@@ -32,7 +32,7 @@ Risks addressed by this policy
 |----| ----------- | ---------- |
 | We damage our business by contributing to an OS asset. | We develop valuable IPR (most likely complete software, algorithms, or training data sets) and contribute it to an OS project that damages our business.| No UKHO developed software code, algorithms, data or training data sets should be released into an OS project without specific approval. See Authorisation |
 |We attract an inappropriate liability for support of OS assets that we have contributed|Unless properly licensed, it is possible that the UKHO could attract some liability for IP assets that it develops and makes OS. | Only a specified license can be used.  See Licensing. |
-|Our brand is damaged by delivering poor quality OS asset contributions | Unless properly licensed, it is possible that the UKHO could attract some liability for IP assets that it develops and makes OS. | ur approved OS asset contributions must be produced to the same quality standards as those developed for our own internal use. See Standards|
+|Our brand is damaged by delivering poor quality OS asset contributions | Unless properly licensed, it is possible that the UKHO could attract some liability for IP assets that it develops and makes OS. | Our approved OS asset contributions must be produced to the same quality standards as those developed for our own internal use. See Standards|
 |We inadvertently breach license terms of other software Most open source software relies on other open source software dependencies. | It is possible to breach the license terms of these dependencies by issuing them under an incompatible license, or not meeting their license terms in some way. |Licensing terms must be carefully managed.  See Dependencies.|
 
 ## Ownership of Open Source repositories
@@ -57,7 +57,7 @@ Contributors must be mindful that our open source software is linked to the UKHO
 
 The repository must match internal standards, including code standards, unit testing, documentation, package names etc.  As with internal code, all contributions to an open source repository must be subject to code reviews.
 
-Additional standards will be applied to open source projects with regards to structure, standard documentation etc. These will be defined by the work to stand up our InnerSource capability[1].
+Additional standards will be applied to open source projects with regards to structure, standard documentation etc. These will be defined by the work to stand up our InnerSource capability.
 
 An existing Lead Engineer must be assigned to each repository and is accountable for maintaining quality standards.
 

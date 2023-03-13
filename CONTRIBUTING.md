@@ -1,12 +1,12 @@
 # Contributing to the project
 
-Firstly, thank you for taking the time to contribute! We appreciate it as this is not the most exciting or glamorous of topics.
+Firstly, thank you for taking the time to contribute!
 
 These are only guidelines for contributing to this repo, not hard rules. They may not fit all scenarios encountered, so please use your best judgment and feel free to propose a change to this document via a pull request if you think it can be improved.
 
 ## Questions
 
-If you have any questions, please open an issue. <https://github.com/UKHO/exchange-set-service/issues/new>
+If you have any questions, please open an issue. <https://github.com/UKHO/erp-facade/issues>
 
 ## Improvements
 
