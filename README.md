@@ -14,11 +14,11 @@ The incremental development of the ERP Facade will be split into 3 outcomes.
 
 * Each event will contain all of the applicable ‘releasability set’ or batch of ENCs that should be processed. There is no need to cache events until others have arrived. 
 
-* Extraction of the relevant information. Some event content is not relevant to SAP. See the of API call data elements expected at Annex 1.4 vs the sample event in Annex 1.3.1 
+* Extraction of the relevant information. Some event content is not relevant to SAP.
 
 * Translation of the relevant event contents for each releasability set into the required SAP Inbound batch ordering structure. This order allows SAP to amend its master data tables in the correct order, which is generally Cell changes, followed by Unit changes, followed by associations between Cells and Units. 
 
-* Lookup of some values to find a code required for SAP. For example, "unitType": "AVCS Folio Transit" = “10”, see Annex 1.8 for examples. 
+* Lookup of some values to find a code required for SAP. For example, "unitType": "AVCS Folio Transit" = “10”. 
 
 * Recording of the Inbound Trace ID on the *enccontentpublished* event for each intended SAP Inbound communication batch. 
 
@@ -28,9 +28,10 @@ The incremental development of the ERP Facade will be split into 3 outcomes.
 
 * Expose a webservice (SOAP 1.2) for SAP Outbound 1 & 2 API calls. 
 
-* Receive any SAP Outound1 calls. As these are only in response to a previous SAP Inbound call, the Message IDs should be compared. The SAP Outbound1 data received will meet the specification in Annex 1.6 
+* Receive any SAP Outound1 calls. As these are only in response to a previous SAP Inbound call, the Message IDs should be compared. The SAP Outbound1 data received will meet the specification. 
 
-* Log successful Inbound and Outbound1 Trace IDs to the Enterprise logging service (ELK Stack). This ensures that each inbound message gained a response. 
+* Log successful Inbound and Outbound1 Trace IDs to the Enterprise logging service (ELK Stack). This ensures that each inbound message gained a response.
+
 * Check that a price is returned for each and every unit of sale sent to SAP. Log any discrepancies to the Enterprise Logging service but let the Event continue with a NULL price for the errored item. This will include all units of sale in the inbound event regardless of whether the price has actually changed. 
 
 * For each received Outbound1 batch, generate a single *uk.gov.ukho.erpFacade*. unitOfSaleUpdated event for the batch. This will contain all of the inbound data in the *uk.gov.ukho.encpublishing.enccontentpublished* event with the addition of the price information returned from SAP, and will conform to the event specification below, and publish to the EES. Each Unit of Sale will have a current and may have a future price (if applicable). 
