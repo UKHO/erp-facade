@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\UKHO.ERPFacade\UKHO.ERPFacade.csproj" />
+    <ProjectReference Include="..\..\src\UKHO.ERPFacade\UKHO.ERPFacade.Common.csproj" />
   </ItemGroup>
 
 </Project>
