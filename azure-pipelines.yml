@@ -65,10 +65,10 @@ stages:
       - job: UnitTestsAndCodeCoverage
         workspace:
           clean: all
-        displayname: "dotnet test and publish code coverage"
+        displaynName: "dotnet test and publish code coverage"
         steps:
           - task: UseDotNet@2
-            displayname: 'use .net 6.0.x sdk'
+            displayName: : 'use .net 6.0.x sdk'
             inputs:
               packagetype: sdk
               useglobaljson: true
