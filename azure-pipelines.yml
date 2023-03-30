@@ -35,20 +35,11 @@ stages:
             inputs:
               packageType: sdk
               useGlobalJson: true
-              workingDirectory: '$(Build.SourcesDirectory)\src'
+              workingDirectory: '$(Build.SourcesDirectory)\src\UKHO.ERPFacade.API'
 
-          #- task: DotNetCoreCLI@2
-          #  displayName: ".Net Core - NuGet restore non test projects only"
-          #  inputs:
-          #    command: "restore"
-          #    projects: |
-          #      **/*.csproj
-          #      !**/*Tests.csproj
-          #    feedsToUse: config
-          #    noCache: true
-          #    nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
-          #    workingDirectory: '$(Build.SourcesDirectory)\src'
-          #    packagesDirectory: '$(Build.SourcesDirectory)\src\packages'
+          - task: DotNetCoreCLI@2
+            displayName: ".Net Core - NuGet restore non test projects only"
+
 
           - task: CmdLine@1
             displayName: "Run OWASP Dependency Checker"
@@ -71,50 +62,50 @@ stages:
                 param($ReportLocation)
                 Invoke-VulnerabilityCheck -ReportLocation $ReportLocation
 
-      #- job: UnitTestsAndCodeCoverage
-      #  workspace:
-      #    clean: all
-      #  displayName: "Dotnet Test and Publish Code Coverage"
-      #  steps:
-      #    - task: UseDotNet@2
-      #      displayName: 'Use .NET 6.0.x sdk'
-      #      inputs:
-      #        packageType: sdk
-      #        useGlobalJson: true
-      #        workingDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web'
+      - job: unittestsandcodecoverage
+        workspace:
+          clean: all
+        displayname: "dotnet test and publish code coverage"
+        steps:
+          - task: usedotnet@2
+            displayname: 'use .net 6.0.x sdk'
+            inputs:
+              packagetype: sdk
+              useglobaljson: true
+              workingdirectory: '$(build.sourcesdirectory)\src\UKHI.ERPfacade.API'
 
-      #    - task: DotNetCoreCLI@2
-      #      displayName: ".Net Core - NuGet restore test projects only"
-      #      inputs:
-      #        command: "restore"
-      #        projects: "**/*Tests.csproj"
-      #        feedsToUse: config
-      #        noCache: true
-      #        nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
-      #        workingDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web'
-      #        packagesDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web\packagesForTests'
+          - task: DotNetCoreCLI@2
+            displayName: ".Net Core - NuGet restore test projects only"
+            inputs:
+              command: "restore"
+              projects: "**/*Tests.csproj"
+              feedsToUse: config
+              noCache: true
+              nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
+              workingDirectory: '$(Build.SourcesDirectory)\src'
+              packagesDirectory: '$(Build.SourcesDirectory)\src\packagesForTests'
 
-      #    - task: DotNetCoreCLI@2
-      #      displayName: "dotnet test - Perform Unit Tests"
-      #      inputs:
-      #        command: "test"
-      #        projects: "**/*UnitTests.csproj"
-      #        arguments: '--configuration $(BuildConfiguration) --settings "$(Build.SourcesDirectory)\test.runsettings" /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:Exclude=[UKHO.MaritimeSafetyInformation.Web.Views]* /p:ExcludeByFile=**/UKHO.MaritimeSafetyInformation.Web/Views/**/*.cshtml%2c**/UKHO.MaritimeSafetyInformationAdmin.Web/Views/**/*.cshtml'
-      #        publishTestResults: true
-      #        testRunTitle: "UnitTests"
+          - task: DotNetCoreCLI@2
+            displayName: "dotnet test - Perform Unit Tests"
+            inputs:
+              command: "test"
+              projects: "**/*UnitTests.csproj"
+              arguments: '--configuration $(BuildConfiguration) --settings "$(Build.SourcesDirectory)\test.runsettings" /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura'
+              publishTestResults: true
+              testRunTitle: "UnitTests"
 
-      #    - task: PowerShell@2
-      #      displayName: "Generate code coverage report"
-      #      inputs:
-      #        targetType: filePath
-      #        filePath: '$(Build.SourcesDirectory)\CodeCoverageReport.ps1'
-      #        arguments: '-source "$(Build.SourcesDirectory)" -reportFolder "$(Build.ArtifactStagingDirectory)"'
+          - task: PowerShell@2
+            displayName: "Generate code coverage report"
+            inputs:
+              targetType: filePath
+              filePath: '$(Build.SourcesDirectory)\CodeCoverageReport.ps1'
+              arguments: '-source "$(Build.SourcesDirectory)" -reportFolder "$(Build.ArtifactStagingDirectory)"'
 
-      #    - task: PublishBuildArtifacts@1
-      #      displayName: "Publish Code coverage"
-      #      inputs:
-      #        PathtoPublish: "$(Build.ArtifactStagingDirectory)/codecoveragereport"
-      #        ArtifactName: codecoveragereport
+          - task: PublishBuildArtifacts@1
+            displayName: "Publish Code coverage"
+            inputs:
+              PathtoPublish: "$(Build.ArtifactStagingDirectory)/codecoveragereport"
+              ArtifactName: codecoveragereport
 
       #- job: BuildAndPublishAPI
       #  workspace:
