@@ -65,7 +65,7 @@ stages:
       - job: UnitTestsAndCodeCoverage
         workspace:
           clean: all
-        displaynName: "dotnet test and publish code coverage"
+        displayName: "dotnet test and publish code coverage"
         steps:
           - task: UseDotNet@2
             displayName: 'Use .NET 6.0.x sdk'
