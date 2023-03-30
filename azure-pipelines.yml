@@ -62,28 +62,28 @@ stages:
                 param($ReportLocation)
                 Invoke-VulnerabilityCheck -ReportLocation $ReportLocation
 
-      - job: unittestsandcodecoverage
+      - job: UnitTestsAndCodeCoverage
         workspace:
           clean: all
         displayname: "dotnet test and publish code coverage"
         steps:
-          - task: usedotnet@2
+          - task: UseDotNet@2
             displayname: 'use .net 6.0.x sdk'
             inputs:
               packagetype: sdk
               useglobaljson: true
               workingdirectory: '$(build.sourcesdirectory)\src\UKHI.ERPfacade.API'
 
-          - task: DotNetCoreCLI@2
-            displayName: ".Net Core - NuGet restore test projects only"
-            inputs:
-              command: "restore"
-              projects: "**/*Tests.csproj"
-              feedsToUse: config
-              noCache: true
-              nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
-              workingDirectory: '$(Build.SourcesDirectory)\src'
-              packagesDirectory: '$(Build.SourcesDirectory)\src\packagesForTests'
+          #- task: DotNetCoreCLI@2
+          #  displayName: ".Net Core - NuGet restore test projects only"
+          #  inputs:
+          #    command: "restore"
+          #    projects: "**/*Tests.csproj"
+          #    feedsToUse: config
+          #    noCache: true
+          #    nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
+          #    workingDirectory: '$(Build.SourcesDirectory)\src'
+          #    packagesDirectory: '$(Build.SourcesDirectory)\src\packagesForTests'
 
           - task: DotNetCoreCLI@2
             displayName: "dotnet test - Perform Unit Tests"
