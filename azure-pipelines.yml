@@ -68,7 +68,7 @@ stages:
         displaynName: "dotnet test and publish code coverage"
         steps:
           - task: UseDotNet@2
-            displayName: : 'use .net 6.0.x sdk'
+            displayName: 'Use .NET 6.0.x sdk'
             inputs:
               packagetype: sdk
               useglobaljson: true
