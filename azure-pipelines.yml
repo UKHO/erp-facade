@@ -35,11 +35,7 @@ stages:
             inputs:
               packageType: sdk
               useGlobalJson: true
-              workingDirectory: '$(Build.SourcesDirectory)\src\UKHO.ERPFacade.API'
-
-          - task: DotNetCoreCLI@2
-            displayName: ".Net Core - NuGet restore non test projects only"
-
+              workingDirectory: '$(Build.SourcesDirectory)\src'
 
           - task: CmdLine@1
             displayName: "Run OWASP Dependency Checker"
@@ -72,7 +68,7 @@ stages:
             inputs:
               packagetype: sdk
               useglobaljson: true
-              workingdirectory: '$(build.sourcesdirectory)\src\UKHI.ERPfacade.API'
+              workingdirectory: '$(build.sourcesdirectory)\src'
 
           #- task: DotNetCoreCLI@2
           #  displayName: ".Net Core - NuGet restore test projects only"
