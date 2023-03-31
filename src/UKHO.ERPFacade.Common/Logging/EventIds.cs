@@ -9,7 +9,7 @@ namespace UKHO.ERPFacade.Common.Logging
         /// </summary>
         UnhandledControllerException = 920001,
         /// <summary>
-        /// 920002 - An NewEnsEventPublishedOptions event started.
+        /// 920002 - ERP Facade Request event started.
         /// </summary>
         Start = 920002
     }
