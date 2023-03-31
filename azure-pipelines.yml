@@ -128,7 +128,7 @@ stages:
             inputs:
               command: "publish"
               publishWebProjects: false
-              projects: '**/*UKHO.ERPFacade.API.csproj'
+              projects: '**/*.csproj'
               arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\ERPFacadeAPI'
               zipAfterPublish: true
               modifyOutputPath: true
