@@ -10,13 +10,10 @@ namespace UKHO.ERPFacade.API.Controllers
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         protected new HttpContext HttpContext => _httpContextAccessor.HttpContext!;
-        protected readonly ILogger<T> _logger;
-        public const string InternalServerError = "Internal Server Error";
 
-        protected BaseController(IHttpContextAccessor httpContextAccessor, ILogger<T> logger)
+        protected BaseController(IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
-            _logger = logger;
         }
 
         protected string GetCurrentCorrelationId()

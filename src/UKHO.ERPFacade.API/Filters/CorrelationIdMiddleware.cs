@@ -1,5 +1,8 @@
-﻿namespace UKHO.ERPFacade.API.Filters
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace UKHO.ERPFacade.API.Filters
 {
+    [ExcludeFromCodeCoverage]
     public static class CorrelationIdMiddleware
     {
         public const string XCorrelationIdHeaderKey = "X-Correlation-ID";

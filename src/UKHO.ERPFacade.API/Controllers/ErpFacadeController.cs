@@ -8,18 +8,20 @@ namespace UKHO.ERPFacade.API.Controllers
     public class ErpFacadeController : BaseController<ErpFacadeController>
     {
         private readonly ILogger<ErpFacadeController> _logger;
+
         public ErpFacadeController(IHttpContextAccessor contextAccessor,
                                    ILogger<ErpFacadeController> logger)
-            : base(contextAccessor, logger)
+        : base(contextAccessor)
         {
             _logger = logger;
         }
 
         [HttpPost]
-        [Route("/webhook/erpfacadecontroller")]
+        [Route("/erpfacade/getpriceinfo")]
         public virtual async Task<IActionResult> Post()
         {
-            _logger.LogInformation(EventIds.Start.ToEventId(), "Start of Post endpoint with _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+            _logger.LogInformation(EventIds.ErpFacadeApiCalled.ToEventId(), "ERP Facade endpoint is called. | _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+            await Task.CompletedTask;
             return Ok();
         }
     }

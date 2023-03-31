@@ -1,4 +1,6 @@
+using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
+using Azure.Security.KeyVault.Secrets;
 using Microsoft.Extensions.Logging.Configuration;
 using Serilog;
 using System.Diagnostics.CodeAnalysis;
@@ -16,12 +18,9 @@ namespace UKHO.ERPFacade
         internal static void Main(string[] args)
         {
             EventHubLoggingConfiguration eventHubLoggingConfiguration;
-
             IHttpContextAccessor httpContextAccessor = new HttpContextAccessor();
-
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
             IConfiguration configuration = builder.Configuration;
-
             IWebHostEnvironment webHostEnvironment = builder.Environment;
 
             builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
@@ -36,19 +35,13 @@ namespace UKHO.ERPFacade
                 .AddEnvironmentVariables();
             });
 
-            if (!string.IsNullOrWhiteSpace(configuration["KeyVaultSettings:ServiceUri"]))
+            string kvServiceUri = configuration["KeyVaultSettings:ServiceUri"];
+            if (!string.IsNullOrWhiteSpace(kvServiceUri))
             {
-                builder.Configuration.AddAzureKeyVault(
-                      new Uri(configuration["KeyVaultSettings:ServiceUri"]),
-                   new DefaultAzureCredential());
+                var secretClient = new SecretClient(new Uri(kvServiceUri), new DefaultAzureCredential(
+                new DefaultAzureCredentialOptions()));
+                builder.Configuration.AddAzureKeyVault(secretClient, new KeyVaultSecretManager());
             }
-
-            // Add services to the container
-            builder.Services.AddControllers(o =>
-            {
-                o.AllowEmptyInputInBodyModelBinding = true;
-            });
-
 #if DEBUG
             //create the logger and setup of sinks, filters and properties	
             Log.Logger = new LoggerConfiguration()
@@ -74,8 +67,7 @@ namespace UKHO.ERPFacade
                             additionalValues["_RemoteIPAddress"] = httpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString();
                             additionalValues["_User-Agent"] = httpContextAccessor.HttpContext.Request.Headers["User-Agent"].FirstOrDefault() ?? string.Empty;
                             additionalValues["_AssemblyVersion"] = Assembly.GetExecutingAssembly().GetCustomAttributes<AssemblyFileVersionAttribute>().Single().Version;
-                            additionalValues["_X-Correlation-ID"] =
-                                httpContextAccessor.HttpContext.Request.Headers?[CorrelationIdMiddleware.XCorrelationIdHeaderKey].FirstOrDefault() ?? string.Empty;
+                            additionalValues["_X-Correlation-ID"] = httpContextAccessor.HttpContext.Request.Headers?[CorrelationIdMiddleware.XCorrelationIdHeaderKey].FirstOrDefault() ?? string.Empty;
                         }
                     }
                     logging.AddEventHub(config =>
@@ -94,7 +86,7 @@ namespace UKHO.ERPFacade
                     });
                 }
             });
-            builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             builder.Services.AddLogging(loggingBuilder =>
             {
                 loggingBuilder.AddConfiguration(configuration.GetSection("Logging"));
@@ -106,6 +98,11 @@ namespace UKHO.ERPFacade
 
             // The following line enables Application Insights telemetry collection.	
             builder.Services.AddApplicationInsightsTelemetry();
+
+            // Add services to the container.
+            builder.Services.AddControllers();
+
+            builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             var app = builder.Build();
 

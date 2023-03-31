@@ -11,7 +11,7 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 920002 - ERP Facade Request event started.
         /// </summary>
-        Start = 920002
+        ErpFacadeApiCalled = 920002
     }
     public static class EventIdExtensions
     {

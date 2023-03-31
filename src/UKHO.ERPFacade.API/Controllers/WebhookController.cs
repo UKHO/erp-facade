@@ -5,6 +5,6 @@ namespace UKHO.ERPFacade.API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class WebhookController : ControllerBase
-    {        
+    {
     }
 }
