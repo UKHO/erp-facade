@@ -103,89 +103,38 @@ stages:
               PathtoPublish: "$(Build.ArtifactStagingDirectory)/codecoveragereport"
               ArtifactName: codecoveragereport
 
-      #- job: BuildAndPublishAPI
-      #  workspace:
-      #    clean: all
-      #  displayName: "Dotnet Build publish API"
-      #  steps:
-      #    - task: PowerShell@2
-      #      displayName: "Set assembly version numbers based on build ID"
-      #      inputs:
-      #        targetType: filePath
-      #        filePath: '$(Build.SourcesDirectory)\Apply-AssemblyVersionAndDefaults.ps1'
-      #        arguments: '-buildNumber "$(Build.BuildNumber)" -solutionDirectory "$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web\" -UKHOAssemblyCompany "$env:UKHOAssemblyCompany" -UKHOAssemblyCopyright "$(UKHOAssemblyCopyright)" -UKHOAssemblyVersionPrefix "$env:UKHOAssemblyVersionPrefix" -UKHOAssemblyProduct "$env:UKHOAssemblyProduct"'
+      - job: BuildAndPublishAPI
+        workspace:
+          clean: all
+        displayName: "Dotnet Build publish API"
+        steps:
 
-      #    - task: UseDotNet@2
-      #      displayName: 'Use .NET 6.0.x sdk'
-      #      inputs:
-      #        packageType: sdk
-      #        useGlobalJson: true
-      #        workingDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web'
+          - task: UseDotNet@2
+            displayName: 'Use .NET 6.0.x sdk'
+            inputs:
+              packageType: sdk
+              useGlobalJson: true
+              workingDirectory: '$(Build.SourcesDirectory)\src'            
 
-      #    - task: DotNetCoreCLI@2
-      #      displayName: ".Net Core - NuGet restore"
-      #      inputs:
-      #        command: restore
-      #        projects: |
-      #          **/*.csproj
-      #        feedsToUse: config
-      #        noCache: true
-      #        nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
-      #        workingDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web'              
+          - task: DotNetCoreCLI@2
+            displayName: "dotnet build task"
+            inputs:
+              command: "build"
+              projects: "**/*.csproj"
+              arguments: '--configuration $(BuildConfiguration)'
 
-      #    - task: DotNetCoreCLI@2
-      #      displayName: "dotnet build task"
-      #      inputs:
-      #        command: "build"
-      #        projects: "**/*.csproj"
-      #        arguments: '--configuration $(BuildConfiguration) --output $(Build.BinariesDirectory)'
+          - task: DotNetCoreCLI@2
+            displayName: "Publish ERP Facade API "
+            inputs:
+              command: "publish"
+              publishWebProjects: false
+              projects: '**/*UKHO.ERPFacade.API.csproj'
+              arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\ERPFacadeAPI'
+              zipAfterPublish: true
+              modifyOutputPath: true
 
-      #    - task: DotNetCoreCLI@2
-      #      displayName: "Publish WebApp"
-      #      inputs:
-      #        command: "publish"
-      #        publishWebProjects: false
-      #        projects: '**/*UKHO.MaritimeSafetyInformation.Web.csproj'
-      #        arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\MaritimeSafetyInformationWeb'
-      #        zipAfterPublish: true
-      #        modifyOutputPath: true
-
-      #    - task: PublishBuildArtifacts@1
-      #      displayName: "Publish Web Artifact"
-      #      inputs:
-      #        PathtoPublish: '$(Build.ArtifactStagingDirectory)\MaritimeSafetyInformationWeb'
-      #        ArtifactName: MaritimeSafetyInformation
-
-      #    - task: DotNetCoreCLI@2
-      #      displayName: "Publish Admin WebApp"
-      #      inputs:
-      #        command: "publish"
-      #        publishWebProjects: false
-      #        projects: '**/*UKHO.MaritimeSafetyInformationAdmin.Web.csproj'
-      #        arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\MaritimeSafetyInformationAdminWeb'
-      #        zipAfterPublish: true
-      #        modifyOutputPath: true
-
-      #    - task: PublishBuildArtifacts@1
-      #      displayName: "Publish Admin Web Artifact"
-      #      inputs:
-      #        PathtoPublish: '$(Build.ArtifactStagingDirectory)\MaritimeSafetyInformationAdminWeb'
-      #        ArtifactName: MaritimeSafetyInformationAdmin
-
-      #- job: PublishTerraformArtifacts
-      #  workspace:
-      #    clean: all
-      #  displayName: "Publish Terraform Artifacts"
-      #  steps:
-      #    - task: CopyFiles@2
-      #      displayName: Copy MaritimeSafetyInformationService Config
-      #      inputs:
-      #        SourceFolder: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web\UKHO.MaritimeSafetyInformation.Web\'
-      #        Contents: 'appsettings.json'
-      #        TargetFolder: '$(Build.SourcesDirectory)\Deployment\src'
-
-      #    - task: PublishBuildArtifacts@1
-      #      displayName: "Publish terraform Artifacts"
-      #      inputs:
-      #        PathtoPublish: '$(Build.SourcesDirectory)\Deployment'
-      #        ArtifactName: terraformartifact
+          - task: PublishBuildArtifacts@1
+            displayName: "Publish Web Artifact"
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)\ERPFacadeAPI'
+              ArtifactName: ERPFacadeAPI
