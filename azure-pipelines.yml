@@ -61,7 +61,7 @@ stages:
       - job: UnitTestsAndCodeCoverage
         workspace:
           clean: all
-        displayName: "dotnet test and publish code coverage"
+        displayName: "Dotnet Test and Publish Code Coverage"
         steps:
           - task: UseDotNet@2
             displayName: 'Use .NET 6.0.x sdk'
@@ -120,7 +120,7 @@ stages:
             displayName: "dotnet build task"
             inputs:
               command: "build"
-              projects: "**/*.csproj"
+              projects: "**/UKHO.ERPFacade.API.csproj"
               arguments: '--configuration $(BuildConfiguration)'
 
           - task: DotNetCoreCLI@2
