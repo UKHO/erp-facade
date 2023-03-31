@@ -13,11 +13,8 @@ variables:
     value: "any cpu"
   - name: BuildCounter
     value: $[counter(format('{0:yyyyMMdd}', pipeline.startTime), 1)]
-  - name: Container
-    value: "ukhydrographicoffice/terraform-azure-powershell-unzip:1.1.8"
   - name: WindowsPool
     value: "NautilusBuild"
-
 
 stages:
 
@@ -36,6 +33,18 @@ stages:
               packageType: sdk
               useGlobalJson: true
               workingDirectory: '$(Build.SourcesDirectory)\src'
+
+          - task: DotNetCoreCLI@2
+            displayName: ".Net Core - NuGet restore test projects only"
+            inputs:
+              projects: |
+                **/*.csproj
+                !**/*Tests.csproj
+              feedsToUse: config
+              noCache: true
+              nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
+              workingDirectory: '$(Build.SourcesDirectory)\src'
+              packagesDirectory: '$(Build.SourcesDirectory)\src\packagesForTests'
 
           - task: CmdLine@1
             displayName: "Run OWASP Dependency Checker"
@@ -70,16 +79,16 @@ stages:
               useglobaljson: true
               workingdirectory: '$(build.sourcesdirectory)\src'
 
-          #- task: DotNetCoreCLI@2
-          #  displayName: ".Net Core - NuGet restore test projects only"
-          #  inputs:
-          #    command: "restore"
-          #    projects: "**/*Tests.csproj"
-          #    feedsToUse: config
-          #    noCache: true
-          #    nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
-          #    workingDirectory: '$(Build.SourcesDirectory)\src'
-          #    packagesDirectory: '$(Build.SourcesDirectory)\src\packagesForTests'
+          - task: DotNetCoreCLI@2
+            displayName: ".Net Core - NuGet restore test projects only"
+            inputs:
+              command: "restore"
+              projects: "**/*Tests.csproj"
+              feedsToUse: config
+              noCache: true
+              nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
+              workingDirectory: '$(Build.SourcesDirectory)\src'
+              packagesDirectory: '$(Build.SourcesDirectory)\src\packagesForTests'
 
           - task: DotNetCoreCLI@2
             displayName: "dotnet test - Perform Unit Tests"
@@ -114,7 +123,19 @@ stages:
             inputs:
               packageType: sdk
               useGlobalJson: true
-              workingDirectory: '$(Build.SourcesDirectory)\src'            
+              workingDirectory: '$(Build.SourcesDirectory)\src'
+              
+          - task: DotNetCoreCLI@2
+            displayName: ".Net Core - NuGet restore test projects only"
+            inputs:
+              command: "restore"
+              projects: |
+                **/*.csproj
+              feedsToUse: config
+              noCache: true
+              nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
+              workingDirectory: '$(Build.SourcesDirectory)\src'
+              packagesDirectory: '$(Build.SourcesDirectory)\src\packagesForTests'
 
           - task: DotNetCoreCLI@2
             displayName: "dotnet build task"
