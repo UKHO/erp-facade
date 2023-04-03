@@ -15,10 +15,8 @@ namespace UKHO.ERPFacade.API.StorageAccount
 {
     public class StoreEssEventInBlob
     {
-        public async void StoreEventDataInBlob(string inputJson)
+        public async Task StoreEventDataInBlob(string inputJson)
         {
-            var builder = WebApplication.CreateBuilder();
-
             //Deserialize the Event data and get the traceID
             ESSEventData eSSEventData = JsonConvert.DeserializeObject<ESSEventData>(inputJson);
             string traceId = eSSEventData.data.traceId;
@@ -30,7 +28,7 @@ namespace UKHO.ERPFacade.API.StorageAccount
             string fileName = traceId + ".json";
 
             //get Storageaccount connection string from appsettings.json
-            string connectionString = builder.Configuration.GetValue<string>("StorageConnectionString");
+            string connectionString = Environment.GetEnvironmentVariable("StorageConnectionString");
 
             //upload the event data in blob
             BlobContainerClient bcc = new BlobContainerClient(connectionString, containerName);
@@ -41,13 +39,14 @@ namespace UKHO.ERPFacade.API.StorageAccount
             await bc.UploadAsync(streamForm, overwrite: true);
 
             //upload the event data in table
-            StoreEventDataInTable(inputJson, traceId, connectionString);
-
+            await StoreEventDataInTable(inputJson, traceId, connectionString);
         }
 
-        public async void StoreEventDataInTable(string inputJson, string traceId, string connectionString)
+        public async Task StoreEventDataInTable(string inputJson, string traceId, string connectionString)
         {
             var guid = Guid.NewGuid();
+            var guid1 = Guid.NewGuid();
+
             TableServiceClient tsc = new TableServiceClient(connectionString);
 
             //Create table in Azure storage
@@ -64,11 +63,11 @@ namespace UKHO.ERPFacade.API.StorageAccount
                 //Upload data in table
                 TableColumns tableColumns = new TableColumns();
                 tableColumns.PartitionKey = guid.ToString();
-                tableColumns.RowKey = guid.ToString();
+                tableColumns.RowKey = guid1.ToString();
                 tableColumns.Timestamp = DateTime.UtcNow;
                 tableColumns.TraceID = traceId;
                 tableColumns.EventData = inputJson;
-                tableColumns.RequestDateTime = DateTime.UtcNow;
+                tableColumns.RequestDateTime = null;
                 tableColumns.ResponseDateTime = null;
 
                 await tc.AddEntityAsync<TableColumns>(tableColumns);
@@ -88,7 +87,7 @@ namespace UKHO.ERPFacade.API.StorageAccount
 
             public string EventData { get; set; }
 
-            public DateTime RequestDateTime { get; set; }
+            public DateTime? RequestDateTime { get; set; }
 
             public DateTime? ResponseDateTime { get; set; }
 
