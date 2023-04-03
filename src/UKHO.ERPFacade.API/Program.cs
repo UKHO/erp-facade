@@ -96,6 +96,11 @@ namespace UKHO.ERPFacade
                 loggingBuilder.AddAzureWebAppDiagnostics();
             });
 
+            builder.Services.AddHeaderPropagation(options =>
+            {
+                options.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey);
+            });
+
             // The following line enables Application Insights telemetry collection.	
             builder.Services.AddApplicationInsightsTelemetry();
 
