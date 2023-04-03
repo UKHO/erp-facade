@@ -108,6 +108,8 @@ namespace UKHO.ERPFacade
 
             app.UseHttpsRedirection();
 
+            app.UseCorrelationIdMiddleware();
+
             app.MapControllers();
 
             app.Run();
