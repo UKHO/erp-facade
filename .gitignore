@@ -329,7 +329,7 @@ ASALocalRun/
 
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
-/UKHO.ExchangeSetService.API/UKHO.ExchangeSetService.API/Logs
+/src/UKHO.ErpFacade.API/Logs
 # Local .terraform directories
 **/.terraform/*
 
