@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-
-namespace UKHO.ERPFacade.Common.Logging
+﻿namespace UKHO.ERPFacade.Common.Logging
 {
     public enum EventIds
     {
@@ -12,12 +10,5 @@ namespace UKHO.ERPFacade.Common.Logging
         /// 920002 - ERP Facade Request event started.
         /// </summary>
         ErpFacadeApiCalled = 920002
-    }
-    public static class EventIdExtensions
-    {
-        public static EventId ToEventId(this EventIds eventId)
-        {
-            return new EventId((int)eventId, eventId.ToString());
-        }
-    }
+    }   
 }
