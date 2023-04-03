@@ -141,7 +141,7 @@ stages:
             displayName: "dotnet build task"
             inputs:
               command: "build"
-              projects: "**/UKHO.ERPFacade.API.csproj"
+              projects: "**/*.csproj"
               arguments: '--configuration $(BuildConfiguration)'
 
           - task: DotNetCoreCLI@2
