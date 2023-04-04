@@ -18,17 +18,17 @@ namespace UKHO.ERPFacade.API.Controllers
         }
 
         [HttpOptions]
-        [Route("/webhook/newenccontentpublishedoptions")]
-        public IActionResult NewEncContentPublishedOptions()
+        [Route("/webhook/newenccontentpublishedeventoptions")]
+        public IActionResult NewEncContentPublishedEventOptions()
         {
             var webhookRequestOrigin = HttpContext.Request.Headers["WebHook-Request-Origin"].FirstOrDefault();
 
-            _logger.LogInformation(EventIds.NewEncContentPublishedOptionsCallStarted.ToEventId(), "Started processing the Options request for the New ENC Content Published event for webhook. | WebHook-Request-Origin : {webhookRequestOrigin} | _X-Correlation-ID : {CorrelationId}", webhookRequestOrigin, GetCurrentCorrelationId());
+            _logger.LogInformation(EventIds.NewEncContentPublishedEventOptionsCallStarted.ToEventId(), "Started processing the Options request for the New ENC Content Published event for webhook. | WebHook-Request-Origin : {webhookRequestOrigin} | _X-Correlation-ID : {CorrelationId}", webhookRequestOrigin, GetCurrentCorrelationId());
 
             HttpContext.Response.Headers.Add("WebHook-Allowed-Rate", "*");
             HttpContext.Response.Headers.Add("WebHook-Allowed-Origin", webhookRequestOrigin);
 
-            _logger.LogInformation(EventIds.NewEncContentPublishedOptionsCallCompleted.ToEventId(), "Completed processing the Options request for the New ENC Content Published event for webhook. | WebHook-Request-Origin : {webhookRequestOrigin} | _X-Correlation-ID : {CorrelationId}", webhookRequestOrigin, GetCurrentCorrelationId());
+            _logger.LogInformation(EventIds.NewEncContentPublishedEventOptionsCallCompleted.ToEventId(), "Completed processing the Options request for the New ENC Content Published event for webhook. | WebHook-Request-Origin : {webhookRequestOrigin} | _X-Correlation-ID : {CorrelationId}", webhookRequestOrigin, GetCurrentCorrelationId());
 
             return new OkObjectResult(StatusCodes.Status200OK);
         }
@@ -37,7 +37,7 @@ namespace UKHO.ERPFacade.API.Controllers
         [Route("/webhook/newenccontentpublishedeventreceived")]
         public virtual async Task<IActionResult> NewEncContentPublishedEventReceived([FromBody] JObject request)
         {
-            _logger.LogInformation(EventIds.NewEncContentPublishedEventReceived.ToEventId(), "ERP Facade webhook has received new event fron EES. | _X-Correlation-ID : {CorrelationId}", GetCurrentCorrelationId());
+            _logger.LogInformation(EventIds.NewEncContentPublishedEventReceived.ToEventId(), "ERP Facade webhook has received new enccontentpublished event from EES. | _X-Correlation-ID : {CorrelationId}", GetCurrentCorrelationId());
 
             await Task.CompletedTask;
 

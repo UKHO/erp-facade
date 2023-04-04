@@ -7,13 +7,13 @@
         /// </summary>
         UnhandledControllerException = 920001,
         /// <summary>
-        /// 920002 - New ENC content published webhook options call started.
+        /// 920002 - New ENC content published event options call started.
         /// </summary>
-        NewEncContentPublishedOptionsCallStarted = 920002,
+        NewEncContentPublishedEventOptionsCallStarted = 920002,
         /// <summary>
-        /// 920003 - New ENC content published webhook options call completed.
+        /// 920003 - New ENC content published event options call completed.
         /// </summary>
-        NewEncContentPublishedOptionsCallCompleted = 920003,
+        NewEncContentPublishedEventOptionsCallCompleted = 920003,
         /// <summary>
         /// 920004 - New ENC content published event received by ERP Facade webhook.
         /// </summary>
