@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
-using UKHO.ERPFacade.Common.Logging;
 
-namespace UKHO.ERPFacade.Common.Configuration
+namespace UKHO.ERPFacade.Common.Logging
 {
     public static class EventIdExtensions
     {

@@ -7,16 +7,16 @@
         /// </summary>
         UnhandledControllerException = 920001,
         /// <summary>
-        /// 920002 - New ENS event published webhook options call started.
+        /// 920002 - New ENC content published webhook options call started.
         /// </summary>
-        NewEnsEventPublishedWebhookOptionsCallStarted = 920002,
+        NewEncContentPublishedOptionsCallStarted = 920002,
         /// <summary>
-        /// 920003 - New ENS event published webhook options call completed.
+        /// 920003 - New ENC content published webhook options call completed.
         /// </summary>
-        NewEnsEventPublishedWebhookOptionsCallCompleted = 920003,
+        NewEncContentPublishedOptionsCallCompleted = 920003,
         /// <summary>
-        /// 920004 - New ENS event received by ERP Facade webhook.
+        /// 920004 - New ENC content published event received by ERP Facade webhook.
         /// </summary>
-        NewEnsEventReceived = 920004
+        NewEncContentPublishedEventReceived = 920004
     }
 }
