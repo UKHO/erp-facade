@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
-using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Helpers;
+using UKHO.ERPFacade.Common.Logging;
 
 namespace UKHO.ERPFacade.API.Controllers
 {
@@ -40,16 +40,20 @@ namespace UKHO.ERPFacade.API.Controllers
             return new OkObjectResult(StatusCodes.Status200OK);
         }
 
+
         [HttpPost]
         [Route("/webhook/newenccontentpublishedeventreceived")]
         public virtual async Task<IActionResult> NewEncContentPublishedEventReceived([FromBody] JObject requestJson)
         {
-            _logger.LogInformation(EventIds.NewEncContentPublishedEventReceived.ToEventId(), "ERP Facade webhook has received new enccontentpublished event from EES. | _X-Correlation-ID : {CorrelationId}", GetCurrentCorrelationId());
+            string traceId = requestJson.SelectToken("data.traceId")?.Value<string>();
 
-            await _azureTableStorageHelper.UpsertEntity(requestJson, requestJson.SelectToken("data.traceId").Value<string>());
-            await _azureBlobStorageHelper.UploadEvent(requestJson, requestJson.SelectToken("data.traceId").Value<string>());
+            if (string.IsNullOrEmpty(traceId))
+            {
+                return new BadRequestObjectResult(StatusCodes.Status400BadRequest);
+            }
 
-            await Task.CompletedTask;
+            await _azureTableStorageHelper.UpsertEntity(requestJson, traceId);
+            await _azureBlobStorageHelper.UploadEvent(requestJson, traceId);
 
             return new OkObjectResult(StatusCodes.Status200OK);
         }
