@@ -18,7 +18,6 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
     {
         private IHttpContextAccessor _fakeHttpContextAccessor;
         private ILogger<WebhookController> _fakeLogger;
-
         private WebhookController _fakeWebHookController;
 
         [SetUp]
@@ -26,11 +25,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         {
             _fakeHttpContextAccessor = A.Fake<IHttpContextAccessor>();
             _fakeLogger = A.Fake<ILogger<WebhookController>>();
-
             _fakeWebHookController = new WebhookController(_fakeHttpContextAccessor, _fakeLogger);
         }
-
-        #region Options
 
         [Test]
         public void WhenValidHeaderRequestedInNewEncContentPublishedEventOptions_ThenWebhookReturns200OkResponse()
@@ -60,16 +56,12 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             A.CallTo(() => responseHeaders.Add("WebHook-Allowed-Origin", "test.com")).MustHaveHappened();
         }
 
-        #endregion Options
-
-        #region Post
-
         [Test]
         public async Task WhenValidEventInNewEncContentPublishedEventReceived_ThenWebhookReturns200OkResponse()
         {
-            var fakeEnsEventJson = JObject.Parse(@"{""dataContentType"":""application/json""}");
+            var fakeEncEventJson = JObject.Parse(@"{""dataContentType"":""application/json""}");
 
-            var result = (OkObjectResult)await _fakeWebHookController.NewEncContentPublishedEventReceived(fakeEnsEventJson);
+            var result = (OkObjectResult)await _fakeWebHookController.NewEncContentPublishedEventReceived(fakeEncEventJson);
 
             result.StatusCode.Should().Be(200);
 
@@ -78,7 +70,5 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
              && call.GetArgument<EventId>(1) == EventIds.NewEncContentPublishedEventReceived.ToEventId()
              && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "ERP Facade webhook has received new enccontentpublished event from EES. | _X-Correlation-ID : {CorrelationId}").MustHaveHappenedOnceExactly();
         }
-
-        #endregion Post
     }
 }
