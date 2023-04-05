@@ -30,11 +30,3 @@ variable "tags" {
 
 }
 
-variable "allowed_subnet_ids" {
-  type = list
-}
-
-variable "allowed_ips" {
-
-}
-
