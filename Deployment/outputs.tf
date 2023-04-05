@@ -1,3 +1,3 @@
 output "webapp_name" {
-   value = module.webapp_service.default_site_hostname
+   value = module.webapp_service.webapp_name
 }
