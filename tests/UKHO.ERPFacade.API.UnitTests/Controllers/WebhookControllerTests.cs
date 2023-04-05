@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using FakeItEasy;
+﻿using FakeItEasy;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using UKHO.ERPFacade.API.Controllers;
 using UKHO.ERPFacade.Common.Logging;
 
@@ -30,8 +30,10 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             _fakeWebHookController = new WebhookController(_fakeHttpContextAccessor, _fakeLogger);
         }
 
+        #region Options
+
         [Test]
-        public void TestDoesWebhookReturns200OkResponseWhenValidHeaderRequestedInNewEncContentPublishedEventOptions()
+        public void WhenValidHeaderRequestedInNewEncContentPublishedEventOptions_ThenWebhookReturns200OkResponse()
         {
             var responseHeaders = A.Fake<IHeaderDictionary>();
             var httpContext = A.Fake<HttpContext>();
@@ -58,8 +60,12 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             A.CallTo(() => responseHeaders.Add("WebHook-Allowed-Origin", "test.com")).MustHaveHappened();
         }
 
+        #endregion Options
+
+        #region Post
+
         [Test]
-        public async Task TestDoesWebhookReturns200OkResponseWhenValidNewEncContentPublishedEventReceived()
+        public async Task WhenValidEventInNewEncContentPublishedEventReceived_ThenWebhookReturns200OkResponse()
         {
             var fakeEnsEventJson = JObject.Parse(@"{""dataContentType"":""application/json""}");
 
@@ -72,5 +78,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
              && call.GetArgument<EventId>(1) == EventIds.NewEncContentPublishedEventReceived.ToEventId()
              && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "ERP Facade webhook has received new enccontentpublished event from EES. | _X-Correlation-ID : {CorrelationId}").MustHaveHappenedOnceExactly();
         }
+
+        #endregion Post
     }
 }
