@@ -1,7 +1,7 @@
 using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
-using Microsoft.Extensions.Logging.Configuration;
+using Newtonsoft.Json.Serialization;
 using Serilog;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
@@ -51,6 +51,7 @@ namespace UKHO.ERPFacade
 #endif
 
             eventHubLoggingConfiguration = configuration.GetSection("EventHubLoggingConfiguration").Get<EventHubLoggingConfiguration>()!;
+
             builder.Host.ConfigureLogging(logging =>
             {
                 logging.ClearProviders();
@@ -105,7 +106,13 @@ namespace UKHO.ERPFacade
             builder.Services.AddApplicationInsightsTelemetry();
 
             // Add services to the container.
-            builder.Services.AddControllers();
+            builder.Services.AddControllers(o =>
+            {
+                o.AllowEmptyInputInBodyModelBinding = true;
+            }).AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            });
 
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
