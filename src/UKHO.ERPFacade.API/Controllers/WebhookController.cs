@@ -10,14 +10,17 @@ namespace UKHO.ERPFacade.API.Controllers
     {
         private readonly ILogger<WebhookController> _logger;
         private readonly IAzureTableStorageHelper _azureTableStorageHelper;
+        private readonly IAzureBlobStorageHelper _azureBlobStorageHelper;
 
         public WebhookController(IHttpContextAccessor contextAccessor,
                                  ILogger<WebhookController> logger,
-                                 IAzureTableStorageHelper azureTableStorageHelper)
+                                 IAzureTableStorageHelper azureTableStorageHelper,
+                                 IAzureBlobStorageHelper azureBlobStorageHelper)
         : base(contextAccessor)
         {
             _logger = logger;
             _azureTableStorageHelper = azureTableStorageHelper;
+            _azureBlobStorageHelper = azureBlobStorageHelper;
         }
 
         [HttpPost]
@@ -25,6 +28,7 @@ namespace UKHO.ERPFacade.API.Controllers
         public virtual async Task<IActionResult> NewEncContentPublishedEventReceived([FromBody] JObject requestJson)
         {
             await _azureTableStorageHelper.UpsertEntity(requestJson, requestJson.SelectToken("data.traceId").Value<string>());
+            await _azureBlobStorageHelper.UploadEvent(requestJson, requestJson.SelectToken("data.traceId").Value<string>());
 
             return new OkObjectResult(StatusCodes.Status200OK);
         }
