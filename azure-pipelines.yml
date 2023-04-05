@@ -1,5 +1,11 @@
 name: $(BuildDefinitionName)_$(SourceBranchName)_$(Date:yy)$(DayOfYear).$(BuildCounter)
 
+parameters:
+  - name: ContinueEvenIfResourcesAreGettingDestroyed
+    displayName: "Continue even if resources are getting destroyed"
+    type: boolean
+    default: false
+
 trigger:
   - main
   - release/*
