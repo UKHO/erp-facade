@@ -53,6 +53,7 @@ namespace UKHO.ERPFacade
 #endif
 
             eventHubLoggingConfiguration = configuration.GetSection("EventHubLoggingConfiguration").Get<EventHubLoggingConfiguration>()!;
+
             builder.Host.ConfigureLogging(logging =>
             {
                 logging.ClearProviders();
