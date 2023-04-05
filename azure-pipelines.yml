@@ -126,7 +126,7 @@ stages:
               workingDirectory: '$(Build.SourcesDirectory)\src'
               
           - task: DotNetCoreCLI@2
-            displayName: ".Net Core - NuGet restore test projects only"
+            displayName: ".Net Core - NuGet restore non test projects only"
             inputs:
               command: "restore"
               projects: |
@@ -141,7 +141,7 @@ stages:
             displayName: "dotnet build task"
             inputs:
               command: "build"
-              projects: "**/UKHO.ERPFacade.API.csproj"
+              projects: "**/*.csproj"
               arguments: '--configuration $(BuildConfiguration)'
 
           - task: DotNetCoreCLI@2
@@ -149,7 +149,7 @@ stages:
             inputs:
               command: "publish"
               publishWebProjects: false
-              projects: '**/*.csproj'
+              projects: '**/*UKHO.ERPFacade.API.csproj'
               arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\ERPFacadeAPI'
               zipAfterPublish: true
               modifyOutputPath: true
