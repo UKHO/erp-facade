@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UKHO.ERPFacade.API.Controllers;
+using UKHO.ERPFacade.Common.Helpers;
 using UKHO.ERPFacade.Common.Logging;
 
 namespace UKHO.ERPFacade.API.UnitTests.Controllers
@@ -19,13 +20,16 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         private IHttpContextAccessor _fakeHttpContextAccessor;
         private ILogger<WebhookController> _fakeLogger;
         private WebhookController _fakeWebHookController;
+        private IAzureTableStorageHelper _fakeAzureTableStorageHelper;
+        private IAzureBlobStorageHelper _fakeAzureBlobStorageHelper;
 
         [SetUp]
         public void Setup()
         {
             _fakeHttpContextAccessor = A.Fake<IHttpContextAccessor>();
             _fakeLogger = A.Fake<ILogger<WebhookController>>();
-            _fakeWebHookController = new WebhookController(_fakeHttpContextAccessor, _fakeLogger);
+            _fakeWebHookController = new WebhookController(_fakeHttpContextAccessor, _fakeLogger,
+                _fakeAzureTableStorageHelper, _fakeAzureBlobStorageHelper);
         }
 
         [Test]

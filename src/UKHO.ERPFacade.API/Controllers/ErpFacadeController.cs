@@ -20,7 +20,7 @@ namespace UKHO.ERPFacade.API.Controllers
         [Route("/erpfacade/getpriceinfo")]
         public virtual async Task<IActionResult> Post()
         {
-            _logger.LogInformation(EventIds.ErpFacadeApiCalled.ToEventId(), "ERP Facade endpoint is called. | _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+            //_logger.LogInformation(EventIds.ErpFacadeApiCalled.ToEventId(), "ERP Facade endpoint is called. | _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
             await Task.CompletedTask;
             return Ok();
         }
