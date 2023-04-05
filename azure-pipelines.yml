@@ -162,11 +162,11 @@ stages:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)\ERPFacadeAPI'
               ArtifactName: ERPFacadeAPI
 
-           - task: PublishBuildArtifacts@1
-             displayName: "Publish terraform Artifacts"
-             inputs:
-               PathtoPublish: '$(Build.SourcesDirectory)\Deployment'
-               ArtifactName: terraformartifact
+          - task: PublishBuildArtifacts@1
+            displayName: "Publish terraform Artifacts"
+            inputs:
+              PathtoPublish: '$(Build.SourcesDirectory)\Deployment'
+              ArtifactName: terraformartifact
 
 
   - stage: Devdeploy
