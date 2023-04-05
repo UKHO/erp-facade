@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Logging;
 
 namespace UKHO.ERPFacade.API.Controllers

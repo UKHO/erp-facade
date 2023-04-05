@@ -2,11 +2,13 @@ using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using Microsoft.Extensions.Logging.Configuration;
+using Newtonsoft.Json.Serialization;
 using Serilog;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using UKHO.ERPFacade.API.Filters;
 using UKHO.ERPFacade.Common.Configuration;
+using UKHO.ERPFacade.Common.Helpers;
 using UKHO.Logging.EventHubLogProvider;
 
 namespace UKHO.ERPFacade
@@ -105,8 +107,17 @@ namespace UKHO.ERPFacade
             builder.Services.AddApplicationInsightsTelemetry();
 
             // Add services to the container.
-            builder.Services.AddControllers();
+            builder.Services.AddControllers(o =>
+            {
+                o.AllowEmptyInputInBodyModelBinding = true;
+            }).AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            });
 
+            builder.Services.Configure<AzureStorageConfiguration>(configuration.GetSection("AzureStorageConfiguration"));
+
+            builder.Services.AddSingleton<IAzureTableStorageHelper, AzureTableStorageHelper>();
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             var app = builder.Build();
