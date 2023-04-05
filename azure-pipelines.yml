@@ -15,6 +15,8 @@ variables:
     value: $[counter(format('{0:yyyyMMdd}', pipeline.startTime), 1)]
   - name: WindowsPool
     value: "NautilusBuild"
+  - name: Container
+    value: "ukhydrographicoffice/terraform-azure-powershell-unzip:1.4.4"
 
 stages:
 
@@ -159,3 +161,32 @@ stages:
             inputs:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)\ERPFacadeAPI'
               ArtifactName: ERPFacadeAPI
+
+           - task: PublishBuildArtifacts@1
+             displayName: "Publish terraform Artifacts"
+             inputs:
+               PathtoPublish: '$(Build.SourcesDirectory)\Deployment'
+               ArtifactName: terraformartifact
+
+
+  - stage: Devdeploy
+    displayName: "Devdeploy (inc terraform, webapp deploy)"
+    variables:
+      - group: "ERP-Facade-Dev"
+      - group: "Erp-Dev"
+    jobs:
+      - deployment: DevDeployTerraform
+        displayName: "Dev - Deploy Terraform and Dotnet App"
+        environment: "ERP-Dev"
+        pool: $(DeploymentPool)
+        container: ${{variables.Container}}
+        workspace:
+          clean: all
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - template: Deployment/templates/continuous-deployment.yml
+                  parameters:
+                    ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
+                    AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
