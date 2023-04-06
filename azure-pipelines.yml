@@ -45,7 +45,7 @@ stages:
               workingDirectory: '$(Build.SourcesDirectory)\src'
 
           - task: DotNetCoreCLI@2
-            displayName: ".Net Core - NuGet restore test projects only"
+            displayName: ".Net Core - NuGet restore non test projects only"
             inputs:
               projects: |
                 **/*.csproj

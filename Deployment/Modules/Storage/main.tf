@@ -8,7 +8,7 @@ resource "azurerm_storage_account" "storage" {
   allow_nested_items_to_be_public    = false
   tags                               = var.tags
 }
-resource "azurerm_storage_container" "erp_facade-cotainer" {
+resource "azurerm_storage_container" "erp_facade_container" {
   name                      = var.container_name
   storage_account_name      = azurerm_storage_account.storage.name
 }
