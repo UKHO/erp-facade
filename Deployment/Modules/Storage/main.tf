@@ -13,9 +13,9 @@ resource "azurerm_storage_container" "erp_facade-cotainer" {
   storage_account_name      = azurerm_storage_account.storage.name
 }
 
-resource "azurerm_storage_table" "banner_notification_table" {
+resource "azurerm_storage_table" "table" {
   name                 = var.table_name
-  storage_account_name = azurerm_storage_account.cache_storage.name
+  storage_account_name = azurerm_storage_account.storage.name
 }
 
 resource "azurerm_role_assignment" "storage_data_contributor_role" {
