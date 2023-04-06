@@ -14,7 +14,7 @@ locals {
   table_name         = "eesevents"
   web_app_name       = "${local.service_name}-${local.env_name}-api"
   key_vault_name     = "${local.service_name}-ukho-${local.env_name}-kv"
-  storage_name       = "${local.service_name}-${local.env_name}-storage"
+  storage_name       = "${local.service_name}${local.env_name}storage"
   container_name     = "erp-container"
   tags = {
     SERVICE                   = "ERP Facade"
