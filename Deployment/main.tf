@@ -56,9 +56,12 @@ module "key_vault" {
 
 module "storage" {
   source                                = "./Modules/Storage"
-  name                                  = "${local.service_name}${local.env_name}cachestorage"
+  name                                  = local.storage_name
   resource_group_name                   = azurerm_resource_group.rg.name
   location                              = azurerm_resource_group.rg.location
   tags                                  = local.tags
+  table_name                            = local.table_name
+  container_name                        = local.container_name
+  webapp_principal_id                   = module.webapp_service.web_app_object_id
   
  }

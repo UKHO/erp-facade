@@ -11,8 +11,11 @@ variable "resource_group_name" {
 locals {
   env_name           = lower(terraform.workspace)
   service_name       = "erpfacade"
+  table_name         = "eesevents"
   web_app_name       = "${local.service_name}-${local.env_name}-api"
   key_vault_name     = "${local.service_name}-ukho-${local.env_name}-kv"
+  storage_name       = "${local.service_name}-${local.env_name}-storage"
+  container_name     = "erp-container"
   tags = {
     SERVICE                   = "ERP Facade"
     ENVIRONMENT               = local.env_name
