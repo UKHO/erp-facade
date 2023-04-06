@@ -23,29 +23,28 @@
         /// </summary>
         CheckNullTraceId = 920005,
         /// <summary>
-        /// 920006 - Uploading the received ENC content published event in Azure Blob storage.
-        /// </summary>
-        UploadEncContentPublishedEventInAzureBlob = 920006,
-        /// <summary>
-        /// 920007 - Uploaded ENC content published event in Azure Blob storage successfully.
-        /// </summary>
-        UploadedEncContentPublishedEventInAzureBlob = 920007,
-        /// <summary>
         /// 920008 - Storing the received ENC content published event in Azure table storage.
         /// </summary>
-        StoreEncContentPublishedEventInAzureTable = 920008,
+        StoreEncContentPublishedEventInAzureTable = 920006,
         /// <summary>
         /// 920009 - Added new ENC content published event in Azure table storage successfully.
         /// </summary>
-        AddedEncContentPublishedEventInAzureTable = 920009,
+        AddedEncContentPublishedEventInAzureTable = 920007,
         /// <summary>
         /// 920010 - ENC content published event already exists!.
         /// </summary>
-        CheckDuplicateEncContentPublishedEvent = 920010,
+        CheckDuplicateEncContentPublishedEvent = 920008,
         /// <summary>
         /// 920011 - Updated the existing ENC content published event in Azure table storage successfully.
         /// </summary>
-        UpdatedEncContentPublishedEventInAzureTable = 920011,
-        
+        UpdatedEncContentPublishedEventInAzureTable = 920009,
+        /// <summary>
+        /// 920006 - Uploading the received ENC content published event in Azure Blob storage.
+        /// </summary>
+        UploadEncContentPublishedEventInAzureBlob = 920010,
+        /// <summary>
+        /// 920007 - Uploaded ENC content published event in Azure Blob storage successfully.
+        /// </summary>
+        UploadedEncContentPublishedEventInAzureBlob = 920011,
     }
 }

@@ -55,11 +55,11 @@ namespace UKHO.ERPFacade.API.Controllers
                 return new BadRequestObjectResult(StatusCodes.Status400BadRequest);
             }
 
-            _logger.LogInformation(EventIds.UploadEncContentPublishedEventInAzureBlob.ToEventId(), "Uploading the received ENC content published event in Azure Blob storage. | _X-Correlation-ID : {CorrelationId}", GetCurrentCorrelationId());
-            await _azureBlobStorageHelper.UploadEvent(requestJson, traceId, GetCurrentCorrelationId());
-
             _logger.LogInformation(EventIds.StoreEncContentPublishedEventInAzureTable.ToEventId(), "Storing the received ENC content published event in Azure table storage. | _X-Correlation-ID : {CorrelationId}", GetCurrentCorrelationId());
             await _azureTableStorageHelper.UpsertEntity(requestJson, traceId, GetCurrentCorrelationId());
+
+            _logger.LogInformation(EventIds.UploadEncContentPublishedEventInAzureBlob.ToEventId(), "Uploading the received ENC content published event in Azure Blob storage. | _X-Correlation-ID : {CorrelationId}", GetCurrentCorrelationId());
+            await _azureBlobStorageHelper.UploadEvent(requestJson, traceId, GetCurrentCorrelationId());
 
             return new OkObjectResult(StatusCodes.Status200OK);
         }
