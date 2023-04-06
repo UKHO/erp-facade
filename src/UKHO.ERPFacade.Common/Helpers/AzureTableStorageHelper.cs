@@ -1,7 +1,6 @@
 ﻿using Azure;
 using Azure.Data.Tables;
 using Azure.Data.Tables.Models;
-using Azure.Storage.Blobs.Specialized;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
@@ -16,7 +15,7 @@ namespace UKHO.ERPFacade.Common.Helpers
     public class AzureTableStorageHelper : IAzureTableStorageHelper
     {
         private readonly ILogger<AzureTableStorageHelper> _logger;
-        private const string ERP_FACADE_TABLE_NAME = "abc";
+        private const string ERP_FACADE_TABLE_NAME = "eesevents";
 
         private readonly IOptions<AzureStorageConfiguration> _azureStorageConfig;
 
@@ -24,7 +23,7 @@ namespace UKHO.ERPFacade.Common.Helpers
                                         IOptions<AzureStorageConfiguration> azureStorageConfig)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _azureStorageConfig = azureStorageConfig;
+            _azureStorageConfig = azureStorageConfig ?? throw new ArgumentNullException(nameof(azureStorageConfig));
         }
 
         public async Task UpsertEntity(JObject eesEvent, string traceId, string correlationId)
@@ -35,7 +34,6 @@ namespace UKHO.ERPFacade.Common.Helpers
 
             if (existingEntity == null)
             {
-
                 EESEventTable eESEvent = new()
                 {
                     RowKey = Guid.NewGuid().ToString(),
@@ -46,19 +44,21 @@ namespace UKHO.ERPFacade.Common.Helpers
                     RequestDateTime = null,
                     ResponseDateTime = null
                 };
-                
+
                 await tableClient.AddEntityAsync(eESEvent, CancellationToken.None);
-                _logger.LogInformation(EventIds.AddedEncContentPublishedEventInAzureTable.ToEventId(), "Added new ENC content published event in Azure table storage successfully. | _X-Correlation-ID : {CorrelationId}", correlationId);
+
+                _logger.LogInformation(EventIds.AddedEncContentPublishedEventInAzureTable.ToEventId(), "ENC content published event in added in azure table successfully. | _X-Correlation-ID : {CorrelationId}", correlationId);
             }
             else
             {
-                _logger.LogWarning(EventIds.CheckDuplicateEncContentPublishedEvent.ToEventId(), "ENC content published event already exists! | _X-Correlation-ID : {CorrelationId}", correlationId);
+                _logger.LogWarning(EventIds.ReceivedDuplicateEncContentPublishedEvent.ToEventId(), "Duplicate ENC contect published event received. | _X-Correlation-ID : {CorrelationId}", correlationId);
 
                 existingEntity.Timestamp = DateTime.UtcNow;
                 existingEntity.EventData = eesEvent.ToString();
 
                 await tableClient.UpdateEntityAsync(existingEntity, ETag.All, TableUpdateMode.Replace);
-                _logger.LogInformation(EventIds.UpdatedEncContentPublishedEventInAzureTable.ToEventId(), "Updated the existing ENC content published event in Azure table storage successfully. | _X-Correlation-ID : {CorrelationId}", correlationId);
+
+                _logger.LogInformation(EventIds.UpdatedEncContentPublishedEventInAzureTable.ToEventId(), "Existing ENC content published event updated in azure table successfully. | _X-Correlation-ID : {CorrelationId}", correlationId);
             }
         }
 

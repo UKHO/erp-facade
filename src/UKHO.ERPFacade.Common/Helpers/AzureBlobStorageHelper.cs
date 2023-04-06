@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Azure;
-using Azure.Storage.Blobs;
-using Azure.Storage.Blobs.Models;
+﻿using Azure.Storage.Blobs;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
+using System.Diagnostics.CodeAnalysis;
+using System.Text;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Logging;
 
@@ -26,7 +19,7 @@ namespace UKHO.ERPFacade.Common.Helpers
                                         IOptions<AzureStorageConfiguration> azureStorageConfig)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _azureStorageConfig = azureStorageConfig;
+            _azureStorageConfig = azureStorageConfig ?? throw new ArgumentNullException(nameof(azureStorageConfig));
         }
 
         public async Task UploadEvent(JObject eesEvent, string traceId, string correlationId)
@@ -36,7 +29,8 @@ namespace UKHO.ERPFacade.Common.Helpers
             Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(eesEvent.ToString() ?? ""));
 
             await blobClient.UploadAsync(stream, overwrite: true);
-            _logger.LogInformation(EventIds.UploadedEncContentPublishedEventInAzureBlob.ToEventId(), "Uploaded ENC content published event in Azure Blob storage successfully. | _X-Correlation-ID : {CorrelationId}", correlationId);
+
+            _logger.LogInformation(EventIds.UploadedEncContentPublishedEventInAzureBlob.ToEventId(), "ENC content published event is uploaded in blob storage successfully. | _X-Correlation-ID : {CorrelationId}", correlationId);
         }
 
         //Private Methods
@@ -44,9 +38,9 @@ namespace UKHO.ERPFacade.Common.Helpers
         {
             BlobContainerClient blobContainerClient = new BlobContainerClient(_azureStorageConfig.Value.ConnectionString, containerName);
             blobContainerClient.CreateIfNotExists();
-             
+
             var blobName = containerName + ".json";
-           
+
             BlobClient blobClient = blobContainerClient.GetBlobClient(blobName);
             return blobClient;
         }

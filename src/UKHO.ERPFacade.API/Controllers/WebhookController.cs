@@ -51,14 +51,14 @@ namespace UKHO.ERPFacade.API.Controllers
 
             if (string.IsNullOrEmpty(traceId))
             {
-                _logger.LogWarning(EventIds.CheckNullTraceId.ToEventId(), "Trace ID not found! | _X-Correlation-ID : {CorrelationId}", GetCurrentCorrelationId());
+                _logger.LogWarning(EventIds.TraceIdMissingInEvent.ToEventId(), "TraceId is missing in ENC content published event. | _X-Correlation-ID : {CorrelationId}", GetCurrentCorrelationId());
                 return new BadRequestObjectResult(StatusCodes.Status400BadRequest);
             }
 
-            _logger.LogInformation(EventIds.StoreEncContentPublishedEventInAzureTable.ToEventId(), "Storing the received ENC content published event in Azure table storage. | _X-Correlation-ID : {CorrelationId}", GetCurrentCorrelationId());
+            _logger.LogInformation(EventIds.StoreEncContentPublishedEventInAzureTable.ToEventId(), "Storing the received ENC content published event in azure table. | _X-Correlation-ID : {CorrelationId}", GetCurrentCorrelationId());
             await _azureTableStorageHelper.UpsertEntity(requestJson, traceId, GetCurrentCorrelationId());
 
-            _logger.LogInformation(EventIds.UploadEncContentPublishedEventInAzureBlob.ToEventId(), "Uploading the received ENC content published event in Azure Blob storage. | _X-Correlation-ID : {CorrelationId}", GetCurrentCorrelationId());
+            _logger.LogInformation(EventIds.UploadEncContentPublishedEventInAzureBlob.ToEventId(), "Uploading the received ENC content published event in blob storage. | _X-Correlation-ID : {CorrelationId}", GetCurrentCorrelationId());
             await _azureBlobStorageHelper.UploadEvent(requestJson, traceId, GetCurrentCorrelationId());
 
             return new OkObjectResult(StatusCodes.Status200OK);

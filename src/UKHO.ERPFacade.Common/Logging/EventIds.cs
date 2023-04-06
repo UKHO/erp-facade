@@ -19,31 +19,31 @@
         /// </summary>
         NewEncContentPublishedEventReceived = 920004,
         /// <summary>
-        /// 920005 - Trace ID not found.
+        /// 920005 - TraceId is missing in ENC content published event.
         /// </summary>
-        CheckNullTraceId = 920005,
+        TraceIdMissingInEvent = 920005,
         /// <summary>
-        /// 920008 - Storing the received ENC content published event in Azure table storage.
+        /// 920006 - Storing the received ENC content published event in azure table.
         /// </summary>
         StoreEncContentPublishedEventInAzureTable = 920006,
         /// <summary>
-        /// 920009 - Added new ENC content published event in Azure table storage successfully.
+        /// 920007 - ENC content published event in added in azure table successfully.
         /// </summary>
         AddedEncContentPublishedEventInAzureTable = 920007,
         /// <summary>
-        /// 920010 - ENC content published event already exists!.
+        /// 920008 - Duplicate ENC contect published event received.
         /// </summary>
-        CheckDuplicateEncContentPublishedEvent = 920008,
+        ReceivedDuplicateEncContentPublishedEvent = 920008,
         /// <summary>
-        /// 920011 - Updated the existing ENC content published event in Azure table storage successfully.
+        /// 920009 - Existing ENC content published event updated in azure table successfully.
         /// </summary>
         UpdatedEncContentPublishedEventInAzureTable = 920009,
         /// <summary>
-        /// 920006 - Uploading the received ENC content published event in Azure Blob storage.
+        /// 920010 - Uploading the received ENC content published event in blob storage.
         /// </summary>
         UploadEncContentPublishedEventInAzureBlob = 920010,
         /// <summary>
-        /// 920007 - Uploaded ENC content published event in Azure Blob storage successfully.
+        /// 920011 - ENC content published event is uploaded in blob storage successfully.
         /// </summary>
         UploadedEncContentPublishedEventInAzureBlob = 920011,
     }
