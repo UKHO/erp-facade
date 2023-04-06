@@ -9,6 +9,6 @@ namespace UKHO.ERPFacade.Common.Helpers
 {
     public interface IAzureBlobStorageHelper
     {
-        Task UploadEvent(JObject eesEvent, string traceId);
+        Task UploadEvent(JObject eesEvent, string traceId, string correlationId);
     }
 }
