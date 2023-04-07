@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UKHO.ERPFacade.API.Controllers;
+using UKHO.ERPFacade.Common.Helpers;
 using UKHO.ERPFacade.Common.Logging;
 
 namespace UKHO.ERPFacade.API.UnitTests.Controllers
@@ -18,6 +19,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
     {
         private IHttpContextAccessor _fakeHttpContextAccessor;
         private ILogger<WebhookController> _fakeLogger;
+        private ISapClient _fakeSapClient;
+
         private WebhookController _fakeWebHookController;
 
         [SetUp]
@@ -25,7 +28,9 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         {
             _fakeHttpContextAccessor = A.Fake<IHttpContextAccessor>();
             _fakeLogger = A.Fake<ILogger<WebhookController>>();
-            _fakeWebHookController = new WebhookController(_fakeHttpContextAccessor, _fakeLogger);
+            _fakeSapClient = A.Fake<ISapClient>();
+
+            _fakeWebHookController = new WebhookController(_fakeHttpContextAccessor, _fakeLogger, _fakeSapClient);
         }
 
         [Test]

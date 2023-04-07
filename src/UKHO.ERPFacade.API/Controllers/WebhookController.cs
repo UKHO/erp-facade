@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
+using System.Xml;
+using UKHO.ERPFacade.Common.Helpers;
 using UKHO.ERPFacade.Common.Logging;
 
 namespace UKHO.ERPFacade.API.Controllers
@@ -9,12 +11,15 @@ namespace UKHO.ERPFacade.API.Controllers
     public class WebhookController : BaseController<WebhookController>
     {
         private readonly ILogger<WebhookController> _logger;
+        private readonly ISapClient _sapClient;
 
         public WebhookController(IHttpContextAccessor contextAccessor,
-                                 ILogger<WebhookController> logger)
+                                 ILogger<WebhookController> logger,
+                                 ISapClient sapClient)
         : base(contextAccessor)
         {
             _logger = logger;
+            _sapClient = sapClient;
         }
 
         [HttpOptions]
@@ -38,6 +43,11 @@ namespace UKHO.ERPFacade.API.Controllers
         public virtual async Task<IActionResult> NewEncContentPublishedEventReceived([FromBody] JObject request)
         {
             _logger.LogInformation(EventIds.NewEncContentPublishedEventReceived.ToEventId(), "ERP Facade webhook has received new enccontentpublished event from EES. | _X-Correlation-ID : {CorrelationId}", GetCurrentCorrelationId());
+
+            XmlDocument soapXml = new XmlDocument();
+            soapXml.Load(@"D:\ERP Facade\SAPRequest.xml");
+
+            _sapClient.PostEventData(soapXml);
 
             await Task.CompletedTask;
 

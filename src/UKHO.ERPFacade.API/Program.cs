@@ -7,6 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using UKHO.ERPFacade.API.Filters;
 using UKHO.ERPFacade.Common.Configuration;
+using UKHO.ERPFacade.Common.Helpers;
 using UKHO.Logging.EventHubLogProvider;
 
 namespace UKHO.ERPFacade
@@ -113,6 +114,12 @@ namespace UKHO.ERPFacade
             {
                 options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             });
+
+            builder.Services.AddHttpClient<ISapClient, SapClient>(c =>
+            {
+                c.BaseAddress = new Uri(configuration.GetValue<string>("SapConfiguration:BaseAddress"));
+            });
+            builder.Services.Configure<SapConfiguration>(configuration.GetSection("SapConfiguration"));
 
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
