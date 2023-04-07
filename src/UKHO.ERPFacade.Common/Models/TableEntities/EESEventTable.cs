@@ -1,8 +1,10 @@
 ﻿using Azure;
 using Azure.Data.Tables;
+using System.Diagnostics.CodeAnalysis;
 
 namespace UKHO.ERPFacade.Common.Models.TableEntities
 {
+    [ExcludeFromCodeCoverage]
     public class EESEventTable : ITableEntity
     {
         public string RowKey { get; set; } = default!;

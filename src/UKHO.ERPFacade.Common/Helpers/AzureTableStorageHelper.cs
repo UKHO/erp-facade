@@ -30,7 +30,7 @@ namespace UKHO.ERPFacade.Common.Helpers
         {
             TableClient tableClient = GetTableClient(ERP_FACADE_TABLE_NAME);
 
-            EESEventTable? existingEntity = await GetEntity(traceId);
+            EESEventTable existingEntity = await GetEntity(traceId);
 
             if (existingEntity == null)
             {
@@ -47,22 +47,22 @@ namespace UKHO.ERPFacade.Common.Helpers
 
                 await tableClient.AddEntityAsync(eESEvent, CancellationToken.None);
 
-                _logger.LogInformation(EventIds.AddedEncContentPublishedEventInAzureTable.ToEventId(), "ENC content published event in added in azure table successfully. | _X-Correlation-ID : {CorrelationId}", correlationId);
+                _logger.LogInformation(EventIds.AddedEncContentPublishedEventInAzureTable.ToEventId(), "ENC content published event is added in azure table successfully. | _X-Correlation-ID : {CorrelationId}", correlationId);
             }
             else
             {
-                _logger.LogWarning(EventIds.ReceivedDuplicateEncContentPublishedEvent.ToEventId(), "Duplicate ENC contect published event received. | _X-Correlation-ID : {CorrelationId}", correlationId);
+                _logger.LogWarning(EventIds.ReceivedDuplicateEncContentPublishedEvent.ToEventId(), "Duplicate ENC content published event received. | _X-Correlation-ID : {CorrelationId}", correlationId);
 
                 existingEntity.Timestamp = DateTime.UtcNow;
                 existingEntity.EventData = eesEvent.ToString();
 
                 await tableClient.UpdateEntityAsync(existingEntity, ETag.All, TableUpdateMode.Replace);
 
-                _logger.LogInformation(EventIds.UpdatedEncContentPublishedEventInAzureTable.ToEventId(), "Existing ENC content published event updated in azure table successfully. | _X-Correlation-ID : {CorrelationId}", correlationId);
+                _logger.LogInformation(EventIds.UpdatedEncContentPublishedEventInAzureTable.ToEventId(), "Existing ENC content published event is updated in azure table successfully. | _X-Correlation-ID : {CorrelationId}", correlationId);
             }
         }
 
-        public async Task<EESEventTable?> GetEntity(string traceId)
+        public async Task<EESEventTable> GetEntity(string traceId)
         {
             IList<EESEventTable> records = new List<EESEventTable>();
             TableClient tableClient = GetTableClient(ERP_FACADE_TABLE_NAME);
@@ -77,7 +77,7 @@ namespace UKHO.ERPFacade.Common.Helpers
         //Private Methods
         private TableClient GetTableClient(string tableName)
         {
-            var serviceClient = new TableServiceClient(_azureStorageConfig.Value.ConnectionString);
+            TableServiceClient serviceClient = new (_azureStorageConfig.Value.ConnectionString);
             Pageable<TableItem> queryTableResults = serviceClient.Query(filter: $"TableName eq '{tableName}'");
             var tableExists = queryTableResults.FirstOrDefault(t => t.Name == tableName);
 
@@ -86,7 +86,7 @@ namespace UKHO.ERPFacade.Common.Helpers
                 throw new Exception();
             }
 
-            TableClient? tableClient = serviceClient.GetTableClient(tableName);
+            TableClient tableClient = serviceClient.GetTableClient(tableName);
             return tableClient;
         }
     }

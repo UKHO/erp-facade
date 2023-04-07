@@ -36,7 +36,7 @@ namespace UKHO.ERPFacade.Common.Helpers
         //Private Methods
         private BlobClient GetBlobClient(string containerName)
         {
-            BlobContainerClient blobContainerClient = new BlobContainerClient(_azureStorageConfig.Value.ConnectionString, containerName);
+            BlobContainerClient blobContainerClient = new (_azureStorageConfig.Value.ConnectionString, containerName);
             blobContainerClient.CreateIfNotExists();
 
             var blobName = containerName + ".json";
