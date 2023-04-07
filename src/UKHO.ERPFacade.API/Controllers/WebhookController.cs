@@ -47,9 +47,9 @@ namespace UKHO.ERPFacade.API.Controllers
             XmlDocument soapXml = new XmlDocument();
             soapXml.Load(@"D:\ERP Facade\SAPRequest.xml");
 
-            _sapClient.PostEventData(soapXml);
+            HttpResponseMessage response = await _sapClient.PostEventData(soapXml, "Z_ADDS_MAT_INFO");
 
-            await Task.CompletedTask;
+            _logger.LogInformation("SAP Mock Service response - {SapResponse}", response.Content?.ReadAsStringAsync().Result);
 
             return new OkObjectResult(StatusCodes.Status200OK);
         }

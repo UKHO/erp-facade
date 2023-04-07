@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Xml;
-using UKHO.ERPFacade.Common.Configuration;
 
 namespace UKHO.ERPFacade.Common.Helpers
 {
@@ -9,22 +8,20 @@ namespace UKHO.ERPFacade.Common.Helpers
     public class SapClient : ISapClient
     {
         private readonly HttpClient _httpClient;
-        private readonly SapConfiguration _sapConfig;
 
-        public SapClient(HttpClient httpClient, SapConfiguration sapConfig)
+        public SapClient(HttpClient httpClient)
         {
             _httpClient = httpClient;
-            _sapConfig = sapConfig;
 
             _httpClient.DefaultRequestHeaders.Add("Accept", "text/xml");
-            var credentials = "Basic " + Convert.ToBase64String(Encoding.ASCII.GetBytes($"{sapConfig.Username}:{sapConfig.Password}"));
+            var credentials = "Basic " + Convert.ToBase64String(Encoding.ASCII.GetBytes($"vishal:dukare"));
             _httpClient.DefaultRequestHeaders.Add("Authorization", credentials);
         }
 
-        public async Task<HttpResponseMessage> PostEventData(XmlDocument sapMessageXml)
+        public async Task<HttpResponseMessage> PostEventData(XmlDocument sapMessageXml, string sapServiceOperation)
         {
-            var response = await _httpClient.PostAsync($"?op={_sapConfig.SapServiceOperation}", new StringContent(sapMessageXml.InnerXml, Encoding.UTF8, "text/xml"));
-
+            var response = await _httpClient.PostAsync($"?op={sapServiceOperation}", new StringContent(sapMessageXml.InnerXml, Encoding.UTF8, "text/xml"));
+            var data = response.Content?.ReadAsStringAsync().Result;
             return response;
         }
     }

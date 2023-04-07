@@ -115,13 +115,13 @@ namespace UKHO.ERPFacade
                 options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             });
 
+            builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            builder.Services.Configure<SapConfiguration>(configuration.GetSection("SapConfiguration"));
+
             builder.Services.AddHttpClient<ISapClient, SapClient>(c =>
             {
                 c.BaseAddress = new Uri(configuration.GetValue<string>("SapConfiguration:BaseAddress"));
             });
-            builder.Services.Configure<SapConfiguration>(configuration.GetSection("SapConfiguration"));
-
-            builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             var app = builder.Build();
 
