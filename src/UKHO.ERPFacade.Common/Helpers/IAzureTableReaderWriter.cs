@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using UKHO.ERPFacade.Common.Models.TableEntities;
 
-namespace UKHO.ERPFacade.Common.Helpers
+namespace UKHO.ERPFacade.Common.IO
 {
     public interface IAzureTableReaderWriter
     {
