@@ -6,6 +6,7 @@ using Serilog;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using UKHO.ERPFacade.API.Filters;
+using UKHO.ERPFacade.API.Services;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.Logging.EventHubLogProvider;
 
@@ -113,6 +114,8 @@ namespace UKHO.ERPFacade
             {
                 options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             });
+
+            builder.Services.AddHostedService<TimeoutService>();
 
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
