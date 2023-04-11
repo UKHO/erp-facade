@@ -19,8 +19,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
     {
         private IHttpContextAccessor _fakeHttpContextAccessor;
         private ILogger<WebhookController> _fakeLogger;
-        private IAzureTableStorageHelper _fakeAzureTableStorageHelper;
-        private IAzureBlobStorageHelper _fakeAzureBlobStorageHelper;
+        private IAzureTableReaderWriter _fakeAzureTableStorageHelper;
+        private IAzureBlobEventWriter _fakeAzureBlobStorageHelper;
 
         private WebhookController _fakeWebHookController;
 
@@ -29,8 +29,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         {
             _fakeHttpContextAccessor = A.Fake<IHttpContextAccessor>();
             _fakeLogger = A.Fake<ILogger<WebhookController>>();
-            _fakeAzureTableStorageHelper = A.Fake<IAzureTableStorageHelper>();
-            _fakeAzureBlobStorageHelper = A.Fake<IAzureBlobStorageHelper>();
+            _fakeAzureTableStorageHelper = A.Fake<IAzureTableReaderWriter>();
+            _fakeAzureBlobStorageHelper = A.Fake<IAzureBlobEventWriter>();
 
             _fakeWebHookController = new WebhookController(_fakeHttpContextAccessor,
                                                            _fakeLogger,

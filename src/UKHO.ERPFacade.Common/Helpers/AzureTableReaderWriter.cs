@@ -12,14 +12,14 @@ using UKHO.ERPFacade.Common.Models.TableEntities;
 namespace UKHO.ERPFacade.Common.Helpers
 {
     [ExcludeFromCodeCoverage]
-    public class AzureTableStorageHelper : IAzureTableStorageHelper
+    public class AzureTableReaderWriter : IAzureTableReaderWriter
     {
-        private readonly ILogger<AzureTableStorageHelper> _logger;
+        private readonly ILogger<AzureTableReaderWriter> _logger;
         private const string ERP_FACADE_TABLE_NAME = "eesevents";
 
         private readonly IOptions<AzureStorageConfiguration> _azureStorageConfig;
 
-        public AzureTableStorageHelper(ILogger<AzureTableStorageHelper> logger,
+        public AzureTableReaderWriter(ILogger<AzureTableReaderWriter> logger,
                                         IOptions<AzureStorageConfiguration> azureStorageConfig)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -30,11 +30,11 @@ namespace UKHO.ERPFacade.Common.Helpers
         {
             TableClient tableClient = GetTableClient(ERP_FACADE_TABLE_NAME);
 
-            EESEventTable existingEntity = await GetEntity(traceId);
+            EESEventEntity existingEntity = await GetEntity(traceId);
 
             if (existingEntity == null)
             {
-                EESEventTable eESEvent = new()
+                EESEventEntity eESEvent = new()
                 {
                     RowKey = Guid.NewGuid().ToString(),
                     PartitionKey = Guid.NewGuid().ToString(),
@@ -62,11 +62,11 @@ namespace UKHO.ERPFacade.Common.Helpers
             }
         }
 
-        public async Task<EESEventTable> GetEntity(string traceId)
+        public async Task<EESEventEntity> GetEntity(string traceId)
         {
-            IList<EESEventTable> records = new List<EESEventTable>();
+            IList<EESEventEntity> records = new List<EESEventEntity>();
             TableClient tableClient = GetTableClient(ERP_FACADE_TABLE_NAME);
-            var entities = tableClient.QueryAsync<EESEventTable>(filter: TableClient.CreateQueryFilter($"TraceID eq {traceId}"), maxPerPage: 1);
+            var entities = tableClient.QueryAsync<EESEventEntity>(filter: TableClient.CreateQueryFilter($"TraceID eq {traceId}"), maxPerPage: 1);
             await foreach (var entity in entities)
             {
                 records.Add(entity);

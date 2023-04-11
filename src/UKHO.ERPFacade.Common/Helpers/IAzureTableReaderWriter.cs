@@ -3,9 +3,9 @@ using UKHO.ERPFacade.Common.Models.TableEntities;
 
 namespace UKHO.ERPFacade.Common.Helpers
 {
-    public interface IAzureTableStorageHelper
+    public interface IAzureTableReaderWriter
     {
         Task UpsertEntity(JObject eesEvent, string traceId, string correlationId);
-        Task<EESEventTable> GetEntity(string traceId);
+        Task<EESEventEntity> GetEntity(string traceId);
     }
 }

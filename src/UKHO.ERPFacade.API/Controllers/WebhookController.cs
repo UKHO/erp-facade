@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
+using System.Xml;
 using UKHO.ERPFacade.Common.Helpers;
 using UKHO.ERPFacade.Common.Logging;
 
@@ -10,13 +11,13 @@ namespace UKHO.ERPFacade.API.Controllers
     public class WebhookController : BaseController<WebhookController>
     {
         private readonly ILogger<WebhookController> _logger;
-        private readonly IAzureTableStorageHelper _azureTableStorageHelper;
-        private readonly IAzureBlobStorageHelper _azureBlobStorageHelper;
+        private readonly IAzureTableReaderWriter _azureTableStorageHelper;
+        private readonly IAzureBlobEventWriter _azureBlobStorageHelper;
 
         public WebhookController(IHttpContextAccessor contextAccessor,
                                  ILogger<WebhookController> logger,
-                                 IAzureTableStorageHelper azureTableStorageHelper,
-                                 IAzureBlobStorageHelper azureBlobStorageHelper)
+                                 IAzureTableReaderWriter azureTableStorageHelper,
+                                 IAzureBlobEventWriter azureBlobStorageHelper)
         : base(contextAccessor)
         {
             _logger = logger;

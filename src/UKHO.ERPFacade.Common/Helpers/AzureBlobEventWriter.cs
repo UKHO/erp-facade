@@ -10,12 +10,12 @@ using UKHO.ERPFacade.Common.Logging;
 namespace UKHO.ERPFacade.Common.Helpers
 {
     [ExcludeFromCodeCoverage]
-    public class AzureBlobStorageHelper : IAzureBlobStorageHelper
+    public class AzureBlobEventWriter : IAzureBlobEventWriter
     {
-        private readonly ILogger<AzureBlobStorageHelper> _logger;
+        private readonly ILogger<AzureBlobEventWriter> _logger;
         private readonly IOptions<AzureStorageConfiguration> _azureStorageConfig;
 
-        public AzureBlobStorageHelper(ILogger<AzureBlobStorageHelper> logger,
+        public AzureBlobEventWriter(ILogger<AzureBlobEventWriter> logger,
                                         IOptions<AzureStorageConfiguration> azureStorageConfig)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));

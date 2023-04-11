@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace UKHO.ERPFacade.Common.Helpers
 {
-    public interface IAzureBlobStorageHelper
+    public interface IAzureBlobEventWriter
     {
         Task UploadEvent(JObject eesEvent, string traceId, string correlationId);
     }

@@ -118,8 +118,8 @@ namespace UKHO.ERPFacade
 
             builder.Services.Configure<AzureStorageConfiguration>(configuration.GetSection("AzureStorageConfiguration"));
 
-            builder.Services.AddSingleton<IAzureTableStorageHelper, AzureTableStorageHelper>();
-            builder.Services.AddSingleton<IAzureBlobStorageHelper, AzureBlobStorageHelper>();
+            builder.Services.AddSingleton<IAzureTableReaderWriter, AzureTableReaderWriter>();
+            builder.Services.AddSingleton<IAzureBlobEventWriter, AzureBlobEventWriter>();
 
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 

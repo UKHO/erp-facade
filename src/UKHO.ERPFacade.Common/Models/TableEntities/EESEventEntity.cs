@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace UKHO.ERPFacade.Common.Models.TableEntities
 {
     [ExcludeFromCodeCoverage]
-    public class EESEventTable : ITableEntity
+    public class EESEventEntity : ITableEntity
     {
         public string RowKey { get; set; } = default!;
 
