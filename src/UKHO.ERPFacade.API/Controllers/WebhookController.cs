@@ -11,18 +11,18 @@ namespace UKHO.ERPFacade.API.Controllers
     public class WebhookController : BaseController<WebhookController>
     {
         private readonly ILogger<WebhookController> _logger;
-        private readonly IAzureTableReaderWriter _azureTableStorageHelper;
-        private readonly IAzureBlobEventWriter _azureBlobStorageHelper;
+        private readonly IAzureTableReaderWriter _azureTableReaderWriter;
+        private readonly IAzureBlobEventWriter _azureBlobEventWriter;
 
         public WebhookController(IHttpContextAccessor contextAccessor,
                                  ILogger<WebhookController> logger,
-                                 IAzureTableReaderWriter azureTableStorageHelper,
-                                 IAzureBlobEventWriter azureBlobStorageHelper)
+                                 IAzureTableReaderWriter azureTableReaderWriter,
+                                 IAzureBlobEventWriter azureBlobEventWriter)
         : base(contextAccessor)
         {
             _logger = logger;
-            _azureTableStorageHelper = azureTableStorageHelper;
-            _azureBlobStorageHelper = azureBlobStorageHelper;
+            _azureTableReaderWriter = azureTableReaderWriter;
+            _azureBlobEventWriter = azureBlobEventWriter;
         }
 
         [HttpOptions]
@@ -57,10 +57,10 @@ namespace UKHO.ERPFacade.API.Controllers
             }
 
             _logger.LogInformation(EventIds.StoreEncContentPublishedEventInAzureTable.ToEventId(), "Storing the received ENC content published event in azure table. | _X-Correlation-ID : {CorrelationId}", GetCurrentCorrelationId());
-            await _azureTableStorageHelper.UpsertEntity(requestJson, traceId, GetCurrentCorrelationId());
+            await _azureTableReaderWriter.UpsertEntity(requestJson, traceId, GetCurrentCorrelationId());
 
             _logger.LogInformation(EventIds.UploadEncContentPublishedEventInAzureBlob.ToEventId(), "Uploading the received ENC content published event in blob storage. | _X-Correlation-ID : {CorrelationId}", GetCurrentCorrelationId());
-            await _azureBlobStorageHelper.UploadEvent(requestJson, traceId, GetCurrentCorrelationId());
+            await _azureBlobEventWriter.UploadEvent(requestJson, traceId, GetCurrentCorrelationId());
 
             return new OkObjectResult(StatusCodes.Status200OK);
         }
