@@ -50,6 +50,9 @@ module "key_vault" {
   secrets = {
       "EventHubLoggingConfiguration--ConnectionString"            = module.eventhub.log_primary_connection_string
       "EventHubLoggingConfiguration--EntityPath"                  = module.eventhub.entity_path
+      "ApplicationInsights--ConnectionString"                     = module.app_insights.connection_string
+      "AzureStorageConfiguration--ConnectionString"                = module.storage.storage_connection_string
+      
  }
   tags                                                            = local.tags
 }
