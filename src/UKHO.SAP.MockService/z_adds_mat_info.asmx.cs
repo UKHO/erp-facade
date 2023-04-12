@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Azure.Core;
+using Azure.Identity;
+using Azure.Security.KeyVault.Secrets;
+using System;
 using System.Web;
 using System.Web.Services;
 using System.Xml.Serialization;
@@ -20,26 +23,13 @@ namespace UKHO.SAP.MockService
         public Z_ADDS_MAT_INFOResponse Z_ADDS_MAT_INFO([XmlElement("Z_ADDS_MAT_INFO", Namespace = "urn:sap-com:document:sap:rfc:functions")] Z_ADDS_MAT_INFO z_ADDS_MAT_INFO)
         {
             Z_ADDS_MAT_INFOResponse response;
-            string authHeader = HttpContext.Current.Request.Headers["Authorization"];
-            string[] authHeaderParts = authHeader.Split(' ');
 
-            if (authHeaderParts.Length != 2 || authHeaderParts[0] != "Basic")
-            {
-                return new Z_ADDS_MAT_INFOResponse()
-                {
-                    EX_MESSAGE = "Invalid Authorization header",
-                    EX_STATUS = "Failed"
-                };
-            }
+            (string headerUsername, string headerPassword) = ExtractCredentialsFromHeader();
 
-            string decodedCredentials = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(authHeaderParts[1]));
+            (string keyvaultUsername, string keyvaultPassword) = GetCredentialsFromKeyVault();
 
-            string[] credentials = decodedCredentials.Split(':');
-
-            string username = credentials[0];
-            string password = credentials[1];
-
-            if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password) && username == "vishal" && password == "dukare")
+            if (!string.IsNullOrEmpty(headerUsername) && !string.IsNullOrEmpty(headerPassword) &&
+                headerUsername == keyvaultUsername && headerPassword == keyvaultPassword)
             {
                 response = new Z_ADDS_MAT_INFOResponse()
                 {
@@ -56,6 +46,47 @@ namespace UKHO.SAP.MockService
                 };
             }
             return response;
+        }
+
+        private (string username, string password) GetCredentialsFromKeyVault()
+        {
+            SecretClientOptions options = new SecretClientOptions()
+            {
+                Retry =
+                {
+                    Delay= TimeSpan.FromSeconds(2),
+                    MaxDelay = TimeSpan.FromSeconds(16),
+                    MaxRetries = 5,
+                    Mode = RetryMode.Exponential
+                 }
+            };
+            var client = new SecretClient(new Uri(System.Configuration.ConfigurationManager.AppSettings["KeyVaultUri"]), new DefaultAzureCredential(), options);
+
+            KeyVaultSecret usernameSecret = client.GetSecret(System.Configuration.ConfigurationManager.AppSettings["UsernameSecretName"]);
+            KeyVaultSecret passwordSecret = client.GetSecret(System.Configuration.ConfigurationManager.AppSettings["PasswordSecretName"]);
+
+            return (usernameSecret.Value, passwordSecret.Value);
+        }
+
+        private (string username, string password) ExtractCredentialsFromHeader()
+        {
+            string headerUsername = string.Empty;
+            string headerPassword = string.Empty;
+
+            string authHeader = HttpContext.Current.Request.Headers["Authorization"];
+            string[] authHeaderParts = authHeader.Split(' ');
+
+            if (authHeaderParts.Length == 2 || authHeaderParts[0] == "Basic")
+            {
+                string decodedCredentials = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(authHeaderParts[1]));
+
+                string[] credentials = decodedCredentials.Split(':');
+
+                headerUsername = credentials[0];
+                headerPassword = credentials[1];
+            }
+
+            return (headerUsername, headerPassword);
         }
     }
 }
