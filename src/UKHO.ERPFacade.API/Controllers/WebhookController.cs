@@ -42,16 +42,29 @@ namespace UKHO.ERPFacade.API.Controllers
         [Route("/webhook/newenccontentpublishedeventreceived")]
         public virtual async Task<IActionResult> NewEncContentPublishedEventReceived([FromBody] JObject request)
         {
-            _logger.LogInformation(EventIds.NewEncContentPublishedEventReceived.ToEventId(), "ERP Facade webhook has received new enccontentpublished event from EES. | _X-Correlation-ID : {CorrelationId}", GetCurrentCorrelationId());
+            try
+            {
+                _logger.LogInformation(EventIds.NewEncContentPublishedEventReceived.ToEventId(), "ERP Facade webhook has received new enccontentpublished event from EES. | _X-Correlation-ID : {CorrelationId}", GetCurrentCorrelationId());
 
-            XmlDocument soapXml = new XmlDocument();
-            soapXml.Load(@"D:\ERP Facade\SAPRequest.xml");
+                //Below two lines are added temporary only to send sample xml to mock service for local testing.
+                XmlDocument soapXml = new XmlDocument();
+                soapXml.Load(@"..\UKHO.ERPFacade.API\SapXmlTemplates\SAPRequest.xml");
 
-            HttpResponseMessage response = await _sapClient.PostEventData(soapXml, "Z_ADDS_MAT_INFO");
+                HttpResponseMessage response = await _sapClient.PostEventData(soapXml, "Z_ADDS_MAT_INFO");
 
-            _logger.LogInformation("SAP Mock Service response - {SapResponse}", response.Content?.ReadAsStringAsync().Result);
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logger.LogError("Could not connect to SAP | {StatusCode} | {SapResponse}", response.StatusCode, response.Content?.ReadAsStringAsync().Result);
+                    throw new Exception();
+                }
+                _logger.LogInformation("Data pushed to SAP successfully | {StatusCode} | {SapResponse}", response.StatusCode, response.Content?.ReadAsStringAsync().Result);
 
-            return new OkObjectResult(StatusCodes.Status200OK);
+                return new OkObjectResult(StatusCodes.Status200OK);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

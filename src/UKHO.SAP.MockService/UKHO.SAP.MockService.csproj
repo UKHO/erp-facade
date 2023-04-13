@@ -179,6 +179,7 @@
     <Content Include="z_adds_mat_info.asmx" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BasicAuthHttpModule.cs" />
     <Compile Include="EntityPropertyConverter\EntityPropertyConvert.cs" />
     <Compile Include="EntityPropertyConverter\EntityPropertyConverterAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

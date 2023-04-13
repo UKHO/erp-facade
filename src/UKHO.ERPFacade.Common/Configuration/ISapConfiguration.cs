@@ -1,9 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace UKHO.ERPFacade.Common.Configuration
+﻿namespace UKHO.ERPFacade.Common.Configuration
 {
-    [ExcludeFromCodeCoverage]
-    public class SapConfiguration : ISapConfiguration
+    public interface ISapConfiguration
     {
         public string BaseAddress { get; set; }
 
