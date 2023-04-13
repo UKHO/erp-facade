@@ -17,7 +17,7 @@ namespace UKHO.ERPFacade.Common.HttpClients
             _httpClient = httpClient;
             _sapConfig = sapConfig;
 
-            var credentials = "Basic " + Convert.ToBase64String(Encoding.ASCII.GetBytes("$" + _sapConfig.Value.Username + ":" + _sapConfig.Value.Password));
+            var credentials = "Basic " + Convert.ToBase64String(Encoding.ASCII.GetBytes(_sapConfig.Value.Username + ":" + _sapConfig.Value.Password));
 
             _httpClient.DefaultRequestHeaders.Add("Authorization", credentials);
             _httpClient.DefaultRequestHeaders.Add("Accept", "text/xml");
