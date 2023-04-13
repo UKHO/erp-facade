@@ -11,6 +11,7 @@ using Serilog.Events;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using UKHO.ERPFacade.Common.Configuration;
+using UKHO.ERPFacade.Common.IO;
 using UKHO.Logging.EventHubLogProvider;
 
 namespace UKHO.ERPFacade.WebJob
@@ -106,7 +107,7 @@ namespace UKHO.ERPFacade.WebJob
 
                 loggingBuilder.AddConsole();
                 loggingBuilder.AddDebug();
-                loggingBuilder.AddSerilog();
+                //loggingBuilder.AddSerilog();
                 loggingBuilder.AddAzureWebAppDiagnostics();
 
                 var eventHubConfig = configuration.GetSection("EventHubLoggingConfiguration").Get<EventHubLoggingConfiguration>();
@@ -149,6 +150,7 @@ namespace UKHO.ERPFacade.WebJob
             }
 
             serviceCollection.AddSingleton<ErpFacadeWebJob>();
+            serviceCollection.AddSingleton<IAzureTableReaderWriter,AzureTableReaderWriter>();
         }
     }
 }

@@ -4,6 +4,7 @@ using Azure.Data.Tables.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Logging;
@@ -16,14 +17,18 @@ namespace UKHO.ERPFacade.Common.IO
     {
         private readonly ILogger<AzureTableReaderWriter> _logger;
         private const string ERP_FACADE_TABLE_NAME = "eesevents";
+        private const int DEFAULT_CALLBACK_DURATION = 5;
 
         private readonly IOptions<AzureStorageConfiguration> _azureStorageConfig;
+        private readonly IOptions<ErpFacadeWebJobConfiguration> _erpFacadeWebjobConfig;
 
         public AzureTableReaderWriter(ILogger<AzureTableReaderWriter> logger,
-                                        IOptions<AzureStorageConfiguration> azureStorageConfig)
+                                        IOptions<AzureStorageConfiguration> azureStorageConfig,
+                                        IOptions<ErpFacadeWebJobConfiguration> erpFacadeWebjobConfig)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _azureStorageConfig = azureStorageConfig ?? throw new ArgumentNullException(nameof(azureStorageConfig));
+            _erpFacadeWebjobConfig  = erpFacadeWebjobConfig ?? throw new ArgumentNullException(nameof(erpFacadeWebjobConfig));
         }
 
         public async Task UpsertEntity(JObject eesEvent, string traceId, string correlationId)
@@ -72,6 +77,39 @@ namespace UKHO.ERPFacade.Common.IO
                 records.Add(entity);
             }
             return records.FirstOrDefault();
+        }
+
+        public void ValidateEntity()
+        {
+            TableClient tableClient = GetTableClient(ERP_FACADE_TABLE_NAME);
+            var callBackDuration = string.IsNullOrEmpty(_erpFacadeWebjobConfig.Value.SapCallbackDurationInMins) ? DEFAULT_CALLBACK_DURATION 
+                : int.Parse(_erpFacadeWebjobConfig.Value.SapCallbackDurationInMins);
+            var entities = tableClient.Query<EESEventEntity>(entity => entity.IsNotified.Value == false);
+
+            foreach (var tableitem in entities)
+            {
+                if (tableitem.RequestDateTime.HasValue)
+                {
+                    if (!tableitem.ResponseDateTime.HasValue && (tableitem.RequestDateTime.Value - DateTime.Now) <= TimeSpan.FromMinutes(callBackDuration)
+                        ||
+                        tableitem.ResponseDateTime.HasValue && ((tableitem.ResponseDateTime.Value - tableitem.RequestDateTime.Value) > TimeSpan.FromMinutes(callBackDuration)))
+                    {
+                        _logger.LogWarning(EventIds.WebjobCallbackTimeoutEventFromSAP.ToEventId(), $"Request is timed out for the traceid : {tableitem.TraceID}.");
+
+                        TableEntity tableEntity = new TableEntity(tableitem.PartitionKey, tableitem.RowKey)
+                            {
+                                 {"IsNotified", true }
+                            };
+
+                        tableClient.UpdateEntity(tableEntity, tableitem.ETag);
+                    }
+                }
+                else
+                {
+                    _logger.LogError(EventIds.EmptyRequestDateTime.ToEventId(), $"Empty RequestDateTime column for traceid : {tableitem.TraceID}");
+                }
+            }
+
         }
 
         //Private Methods
