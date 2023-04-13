@@ -1,6 +1,6 @@
 ﻿using System.Xml;
 
-namespace UKHO.ERPFacade.Common.Helpers
+namespace UKHO.ERPFacade.Common.HttpClients
 {
     public interface ISapClient
     {

@@ -1,10 +1,14 @@
+using Azure.Extensions.AspNetCore.Configuration.Secrets;
+using Azure.Identity;
+using Azure.Security.KeyVault.Secrets;
 using Newtonsoft.Json.Serialization;
 using Serilog;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using UKHO.ERPFacade.API.Filters;
 using UKHO.ERPFacade.Common.Configuration;
-using UKHO.ERPFacade.Common.Helpers;
+using UKHO.ERPFacade.Common.HttpClients;
+using UKHO.ERPFacade.Common.IO;
 using UKHO.Logging.EventHubLogProvider;
 
 namespace UKHO.ERPFacade
@@ -33,13 +37,13 @@ namespace UKHO.ERPFacade
                 .AddEnvironmentVariables();
             });
 
-            //string kvServiceUri = configuration["KeyVaultSettings:ServiceUri"];
-            //if (!string.IsNullOrWhiteSpace(kvServiceUri))
-            //{
-            //    var secretClient = new SecretClient(new Uri(kvServiceUri), new DefaultAzureCredential(
-            //    new DefaultAzureCredentialOptions()));
-            //    builder.Configuration.AddAzureKeyVault(secretClient, new KeyVaultSecretManager());
-            //}
+            string kvServiceUri = configuration["KeyVaultSettings:ServiceUri"];
+            if (!string.IsNullOrWhiteSpace(kvServiceUri))
+            {
+                var secretClient = new SecretClient(new Uri(kvServiceUri), new DefaultAzureCredential(
+                new DefaultAzureCredentialOptions()));
+                builder.Configuration.AddAzureKeyVault(secretClient, new KeyVaultSecretManager());
+            }
 #if DEBUG
             //create the logger and setup of sinks, filters and properties	
             Log.Logger = new LoggerConfiguration()
@@ -112,10 +116,13 @@ namespace UKHO.ERPFacade
                 options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             });
 
-            builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            builder.Services.AddSingleton<ISapConfiguration, SapConfiguration>();
-
+            builder.Services.Configure<AzureStorageConfiguration>(configuration.GetSection("AzureStorageConfiguration"));
             builder.Services.Configure<SapConfiguration>(configuration.GetSection("SapConfiguration"));
+
+            builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            builder.Services.AddSingleton<IAzureTableReaderWriter, AzureTableReaderWriter>();
+            builder.Services.AddSingleton<IAzureBlobEventWriter, AzureBlobEventWriter>();
+            builder.Services.AddSingleton<ISapConfiguration, SapConfiguration>();
 
             builder.Services.AddHttpClient<ISapClient, SapClient>(c =>
             {

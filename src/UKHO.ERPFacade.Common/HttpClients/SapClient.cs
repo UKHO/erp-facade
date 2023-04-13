@@ -4,7 +4,7 @@ using System.Text;
 using System.Xml;
 using UKHO.ERPFacade.Common.Configuration;
 
-namespace UKHO.ERPFacade.Common.Helpers
+namespace UKHO.ERPFacade.Common.HttpClients
 {
     [ExcludeFromCodeCoverage]
     public class SapClient : ISapClient

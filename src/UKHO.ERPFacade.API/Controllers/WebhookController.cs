@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using System.Xml;
-using UKHO.ERPFacade.Common.Helpers;
+using UKHO.ERPFacade.Common.HttpClients;
+using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
 
 namespace UKHO.ERPFacade.API.Controllers
@@ -11,14 +12,20 @@ namespace UKHO.ERPFacade.API.Controllers
     public class WebhookController : BaseController<WebhookController>
     {
         private readonly ILogger<WebhookController> _logger;
+        private readonly IAzureTableReaderWriter _azureTableReaderWriter;
+        private readonly IAzureBlobEventWriter _azureBlobEventWriter;
         private readonly ISapClient _sapClient;
 
         public WebhookController(IHttpContextAccessor contextAccessor,
                                  ILogger<WebhookController> logger,
+                                 IAzureTableReaderWriter azureTableReaderWriter,
+                                 IAzureBlobEventWriter azureBlobEventWriter,
                                  ISapClient sapClient)
         : base(contextAccessor)
         {
             _logger = logger;
+            _azureTableReaderWriter = azureTableReaderWriter;
+            _azureBlobEventWriter = azureBlobEventWriter;
             _sapClient = sapClient;
         }
 
@@ -38,13 +45,28 @@ namespace UKHO.ERPFacade.API.Controllers
             return new OkObjectResult(StatusCodes.Status200OK);
         }
 
+
         [HttpPost]
         [Route("/webhook/newenccontentpublishedeventreceived")]
-        public virtual async Task<IActionResult> NewEncContentPublishedEventReceived([FromBody] JObject request)
+        public virtual async Task<IActionResult> NewEncContentPublishedEventReceived([FromBody] JObject requestJson)
         {
             try
             {
                 _logger.LogInformation(EventIds.NewEncContentPublishedEventReceived.ToEventId(), "ERP Facade webhook has received new enccontentpublished event from EES. | _X-Correlation-ID : {CorrelationId}", GetCurrentCorrelationId());
+
+                string traceId = requestJson.SelectToken("data.traceId")?.Value<string>();
+
+                if (string.IsNullOrEmpty(traceId))
+                {
+                    _logger.LogWarning(EventIds.TraceIdMissingInEvent.ToEventId(), "TraceId is missing in ENC content published event. | _X-Correlation-ID : {CorrelationId}", GetCurrentCorrelationId());
+                    return new BadRequestObjectResult(StatusCodes.Status400BadRequest);
+                }
+
+                _logger.LogInformation(EventIds.StoreEncContentPublishedEventInAzureTable.ToEventId(), "Storing the received ENC content published event in azure table. | _X-Correlation-ID : {CorrelationId}", GetCurrentCorrelationId());
+                await _azureTableReaderWriter.UpsertEntity(requestJson, traceId, GetCurrentCorrelationId());
+
+                _logger.LogInformation(EventIds.UploadEncContentPublishedEventInAzureBlob.ToEventId(), "Uploading the received ENC content published event in blob storage. | _X-Correlation-ID : {CorrelationId}", GetCurrentCorrelationId());
+                await _azureBlobEventWriter.UploadEvent(requestJson, traceId, GetCurrentCorrelationId());
 
                 //Below two lines are added temporary only to send sample xml to mock service for local testing.
                 XmlDocument soapXml = new XmlDocument();
