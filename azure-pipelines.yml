@@ -208,6 +208,12 @@ stages:
               configuration: '$(BuildConfiguration)'
               clean: true
 
+          - task: CopyFiles@2
+            displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
+            inputs:
+              SourceFolder: '$(Build.SourcesDirectory)'
+              Contents: 'UKHO.SAP.MockService\src\UKHO.SAP.MockService\bin\**'
+              TargetFolder: '$(build.artifactstagingdirectory)'
 
           - task: PowerShell@2
             inputs:
@@ -220,14 +226,6 @@ stages:
                 echo "system.default working directory"
                 
                 Get-ChildItem -Path $(Build.SourcesDirectory)  –Recurse
-
-
-          - task: CopyFiles@2
-            displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
-            inputs:
-              SourceFolder: '$(Build.SourcesDirectory)'
-              Contents: 'UKHO.SAP.MockService\src\UKHO.SAP.MockService\bin\**'
-              TargetFolder: '$(build.artifactstagingdirectory)'
 
           - task: ArchiveFiles@2
             displayName: 'Archive Files for Mock API package'
