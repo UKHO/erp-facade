@@ -48,7 +48,7 @@ namespace UKHO.ERPFacade
             //create the logger and setup of sinks, filters and properties
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Information()
-                .WriteTo.File("Logs/UKHO.ERPFacade.API-.txt", rollingInterval: RollingInterval.Day, outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level}] [{SourceContext}] [X-Correlation-ID : {CorrelationId}] {Message}{NewLine}{Exception}")
+                .WriteTo.File("Logs/UKHO.ERPFacade.API-.txt", rollingInterval: RollingInterval.Day, outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level}] [{SourceContext}] {Message}{NewLine}{Exception}")
                 .CreateLogger();
 #endif
 
@@ -128,8 +128,6 @@ namespace UKHO.ERPFacade
             app.UseHttpsRedirection();
 
             app.UseCorrelationIdMiddleware();
-
-            app.UseLogCorrelationIdMiddleware();
 
             app.MapControllers();
 
