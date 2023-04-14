@@ -183,53 +183,34 @@ stages:
         displayName: "Dotnet Build publish Mock API"
         steps:
 
-          - task: UseDotNet@2
-            displayName: 'Use .NET 4.8.x sdk'
+          - task: VSBuild@1
+            displayName: 'Build sync service solution **\*.sln'
             inputs:
-              packageType: sdk
-              useGlobalJson: true
-              workingDirectory: '$(Build.SourcesDirectory)\src\UKHO.SAP.MockService'
-              
-          - task: DotNetCoreCLI@2
-            displayName: ".Net Core - NuGet restore for non test projects only"
-            inputs:
-              command: "restore"
-              projects: |
-                **/UKHO.SAP.MockService.csproj
-              feedsToUse: config
-              noCache: true
-              nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
-              workingDirectory: '$(Build.SourcesDirectory)\src'
-              packagesDirectory: '$(Build.SourcesDirectory)\src\packagesForTests'
+              solution: '$(Solution)'
+              vsVersion: 17.0
+              platform: '$(BuildPlatform)'
+              configuration: '$(BuildConfiguration)'
+              clean: true
 
-          - task: DotNetCoreCLI@2
-            displayName: "dotnet build task"
+          - task: CopyFiles@2
+            displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
             inputs:
-              command: "build"
-              projects: "**/UKHO.SAP.MockService.csproj"
-              arguments: '--configuration $(BuildConfiguration)'
+              SourceFolder: '$(system.defaultworkingdirectory)'
+              Contents: 'UKHO.SAP.MockService\bin\$(BuildConfiguration)\**'
+              TargetFolder: '$(build.artifactstagingdirectory)'
 
-          #- task: DotNetCoreCLI@2
-          #  displayName: "Publish ERP Facade API "
-          #  inputs:
-          #    command: "publish"
-          #    publishWebProjects: false
-          #    projects: '**/*UKHO.ERPFacade.API.csproj'
-          #    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\ERPFacadeAPI'
-          #    zipAfterPublish: true
-          #    modifyOutputPath: true
+          - task: ArchiveFiles@2
+            displayName: 'Archive $(build.artifactstagingdirectory)\UKHO.SAP.MockService\bin\$(BuildConfiguration)\net48\'
+            inputs:
+              rootFolderOrFile: '$(build.artifactstagingdirectory)\UKHO.SAP.MockService\bin\$(BuildConfiguration)\net48\'
+              includeRootFolder: false
+              archiveFile: '$(Build.ArtifactStagingDirectory)\UKHO.SAP.MockService.zip'
 
           - task: PublishBuildArtifacts@1
-            displayName: "Publish Web Artifact"
+            displayName: 'Publish Artifact: UKHO.AvcsOnline.S63DataSync'
             inputs:
-              PathtoPublish: '$(Build.ArtifactStagingDirectory)\ERPFacadeAPI'
-              ArtifactName: ERPFacadeAPI
-
-          - task: PublishBuildArtifacts@1
-            displayName: "Publish terraform Artifacts"
-            inputs:
-              PathtoPublish: '$(Build.SourcesDirectory)\Deployment'
-              ArtifactName: terraformartifact
+              PathtoPublish: '$(build.artifactstagingdirectory)\UKHO.SAP.MockService\bin\$(BuildConfiguration)\net48'
+              ArtifactName: UKHO.SAP.MockService
 
   - stage: Devdeploy
     displayName: "Devdeploy (inc terraform, webapp deploy)"
