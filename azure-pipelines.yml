@@ -37,30 +37,31 @@ stages:
           clean: all
         displayName: "Dependencychecker"
         steps:
-          - task: UseDotNet@2
-            displayName: 'Use .NET 6.0.x sdk'
-            inputs:
-              packageType: sdk
-              useGlobalJson: true
-              workingDirectory: '$(Build.SourcesDirectory)\src'
+          #- task: UseDotNet@2
+          #  displayName: 'Use .NET 6.0.x sdk'
+          #  inputs:
+          #    packageType: sdk
+          #    useGlobalJson: true
+          #    workingDirectory: '$(Build.SourcesDirectory)'
 
-          - task: DotNetCoreCLI@2
-            displayName: ".Net Core - NuGet restore non test projects only"
-            inputs:
-              projects: |
-                **/*.csproj
-                !**/*Tests.csproj
-              feedsToUse: config
-              noCache: true
-              nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
-              workingDirectory: '$(Build.SourcesDirectory)\src'
-              packagesDirectory: '$(Build.SourcesDirectory)\src\packagesForTests'
+          #- task: DotNetCoreCLI@2
+          #  displayName: ".Net Core - NuGet restore non test projects only"
+          #  inputs:
+          #    projects: |
+          #      **/*.csproj
+          #      !**/*Tests.csproj
+
+          #    feedsToUse: config
+          #    noCache: true
+          #    nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
+          #    workingDirectory: '$(Build.SourcesDirectory)\UKHO.ERPFacade\src'
+          #    packagesDirectory: '$(Build.SourcesDirectory)\UKHO.ERPFacade\src\packagesForTests'
 
           - task: CmdLine@1
             displayName: "Run OWASP Dependency Checker"
             inputs:
               filename: 'dependency-check.bat'
-              arguments: '--project "erp-facade - $(Build.SourceBranchName)" --scan "$(Build.SourcesDirectory)\src" --out "$(Build.ArtifactStagingDirectory)\DCReport" --suppression $(Build.SourcesDirectory)\NVDSuppressions.xml --noupdate'
+              arguments: '--project "erp-facade - $(Build.SourceBranchName)" --scan "$(Build.SourcesDirectory)" --out "$(Build.ArtifactStagingDirectory)\DCReport" --suppression $(Build.SourcesDirectory)\NVDSuppressions.xml --noupdate'
 
           - task: PublishBuildArtifacts@1
             displayName: "Publish Artifact: OWASP Dependency Checker Report"
@@ -87,7 +88,7 @@ stages:
             inputs:
               packagetype: sdk
               useglobaljson: true
-              workingdirectory: '$(build.sourcesdirectory)\src'
+              workingdirectory: '$(build.sourcesdirectory)\UKHO.ERPFacade'
 
           - task: DotNetCoreCLI@2
             displayName: ".Net Core - NuGet restore test projects only"
@@ -97,8 +98,8 @@ stages:
               feedsToUse: config
               noCache: true
               nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
-              workingDirectory: '$(Build.SourcesDirectory)\src'
-              packagesDirectory: '$(Build.SourcesDirectory)\src\packagesForTests'
+              workingDirectory: '$(Build.SourcesDirectory)\UKHO.ERPFacade\'
+              packagesDirectory: '$(Build.SourcesDirectory)\UKHO.ERPFacade\packagesForTests'
 
           - task: DotNetCoreCLI@2
             displayName: "dotnet test - Perform Unit Tests"
@@ -133,7 +134,7 @@ stages:
             inputs:
               packageType: sdk
               useGlobalJson: true
-              workingDirectory: '$(Build.SourcesDirectory)\UKHO.ERPFacade\src'
+              workingDirectory: '$(Build.SourcesDirectory)\UKHO.ERPFacade'
               
           - task: DotNetCoreCLI@2
             displayName: ".Net Core - NuGet restore for non test projects only"
@@ -141,12 +142,12 @@ stages:
               command: "restore"
               projects: |
                 **/*.csproj
-                !**/UKHO.SAP.MockService.csproj
+                #!**/UKHO.SAP.MockService.csproj
               feedsToUse: config
               noCache: true
               nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
-              workingDirectory: '$(Build.SourcesDirectory)\UKHO.ERPFacade\src'
-              packagesDirectory: '$(Build.SourcesDirectory)\UKHO.ERPFacade\src\packagesForTests'
+              workingDirectory: '$(Build.SourcesDirectory)\UKHO.ERPFacade'
+              packagesDirectory: '$(Build.SourcesDirectory)\UKHO.ERPFacade\packagesForTests'
 
           - task: DotNetCoreCLI@2
             displayName: "dotnet build task"
@@ -154,7 +155,7 @@ stages:
               command: "build"
               projects: |
                 **/*.csproj
-                !**/UKHO.SAP.MockService.csproj
+                #!**/UKHO.SAP.MockService.csproj
               arguments: '--configuration $(BuildConfiguration)'
 
           - task: DotNetCoreCLI@2
@@ -184,6 +185,19 @@ stages:
           clean: all
         displayName: "Dotnet Build publish Mock API"
         steps:
+
+          - task: NuGetToolInstaller@0
+            displayName: 'Use NuGet 6.0.0'
+            inputs:
+              versionSpec: 6.0.0
+
+          - task: NuGetRestore@1
+            displayName: 'NuGet restore using NuGet.config'
+            inputs:
+              solution: '$(Build.SourcesDirectory)\UKHO.SAP.MockService\UKHO.SAP.MockService.sln'
+              selectOrConfig: config
+              nugetConfigPath: NuGet.config
+              noCache: true
 
           - task: VSBuild@1
             displayName: 'Build sync service solution **\*.sln'
