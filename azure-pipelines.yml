@@ -208,6 +208,20 @@ stages:
               configuration: '$(BuildConfiguration)'
               clean: true
 
+
+          - task: PowerShell@2
+            inputs:
+              targetType: 'inline'
+              script: |
+                echo "Build.Source working directory"
+                
+                Get-ChildItem -Path $(Build.SourcesDirectory)  –Recurse
+                
+                echo "system.default working directory"
+                
+                Get-ChildItem -Path $(Build.SourcesDirectory)  –Recurse
+
+
           - task: CopyFiles@2
             displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
             inputs:
