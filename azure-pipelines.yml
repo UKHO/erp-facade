@@ -232,7 +232,7 @@ stages:
             inputs:
               rootFolderOrFile: '$(build.artifactstagingdirectory)\UKHO.SAP.MockService\src\UKHO.SAP.MockService\bin\**'
               includeRootFolder: false
-              archiveFile: '$(Build.ArtifactStagingDirectory)\UKHO.SAP.MockService.zip'
+              archiveFile: '$(build.artifactstagingdirectory)\UKHO.SAP.MockService.zip'
 
           - task: PublishBuildArtifacts@1
             displayName: 'Publish Artifact: UKHO.SAP.MockService'
