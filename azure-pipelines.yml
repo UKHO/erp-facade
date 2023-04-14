@@ -231,6 +231,7 @@ stages:
 
                 Get-ChildItem -Path $(build.artifactstagingdirectory)  –Recurse
 
+                echo "build binaries staging directory"
                 Get-ChildItem -Path $(Build.BinariesDirectory)  –Recurse
 
           - task: ArchiveFiles@2
