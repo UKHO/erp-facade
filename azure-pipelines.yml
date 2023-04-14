@@ -226,7 +226,7 @@ stages:
             displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
             inputs:
               SourceFolder: '$(Build.SourcesDirectory)'
-              Contents: 'UKHO.SAP.MockService\src\UKHO.SAP.MockService\bin\$(BuildConfiguration)\**'
+              Contents: 'UKHO.SAP.MockService\src\UKHO.SAP.MockService\bin\**'
               TargetFolder: '$(build.artifactstagingdirectory)'
 
           - task: ArchiveFiles@2
