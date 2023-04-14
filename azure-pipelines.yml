@@ -176,6 +176,41 @@ stages:
               PathtoPublish: '$(Build.SourcesDirectory)\Deployment'
               ArtifactName: terraformartifact
 
+      - job: BuildAndPublishMockAPI
+        workspace:
+          clean: all
+        displayName: "Dotnet Build publish Mock API"
+        steps:
+
+          - task: VSBuild@1
+            displayName: 'Build sync service solution **\*.sln'
+            inputs:
+              solution: '$(Build.SourcesDirectory)\UKHO.SAP.MockService\UKHO.SAP.MockService.sln'
+              vsVersion: 17.0
+              platform: '$(BuildPlatform)'
+              configuration: '$(BuildConfiguration)'
+              clean: true
+
+          - task: CopyFiles@2
+            displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
+            inputs:
+              SourceFolder: '$(system.defaultworkingdirectory)'
+              Contents: 'UKHO.SAP.MockService\bin\$(BuildConfiguration)\**'
+              TargetFolder: '$(build.artifactstagingdirectory)'
+
+          - task: ArchiveFiles@2
+            displayName: 'Archive $(build.artifactstagingdirectory)\UKHO.SAP.MockService\bin\$(BuildConfiguration)\net48\'
+            inputs:
+              rootFolderOrFile: '$(build.artifactstagingdirectory)\UKHO.SAP.MockService\bin\$(BuildConfiguration)\net48\'
+              includeRootFolder: false
+              archiveFile: '$(Build.ArtifactStagingDirectory)\UKHO.SAP.MockService.zip'
+
+          - task: PublishBuildArtifacts@1
+            displayName: 'Publish Artifact: UKHO.SAP.MockService'
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)\UKHO.SAP.MockService.zip'
+              ArtifactName: UKHOSAPMockAPIService
+
   - stage: Devdeploy
     displayName: "Devdeploy (inc terraform, webapp deploy)"
     variables:
