@@ -155,7 +155,7 @@ stages:
               command: "build"
               projects: |
                 **/*.csproj
-                #!**/UKHO.SAP.MockService.csproj
+                !**/ukho.sap.mockservice.csproj
               arguments: '--configuration $(BuildConfiguration)'
 
           - task: DotNetCoreCLI@2
