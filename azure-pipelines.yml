@@ -133,7 +133,7 @@ stages:
             inputs:
               packageType: sdk
               useGlobalJson: true
-              workingDirectory: '$(Build.SourcesDirectory)\src'
+              workingDirectory: '$(Build.SourcesDirectory)\UKHO.ERPFacade\src'
               
           - task: DotNetCoreCLI@2
             displayName: ".Net Core - NuGet restore for non test projects only"
@@ -141,17 +141,20 @@ stages:
               command: "restore"
               projects: |
                 **/*.csproj
+                !**/UKHO.SAP.MockService.csproj
               feedsToUse: config
               noCache: true
               nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
-              workingDirectory: '$(Build.SourcesDirectory)\src'
-              packagesDirectory: '$(Build.SourcesDirectory)\src\packagesForTests'
+              workingDirectory: '$(Build.SourcesDirectory)\UKHO.ERPFacade\src'
+              packagesDirectory: '$(Build.SourcesDirectory)\UKHO.ERPFacade\src\packagesForTests'
 
           - task: DotNetCoreCLI@2
             displayName: "dotnet build task"
             inputs:
               command: "build"
-              projects: "**/*.csproj"
+              projects: |
+                **/*.csproj
+                !**/UKHO.SAP.MockService.csproj
               arguments: '--configuration $(BuildConfiguration)'
 
           - task: DotNetCoreCLI@2
