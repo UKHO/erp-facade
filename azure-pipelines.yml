@@ -225,7 +225,9 @@ stages:
                 
                 echo "system.default working directory"
                 
-                Get-ChildItem -Path $(Build.SourcesDirectory)  –Recurse
+                Get-ChildItem -Path $(system.defaultworkingdirectory)  –Recurse
+
+                Get-ChildItem -Path $(build.artifactstagingdirectory)  –Recurse
 
           - task: ArchiveFiles@2
             displayName: 'Archive Files for Mock API package'
