@@ -232,7 +232,7 @@ stages:
           - task: ArchiveFiles@2
             displayName: 'Archive Files for Mock API package'
             inputs:
-              rootFolderOrFile: '$(build.artifactstagingdirectory)\UKHO.SAP.MockService\bin\$(BuildConfiguration)\**'
+              rootFolderOrFile: '$(build.artifactstagingdirectory)\UKHO.SAP.MockService\bin\**'
               includeRootFolder: false
               archiveFile: '$(Build.ArtifactStagingDirectory)\UKHO.SAP.MockService.zip'
 
