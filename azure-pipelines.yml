@@ -231,10 +231,12 @@ stages:
 
                 Get-ChildItem -Path $(build.artifactstagingdirectory)  –Recurse
 
+                Get-ChildItem -Path $(Build.BinariesDirectory)  –Recurse
+
           - task: ArchiveFiles@2
             displayName: 'Archive Files for Mock API package'
             inputs:
-              rootFolderOrFile: '$(build.artifactstagingdirectory)\UKHO.SAP.MockService\src\UKHO.SAP.MockService\bin\**'
+              rootFolderOrFile: '$(Build.BinariesDirectory)\UKHO.SAP.MockService\src\UKHO.SAP.MockService\bin\**'
               includeRootFolder: false
               archiveFile: '$(build.artifactstagingdirectory)\UKHO.SAP.MockService.zip'
 
