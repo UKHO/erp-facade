@@ -227,6 +227,8 @@ stages:
                 
                 Get-ChildItem -Path $(system.defaultworkingdirectory)  –Recurse
 
+                echo "build arifact staging directory" 
+
                 Get-ChildItem -Path $(build.artifactstagingdirectory)  –Recurse
 
           - task: ArchiveFiles@2
