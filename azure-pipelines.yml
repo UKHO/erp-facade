@@ -186,7 +186,7 @@ stages:
           - task: VSBuild@1
             displayName: 'Build sync service solution **\*.sln'
             inputs:
-              solution: '$(Solution)'
+              solution: '$(Build.SourcesDirectory)\UKHO.SAP.MockService\UKHO.AvcsOnline.S63DataSync.sln'
               vsVersion: 17.0
               platform: '$(BuildPlatform)'
               configuration: '$(BuildConfiguration)'
@@ -207,10 +207,10 @@ stages:
               archiveFile: '$(Build.ArtifactStagingDirectory)\UKHO.SAP.MockService.zip'
 
           - task: PublishBuildArtifacts@1
-            displayName: 'Publish Artifact: UKHO.AvcsOnline.S63DataSync'
+            displayName: 'Publish Artifact: UKHO.SAP.MockService'
             inputs:
-              PathtoPublish: '$(build.artifactstagingdirectory)\UKHO.SAP.MockService\bin\$(BuildConfiguration)\net48'
-              ArtifactName: UKHO.SAP.MockService
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)\UKHO.SAP.MockService.zip'
+              ArtifactName: UKHOSAPMockAPIService
 
   - stage: Devdeploy
     displayName: "Devdeploy (inc terraform, webapp deploy)"
