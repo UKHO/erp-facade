@@ -37,26 +37,6 @@ stages:
           clean: all
         displayName: "Dependencychecker"
         steps:
-          #- task: UseDotNet@2
-          #  displayName: 'Use .NET 6.0.x sdk'
-          #  inputs:
-          #    packageType: sdk
-          #    useGlobalJson: true
-          #    workingDirectory: '$(Build.SourcesDirectory)'
-
-          #- task: DotNetCoreCLI@2
-          #  displayName: ".Net Core - NuGet restore non test projects only"
-          #  inputs:
-          #    projects: |
-          #      **/*.csproj
-          #      !**/*Tests.csproj
-
-          #    feedsToUse: config
-          #    noCache: true
-          #    nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
-          #    workingDirectory: '$(Build.SourcesDirectory)\UKHO.ERPFacade\src'
-          #    packagesDirectory: '$(Build.SourcesDirectory)\UKHO.ERPFacade\src\packagesForTests'
-
           - task: CmdLine@1
             displayName: "Run OWASP Dependency Checker"
             inputs:
@@ -172,7 +152,7 @@ stages:
             displayName: "Publish Web Artifact"
             inputs:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)\ERPFacadeAPI'
-              ArtifactName: ERPFacadeAPI
+              ArtifactName: UKHORPFacadeAPI
 
           - task: PublishBuildArtifacts@1
             displayName: "Publish terraform Artifacts"
@@ -200,7 +180,7 @@ stages:
               noCache: true
 
           - task: VSBuild@1
-            displayName: 'Build sync service solution **\*.sln'
+            displayName: 'Build Mock API Solution'
             inputs:
               solution: '$(Build.SourcesDirectory)\UKHO.SAP.MockService\UKHO.SAP.MockService.sln'
               vsVersion: 17.0
@@ -214,25 +194,6 @@ stages:
               SourceFolder: '$(Build.SourcesDirectory)'
               Contents: 'UKHO.SAP.MockService\src\UKHO.SAP.MockService\bin\**'
               TargetFolder: '$(build.artifactstagingdirectory)'
-
-          - task: PowerShell@2
-            inputs:
-              targetType: 'inline'
-              script: |
-                echo "Build.Source working directory"
-                
-                Get-ChildItem -Path $(Build.SourcesDirectory)  –Recurse
-                
-                echo "system.default working directory"
-                
-                Get-ChildItem -Path $(system.defaultworkingdirectory)  –Recurse
-
-                echo "build arifact staging directory" 
-
-                Get-ChildItem -Path $(build.artifactstagingdirectory)  –Recurse
-
-                echo "build binaries staging directory"
-                Get-ChildItem -Path $(Build.BinariesDirectory)  –Recurse
 
           - task: ArchiveFiles@2
             displayName: 'Archive Files for Mock API package'

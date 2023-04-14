@@ -33,4 +33,14 @@ steps:
       azureSubscription: "${{ parameters.AzureSubscription }}"
       appType: webApp
       appName: "$(WEB_APP_NAME)"
-      package: "$(Pipeline.Workspace)/ERPFacadeAPI/UKHO.ERPFacade.API.zip"
+      package: "$(Pipeline.Workspace)/UKHORPFacadeAPI/UKHO.ERPFacade.API.zip"
+
+  - task: AzureWebApp@1
+    displayName: "Azure App Deploy: ERPFacade-SAP-MockApi"
+    inputs:
+      azureSubscription: "${{ parameters.AzureSubscription }}"
+      appType: webApp
+      appName: "$(MOCK_WEB_APP_NAME)"
+      package: "$(Pipeline.Workspace)/UKHOSAPMockAPIService/UKHO.SAP.MockService.zip"
+
+
