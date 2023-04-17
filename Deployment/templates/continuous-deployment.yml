@@ -19,6 +19,9 @@ steps:
       ARM_CLIENT_SECRET: $(TERRAFORM-CLIENT-SECRET)
       ARM_TENANT_ID: $(TERRAFORM-TENANT-ID)
       ARM_SUBSCRIPTION_ID: $(TERRAFORM-SUBSCRIPTION-ID)
+      TF_VAR_spoke_rg: $(spokeRG)
+      TF_VAR_spoke_vnet_name: $(spokeVnetName)
+      TF_VAR_spoke_subnet_name: $(spokeSubnetName)
 
   - task: FileTransform@1
     displayName: "File Transform: WebAppSettings"
@@ -33,7 +36,7 @@ steps:
       azureSubscription: "${{ parameters.AzureSubscription }}"
       appType: webApp
       appName: "$(WEB_APP_NAME)"
-      package: "$(Pipeline.Workspace)/UKHORPFacadeAPI/UKHO.ERPFacade.API.zip"
+      package: "$(Pipeline.Workspace)/UKHOERPFacadeAPI/UKHO.ERPFacade.API.zip"
 
   - task: AzureWebApp@1
     displayName: "Azure App Deploy: ERPFacade-SAP-MockApi"
@@ -41,6 +44,6 @@ steps:
       azureSubscription: "${{ parameters.AzureSubscription }}"
       appType: webApp
       appName: "$(MOCK_WEB_APP_NAME)"
-      package: "$(Pipeline.Workspace)/UKHOSAPMockAPIService/UKHO.SAP.MockService.zip"
+      package: "$(Pipeline.Workspace)/UKHOSAPMockService/UKHO.SAP.MockService.zip"
 
 

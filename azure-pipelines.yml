@@ -122,7 +122,7 @@ stages:
               command: "restore"
               projects: |
                 **/*.csproj
-                #!**/UKHO.SAP.MockService.csproj
+                !**/UKHO.SAP.MockService.csproj
               feedsToUse: config
               noCache: true
               nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
@@ -135,7 +135,7 @@ stages:
               command: "build"
               projects: |
                 **/*.csproj
-                !**/ukho.sap.mockservice.csproj
+                !**/UKHO.SAP.MockService.csproj
               arguments: '--configuration $(BuildConfiguration)'
 
           - task: DotNetCoreCLI@2
@@ -160,10 +160,10 @@ stages:
               PathtoPublish: '$(Build.SourcesDirectory)\Deployment'
               ArtifactName: terraformartifact
 
-      - job: BuildAndPublishMockAPI
+      - job: BuildAndPublishSAPMockService
         workspace:
           clean: all
-        displayName: "Dotnet Build publish Mock API"
+        displayName: "Dotnet Build publish SAP Mock Service"
         steps:
 
           - task: NuGetToolInstaller@0
@@ -206,7 +206,7 @@ stages:
             displayName: 'Publish Artifact: UKHO.SAP.MockService'
             inputs:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)\UKHO.SAP.MockService.zip'
-              ArtifactName: UKHOSAPMockAPIService
+              ArtifactName: UKHOSAPMockService
 
   - stage: Devdeploy
     displayName: "Devdeploy (inc terraform, webapp deploy)"
