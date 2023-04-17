@@ -106,7 +106,7 @@ stages:
       - job: BuildAndPublishAPI
         workspace:
           clean: all
-        displayName: "Dotnet Build publish API"
+        displayName: "Dotnet Build publish ERP Facade API"
         steps:
 
           - task: UseDotNet@2
