@@ -27,6 +27,7 @@ namespace UKHO.ERPFacade.WebJob
             try
             {
                 //Code to monitor the table records.
+                _logger.LogInformation("Add code to monitor the table records");
             }
             catch (Exception)
             {

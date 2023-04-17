@@ -92,18 +92,16 @@ namespace UKHO.ERPFacade.WebJob
         {
             serviceCollection.AddApplicationInsightsTelemetryWorkerService();
 
-            //Add logging
+#if DEBUG
+            //create the logger and setup of sinks, filters and properties	
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Information()
+                .WriteTo.File("Logs/UKHO.ERPFacade.WebJob-.txt", rollingInterval: RollingInterval.Day, outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level}] [{SourceContext}] {Message}{NewLine}{Exception}")
+                .CreateLogger();
+#endif
             serviceCollection.AddLogging(loggingBuilder =>
             {
                 loggingBuilder.AddConfiguration(configuration.GetSection("Logging"));
-#if DEBUG
-                loggingBuilder.AddSerilog(new LoggerConfiguration()
-                                .WriteTo.File("Logs/UKHO.ERPFacade.WebJob-Logs-.txt", rollingInterval: RollingInterval.Day, outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level}] [{SourceContext}] {Message}{NewLine}{Exception}")
-                                .MinimumLevel.Information()
-                                .MinimumLevel.Override("UKHO", LogEventLevel.Debug)
-                                .CreateLogger(), dispose: true);
-#endif
-
                 loggingBuilder.AddConsole();
                 loggingBuilder.AddDebug();
                 loggingBuilder.AddSerilog();
