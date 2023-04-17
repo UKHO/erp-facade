@@ -1,11 +1,4 @@
-﻿using UKHO.ERPFacade.API;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using Microsoft.Extensions.Configuration;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
@@ -15,44 +8,13 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         public string PayloadFolder { get; set; }
         public string PayloadParentFolder { get; set; }
         public string WebhookPayloadFileName { get; set; }
-        public ErpFacadeLocalConfiguration erpfacadeLocalConfig = new();
-        public ErpFacadeDevConfiguration erpfacadeDevConfig = new();
-        public ESSApiConfiguration EssConfig = new();
-        public SapMockConfiguration sapMockConfig= new();
-        public SapConfiguration sapConfig = new();
+        
+        public ErpFacadeConfiguration erpfacadeConfig = new();
+      
 
-        public class ErpFacadeLocalConfiguration
+        public class ErpFacadeConfiguration
         {
             public string BaseUrl { get; set; }
-        }
-        public class ErpFacadeDevConfiguration
-        {
-            public string BaseUrl { get; set; }
-        }
-
-        public class ESSApiConfiguration
-        {
-            public string BaseUrl { get; set; }
-            public string MicrosoftOnlineLoginUrl { get; set; }
-            public string TenantId { get; set; }
-            public string AutoTestClientId { get; set; }
-            public string AutoTestClientSecret { get; set; }
-            public string EssClientId { get; set; }
-            public bool IsRunningOnLocalMachine { get; set; }
-        }
-        public class SapMockConfiguration
-        {
-            public string BaseAddress { get; set; }
-            public string SapServiceOperation { get; set; }
-            public string Username { get; set; }
-            public string Password { get; set; }
-        }
-        public class SapConfiguration
-        {
-            public string BaseAddress { get; set; }
-            public string SapServiceOperation { get; set; }
-            public string Username { get; set; }
-            public string Password { get; set; }
         }
 
         public TestConfiguration()
@@ -60,14 +22,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             ConfigurationRoot = new ConfigurationBuilder()
                                .AddJsonFile("appsettings.json", false)
                                .Build();
+
             PayloadFolder = ConfigurationRoot.GetSection("PayloadFolder").Value;
             PayloadParentFolder = ConfigurationRoot.GetSection("PayloadParentFolder").Value;
             WebhookPayloadFileName = ConfigurationRoot.GetSection("WebhookPayloadFileName").Value;
-            ConfigurationRoot.Bind("ErpFacadeLocalConfiguration", erpfacadeLocalConfig);
-            ConfigurationRoot.Bind("ErpFacadeDevConfiguration", erpfacadeDevConfig);
-            ConfigurationRoot.Bind("ESSApiConfiguration", EssConfig);
-            ConfigurationRoot.Bind("SapMockConfiguration", sapMockConfig);
-            ConfigurationRoot.Bind("SapConfiguration", sapConfig);
+            ConfigurationRoot.Bind("ErpFacadeConfiguration", erpfacadeConfig);
+         
            
         }
     }

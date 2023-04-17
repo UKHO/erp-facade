@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-using NUnit.Framework;
-using System.Reflection;
+﻿using NUnit.Framework;
 using UKHO.ERPFacade.API.FunctionalTests.Helpers;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
@@ -15,13 +13,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         private string filePathWebhook;
 
         [SetUp]
-        public async Task SetupAsync()
+        public void Setup()
         {
             webhook = new WebhookEndpoint();
             TestConfig = new TestConfiguration();
-            DirectoryInfo dir = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent;
-            filePathWebhook = Path.Combine(dir.FullName, TestConfig.PayloadParentFolder, TestConfig.PayloadFolder, TestConfig.WebhookPayloadFileName);
-     }
+
+        }
         [Test]
         public void WhenValidEventInnewenccontentpublishedeventoptions_ThenWebhookReturns200OkResponse()
         {
@@ -32,7 +29,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [Test]
         public void WhenValidEventInNewEncContentPublishedEventReceived_ThenWebhookReturn200OkResponse()
         {
-            var response = webhook.PostWebhookResponseFileAsync(filePathWebhook).Result;
+            var response = webhook.PostWebhookResponseFile();
             Assert.That((int)response.StatusCode, Is.EqualTo(200));
 
         }
