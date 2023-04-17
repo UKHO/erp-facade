@@ -35,7 +35,7 @@ resource "azurerm_windows_web_app" "webapp_service" {
 
 
   resource "azurerm_windows_web_app" "mock_webapp_service" {
-  count               = (var.env_name == "dev" ) ? 1 : 0
+  count               = (var.env_name = "dev" ) ? 1 : 0
   name                = var.mock_webapp_name 
   location            = var.location
   resource_group_name = var.resource_group_name
