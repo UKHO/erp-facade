@@ -21,14 +21,11 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             TestConfig = new TestConfiguration();
             DirectoryInfo dir = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent;
             filePathWebhook = Path.Combine(dir.FullName, TestConfig.PayloadParentFolder, TestConfig.PayloadFolder, TestConfig.WebhookPayloadFileName);
-
-            //WebhookPayload webhookPayload = JsonConvert.DeserializeObject<WebhookPayload>(await File.ReadAllTextAsync(filePathWebhook));
-            //WebhookPayload webhookPayload = await JsonFileReader.ReadAsync<WebhookPayload>(@"C:\Users\Sadha1501493\GitHubRepo\erp-facade\UKHO.ERPFacade.API.FunctionalTests\Helpers\ERPFacadePayloadTestData\WebhookPayload.JSON");
-        }
+     }
         [Test]
-        public void WhenValidEventInNewEncContentPublishedEventReceived_ThenWebhookReturns200OkResponse()
-        {          
-            var response = webhook.GetWebhookResponseFileAsync().Result;
+        public void WhenValidEventInnewenccontentpublishedeventoptions_ThenWebhookReturns200OkResponse()
+        {
+            var response = webhook.GetWebhookOptionResponse();
             Assert.That((int)response.StatusCode, Is.EqualTo(200));
 
         }
