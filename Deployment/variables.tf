@@ -34,3 +34,14 @@ variable "sku_name" {
             }
 }
 
+variable "spoke_rg" {
+  type = string
+}
+
+variable "spoke_vnet_name" {
+  type = string
+}
+
+variable "spoke_subnet_name" {
+  type = string
+}
