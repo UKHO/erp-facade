@@ -33,10 +33,9 @@ resource "azurerm_windows_web_app" "webapp_service" {
   https_only = true
   }
 
-
 resource "azurerm_windows_web_app" "mock_webapp_service" {
-  count               = var.env_name == "Dev" ? 1 : 0
-  name                = var.mock_webapp_name 
+  count               = var.env_name == "Dev" ? 1 : 0
+  name                = var.mock_webapp_name
   location            = var.location
   resource_group_name = var.resource_group_name
   service_plan_id     = azurerm_service_plan.app_service_plan.id
