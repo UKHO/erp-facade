@@ -33,24 +33,23 @@ resource "azurerm_windows_web_app" "webapp_service" {
   https_only = true
   }
 
-
-  resource "azurerm_windows_web_app" "mock_webapp_service" {
-  count               = "${var.env == "dev" ? 1 : 0}"
-  name                = var.mock_webapp_name 
+resource "azurerm_windows_web_app" "mock_webapp_service" {
+  count               = var.env_name == "dev" ? 1 : 0
+  name                = var.mock_webapp_name
   location            = var.location
   resource_group_name = var.resource_group_name
   service_plan_id     = azurerm_service_plan.app_service_plan.id
   tags                = var.tags
 
   site_config {
-     application_stack {    
-     current_stack = "dotnet"
-     dotnet_version = "v4.0"
+      application_stack {    
+      current_stack = "dotnet"
+      dotnet_version = "v4.0"
     }
     always_on  = true
     ftps_state = "Disabled"
 
-   }
+    }
      
   app_settings = var.mock_app_settings
 
@@ -59,7 +58,7 @@ resource "azurerm_windows_web_app" "webapp_service" {
     }
 
   https_only = true
-  }
+   }
 
 resource "azurerm_app_service_virtual_network_swift_connection" "webapp_vnet_integration" {
   app_service_id = azurerm_windows_web_app.webapp_service.id

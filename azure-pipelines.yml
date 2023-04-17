@@ -152,7 +152,7 @@ stages:
             displayName: "Publish Web Artifact"
             inputs:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)\ERPFacadeAPI'
-              ArtifactName: UKHORPFacadeAPI
+              ArtifactName: UKHOERPFacadeAPI
 
           - task: PublishBuildArtifacts@1
             displayName: "Publish terraform Artifacts"
