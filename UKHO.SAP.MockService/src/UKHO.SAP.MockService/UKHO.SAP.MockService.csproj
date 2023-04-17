@@ -178,17 +178,28 @@
     <Content Include="Web.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="z_adds_mat_info.asmx" />
+    <Content Include="z_adds_mat_info.asmx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BasicAuthHttpModule.cs" />
-    <Compile Include="EntityPropertyConverter\EntityPropertyConvert.cs" />
-    <Compile Include="EntityPropertyConverter\EntityPropertyConverterAttribute.cs" />
+    <Compile Include="BasicAuthHttpModule.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="EntityPropertyConverter\EntityPropertyConvert.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="EntityPropertyConverter\EntityPropertyConverterAttribute.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="z_adds_mat_info.asmx.cs">
       <DependentUpon>z_adds_mat_info.asmx</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="z_adds_mat_info_Inteface.cs" />
+    <Compile Include="z_adds_mat_info_Inteface.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
