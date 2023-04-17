@@ -13,7 +13,3 @@ output "default_site_hostname" {
 output "webapp_name" {
    value =  azurerm_windows_web_app.webapp_service.name
 }
-
-output "mock_webapp_name" {
-   value =  azurerm_windows_web_app.mock_webapp_service.name
-}
