@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
-using System.Xml;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
 
