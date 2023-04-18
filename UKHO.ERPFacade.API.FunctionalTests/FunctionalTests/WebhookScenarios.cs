@@ -22,14 +22,14 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [Test]
         public void WhenValidEventInnewenccontentpublishedeventoptions_ThenWebhookReturns200OkResponse()
         {
-            var response = webhook.GetWebhookOptionResponse();
+            var response = webhook.OptionWebhookResponse();
             Assert.That((int)response.StatusCode, Is.EqualTo(200));
 
         }
         [Test]
         public void WhenValidEventInNewEncContentPublishedEventReceived_ThenWebhookReturn200OkResponse()
         {
-            var response = webhook.PostWebhookResponseFile();
+            var response = webhook.PostWebhookResponse();
             Assert.That((int)response.StatusCode, Is.EqualTo(200));
 
         }
