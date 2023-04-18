@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
+using UKHO.ERPFacade.API.Filters;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
 
@@ -46,7 +47,7 @@ namespace UKHO.ERPFacade.API.Controllers
         {
             _logger.LogInformation(EventIds.NewEncContentPublishedEventReceived.ToEventId(), "ERP Facade webhook has received new enccontentpublished event from EES.");
 
-            string traceId = requestJson.SelectToken("data.traceId")?.Value<string>();
+            string traceId = requestJson.SelectToken(CorrelationIdMiddleware.TraceIdKey)?.Value<string>();
 
             if (string.IsNullOrEmpty(traceId))
             {

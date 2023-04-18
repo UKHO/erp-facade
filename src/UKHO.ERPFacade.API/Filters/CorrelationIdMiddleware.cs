@@ -7,6 +7,7 @@ namespace UKHO.ERPFacade.API.Filters
     public class CorrelationIdMiddleware
     {
         public const string XCorrelationIdHeaderKey = "_X-Correlation-ID";
+        public const string TraceIdKey = "data.traceId";
         private readonly RequestDelegate _next;
 
         public CorrelationIdMiddleware(RequestDelegate next)
@@ -22,12 +23,16 @@ namespace UKHO.ERPFacade.API.Filters
             {
                 httpContext.Request.EnableBuffering();
 
-                var bodyAsText = await new StreamReader(httpContext.Request.Body).ReadToEndAsync();
-                JObject bodyAsJson = JObject.Parse(bodyAsText);
-                correlationId = bodyAsJson.SelectToken("data.traceId")?.Value<string>();
+                using (var streamReader = new StreamReader(httpContext.Request.Body, leaveOpen: true))
+                {
+                    var bodyAsText = await streamReader.ReadToEndAsync();
 
-                httpContext.Request.Headers.Add(XCorrelationIdHeaderKey, correlationId);
-                httpContext.Request.Body.Position = 0;  //rewinding the stream to 0
+                    JObject bodyAsJson = JObject.Parse(bodyAsText);
+                    correlationId = bodyAsJson.SelectToken(TraceIdKey)?.Value<string>();
+
+                    httpContext.Request.Headers.Add(XCorrelationIdHeaderKey, correlationId);
+                    httpContext.Request.Body.Position = 0;
+                }
             }
 
             if (string.IsNullOrEmpty(correlationId))
