@@ -17,7 +17,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         {
             webhook = new WebhookEndpoint();
             TestConfig = new TestConfiguration();
-
+            DirectoryInfo dir = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent;
+            filePathWebhook = Path.Combine(dir.FullName, TestConfig.PayloadFolder, TestConfig.WebhookPayloadFileName);
         }
         [Test]
         public void WhenValidEventInnewenccontentpublishedeventoptions_ThenWebhookReturns200OkResponse()
@@ -26,13 +27,13 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             Assert.That((int)response.StatusCode, Is.EqualTo(200));
 
         }
+        
         [Test]
-        public void WhenValidEventInNewEncContentPublishedEventReceived_ThenWebhookReturn200OkResponse()
+        public void WhenValidEventInNewEncContentPublishedEventReceived_ThenWebhookReturns200OkResponse()
         {
-            var response = webhook.PostWebhookResponse();
+            var response = webhook.PostWebhookResponse(filePathWebhook);
             Assert.That((int)response.StatusCode, Is.EqualTo(200));
 
         }
-
     }
 }
