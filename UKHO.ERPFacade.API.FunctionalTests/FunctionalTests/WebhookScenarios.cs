@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using FluentAssertions;
+using NUnit.Framework;
 using UKHO.ERPFacade.API.FunctionalTests.Helpers;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
@@ -24,15 +25,14 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         public void WhenValidEventInnewenccontentpublishedeventoptions_ThenWebhookReturns200OkResponse()
         {
             var response = webhook.OptionWebhookResponse();
-            Assert.That((int)response.StatusCode, Is.EqualTo(200));
-
+            response.StatusCode.Should().Be((System.Net.HttpStatusCode)200);
         }
         
         [Test]
         public void WhenValidEventInNewEncContentPublishedEventReceived_ThenWebhookReturns200OkResponse()
         {
             var response = webhook.PostWebhookResponse(filePathWebhook);
-            Assert.That((int)response.StatusCode, Is.EqualTo(200));
+            response.StatusCode.Should().Be((System.Net.HttpStatusCode)200);
 
         }
     }
