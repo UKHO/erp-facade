@@ -375,3 +375,5 @@ terraform_output.json
 
 # Ignore VS Code ionide extension temp folder
 /.ionide/
+/UKHO.ERPFacade.API.FunctionalTests/FunctionalTests/GetPriceInfoScenarios.cs
+/UKHO.ERPFacade.API.FunctionalTests/Helpers/GetPriceInfo.cs
