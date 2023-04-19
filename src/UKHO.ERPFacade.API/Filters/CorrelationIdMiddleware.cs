@@ -18,7 +18,7 @@ namespace UKHO.ERPFacade.API.Filters
             httpContext.Request.EnableBuffering();
             var correlationId = Guid.NewGuid().ToString();
 
-            using var streamReader = new StreamReader(httpContext.Request.Body, leaveOpen: true);
+            using var streamReader = new StreamReader(httpContext.Request.Body);
             var bodyAsText = await streamReader.ReadToEndAsync();
 
             if (!string.IsNullOrWhiteSpace(bodyAsText))
