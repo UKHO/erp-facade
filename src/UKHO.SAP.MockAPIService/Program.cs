@@ -41,9 +41,11 @@ namespace UKHO.SAP.MockAPIService
 
             // Add services to the container.
             builder.Services.AddSoapCore();
-            builder.Services.AddSingleton<Iz_adds_mat_info, z_adds_mat_info>();
+
             builder.Services.Configure<SapConfiguration>(configuration.GetSection("SapConfiguration"));
-            builder.Services.AddSingleton<ISapConfiguration,SapConfiguration>();
+
+            builder.Services.AddSingleton<Iz_adds_mat_info, z_adds_mat_info>();
+            builder.Services.AddSingleton<ISapConfiguration, SapConfiguration>();
 
             var app = builder.Build();
 
@@ -51,11 +53,11 @@ namespace UKHO.SAP.MockAPIService
 
             app.UseRouting();
 
-            app.UseEndpoints(endpoints => {
+            app.UseEndpoints(endpoints =>
+            {
                 endpoints.UseSoapEndpoint<Iz_adds_mat_info>("/z_adds_mat_info.asmx", new SoapEncoderOptions(), SoapSerializer.XmlSerializer);
             });
             app.Run();
-
         }
     }
-}      
+}

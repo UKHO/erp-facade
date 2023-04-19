@@ -1,8 +1,9 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using UKHO.SAP.MockAPIService.EntityPropertyConverter;
+
 namespace UKHO.SAP.MockAPIService.Models
 {
-    [ExcludeFromCodeCoverage]    
+    [ExcludeFromCodeCoverage]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.1.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]

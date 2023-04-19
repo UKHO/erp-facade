@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{50E64422
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UKHO.ERPFacade.Common", "src\UKHO.ERPFacade.Common\UKHO.ERPFacade.Common.csproj", "{37689E17-E7FD-48D0-A361-B869B9B837BB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UKHO.SAP.MockAPIService", "..\src\UKHO.SAP.MockAPIService\UKHO.SAP.MockAPIService.csproj", "{CA793DE4-1EA5-452D-87EC-5545F95929E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UKHO.SAP.MockAPIService", "src\UKHO.SAP.MockAPIService\UKHO.SAP.MockAPIService.csproj", "{CA793DE4-1EA5-452D-87EC-5545F95929E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -19,13 +19,13 @@ namespace UKHO.SAP.MockAPIService.Filters
         }
 
         public async Task Invoke(HttpContext context)
-        {            
+        {
             var request = context.Request;
             var authHeader = request.Headers["Authorization"];
             if (!Microsoft.Extensions.Primitives.StringValues.IsNullOrEmpty(authHeader))
             {
                 var authHeaderVal = AuthenticationHeaderValue.Parse(authHeader);
-                                
+
                 if (authHeaderVal.Scheme.Equals("basic", StringComparison.OrdinalIgnoreCase) &&
                     authHeaderVal.Parameter != null)
                 {
@@ -33,7 +33,7 @@ namespace UKHO.SAP.MockAPIService.Filters
                 }
                 if (context.Response.StatusCode != 401)
                     await _next.Invoke(context);
-            }            
+            }
         }
 
         private void AuthenticateUser(HttpContext context, string credentials)
@@ -47,29 +47,20 @@ namespace UKHO.SAP.MockAPIService.Filters
                 string name = credentials.Substring(0, separator);
                 string password = credentials.Substring(separator + 1);
 
-                if (!CheckPassword(name, password))
-                {                    
-                    context.Response.StatusCode = 401;                    
+                if (!IsUserAuthenticated(name, password))
+                {
+                    context.Response.StatusCode = 401;
                 }
             }
             catch (FormatException)
-            {                
+            {
                 context.Response.StatusCode = 401;
             }
         }
-        
-        private bool CheckPassword(string username, string password)
-        {       
 
-            return username == _sapConfiguration.Value.Username && password == _sapConfiguration.Value.Password;
-        }
-    }
-
-    public static class MyMiddlewareExtensions
-    {
-        public static IApplicationBuilder BasicAuthCustomMiddleware(this IApplicationBuilder builder)
+        private bool IsUserAuthenticated(string username, string password)
         {
-            return builder.UseMiddleware<BasicAuthMiddleware>();
+            return username == _sapConfiguration.Value.Username && password == _sapConfiguration.Value.Password;
         }
     }
 }
