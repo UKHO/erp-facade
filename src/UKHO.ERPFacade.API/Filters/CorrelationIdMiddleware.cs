@@ -1,9 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
-using System.Diagnostics.CodeAnalysis;
 
 namespace UKHO.ERPFacade.API.Filters
 {
-    [ExcludeFromCodeCoverage]
     public class CorrelationIdMiddleware
     {
         public const string XCorrelationIdHeaderKey = "_X-Correlation-ID";
@@ -17,35 +15,26 @@ namespace UKHO.ERPFacade.API.Filters
 
         public async Task InvokeAsync(HttpContext httpContext)
         {
-            string? correlationId = string.Empty;
+            httpContext.Request.EnableBuffering();
+            var correlationId = Guid.NewGuid().ToString();
 
-            if (httpContext.Request.ContentLength > 0)
+            using var streamReader = new StreamReader(httpContext.Request.Body, leaveOpen: true);
+            var bodyAsText = await streamReader.ReadToEndAsync();
+
+            if (!string.IsNullOrWhiteSpace(bodyAsText))
             {
-                httpContext.Request.EnableBuffering();
-
-                using (var streamReader = new StreamReader(httpContext.Request.Body, leaveOpen: true))
-                {
-                    var bodyAsText = await streamReader.ReadToEndAsync();
-
-                    JObject bodyAsJson = JObject.Parse(bodyAsText);
-                    correlationId = bodyAsJson.SelectToken(TraceIdKey)?.Value<string>();
-
-                    httpContext.Request.Headers.Add(XCorrelationIdHeaderKey, correlationId);
-                    httpContext.Request.Body.Position = 0;
-                }
+                JObject bodyAsJson = JObject.Parse(bodyAsText);
+                correlationId = bodyAsJson.SelectToken(TraceIdKey)?.Value<string>();
             }
 
-            if (string.IsNullOrEmpty(correlationId))
-            {
-                correlationId = Guid.NewGuid().ToString();
-                httpContext.Request.Headers.Add(XCorrelationIdHeaderKey, correlationId);
-            }
+            httpContext.Request.Body.Position = 0;
 
+            httpContext.Request.Headers.Add(XCorrelationIdHeaderKey, correlationId);
             httpContext.Response.Headers.Add(XCorrelationIdHeaderKey, correlationId);
 
             var state = new Dictionary<string, object>
             {
-                [XCorrelationIdHeaderKey] = correlationId,
+                [XCorrelationIdHeaderKey] = correlationId!,
             };
 
             var logger = httpContext.RequestServices.GetRequiredService<ILogger<CorrelationIdMiddleware>>();
