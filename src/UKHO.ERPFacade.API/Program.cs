@@ -124,6 +124,13 @@ namespace UKHO.ERPFacade
                 .AddAuthenticationSchemes("AzureAD")
                 .Build();
             });
+
+            builder.Services.AddAuthorization(options =>
+            {
+              options.AddPolicy("WebhookCaller", policy => policy.RequireRole("WebhookCaller"));
+            });
+
+
             // The following line enables Application Insights telemetry collection.	
             builder.Services.AddApplicationInsightsTelemetry();
 

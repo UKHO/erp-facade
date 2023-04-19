@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
-using UKHO.ERPFacade.Common.Helpers;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
 
@@ -28,8 +27,8 @@ namespace UKHO.ERPFacade.API.Controllers
         }
 
         [HttpOptions]
-        [Route("/webhook/newenccontentpublishedeventoptions")]
-        [Authorize(Roles = ApplicationRoles.WebhookCallerRole)]
+        [Route("/webhook/newenccontentpublishedeventoptions")]        
+        [Authorize(Policy = "WebhookCaller")]
         public IActionResult NewEncContentPublishedEventOptions()
         {
             var webhookRequestOrigin = HttpContext.Request.Headers["WebHook-Request-Origin"].FirstOrDefault();
@@ -44,10 +43,9 @@ namespace UKHO.ERPFacade.API.Controllers
             return new OkObjectResult(StatusCodes.Status200OK);
         }
 
-
         [HttpPost]
         [Route("/webhook/newenccontentpublishedeventreceived")]
-        [Authorize(Roles = ApplicationRoles.WebhookCallerRole)]
+        [Authorize(Policy = "WebhookCaller")]
         public virtual async Task<IActionResult> NewEncContentPublishedEventReceived([FromBody] JObject requestJson)
         {
             _logger.LogInformation(EventIds.NewEncContentPublishedEventReceived.ToEventId(), "ERP Facade webhook has received new enccontentpublished event from EES. | _X-Correlation-ID : {CorrelationId}", GetCurrentCorrelationId());
