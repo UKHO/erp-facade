@@ -3,7 +3,7 @@
 namespace UKHO.ERPFacade.API.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
+    [ApiController] 
     public class ErpFacadeController : BaseController<ErpFacadeController>
     {
         private readonly ILogger<ErpFacadeController> _logger;
