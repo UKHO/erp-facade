@@ -45,7 +45,7 @@ namespace UKHO.ERPFacade
                 builder.Configuration.AddAzureKeyVault(secretClient, new KeyVaultSecretManager());
             }
 #if DEBUG
-            //create the logger and setup of sinks, filters and properties	
+            //create the logger and setup of sinks, filters and properties
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Information()
                 .WriteTo.File("Logs/UKHO.ERPFacade.API-.txt", rollingInterval: RollingInterval.Day, outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level}] [{SourceContext}] {Message}{NewLine}{Exception}")
@@ -70,7 +70,7 @@ namespace UKHO.ERPFacade
                             additionalValues["_RemoteIPAddress"] = httpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString();
                             additionalValues["_User-Agent"] = httpContextAccessor.HttpContext.Request.Headers["User-Agent"].FirstOrDefault() ?? string.Empty;
                             additionalValues["_AssemblyVersion"] = Assembly.GetExecutingAssembly().GetCustomAttributes<AssemblyFileVersionAttribute>().Single().Version;
-                            additionalValues["_X-Correlation-ID"] = httpContextAccessor.HttpContext.Request.Headers?[CorrelationIdMiddleware.XCorrelationIdHeaderKey].FirstOrDefault() ?? string.Empty;
+                            additionalValues["_X-Correlation-ID"] = httpContextAccessor.HttpContext.Request.Headers?[CorrelationIdMiddleware.XCORRELATIONIDHEADERKEY].FirstOrDefault() ?? string.Empty;
                         }
                     }
                     logging.AddEventHub(config =>
@@ -101,10 +101,10 @@ namespace UKHO.ERPFacade
 
             builder.Services.AddHeaderPropagation(options =>
             {
-                options.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey);
+                options.Headers.Add(CorrelationIdMiddleware.XCORRELATIONIDHEADERKEY);
             });
 
-            // The following line enables Application Insights telemetry collection.	
+            // The following line enables Application Insights telemetry collection.
             builder.Services.AddApplicationInsightsTelemetry();
 
             // Add services to the container.
