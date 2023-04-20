@@ -12,6 +12,10 @@
     <NoWarn>8600;8602</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Filters\LogCorrelationIdMiddleware.cs" />
+    <Compile Remove="Filters\LogCorrelationIdMiddlewareExtensions.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.2.2" />
     <PackageReference Include="Azure.Identity" Version="1.8.2" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
