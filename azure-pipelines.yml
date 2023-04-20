@@ -10,7 +10,7 @@ trigger:
   - main
   - release/*
 
-pool: $(WindowsPool)
+pool: $(WindowsPool) 
 
 variables:
   - name: BuildConfiguration
@@ -57,7 +57,6 @@ stages:
               inlineScript: |
                 param($ReportLocation)
                 Invoke-VulnerabilityCheck -ReportLocation $ReportLocation
-
       - job: UnitTestsAndCodeCoverage
         workspace:
           clean: all
@@ -151,7 +150,7 @@ stages:
           - task: PublishBuildArtifacts@1
             displayName: "Publish Web Artifact"
             inputs:
-              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)\ERPFacadeAPI'
               ArtifactName: UKHOERPFacadeAPI
 
           - task: PublishBuildArtifacts@1
@@ -179,7 +178,7 @@ stages:
               command: "restore"
               projects: |
                 **/*.csproj
-                !**/UKHO.ERPFacade.API.csproj
+                !**/UKHO.SAP.ERPFacade.API.csproj
               feedsToUse: config
               noCache: true
               nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
@@ -208,16 +207,9 @@ stages:
           - task: PublishBuildArtifacts@1
             displayName: "Publish Web Artifact"
             inputs:
-              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-              ArtifactName: MockAPIService
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)\MockAPIService'
+              ArtifactName: UKHOMockAPIService
 
-          #- task: PublishBuildArtifacts@1
-          #  displayName: "Publish terraform Artifacts"
-          #  inputs:
-          #    PathtoPublish: '$(Build.SourcesDirectory)\Deployment'
-          #    ArtifactName: terraformartifact
-
-      
   - stage: Devdeploy
     displayName: "Devdeploy (inc terraform, webapp deploy)"
     variables:
