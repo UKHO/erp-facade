@@ -126,7 +126,7 @@ stages:
               noCache: true
               nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
               workingDirectory: '$(Build.SourcesDirectory)\UKHO.ERPFacade'
-              packagesDirectory: '$(Build.SourcesDirectory)\UKHO.ERPFacade\packagesForTests'
+              packagesDirectory: '$(Build.SourcesDirectory)\UKHO.ERPFacade\packages'
 
           - task: DotNetCoreCLI@2
             displayName: "dotnet build task"
@@ -159,10 +159,10 @@ stages:
               PathtoPublish: '$(Build.SourcesDirectory)\Deployment'
               ArtifactName: terraformartifact
 
-      - job: BuildAndPublishMockAPI
+      - job: BuildAndPublishMockService
         workspace:
           clean: all
-        displayName: "Dotnet Build publish Mock API"
+        displayName: "Dotnet Build And Publish Mock Service"
         steps:
 
           - task: UseDotNet@2
@@ -173,42 +173,40 @@ stages:
               workingDirectory: '$(Build.SourcesDirectory)'
               
           - task: DotNetCoreCLI@2
-            displayName: ".Net Core - NuGet restore for non test projects only"
+            displayName: ".Net Core - NuGet restore for mock project"
             inputs:
               command: "restore"
               projects: |
-                **/*.csproj
-                !**/UKHO.SAP.ERPFacade.API.csproj
+                **/UKHO.SAP.MockAPIService.csproj
               feedsToUse: config
               noCache: true
               nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
-              workingDirectory: '$(Build.SourcesDirectory)\UKHO.SAP.MockAPIService'
-              packagesDirectory: '$(Build.SourcesDirectory)\UKHO.SAP.MockAPIService\packagesForTests'
+              workingDirectory: '$(Build.SourcesDirectory)\UKHO.SAP.MockSAPService'
+              packagesDirectory: '$(Build.SourcesDirectory)\UKHO.SAP.MockSAPService\packages'
 
           - task: DotNetCoreCLI@2
             displayName: "dotnet build task"
             inputs:
               command: "build"
               projects: |
-                **/*.csproj
-                !**/UKHO.ERPFacade.API.csproj
+                **/UKHO.SAP.MockAPIService.csproj
               arguments: '--configuration $(BuildConfiguration)'
 
           - task: DotNetCoreCLI@2
-            displayName: "Publish Mock API "
+            displayName: "Publish Mock Service"
             inputs:
               command: "publish"
               publishWebProjects: false
               projects: '**/*UKHO.SAP.MockAPIService.csproj'
-              arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\MockAPIService'
+              arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\MockSAPService'
               zipAfterPublish: true
               modifyOutputPath: true
 
           - task: PublishBuildArtifacts@1
-            displayName: "Publish Web Artifact"
+            displayName: "Publish Mock Service Artifact"
             inputs:
-              PathtoPublish: '$(Build.ArtifactStagingDirectory)\MockAPIService'
-              ArtifactName: UKHOMockAPIService
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)\MockSAPService'
+              ArtifactName: UKHOMockSAPService
 
   - stage: Devdeploy
     displayName: "Devdeploy (inc terraform, webapp deploy)"
