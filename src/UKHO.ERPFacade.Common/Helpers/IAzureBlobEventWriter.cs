@@ -9,6 +9,6 @@ namespace UKHO.ERPFacade.Common.IO
 {
     public interface IAzureBlobEventWriter
     {
-        Task UploadEvent(JObject eesEvent, string traceId, string correlationId);
+        Task UploadEvent(JObject eesEvent, string traceId);
     }
 }

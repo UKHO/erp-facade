@@ -29,7 +29,7 @@ namespace UKHO.ERPFacade.WebJob
                 //Build configuration
                 IConfigurationRoot configuration = BuildConfiguration();
 
-                var serviceCollection = new ServiceCollection();
+                ServiceCollection serviceCollection = new();
 
                 //Configure required services
                 ConfigureServices(serviceCollection, configuration);
@@ -106,7 +106,7 @@ namespace UKHO.ERPFacade.WebJob
                 loggingBuilder.AddSerilog();
                 loggingBuilder.AddAzureWebAppDiagnostics();
 
-                var eventHubConfig = configuration.GetSection("EventHubLoggingConfiguration").Get<EventHubLoggingConfiguration>();
+                EventHubLoggingConfiguration eventHubConfig = configuration.GetSection("EventHubLoggingConfiguration").Get<EventHubLoggingConfiguration>();
 
                 if (eventHubConfig != null && !string.IsNullOrWhiteSpace(eventHubConfig.ConnectionString))
                 {

@@ -56,10 +56,10 @@ namespace UKHO.ERPFacade.API.Controllers
             }
 
             _logger.LogInformation(EventIds.StoreEncContentPublishedEventInAzureTable.ToEventId(), "Storing the received ENC content published event in azure table.");
-            await _azureTableReaderWriter.UpsertEntity(requestJson, traceId, GetCurrentCorrelationId());
+            await _azureTableReaderWriter.UpsertEntity(requestJson, traceId);
 
             _logger.LogInformation(EventIds.UploadEncContentPublishedEventInAzureBlob.ToEventId(), "Uploading the received ENC content published event in blob storage.");
-            await _azureBlobEventWriter.UploadEvent(requestJson, traceId, GetCurrentCorrelationId());
+            await _azureBlobEventWriter.UploadEvent(requestJson, traceId);
 
             return new OkObjectResult(StatusCodes.Status200OK);
         }
