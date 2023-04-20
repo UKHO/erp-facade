@@ -13,7 +13,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                                .AddEnvironmentVariables()
                                .Build();
 
-            TestConfig testConfig = new();
+            testConfig = new();
             ConfigurationRoot.Bind(testConfig);
         }
     }

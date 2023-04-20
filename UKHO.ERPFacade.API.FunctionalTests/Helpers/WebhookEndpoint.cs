@@ -5,18 +5,18 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
     
     public class WebhookEndpoint
     {
-        public readonly Config config = new();
+        public  Config config;
         private RestClient client;
         public WebhookEndpoint()
         {
+            config = new();
             var options = new RestClientOptions(config.testConfig.ErpFacadeConfiguration.BaseUrl);
             client = new RestClient(options);
         }
 
         public async Task<RestResponse> OptionWebhookResponseAsync()
         {
-            String requestBody = "{ }";
-            var request = new RestRequest("/webhook/newenccontentpublishedeventoptions").AddJsonBody(requestBody);
+            var request = new RestRequest("/webhook/newenccontentpublishedeventoptions");
             var response = await client.OptionsAsync(request);
             return response;
         }
@@ -24,7 +24,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         
         public async Task<RestResponse> PostWebhookResponseAsync(String filePath)
         {
-            String requestBody;
+            string requestBody;
             using (StreamReader r = new StreamReader(filePath))
             {
                 requestBody = r.ReadToEnd();
