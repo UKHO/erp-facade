@@ -45,7 +45,7 @@ namespace UKHO.ERPFacade
                 builder.Configuration.AddAzureKeyVault(secretClient, new KeyVaultSecretManager());
             }
 #if DEBUG
-            //create the logger and setup of sinks, filters and properties	
+            //create the logger and setup of sinks, filters and properties
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Information()
                 .WriteTo.File("Logs/UKHO.ERPFacade.API-.txt", rollingInterval: RollingInterval.Day, outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level}] [{SourceContext}] {Message}{NewLine}{Exception}")
@@ -104,7 +104,7 @@ namespace UKHO.ERPFacade
                 options.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey);
             });
 
-            // The following line enables Application Insights telemetry collection.	
+            // The following line enables Application Insights telemetry collection.
             builder.Services.AddApplicationInsightsTelemetry();
 
             // Add services to the container.
