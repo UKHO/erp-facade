@@ -44,7 +44,7 @@ resource "azurerm_windows_web_app" "mock_webapp_service" {
   site_config {
       application_stack {    
       current_stack = "dotnet"
-      dotnet_version = "v4.0"
+      dotnet_version = "v6.0"
     }
     always_on  = true
     ftps_state = "Disabled"
