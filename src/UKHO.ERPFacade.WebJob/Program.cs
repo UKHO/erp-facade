@@ -17,8 +17,8 @@ namespace UKHO.ERPFacade.WebJob
     [ExcludeFromCodeCoverage]
     public static class Program
     {
-        private static readonly InMemoryChannel s_aIChannel = new();
-        private static readonly string s_assemblyVersion = Assembly.GetExecutingAssembly().GetCustomAttributes<AssemblyFileVersionAttribute>().Single().Version;
+        private static readonly InMemoryChannel TelemetryChannel = new();
+        private static readonly string WebJobAssemblyVersion = Assembly.GetExecutingAssembly().GetCustomAttributes<AssemblyFileVersionAttribute>().Single().Version;
 
         public static void Main()
         {
@@ -44,7 +44,7 @@ namespace UKHO.ERPFacade.WebJob
                 finally
                 {
                     //Ensure all buffered app insights logs are flushed into Azure
-                    s_aIChannel.Flush();
+                    TelemetryChannel.Flush();
                     Task.Delay(delayTime);
                 }
             }
@@ -124,7 +124,7 @@ namespace UKHO.ERPFacade.WebJob
                         config.NodeName = eventHubConfig.NodeName;
                         config.AdditionalValuesProvider = additionalValues =>
                         {
-                            additionalValues["_AssemblyVersion"] = s_assemblyVersion;
+                            additionalValues["_AssemblyVersion"] = WebJobAssemblyVersion;
                         };
                     });
                 }
@@ -133,7 +133,7 @@ namespace UKHO.ERPFacade.WebJob
             serviceCollection.Configure<TelemetryConfiguration>(
                 (config) =>
                 {
-                    config.TelemetryChannel = s_aIChannel;
+                    config.TelemetryChannel = TelemetryChannel;
                 }
             );
 
