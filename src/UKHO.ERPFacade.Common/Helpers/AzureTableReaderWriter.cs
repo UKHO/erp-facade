@@ -1,6 +1,6 @@
-﻿using Azure.Data.Tables.Models;
+﻿using Azure;
 using Azure.Data.Tables;
-using Azure;
+using Azure.Data.Tables.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
@@ -26,7 +26,7 @@ namespace UKHO.ERPFacade.Common.IO
             _azureStorageConfig = azureStorageConfig ?? throw new ArgumentNullException(nameof(azureStorageConfig));
         }
 
-        public async Task UpsertEntity(JObject eesEvent, string traceId, string correlationId)
+        public async Task UpsertEntity(JObject eesEvent, string traceId)
         {
             TableClient tableClient = GetTableClient(ERP_FACADE_TABLE_NAME);
 

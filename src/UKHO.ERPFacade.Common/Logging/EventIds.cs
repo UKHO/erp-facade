@@ -46,5 +46,13 @@
         /// 940011 - ENC content published event is uploaded in blob storage successfully.
         /// </summary>
         UploadedEncContentPublishedEventInAzureBlob = 940011,
+        /// <summary>
+        /// 940012 - Could not connect to SAP
+        /// </summary>
+        SapConnectionFailed = 940012,
+        /// <summary>
+        /// 940013 - Data pushed to SAP
+        /// </summary>
+        DataPushedToSap = 940013,
     }
 }

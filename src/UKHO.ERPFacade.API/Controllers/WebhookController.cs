@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
+using System.Xml;
+using UKHO.ERPFacade.Common.Helpers;
 using UKHO.ERPFacade.Common.HttpClients;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
@@ -14,6 +16,7 @@ namespace UKHO.ERPFacade.API.Controllers
         private readonly IAzureTableReaderWriter _azureTableReaderWriter;
         private readonly IAzureBlobEventWriter _azureBlobEventWriter;
         private readonly ISapClient _sapClient;
+        private readonly IXmlHelper _xmlHelper;
 
         public const string TRACEIDKEY = "data.traceId";
 
@@ -21,13 +24,15 @@ namespace UKHO.ERPFacade.API.Controllers
                                  ILogger<WebhookController> logger,
                                  IAzureTableReaderWriter azureTableReaderWriter,
                                  IAzureBlobEventWriter azureBlobEventWriter,
-                                 ISapClient sapClient)
+                                 ISapClient sapClient,
+                                 IXmlHelper xmlHelper)
         : base(contextAccessor)
         {
             _logger = logger;
             _azureTableReaderWriter = azureTableReaderWriter;
             _azureBlobEventWriter = azureBlobEventWriter;
             _sapClient = sapClient;
+            _xmlHelper = xmlHelper;
         }
 
         [HttpOptions]
@@ -61,10 +66,22 @@ namespace UKHO.ERPFacade.API.Controllers
             }
 
             _logger.LogInformation(EventIds.StoreEncContentPublishedEventInAzureTable.ToEventId(), "Storing the received ENC content published event in azure table.");
-            await _azureTableReaderWriter.UpsertEntity(requestJson, traceId, GetCurrentCorrelationId());
+            await _azureTableReaderWriter.UpsertEntity(requestJson, traceId);
 
             _logger.LogInformation(EventIds.UploadEncContentPublishedEventInAzureBlob.ToEventId(), "Uploading the received ENC content published event in blob storage.");
-            await _azureBlobEventWriter.UploadEvent(requestJson, traceId, GetCurrentCorrelationId());
+            await _azureBlobEventWriter.UploadEvent(requestJson, traceId);
+
+            //Below line is added temporary only to send sample xml to mock service for local testing.
+            XmlDocument soapXml = _xmlHelper.CreateXmlDocument("..\\UKHO.ERPFacade.API\\SapXmlTemplates\\SAPRequest.xml");
+
+            HttpResponseMessage response = await _sapClient.PostEventData(soapXml, "Z_ADDS_MAT_INFO");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogError(EventIds.SapConnectionFailed.ToEventId(), "Could not connect to SAP. | {StatusCode} | {SapResponse}", response.StatusCode, response.Content?.ReadAsStringAsync().Result);
+                throw new Exception();
+            }
+            _logger.LogInformation(EventIds.DataPushedToSap.ToEventId(), "Data pushed to SAP successfully. | {StatusCode} | {SapResponse}", response.StatusCode, response.Content?.ReadAsStringAsync().Result);
 
             return new OkObjectResult(StatusCodes.Status200OK);
         }

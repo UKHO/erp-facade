@@ -7,6 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using UKHO.ERPFacade.API.Filters;
 using UKHO.ERPFacade.Common.Configuration;
+using UKHO.ERPFacade.Common.Helpers;
 using UKHO.ERPFacade.Common.HttpClients;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.Logging.EventHubLogProvider;
@@ -123,6 +124,7 @@ namespace UKHO.ERPFacade
             builder.Services.AddSingleton<IAzureTableReaderWriter, AzureTableReaderWriter>();
             builder.Services.AddSingleton<IAzureBlobEventWriter, AzureBlobEventWriter>();
             builder.Services.AddSingleton<ISapConfiguration, SapConfiguration>();
+            builder.Services.AddSingleton<IXmlHelper, XmlHelper>();
 
             builder.Services.AddHttpClient<ISapClient, SapClient>(c =>
             {
