@@ -50,30 +50,23 @@ namespace UKHO.ERPFacade.API.Controllers
         [Route("/webhook/newenccontentpublishedeventreceived")]
         public virtual async Task<IActionResult> NewEncContentPublishedEventReceived([FromBody] JObject requestJson)
         {
-            try
+            _logger.LogInformation(EventIds.NewEncContentPublishedEventReceived.ToEventId(), "ERP Facade webhook has received new enccontentpublished event from EES.");
+
+            string traceId = requestJson.SelectToken(TRACEIDKEY)?.Value<string>();
+
+            if (string.IsNullOrEmpty(traceId))
             {
-                _logger.LogInformation(EventIds.NewEncContentPublishedEventReceived.ToEventId(), "ERP Facade webhook has received new enccontentpublished event from EES.");
-
-                string traceId = requestJson.SelectToken(TRACEIDKEY)?.Value<string>();
-
-                if (string.IsNullOrEmpty(traceId))
-                {
-                    _logger.LogWarning(EventIds.TraceIdMissingInEvent.ToEventId(), "TraceId is missing in ENC content published event.");
-                    return new BadRequestObjectResult(StatusCodes.Status400BadRequest);
-                }
-
-                _logger.LogInformation(EventIds.StoreEncContentPublishedEventInAzureTable.ToEventId(), "Storing the received ENC content published event in azure table.");
-                await _azureTableReaderWriter.UpsertEntity(requestJson, traceId, GetCurrentCorrelationId());
-
-                _logger.LogInformation(EventIds.UploadEncContentPublishedEventInAzureBlob.ToEventId(), "Uploading the received ENC content published event in blob storage.");
-                await _azureBlobEventWriter.UploadEvent(requestJson, traceId, GetCurrentCorrelationId());
-
-                return new OkObjectResult(StatusCodes.Status200OK);
+                _logger.LogWarning(EventIds.TraceIdMissingInEvent.ToEventId(), "TraceId is missing in ENC content published event.");
+                return new BadRequestObjectResult(StatusCodes.Status400BadRequest);
             }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+
+            _logger.LogInformation(EventIds.StoreEncContentPublishedEventInAzureTable.ToEventId(), "Storing the received ENC content published event in azure table.");
+            await _azureTableReaderWriter.UpsertEntity(requestJson, traceId, GetCurrentCorrelationId());
+
+            _logger.LogInformation(EventIds.UploadEncContentPublishedEventInAzureBlob.ToEventId(), "Uploading the received ENC content published event in blob storage.");
+            await _azureBlobEventWriter.UploadEvent(requestJson, traceId, GetCurrentCorrelationId());
+
+            return new OkObjectResult(StatusCodes.Status200OK);
         }
     }
 }
