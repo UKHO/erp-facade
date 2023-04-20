@@ -185,7 +185,7 @@ stages:
               packagesDirectory: '$(Build.SourcesDirectory)\UKHO.SAP.MockSAPService\packages'
 
           - task: DotNetCoreCLI@2
-            displayName: "dotnet build task"
+            displayName: "Build Mock Servic Project"
             inputs:
               command: "build"
               projects: |
@@ -197,7 +197,7 @@ stages:
             inputs:
               command: "publish"
               publishWebProjects: false
-              projects: '**/*UKHO.SAP.MockAPIService.csproj'
+              projects: '**/UKHO.SAP.MockAPIService.csproj'
               arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\MockSAPService'
               zipAfterPublish: true
               modifyOutputPath: true
