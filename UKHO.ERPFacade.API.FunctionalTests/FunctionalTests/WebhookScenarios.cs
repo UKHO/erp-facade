@@ -7,34 +7,29 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
     [TestFixture]
     public  class WebhookScenarios
     {
-
-        private WebhookEndpoint webhook { get; set; }
-        private TestConfiguration TestConfig { get; set; }
-
-        private string filePathWebhook;
+        private WebhookEndpoint _webhook { get; set; }
+        private DirectoryInfo _dir;
 
         [SetUp]
         public void Setup()
         {
-            webhook = new WebhookEndpoint();
-            TestConfig = new TestConfiguration();
-            DirectoryInfo dir = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent;
-            filePathWebhook = Path.Combine(dir.FullName, TestConfig.PayloadFolder, TestConfig.WebhookPayloadFileName);
+            _webhook = new WebhookEndpoint();
+             _dir = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent;
         }
         [Test]
-        public void WhenValidEventInnewenccontentpublishedeventoptions_ThenWebhookReturns200OkResponse()
+        public async Task WhenValidEventInnewenccontentpublishedeventoptions_ThenWebhookReturns200OkResponse()
         {
-            var response = webhook.OptionWebhookResponseAsync().Result;
+            var response = await _webhook.OptionWebhookResponseAsync();
             response.StatusCode.Should().Be((System.Net.HttpStatusCode)200);
         }
         
         [Test]
-        public void WhenValidEventInNewEncContentPublishedEventReceived_ThenWebhookReturns200OkResponse()
+        public async Task WhenValidEventInNewEncContentPublishedEventReceived_ThenWebhookReturns200OkResponse()
         {
-            var response = webhook.PostWebhookResponseAsync(filePathWebhook).Result;
-            response.StatusCode.Should().Be((System.Net.HttpStatusCode)200);
-            
+            string filePath = Path.Combine(_dir.FullName, _webhook.config.testConfig.PayloadFolder, _webhook.config.testConfig.WebhookPayloadFileName);
 
+            var response = await _webhook.PostWebhookResponseAsync(filePath);
+            response.StatusCode.Should().Be((System.Net.HttpStatusCode)200);
         }
     }
 }

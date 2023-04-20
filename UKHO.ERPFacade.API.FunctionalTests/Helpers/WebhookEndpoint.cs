@@ -5,11 +5,11 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
     
     public class WebhookEndpoint
     {
-        private readonly TestConfiguration _config = new();
+        public readonly Config config = new();
         private RestClient client;
         public WebhookEndpoint()
         {
-            var options = new RestClientOptions(_config.erpfacadeConfig.BaseUrl);
+            var options = new RestClientOptions(config.testConfig.ErpFacadeConfiguration.BaseUrl);
             client = new RestClient(options);
         }
 
