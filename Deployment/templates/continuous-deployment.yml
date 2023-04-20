@@ -53,6 +53,6 @@ steps:
       azureSubscription: "${{ parameters.AzureSubscription }}"
       appType: webApp
       appName: "$(MOCK_WEB_APP_NAME)"
-      package: "$(Pipeline.Workspace)/UKHOSAPMockService/UKHO.SAP.MockAPIService.zip"
+      package: "$(Pipeline.Workspace)/UKHOMockSAPService/UKHO.SAP.MockAPIService.zip"
 
 
