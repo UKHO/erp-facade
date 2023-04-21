@@ -42,7 +42,7 @@ stages:
             inputs:
               packagetype: sdk
               useglobaljson: true
-              workingdirectory: '$(build.sourcesdirectory)'
+              workingdirectory: '$(build.sourcesdirectory)\src'
 
           - task: DotNetCoreCLI@2
             displayName: ".Net Core - NuGet restore for dotnet projects only"
@@ -88,7 +88,7 @@ stages:
             inputs:
               packagetype: sdk
               useglobaljson: true
-              workingdirectory: '$(build.sourcesdirectory)'
+              workingdirectory: '$(build.sourcesdirectory)\src'
 
           - task: DotNetCoreCLI@2
             displayName: ".Net Core - NuGet restore test projects only"
@@ -134,7 +134,7 @@ stages:
             inputs:
               packageType: sdk
               useGlobalJson: true
-              workingDirectory: '$(Build.SourcesDirectory)'
+              workingDirectory: '$(Build.SourcesDirectory)\src'
               
           - task: DotNetCoreCLI@2
             displayName: ".Net Core - NuGet restore for non test projects only"
@@ -191,7 +191,7 @@ stages:
             inputs:
               packageType: sdk
               useGlobalJson: true
-              workingDirectory: '$(Build.SourcesDirectory)'
+              workingDirectory: '$(Build.SourcesDirectory)\src'
               
           - task: DotNetCoreCLI@2
             displayName: ".Net Core - NuGet restore for mock project"
