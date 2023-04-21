@@ -26,7 +26,7 @@ namespace UKHO.ERPFacade.Common.IO
             _azureStorageConfig = azureStorageConfig ?? throw new ArgumentNullException(nameof(azureStorageConfig));
         }
 
-        public async Task UpsertEntity(JObject eesEvent, string traceId, string correlationId)
+        public async Task UpsertEntity(JObject eesEvent, string traceId)
         {
             TableClient tableClient = GetTableClient(ERP_FACADE_TABLE_NAME);
 
