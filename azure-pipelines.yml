@@ -37,6 +37,26 @@ stages:
           clean: all
         displayName: "Dependencychecker"
         steps:
+
+          - task: UseDotNet@2
+            displayName: 'Use .NET 6.0.x sdk'
+            inputs:
+              packagetype: sdk
+              useglobaljson: true
+              workingdirectory: '$(build.sourcesdirectory)'
+
+          - task: DotNetCoreCLI@2
+            displayName: ".Net Core - NuGet restore for dotnet projects only"
+            inputs:
+              command: "restore"
+              projects: |
+                **/*.csproj
+              feedsToUse: config
+              noCache: true
+              nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
+              workingDirectory: '$(Build.SourcesDirectory)'
+              packagesDirectory: '$(Build.SourcesDirectory)\packages'
+
           - task: CmdLine@1
             displayName: "Run OWASP Dependency Checker"
             inputs:
@@ -57,6 +77,7 @@ stages:
               inlineScript: |
                 param($ReportLocation)
                 Invoke-VulnerabilityCheck -ReportLocation $ReportLocation
+
       - job: UnitTestsAndCodeCoverage
         workspace:
           clean: all
@@ -77,8 +98,8 @@ stages:
               feedsToUse: config
               noCache: true
               nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
-              workingDirectory: '$(Build.SourcesDirectory)\UKHO.ERPFacade\'
-              packagesDirectory: '$(Build.SourcesDirectory)\UKHO.ERPFacade\packagesForTests'
+              workingDirectory: '$(Build.SourcesDirectory)'
+              packagesDirectory: '$(Build.SourcesDirectory)\packagesForTests'
 
           - task: DotNetCoreCLI@2
             displayName: "dotnet test - Perform Unit Tests"
@@ -125,8 +146,8 @@ stages:
               feedsToUse: config
               noCache: true
               nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
-              workingDirectory: '$(Build.SourcesDirectory)\UKHO.ERPFacade'
-              packagesDirectory: '$(Build.SourcesDirectory)\UKHO.ERPFacade\packages'
+              workingDirectory: '$(Build.SourcesDirectory)\src'
+              packagesDirectory: '$(Build.SourcesDirectory)\src\packages'
 
           - task: DotNetCoreCLI@2
             displayName: "dotnet build task"
