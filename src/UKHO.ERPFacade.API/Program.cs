@@ -1,6 +1,8 @@
 using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging.Configuration;
 using Newtonsoft.Json.Serialization;
 using Serilog;
@@ -104,7 +106,32 @@ namespace UKHO.ERPFacade
                 options.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey);
             });
 
-            // The following line enables Application Insights telemetry collection.
+            var azureAdConfiguration = new AzureADConfiguration();
+            builder.Configuration.Bind("AzureADConfiguration", azureAdConfiguration);
+
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                   .AddJwtBearer("AzureAD", options =>
+                   {
+                       options.Audience = azureAdConfiguration.ClientId;
+                       options.Authority = $"{azureAdConfiguration.MicrosoftOnlineLoginUrl}{azureAdConfiguration.TenantId}";
+                   });
+
+
+            builder.Services.AddAuthorization(options =>
+            {
+                options.DefaultPolicy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .AddAuthenticationSchemes("AzureAD")
+                .Build();
+            });
+
+            builder.Services.AddAuthorization(options =>
+            {
+              options.AddPolicy("WebhookCaller", policy => policy.RequireRole("WebhookCaller"));
+            });
+
+
+            // The following line enables Application Insights telemetry collection.	
             builder.Services.AddApplicationInsightsTelemetry();
 
             // Add services to the container.
@@ -130,6 +157,10 @@ namespace UKHO.ERPFacade
             app.UseCorrelationIdMiddleware();
 
             app.MapControllers();
+
+            app.UseAuthorization();
+
+            app.UseAuthentication();
 
             app.Run();
         }

@@ -2,10 +2,9 @@
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
-    
     public class WebhookEndpoint
     {
-        public  Config config;
+        public Config config;
         private RestClient client;
         public WebhookEndpoint()
         {
@@ -21,13 +20,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return response;
         }
 
-        
         public async Task<RestResponse> PostWebhookResponseAsync(String filePath)
         {
             string requestBody;
-            using (StreamReader r = new StreamReader(filePath))
+            using (StreamReader streamReader = new StreamReader(filePath))
             {
-                requestBody = r.ReadToEnd();
+                requestBody = streamReader.ReadToEnd();
             }
             var request = new RestRequest("/webhook/newenccontentpublishedeventreceived").AddJsonBody(requestBody);
             var response = await client.PostAsync(request);

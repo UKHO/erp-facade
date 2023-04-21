@@ -4,8 +4,7 @@ using UKHO.ERPFacade.API.Filters;
 
 namespace UKHO.ERPFacade.API.Controllers
 {
-    [ExcludeFromCodeCoverage]
-    [ApiController]
+    [ExcludeFromCodeCoverage]    
     public abstract class BaseController<T> : ControllerBase
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
