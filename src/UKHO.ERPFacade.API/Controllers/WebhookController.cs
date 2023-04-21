@@ -76,7 +76,7 @@ namespace UKHO.ERPFacade.API.Controllers
             await _azureBlobEventWriter.UploadEvent(requestJson, traceId);
 
             //Below line is added temporary only to send sample xml to mock service for local testing.
-            XmlDocument soapXml = _xmlHelper.CreateXmlDocument("..\\UKHO.ERPFacade.API\\SapXmlTemplates\\SAPRequest.xml");
+            XmlDocument soapXml = _xmlHelper.CreateXmlDocument(Path.Combine(Environment.CurrentDirectory, "SapXmlTemplates\\SAPRequest.xml"));
 
             HttpResponseMessage response = await _sapClient.PostEventData(soapXml, "Z_ADDS_MAT_INFO");
 
