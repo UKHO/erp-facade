@@ -52,6 +52,7 @@ stages:
               projects: |
                 **/*.csproj
                 !**/*Tests.csproj
+                !**/UKHO.SAP.MockService.csproj
               feedsToUse: config
               noCache: true
               nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
