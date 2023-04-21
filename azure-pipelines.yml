@@ -56,7 +56,7 @@ stages:
               noCache: true
               nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
               workingDirectory: '$(Build.SourcesDirectory)\src'
-              packagesDirectory: '$(Build.SourcesDirectory)\src\packages'
+              packagesDirectory: '$(Build.SourcesDirectory)\src\packagesForAPI'
 
           - task: CmdLine@1
             displayName: "Run OWASP Dependency Checker"
