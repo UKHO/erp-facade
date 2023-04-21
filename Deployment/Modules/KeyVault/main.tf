@@ -50,24 +50,6 @@ resource "azurerm_key_vault_access_policy" "kv_read_access" {
   ]
 }
 
-#access policy for read access (app service)
-resource "azurerm_key_vault_access_policy" "kv_read_access" {
-  for_each     = var.read_access_objects
-  key_vault_id = azurerm_key_vault.kv.id
-  tenant_id    = var.tenant_id
-  object_id    = each.value
-
-  key_permissions = [
-    "List",
-    "Get",
-  ]
-
-  secret_permissions = [
-    "List",
-    "Get"
-  ]
-}
-
 resource "azurerm_key_vault_secret" "passed_in_secrets" {
   count        = length(var.secrets)
   name         = keys(var.secrets)[count.index]
