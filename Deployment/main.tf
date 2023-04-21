@@ -60,6 +60,7 @@ module "key_vault" {
 
   read_access_objects = {
      "webapp_service"       = module.webapp_service.web_app_object_id
+     "mock_service"         = module.webapp_service.mock_web_app_object_id
   }
   secrets = {
       "EventHubLoggingConfiguration--ConnectionString"            = module.eventhub.log_primary_connection_string

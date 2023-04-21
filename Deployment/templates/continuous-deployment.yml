@@ -46,6 +46,13 @@ steps:
       appName: "$(WEB_APP_NAME)"
       package: "$(Pipeline.Workspace)/UKHOERPFacadeAPI/UKHO.ERPFacade.API.zip"
 
+  - task: FileTransform@1
+    displayName: "File Transform: Mock Service Application Settings"
+    inputs:
+      folderPath: '$(Pipeline.Workspace)/UKHOMockSAPService/*.zip'
+      fileType: 'json'
+      targetFiles: '**/appsettings.json'
+
   - task: AzureWebApp@1
     displayName: "Azure App Deploy: ERPFacade-SAP-MockService"
     condition: and(succeeded(), eq(variables['Environment.Name'], 'ERP-Dev'))
@@ -53,6 +60,6 @@ steps:
       azureSubscription: "${{ parameters.AzureSubscription }}"
       appType: webApp
       appName: "$(MOCK_WEB_APP_NAME)"
-      package: "$(Pipeline.Workspace)/UKHOSAPMockService/UKHO.SAP.MockService.zip"
+      package: "$(Pipeline.Workspace)/UKHOMockSAPService/UKHO.SAP.MockAPIService.zip"
 
 

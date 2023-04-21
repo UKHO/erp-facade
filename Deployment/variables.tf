@@ -13,7 +13,7 @@ locals {
   service_name       = "erpfacade"
   table_name         = "eesevents"
   web_app_name       = "${local.service_name}-${local.env_name}-api"
-  mock_web_app_name  = "${local.service_name}-${local.env_name}-SapMockApi"
+  mock_web_app_name  = "${local.service_name}-${local.env_name}-sapmockservice"
   key_vault_name     = "${local.service_name}-ukho-${local.env_name}-kv"
   storage_name       = "${local.service_name}${local.env_name}storage"
   container_name     = "erp-container"
