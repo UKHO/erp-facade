@@ -40,9 +40,9 @@ stages:
           - task: UseDotNet@2
             displayName: 'Use .NET 6.0.x sdk'
             inputs:
-              packagetype: sdk
-              useglobaljson: true
-              workingdirectory: '$(build.sourcesdirectory)\src'
+              packageType: sdk
+              useGlobalJson: true
+              workingDirectory: '$(Build.SourcesDirectory)\src'
 
           - task: DotNetCoreCLI@2
             displayName: ".Net Core - NuGet restore for dotnet projects only"
@@ -51,6 +51,7 @@ stages:
               projects: |
                 **/*.csproj
                 !**/*Tests.csproj
+                !UKHO.SAP.MockAPIService.csproj
               feedsToUse: config
               noCache: true
               nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
