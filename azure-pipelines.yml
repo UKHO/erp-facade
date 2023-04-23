@@ -40,22 +40,21 @@ stages:
           - task: UseDotNet@2
             displayName: 'Use .NET 6.0.x sdk'
             inputs:
-              packagetype: sdk
-              useglobaljson: true
-              workingdirectory: '$(build.sourcesdirectory)'
+              packageType: sdk
+              useGlobalJson: true
+              workingDirectory: '$(Build.SourcesDirectory)\src'
 
           - task: DotNetCoreCLI@2
-            displayName: ".Net Core - NuGet restore for dotnet projects only"
+            displayName: ".Net Core - NuGet restore non test projects only"
             inputs:
-              command: "restore"
               projects: |
                 **/*.csproj
                 !**/*Tests.csproj
               feedsToUse: config
               noCache: true
               nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
-              workingDirectory: '$(Build.SourcesDirectory)'
-              packagesDirectory: '$(Build.SourcesDirectory)\src\PackageforAPI'
+              workingDirectory: '$(Build.SourcesDirectory)\src'
+              packagesDirectory: '$(Build.SourcesDirectory)\src\packagesForAPI'
 
           - task: PowerShell@2
             inputs:
