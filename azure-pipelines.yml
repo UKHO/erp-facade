@@ -55,7 +55,15 @@ stages:
               noCache: true
               nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
               workingDirectory: '$(Build.SourcesDirectory)'
-              packagesDirectory: '$(Build.SourcesDirectory)\packages'
+              packagesDirectory: '$(Build.SourcesDirectory)\packagesForAPI'
+
+          - task: PowerShell@2
+            inputs:
+              targetType: 'inline'
+              script: |
+                echo "Build.Source working directory"
+                
+                Get-ChildItem -Path $(Build.SourcesDirectory)  –Recurse
 
           - task: CmdLine@1
             displayName: "Run OWASP Dependency Checker"
