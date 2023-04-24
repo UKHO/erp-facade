@@ -22,7 +22,7 @@ namespace UKHO.ERPFacade.Common.IO
             _azureStorageConfig = azureStorageConfig ?? throw new ArgumentNullException(nameof(azureStorageConfig));
         }
 
-        public async Task UploadEvent(JObject eesEvent, string traceId, string correlationId)
+        public async Task UploadEvent(JObject eesEvent, string traceId)
         {
             BlobClient blobClient = GetBlobClient(traceId);
 
