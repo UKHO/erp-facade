@@ -9,6 +9,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
     {
         private WebhookEndpoint Webhook { get; set; }
         private DirectoryInfo _dir;
+        private readonly ADAuthTokenProvider _authToken = new ADAuthTokenProvider();
+        public static Boolean noRole = false;
 
         [SetUp]
         public void Setup()
@@ -16,20 +18,38 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             Webhook = new WebhookEndpoint();
             _dir = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent;
         }
-        [Test]
-        public async Task WhenValidEventInnewenccontentpublishedeventoptions_ThenWebhookReturns200OkResponse()
+
+        [Test(Description = "WhenValidEventInNewEncContentPublishedEventOptions_ThenWebhookReturns200OkResponse"), Order(0)]
+        public async Task WhenValidEventInNewEncContentPublishedEventOptions_ThenWebhookReturns200OkResponse()
         {
-            var response = await Webhook.OptionWebhookResponseAsync();
-            response.StatusCode.Should().Be((System.Net.HttpStatusCode)200);
+            var response = await Webhook.OptionWebhookResponseAsync(await _authToken.GetAzureADToken(false));
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
 
-        [Test]
-        public async Task WhenValidEventInNewEncContentPublishedEventReceived_ThenWebhookReturns200OkResponse()
+        [Test(Description = "WhenValidEventInNewEncContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponse"), Order(0)]
+        public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponse()
         {
-            string filePath = Path.Combine(_dir.FullName, Webhook.config.testConfig.PayloadFolder, Webhook.config.testConfig.WebhookPayloadFileName);
+            string filePath = Path.Combine(_dir.FullName, WebhookEndpoint.config.testConfig.PayloadFolder, WebhookEndpoint.config.testConfig.WebhookPayloadFileName);
 
-            var response = await Webhook.PostWebhookResponseAsync(filePath);
-            response.StatusCode.Should().Be((System.Net.HttpStatusCode)200);
+            var response = await Webhook.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(false));
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        }
+
+        [Test(Description = "WhenValidEventInNewEncContentPublishedEventReceivedWithInvalidToken_ThenWebhookReturns401UnAuthorizedResponse"), Order(1)]
+        public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithInvalidToken_ThenWebhookReturns401UnAuthorizedResponse()
+        {
+            string filePath = Path.Combine(_dir.FullName, WebhookEndpoint.config.testConfig.PayloadFolder, WebhookEndpoint.config.testConfig.WebhookPayloadFileName);
+
+            var response = await Webhook.PostWebhookResponseAsync(filePath, "invalidToken_abcd");
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
+        }
+
+        [Test(Description = "WhenValidEventInNewEncContentPublishedEventReceivedWithTokenHavingNoRole_ThenWebhookReturns403ForbiddenResponse"), Order(1)]
+        public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithTokenHavingNoRole_ThenWebhookReturns403ForbiddenResponse()
+        {
+            string filePath = Path.Combine(_dir.FullName, WebhookEndpoint.config.testConfig.PayloadFolder, WebhookEndpoint.config.testConfig.WebhookPayloadFileName);
+            var response = await Webhook.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(true));
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.Forbidden);
         }
     }
 }
