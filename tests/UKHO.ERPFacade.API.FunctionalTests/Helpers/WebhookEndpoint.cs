@@ -17,7 +17,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             
         }
 
-        public async Task<RestResponse> OptionWebhookResponseAsync(String token)
+        public async Task<RestResponse> OptionWebhookResponseAsync(string token)
         {
             var request = new RestRequest("/webhook/newenccontentpublishedeventoptions");
             request.AddHeader("Authorization", "Bearer " + token);
@@ -26,7 +26,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         }
 
 
-        public async Task<RestResponse> PostWebhookResponseAsync(String filePath, String token)
+        public async Task<RestResponse> PostWebhookResponseAsync(string filePath, string token)
         {
             string requestBody;
 

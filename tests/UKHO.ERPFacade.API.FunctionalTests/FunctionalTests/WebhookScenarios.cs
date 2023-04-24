@@ -24,7 +24,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         public async Task WhenValidEventInNewEncContentPublishedEventOptions_ThenWebhookReturns200OkResponse()
         {
             var response = await Webhook.OptionWebhookResponseAsync(await _authToken.GetAzureADToken(false));
-            response.StatusCode.Should().Be((System.Net.HttpStatusCode)200);
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
 
         [Test, Order(0)]
@@ -34,7 +34,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             string filePath = Path.Combine(_dir.FullName, WebhookEndpoint.config.testConfig.PayloadFolder, WebhookEndpoint.config.testConfig.WebhookPayloadFileName);
 
             var response = await Webhook.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(false));
-            response.StatusCode.Should().Be((System.Net.HttpStatusCode)200);
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
 
         [Test, Order(1)]
@@ -44,7 +44,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             string filePath = Path.Combine(_dir.FullName, WebhookEndpoint.config.testConfig.PayloadFolder, WebhookEndpoint.config.testConfig.WebhookPayloadFileName);
 
             var response = await Webhook.PostWebhookResponseAsync(filePath, "invalidToken_abcd");
-            response.StatusCode.Should().Be((System.Net.HttpStatusCode)401);
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
         }
 
         [Test, Order(1)]
@@ -53,7 +53,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         {
             string filePath = Path.Combine(_dir.FullName, WebhookEndpoint.config.testConfig.PayloadFolder, WebhookEndpoint.config.testConfig.WebhookPayloadFileName);
             var response = await Webhook.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(true));
-            response.StatusCode.Should().Be((System.Net.HttpStatusCode)403);
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.Forbidden);
         }
     }
 }
