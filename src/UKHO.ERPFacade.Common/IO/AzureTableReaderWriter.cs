@@ -1,6 +1,6 @@
-﻿using Azure.Data.Tables.Models;
+﻿using Azure;
 using Azure.Data.Tables;
-using Azure;
+using Azure.Data.Tables.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;

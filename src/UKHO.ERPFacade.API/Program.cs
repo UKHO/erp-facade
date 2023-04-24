@@ -3,13 +3,14 @@ using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Logging.Configuration;
 using Newtonsoft.Json.Serialization;
 using Serilog;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using UKHO.ERPFacade.API.Filters;
 using UKHO.ERPFacade.Common.Configuration;
+using UKHO.ERPFacade.Common.Helpers;
+using UKHO.ERPFacade.Common.HttpClients;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.Logging.EventHubLogProvider;
 
@@ -72,7 +73,7 @@ namespace UKHO.ERPFacade
                             additionalValues["_RemoteIPAddress"] = httpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString();
                             additionalValues["_User-Agent"] = httpContextAccessor.HttpContext.Request.Headers["User-Agent"].FirstOrDefault() ?? string.Empty;
                             additionalValues["_AssemblyVersion"] = Assembly.GetExecutingAssembly().GetCustomAttributes<AssemblyFileVersionAttribute>().Single().Version;
-                            additionalValues["_X-Correlation-ID"] = httpContextAccessor.HttpContext.Request.Headers?[CorrelationIdMiddleware.XCorrelationIdHeaderKey].FirstOrDefault() ?? string.Empty;
+                            additionalValues["_X-Correlation-ID"] = httpContextAccessor.HttpContext.Request.Headers?[CorrelationIdMiddleware.XCORRELATIONIDHEADERKEY].FirstOrDefault() ?? string.Empty;
                         }
                     }
                     logging.AddEventHub(config =>
@@ -103,7 +104,7 @@ namespace UKHO.ERPFacade
 
             builder.Services.AddHeaderPropagation(options =>
             {
-                options.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey);
+                options.Headers.Add(CorrelationIdMiddleware.XCORRELATIONIDHEADERKEY);
             });
 
             var azureAdConfiguration = new AzureADConfiguration();
@@ -127,7 +128,7 @@ namespace UKHO.ERPFacade
 
             builder.Services.AddAuthorization(options =>
             {
-              options.AddPolicy("WebhookCaller", policy => policy.RequireRole("WebhookCaller"));
+                options.AddPolicy("WebhookCaller", policy => policy.RequireRole("WebhookCaller"));
             });
 
 
@@ -144,11 +145,18 @@ namespace UKHO.ERPFacade
             });
 
             builder.Services.Configure<AzureStorageConfiguration>(configuration.GetSection("AzureStorageConfiguration"));
-
-            builder.Services.AddSingleton<IAzureTableReaderWriter, AzureTableReaderWriter>();
-            builder.Services.AddSingleton<IAzureBlobEventWriter, AzureBlobEventWriter>();
+            builder.Services.Configure<SapConfiguration>(configuration.GetSection("SapConfiguration"));
 
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            builder.Services.AddSingleton<IAzureTableReaderWriter, AzureTableReaderWriter>();
+            builder.Services.AddSingleton<IAzureBlobEventWriter, AzureBlobEventWriter>();
+            builder.Services.AddSingleton<ISapConfiguration, SapConfiguration>();
+            builder.Services.AddSingleton<IXmlHelper, XmlHelper>();
+
+            builder.Services.AddHttpClient<ISapClient, SapClient>(c =>
+            {
+                c.BaseAddress = new Uri(configuration.GetValue<string>("SapConfiguration:BaseAddress"));
+            });
 
             var app = builder.Build();
 

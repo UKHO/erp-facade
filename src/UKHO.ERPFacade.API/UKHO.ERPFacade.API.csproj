@@ -6,10 +6,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <NoWarn>8600;8602</NoWarn>
+    <NoWarn>8600;8602;8604</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <NoWarn>8600;8602</NoWarn>
+    <NoWarn>8600;8602;8604</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Filters\LogCorrelationIdMiddleware.cs" />
@@ -32,5 +32,10 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\UKHO.ERPFacade.Common\UKHO.ERPFacade.Common.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="SapXmlTemplates\SAPRequest.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

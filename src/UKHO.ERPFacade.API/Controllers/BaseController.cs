@@ -17,7 +17,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
         protected string GetCurrentCorrelationId()
         {
-            return _httpContextAccessor.HttpContext!.Request.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey].FirstOrDefault()!;
+            return _httpContextAccessor.HttpContext!.Request.Headers[CorrelationIdMiddleware.XCORRELATIONIDHEADERKEY].FirstOrDefault()!;
         }
     }
 }
