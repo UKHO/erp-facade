@@ -9,10 +9,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
     {
         private WebhookEndpoint Webhook { get; set; }
         private DirectoryInfo _dir;
-
-        private string _validToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6Ii1LSTNROW5OUjdiUm9meG1lWm9YcWJIWkdldyIsImtpZCI6Ii1LSTNROW5OUjdiUm9meG1lWm9YcWJIWkdldyJ9.eyJhdWQiOiI4Y2M0ZGRkNS1kMzdhLTQ5YzItYWQ1NS1iNzU4Mzk5OTMzNDgiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC85MTM0Y2E0OC02NjNkLTRhMDUtOTY4YS0zMWE0MmYwYWVkM2UvIiwiaWF0IjoxNjgyMDc1MTA5LCJuYmYiOjE2ODIwNzUxMDksImV4cCI6MTY4MjA3OTEyNiwiYWNyIjoiMSIsImFpbyI6IkFhUUFXLzhUQUFBQVZXalgzeEJNbkxUR3p1SkZNM0xpT3JUYlBoUDF4WUFXOThUMVAwUWNGaDlIV1FSakxIWEo4TDQrWjMrV1JVbmlpOTFyK0k0YUpYcUloSU04K0UvS3VxUFRuaFo4K1M4ZVI3cU02U2dqWlBaV2hpMUZtVFFKYk9zN3RvWi9NTHl2YzRtWUl4WFdGVUtDMlJUdTF4SC82S1dZN2VncmZldFFrRzdLSk0zeDRTTmh4VG1YOUVXZzZodncvRzMwQ0FKV2tEdEFRMHUwZVJGdFFYTGEvMGRlOWc9PSIsImFtciI6WyJyc2EiXSwiYXBwaWQiOiI4Y2M0ZGRkNS1kMzdhLTQ5YzItYWQ1NS1iNzU4Mzk5OTMzNDgiLCJhcHBpZGFjciI6IjAiLCJlbWFpbCI6InByYXNoYW50Lmd1cHRhQG1hc3Rlay5jb20iLCJmYW1pbHlfbmFtZSI6Ikd1cHRhIiwiZ2l2ZW5fbmFtZSI6IlByYXNoYW50IiwiaWRwIjoiaHR0cHM6Ly9zdHMud2luZG93cy5uZXQvYWRkMWM1MDAtYTZkNy00ZGJkLWI4OTAtN2Y4Y2I2ZjdkODYxLyIsImlwYWRkciI6IjEwMy42Ni44Mi4yNTMiLCJuYW1lIjoiUHJhc2hhbnQgR3VwdGEiLCJvaWQiOiIzYTQzYzE2ZC1kODE5LTQxNTktOTM5Ni01ZDEzMjM4NTQwZjciLCJyaCI6IjAuQVZNQVNNbzBrVDFtQlVxV2lqR2tMd3J0UHRYZHhJeDYwOEpKclZXM1dEbVpNMGdDQU80LiIsInJvbGVzIjpbIldlYmhvb2tDYWxsZXIiXSwic2NwIjoiVXNlci5SZWFkIiwic3ViIjoiamk4VkhSWWZ4NUJIVzRuMGsyRWRQbzFxR2VQS0xObGFzb1JEVlVFT0d3VSIsInRpZCI6IjkxMzRjYTQ4LTY2M2QtNGEwNS05NjhhLTMxYTQyZjBhZWQzZSIsInVuaXF1ZV9uYW1lIjoicHJhc2hhbnQuZ3VwdGFAbWFzdGVrLmNvbSIsInV0aSI6InN4Qy1PWnZ6b2t1SmhZdmgwZ0U2QUEiLCJ2ZXIiOiIxLjAifQ.ExDXebHW6kNOf3-JtV-3-KUubHriEmnGphqYRGnFKqEd9DDJ5gGuHA1Gz_8OfIblkopNH6mH-HOi0dMnYkw2wwrcQ_xqmdeg7UAuktrhRABZPkH0cgXHuUbCmHk36J6BQ_nQ3GazKEvQ-6Y7_g4bu1W2jKm0pWzIfOp1TES1CLTnxKQdV3hQfC5tpV2MaTCohwJ3snTrhk9D6NNzuV9QDyIC-8W6kvhYIT0Cab8hGZdSb36UmPKp6IBm4vIRBDg1lBFk3lRsYKaKxngNE1oD9XfY3y1igVUzNeNXcbXpkyDn02QTtpuT-TXMQA7NQSDmgEcV_wvodGOkD75pU0s69g";
-        private string _inValidToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6Ii1LSTNROW5OUjdiUm9meG1lWm9YcWJIWkdldyIsImtpZCI6Ii1LSTNROW5OUjdiUm9meG1lWm9YcWJIWkdldyJ9.eyJhdWQiOiI4Y2M0ZGRkNS1kMzdhLTQ5YzItYWQ1NS1iNzU4Mzk5OTMzNDgiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC85MTM0Y2E0OC02NjNkLTRhMDUtOTY4YS0zMWE0MmYwYWVkM2UvIiwiaWF0IjoxNjgyMDc1MTA5LCJuYmYiOjE2ODIwNzUxMDksImV4cCI6MTY4MjA3OTEyNiwiYWNyIjoiMSIsImFpbyI6IkFhUUFXLzhUQUFBQVZXalgzeEJNbkxUR3p1SkZNM0xpT3JUYlBoUDF4WUFXOThUMVAwUWNGaDlIV1FSakxIWEo4TDQrWjMrV1JVbmlpOTFyK0k0YUpYcUloSU04K0UvS3VxUFRuaFo4K1M4ZVI3cU02U2dqWlBaV2hpMUZtVFFKYk9zN3RvWi9NTHl2YzRtWUl4WFdGVUtDMlJUdTF4SC82S1dZN2VncmZldFFrRzdLSk0zeDRTTmh4VG1YOUVXZzZodncvRzMwQ0FKV2tEdEFRMHUwZVJGdFFYTGEvMGRlOWc9PSIsImFtciI6WyJyc2EiXSwiYXBwaWQiOiI4Y2M0ZGRkNS1kMzdhLTQ5YzItYWQ1NS1iNzU4Mzk5OTMzNDgiLCJhcHBpZGFjciI6IjAiLCJlbWFpbCI6InByYXNoYW50Lmd1cHRhQG1hc3Rlay5jb20iLCJmYW1pbHlfbmFtZSI6Ikd1cHRhIiwiZ2l2ZW5fbmFtZSI6IlByYXNoYW50IiwiaWRwIjoiaHR0cHM6Ly9zdHMud2luZG93cy5uZXQvYWRkMWM1MDAtYTZkNy00ZGJkLWI4OTAtN2Y4Y2I2ZjdkODYxLyIsImlwYWRkciI6IjEwMy42Ni44Mi4yNTMiLCJuYW1lIjoiUHJhc2hhbnQgR3VwdGEiLCJvaWQiOiIzYTQzYzE2ZC1kODE5LTQxNTktOTM5Ni01ZDEzMjM4NTQwZjciLCJyaCI6IjAuQVZNQVNNbzBrVDFtQlVxV2lqR2tMd3J0UHRYZHhJeDYwOEpKclZXM1dEbVpNMGdDQU80LiIsInJvbGVzIjpbIldlYmhvb2tDYWxsZXIiXSwic2NwIjoiVXNlci5SZWFkIiwic3ViIjoiamk4VkhSWWZ4NUJIVzRuMGsyRWRQbzFxR2VQS0xObGFzb1JEVlVFT0d3VSIsInRpZCI6IjkxMzRjYTQ4LTY2M2QtNGEwNS05NjhhLTMxYTQyZjBhZWQzZSIsInVuaXF1ZV9uYW1lIjoicHJhc2hhbnQuZ3VwdGFAbWFzdGVrLmNvbSIsInV0aSI6InN4Qy1PWnZ6b2t1SmhZdmgwZ0U2QUEiLCJ2ZXIiOiIxLjAifQ.ExDXebHW6kNOf3-JtV-3-KUubHriEmnGphqYRGnFKqEd9DDJ5gGuHA1Gz_8OfIblkopNH6mH-HOi0dMnYkw2wwrcQ_xqmdeg7UAuktrhRABZPkH0cgXHuUbCmHk36J6BQ_nQ3GazKEvQ-6Y7_g4bu1W2jKm0pWzIfOp1TES1CLTnxKQdV3hQfC5tpV2MaTCohwJ3snTrhk9D6NNzuV9QDyIC-8W6kvhYIT0Cab8hGZdSb36UmPKp6IBm4vIRBDg1lBFk3lRsYKaKxngNE1oD9XfY3y1igVUzNeNXcbXpkyDn02QTtpuT-TXMQA7NQSDmgEcV_wvodGOkD75pU0s69ga";
-        private string _tokenWithNoRole = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6Ii1LSTNROW5OUjdiUm9meG1lWm9YcWJIWkdldyIsImtpZCI6Ii1LSTNROW5OUjdiUm9meG1lWm9YcWJIWkdldyJ9.eyJhdWQiOiI4Y2M0ZGRkNS1kMzdhLTQ5YzItYWQ1NS1iNzU4Mzk5OTMzNDgiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC85MTM0Y2E0OC02NjNkLTRhMDUtOTY4YS0zMWE0MmYwYWVkM2UvIiwiaWF0IjoxNjgyMDc1Mjg3LCJuYmYiOjE2ODIwNzUyODcsImV4cCI6MTY4MjA3OTc0NCwiYWNyIjoiMSIsImFpbyI6IkFXUUFtLzhUQUFBQUlTeG5WKzluZ2dKSTlOU1FQb3ovdlpybW5PZVVFdDVWeEI4VWYzZVdBb2ZldkpEYlY4bzFPOXpHQ3RjR2N2N0RJcXRzeU8rSG9DeW4wZkIrbEZBNjByS2xTN0lUaGRuRm5KdzE2WVU1YzR2dWFuS0p6bDZnQnF1RkpmWE5LRVVLIiwiYW1yIjpbInB3ZCIsIm1mYSJdLCJhcHBpZCI6IjhjYzRkZGQ1LWQzN2EtNDljMi1hZDU1LWI3NTgzOTk5MzM0OCIsImFwcGlkYWNyIjoiMCIsImVtYWlsIjoic2FtaWsxNTAxNTQ0QG1hc3Rlay5jb20iLCJmYW1pbHlfbmFtZSI6Im1vaGlyZSIsImdpdmVuX25hbWUiOiJzYW1pa3NoYSIsImlkcCI6Imh0dHBzOi8vc3RzLndpbmRvd3MubmV0L2FkZDFjNTAwLWE2ZDctNGRiZC1iODkwLTdmOGNiNmY3ZDg2MS8iLCJpcGFkZHIiOiIyMDMuMTk0Ljk2LjE0OSIsIm5hbWUiOiJTYW1pa3NoYSBNb2hpcmUiLCJvaWQiOiI1NWFiMjQ5My1iMDgzLTRhNDEtYmYyMS0xNDNkMzk0MDMyMGUiLCJyaCI6IjAuQVFJQVNNbzBrVDFtQlVxV2lqR2tMd3J0UHRYZHhJeDYwOEpKclZXM1dEbVpNMGdDQUJNLiIsInNjcCI6IlVzZXIuUmVhZCIsInN1YiI6ImozSG5RTUtxWVpiMnphcE5wM21GNTIzUGJtclR2eXVweXIwaXh6N0N4Y00iLCJ0aWQiOiI5MTM0Y2E0OC02NjNkLTRhMDUtOTY4YS0zMWE0MmYwYWVkM2UiLCJ1bmlxdWVfbmFtZSI6InNhbWlrMTUwMTU0NEBtYXN0ZWsuY29tIiwidXRpIjoiVmd4WGxfNlhNRVNSMUVyWnN3Z01BQSIsInZlciI6IjEuMCJ9.f2JESlMgwG1I8Ft5vJvMFSXq7qKC4ugZFHT_nsEDth9ffidL9sYkboSrHy0I4hk0aoceyJVw4EqwFvi3_JYViF9m7eaGAm2getR7kBy0HRdmaVSYLqqmLQ5-MiyzZTGlXVLyIg-y_DHzSRnRud6Wo4uwNP4O-mE3djNabtApmhsLEkuLH4WBhQuscHl1n1jTd_Z_hZ1BRu2l6WtWblaaLN5CmZpVAzp7M2-lt085EF7vgMszzHSAcjvZKCCW3FvE3JRTlw0OH4wLZQ0o7wbDXsVydBQFBbATYb1GG8DAD1doJhjI_Q4b3d_RlNTG1-x6eud7J07LRMbMWlgia1yXDg";
+        private readonly ADAuthTokenProvider _authToken = new ADAuthTokenProvider();
+        public static Boolean noRole = false;
 
         [SetUp]
         public void Setup()
@@ -21,37 +19,40 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             _dir = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent;
         }
 
-        [Test]
+        [Test, Order(0)]
+        [TestCase(TestName = "WhenValidEventInNewEncContentPublishedEventOptions_ThenWebhookReturns200OkResponse")]
         public async Task WhenValidEventInNewEncContentPublishedEventOptions_ThenWebhookReturns200OkResponse()
         {
-            var response = await Webhook.OptionWebhookResponseAsync(_validToken);
+            var response = await Webhook.OptionWebhookResponseAsync(await _authToken.GetAzureADToken(false));
             response.StatusCode.Should().Be((System.Net.HttpStatusCode)200);
         }
 
-        [Test]
+        [Test, Order(0)]
+        [TestCase(TestName = "WhenValidEventInNewEncContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponse")]
         public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponse()
         {
-            string filePath = Path.Combine(_dir.FullName, Webhook.config.testConfig.PayloadFolder, Webhook.config.testConfig.WebhookPayloadFileName);
+            string filePath = Path.Combine(_dir.FullName, WebhookEndpoint.config.testConfig.PayloadFolder, WebhookEndpoint.config.testConfig.WebhookPayloadFileName);
 
-            var response = await Webhook.PostWebhookResponseAsync(filePath, _validToken);
+            var response = await Webhook.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(false));
             response.StatusCode.Should().Be((System.Net.HttpStatusCode)200);
         }
 
-        [Test]
+        [Test, Order(1)]
+        [TestCase(TestName = "WhenValidEventInNewEncContentPublishedEventReceivedWithInvalidToken_ThenWebhookReturns401UnAuthorizedResponse")]
         public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithInvalidToken_ThenWebhookReturns401UnAuthorizedResponse()
         {
-            string filePath = Path.Combine(_dir.FullName, Webhook.config.testConfig.PayloadFolder, Webhook.config.testConfig.WebhookPayloadFileName);
+            string filePath = Path.Combine(_dir.FullName, WebhookEndpoint.config.testConfig.PayloadFolder, WebhookEndpoint.config.testConfig.WebhookPayloadFileName);
 
-            var response = await Webhook.PostWebhookResponseAsync(filePath, _inValidToken);
+            var response = await Webhook.PostWebhookResponseAsync(filePath, "invalidToken_abcd");
             response.StatusCode.Should().Be((System.Net.HttpStatusCode)401);
         }
 
-        [Test]
+        [Test, Order(1)]
+        [TestCase(TestName = "WhenValidEventInNewEncContentPublishedEventReceivedWithTokenHavingNoRole_ThenWebhookReturns403ForbiddenResponse")]
         public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithTokenHavingNoRole_ThenWebhookReturns403ForbiddenResponse()
         {
-            string filePath = Path.Combine(_dir.FullName, Webhook.config.testConfig.PayloadFolder, Webhook.config.testConfig.WebhookPayloadFileName);
-
-            var response = await Webhook.PostWebhookResponseAsync(filePath, _tokenWithNoRole);
+            string filePath = Path.Combine(_dir.FullName, WebhookEndpoint.config.testConfig.PayloadFolder, WebhookEndpoint.config.testConfig.WebhookPayloadFileName);
+            var response = await Webhook.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(true));
             response.StatusCode.Should().Be((System.Net.HttpStatusCode)403);
         }
     }
