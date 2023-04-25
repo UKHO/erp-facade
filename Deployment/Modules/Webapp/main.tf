@@ -30,6 +30,10 @@ resource "azurerm_windows_web_app" "webapp_service" {
     type = "SystemAssigned"
     }
 
+  lifecycle {
+    ignore_changes = [ virtual_network_subnet_id ]
+   }
+
   https_only = true
   }
 
@@ -59,9 +63,6 @@ resource "azurerm_windows_web_app" "mock_webapp_service" {
 
   https_only = true
 
-  lifecycle {
-    ignore_changes = [virtual_network_subnet_id]
-   }
  }
 
 resource "azurerm_app_service_virtual_network_swift_connection" "webapp_vnet_integration" {
