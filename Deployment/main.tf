@@ -50,6 +50,16 @@ module "webapp_service" {
   tags                                                         = local.tags
 }
 
+locals {
+  kv_read_access_list = {
+    "webapp_service"                  = module.webapp_service.web_app_object_id
+  }
+
+  kv_read_access_list_with_mock       = merge(local.kv_read_access_list, {
+     "mock_service"                   = local.env_name == "dev" ? module.webapp_service.mock_web_app_object_id : ""
+  })
+}
+
 module "key_vault" {
   source              = "./Modules/KeyVault"
   name                = local.key_vault_name
@@ -57,16 +67,12 @@ module "key_vault" {
   env_name            = local.env_name
   tenant_id           = module.webapp_service.web_app_tenant_id
   location            = azurerm_resource_group.rg.location
-
-  read_access_objects = {
-     "webapp_service"       = module.webapp_service.web_app_object_id
-     "mock_service"         = local.env_name == "dev" ? module.webapp_service.mock_web_app_object_id : null
-  }
+  read_access_objects = local.env_name == "dev" ? local.kv_read_access_list_with_mock : local.kv_read_access_list
   secrets = {
       "EventHubLoggingConfiguration--ConnectionString"            = module.eventhub.log_primary_connection_string
       "EventHubLoggingConfiguration--EntityPath"                  = module.eventhub.entity_path
       "ApplicationInsights--ConnectionString"                     = module.app_insights.connection_string
-      "AzureStorageConfiguration--ConnectionString"                = module.storage.storage_connection_string
+      "AzureStorageConfiguration--ConnectionString"               = module.storage.storage_connection_string
       
  }
   tags                                                            = local.tags
