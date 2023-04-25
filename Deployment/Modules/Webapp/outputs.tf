@@ -15,5 +15,5 @@ output "webapp_name" {
 }
 
 output "mock_web_app_object_id" {
-  value = azurerm_windows_web_app.mock_webapp_service.0.identity.0.principal_id
+  value = var.env_name == "dev" ?  azurerm_windows_web_app.mock_webapp_service.0.identity.0.principal_id :  null
 }

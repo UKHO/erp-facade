@@ -256,7 +256,7 @@ stages:
     variables:
       - group: "ERP-Facade-QA"
       - group: "Erp-QA"
-    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
+    #condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
     jobs:
       - deployment: QADeployTerraform
         displayName: "QA - Deploy Terraform and Dotnet App"
