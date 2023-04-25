@@ -130,6 +130,9 @@ namespace UKHO.ERPFacade.API.Models
         [JsonProperty("unitOfSaleType")]
         public string UnitOfSaleType { get; set; }
 
+        [JsonProperty("unitSize")]
+        public string UnitSize { get; set; }
+
         [JsonProperty("unitType")]
         public string UnitType { get; set; }
 
@@ -137,7 +140,7 @@ namespace UKHO.ERPFacade.API.Models
         public string Status { get; set; }
 
         [JsonProperty("isNewUnitOfSale")]
-        public string IsNewUnitOfSale { get; set; }
+        public bool IsNewUnitOfSale { get; set; }
 
         [JsonProperty("geographicLimit")]
         public GeographicLimit GeographicLimit { get; set; }

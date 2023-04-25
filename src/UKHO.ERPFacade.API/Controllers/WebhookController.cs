@@ -139,48 +139,128 @@ namespace UKHO.ERPFacade.API.Controllers
 
                     foreach (var action in _sapActionConfig.Value.SapActions.Where(x => actions.Contains(x.ActionNumber)))
                     {
-                        XmlElement itemNode = soapXml.CreateElement("item");
-
-                        XmlElement actionNumberNode = soapXml.CreateElement("ACTIONNUMBER");
-                        actionNumberNode.InnerText = action.ActionNumber.ToString();
-
-                        XmlElement actionNode = soapXml.CreateElement("ACTION");
-                        actionNode.InnerText = action.Action.ToString();
-
-                        XmlElement productNode = soapXml.CreateElement("PRODUCT");
-                        productNode.InnerText = action.Product.ToString();
-
-                        itemNode.AppendChild(actionNumberNode);
-                        itemNode.AppendChild(actionNode);
-                        itemNode.AppendChild(productNode);
-
-                        foreach (var node in action.Attributes.Where(x => x.Section == "Product"))
+                        if (action.ActionNumber == 3)
                         {
-                            XmlElement itemSubNode = soapXml.CreateElement(node.XmlNodeName);
-
-                            if (node.IsRequired)
+                            foreach (var item in scenario.InUnitOfSales)
                             {
-                                object jsonFieldValue = GetProp(node.JsonPropertyName, scenario.Product, scenario.Product.GetType());
-                                itemSubNode.InnerText = string.IsNullOrWhiteSpace(jsonFieldValue.ToString()) ? string.Empty : jsonFieldValue.ToString().Substring(0, Math.Min(250, jsonFieldValue.ToString().Length));
-                            }
-                            itemNode.AppendChild(itemSubNode);
-                        }
+                                XmlElement itemNode = soapXml.CreateElement("item");
 
-                        foreach (var node in action.Attributes.Where(x => x.Section == "UnitOfSale"))
+                                XmlElement actionNumberNode = soapXml.CreateElement("ACTIONNUMBER");
+                                actionNumberNode.InnerText = action.ActionNumber.ToString();
+
+                                XmlElement actionNode = soapXml.CreateElement("ACTION");
+                                actionNode.InnerText = action.Action.ToString();
+
+                                XmlElement productNode = soapXml.CreateElement("PRODUCT");
+                                productNode.InnerText = action.Product.ToString();
+
+                                itemNode.AppendChild(actionNumberNode);
+                                itemNode.AppendChild(actionNode);
+                                itemNode.AppendChild(productNode);
+
+                                foreach (var node in action.Attributes.Where(x => x.Section == "Product"))
+                                {
+                                    XmlElement itemSubNode = soapXml.CreateElement(node.XmlNodeName);
+
+                                    if (node.IsRequired)
+                                    {
+                                        object jsonFieldValue = GetProp(node.JsonPropertyName, scenario.Product, scenario.Product.GetType());
+                                        itemSubNode.InnerText = string.IsNullOrWhiteSpace(jsonFieldValue.ToString()) ? string.Empty : jsonFieldValue.ToString().Substring(0, Math.Min(250, jsonFieldValue.ToString().Length));
+                                    }
+                                    itemNode.AppendChild(itemSubNode);
+                                }
+
+                                foreach (var node in action.Attributes.Where(x => x.Section == "UnitOfSale"))
+                                {
+                                    XmlElement itemSubNode = soapXml.CreateElement(node.XmlNodeName);
+
+                                    if (action.ActionNumber == 2)
+                                    {
+                                        foreach (var unitOfSale in scenario.UnitOfSales)
+                                        {
+                                            if (unitOfSale.IsNewUnitOfSale)
+                                            {
+                                                if (node.IsRequired)
+                                                {
+                                                    object jsonFieldValue = GetProp(node.JsonPropertyName, unitOfSale, unitOfSale.GetType());
+                                                    itemSubNode.InnerText = string.IsNullOrWhiteSpace(jsonFieldValue.ToString()) ? string.Empty : jsonFieldValue.ToString().Substring(0, Math.Min(250, jsonFieldValue.ToString().Length));
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (node.IsRequired)
+                                        {
+                                            if (node.XmlNodeName == "ENCSIZE")
+                                            {
+                                                UnitOfSale unitOfSale = scenario.UnitOfSales.Where(x => x.UnitName == item).FirstOrDefault();
+
+                                                object jsonFieldValue = GetProp(node.JsonPropertyName, unitOfSale, unitOfSale.GetType());
+                                                itemSubNode.InnerText = string.IsNullOrWhiteSpace(jsonFieldValue.ToString()) ? string.Empty : jsonFieldValue.ToString().Substring(0, Math.Min(250, jsonFieldValue.ToString().Length));
+                                            }
+                                            else
+                                            {
+                                                itemSubNode.InnerText = string.IsNullOrWhiteSpace(item.ToString()) ? string.Empty : item.ToString().Substring(0, Math.Min(250, item.ToString().Length));
+                                            }
+                                        }
+                                    }
+                                    itemNode.AppendChild(itemSubNode);
+                                }
+                                actionItemNode.AppendChild(itemNode);
+                            }
+                        }
+                        else
                         {
-                            foreach (var unitOfSale in scenario.InUnitOfSales)
+                            XmlElement itemNode = soapXml.CreateElement("item");
+
+                            XmlElement actionNumberNode = soapXml.CreateElement("ACTIONNUMBER");
+                            actionNumberNode.InnerText = action.ActionNumber.ToString();
+
+                            XmlElement actionNode = soapXml.CreateElement("ACTION");
+                            actionNode.InnerText = action.Action.ToString();
+
+                            XmlElement productNode = soapXml.CreateElement("PRODUCT");
+                            productNode.InnerText = action.Product.ToString();
+
+                            itemNode.AppendChild(actionNumberNode);
+                            itemNode.AppendChild(actionNode);
+                            itemNode.AppendChild(productNode);
+
+                            foreach (var node in action.Attributes.Where(x => x.Section == "Product"))
                             {
                                 XmlElement itemSubNode = soapXml.CreateElement(node.XmlNodeName);
 
                                 if (node.IsRequired)
                                 {
-                                    object jsonFieldValue = GetProp(node.JsonPropertyName, unitOfSale, scenario.Product.GetType());
+                                    object jsonFieldValue = GetProp(node.JsonPropertyName, scenario.Product, scenario.Product.GetType());
                                     itemSubNode.InnerText = string.IsNullOrWhiteSpace(jsonFieldValue.ToString()) ? string.Empty : jsonFieldValue.ToString().Substring(0, Math.Min(250, jsonFieldValue.ToString().Length));
                                 }
                                 itemNode.AppendChild(itemSubNode);
                             }
+
+                            foreach (var node in action.Attributes.Where(x => x.Section == "UnitOfSale"))
+                            {
+                                XmlElement itemSubNode = soapXml.CreateElement(node.XmlNodeName);
+
+                                if (action.ActionNumber == 2)
+                                {
+                                    foreach (var unitOfSale in scenario.UnitOfSales)
+                                    {
+                                        if (unitOfSale.IsNewUnitOfSale)
+                                        {
+                                            if (node.IsRequired)
+                                            {
+                                                object jsonFieldValue = GetProp(node.JsonPropertyName, unitOfSale, unitOfSale.GetType());
+                                                itemSubNode.InnerText = string.IsNullOrWhiteSpace(jsonFieldValue.ToString()) ? string.Empty : jsonFieldValue.ToString().Substring(0, Math.Min(250, jsonFieldValue.ToString().Length));
+                                            }
+                                        }
+                                    }
+                                }
+                                itemNode.AppendChild(itemSubNode);
+                            }
+                            actionItemNode.AppendChild(itemNode);
                         }
-                        actionItemNode.AppendChild(itemNode);
                     }
                 }
 
