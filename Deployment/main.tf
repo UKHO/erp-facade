@@ -51,14 +51,14 @@ module "webapp_service" {
 }
 
 locals {
-  kv_read_access_list = {
-    "webapp_service"               = module.webapp_service.web_app_object_id
-  }
+      kv_read_access_list = {
+      "webapp_service"      = module.webapp_service.web_app_object_id
+    }
 
-  kv_read_access_list_with_mock = merge(local.kv_read_access_list, {
-    "mock_service"                   = local.env_name == "dev" ? module.webapp_service.mock_web_app_object_id : ""
-  })
-}
+      kv_read_access_list   = merge(local.kv_read_access_list, {
+      "mock_service"        = local.env_name == "dev" ? module.webapp_service.mock_web_app_object_id : ""
+    })
+  }
 
 module "key_vault" {
   source              = "./Modules/KeyVault"
