@@ -65,7 +65,7 @@ resource "azurerm_app_service_virtual_network_swift_connection" "webapp_vnet_int
   subnet_id      = var.subnet_id
 
    lifecycle {
-    ignore_changes = [virtual_network_subnet_id]
+    ignore_changes = [subnet_id]
   }
 
 }
