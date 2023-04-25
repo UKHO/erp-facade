@@ -8,6 +8,7 @@ using Serilog;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using UKHO.ERPFacade.API.Filters;
+using UKHO.ERPFacade.API.Models;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Helpers;
 using UKHO.ERPFacade.Common.HttpClients;
@@ -23,6 +24,10 @@ namespace UKHO.ERPFacade
         internal static void Main(string[] args)
         {
             EventHubLoggingConfiguration eventHubLoggingConfiguration;
+            ScenarioRuleConfiguration mappingConfiguration;
+            ActionNumberConfiguration actionNumberConfiguration;
+            SapActionConfiguration sapActionConfiguration;
+
             IHttpContextAccessor httpContextAccessor = new HttpContextAccessor();
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
             IConfiguration configuration = builder.Configuration;
@@ -33,6 +38,9 @@ namespace UKHO.ERPFacade
                 config.SetBasePath(webHostEnvironment.ContentRootPath)
                 .AddJsonFile("appsettings.json", false, true)
                 .AddJsonFile($"appsettings.{webHostEnvironment.EnvironmentName}.json", true, true)
+                .AddJsonFile("ConfigurationFiles/ScenarioRules.json", true, true)
+                .AddJsonFile("ConfigurationFiles/ActionNumbers.json", true, true)
+                .AddJsonFile("ConfigurationFiles/SapActions.json", true, true)
 #if DEBUG
                 //Add development overrides configuration
                 .AddJsonFile("appsettings.local.overrides.json", true, true)
@@ -146,6 +154,14 @@ namespace UKHO.ERPFacade
 
             builder.Services.Configure<AzureStorageConfiguration>(configuration.GetSection("AzureStorageConfiguration"));
             builder.Services.Configure<SapConfiguration>(configuration.GetSection("SapConfiguration"));
+
+            builder.Services.Configure<ScenarioRuleConfiguration>(configuration.GetSection("ScenarioRuleConfiguration"));
+            builder.Services.Configure<ActionNumberConfiguration>(configuration.GetSection("ActionNumberConfiguration"));
+            builder.Services.Configure<SapActionConfiguration>(configuration.GetSection("SapActionConfiguration"));
+
+            mappingConfiguration = configuration.GetSection("ScenarioRuleConfiguration").Get<ScenarioRuleConfiguration>()!;
+            actionNumberConfiguration = configuration.GetSection("ActionNumberConfiguration").Get<ActionNumberConfiguration>()!;
+            sapActionConfiguration = configuration.GetSection("SapActionConfiguration").Get<SapActionConfiguration>()!;
 
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             builder.Services.AddSingleton<IAzureTableReaderWriter, AzureTableReaderWriter>();

@@ -23,31 +23,31 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
     [TestFixture]
     public class WebhookControllerTests
     {
-        private IHttpContextAccessor _fakeHttpContextAccessor;
-        private ILogger<WebhookController> _fakeLogger;
-        private IAzureTableReaderWriter _fakeAzureTableReaderWriter;
-        private IAzureBlobEventWriter _fakeAzureBlobEventWriter;
-        private ISapClient _fakeSapClient;
-        private IXmlHelper _fakeXmlHelper;
+        private readonly IHttpContextAccessor _fakeHttpContextAccessor;
+        private readonly ILogger<WebhookController> _fakeLogger;
+        private readonly IAzureTableReaderWriter _fakeAzureTableReaderWriter;
+        private readonly IAzureBlobEventWriter _fakeAzureBlobEventWriter;
+        private readonly ISapClient _fakeSapClient;
+        private readonly IXmlHelper _fakeXmlHelper;
 
-        private WebhookController _fakeWebHookController;
+        private readonly WebhookController _fakeWebHookController;
 
         [SetUp]
         public void Setup()
         {
-            _fakeHttpContextAccessor = A.Fake<IHttpContextAccessor>();
-            _fakeLogger = A.Fake<ILogger<WebhookController>>();
-            _fakeAzureTableReaderWriter = A.Fake<IAzureTableReaderWriter>();
-            _fakeAzureBlobEventWriter = A.Fake<IAzureBlobEventWriter>();
-            _fakeSapClient = A.Fake<ISapClient>();
-            _fakeXmlHelper = A.Fake<IXmlHelper>();
+            //_fakeHttpContextAccessor = A.Fake<IHttpContextAccessor>();
+            //_fakeLogger = A.Fake<ILogger<WebhookController>>();
+            //_fakeAzureTableReaderWriter = A.Fake<IAzureTableReaderWriter>();
+            //_fakeAzureBlobEventWriter = A.Fake<IAzureBlobEventWriter>();
+            //_fakeSapClient = A.Fake<ISapClient>();
+            //_fakeXmlHelper = A.Fake<IXmlHelper>();
 
-            _fakeWebHookController = new WebhookController(_fakeHttpContextAccessor,
-                                                           _fakeLogger,
-                                                           _fakeAzureTableReaderWriter,
-                                                           _fakeAzureBlobEventWriter,
-                                                           _fakeSapClient,
-                                                           _fakeXmlHelper);
+            //_fakeWebHookController = new WebhookController(_fakeHttpContextAccessor,
+            //                                               _fakeLogger,
+            //                                               _fakeAzureTableReaderWriter,
+            //                                               _fakeAzureBlobEventWriter,
+            //                                               _fakeSapClient,
+            //                                               _fakeXmlHelper);
         }
 
         [Test]

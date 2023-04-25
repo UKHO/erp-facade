@@ -1,0 +1,18 @@
+{
+  "ActionNumberConfiguration": {
+    "Actions": [
+      {
+        "Scenario": "NewCell",
+        "ActionNumbers": [ 1, 2, 3 ]
+      },
+      {
+        "Scenario": "UpdateCell",
+        "ActionNumbers": [ 7 ]
+      },
+      {
+        "Scenario": "ReplaceCell",
+        "ActionNumbers": [ 1,2,3,4 ]
+      }
+    ]
+  }
+}

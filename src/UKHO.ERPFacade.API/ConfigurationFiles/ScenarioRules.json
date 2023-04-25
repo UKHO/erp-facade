@@ -1,0 +1,56 @@
+{
+  "ScenarioRuleConfiguration": {
+    "ScenarioRules": [
+      {
+        "Scenario": "NewCell",
+        "Rules": [
+          {
+            "AttributeDataType": "bool",
+            "AttributeName": "Status.IsNewCell",
+            "AttriuteValue": "True"
+          }
+        ]
+      },
+      {
+        "Scenario": "CancelCell",
+        "Rules": [
+          {
+            "AttributeDataType": "string",
+            "AttributeName": "status.statusName",
+            "AttriuteValue": "Cancellation Update"
+          },
+          {
+            "AttributeDataType": "bool",
+            "AttributeName": "contentChanged",
+            "AttriuteValue": "true"
+          }
+        ]
+      },
+      {
+        "Scenario": "ReplaceCell",
+        "Rules": [
+          {
+            "AttributeDataType": "list",
+            "AttributeName": "replacedBy",
+            "AttriuteValue": "true"
+          }
+        ]
+      },
+      {
+        "Scenario": "UpdateCell",
+        "Rules": [
+          {
+            "AttributeDataType": "string",
+            "AttributeName": "status.statusName",
+            "AttriuteValue": "Update"
+          },
+          {
+            "AttributeDataType": "bool",
+            "AttributeName": "contentChanged",
+            "AttriuteValue": "true"
+          }
+        ]
+      }
+    ]
+  }
+}

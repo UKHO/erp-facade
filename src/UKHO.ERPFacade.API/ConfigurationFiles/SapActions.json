@@ -1,0 +1,120 @@
+{
+  "SapActionConfiguration": {
+    "SapActions": [
+      {
+        "ActionNumber": 1,
+        "Action": "CREATE NEW CELL",
+        "Product": "ENC CELL",
+        "Attributes": [
+          {
+            "IsRequired": true,
+            "Section": "Product",
+            "JsonPropertyName": "ProductType",
+            "XmlNodeName": "PRODTYPE"
+          },
+          {
+            "IsRequired": true,
+            "Section": "Product",
+            "JsonPropertyName": "ProductName",
+            "XmlNodeName": "CHILDCELL"
+          },
+          {
+            "IsRequired": true,
+            "Section": "Product",
+            "JsonPropertyName": "ProductName",
+            "XmlNodeName": "PRODUCTNAME"
+          },
+          {
+            "IsRequired": false,
+            "Section": "Product",
+            "JsonPropertyName": "",
+            "XmlNodeName": "CANCELLED"
+          },
+          {
+            "IsRequired": false,
+            "Section": "Product",
+            "JsonPropertyName": "ReplacedBy",
+            "XmlNodeName": "REPLACEDBY"
+          },
+          {
+            "IsRequired": true,
+            "Section": "Product",
+            "JsonPropertyName": "Agency",
+            "XmlNodeName": "AGENCY"
+          },
+          {
+            "IsRequired": true,
+            "Section": "Product",
+            "JsonPropertyName": "ProviderCode",
+            "XmlNodeName": "PROVIDER"
+          },
+          {
+            "IsRequired": true,
+            "Section": "Product",
+            "JsonPropertyName": "Size",
+            "XmlNodeName": "ENCSIZE"
+          },
+          {
+            "IsRequired": true,
+            "Section": "Product",
+            "JsonPropertyName": "Title",
+            "XmlNodeName": "TITLE"
+          },
+          {
+            "IsRequired": true,
+            "Section": "Product",
+            "JsonPropertyName": "EditionNumber",
+            "XmlNodeName": "EDITIONNO"
+          },
+          {
+            "IsRequired": true,
+            "Section": "Product",
+            "JsonPropertyName": "UpdateNumber",
+            "XmlNodeName": "UPDATENO"
+          },
+          {
+            "IsRequired": true,
+            "Section": "UnitOfSale",
+            "JsonPropertyName": "UnitType",
+            "XmlNodeName": "UNITTYPE"
+          }
+        ]
+      },
+      {
+        "ActionNumber": 2,
+        "Action": "CREATE AVCS UNIT OF SALE",
+        "Product": "AVCS UNIT"
+      },
+      {
+        "ActionNumber": 3,
+        "Action": "ASSIGN CELL TO AVCS UNIT OF SALE",
+        "Product": "AVCS UNIT"
+      },
+      {
+        "ActionNumber": 5,
+        "Action": "CANCEL ENC CELL",
+        "Product": "ENC CELL"
+      },
+      {
+        "ActionNumber": 6,
+        "Action": "CANCEL AVCS UNIT OF SALE",
+        "Product": "AVCS UNIT"
+      },
+      {
+        "ActionNumber": 7,
+        "Action": "REMOVE ENC CELL FROM AVCS UNIT OF SALE",
+        "Product": "ENC CELL"
+      },
+      {
+        "ActionNumber": 8,
+        "Action": "UPDATE ENC CELL EDITION UPDATE NUMBER",
+        "Product": "ENC CELL"
+      },
+      {
+        "ActionNumber": 9,
+        "Action": "REPLACE WITH ENC CELL",
+        "Product": "ENC CELL"
+      }
+    ]
+  }
+}
