@@ -22,7 +22,7 @@ namespace UKHO.ERPFacade.Common.IO
             _azureStorageConfig = azureStorageConfig ?? throw new ArgumentNullException(nameof(azureStorageConfig));
         }
 
-        public async Task UploadEvent(JObject eesEvent, string traceId, string correlationId)
+        public async Task UploadEvent(JObject eesEvent, string traceId)
         {
             BlobClient blobClient = GetBlobClient(traceId);
 
@@ -30,13 +30,13 @@ namespace UKHO.ERPFacade.Common.IO
 
             await blobClient.UploadAsync(stream, overwrite: true);
 
-            _logger.LogInformation(EventIds.UploadedEncContentPublishedEventInAzureBlob.ToEventId(), "ENC content published event is uploaded in blob storage successfully. | _X-Correlation-ID : {CorrelationId}", correlationId);
+            _logger.LogInformation(EventIds.UploadedEncContentPublishedEventInAzureBlob.ToEventId(), "ENC content published event is uploaded in blob storage successfully.");
         }
 
         //Private Methods
         private BlobClient GetBlobClient(string containerName)
         {
-            BlobContainerClient blobContainerClient = new (_azureStorageConfig.Value.ConnectionString, containerName);
+            BlobContainerClient blobContainerClient = new(_azureStorageConfig.Value.ConnectionString, containerName);
             blobContainerClient.CreateIfNotExists();
 
             var blobName = containerName + ".json";

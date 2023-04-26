@@ -1,13 +1,16 @@
 using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
-using Microsoft.Extensions.Logging.Configuration;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json.Serialization;
 using Serilog;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using UKHO.ERPFacade.API.Filters;
 using UKHO.ERPFacade.Common.Configuration;
+using UKHO.ERPFacade.Common.Helpers;
+using UKHO.ERPFacade.Common.HttpClients;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.Logging.EventHubLogProvider;
 
@@ -45,7 +48,7 @@ namespace UKHO.ERPFacade
                 builder.Configuration.AddAzureKeyVault(secretClient, new KeyVaultSecretManager());
             }
 #if DEBUG
-            //create the logger and setup of sinks, filters and properties	
+            //create the logger and setup of sinks, filters and properties
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Information()
                 .WriteTo.File("Logs/UKHO.ERPFacade.API-.txt", rollingInterval: RollingInterval.Day, outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level}] [{SourceContext}] {Message}{NewLine}{Exception}")
@@ -70,7 +73,7 @@ namespace UKHO.ERPFacade
                             additionalValues["_RemoteIPAddress"] = httpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString();
                             additionalValues["_User-Agent"] = httpContextAccessor.HttpContext.Request.Headers["User-Agent"].FirstOrDefault() ?? string.Empty;
                             additionalValues["_AssemblyVersion"] = Assembly.GetExecutingAssembly().GetCustomAttributes<AssemblyFileVersionAttribute>().Single().Version;
-                            additionalValues["_X-Correlation-ID"] = httpContextAccessor.HttpContext.Request.Headers?[CorrelationIdMiddleware.XCorrelationIdHeaderKey].FirstOrDefault() ?? string.Empty;
+                            additionalValues["_X-Correlation-ID"] = httpContextAccessor.HttpContext.Request.Headers?[CorrelationIdMiddleware.XCORRELATIONIDHEADERKEY].FirstOrDefault() ?? string.Empty;
                         }
                     }
                     logging.AddEventHub(config =>
@@ -101,8 +104,33 @@ namespace UKHO.ERPFacade
 
             builder.Services.AddHeaderPropagation(options =>
             {
-                options.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey);
+                options.Headers.Add(CorrelationIdMiddleware.XCORRELATIONIDHEADERKEY);
             });
+
+            var azureAdConfiguration = new AzureADConfiguration();
+            builder.Configuration.Bind("AzureADConfiguration", azureAdConfiguration);
+
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                   .AddJwtBearer("AzureAD", options =>
+                   {
+                       options.Audience = azureAdConfiguration.ClientId;
+                       options.Authority = $"{azureAdConfiguration.MicrosoftOnlineLoginUrl}{azureAdConfiguration.TenantId}";
+                   });
+
+
+            builder.Services.AddAuthorization(options =>
+            {
+                options.DefaultPolicy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .AddAuthenticationSchemes("AzureAD")
+                .Build();
+            });
+
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("WebhookCaller", policy => policy.RequireRole("WebhookCaller"));
+            });
+
 
             // The following line enables Application Insights telemetry collection.	
             builder.Services.AddApplicationInsightsTelemetry();
@@ -117,11 +145,18 @@ namespace UKHO.ERPFacade
             });
 
             builder.Services.Configure<AzureStorageConfiguration>(configuration.GetSection("AzureStorageConfiguration"));
-
-            builder.Services.AddSingleton<IAzureTableReaderWriter, AzureTableReaderWriter>();
-            builder.Services.AddSingleton<IAzureBlobEventWriter, AzureBlobEventWriter>();
+            builder.Services.Configure<SapConfiguration>(configuration.GetSection("SapConfiguration"));
 
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            builder.Services.AddSingleton<IAzureTableReaderWriter, AzureTableReaderWriter>();
+            builder.Services.AddSingleton<IAzureBlobEventWriter, AzureBlobEventWriter>();
+            builder.Services.AddSingleton<ISapConfiguration, SapConfiguration>();
+            builder.Services.AddSingleton<IXmlHelper, XmlHelper>();
+
+            builder.Services.AddHttpClient<ISapClient, SapClient>(c =>
+            {
+                c.BaseAddress = new Uri(configuration.GetValue<string>("SapConfiguration:BaseAddress"));
+            });
 
             var app = builder.Build();
 
@@ -130,6 +165,10 @@ namespace UKHO.ERPFacade
             app.UseCorrelationIdMiddleware();
 
             app.MapControllers();
+
+            app.UseAuthorization();
+
+            app.UseAuthentication();
 
             app.Run();
         }

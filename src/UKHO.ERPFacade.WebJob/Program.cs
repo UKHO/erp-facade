@@ -20,8 +20,8 @@ namespace UKHO.ERPFacade.WebJob
     [ExcludeFromCodeCoverage]
     public static class Program
     {
-        private static readonly InMemoryChannel s_aIChannel = new();
-        private static readonly string s_assemblyVersion = Assembly.GetExecutingAssembly().GetCustomAttributes<AssemblyFileVersionAttribute>().Single().Version;
+        private static readonly InMemoryChannel TelemetryChannel = new();
+        private static readonly string WebJobAssemblyVersion = Assembly.GetExecutingAssembly().GetCustomAttributes<AssemblyFileVersionAttribute>().Single().Version;
 
         public static void Main()
         {
@@ -32,7 +32,7 @@ namespace UKHO.ERPFacade.WebJob
                 //Build configuration
                 IConfigurationRoot configuration = BuildConfiguration();
 
-                var serviceCollection = new ServiceCollection();
+                ServiceCollection serviceCollection = new();
 
                 //Configure required services
                 ConfigureServices(serviceCollection, configuration);
@@ -47,7 +47,7 @@ namespace UKHO.ERPFacade.WebJob
                 finally
                 {
                     //Ensure all buffered app insights logs are flushed into Azure
-                    s_aIChannel.Flush();
+                    TelemetryChannel.Flush();
                     Task.Delay(delayTime);
                 }
             }
@@ -99,19 +99,21 @@ namespace UKHO.ERPFacade.WebJob
             {
                 loggingBuilder.AddConfiguration(configuration.GetSection("Logging"));
 #if DEBUG
-                loggingBuilder.AddSerilog(new LoggerConfiguration()
-                                .WriteTo.File("Logs/UKHO.ERPFacade.WebJob-Logs-.txt", rollingInterval: RollingInterval.Day, outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level}] [{SourceContext}] {Message}{NewLine}{Exception}")
-                                .MinimumLevel.Information()
-                                .MinimumLevel.Override("UKHO", LogEventLevel.Debug)
-                                .CreateLogger(), dispose: true);
+            //create the logger and setup of sinks, filters and properties	
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Information()
+                .WriteTo.File("Logs/UKHO.ERPFacade.WebJob-.txt", rollingInterval: RollingInterval.Day, outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level}] [{SourceContext}] {Message}{NewLine}{Exception}")
+                .CreateLogger();
 #endif
-
+            serviceCollection.AddLogging(loggingBuilder =>
+            {
+                loggingBuilder.AddConfiguration(configuration.GetSection("Logging"));
                 loggingBuilder.AddConsole();
                 loggingBuilder.AddDebug();
-                //loggingBuilder.AddSerilog();
+                loggingBuilder.AddSerilog();
                 loggingBuilder.AddAzureWebAppDiagnostics();
 
-                var eventHubConfig = configuration.GetSection("EventHubLoggingConfiguration").Get<EventHubLoggingConfiguration>();
+                EventHubLoggingConfiguration eventHubConfig = configuration.GetSection("EventHubLoggingConfiguration").Get<EventHubLoggingConfiguration>();
 
                 if (eventHubConfig != null && !string.IsNullOrWhiteSpace(eventHubConfig.ConnectionString))
                 {
@@ -129,7 +131,7 @@ namespace UKHO.ERPFacade.WebJob
                         config.NodeName = eventHubConfig.NodeName;
                         config.AdditionalValuesProvider = additionalValues =>
                         {
-                            additionalValues["_AssemblyVersion"] = s_assemblyVersion;
+                            additionalValues["_AssemblyVersion"] = WebJobAssemblyVersion;
                         };
                     });
                 }
@@ -138,7 +140,7 @@ namespace UKHO.ERPFacade.WebJob
             serviceCollection.Configure<TelemetryConfiguration>(
                 (config) =>
                 {
-                    config.TelemetryChannel = s_aIChannel;
+                    config.TelemetryChannel = TelemetryChannel;
                 }
             );
 

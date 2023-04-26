@@ -31,7 +31,7 @@ namespace UKHO.ERPFacade.Common.IO
             _erpFacadeWebjobConfig  = erpFacadeWebjobConfig ?? throw new ArgumentNullException(nameof(erpFacadeWebjobConfig));
         }
 
-        public async Task UpsertEntity(JObject eesEvent, string traceId, string correlationId)
+        public async Task UpsertEntity(JObject eesEvent, string traceId)
         {
             TableClient tableClient = GetTableClient(ERP_FACADE_TABLE_NAME);
 
@@ -52,18 +52,18 @@ namespace UKHO.ERPFacade.Common.IO
 
                 await tableClient.AddEntityAsync(eESEvent, CancellationToken.None);
 
-                _logger.LogInformation(EventIds.AddedEncContentPublishedEventInAzureTable.ToEventId(), "ENC content published event is added in azure table successfully. | _X-Correlation-ID : {CorrelationId}", correlationId);
+                _logger.LogInformation(EventIds.AddedEncContentPublishedEventInAzureTable.ToEventId(), "ENC content published event is added in azure table successfully.");
             }
             else
             {
-                _logger.LogWarning(EventIds.ReceivedDuplicateEncContentPublishedEvent.ToEventId(), "Duplicate ENC content published event received. | _X-Correlation-ID : {CorrelationId}", correlationId);
+                _logger.LogWarning(EventIds.ReceivedDuplicateEncContentPublishedEvent.ToEventId(), "Duplicate ENC content published event received.");
 
                 existingEntity.Timestamp = DateTime.UtcNow;
                 existingEntity.EventData = eesEvent.ToString();
 
                 await tableClient.UpdateEntityAsync(existingEntity, ETag.All, TableUpdateMode.Replace);
 
-                _logger.LogInformation(EventIds.UpdatedEncContentPublishedEventInAzureTable.ToEventId(), "Existing ENC content published event is updated in azure table successfully. | _X-Correlation-ID : {CorrelationId}", correlationId);
+                _logger.LogInformation(EventIds.UpdatedEncContentPublishedEventInAzureTable.ToEventId(), "Existing ENC content published event is updated in azure table successfully.");
             }
         }
 
@@ -115,7 +115,7 @@ namespace UKHO.ERPFacade.Common.IO
         //Private Methods
         private TableClient GetTableClient(string tableName)
         {
-            TableServiceClient serviceClient = new (_azureStorageConfig.Value.ConnectionString);
+            TableServiceClient serviceClient = new(_azureStorageConfig.Value.ConnectionString);
             Pageable<TableItem> queryTableResults = serviceClient.Query(filter: $"TableName eq '{tableName}'");
             var tableExists = queryTableResults.FirstOrDefault(t => t.Name == tableName);
 

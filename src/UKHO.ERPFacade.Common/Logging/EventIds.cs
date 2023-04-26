@@ -47,6 +47,14 @@
         /// </summary>
         UploadedEncContentPublishedEventInAzureBlob = 940011,
         /// <summary>
+        /// 940012 - Could not connect to SAP
+        /// </summary>
+        SapConnectionFailed = 940012,
+        /// <summary>
+        /// 940013 - Data pushed to SAP
+        /// </summary>
+        DataPushedToSap = 940013,
+        /// <summary>
         /// 940012 - Webjob started to process the incomplete transactions.
         /// </summary>
         WebjobProcessEventStarted = 940012,

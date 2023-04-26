@@ -1,28 +1,48 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using Newtonsoft.Json.Linq;
 
 namespace UKHO.ERPFacade.API.Filters
 {
-    [ExcludeFromCodeCoverage]
-    public static class CorrelationIdMiddleware
+    public class CorrelationIdMiddleware
     {
-        public const string XCorrelationIdHeaderKey = "X-Correlation-ID";
+        public const string XCORRELATIONIDHEADERKEY = "_X-Correlation-ID";
+        public const string TRACEIDKEY = "data.traceId";
 
-        public static IApplicationBuilder UseCorrelationIdMiddleware(this IApplicationBuilder builder)
+        private readonly RequestDelegate _next;
+
+        public CorrelationIdMiddleware(RequestDelegate next)
         {
-            return builder.Use(async (context, func) =>
+            _next = next;
+        }
+
+        public async Task InvokeAsync(HttpContext httpContext)
+        {
+            httpContext.Request.EnableBuffering();
+            var correlationId = Guid.NewGuid().ToString();
+
+            using var streamReader = new StreamReader(httpContext.Request.Body);
+            var bodyAsText = await streamReader.ReadToEndAsync();
+
+            if (!string.IsNullOrWhiteSpace(bodyAsText))
             {
-                string? correlationId = context.Request.Headers[XCorrelationIdHeaderKey].FirstOrDefault();
+                JObject bodyAsJson = JObject.Parse(bodyAsText);
+                correlationId = bodyAsJson.SelectToken(TRACEIDKEY)?.Value<string>();
+            }
 
-                if (string.IsNullOrEmpty(correlationId))
-                {
-                    correlationId = Guid.NewGuid().ToString();
-                    context.Request.Headers.Add(XCorrelationIdHeaderKey, correlationId);
-                }
+            httpContext.Request.Body.Position = 0;
 
-                context.Response.Headers.Add(XCorrelationIdHeaderKey, correlationId);
+            httpContext.Request.Headers.Add(XCORRELATIONIDHEADERKEY, correlationId);
+            httpContext.Response.Headers.Add(XCORRELATIONIDHEADERKEY, correlationId);
 
-                await func();
-            });
+            var state = new Dictionary<string, object>
+            {
+                [XCORRELATIONIDHEADERKEY] = correlationId!,
+            };
+
+            var logger = httpContext.RequestServices.GetRequiredService<ILogger<CorrelationIdMiddleware>>();
+            using (logger.BeginScope(state))
+            {
+                await _next(httpContext);
+            }
         }
     }
 }

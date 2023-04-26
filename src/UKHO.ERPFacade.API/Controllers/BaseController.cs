@@ -4,8 +4,7 @@ using UKHO.ERPFacade.API.Filters;
 
 namespace UKHO.ERPFacade.API.Controllers
 {
-    [ExcludeFromCodeCoverage]
-    [ApiController]
+    [ExcludeFromCodeCoverage]    
     public abstract class BaseController<T> : ControllerBase
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -18,7 +17,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
         protected string GetCurrentCorrelationId()
         {
-            return _httpContextAccessor.HttpContext!.Request.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey].FirstOrDefault()!;
+            return _httpContextAccessor.HttpContext!.Request.Headers[CorrelationIdMiddleware.XCORRELATIONIDHEADERKEY].FirstOrDefault()!;
         }
     }
 }
