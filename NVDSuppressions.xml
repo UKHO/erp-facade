@@ -102,4 +102,12 @@
     </notes>
     <cve>CVE-2021-26423</cve>
   </suppress>
+ <suppress>
+    <notes>
+      <![CDATA[
+   file name: System.Runtime.Serialization.Json:4.3.0
+   ]]>
+    </notes>
+    <cve>CVE-2022-45688</cve>
+  </suppress>
 </suppressions>
