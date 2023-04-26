@@ -7,5 +7,7 @@ namespace UKHO.ERPFacade.Common.IO
     {
         Task UpsertEntity(JObject eesEvent, string traceId);
         Task<EESEventEntity> GetEntity(string traceId);
+        void ValidateEntity();
+
     }
 }

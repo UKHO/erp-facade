@@ -54,5 +54,17 @@
         /// 940013 - Data pushed to SAP
         /// </summary>
         DataPushedToSap = 940013,
+        /// <summary>
+        /// 940014- Webjob started to process the incomplete transactions.
+        /// </summary>
+        WebjobProcessEventStarted = 940014,
+        /// <summary>
+        /// 940015 - Callback from SAP is timed out.
+        /// </summary>
+        WebjobCallbackTimeoutEventFromSAP = 940015,
+        /// <summary>
+        /// 940016 - Empty or null RequestDateTime Column in Azure Table.
+        /// </summary>
+        EmptyRequestDateTime = 940016,
     }
 }

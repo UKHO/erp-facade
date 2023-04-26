@@ -10,6 +10,8 @@ using Serilog;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using UKHO.ERPFacade.Common.Configuration;
+using UKHO.ERPFacade.Common.IO;
+using UKHO.ERPFacade.WebJob.Services;
 using UKHO.Logging.EventHubLogProvider;
 
 namespace UKHO.ERPFacade.WebJob
@@ -146,6 +148,8 @@ namespace UKHO.ERPFacade.WebJob
             }
 
             serviceCollection.AddSingleton<ErpFacadeWebJob>();
+            serviceCollection.AddSingleton<IAzureTableReaderWriter, AzureTableReaderWriter>();
+            serviceCollection.AddSingleton<IMonitoringService, MonitoringService>();
         }
     }
 }
