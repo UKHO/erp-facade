@@ -38,4 +38,36 @@
     </notes>
     <cve>CVE-2022-41064</cve>
   </suppress>
+<suppress>
+    <notes>
+      <![CDATA[
+   file name: Microsoft.AspNetCore.Hosting.Abstractions.dll
+   ]]>
+    </notes>
+    <cve>CVE-2018-8409</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Microsoft.AspNetCore.Http.Features.dll
+   ]]>
+    </notes>
+    <cve>CVE-2018-8409</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Microsoft.AspNetCore.Http.Extensions.dll
+   ]]>
+    </notes>
+    <cve>CVE-2018-8409</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Microsoft.AspNetCore.WebUtilities.dll
+   ]]>
+    </notes>
+    <cve>CVE-2018-8409</cve>
+  </suppress>
 </suppressions>
