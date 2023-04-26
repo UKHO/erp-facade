@@ -10,4 +10,32 @@
 		</notes>
 		<cve>CVE-2021-43138</cve>
 	</suppress>
+<suppress>
+    <notes>
+      <![CDATA[
+    file name: Microsoft.AspNetCore.Hosting.Abstractions.dll
+    See https://github.com/dotnet/announcements/issues/176 for full MS Details on CVE.
+    A remote code execution vulnerability exists when parsing certain types of graphics files.
+    This vulnerability only exists on systems running on MacOS or Linux.
+    This CVE applies to any .NET Core 3.1 but patch is provided at 3.1.405, MSI is pinned to .Net core SDK > 6.0.101 which is not vunerable, and deployed to Azure App Service which will have the security patch applied.
+    ]]>
+    </notes>
+    <cve>CVE-2021-24112</cve>
+  </suppress>
+ <suppress>
+    <notes>
+      <![CDATA[
+   file name: Microsoft.Azure.EventGrid:3.2.1
+   ]]>
+    </notes>
+    <cve>CVE-2021-42306</cve>
+  </suppress>
+<suppress>
+    <notes>
+      <![CDATA[
+   file name: Microsoft.CSharp:4.0.1, Microsoft.CSharp:4.5.0
+   ]]>
+    </notes>
+    <cve>CVE-2022-41064</cve>
+  </suppress>
 </suppressions>
