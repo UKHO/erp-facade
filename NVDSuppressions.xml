@@ -81,4 +81,25 @@
     </notes>
     <cve>CVE-2021-1721</cve>
   </suppress>
+ <suppress>
+    <notes>
+      <![CDATA[
+   file name: Microsoft.CSharp:4.3.0, Microsoft.CSharp:4.5.0,
+   Microsoft.Extensions.Caching.Abstractions:5.0.0, Microsoft.Extensions.Caching.Memory:5.0.0,
+   Microsoft.Extensions.Configuration.Abstractions:5.0.0
+   ]]>
+    </notes>
+    <cve>CVE-2022-30184</cve>
+  </suppress>
+ <suppress>
+    <notes>
+      <![CDATA[
+    file name: Microsoft.AspNetCore.Hosting.Abstractions.dll
+    See https://github.com/dotnet/announcements/issues/194 for full MS Details on CVE.
+    A denial of service vulnerability exists in .NET 5.0, .NET Core 3.1 and .NET Core 2.1 where .NET (Core) server applications providing WebSocket endpoints could be tricked into endlessly looping while trying to read a single WebSocket frame.
+    This CVE applies to any .NET Core 3.1 but patch is provided at 3.1.412, MSI is pinned to .Net core SDK > 6.0.101 which is not vunerable, and deployed to Azure App Service which will have the security patch applied.
+    ]]>
+    </notes>
+    <cve>CVE-2021-26423</cve>
+  </suppress>
 </suppressions>
