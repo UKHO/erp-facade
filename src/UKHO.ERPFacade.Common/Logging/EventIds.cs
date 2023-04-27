@@ -66,5 +66,9 @@
         /// 940016 - Empty or null RequestDateTime Column in Azure Table.
         /// </summary>
         EmptyRequestDateTime = 940016,
+        /// <summary>
+        /// 940017 - Updated entity successfully in Azure Table
+        /// </summary>
+        UpdateEntitySuccessful = 940017
     }
 }

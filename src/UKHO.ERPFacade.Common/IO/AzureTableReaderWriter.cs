@@ -17,6 +17,8 @@ namespace UKHO.ERPFacade.Common.IO
         private readonly ILogger<AzureTableReaderWriter> _logger;
         private const string ERP_FACADE_TABLE_NAME = "eesevents";
         private const int DEFAULT_CALLBACK_DURATION = 5;
+        private const string UPDATE_REQUEST_TIME = "RequestDateTime";
+        private const string UPDATE_RESPONSE_TIME = "ResponseDateTime";
 
         private readonly IOptions<AzureStorageConfiguration> _azureStorageConfig;
         private readonly IOptions<ErpFacadeWebJobConfiguration> _erpFacadeWebjobConfig;
@@ -77,6 +79,24 @@ namespace UKHO.ERPFacade.Common.IO
                 records.Add(entity);
             }
             return records.FirstOrDefault();
+        }
+
+        public async Task UpdateEntity(string traceId,string updateColumn)
+        {
+            TableClient tableClient = GetTableClient(ERP_FACADE_TABLE_NAME);
+            EESEventEntity existingEntity = await GetEntity(traceId);
+
+            if (updateColumn == UPDATE_REQUEST_TIME)
+            {
+                existingEntity.RequestDateTime = DateTime.UtcNow;
+            }
+            else if(updateColumn == UPDATE_RESPONSE_TIME)
+            {
+                existingEntity.ResponseDateTime = DateTime.UtcNow;
+            }
+
+            await tableClient.UpdateEntityAsync(existingEntity, ETag.All, TableUpdateMode.Replace);
+            _logger.LogInformation(EventIds.UpdateEntitySuccessful.ToEventId(), "{updateColumn} is updated in azure table successfully.",updateColumn);
         }
 
         public void ValidateEntity()

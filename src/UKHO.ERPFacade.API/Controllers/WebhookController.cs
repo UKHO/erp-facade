@@ -11,7 +11,7 @@ namespace UKHO.ERPFacade.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class WebhookController : BaseController<WebhookController>
     {
         private readonly ILogger<WebhookController> _logger;
@@ -21,6 +21,7 @@ namespace UKHO.ERPFacade.API.Controllers
         private readonly IXmlHelper _xmlHelper;
 
         public const string TRACEIDKEY = "data.traceId";
+        private const string UPDATE_REQUEST_TIME = "RequestDateTime";
 
         public WebhookController(IHttpContextAccessor contextAccessor,
                                  ILogger<WebhookController> logger,
@@ -56,7 +57,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
         [HttpPost]
         [Route("/webhook/newenccontentpublishedeventreceived")]
-        [Authorize(Policy = "WebhookCaller")]
+     //   [Authorize(Policy = "WebhookCaller")]
         public virtual async Task<IActionResult> NewEncContentPublishedEventReceived([FromBody] JObject requestJson)
         {
             _logger.LogInformation(EventIds.NewEncContentPublishedEventReceived.ToEventId(), "ERP Facade webhook has received new enccontentpublished event from EES.");
@@ -86,7 +87,7 @@ namespace UKHO.ERPFacade.API.Controllers
                 throw new Exception();
             }
             _logger.LogInformation(EventIds.DataPushedToSap.ToEventId(), "Data pushed to SAP successfully. | {StatusCode} | {SapResponse}", response.StatusCode, response.Content?.ReadAsStringAsync().Result);
-
+            await _azureTableReaderWriter.UpdateEntity(traceId, UPDATE_REQUEST_TIME);
             return new OkObjectResult(StatusCodes.Status200OK);
         }
     }
