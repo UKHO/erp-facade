@@ -43,5 +43,27 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             RestResponse response = await client.ExecuteAsync(request);
             return response;
         }
+
+        public async Task<RestResponse> PostWebhookResponseAsyncForXML(string filePath, string token)
+        {
+            string requestBody;
+
+            using (StreamReader streamReader = new StreamReader(filePath))
+            {
+                requestBody = streamReader.ReadToEnd();
+            }
+
+            var request = new RestRequest("/webhook/newenccontentpublishedeventreceived", Method.Post);
+            request.AddHeader("Content-Type", "application/json");
+            request.AddHeader("Authorization", "Bearer " + token);
+            request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
+            RestResponse response = await client.ExecuteAsync(request);
+            //logic to download XML
+            //Logic to verifyxml
+            SAPXmlHelper sAPXmlHelper = new SAPXmlHelper();
+            sAPXmlHelper.CheckXMLAttributes(requestBody);
+
+            return response;
+        }
     }
 }

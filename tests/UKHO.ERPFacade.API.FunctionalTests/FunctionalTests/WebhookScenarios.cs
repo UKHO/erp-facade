@@ -51,5 +51,13 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             var response = await Webhook.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(true));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.Forbidden);
         }
+        [Test(Description = "WhenValidEventInNewEncContentPublishedEventReceivedWithXML_ThenWebhookReturns200OkResponse"), Order(0)]
+        public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithXML_ThenWebhookReturns200OkResponse()
+        {
+            string filePath = Path.Combine(_dir.FullName, WebhookEndpoint.config.testConfig.PayloadFolder, WebhookEndpoint.config.testConfig.WebhookPayloadFileName);
+
+            var response = await Webhook.PostWebhookResponseAsyncForXML(filePath, await _authToken.GetAzureADToken(false));
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        }
     }
 }
