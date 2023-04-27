@@ -46,7 +46,8 @@ namespace UKHO.ERPFacade.Common.IO
                     TraceID = traceId,
                     EventData = eesEvent.ToString(),
                     RequestDateTime = null,
-                    ResponseDateTime = null
+                    ResponseDateTime = null,
+                    IsNotified = false
                 };
 
                 await tableClient.AddEntityAsync(eESEvent, CancellationToken.None);
