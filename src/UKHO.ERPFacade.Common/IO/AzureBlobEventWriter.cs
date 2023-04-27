@@ -24,7 +24,7 @@ namespace UKHO.ERPFacade.Common.IO
 
         public async Task UploadEvent(JObject eesEvent, string traceId)
         {
-            BlobClient blobClient = GetBlobClient(traceId);
+            BlobClient blobClient = GetBlobClient(traceId, ".json");
 
             Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(eesEvent.ToString() ?? ""));
 
@@ -33,13 +33,22 @@ namespace UKHO.ERPFacade.Common.IO
             _logger.LogInformation(EventIds.UploadedEncContentPublishedEventInAzureBlob.ToEventId(), "ENC content published event is uploaded in blob storage successfully.");
         }
 
+        public async Task UploadXMLEvent(string xml, string traceId)
+        {
+            BlobClient blobClient = GetBlobClient(traceId, ".xml");
+
+            Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(xml ?? ""));
+
+            await blobClient.UploadAsync(stream, overwrite: true);
+        }
+
         //Private Methods
-        private BlobClient GetBlobClient(string containerName)
+        private BlobClient GetBlobClient(string containerName, string fileExtension)
         {
             BlobContainerClient blobContainerClient = new(_azureStorageConfig.Value.ConnectionString, containerName);
             blobContainerClient.CreateIfNotExists();
 
-            var blobName = containerName + ".json";
+            var blobName = containerName + fileExtension;
 
             BlobClient blobClient = blobContainerClient.GetBlobClient(blobName);
             return blobClient;
