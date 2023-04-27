@@ -17,7 +17,7 @@
     See https://github.com/dotnet/announcements/issues/176 for full MS Details on CVE.
     A remote code execution vulnerability exists when parsing certain types of graphics files.
     This vulnerability only exists on systems running on MacOS or Linux.
-    This CVE applies to any .NET Core 3.1 but patch is provided at 3.1.405, MSI is pinned to .Net core SDK > 6.0.101 which is not vunerable, and deployed to Azure App Service which will have the security patch applied.
+    This CVE applies to any .NET Core 3.1 but patch is provided at 3.1.405, ERP Facade is pinned to .Net core SDK > 6.0.101 which is not vunerable, and deployed to Azure App Service which will have the security patch applied.
     ]]>
     </notes>
     <cve>CVE-2021-24112</cve>
@@ -97,7 +97,7 @@
     file name: Microsoft.AspNetCore.Hosting.Abstractions.dll
     See https://github.com/dotnet/announcements/issues/194 for full MS Details on CVE.
     A denial of service vulnerability exists in .NET 5.0, .NET Core 3.1 and .NET Core 2.1 where .NET (Core) server applications providing WebSocket endpoints could be tricked into endlessly looping while trying to read a single WebSocket frame.
-    This CVE applies to any .NET Core 3.1 but patch is provided at 3.1.412, MSI is pinned to .Net core SDK > 6.0.101 which is not vunerable, and deployed to Azure App Service which will have the security patch applied.
+    This CVE applies to any .NET Core 3.1 but patch is provided at 3.1.412, ERP Facade is pinned to .Net core SDK > 6.0.101 which is not vunerable, and deployed to Azure App Service which will have the security patch applied.
     ]]>
     </notes>
     <cve>CVE-2021-26423</cve>
@@ -109,5 +109,15 @@
    ]]>
     </notes>
     <cve>CVE-2022-45688</cve>
+  </suppress>
+<suppress>
+    <notes>
+      <![CDATA[
+   file name: GetDocument.Insider.dll
+   Suppressing this CVE as it is a .NetCore runtime issue affecting .NetCore runtimes below .NET Core 3.1.4 or lower. The ERP Facade Runs in an AppService which will have the fixes already applied, and the global.json has been addeded to require .NetCore SDK > 6.0.101 or greater.
+   More details can be found here: https://github.com/dotnet/announcements/issues/156
+   ]]>
+    </notes>
+    <cve>CVE-2020-1108</cve>
   </suppress>
 </suppressions>
