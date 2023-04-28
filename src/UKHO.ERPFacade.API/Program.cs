@@ -1,6 +1,7 @@
 using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
+using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json.Serialization;
@@ -117,7 +118,6 @@ namespace UKHO.ERPFacade
                        options.Authority = $"{azureAdConfiguration.MicrosoftOnlineLoginUrl}{azureAdConfiguration.TenantId}";
                    });
 
-
             builder.Services.AddAuthorization(options =>
             {
                 options.DefaultPolicy = new AuthorizationPolicyBuilder()
@@ -131,9 +131,9 @@ namespace UKHO.ERPFacade
                 options.AddPolicy("WebhookCaller", policy => policy.RequireRole("WebhookCaller"));
             });
 
-
-            // The following line enables Application Insights telemetry collection.	
-            builder.Services.AddApplicationInsightsTelemetry();
+            // The following line enables Application Insights telemetry collection.
+            var options = new ApplicationInsightsServiceOptions { ConnectionString = configuration.GetValue<string>("ApplicationInsights:ConnectionString") };
+            builder.Services.AddApplicationInsightsTelemetry(options);
 
             // Add services to the container.
             builder.Services.AddControllers(o =>
