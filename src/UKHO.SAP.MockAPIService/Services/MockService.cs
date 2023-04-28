@@ -1,7 +1,9 @@
-﻿using UKHO.SAP.MockAPIService.Enums;
+﻿using System.Diagnostics.CodeAnalysis;
+using UKHO.SAP.MockAPIService.Enums;
 
 namespace UKHO.SAP.MockAPIService.Services
 {
+    [ExcludeFromCodeCoverage]
     public class MockService
     {
         private readonly string _homeDirectoryPath;
