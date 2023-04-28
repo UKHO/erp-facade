@@ -25,13 +25,12 @@ namespace UKHO.SAP.MockAPIService.Services
 
             Task.Run(async () => await _azureBlobEventWriter.UploadEvent(requestXML, REQUESTFORMAT, z_ADDS_MAT_INFO.IM_MATINFO.CORRID));
 
-            string currentTestCase = _mockService.GetCurrentTestCase().ToString();
             _mockService.CleanUp();
 
             return new Z_ADDS_MAT_INFOResponse()
             {
                 EX_MESSAGE = "Record successfully received for " + z_ADDS_MAT_INFO.IM_MATINFO.CORRID,
-                EX_STATUS = currentTestCase
+                EX_STATUS = "0"
             };
         }
 
