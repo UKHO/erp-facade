@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
+using UKHO.ERPFacade.Common.IO;
+using UKHO.ERPFacade.Common.Logging;
 
 namespace UKHO.ERPFacade.API.Controllers
 {
@@ -7,20 +10,48 @@ namespace UKHO.ERPFacade.API.Controllers
     public class ErpFacadeController : BaseController<ErpFacadeController>
     {
         private readonly ILogger<ErpFacadeController> _logger;
+        private readonly IAzureTableReaderWriter _azureTableReaderWriter;
+        private readonly IAzureBlobEventWriter _azureBlobEventWriter;
+
+        public const string TRACEIDKEY = "data.traceId";
+        private const string UPDATE_RESPONSE_TIME = "ResponseDateTime";
+
 
         public ErpFacadeController(IHttpContextAccessor contextAccessor,
-                                   ILogger<ErpFacadeController> logger)
+                                   ILogger<ErpFacadeController> logger,
+                                   IAzureTableReaderWriter azureTableReaderWriter,
+                                   IAzureBlobEventWriter azureBlobEventWriter)
         : base(contextAccessor)
         {
             _logger = logger;
+            _azureTableReaderWriter = azureTableReaderWriter;
+            _azureBlobEventWriter = azureBlobEventWriter;
         }
 
         [HttpPost]
         [Route("/erpfacade/getpriceinfo")]
-        public virtual async Task<IActionResult> Post()
+        public virtual async Task<IActionResult> Post([FromBody] JObject requestJson)
         {
-            await Task.CompletedTask;
-            return Ok();
+            string traceId = requestJson.SelectToken(TRACEIDKEY)?.Value<string>();
+
+            if (string.IsNullOrEmpty(traceId))
+            {
+                _logger.LogWarning("TraceId is missing in the event received from the SAP.");
+                return new BadRequestObjectResult(StatusCodes.Status400BadRequest);
+            }
+
+            //await _azureTableReaderWriter.UpdateEntity(traceId, UPDATE_RESPONSE_TIME);
+
+            bool isBlobExists = _azureBlobEventWriter.CheckIfContainerExists(traceId);
+
+            if (!isBlobExists)
+            {
+                _logger.LogError("Blob does not exist in the Azure Storage for the given trace ID");
+                return new NotFoundObjectResult(StatusCodes.Status404NotFound);
+            }
+
+            _logger.LogInformation("Blob exists in the Azure Storage for the given trace ID");
+            return new OkObjectResult(StatusCodes.Status200OK);
         }
     }
 }
