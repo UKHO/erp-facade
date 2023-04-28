@@ -1,4 +1,5 @@
 ﻿using FakeItEasy;
+using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.WebJob.Services;
 
-namespace UKHO.ERPFacade.API.UnitTests.Services
+namespace UKHO.ERPFacade.WebJob.UnitTests.Services
 {
     [TestFixture]
     public class MonitoringServiceTests
@@ -46,6 +47,20 @@ namespace UKHO.ERPFacade.API.UnitTests.Services
 
             Assert.That(ex.Message, Is.EqualTo("Fake Exception"));
 
+        }
+
+        [Test]
+        public void Does_Constructor_Throws_ArgumentNullException_When_Paramter_Is_Null()
+        {
+            Assert.Throws<ArgumentNullException>(
+             () => new MonitoringService(_fakeLogger, null))
+             .ParamName
+             .Should().Be("azureTableReaderWriter");
+
+            Assert.Throws<ArgumentNullException>(
+             () => new MonitoringService(null, _fakeAzureTableReaderWriter))
+             .ParamName
+             .Should().Be("logger");
         }
     }
 }
