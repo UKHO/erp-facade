@@ -49,6 +49,7 @@ namespace UKHO.SAP.MockAPIService
             builder.Services.AddSingleton<Iz_adds_mat_info, z_adds_mat_info>();
             builder.Services.AddSingleton<ISapConfiguration, SapConfiguration>();
             builder.Services.AddSingleton<IAzureBlobEventWriter, AzureBlobEventWriter>();
+            builder.Services.AddSingleton<MockService>();
 
             var app = builder.Build();
 
