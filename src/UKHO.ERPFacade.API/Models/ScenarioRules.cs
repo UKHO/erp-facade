@@ -16,10 +16,9 @@
     public enum ScenarioType
     {
         NewCell = 1,
-        CancelCell = 2,
-        ReplaceCell = 3,
-        UpdateCell = 4,
-        ChangeCell = 5,
-        ChangeUnitOfSale = 6
+        CancelReplaceCell = 2,
+        UpdateCell = 3,
+        ChangeCell = 4,
+        ChangeUnitOfSale = 5
     }
 }

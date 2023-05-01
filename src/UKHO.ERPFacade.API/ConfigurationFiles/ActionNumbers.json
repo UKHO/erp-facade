@@ -10,8 +10,8 @@
         "ActionNumbers": [ 7 ]
       },
       {
-        "Scenario": "ReplaceCell",
-        "ActionNumbers": [ 1,2,3,4 ]
+        "Scenario": "CancelReplaceCell",
+        "ActionNumbers": [ 4, 8, 9, 10 ]
       }
     ]
   }

@@ -102,7 +102,9 @@ namespace UKHO.ERPFacade.API.Controllers
                 List<Scenario> scenarios = new();
                 List<UnitOfSale> unitOfSales = new();
                 bool restLoop = false;
+                bool scenarioIdentified = false;
 
+                //This loop is to identify the scenarios in given JSON EES event request.
                 foreach (Product product in eventData.Data.Products)
                 {
                     Scenario scenarioObj = new();
@@ -115,20 +117,29 @@ namespace UKHO.ERPFacade.API.Controllers
 
                             if (jsonFieldValue != null && jsonFieldValue.ToString() == rule.AttriuteValue)
                             {
-                                scenarioObj.ScenarioType = scenario.Scenario;
-                                scenarioObj.Product = product;
-                                scenarioObj.InUnitOfSales = product.InUnitsOfSale;
-                                scenarioObj.UnitOfSales = eventData.Data.UnitsOfSales.Where(x => product.InUnitsOfSale.Contains(x.UnitName) &&
-                                                                                           (x.CompositionChanges.AddProducts.Contains(product.ProductName) ||
-                                                                                            x.CompositionChanges.RemoveProducts.Contains(product.ProductName))).ToList();
-
-                                scenarios.Add(scenarioObj);
-
                                 restLoop = true;
-                                break;
+                                continue;
+                            }
+                            else
+                            {
+                                restLoop = false;
                             }
                         }
-                        if (restLoop) break;
+                        if (restLoop)
+                        {
+                            scenarioObj.ScenarioType = scenario.Scenario;
+                            scenarioObj.IsCellReplaced = product.ReplacedBy.Any();
+                            scenarioObj.Product = product;
+                            scenarioObj.InUnitOfSales = product.InUnitsOfSale;
+                            scenarioObj.UnitOfSales = eventData.Data.UnitsOfSales.Where(x => product.InUnitsOfSale.Contains(x.UnitName) ||
+                                                                                       (x.CompositionChanges.AddProducts.Contains(product.ProductName) ||
+                                                                                        x.CompositionChanges.RemoveProducts.Contains(product.ProductName))).ToList();
+
+                            scenarios.Add(scenarioObj);
+
+                            scenarioIdentified = true;
+                        }
+                        if (scenarioIdentified) break;
                     }
                 }
 
@@ -139,7 +150,8 @@ namespace UKHO.ERPFacade.API.Controllers
 
                     foreach (var action in _sapActionConfig.Value.SapActions.Where(x => actions.Contains(x.ActionNumber)))
                     {
-                        if (action.ActionNumber == 3)
+                        //This condition is to loop through UoS to assign or remove ENC cell to given UoS.
+                        if (action.ActionNumber == 3 || action.ActionNumber == 8)
                         {
                             foreach (var item in scenario.InUnitOfSales)
                             {
@@ -174,36 +186,67 @@ namespace UKHO.ERPFacade.API.Controllers
                                 {
                                     XmlElement itemSubNode = soapXml.CreateElement(node.XmlNodeName);
 
-                                    if (action.ActionNumber == 2)
+                                    if (node.IsRequired)
                                     {
-                                        foreach (var unitOfSale in scenario.UnitOfSales)
+                                        UnitOfSale unitOfSale = scenario.UnitOfSales.Where(x => x.UnitName == item).FirstOrDefault();
+
+                                        object jsonFieldValue = GetProp(node.JsonPropertyName, unitOfSale, unitOfSale.GetType());
+                                        itemSubNode.InnerText = string.IsNullOrWhiteSpace(jsonFieldValue.ToString()) ? string.Empty : jsonFieldValue.ToString().Substring(0, Math.Min(250, jsonFieldValue.ToString().Length));
+                                    }
+                                    itemNode.AppendChild(itemSubNode);
+                                }
+                                actionItemNode.AppendChild(itemNode);
+                            }
+                        }
+                        //This condition is to loop through ENC cell which will be replacing existing ENC cell.
+                        else if (action.ActionNumber == 4)
+                        {
+                            foreach (var item in scenario.Product.ReplacedBy)
+                            {
+                                XmlElement itemNode = soapXml.CreateElement("item");
+
+                                XmlElement actionNumberNode = soapXml.CreateElement("ACTIONNUMBER");
+                                actionNumberNode.InnerText = action.ActionNumber.ToString();
+
+                                XmlElement actionNode = soapXml.CreateElement("ACTION");
+                                actionNode.InnerText = action.Action.ToString();
+
+                                XmlElement productNode = soapXml.CreateElement("PRODUCT");
+                                productNode.InnerText = action.Product.ToString();
+
+                                itemNode.AppendChild(actionNumberNode);
+                                itemNode.AppendChild(actionNode);
+                                itemNode.AppendChild(productNode);
+
+                                foreach (var node in action.Attributes.Where(x => x.Section == "Product"))
+                                {
+                                    XmlElement itemSubNode = soapXml.CreateElement(node.XmlNodeName);
+
+                                    if (node.IsRequired)
+                                    {
+                                        if (node.XmlNodeName == "REPLACEDBY")
                                         {
-                                            if (unitOfSale.IsNewUnitOfSale)
-                                            {
-                                                if (node.IsRequired)
-                                                {
-                                                    object jsonFieldValue = GetProp(node.JsonPropertyName, unitOfSale, unitOfSale.GetType());
-                                                    itemSubNode.InnerText = string.IsNullOrWhiteSpace(jsonFieldValue.ToString()) ? string.Empty : jsonFieldValue.ToString().Substring(0, Math.Min(250, jsonFieldValue.ToString().Length));
-                                                }
-                                            }
+                                            itemSubNode.InnerText = string.IsNullOrWhiteSpace(item.ToString()) ? string.Empty : item.ToString().Substring(0, Math.Min(250, item.ToString().Length));
+                                        }
+                                        else
+                                        {
+                                            object jsonFieldValue = GetProp(node.JsonPropertyName, scenario.Product, scenario.Product.GetType());
+                                            itemSubNode.InnerText = string.IsNullOrWhiteSpace(jsonFieldValue.ToString()) ? string.Empty : jsonFieldValue.ToString().Substring(0, Math.Min(250, jsonFieldValue.ToString().Length));
                                         }
                                     }
-                                    else
-                                    {
-                                        if (node.IsRequired)
-                                        {
-                                            if (node.XmlNodeName == "ENCSIZE")
-                                            {
-                                                UnitOfSale unitOfSale = scenario.UnitOfSales.Where(x => x.UnitName == item).FirstOrDefault();
+                                    itemNode.AppendChild(itemSubNode);
+                                }
 
-                                                object jsonFieldValue = GetProp(node.JsonPropertyName, unitOfSale, unitOfSale.GetType());
-                                                itemSubNode.InnerText = string.IsNullOrWhiteSpace(jsonFieldValue.ToString()) ? string.Empty : jsonFieldValue.ToString().Substring(0, Math.Min(250, jsonFieldValue.ToString().Length));
-                                            }
-                                            else
-                                            {
-                                                itemSubNode.InnerText = string.IsNullOrWhiteSpace(item.ToString()) ? string.Empty : item.ToString().Substring(0, Math.Min(250, item.ToString().Length));
-                                            }
-                                        }
+                                foreach (var node in action.Attributes.Where(x => x.Section == "UnitOfSale"))
+                                {
+                                    XmlElement itemSubNode = soapXml.CreateElement(node.XmlNodeName);
+
+                                    if (node.IsRequired)
+                                    {
+                                        UnitOfSale unitOfSale4 = scenario.UnitOfSales.Where(x => x.UnitName == item).FirstOrDefault();
+
+                                        object jsonFieldValue = GetProp(node.JsonPropertyName, unitOfSale4, unitOfSale4.GetType());
+                                        itemSubNode.InnerText = string.IsNullOrWhiteSpace(jsonFieldValue.ToString()) ? string.Empty : jsonFieldValue.ToString().Substring(0, Math.Min(250, jsonFieldValue.ToString().Length));
                                     }
                                     itemNode.AppendChild(itemSubNode);
                                 }
@@ -243,19 +286,12 @@ namespace UKHO.ERPFacade.API.Controllers
                             {
                                 XmlElement itemSubNode = soapXml.CreateElement(node.XmlNodeName);
 
-                                if (action.ActionNumber == 2)
+                                if (node.IsRequired)
                                 {
-                                    foreach (var unitOfSale in scenario.UnitOfSales)
-                                    {
-                                        if (unitOfSale.IsNewUnitOfSale)
-                                        {
-                                            if (node.IsRequired)
-                                            {
-                                                object jsonFieldValue = GetProp(node.JsonPropertyName, unitOfSale, unitOfSale.GetType());
-                                                itemSubNode.InnerText = string.IsNullOrWhiteSpace(jsonFieldValue.ToString()) ? string.Empty : jsonFieldValue.ToString().Substring(0, Math.Min(250, jsonFieldValue.ToString().Length));
-                                            }
-                                        }
-                                    }
+                                    UnitOfSale unitOfSale = scenario.UnitOfSales.Where(x => x.UnitName == scenario.Product.ProductName).FirstOrDefault();
+
+                                    object jsonFieldValue = GetProp(node.JsonPropertyName, unitOfSale, unitOfSale.GetType());
+                                    itemSubNode.InnerText = string.IsNullOrWhiteSpace(jsonFieldValue.ToString()) ? string.Empty : jsonFieldValue.ToString().Substring(0, Math.Min(250, jsonFieldValue.ToString().Length));
                                 }
                                 itemNode.AppendChild(itemSubNode);
                             }

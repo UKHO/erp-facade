@@ -12,27 +12,17 @@
         ]
       },
       {
-        "Scenario": "CancelCell",
+        "Scenario": "CancelReplaceCell",
         "Rules": [
           {
             "AttributeDataType": "string",
-            "AttributeName": "status.statusName",
+            "AttributeName": "Status.StatusName",
             "AttriuteValue": "Cancellation Update"
           },
           {
             "AttributeDataType": "bool",
-            "AttributeName": "contentChanged",
-            "AttriuteValue": "true"
-          }
-        ]
-      },
-      {
-        "Scenario": "ReplaceCell",
-        "Rules": [
-          {
-            "AttributeDataType": "list",
-            "AttributeName": "replacedBy",
-            "AttriuteValue": "true"
+            "AttributeName": "ContentChanged",
+            "AttriuteValue": "True"
           }
         ]
       },
@@ -41,13 +31,8 @@
         "Rules": [
           {
             "AttributeDataType": "string",
-            "AttributeName": "status.statusName",
+            "AttributeName": "Status.StatusName",
             "AttriuteValue": "Update"
-          },
-          {
-            "AttributeDataType": "bool",
-            "AttributeName": "contentChanged",
-            "AttriuteValue": "true"
           }
         ]
       }
