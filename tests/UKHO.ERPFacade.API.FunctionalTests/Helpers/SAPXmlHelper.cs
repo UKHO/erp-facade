@@ -1,140 +1,204 @@
-﻿using FluentAssertions.Equivalency;
+﻿using FluentAssertions;
+using FluentAssertions.Equivalency;
 using Newtonsoft.Json;
+using NUnit.Framework;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
     public class SAPXmlHelper
     {
         static int actionCounter = 1;
+        static bool actionAttributesValue;
+        static List<string> AttrNotMatched = new List<string>();
+        public static Config config;
         private static WebhookPayload jsonPayload { get; set; }
-        public void CheckXMLAttributes(string requestBody)
+        private static SAPXmlPayload xmlPayload { get; set; }
+
+        public static async Task<bool> CheckXMLAttributes(string requestBody)
         {
-            //string requestBody;
-            //string filePath = "C:\\Users\\Sadha1501493\\source\\repos\\TestProject1\\TestProject1\\ERPFacadePayloadTestData\\WebhookPayload.JSON";
-            string XMLFilePath = "C:\\Users\\Sadha1501493\\source\\repos\\TestProject1\\TestProject1\\ERPFacadePayloadTestData\\SAPNewCell.xml";
-
-            /*using (StreamReader streamReader = new StreamReader(filePath))
-            {
-                requestBody = streamReader.ReadToEnd();
-            }*/
-
-
-            Console.WriteLine("//deserialization");
+            string XMLFilePath = "C:\\Users\\Sadha1501493\\GitHubRepo\\erp-facade\\tests\\UKHO.ERPFacade.API.FunctionalTests\\ERPFacadePayloadTestData\\SAPNewCell.xml";
+            //Deserialize JSOn and XML payloads
             jsonPayload = JsonConvert.DeserializeObject<WebhookPayload>(requestBody);
-            
-            XmlDocument xDoc = new XmlDocument();
+            XmlSerializer serializer = new XmlSerializer(typeof(SAPXmlPayload));
 
+            using (Stream reader = new FileStream(XMLFilePath, FileMode.Open))
+            {
+                // Call the Deserialize method to restore the object's state.
+                xmlPayload = (SAPXmlPayload)serializer.Deserialize(reader);
+            }
+
+            XmlDocument xDoc = new XmlDocument();
             //load up the xml from the location 
             xDoc.Load(XMLFilePath);
             XmlNodeList nodeList = xDoc.SelectNodes("/Z_ADDS_MAT_INFO/IM_MATINFO/ACTIONITEMS/item");
+            Assert.True(VerifyPresenseOfMandatoryXMLAtrributes(nodeList).Result);
 
-
-            foreach (XmlNode node in nodeList)
+            //verification of action atrribute's value
+            foreach(Item item in xmlPayload.IM_MATINFO.ACTIONITEMS.Item)
             {
+                          
+                if (item.ACTION == "CREATE ENC CELL")
+                    Assert.True(verifyCreateENCCell(item.CHILDCELL, item));
+                else if (item.ACTION == "CREATE AVCS UNIT OF SALE")
+                    Assert.True(verifyCreateAVCSUnitOfSale(item.PRODUCTNAME, item));
+                else if (item.ACTION == "ASSIGN CELL TO AVCS UNIT OF SALE")
+                    Assert.True(verifyAssignCellToAVCSUnitOfSale(item.CHILDCELL, item.PRODUCTNAME, item));
 
-
-                XmlNodeList dd = node.ChildNodes;
-                if (dd[1].InnerText == "CREATE ENC CELL")
-                    verifyCreateENCCell(dd[4].InnerText,  dd);  
-
-                else if (dd[1].InnerText == "CREATE AVCS UNIT OF SALE")
-                    verifyCreateAVCSUnitOfSale(dd[5].InnerText,  dd);
-                else if (dd[1].InnerText == "ASSIGN CELL TO AVCS UNIT OF SALE")
-                    verifyAssignCellToAVCSUnitOfSale(dd[4].InnerText, dd[5].InnerText,  dd);
                 actionCounter++;
+
             }
+            Console.WriteLine("Total verified Actions:" + --actionCounter);
+            await Task.CompletedTask;
+            return true;
         }
 
-        private static void verifyAssignCellToAVCSUnitOfSale(string childCell, string productName,  XmlNodeList xmlAttributes)
+
+        public static async Task<bool> VerifyPresenseOfMandatoryXMLAtrributes(XmlNodeList nodeList)
+        {
+            List<string> ActionAttributesSeq = formActionAtrributes();            
+            foreach (XmlNode node in nodeList)
+            {
+                XmlNodeList dd = node.ChildNodes;
+                
+                for (int i = 0; i < 15; i++)
+                {
+                    if (dd[i].Name != ActionAttributesSeq[i])
+                    {
+                        Console.WriteLine("First missed Attribute is:" + ActionAttributesSeq[i] + " for action number:" + dd[0].InnerText);
+                        return false;
+                    }
+                }                
+
+            }
+            await Task.CompletedTask;
+            return true;
+        }
+
+        private static bool verifyAssignCellToAVCSUnitOfSale(string childCell, string productName, Item item)
         {
 
-            Console.WriteLine("Childcell:" + childCell);
+            Console.WriteLine("Action#:"+actionCounter + ".AVCSUnitOfSale:" + productName);
             foreach (UnitOfSale unitOfSale in jsonPayload.Data.UnitsOfSales)
             {
-                bool flagMatchProduct = false;
+                //bool flagMatchProduct = false;
                 List<string> pdts = unitOfSale.CompositionChanges.AddProducts;
                 foreach (string pdt in pdts)
                 {
                     if ((childCell == pdt) && (productName == unitOfSale.UnitName))
                     {
-                        flagMatchProduct = true;
-                        if (!xmlAttributes[0].InnerText.Equals(actionCounter.ToString()))
-                            flagMatchProduct = false;
-                        //xmlAttributes[1] is skipped as already checked
-                        if (!xmlAttributes[2].InnerText.Equals("AVCS UNIT"))
-                            flagMatchProduct = false;
-                        if (!xmlAttributes[3].InnerText.Equals((getProductInfo(unitOfSale.CompositionChanges.AddProducts)).ProductType))
-                            flagMatchProduct = false;
+
+                        AttrNotMatched.Clear();
+                        if (!item.ACTIONNUMBER.Equals(actionCounter.ToString()))
+                            AttrNotMatched.Add(nameof(item.ACTIONNUMBER));
+                        if (!item.PRODUCT.Equals("AVCS UNIT"))
+                            AttrNotMatched.Add(nameof(item.PRODUCT));
+                        if (!item.PRODTYPE.Equals((getProductInfo(unitOfSale.CompositionChanges.AddProducts)).ProductType))
+                            AttrNotMatched.Add(nameof(item.PRODTYPE));
                         //xmlAttributes[4] & [5] are skipped as already checked
                         //Below code to check rest all attributes are blank
-                        for (int i = 6; i <= 14; i++)
+                        if (!item.CANCELLED.Equals(""))
+                            AttrNotMatched.Add(nameof(item.CANCELLED));
+                        if (!item.REPLACEDBY.Equals(""))
+                            AttrNotMatched.Add(nameof(item.REPLACEDBY));
+                        if (!item.AGENCY.Equals(""))
+                            AttrNotMatched.Add(nameof(item.AGENCY));
+                        if (!item.PROVIDER.Equals(""))
+                            AttrNotMatched.Add(nameof(item.PROVIDER));
+                        if (!item.ENCSIZE.Equals(""))
+                            AttrNotMatched.Add(nameof(item.ENCSIZE));
+                        if (!item.TITLE.Equals(""))
+                            AttrNotMatched.Add(nameof(item.TITLE));
+                        if (!item.EDITIONNO.Equals(""))
+                            AttrNotMatched.Add(nameof(item.EDITIONNO));
+                        if (!item.UPDATENO.Equals(""))
+                            AttrNotMatched.Add(nameof(item.UPDATENO));
+                        if (!item.UNITTYPE.Equals(""))
+                            AttrNotMatched.Add(nameof(item.UNITTYPE));
+                        if (AttrNotMatched.Count == 0)
                         {
-                            if (!xmlAttributes[i].InnerText.Equals(""))
-                                flagMatchProduct = false;
+                            Console.WriteLine("ASSIGN CELL TO AVCS UNIT OF SALE Action's Data is correct");
+                            return true;
+                        }
+
+                        else
+                        {
+                            Console.WriteLine("ASSIGN CELL TO AVCS UNIT OF SALE Action's Data is incorrect");
+                            Console.WriteLine("Not matching attributes are:");
+                            foreach (string attribute in AttrNotMatched)
+                            { Console.WriteLine(attribute); }
+                            return false;
                         }
 
                     }
-                    if (flagMatchProduct)
-                    {
-                        Console.WriteLine("ASSIGN CELL TO AVCS UNIT OF SALE Action's Data is correct");
-                        return;
-                    }
+
 
                 }
-                //if (!flagMatchProduct)
-                //Console.WriteLine("ASSIGN CELL TO AVCS UNIT OF SALE Action's Data is incorrect");
 
             }
+            return false;
         }
 
-        private static void verifyCreateAVCSUnitOfSale(string productName,  XmlNodeList xmlAttributes)
+        private static bool verifyCreateAVCSUnitOfSale(string productName, Item item)
         {
-            Console.WriteLine("UnitOfSale:" + productName);
-            bool flagMatchProduct = false;
+            Console.WriteLine("Action#:" + actionCounter + ".UnitOfSale:" + productName);
             foreach (UnitOfSale unitOfSale in jsonPayload.Data.UnitsOfSales)
             {
 
                 if ((productName == unitOfSale.UnitName) && (unitOfSale.IsNewUnitOfSale))
                 {
-                    flagMatchProduct = true;
-                    if (!xmlAttributes[0].InnerText.Equals(actionCounter.ToString()))
-                        flagMatchProduct = false;
+                    AttrNotMatched.Clear();
+                    if (!item.ACTIONNUMBER.Equals(actionCounter.ToString()))
+                        AttrNotMatched.Add(nameof(item.ACTIONNUMBER));
                     //xmlAttributes[1] is skipped as already checked
-                    if (!xmlAttributes[2].InnerText.Equals("AVCS UNIT"))
-                        flagMatchProduct = false;
-                    if (!xmlAttributes[3].InnerText.Equals((getProductInfo(unitOfSale.CompositionChanges.AddProducts )).ProductType))
-                        flagMatchProduct = false;
-                    if (!xmlAttributes[8].InnerText.Equals((getProductInfo(unitOfSale.CompositionChanges.AddProducts )).Agency))
-                        flagMatchProduct = false;
-                    if (!xmlAttributes[9].InnerText.Equals((getProductInfo(unitOfSale.CompositionChanges.AddProducts )).ProviderCode))
-                        flagMatchProduct = false;
-                    if (!xmlAttributes[10].InnerText.Equals(unitOfSale.UnitSize))
-                        flagMatchProduct = false;
-                    if (!xmlAttributes[11].InnerText.Equals(unitOfSale.Title))
-                        flagMatchProduct = false;
-                    if (!xmlAttributes[14].InnerText.Equals(unitOfSale.UnitType))
-                        flagMatchProduct = false;
-                    int[] ints = new int[] { 4, 6, 7, 12, 13 };
-                    foreach (int i in ints)
+                    if (!item.PRODUCT.Equals("AVCS UNIT"))
+                        AttrNotMatched.Add(nameof(item.PRODUCT));
+                    if (!item.PRODTYPE.Equals((getProductInfo(unitOfSale.CompositionChanges.AddProducts)).ProductType))
+                        AttrNotMatched.Add(nameof(item.PRODTYPE));
+                    if (!item.AGENCY.Equals((getProductInfo(unitOfSale.CompositionChanges.AddProducts)).Agency))
+                        AttrNotMatched.Add(nameof(item.AGENCY));
+                    if (!item.PROVIDER.Equals((getProductInfo(unitOfSale.CompositionChanges.AddProducts)).ProviderCode))
+                        AttrNotMatched.Add(nameof(item.PROVIDER));
+                    if (!item.ENCSIZE.Equals(unitOfSale.UnitSize))
+                        AttrNotMatched.Add(nameof(item.ENCSIZE));
+                    if (!item.TITLE.Equals(unitOfSale.Title))
+                        AttrNotMatched.Add(nameof(item.TITLE));
+                    if (!item.UNITTYPE.Equals(unitOfSale.UnitType))
+                        AttrNotMatched.Add(nameof(item.UNITTYPE));
+                    if (!item.CANCELLED.Equals(""))
+                        AttrNotMatched.Add(nameof(item.CANCELLED));
+                    if (!item.REPLACEDBY.Equals(""))
+                        AttrNotMatched.Add(nameof(item.REPLACEDBY));
+                    if (!item.EDITIONNO.Equals(""))
+                        AttrNotMatched.Add(nameof(item.EDITIONNO));
+                    if (!item.UPDATENO.Equals(""))
+                        AttrNotMatched.Add(nameof(item.UPDATENO));
+                    if (AttrNotMatched.Count == 0)
                     {
-                        if (!xmlAttributes[i].InnerText.Equals(""))
-                            flagMatchProduct = false;
+                        Console.WriteLine("CREATE AVCS UNIT OF SALE Action's Data is correct");
+                        return true;
+                    }
+
+                    else
+                    {
+                        Console.WriteLine("CREATE AVCS UNIT OF SALE Action's Data is incorrect");
+                        Console.WriteLine("Not matching attributes are:");
+                        foreach (string attribute in AttrNotMatched)
+                        { Console.WriteLine(attribute); }
+                        return false;
                     }
                 }
-                if (flagMatchProduct)
-                {
-                    Console.WriteLine("CREATE AVCS UNIT OF SALE Action's Data is correct");
-                    return;
-                }
+
             }
-            //if (!flagMatchProduct)
-            //    Console.WriteLine("CREATE AVCS UNIT OF SALE Action's Data is incorrect");
+            return false;
         }
 
         private static UoSProductInfo getProductInfo(List<string> addProducts)
@@ -155,54 +219,62 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             }
             return productInfo;
         }
-        private static void verifyCreateENCCell(string childCell, XmlNodeList xmlAttributes)
+        private static bool verifyCreateENCCell(string childCell, Item item)
         {
-
-            bool flagMatchProduct = false;
-            Console.WriteLine("Childcell:" + childCell);
+            Console.WriteLine("Action#:" + actionCounter + ".Childcell:" + childCell);
             foreach (Product product in jsonPayload.Data.Products)
             {
                 if ((childCell == product.ProductName) && (product.Status.IsNewCell))
                 {
-                    flagMatchProduct = true;
-                    if (!xmlAttributes[0].InnerText.Equals(actionCounter.ToString()))
-                        flagMatchProduct = false;
+                    AttrNotMatched.Clear();
+                    if (!item.ACTIONNUMBER.Equals(actionCounter.ToString()))
+                        AttrNotMatched.Add(nameof(item.ACTIONNUMBER));
                     //xmlAttributes[1] as already checked
-                    if (!xmlAttributes[2].InnerText.Equals("ENC CELL"))
-                        flagMatchProduct = false;
-                    if (!xmlAttributes[3].InnerText.Equals(product.ProductType[4..]))
-                        flagMatchProduct = false;
-                    if (!xmlAttributes[5].InnerText.Equals(product.ProductName))
-                        flagMatchProduct = false;
-                    if (!xmlAttributes[8].InnerText.Equals(product.Agency))
-                        flagMatchProduct = false;
-                    if (!xmlAttributes[9].InnerText.Equals(product.ProviderCode))
-                        flagMatchProduct = false;
-                    if (!xmlAttributes[10].InnerText.Equals(product.Size))
-                        flagMatchProduct = false;
-                    if (!xmlAttributes[11].InnerText.Equals(product.Title))
-                        flagMatchProduct = false;
-                    if (!xmlAttributes[12].InnerText.Equals(product.EditionNumber))
-                        flagMatchProduct = false;
-                    if (!xmlAttributes[13].InnerText.Equals(product.UpdateNumber))
-                        flagMatchProduct = false;
-                    int[] ints = new int[] { 6, 7, 14 };
-                    foreach (int i in ints)
-                    {
-                        if (!xmlAttributes[i].InnerText.Equals(""))
-                            flagMatchProduct = false;
-                    }
-                }
-                if (flagMatchProduct)
-                {
+                    if (!item.PRODUCT.Equals("ENC CELL"))
+                        AttrNotMatched.Add(nameof(item.PRODUCT));
+                    if (!item.PRODTYPE.Equals(product.ProductType[4..]))
+                        AttrNotMatched.Add(nameof(item.PRODTYPE));
+                    if (!item.PRODUCTNAME.Equals(product.ProductName))
+                        AttrNotMatched.Add(nameof(item.PRODUCTNAME));
+                    if (!item.AGENCY.Equals(product.Agency))
+                        AttrNotMatched.Add(nameof(item.AGENCY));
+                    if (!item.PROVIDER.Equals(product.ProviderCode))
+                        AttrNotMatched.Add(nameof(item.PROVIDER));
+                    if (!item.ENCSIZE.Equals(product.Size))
+                        AttrNotMatched.Add(nameof(item.ENCSIZE));
+                    if (!item.TITLE.Equals(product.Title))
+                        AttrNotMatched.Add(nameof(item.TITLE));
+                    if (!item.EDITIONNO.Equals(product.EditionNumber))
+                        AttrNotMatched.Add(nameof(item.EDITIONNO));
+                    if (!item.UPDATENO.Equals(product.UpdateNumber))
+                        AttrNotMatched.Add(nameof(item.UPDATENO));
+                    //Checking blanks
+                    if (!item.CANCELLED.Equals(""))
+                        AttrNotMatched.Add(nameof(item.CANCELLED));
+                    if (!item.REPLACEDBY.Equals(""))
+                        AttrNotMatched.Add(nameof(item.REPLACEDBY)  );
+                    if (!item.UNITTYPE.Equals(""))
+                        AttrNotMatched.Add(nameof(item.UNITTYPE));
 
-                    Console.WriteLine("CREATE ENC CELL Action's Data is correct");
-                    return;
-                }
+                    if (AttrNotMatched.Count == 0)
+                    {
+                        Console.WriteLine("CREATE ENC CELL Action's Data is correct");
+                        return true;
+                    }
+
+                    else
+                    {
+                        Console.WriteLine("CREATE ENC CELL Action's Data is incorrect");
+                        Console.WriteLine("Not matching attributes are:");
+                        foreach (string attribute in AttrNotMatched)
+                        { Console.WriteLine(attribute); }
+                        return false;
+                    }
+                }            
 
             }
-            //if (!flagMatchProduct)
-            //    Console.WriteLine("CREATE ENC CELL Action's Data is incorrect");
+            return false;
+
 
         }
 
@@ -222,5 +294,29 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             ActionSeq.Add("CANCEL AVCS UNIT OF SALE");
             return ActionSeq;
         }
+        private static List<string> formActionAtrributes()
+        {
+
+            List<string> ActionAttributesSeq = new List<string>();
+            ActionAttributesSeq.Add("ACTIONNUMBER");
+            ActionAttributesSeq.Add("ACTION");
+            ActionAttributesSeq.Add("PRODUCT");
+            ActionAttributesSeq.Add("PRODTYPE");
+            ActionAttributesSeq.Add("CHILDCELL");
+            ActionAttributesSeq.Add("PRODUCTNAME");
+            ActionAttributesSeq.Add("CANCELLED");
+            ActionAttributesSeq.Add("REPLACEDBY");
+            ActionAttributesSeq.Add("AGENCY");
+            ActionAttributesSeq.Add("PROVIDER");
+            ActionAttributesSeq.Add("ENCSIZE");
+            ActionAttributesSeq.Add("TITLE");
+            ActionAttributesSeq.Add("EDITIONNO");
+            ActionAttributesSeq.Add("UPDATENO");
+            ActionAttributesSeq.Add("UNITTYPE");
+
+
+            return ActionAttributesSeq;
+        }
+
     }
 }

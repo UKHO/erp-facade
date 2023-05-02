@@ -1,4 +1,5 @@
-﻿using RestSharp;
+﻿using NUnit.Framework;
+using RestSharp;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
@@ -57,11 +58,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             request.AddHeader("Content-Type", "application/json");
             request.AddHeader("Authorization", "Bearer " + token);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
-            RestResponse response = await client.ExecuteAsync(request);
-            //logic to download XML
-            //Logic to verifyxml
-            SAPXmlHelper sAPXmlHelper = new SAPXmlHelper();
-            sAPXmlHelper.CheckXMLAttributes(requestBody);
+            RestResponse response = await client.ExecuteAsync(request);    
+            //Logic to verifyxml                    
+            Assert.That(SAPXmlHelper.CheckXMLAttributes(requestBody).Result, Is.True);
 
             return response;
         }
