@@ -1,15 +1,6 @@
-﻿using FluentAssertions;
-using FluentAssertions.Equivalency;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using NUnit.Framework;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
-using System.Xml.Schema;
 using System.Xml.Serialization;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
@@ -25,6 +16,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
         public static async Task<bool> CheckXMLAttributes(string requestBody)
         {
+            //Below line added for testing purpose once container is ready then will download xml from there using traceid
             string XMLFilePath = "C:\\Users\\Sadha1501493\\GitHubRepo\\erp-facade\\tests\\UKHO.ERPFacade.API.FunctionalTests\\ERPFacadePayloadTestData\\SAPNewCell.xml";
             //Deserialize JSOn and XML payloads
             jsonPayload = JsonConvert.DeserializeObject<WebhookPayload>(requestBody);
@@ -201,24 +193,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return false;
         }
 
-        private static UoSProductInfo getProductInfo(List<string> addProducts)
-        {
-            UoSProductInfo productInfo = new UoSProductInfo();
-            foreach (string pdt in addProducts)
-            {
-                foreach (Product product in jsonPayload.Data.Products)
-                {
-                    if (pdt.Equals(product.ProductName))
-                    {
-                        productInfo.ProductType = product.ProductType[4..];
-                        productInfo.Agency = product.Agency;
-                        productInfo.ProviderCode = product.ProviderCode;
-                    }
-
-                }
-            }
-            return productInfo;
-        }
+       
         private static bool verifyCreateENCCell(string childCell, Item item)
         {
             Console.WriteLine("Action#:" + actionCounter + ".Childcell:" + childCell);
@@ -277,23 +252,25 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
 
         }
-
-        private static List<string> formActionSeq()
+        private static UoSProductInfo getProductInfo(List<string> addProducts)
         {
+            UoSProductInfo productInfo = new UoSProductInfo();
+            foreach (string pdt in addProducts)
+            {
+                foreach (Product product in jsonPayload.Data.Products)
+                {
+                    if (pdt.Equals(product.ProductName))
+                    {
+                        productInfo.ProductType = product.ProductType[4..];
+                        productInfo.Agency = product.Agency;
+                        productInfo.ProviderCode = product.ProviderCode;
+                    }
 
-            List<string> ActionSeq = new List<string>();
-            ActionSeq.Add("CREATE ENC CELL");
-            ActionSeq.Add("CREATE AVCS UNIT OF SALE");
-            ActionSeq.Add("ASSIGN CELL TO AVCS UNIT OF SALE");
-            ActionSeq.Add("REPLACED WITH NEW ENC CELL");
-            ActionSeq.Add("CHANGE ENC CELL");
-            ActionSeq.Add("CHANGE AVCS UNIT OF SALE");
-            ActionSeq.Add("UPDATE ENC CELL EDITION UPDATE NUMBER");
-            ActionSeq.Add("REMOVE ENC CELL FROM AVCS UNIT OF SALE");
-            ActionSeq.Add("CANCEL ENC CELL");
-            ActionSeq.Add("CANCEL AVCS UNIT OF SALE");
-            return ActionSeq;
+                }
+            }
+            return productInfo;
         }
+
         private static List<string> formActionAtrributes()
         {
 
@@ -313,8 +290,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             ActionAttributesSeq.Add("EDITIONNO");
             ActionAttributesSeq.Add("UPDATENO");
             ActionAttributesSeq.Add("UNITTYPE");
-
-
             return ActionAttributesSeq;
         }
 
