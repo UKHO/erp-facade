@@ -2,11 +2,6 @@
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.WebJob.Services;
 
