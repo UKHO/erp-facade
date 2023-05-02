@@ -180,5 +180,14 @@
    ]]>
 		</notes>
 		<cve>CVE-2018-8409</cve>
+	<cve>CVE-2021-26701</cve>
 	</suppress>
+<suppress>
+    <notes>
+      <![CDATA[
+   file name: NETStandard.Library:1.6.0
+   ]]>
+    </notes>
+    <cve>CVE-2001-0152</cve>
+  </suppress>
 </suppressions>
