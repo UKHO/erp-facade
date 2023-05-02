@@ -29,28 +29,28 @@ namespace UKHO.ERPFacade.API.Controllers
         }
 
         [HttpPost]
-        [Route("/erpfacade/getpriceinfo")]
+        [Route("/erpfacade/priceinformation")]
         public virtual async Task<IActionResult> Post([FromBody] JObject requestJson)
         {
             string traceId = requestJson.SelectToken(TRACEIDKEY)?.Value<string>();
 
             if (string.IsNullOrEmpty(traceId))
             {
-                _logger.LogWarning("TraceId is missing in the event received from the SAP.");
+                _logger.LogWarning(EventIds.TraceIdMissingInSAPEvent.ToEventId(), "TraceId is missing in the event received from the SAP.");
                 return new BadRequestObjectResult(StatusCodes.Status400BadRequest);
             }
 
-            //await _azureTableReaderWriter.UpdateEntity(traceId, UPDATE_RESPONSE_TIME);
+            await _azureTableReaderWriter.UpdateEntity(traceId, UPDATE_RESPONSE_TIME);
 
             bool isBlobExists = _azureBlobEventWriter.CheckIfContainerExists(traceId);
 
             if (!isBlobExists)
             {
-                _logger.LogError("Blob does not exist in the Azure Storage for the given trace ID");
+                _logger.LogError(EventIds.BlobNotFoundInAzure.ToEventId(), "Blob does not exist in the Azure Storage for the trace ID received from SAP event.");
                 return new NotFoundObjectResult(StatusCodes.Status404NotFound);
             }
 
-            _logger.LogInformation("Blob exists in the Azure Storage for the given trace ID");
+            _logger.LogInformation(EventIds.BlobExistsInAzure.ToEventId(), "Blob exists in the Azure Storage for the trace ID received from SAP event.");
             return new OkObjectResult(StatusCodes.Status200OK);
         }
     }
