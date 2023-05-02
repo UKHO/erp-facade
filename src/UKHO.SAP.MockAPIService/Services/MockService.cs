@@ -6,14 +6,13 @@ namespace UKHO.SAP.MockAPIService.Services
     [ExcludeFromCodeCoverage]
     public class MockService
     {
+        private const string CURRENTTESTFILENAME = "CurrentTestCase.txt";
         private readonly string _homeDirectoryPath;
 
-        public MockService(IConfiguration configuration)
+        public MockService()
         {
-            _homeDirectoryPath = Path.Combine(Environment.CurrentDirectory, configuration["FolderName"]);
+            _homeDirectoryPath = Environment.CurrentDirectory;
         }
-
-        private readonly string currentTestFileName = "CurrentTestCase.txt";
 
         public void CreateIfNotExists(string destPath)
         {
@@ -25,33 +24,25 @@ namespace UKHO.SAP.MockAPIService.Services
 
         public void UpdateTestCase(TestCase testCase)
         {
-            string destPath = Path.Combine(_homeDirectoryPath, currentTestFileName);
+            string destPath = Path.Combine(_homeDirectoryPath, CURRENTTESTFILENAME);
 
             CreateIfNotExists(destPath);
 
             File.WriteAllText(destPath, testCase.ToString());
         }
 
-        public TestCase GetCurrentTestCase()
+        public string GetCurrentTestCase()
         {
-            var testCase = new TestCase();
-            string destPath = Path.Combine(_homeDirectoryPath, currentTestFileName);
+            string destPath = Path.Combine(_homeDirectoryPath, CURRENTTESTFILENAME);
 
             CreateIfNotExists(destPath);
 
-            string readText = File.ReadAllText(destPath);
-
-            if (!String.IsNullOrEmpty(readText))
-            {
-                Enum.TryParse(readText, true, out testCase);
-            }
-
-            return testCase;
+            return File.ReadAllText(destPath);
         }
 
         public void CleanUp()
         {
-            string destPath = Path.Combine(_homeDirectoryPath, currentTestFileName);
+            string destPath = Path.Combine(_homeDirectoryPath, CURRENTTESTFILENAME);
             if (Directory.Exists(Path.GetDirectoryName(destPath)))
             {
                 File.Delete(destPath);

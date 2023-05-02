@@ -76,7 +76,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
             _logger.LogInformation(EventIds.UploadEncContentPublishedEventInAzureBlob.ToEventId(), "Uploading the received ENC content published event in blob storage.");
 
-            await _azureBlobEventWriter.UploadEvent(requestJson.ToString(), REQUESTFORMAT, traceId);
+            await _azureBlobEventWriter.UploadEvent(requestJson.ToString(), traceId, traceId + '.' + REQUESTFORMAT);
 
             _logger.LogInformation(EventIds.UploadedEncContentPublishedEventInAzureBlob.ToEventId(), "ENC content published event is uploaded in blob storage successfully.");
 

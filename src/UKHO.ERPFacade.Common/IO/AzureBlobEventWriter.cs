@@ -1,7 +1,7 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Text;
-using Azure.Storage.Blobs;
+﻿using Azure.Storage.Blobs;
 using Microsoft.Extensions.Options;
+using System.Diagnostics.CodeAnalysis;
+using System.Text;
 using UKHO.ERPFacade.Common.Configuration;
 
 namespace UKHO.ERPFacade.Common.IO
@@ -16,22 +16,20 @@ namespace UKHO.ERPFacade.Common.IO
             _azureStorageConfig = azureStorageConfig ?? throw new ArgumentNullException(nameof(azureStorageConfig));
         }
 
-        public async Task UploadEvent(object requestObject, string requestFormat, string traceId)
+        public async Task UploadEvent(string requestEvent, string blobContainerName, string blobName)
         {
-            BlobClient blobClient = GetBlobClient(traceId, requestFormat);
+            BlobClient blobClient = GetBlobClient(blobContainerName, blobName);
 
-            Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(requestObject.ToString() ?? ""));
+            Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(requestEvent ?? ""));
 
             await blobClient.UploadAsync(stream, overwrite: true);
         }
 
         //Private Methods
-        private BlobClient GetBlobClient(string containerName, string requestFormat)
+        private BlobClient GetBlobClient(string containerName, string blobName)
         {
             BlobContainerClient blobContainerClient = new(_azureStorageConfig.Value.ConnectionString, containerName);
             blobContainerClient.CreateIfNotExists();
-
-            var blobName = containerName + '.' + requestFormat;
 
             BlobClient blobClient = blobContainerClient.GetBlobClient(blobName);
             return blobClient;

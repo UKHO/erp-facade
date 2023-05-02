@@ -23,7 +23,7 @@ namespace UKHO.SAP.MockAPIService.Services
         {
             string requestXML = ObjectXMLSerializer<Z_ADDS_MAT_INFO>.SerializeObject(z_ADDS_MAT_INFO);
 
-            Task.Run(async () => await _azureBlobEventWriter.UploadEvent(requestXML, REQUESTFORMAT, z_ADDS_MAT_INFO.IM_MATINFO.CORRID));
+            Task.Run(async () => await _azureBlobEventWriter.UploadEvent(requestXML, z_ADDS_MAT_INFO.IM_MATINFO.CORRID, z_ADDS_MAT_INFO.IM_MATINFO.CORRID + '.' + REQUESTFORMAT));
 
             _mockService.CleanUp();
 

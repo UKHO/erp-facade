@@ -2,6 +2,6 @@
 {
     public interface IAzureBlobEventWriter
     {
-        Task UploadEvent(object requestObject, string requestFormat, string traceId);
+        Task UploadEvent(string requestEvent, string blobContainerName, string blobName);
     }
 }

@@ -2,6 +2,6 @@
 {
     public enum TestCase
     {
-        Status500InternalServerError = 1
+        InternalServerError500 = 1
     }
 }

@@ -60,9 +60,9 @@ namespace UKHO.SAP.MockAPIService.Filters
 
                 if (bool.Parse(_configuration["IsFTRunning"]))
                 {
-                    TestCase currentTestCase = _mockService.GetCurrentTestCase();
+                    string currentTestCase = _mockService.GetCurrentTestCase();
 
-                    if (currentTestCase == TestCase.Status500InternalServerError)
+                    if (currentTestCase == TestCase.InternalServerError500.ToString())
                     {
                         context.Response.StatusCode = StatusCodes.Status500InternalServerError;
                     }
