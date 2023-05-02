@@ -59,16 +59,20 @@
         /// </summary>
         WebjobProcessEventStarted = 940014,
         /// <summary>
-        /// 940015 - Callback from SAP is timed out.
+        /// 940015- Webjob completed to process the incomplete transactions.
         /// </summary>
-        WebjobCallbackTimeoutEventFromSAP = 940015,
+        WebjobProcessEventCompleted = 940015,
         /// <summary>
-        /// 940016 - Empty or null RequestDateTime Column in Azure Table.
+        /// 940016 - Callback from SAP is timed out.
         /// </summary>
-        EmptyRequestDateTime = 940016,
+        WebjobCallbackTimeoutEventFromSAP = 940016,
         /// <summary>
-        /// 940017 - Updated entity successfully in Azure Table
+        /// 940017 - Empty or null RequestDateTime Column in Azure Table.
         /// </summary>
-        UpdateEntitySuccessful = 940017
+        EmptyRequestDateTime = 940017,
+        /// <summary>
+        /// 940018 - Updated entity successfully in Azure Table
+        /// </summary>
+        UpdateEntitySuccessful = 940018
     }
 }
