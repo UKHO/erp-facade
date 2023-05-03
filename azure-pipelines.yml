@@ -167,6 +167,16 @@ stages:
               zipAfterPublish: true
               modifyOutputPath: true
 
+          - task: DotNetCoreCLI@2
+            displayName: "Publish ERPFacadeWebjob Code"
+            inputs:
+              command: "publish"
+              publishWebProjects: false
+              projects: "**/UKHO.ERPFacade.WebJob.csproj"
+              arguments: "--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/ERPFacadeAPI/App_Data/jobs/continuous/ERPFacadeWebjob"
+              zipAfterPublish: false
+              modifyOutputPath: false
+
           - task: PublishBuildArtifacts@1
             displayName: "Publish Web Artifact"
             inputs:
@@ -227,7 +237,6 @@ stages:
             inputs:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)\MockSAPService'
               ArtifactName: UKHOMockSAPService
-
 
   - stage: Devdeploy
     displayName: "Devdeploy (inc terraform, webapp deploy)"
