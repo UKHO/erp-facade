@@ -300,6 +300,23 @@ stages:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
                     AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
 
+                - task: FileTransform@2
+                  displayName: "File Transform: functionaltests"
+                  inputs:
+                    folderPath: "$(Build.SourcesDirectory)/functionaltests"
+                    xmlTransformationRules:
+                    jsonTargetFiles: 'UKHO.ERPFacade.API.FunctionalTests/appsettings.json'
+
+                - task: DotNetCoreCLI@2
+                  displayName: "Run Functional tests"
+                  inputs:
+                    command: "test"
+                    projects: |
+                      **/*FunctionalTests*.dll
+                      !**/obj/**
+                    testRunTitle: "Dev-AutomationTests"
+                    workingDirectory: '$(Build.SourcesDirectory)/functionaltests'
+
   - stage: QAdeploy
     displayName: "QAdeploy (inc terraform, webapp deploy)"
     variables:
