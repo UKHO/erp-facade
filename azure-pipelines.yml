@@ -44,7 +44,7 @@ stages:
               noCache: true
               nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
               workingDirectory: '$(Build.SourcesDirectory)\UKHO.ERPFacade.API'
-              packagesDirectory: '$(Build.SourcesDirectory)\UKHO.ERPFacade.API\packagess'
+              packagesDirectory: '$(Build.SourcesDirectory)\UKHO.ERPFacade.API\packages'
 
           - task: CmdLine@1
             displayName: "Run OWASP Dependency Checker"
@@ -90,7 +90,7 @@ stages:
               noCache: true
               nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
               workingDirectory: '$(Build.SourcesDirectory)\UKHO.ERPFacade.API'
-              packagesDirectory: '$(Build.SourcesDirectory)\UKHO.ERPFacade.API\packagesForTests'
+              packagesDirectory: '$(Build.SourcesDirectory)\UKHO.ERPFacade.API\packages'
 
           - task: DotNetCoreCLI@2
             displayName: "dotnet build task"
