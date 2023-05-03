@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
+using System.Collections;
 using System.Reflection;
 using System.Xml;
 using UKHO.ERPFacade.API.Models;
@@ -59,6 +60,14 @@ namespace UKHO.ERPFacade.API.Helpers
 
                     switch (action.ActionNumber)
                     {
+                        case 2:
+                            var unitOfSale = scenario.UnitOfSales.Where(x => x.UnitName == scenario.Product.ProductName).FirstOrDefault();
+                            if (unitOfSale.IsNewUnitOfSale)
+                            {
+                                actionNode = BuildAction(soapXml, scenario, action, scenario.Product.ProductName);
+                                actionItemNode.AppendChild(actionNode);
+                            }
+                            break;
                         case 3:
                         case 8:
                             foreach (var cell in scenario.InUnitOfSales)
@@ -142,6 +151,8 @@ namespace UKHO.ERPFacade.API.Helpers
             itemNode.AppendChild(actionNode);
             itemNode.AppendChild(productNode);
 
+            List<(int sortingOrder, XmlElement itemNode)> actionAttributeList = new();
+
             foreach (var node in action.Attributes.Where(x => x.Section == "Product"))
             {
                 XmlElement itemSubNode = soapXml.CreateElement(node.XmlNodeName);
@@ -155,10 +166,15 @@ namespace UKHO.ERPFacade.API.Helpers
                     else
                     {
                         object jsonFieldValue = GetProp(node.JsonPropertyName, scenario.Product, scenario.Product.GetType());
-                        itemSubNode.InnerText = string.IsNullOrWhiteSpace(jsonFieldValue.ToString()) ? string.Empty : jsonFieldValue.ToString().Substring(0, Math.Min(250, jsonFieldValue.ToString().Length));
+                        itemSubNode.InnerText = string.IsNullOrWhiteSpace(jsonFieldValue.ToString()) ? string.Empty
+                            : (node.XmlNodeName == "PRODTYPE" ? GetProdType(jsonFieldValue.ToString()) : jsonFieldValue.ToString().Substring(0, Math.Min(250, jsonFieldValue.ToString().Length)));
                     }
                 }
-                itemNode.AppendChild(itemSubNode);
+                else
+                {
+                    itemSubNode.InnerText = string.Empty;
+                }
+                actionAttributeList.Add((node.SortingOrder, itemSubNode));                
             }
 
             foreach (var node in action.Attributes.Where(x => x.Section == "UnitOfSale"))
@@ -167,12 +183,21 @@ namespace UKHO.ERPFacade.API.Helpers
 
                 if (node.IsRequired)
                 {
-                    UnitOfSale unitOfSale4 = scenario.UnitOfSales.Where(x => x.UnitName == cell).FirstOrDefault();
+                    UnitOfSale unitOfSale = scenario.UnitOfSales.Where(x => x.UnitName == cell).FirstOrDefault();
 
-                    object jsonFieldValue = GetProp(node.JsonPropertyName, unitOfSale4, unitOfSale4.GetType());
+                    object jsonFieldValue = GetProp(node.JsonPropertyName, unitOfSale, unitOfSale.GetType());
                     itemSubNode.InnerText = string.IsNullOrWhiteSpace(jsonFieldValue.ToString()) ? string.Empty : jsonFieldValue.ToString().Substring(0, Math.Min(250, jsonFieldValue.ToString().Length));
                 }
-                itemNode.AppendChild(itemSubNode);
+                else
+                {
+                    itemSubNode.InnerText = string.Empty;
+                }                
+                actionAttributeList.Add((node.SortingOrder, itemSubNode));
+            }
+            var sortedActionAttributeList = actionAttributeList.OrderBy(x => x.sortingOrder).ToList();
+            foreach (var itemAttribute in sortedActionAttributeList)
+            {
+                itemNode.AppendChild(itemAttribute.itemNode);
             }
             return itemNode;
         }
@@ -192,39 +217,12 @@ namespace UKHO.ERPFacade.API.Helpers
             {
                 return info.GetValue(obj, null).ToString();
             }
-        }
+        }               
 
-        /// <summary>
-        /// Bind element value.
-        /// </summary>
-        /// <param name="parentNode">Parent node</param>
-        /// <param name="element">Actual element, in which value to be binded.</param>
-        /// <param name="value">Value of the node</param>
-        /// <param name="maxLength">Max lenght of the corresponding field in SAP</param>
-        private static void BindValue(XmlNode parentNode, string element, string value, int maxLength)
+        private static string GetProdType(string prodType)
         {
-            //Retrieve node
-            XmlNode node = parentNode?.SelectSingleNode($"//*[local-name()='{element}']");
-
-            if (node == null)
-            {
-                throw new InvalidDataException($"Xml element '{element}' not available in xml template.");
-            }
-            //Set value
-            SetValue(node, value, maxLength);
-        }
-
-        /// <summary>
-        /// Set value
-        /// </summary>
-        /// <param name="node">Actual node, in which value to be set</param>
-        /// <param name="value">Value of the node</param>
-        /// <param name="maxLength">>Max lenght of the corresponding field in SAP</param>
-        private static void SetValue(XmlNode node, string value, int maxLength)
-        {
-            //As NULL check for 'node' is already taken care, no need to do it again here.
-            //Set value
-            node.InnerText = string.IsNullOrWhiteSpace(value) ? string.Empty : value.Substring(0, Math.Min(maxLength, value.Length));
+            var parts = prodType.Split(' ').ToList();
+            return parts[1];
         }
     }
 }

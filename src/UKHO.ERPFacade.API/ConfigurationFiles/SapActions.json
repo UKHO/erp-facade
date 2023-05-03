@@ -10,73 +10,85 @@
             "IsRequired": true,
             "Section": "Product",
             "JsonPropertyName": "ProductType",
-            "XmlNodeName": "PRODTYPE"
+            "XmlNodeName": "PRODTYPE",
+            "SortingOrder": 1
           },
           {
             "IsRequired": true,
             "Section": "Product",
             "JsonPropertyName": "ProductName",
-            "XmlNodeName": "CHILDCELL"
+            "XmlNodeName": "CHILDCELL",
+            "SortingOrder": 2
           },
           {
             "IsRequired": true,
             "Section": "Product",
             "JsonPropertyName": "ProductName",
-            "XmlNodeName": "PRODUCTNAME"
+            "XmlNodeName": "PRODUCTNAME",
+            "SortingOrder": 3
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "",
-            "XmlNodeName": "CANCELLED"
+            "XmlNodeName": "CANCELLED",
+            "SortingOrder": 4
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "ReplacedBy",
-            "XmlNodeName": "REPLACEDBY"
+            "XmlNodeName": "REPLACEDBY",
+            "SortingOrder": 5
           },
           {
             "IsRequired": true,
             "Section": "Product",
             "JsonPropertyName": "Agency",
-            "XmlNodeName": "AGENCY"
+            "XmlNodeName": "AGENCY",
+            "SortingOrder": 6
           },
           {
             "IsRequired": true,
             "Section": "Product",
             "JsonPropertyName": "ProviderCode",
-            "XmlNodeName": "PROVIDER"
+            "XmlNodeName": "PROVIDER",
+            "SortingOrder": 7
           },
           {
             "IsRequired": true,
             "Section": "Product",
             "JsonPropertyName": "Size",
-            "XmlNodeName": "ENCSIZE"
+            "XmlNodeName": "ENCSIZE",
+            "SortingOrder": 8
           },
           {
             "IsRequired": true,
             "Section": "Product",
             "JsonPropertyName": "Title",
-            "XmlNodeName": "TITLE"
+            "XmlNodeName": "TITLE",
+            "SortingOrder": 9
           },
           {
             "IsRequired": true,
             "Section": "Product",
             "JsonPropertyName": "EditionNumber",
-            "XmlNodeName": "EDITIONNO"
+            "XmlNodeName": "EDITIONNO",
+            "SortingOrder": 10
           },
           {
             "IsRequired": true,
             "Section": "Product",
             "JsonPropertyName": "UpdateNumber",
-            "XmlNodeName": "UPDATENO"
+            "XmlNodeName": "UPDATENO",
+            "SortingOrder": 11
           },
           {
             "IsRequired": false,
             "Section": "UnitOfSale",
             "JsonPropertyName": "UnitType",
-            "XmlNodeName": "UNITTYPE"
+            "XmlNodeName": "UNITTYPE",
+            "SortingOrder": 12
           }
         ]
       },
@@ -89,73 +101,85 @@
             "IsRequired": true,
             "Section": "Product",
             "JsonPropertyName": "ProductType",
-            "XmlNodeName": "PRODTYPE"
+            "XmlNodeName": "PRODTYPE",
+            "SortingOrder": 1
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "ProductName",
-            "XmlNodeName": "CHILDCELL"
+            "XmlNodeName": "CHILDCELL",
+            "SortingOrder": 2
           },
           {
             "IsRequired": true,
             "Section": "Product",
             "JsonPropertyName": "ProductName",
-            "XmlNodeName": "PRODUCTNAME"
+            "XmlNodeName": "PRODUCTNAME",
+            "SortingOrder": 3
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "",
-            "XmlNodeName": "CANCELLED"
+            "XmlNodeName": "CANCELLED",
+            "SortingOrder": 4
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "ReplacedBy",
-            "XmlNodeName": "REPLACEDBY"
+            "XmlNodeName": "REPLACEDBY",
+            "SortingOrder": 5
           },
           {
             "IsRequired": true,
             "Section": "Product",
             "JsonPropertyName": "Agency",
-            "XmlNodeName": "AGENCY"
+            "XmlNodeName": "AGENCY",
+            "SortingOrder": 6
           },
           {
             "IsRequired": true,
             "Section": "Product",
             "JsonPropertyName": "ProviderCode",
-            "XmlNodeName": "PROVIDER"
+            "XmlNodeName": "PROVIDER",
+            "SortingOrder": 7
           },
           {
             "IsRequired": true,
             "Section": "UnitOfSale",
             "JsonPropertyName": "UnitSize",
-            "XmlNodeName": "ENCSIZE"
+            "XmlNodeName": "ENCSIZE",
+            "SortingOrder": 8
           },
           {
             "IsRequired": true,
             "Section": "Product",
             "JsonPropertyName": "Title",
-            "XmlNodeName": "TITLE"
+            "XmlNodeName": "TITLE",
+            "SortingOrder": 9
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "EditionNumber",
-            "XmlNodeName": "EDITIONNO"
+            "XmlNodeName": "EDITIONNO",
+            "SortingOrder": 10
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "UpdateNumber",
-            "XmlNodeName": "UPDATENO"
+            "XmlNodeName": "UPDATENO",
+            "SortingOrder": 11
           },
           {
             "IsRequired": true,
             "Section": "UnitOfSale",
             "JsonPropertyName": "UnitType",
-            "XmlNodeName": "UNITTYPE"
+            "XmlNodeName": "UNITTYPE",
+            "SortingOrder": 12
           }
         ]
       },
@@ -168,73 +192,85 @@
             "IsRequired": true,
             "Section": "Product",
             "JsonPropertyName": "ProductType",
-            "XmlNodeName": "PRODTYPE"
+            "XmlNodeName": "PRODTYPE",
+            "SortingOrder": 1
           },
           {
             "IsRequired": true,
             "Section": "Product",
             "JsonPropertyName": "ProductName",
-            "XmlNodeName": "CHILDCELL"
+            "XmlNodeName": "CHILDCELL",
+            "SortingOrder": 2
           },
           {
             "IsRequired": true,
             "Section": "UnitOfSale",
             "JsonPropertyName": "UnitName",
-            "XmlNodeName": "PRODUCTNAME"
+            "XmlNodeName": "PRODUCTNAME",
+            "SortingOrder": 3
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "",
-            "XmlNodeName": "CANCELLED"
+            "XmlNodeName": "CANCELLED",
+            "SortingOrder": 4
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "ReplacedBy",
-            "XmlNodeName": "REPLACEDBY"
+            "XmlNodeName": "REPLACEDBY",
+            "SortingOrder": 5
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "Agency",
-            "XmlNodeName": "AGENCY"
+            "XmlNodeName": "AGENCY",
+            "SortingOrder": 6
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "ProviderCode",
-            "XmlNodeName": "PROVIDER"
+            "XmlNodeName": "PROVIDER",
+            "SortingOrder": 7
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "Size",
-            "XmlNodeName": "ENCSIZE"
+            "XmlNodeName": "ENCSIZE",
+            "SortingOrder": 8
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "Title",
-            "XmlNodeName": "TITLE"
+            "XmlNodeName": "TITLE",
+            "SortingOrder": 9
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "EditionNumber",
-            "XmlNodeName": "EDITIONNO"
+            "XmlNodeName": "EDITIONNO",
+            "SortingOrder": 10
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "UpdateNumber",
-            "XmlNodeName": "UPDATENO"
+            "XmlNodeName": "UPDATENO",
+            "SortingOrder": 11
           },
           {
             "IsRequired": false,
             "Section": "UnitOfSale",
             "JsonPropertyName": "UnitType",
-            "XmlNodeName": "UNITTYPE"
+            "XmlNodeName": "UNITTYPE",
+            "SortingOrder": 12
           }
         ]
       },
@@ -247,73 +283,85 @@
             "IsRequired": true,
             "Section": "Product",
             "JsonPropertyName": "ProductType",
-            "XmlNodeName": "PRODTYPE"
+            "XmlNodeName": "PRODTYPE",
+            "SortingOrder": 1
           },
           {
             "IsRequired": true,
             "Section": "Product",
             "JsonPropertyName": "ProductName",
-            "XmlNodeName": "CHILDCELL"
+            "XmlNodeName": "CHILDCELL",
+            "SortingOrder": 2
           },
           {
             "IsRequired": true,
             "Section": "Product",
             "JsonPropertyName": "ProductName",
-            "XmlNodeName": "PRODUCTNAME"
+            "XmlNodeName": "PRODUCTNAME",
+            "SortingOrder": 3
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "",
-            "XmlNodeName": "CANCELLED"
+            "XmlNodeName": "CANCELLED",
+            "SortingOrder": 4
           },
           {
             "IsRequired": true,
             "Section": "Product",
             "JsonPropertyName": "ReplacedBy",
-            "XmlNodeName": "REPLACEDBY"
+            "XmlNodeName": "REPLACEDBY",
+            "SortingOrder": 5
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "Agency",
-            "XmlNodeName": "AGENCY"
+            "XmlNodeName": "AGENCY",
+            "SortingOrder": 6
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "ProviderCode",
-            "XmlNodeName": "PROVIDER"
+            "XmlNodeName": "PROVIDER",
+            "SortingOrder": 7
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "Size",
-            "XmlNodeName": "ENCSIZE"
+            "XmlNodeName": "ENCSIZE",
+            "SortingOrder": 8
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "Title",
-            "XmlNodeName": "TITLE"
+            "XmlNodeName": "TITLE",
+            "SortingOrder": 9
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "EditionNumber",
-            "XmlNodeName": "EDITIONNO"
+            "XmlNodeName": "EDITIONNO",
+            "SortingOrder": 10
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "UpdateNumber",
-            "XmlNodeName": "UPDATENO"
+            "XmlNodeName": "UPDATENO",
+            "SortingOrder": 11
           },
           {
             "IsRequired": false,
             "Section": "UnitOfSale",
             "JsonPropertyName": "UnitType",
-            "XmlNodeName": "UNITTYPE"
+            "XmlNodeName": "UNITTYPE",
+            "SortingOrder": 12
           }
         ]
       },
@@ -336,73 +384,85 @@
             "IsRequired": true,
             "Section": "Product",
             "JsonPropertyName": "ProductType",
-            "XmlNodeName": "PRODTYPE"
+            "XmlNodeName": "PRODTYPE",
+            "SortingOrder": 1
           },
           {
             "IsRequired": true,
             "Section": "Product",
             "JsonPropertyName": "ProductName",
-            "XmlNodeName": "CHILDCELL"
+            "XmlNodeName": "CHILDCELL",
+            "SortingOrder": 2
           },
           {
             "IsRequired": true,
             "Section": "UnitOfSale",
             "JsonPropertyName": "UnitName",
-            "XmlNodeName": "PRODUCTNAME"
+            "XmlNodeName": "PRODUCTNAME",
+            "SortingOrder": 3
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "",
-            "XmlNodeName": "CANCELLED"
+            "XmlNodeName": "CANCELLED",
+            "SortingOrder": 4
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "ReplacedBy",
-            "XmlNodeName": "REPLACEDBY"
+            "XmlNodeName": "REPLACEDBY",
+            "SortingOrder": 5
           },
           {
             "IsRequired": true,
             "Section": "Product",
             "JsonPropertyName": "Agency",
-            "XmlNodeName": "AGENCY"
+            "XmlNodeName": "AGENCY",
+            "SortingOrder": 6
           },
           {
             "IsRequired": true,
             "Section": "Product",
             "JsonPropertyName": "ProviderCode",
-            "XmlNodeName": "PROVIDER"
+            "XmlNodeName": "PROVIDER",
+            "SortingOrder": 7
           },
           {
             "IsRequired": true,
             "Section": "Product",
             "JsonPropertyName": "Size",
-            "XmlNodeName": "ENCSIZE"
+            "XmlNodeName": "ENCSIZE",
+            "SortingOrder": 8
           },
           {
             "IsRequired": true,
             "Section": "Product",
             "JsonPropertyName": "Title",
-            "XmlNodeName": "TITLE"
+            "XmlNodeName": "TITLE",
+            "SortingOrder": 9
           },
           {
             "IsRequired": true,
             "Section": "Product",
             "JsonPropertyName": "EditionNumber",
-            "XmlNodeName": "EDITIONNO"
+            "XmlNodeName": "EDITIONNO",
+            "SortingOrder": 10
           },
           {
             "IsRequired": true,
             "Section": "Product",
             "JsonPropertyName": "UpdateNumber",
-            "XmlNodeName": "UPDATENO"
+            "XmlNodeName": "UPDATENO",
+            "SortingOrder": 11
           },
           {
             "IsRequired": false,
             "Section": "UnitOfSale",
             "JsonPropertyName": "UnitType",
-            "XmlNodeName": "UNITTYPE"
+            "XmlNodeName": "UNITTYPE",
+            "SortingOrder": 12
           }
         ]
       },
@@ -415,73 +475,85 @@
             "IsRequired": true,
             "Section": "Product",
             "JsonPropertyName": "ProductType",
-            "XmlNodeName": "PRODTYPE"
+            "XmlNodeName": "PRODTYPE",
+            "SortingOrder": 1
           },
           {
             "IsRequired": true,
             "Section": "Product",
             "JsonPropertyName": "ProductName",
-            "XmlNodeName": "CHILDCELL"
+            "XmlNodeName": "CHILDCELL",
+            "SortingOrder": 2
           },
           {
             "IsRequired": true,
             "Section": "UnitOfSale",
             "JsonPropertyName": "UnitName",
-            "XmlNodeName": "PRODUCTNAME"
+            "XmlNodeName": "PRODUCTNAME",
+            "SortingOrder": 3
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "",
-            "XmlNodeName": "CANCELLED"
+            "XmlNodeName": "CANCELLED",
+            "SortingOrder": 4
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "ReplacedBy",
-            "XmlNodeName": "REPLACEDBY"
+            "XmlNodeName": "REPLACEDBY",
+            "SortingOrder": 5
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "Agency",
-            "XmlNodeName": "AGENCY"
+            "XmlNodeName": "AGENCY",
+            "SortingOrder": 6
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "ProviderCode",
-            "XmlNodeName": "PROVIDER"
+            "XmlNodeName": "PROVIDER",
+            "SortingOrder": 7
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "Size",
-            "XmlNodeName": "ENCSIZE"
+            "XmlNodeName": "ENCSIZE",
+            "SortingOrder": 8
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "Title",
-            "XmlNodeName": "TITLE"
+            "XmlNodeName": "TITLE",
+            "SortingOrder": 9
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "EditionNumber",
-            "XmlNodeName": "EDITIONNO"
+            "XmlNodeName": "EDITIONNO",
+            "SortingOrder": 10
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "UpdateNumber",
-            "XmlNodeName": "UPDATENO"
+            "XmlNodeName": "UPDATENO",
+            "SortingOrder": 11
           },
           {
             "IsRequired": false,
             "Section": "UnitOfSale",
             "JsonPropertyName": "UnitType",
-            "XmlNodeName": "UNITTYPE"
+            "XmlNodeName": "UNITTYPE",
+            "SortingOrder": 12
           }
         ]
       },
@@ -494,73 +566,85 @@
             "IsRequired": true,
             "Section": "Product",
             "JsonPropertyName": "ProductType",
-            "XmlNodeName": "PRODTYPE"
+            "XmlNodeName": "PRODTYPE",
+            "SortingOrder": 1
           },
           {
             "IsRequired": true,
             "Section": "Product",
             "JsonPropertyName": "ProductName",
-            "XmlNodeName": "CHILDCELL"
+            "XmlNodeName": "CHILDCELL",
+            "SortingOrder": 2
           },
           {
             "IsRequired": true,
             "Section": "Product",
             "JsonPropertyName": "ProductName",
-            "XmlNodeName": "PRODUCTNAME"
+            "XmlNodeName": "PRODUCTNAME",
+            "SortingOrder": 3
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "",
-            "XmlNodeName": "CANCELLED"
+            "XmlNodeName": "CANCELLED",
+            "SortingOrder": 4
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "ReplacedBy",
-            "XmlNodeName": "REPLACEDBY"
+            "XmlNodeName": "REPLACEDBY",
+            "SortingOrder": 5
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "Agency",
-            "XmlNodeName": "AGENCY"
+            "XmlNodeName": "AGENCY",
+            "SortingOrder": 6
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "ProviderCode",
-            "XmlNodeName": "PROVIDER"
+            "XmlNodeName": "PROVIDER",
+            "SortingOrder": 7
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "Size",
-            "XmlNodeName": "ENCSIZE"
+            "XmlNodeName": "ENCSIZE",
+            "SortingOrder": 8
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "Title",
-            "XmlNodeName": "TITLE"
+            "XmlNodeName": "TITLE",
+            "SortingOrder": 9
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "EditionNumber",
-            "XmlNodeName": "EDITIONNO"
+            "XmlNodeName": "EDITIONNO",
+            "SortingOrder": 10
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "UpdateNumber",
-            "XmlNodeName": "UPDATENO"
+            "XmlNodeName": "UPDATENO",
+            "SortingOrder": 11
           },
           {
             "IsRequired": false,
             "Section": "UnitOfSale",
             "JsonPropertyName": "UnitType",
-            "XmlNodeName": "UNITTYPE"
+            "XmlNodeName": "UNITTYPE",
+            "SortingOrder": 12
           }
         ]
       },
@@ -573,73 +657,85 @@
             "IsRequired": true,
             "Section": "Product",
             "JsonPropertyName": "ProductType",
-            "XmlNodeName": "PRODTYPE"
+            "XmlNodeName": "PRODTYPE",
+            "SortingOrder": 1
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "ProductName",
-            "XmlNodeName": "CHILDCELL"
+            "XmlNodeName": "CHILDCELL",
+            "SortingOrder": 2
           },
           {
             "IsRequired": true,
             "Section": "Product",
             "JsonPropertyName": "ProductName",
-            "XmlNodeName": "PRODUCTNAME"
+            "XmlNodeName": "PRODUCTNAME",
+            "SortingOrder": 3
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "",
-            "XmlNodeName": "CANCELLED"
+            "XmlNodeName": "CANCELLED",
+            "SortingOrder": 4
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "ReplacedBy",
-            "XmlNodeName": "REPLACEDBY"
+            "XmlNodeName": "REPLACEDBY",
+            "SortingOrder": 5
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "Agency",
-            "XmlNodeName": "AGENCY"
+            "XmlNodeName": "AGENCY",
+            "SortingOrder": 6
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "ProviderCode",
-            "XmlNodeName": "PROVIDER"
+            "XmlNodeName": "PROVIDER",
+            "SortingOrder": 7
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "Size",
-            "XmlNodeName": "ENCSIZE"
+            "XmlNodeName": "ENCSIZE",
+            "SortingOrder": 8
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "Title",
-            "XmlNodeName": "TITLE"
+            "XmlNodeName": "TITLE",
+            "SortingOrder": 9
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "EditionNumber",
-            "XmlNodeName": "EDITIONNO"
+            "XmlNodeName": "EDITIONNO",
+            "SortingOrder": 10
           },
           {
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "UpdateNumber",
-            "XmlNodeName": "UPDATENO"
+            "XmlNodeName": "UPDATENO",
+            "SortingOrder": 11
           },
           {
             "IsRequired": false,
             "Section": "UnitOfSale",
             "JsonPropertyName": "UnitType",
-            "XmlNodeName": "UNITTYPE"
+            "XmlNodeName": "UNITTYPE",
+            "SortingOrder": 12
           }
         ]
       }
