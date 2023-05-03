@@ -40,7 +40,7 @@
         The issue is fixed:         
           2.1.11 or SDK 2.1.507 for Visual Studio 2017 or SDK 2.1.604 for Visual Studio 2019
           2.2.5 or SDK 2.2.107 for Visual Studio 2017 or SDK 2.2.204 for Visual Studio 2019
-        EROP Facade is pinned to .Net core SDK > 3.1.408 which is not vunerable, and deployed to Azure App Service which will have the security patch applied.
+        ERP Facade is pinned to .Net core SDK > 3.1.408 which is not vunerable, and deployed to Azure App Service which will have the security patch applied.
     ]]></notes>
     <cve>CVE-2019-0981</cve>
   </suppress>
@@ -265,5 +265,11 @@
    file name: System.Net.Http:4.3.3
    ]]></notes>  
    <cve>CVE-2018-8292</cve>
+</suppress>
+<suppress>
+   <notes><![CDATA[
+   file name: System.Security.Cryptography.Xml:4.7.0
+   ]]></notes>
+  <cve>CVE-2022-34716</cve>
 </suppress>
 </suppressions>
