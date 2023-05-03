@@ -194,7 +194,7 @@
    <notes><![CDATA[
    file name: WindowsAzure.Storage:9.3.3
    ]]></notes>
-   <packageUrl regex="true">^pkg:nuget/WindowsAzure\.Storage@.*$</packageUrl>
+   <!--<packageUrl regex="true">^pkg:nuget/WindowsAzure\.Storage@.*$</packageUrl>-->
    <cve>CVE-2022-30187</cve>
 </suppress>
 </suppressions>
