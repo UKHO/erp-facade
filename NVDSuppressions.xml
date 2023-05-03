@@ -176,11 +176,22 @@
    file name: Microsoft.AspNetCore.Http.Abstractions.dll
    See https://github.com/aspnet/announcements/issues/316 for MS details on this CVE.
    If the highest .NET Core SDK version is less that 2.1.402 or the highest Microsoft.AspNetCore.App runtime version is less that 2.1.4 you are vulnerable to this issue
-   This CVE applies to .Net Core versions below  2.1.402  (runtime 2.1.4). PKS is pinned to .Net core SDK > 6.0.108 which is not vulnerable, and deployed to Azure App Service which will have the security patch applied.
+   This CVE applies to .Net Core versions below  2.1.402  (runtime 2.1.4). ERP Facade is pinned to .Net core SDK > 6.0.108 which is not vulnerable, and deployed to Azure App Service which will have the security patch applied.
    ]]>
 		</notes>
 		<cve>CVE-2018-8409</cve>
 	<cve>CVE-2021-26701</cve>
+	</suppress>
+	<suppress>
+		<notes>
+			<![CDATA[
+    file name: Microsoft.AspNetCore.Hosting.Abstractions.dll
+    See https://github.com/dotnet/announcements/issues/196 for full MS Details on CVE.
+    An information disclosure vulnerability exists in .NET 5.0, .NET Core 3.1 and .NET Core 2.1 when dumps created by the tool to collect crash dumps and dumps on demand are created with global read permissions on Linux and macOS.
+    This CVE applies to any .NET Core 3.1 but patch is provided at 3.1.412, ERP Facade is pinned to .Net core SDK > 6.0.108 which is not vunerable, and deployed to Azure App Service which will have the security patch applied.
+    ]]>
+		</notes>
+		<cve>CVE-2021-34485</cve>
 	</suppress>
 <suppress>
     <notes>
@@ -193,8 +204,7 @@
 <suppress>
    <notes><![CDATA[
    file name: WindowsAzure.Storage:9.3.3
-   ]]></notes>
-   <!--<packageUrl regex="true">^pkg:nuget/WindowsAzure\.Storage@.*$</packageUrl>-->
+   ]]></notes>   
    <cve>CVE-2022-30187</cve>
 </suppress>
 </suppressions>
