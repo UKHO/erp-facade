@@ -115,6 +115,7 @@
     <notes>
       <![CDATA[
    file name: Microsoft.AspNetCore.WebUtilities.dll
+   .NET Core and Visual Studio Denial of service vulnerability exists but when System.IO.Pipelines improperly handles requests
    ]]>
     </notes>
     <cve>CVE-2018-8409</cve>
@@ -155,6 +156,7 @@
     <notes>
       <![CDATA[
    file name: System.Runtime.Serialization.Json:4.3.0
+   This CVE applies to a stack overflow in the XML.toJSONObject component of hutool-json v5.8.10 allows attackers to cause a Denial of Service (DoS) via crafted JSON or XML data.
    ]]>
     </notes>
     <cve>CVE-2022-45688</cve>
@@ -173,13 +175,13 @@
 		<notes>
 			<![CDATA[
    file name: GetDocument.Insider.dll
-  CVE References ASP.Net versions 1.0-1.1. PKS is built on ASP.Net Core SDK > 6.0.108, not classic ASP.Net.
+  CVE References ASP.Net versions 1.0-1.1. ERPFacade is built on ASP.Net Core SDK > 6.0.108, not classic ASP.Net.
   See https://nvd.nist.gov/vuln/detail/CVE-2005-2224 and https://www.securityfocus.com/bid/14217 for more details.
    ]]>
 		</notes>
 		<cve>CVE-2005-2224</cve>
 	</suppress>
-	<suppress>
+	<!--<suppress>
 		<notes>
 			<![CDATA[
    file name: GetDocument.Insider.dll
@@ -187,7 +189,7 @@
    ]]>
 		</notes>
 		<cve>CVE-2008-0333</cve>
-	</suppress>
+	</suppress>-->
 <suppress>
 		<notes>
 			<![CDATA[
@@ -215,6 +217,7 @@
     <notes>
       <![CDATA[
    file name: NETStandard.Library:1.6.0
+   This CVE applies to any .NET  to the password protection option for the Compressed Folders feature which allows local users to recover the passwords and read the compressed folders.
    ]]>
     </notes>
     <cve>CVE-2001-0152</cve>
