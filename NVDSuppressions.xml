@@ -53,6 +53,42 @@
     ]]></notes>
     <cve>CVE-2019-1301</cve>
   </suppress>
+	<!--<suppress>
+   <notes><![CDATA[
+   file name: Microsoft.AspNetCore.Hosting.Server.Abstractions.dll
+   ]]></notes>  
+   <cve>CVE-2019-0545</cve>
+</suppress>
+	<suppress>
+   <notes><![CDATA[
+   file name: Microsoft.AspNetCore.Hosting.Server.Abstractions.dll
+   ]]></notes>   
+   <cve>CVE-2019-0820</cve>
+</suppress>
+	<suppress>
+   <notes><![CDATA[
+   file name: Microsoft.AspNetCore.Hosting.Server.Abstractions.dll
+   ]]></notes>  
+   <cve>CVE-2019-0657</cve>
+</suppress>-->
+	<suppress>
+   <notes><![CDATA[
+   file name: Microsoft.AspNetCore.Hosting.Abstractions.dll
+   ]]></notes>  
+   <cve>CVE-2019-0545</cve>
+</suppress>
+	<suppress>
+   <notes><![CDATA[
+   file name: Microsoft.AspNetCore.Hosting.Abstractions.dll
+   ]]></notes>   
+   <cve>CVE-2019-0820</cve>
+</suppress>
+	<suppress>
+   <notes><![CDATA[
+   file name: Microsoft.AspNetCore.Hosting.Abstractions.dll
+   ]]></notes>   
+   <cve>CVE-2019-0657</cve>
+</suppress>
  <suppress>
     <notes>
       <![CDATA[
