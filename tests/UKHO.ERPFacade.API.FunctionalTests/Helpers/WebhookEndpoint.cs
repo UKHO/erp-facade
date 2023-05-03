@@ -58,7 +58,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             request.AddHeader("Content-Type", "application/json");
             request.AddHeader("Authorization", "Bearer " + token);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
-            RestResponse response = await client.ExecuteAsync(request);    
+            RestResponse response = await client.ExecuteAsync(request);  
+            if (response.StatusCode==System.Net.HttpStatusCode.OK)
             //Logic to verifyxml                    
             Assert.That(SAPXmlHelper.CheckXMLAttributes(requestBody).Result, Is.True);
 
