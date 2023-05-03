@@ -213,7 +213,7 @@ stages:
               projects: '$(Build.SourcesDirectory)\tests\UKHO.ERPFacade.API.FunctionalTests\UKHO.ERPFacade.API.FunctionalTests.csproj'
               arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\UKHO.ERPFacade.API.FunctionalTests'
               workingDirectory: '$(Build.SourcesDirectory)\tests\UKHO.ERPFacade.API.FunctionalTests'
-              zipAfterPublish: true
+              zipAfterPublish: false
               modifyOutputPath: true
 
           - task: PublishBuildArtifacts@1
