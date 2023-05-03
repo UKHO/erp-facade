@@ -33,6 +33,11 @@
             "AttributeDataType": "string",
             "AttributeName": "Status.StatusName",
             "AttriuteValue": "Update"
+          },
+          {
+            "AttributeDataType": "bool",
+            "AttributeName": "ContentChanged",
+            "AttriuteValue": "True"
           }
         ]
       }

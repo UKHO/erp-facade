@@ -4,11 +4,11 @@
     <Z_ADDS_MAT_INFO xmlns="urn:sap-com:document:sap:rfc:functions">
       <Z_ADDS_MAT_INFO>
         <IM_MATINFO xmlns="">
-         <CORRID>WS78_210_WS92511B</CORRID>
-         <NOOFACTIONS>5</NOOFACTIONS>
-         <RECDATE>20230328</RECDATE>
-         <RECTIME>160000</RECTIME>
-         <ORG>UKHO</ORG>
+          <CORRID></CORRID>
+          <NOOFACTIONS></NOOFACTIONS>
+          <RECDATE></RECDATE>
+          <RECTIME></RECTIME>
+          <ORG>UKHO</ORG>
           <ACTIONITEMS xmlns="urn:sap-com:document:sap:rfc:functions">
           </ACTIONITEMS>
         </IM_MATINFO>

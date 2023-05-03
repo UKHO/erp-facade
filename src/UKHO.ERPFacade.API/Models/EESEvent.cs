@@ -35,10 +35,10 @@ namespace UKHO.ERPFacade.API.Models
         public string TraceId { get; set; }
 
         [JsonProperty("products")]
-        public Product[] Products { get; set; }
+        public List<Product> Products { get; set; }
 
         [JsonProperty("unitsOfSale")]
-        public UnitOfSale[] UnitsOfSales { get; set; }
+        public List<UnitOfSale> UnitsOfSales { get; set; }
     }
 
     public class Product
