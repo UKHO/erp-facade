@@ -32,7 +32,7 @@ stages:
             inputs:
               packageType: sdk
               useGlobalJson: true
-              workingDirectory: '$(Build.SourcesDirectory)\src'
+              workingDirectory: '$(Build.SourcesDirectory)\UKHO.ERPFacade.API'
 
           - task: DotNetCoreCLI@2
             displayName: ".Net Core - NuGet restore test projects only"
@@ -44,14 +44,14 @@ stages:
               feedsToUse: config
               noCache: true
               nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
-              workingDirectory: '$(Build.SourcesDirectory)\src'
-              packagesDirectory: '$(Build.SourcesDirectory)\src\packagess'
+              workingDirectory: '$(Build.SourcesDirectory)\UKHO.ERPFacade.API'
+              packagesDirectory: '$(Build.SourcesDirectory)\UKHO.ERPFacade.API\packagess'
 
           - task: CmdLine@1
             displayName: "Run OWASP Dependency Checker"
             inputs:
               filename: 'dependency-check.bat'
-              arguments: '--project "erp-facade - $(Build.SourceBranchName)" --scan "$(Build.SourcesDirectory)\src" --out "$(Build.ArtifactStagingDirectory)\DCReport" --suppression $(Build.SourcesDirectory)\NVDSuppressions.xml --noupdate'
+              arguments: '--project "erp-facade - $(Build.SourceBranchName)" --scan "$(Build.SourcesDirectory)\UKHO.ERPFacade.API" --out "$(Build.ArtifactStagingDirectory)\DCReport" --suppression $(Build.SourcesDirectory)\NVDSuppressions.xml --noupdate'
 
           - task: PublishBuildArtifacts@1
             displayName: "Publish Artifact: OWASP Dependency Checker Report"
@@ -78,7 +78,7 @@ stages:
             inputs:
               packagetype: sdk
               useglobaljson: true
-              workingdirectory: '$(build.sourcesdirectory)\src'
+              workingdirectory: '$(build.sourcesdirectory)\UKHO.ERPFacade.API'
 
           - task: DotNetCoreCLI@2
             displayName: ".Net Core - NuGet restore test projects only"
@@ -88,8 +88,8 @@ stages:
               feedsToUse: config
               noCache: true
               nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
-              workingDirectory: '$(Build.SourcesDirectory)\src'
-              packagesDirectory: '$(Build.SourcesDirectory)\src\packagesForTests'
+              workingDirectory: '$(Build.SourcesDirectory)\UKHO.ERPFacade.API'
+              packagesDirectory: '$(Build.SourcesDirectory)\UKHO.ERPFacade.API\packagesForTests'
 
           - task: DotNetCoreCLI@2
             displayName: "dotnet test - Perform Unit Tests"
@@ -124,7 +124,7 @@ stages:
             inputs:
               packageType: sdk
               useGlobalJson: true
-              workingDirectory: '$(Build.SourcesDirectory)\src'
+              workingDirectory: '$(Build.SourcesDirectory)\UKHO.ERPFacade.API'
               
           - task: DotNetCoreCLI@2
             displayName: ".Net Core - NuGet restore non test projects only"
@@ -135,8 +135,8 @@ stages:
               feedsToUse: config
               noCache: true
               nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
-              workingDirectory: '$(Build.SourcesDirectory)\src'
-              packagesDirectory: '$(Build.SourcesDirectory)\src\packagesForTests'
+              workingDirectory: '$(Build.SourcesDirectory)\UKHO.ERPFacade.API'
+              packagesDirectory: '$(Build.SourcesDirectory)\UKHO.ERPFacade.API\packagesForTests'
 
           - task: DotNetCoreCLI@2
             displayName: "dotnet build task"
