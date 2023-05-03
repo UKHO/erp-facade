@@ -163,7 +163,7 @@ stages:
               command: "publish"
               publishWebProjects: false
               projects: '**/*UKHO.ERPFacade.API.csproj'
-              arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\UKHOERPFacadeAPI'
+              arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\UKHO.ERPFacade.API'
               zipAfterPublish: true
               modifyOutputPath: true
 
@@ -173,23 +173,23 @@ stages:
               command: "publish"
               publishWebProjects: false
               projects: "**/UKHO.ERPFacade.WebJob.csproj"
-              arguments: "--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/UKHOERPFacadeAPI/App_Data/jobs/continuous/ERPFacadeWebjob"
+              arguments: "--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/UKHO.ERPFacade.API/App_Data/jobs/continuous/ERPFacadeWebjob"
               zipAfterPublish: false
               modifyOutputPath: false
 
           - task: ArchiveFiles@2
             displayName: "Zip ENS service"
             inputs:
-              rootFolderOrFile: '$(Build.ArtifactStagingDirectory)\UKHOERPFacadeAPI'
+              rootFolderOrFile: '$(Build.ArtifactStagingDirectory)\UKHO.ERPFacade.API\'
               includeRootFolder: false
               archiveType: "zip"
-              archiveFile: '$(Build.ArtifactStagingDirectory)\UKHOERPFacadeAPI\UKHOERPFacadeAPI.zip'
+              archiveFile: '$(Build.ArtifactStagingDirectory)\UKHO.ERPFacade.API\UKHO.ERPFacade.API.zip'
               replaceExistingArchive: true
 
           - task: PublishBuildArtifacts@1
             displayName: "Publish Web Artifact"
             inputs:
-              PathtoPublish: '$(Build.ArtifactStagingDirectory)\UKHOERPFacadeAPI'
+              PathtoPublish: ''$(Build.ArtifactStagingDirectory)\UKHO.ERPFacade.API\UKHO.ERPFacade.API.zip'
               ArtifactName: UKHOERPFacadeAPI
 
           - task: PublishBuildArtifacts@1
