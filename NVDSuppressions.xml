@@ -52,25 +52,7 @@
       This CVE applies to any .NET Core based application running on .NET Core 2.1.0-2.1.12, or .NET Core 2.2.0-2.2.6. FSS is pinned to .Net core SDK > 3.1.408 which is not vunerable, and deployed to Azure App Service which will have the security patch applied.
     ]]></notes>
     <cve>CVE-2019-1301</cve>
-  </suppress>
-	<!--<suppress>
-   <notes><![CDATA[
-   file name: Microsoft.AspNetCore.Hosting.Server.Abstractions.dll
-   ]]></notes>  
-   <cve>CVE-2019-0545</cve>
-</suppress>
-	<suppress>
-   <notes><![CDATA[
-   file name: Microsoft.AspNetCore.Hosting.Server.Abstractions.dll
-   ]]></notes>   
-   <cve>CVE-2019-0820</cve>
-</suppress>
-	<suppress>
-   <notes><![CDATA[
-   file name: Microsoft.AspNetCore.Hosting.Server.Abstractions.dll
-   ]]></notes>  
-   <cve>CVE-2019-0657</cve>
-</suppress>-->
+  </suppress>	
 	<suppress>
    <notes><![CDATA[
    file name: Microsoft.AspNetCore.Hosting.Abstractions.dll
@@ -243,4 +225,39 @@
    ]]></notes>   
    <cve>CVE-2022-30187</cve>
 </suppress>
+ <suppress>
+	<notes><![CDATA[
+	file name: System.Net.WebSockets.Client:4.0.0
+	For details on these CVEs see:
+		http://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2017-0247
+		http://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2017-0249
+		http://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2017-0256
+	This is a temporary suppression pending a fix being available.	
+	]]></notes>
+	<cve>CVE-2017-0247</cve>
+	<cve>CVE-2017-0249</cve>
+	<cve>CVE-2017-0256</cve>
+  </suppress>
+<!--<suppress>
+   <notes><![CDATA[
+   file name: System.Private.DataContractSerialization:4.3.0
+   ]]></notes>  
+   <vulnerabilityName>CVE-2023-21538</vulnerabilityName>
+</suppress>
+<suppress>
+    <notes>
+      <![CDATA[
+   file name: System.Security.Cryptography.X509Certificates:4.1.0
+   ]]>
+    </notes>
+    <cve>CVE-2017-11770</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: System.Security.Cryptography.X509Certificates:4.3.0
+   ]]>
+    </notes>
+    <cve>CVE-2017-11770</cve>
+  </suppress>-->
 </suppressions>
