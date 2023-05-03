@@ -189,7 +189,7 @@ stages:
           - task: PublishBuildArtifacts@1
             displayName: "Publish Web Artifact"
             inputs:
-              PathtoPublish: ''$(Build.ArtifactStagingDirectory)\UKHO.ERPFacade.API\UKHO.ERPFacade.API.zip'
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)\UKHO.ERPFacade.API\UKHO.ERPFacade.API.zip'
               ArtifactName: UKHOERPFacadeAPI
 
           - task: PublishBuildArtifacts@1
