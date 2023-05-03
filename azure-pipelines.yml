@@ -173,7 +173,7 @@ stages:
               command: "publish"
               publishWebProjects: false
               projects: "**/UKHO.ERPFacade.WebJob.csproj"
-              arguments: "--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/UKHO.ERPFacade.API/App_Data/jobs/continuous/ERPFacadeWebjob"
+              arguments: "--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\UKHO.ERPFacade.API\App_Data\jobs\continuous\ERPFacadeWebjob"
               zipAfterPublish: false
               modifyOutputPath: false
 
