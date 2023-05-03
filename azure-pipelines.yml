@@ -179,6 +179,55 @@ stages:
               PathtoPublish: '$(Build.SourcesDirectory)\Deployment'
               ArtifactName: terraformartifact
 
+      - job: PublishFunctionalTestsAndTerraform
+        workspace:
+          clean: all
+        displayName: "Publish FunctionalTests and Terraform Artifact"
+        steps:
+
+          - task: UseDotNet@2
+            displayName: 'Use .NET 6.0.x sdk'
+            inputs:
+              packageType: sdk
+              useGlobalJson: true
+              workingDirectory: '$(Build.SourcesDirectory)\src'
+              
+          - task: DotNetCoreCLI@2
+            displayName: ".Net Core - NuGet restore for non test projects only"
+            inputs:
+              command: "restore"
+              projects: |
+                **/*.csproj
+                !**/UKHO.SAP.MockService.csproj
+              feedsToUse: config
+              noCache: true
+              nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
+              workingDirectory: '$(Build.SourcesDirectory)\src'
+              packagesDirectory: '$(Build.SourcesDirectory)\src\packages'
+
+          - task: DotNetCoreCLI@2
+            displayName: "Publish Functional Test Code "
+            inputs:
+              command: "publish"
+              publishWebProjects: false
+              projects: '$(Build.SourcesDirectory)\tests\UKHO.ERPFacade.API.FunctionalTests\UKHO.ERPFacade.API.FunctionalTests.csproj'
+              arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\UKHO.ERPFacade.API.FunctionalTests'
+              workingDirectory: '$(Build.SourcesDirectory)\tests\UKHO.ERPFacade.API.FunctionalTests'
+              zipAfterPublish: true
+              modifyOutputPath: true
+
+          - task: PublishBuildArtifacts@1
+            displayName: "Publish Functional test Artifact"
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)\UKHO.ERPFacade.API.FunctionalTests'
+              ArtifactName: functionaltests
+
+          #- task: PublishBuildArtifacts@1
+          #  displayName: "Publish terraform Artifacts"
+          #  inputs:
+          #    PathtoPublish: '$(Build.SourcesDirectory)\Deployment'
+          #    ArtifactName: terraformartifact
+
       - job: BuildAndPublishMockService
         workspace:
           clean: all
