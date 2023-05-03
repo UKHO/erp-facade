@@ -238,7 +238,7 @@
 	<cve>CVE-2017-0249</cve>
 	<cve>CVE-2017-0256</cve>
   </suppress>
-<!--<suppress>
+<suppress>
    <notes><![CDATA[
    file name: System.Private.DataContractSerialization:4.3.0
    ]]></notes>  
@@ -259,5 +259,11 @@
    ]]>
     </notes>
     <cve>CVE-2017-11770</cve>
-  </suppress>-->
+  </suppress>
+<suppress>
+   <notes><![CDATA[
+   file name: System.Net.Http:4.3.3
+   ]]></notes>  
+   <cve>CVE-2018-8292</cve>
+</suppress>
 </suppressions>
