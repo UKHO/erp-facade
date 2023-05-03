@@ -7,7 +7,7 @@ using System.Text;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Logging;
 
-namespace UKHO.ERPFacade.Common.IO
+namespace UKHO.ERPFacade.Common.IO.Azure
 {
     [ExcludeFromCodeCoverage]
     public class AzureBlobEventWriter : IAzureBlobEventWriter

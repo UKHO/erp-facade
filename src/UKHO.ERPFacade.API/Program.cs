@@ -6,13 +6,15 @@ using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json.Serialization;
 using Serilog;
 using System.Diagnostics.CodeAnalysis;
+using System.IO.Abstractions;
 using System.Reflection;
 using UKHO.ERPFacade.API.Filters;
+using UKHO.ERPFacade.API.Helpers;
 using UKHO.ERPFacade.API.Models;
 using UKHO.ERPFacade.Common.Configuration;
-using UKHO.ERPFacade.Common.Helpers;
 using UKHO.ERPFacade.Common.HttpClients;
 using UKHO.ERPFacade.Common.IO;
+using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.Logging.EventHubLogProvider;
 
 namespace UKHO.ERPFacade
@@ -164,10 +166,15 @@ namespace UKHO.ERPFacade
             sapActionConfiguration = configuration.GetSection("SapActionConfiguration").Get<SapActionConfiguration>()!;
 
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            builder.Services.AddSingleton<IAzureTableReaderWriter, AzureTableReaderWriter>();
-            builder.Services.AddSingleton<IAzureBlobEventWriter, AzureBlobEventWriter>();
-            builder.Services.AddSingleton<ISapConfiguration, SapConfiguration>();
-            builder.Services.AddSingleton<IXmlHelper, XmlHelper>();
+
+            builder.Services.AddScoped<IAzureTableReaderWriter, AzureTableReaderWriter>();
+            builder.Services.AddScoped<IAzureBlobEventWriter, AzureBlobEventWriter>();
+            builder.Services.AddScoped<ISapConfiguration, SapConfiguration>();
+            builder.Services.AddScoped<ISapMessageBuilder, SapMessageBuilder>();
+            builder.Services.AddScoped<IScenarioBuilder, ScenarioBuilder>();
+            builder.Services.AddScoped<IXmlHelper, XmlHelper>();
+            builder.Services.AddScoped<IFileSystemHelper, FileSystemHelper>();
+            builder.Services.AddScoped<IFileSystem, FileSystem>();
 
             builder.Services.AddHttpClient<ISapClient, SapClient>(c =>
             {

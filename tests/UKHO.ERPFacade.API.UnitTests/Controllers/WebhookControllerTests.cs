@@ -13,9 +13,9 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml;
 using UKHO.ERPFacade.API.Controllers;
-using UKHO.ERPFacade.Common.Helpers;
 using UKHO.ERPFacade.Common.HttpClients;
 using UKHO.ERPFacade.Common.IO;
+using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
 
 namespace UKHO.ERPFacade.API.UnitTests.Controllers

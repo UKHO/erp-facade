@@ -9,7 +9,7 @@ using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models.TableEntities;
 
-namespace UKHO.ERPFacade.Common.IO
+namespace UKHO.ERPFacade.Common.IO.Azure
 {
     [ExcludeFromCodeCoverage]
     public class AzureTableReaderWriter : IAzureTableReaderWriter
