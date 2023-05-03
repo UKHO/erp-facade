@@ -163,7 +163,7 @@ stages:
               command: "publish"
               publishWebProjects: false
               projects: '**/*UKHO.ERPFacade.API.csproj'
-              arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\ERPFacadeAPI'
+              arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\UKHOERPFacadeAPI'
               zipAfterPublish: true
               modifyOutputPath: true
 
@@ -173,14 +173,23 @@ stages:
               command: "publish"
               publishWebProjects: false
               projects: "**/UKHO.ERPFacade.WebJob.csproj"
-              arguments: "--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/ERPFacadeAPI/App_Data/jobs/continuous/ERPFacadeWebjob"
+              arguments: "--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/UKHOERPFacadeAPI/App_Data/jobs/continuous/ERPFacadeWebjob"
               zipAfterPublish: false
               modifyOutputPath: false
+
+          - task: ArchiveFiles@2
+            displayName: "Zip ENS service"
+            inputs:
+              rootFolderOrFile: '$(Build.ArtifactStagingDirectory)\UKHOERPFacadeAPI
+              includeRootFolder: false
+              archiveType: "zip"
+              archiveFile: '$(Build.ArtifactStagingDirectory)\UKHOERPFacadeAPI\UKHOERPFacadeAPI.zip'
+              replaceExistingArchive: true
 
           - task: PublishBuildArtifacts@1
             displayName: "Publish Web Artifact"
             inputs:
-              PathtoPublish: '$(Build.ArtifactStagingDirectory)\ERPFacadeAPI'
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)\UKHOERPFacadeAPI'
               ArtifactName: UKHOERPFacadeAPI
 
           - task: PublishBuildArtifacts@1
