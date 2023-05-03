@@ -180,7 +180,7 @@ stages:
           - task: ArchiveFiles@2
             displayName: "Zip ENS service"
             inputs:
-              rootFolderOrFile: '$(Build.ArtifactStagingDirectory)\UKHOERPFacadeAPI
+              rootFolderOrFile: '$(Build.ArtifactStagingDirectory)\UKHOERPFacadeAPI'
               includeRootFolder: false
               archiveType: "zip"
               archiveFile: '$(Build.ArtifactStagingDirectory)\UKHOERPFacadeAPI\UKHOERPFacadeAPI.zip'
