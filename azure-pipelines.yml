@@ -277,6 +277,18 @@ stages:
       - group: "ERP-Facade-Dev"
       - group: "Erp-Dev"
       - group: "ERP-FACADE-DEV-KV"
+      - name: "AzureADConfiguration.TenantId"
+        value: $(AzureADConfigurationTenantId)
+      - name: "AzureADConfiguration.ClientId"
+        value: $(AzureADConfigurationClientId)
+      - name: "AzureADConfiguration.AutoTestClientId"
+        value: $(AzureADConfigurationAutoTestClientId)
+      - name: "AzureADConfiguration.ClientSecret"
+        value: $(AzureADConfigurationClientSecret)
+      - name: "AzureADConfiguration.AutoTestClientIdNoRole"
+        value: $(AzureADConfigurationAutoTestClientIdNoRole)
+      - name: "AzureADConfiguration.ClientSecretNoRole"
+        value: $(AzureADConfigurationClientSecretNoRole)
     jobs:
       - deployment: DevDeployTerraform
         displayName: "Dev - Deploy Terraform and Dotnet App"
@@ -299,7 +311,7 @@ stages:
                   inputs:
                     folderPath: "$(Pipeline.Workspace)/functionaltests"
                     xmlTransformationRules:
-                    jsonTargetFiles: 'UKHO.ERPFacade.API.FunctionalTests/appsettings.json'
+                    jsonTargetFiles: '**/appsettings.json'
 
                 - task: UseDotNet@2
                   displayName: 'Use .NET Core sdk'
@@ -313,6 +325,7 @@ stages:
                     command: "test"
                     projects: |
                       **/*FunctionalTests*.dll
+                      !**/*TestAdapter.dll
                       !**/obj/**
                     testRunTitle: "Dev-AutomationTests"
                     workingDirectory: '$(Pipeline.Workspace)/functionaltests'
@@ -333,6 +346,18 @@ stages:
       - group: "ERP-Facade-QA"
       - group: "Erp-QA"
       - group: "ERP-FACADE-QA-KV"
+      - name: "AzureADConfiguration.TenantId"
+        value: $(AzureADConfigurationTenantId)
+      - name: "AzureADConfiguration.ClientId"
+        value: $(AzureADConfigurationClientId)
+      - name: "AzureADConfiguration.AutoTestClientId"
+        value: $(AzureADConfigurationAutoTestClientId)
+      - name: "AzureADConfiguration.ClientSecret"
+        value: $(AzureADConfigurationClientSecret)
+      - name: "AzureADConfiguration.AutoTestClientIdNoRole"
+        value: $(AzureADConfigurationAutoTestClientIdNoRole)
+      - name: "AzureADConfiguration.ClientSecretNoRole"
+        value: $(AzureADConfigurationClientSecretNoRole)
       - name: mockWebAppName
         value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup
