@@ -92,10 +92,10 @@ namespace UKHO.ERPFacade.API.Controllers
 
                     if (!response.IsSuccessStatusCode)
                     {
-                        _logger.LogError(EventIds.SapConnectionFailed.ToEventId(), "Could not connect to SAP. | {StatusCode} | {SapResponse}", response.StatusCode, response.Content?.ReadAsStringAsync().Result);
+                        _logger.LogError(EventIds.SapConnectionFailed.ToEventId(), "Could not connect to SAP. | {StatusCode}", response.StatusCode);
                         throw new Exception();
                     }
-                    _logger.LogInformation(EventIds.DataPushedToSap.ToEventId(), "Data pushed to SAP successfully. | {StatusCode} | {SapResponse}", response.StatusCode, response.Content?.ReadAsStringAsync().Result);
+                    _logger.LogInformation(EventIds.DataPushedToSap.ToEventId(), "Data pushed to SAP successfully. | {StatusCode}", response.StatusCode);
 
                     return new OkObjectResult(StatusCodes.Status200OK);
                 }
