@@ -6,16 +6,15 @@ using UKHO.ERPFacade.Common.Logging;
 namespace UKHO.ERPFacade.API.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController] 
+    [ApiController]
     public class ErpFacadeController : BaseController<ErpFacadeController>
     {
         private readonly ILogger<ErpFacadeController> _logger;
         private readonly IAzureTableReaderWriter _azureTableReaderWriter;
         private readonly IAzureBlobEventWriter _azureBlobEventWriter;
 
-        public const string TRACEIDKEY = "data.traceId";
-        private const string UPDATE_RESPONSE_TIME = "ResponseDateTime";
-
+        private const string TraceIdKey = "data.traceId";
+        private const string UpdateResponseTime = "ResponseDateTime";
 
         public ErpFacadeController(IHttpContextAccessor contextAccessor,
                                    ILogger<ErpFacadeController> logger,
@@ -32,7 +31,7 @@ namespace UKHO.ERPFacade.API.Controllers
         [Route("/erpfacade/priceinformation")]
         public virtual async Task<IActionResult> Post([FromBody] JObject requestJson)
         {
-            string traceId = requestJson.SelectToken(TRACEIDKEY)?.Value<string>();
+            var traceId = requestJson.SelectToken(TraceIdKey)?.Value<string>();
 
             if (string.IsNullOrEmpty(traceId))
             {
@@ -40,9 +39,9 @@ namespace UKHO.ERPFacade.API.Controllers
                 return new BadRequestObjectResult(StatusCodes.Status400BadRequest);
             }
 
-            await _azureTableReaderWriter.UpdateEntity(traceId, UPDATE_RESPONSE_TIME);
+            await _azureTableReaderWriter.UpdateEntity(traceId, UpdateResponseTime);
 
-            bool isBlobExists = _azureBlobEventWriter.CheckIfContainerExists(traceId);
+            var isBlobExists = _azureBlobEventWriter.CheckIfContainerExists(traceId);
 
             if (!isBlobExists)
             {

@@ -1,10 +1,10 @@
-﻿using Azure;
+﻿using System.Diagnostics.CodeAnalysis;
+using Azure;
 using Azure.Data.Tables;
 using Azure.Data.Tables.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
-using System.Diagnostics.CodeAnalysis;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models.TableEntities;
@@ -15,11 +15,11 @@ namespace UKHO.ERPFacade.Common.IO
     public class AzureTableReaderWriter : IAzureTableReaderWriter
     {
         private readonly ILogger<AzureTableReaderWriter> _logger;
-        private const string ERP_FACADE_TABLE_NAME = "eesevents";
-        private const string UPDATE_REQUEST_TIME = "RequestDateTime";
-        private const string UPDATE_RESPONSE_TIME = "ResponseDateTime";
-
         private readonly IOptions<AzureStorageConfiguration> _azureStorageConfig;
+
+        private const string ErpFacadeTableName = "eesevents";
+        private const string UpdateRequestTime = "RequestDateTime";
+        private const string UpdateResponseTime = "ResponseDateTime";
 
         public AzureTableReaderWriter(ILogger<AzureTableReaderWriter> logger,
                                         IOptions<AzureStorageConfiguration> azureStorageConfig)
@@ -30,7 +30,7 @@ namespace UKHO.ERPFacade.Common.IO
 
         public async Task UpsertEntity(JObject eesEvent, string traceId)
         {
-            TableClient tableClient = GetTableClient(ERP_FACADE_TABLE_NAME);
+            TableClient tableClient = GetTableClient(ErpFacadeTableName);
 
             EESEventEntity existingEntity = await GetEntity(traceId);
 
@@ -67,7 +67,7 @@ namespace UKHO.ERPFacade.Common.IO
         public async Task<EESEventEntity> GetEntity(string traceId)
         {
             IList<EESEventEntity> records = new List<EESEventEntity>();
-            TableClient tableClient = GetTableClient(ERP_FACADE_TABLE_NAME);
+            TableClient tableClient = GetTableClient(ErpFacadeTableName);
             var entities = tableClient.QueryAsync<EESEventEntity>(filter: TableClient.CreateQueryFilter($"TraceID eq {traceId}"), maxPerPage: 1);
             await foreach (var entity in entities)
             {
@@ -78,14 +78,14 @@ namespace UKHO.ERPFacade.Common.IO
 
         public async Task UpdateEntity(string traceId, string updateColumn)
         {
-            TableClient tableClient = GetTableClient(ERP_FACADE_TABLE_NAME);
+            var tableClient = GetTableClient(ErpFacadeTableName);
             EESEventEntity existingEntity = await GetEntity(traceId);
 
-            if (updateColumn == UPDATE_REQUEST_TIME)
+            if (updateColumn == UpdateRequestTime)
             {
                 existingEntity.RequestDateTime = DateTime.UtcNow;
             }
-            else if (updateColumn == UPDATE_RESPONSE_TIME)
+            else if (updateColumn == UpdateResponseTime)
             {
                 existingEntity.ResponseDateTime = DateTime.UtcNow;
             }

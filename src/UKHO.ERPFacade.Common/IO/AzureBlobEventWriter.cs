@@ -1,6 +1,4 @@
-﻿using Azure.Data.Tables.Models;
-using Azure;
-using Azure.Storage.Blobs;
+﻿using Azure.Storage.Blobs;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
@@ -8,7 +6,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Logging;
-using Azure.Storage.Blobs.Models;
 
 namespace UKHO.ERPFacade.Common.IO
 {
@@ -17,7 +14,6 @@ namespace UKHO.ERPFacade.Common.IO
     {
         private readonly ILogger<AzureBlobEventWriter> _logger;
         private readonly IOptions<AzureStorageConfiguration> _azureStorageConfig;
-        private Task<bool> isExists;
 
         public AzureBlobEventWriter(ILogger<AzureBlobEventWriter> logger,
                                         IOptions<AzureStorageConfiguration> azureStorageConfig)
@@ -54,7 +50,7 @@ namespace UKHO.ERPFacade.Common.IO
             BlobServiceClient serviceClient = new(_azureStorageConfig.Value.ConnectionString);
 
             var container = serviceClient.GetBlobContainerClient(containerName);
-            bool isExists = container.Exists();
+            var isExists = container.Exists();
 
             return isExists;
         }

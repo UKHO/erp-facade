@@ -55,20 +55,20 @@
         /// </summary>
         DataPushedToSap = 940013,
         /// <summary>
-        /// 940017 - Updated entity successfully in Azure Table
+        /// 940014 - Updated entity successfully in Azure Table
         /// </summary>
-        UpdateEntitySuccessful = 940017,
+        UpdateEntitySuccessful = 940014,
         /// <summary>
-        /// 940018 - TraceId is missing in the event received from SAP
+        /// 940015 - TraceId is missing in the event received from SAP
         /// </summary>
-        TraceIdMissingInSAPEvent = 940018,
+        TraceIdMissingInSAPEvent = 940015,
         /// <summary>
-        /// 940019 - Blob does not exist for traceID given in SAP event.
+        /// 940016 - Blob does not exist for traceID given in SAP event.
         /// </summary>
-        BlobNotFoundInAzure = 940019,
+        BlobNotFoundInAzure = 940016,
         /// <summary>
-        /// 940020 - Blob exists for traceID given in SAP event.
+        /// 940017 - Blob exists for traceID given in SAP event.
         /// </summary>
-        BlobExistsInAzure = 940020
+        BlobExistsInAzure = 940017
     }
 }
