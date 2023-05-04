@@ -22,7 +22,7 @@ namespace UKHO.ERPFacade.WebJob.Services
 
         public void MonitorIncompleteTransactions()
         {
-            _azureTableReaderWriter.ValidateEntity();
+            _azureTableReaderWriter.ValidateAndUpdateIsNotifiedEntity();
         }
     }
 }

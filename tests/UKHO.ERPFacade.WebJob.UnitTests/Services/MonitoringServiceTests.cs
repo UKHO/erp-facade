@@ -28,14 +28,14 @@ namespace UKHO.ERPFacade.WebJob.UnitTests.Services
         {
             _fakeMonitoringService.MonitorIncompleteTransactions();
 
-            A.CallTo(() => _fakeAzureTableReaderWriter.ValidateEntity()).MustHaveHappened();
+            A.CallTo(() => _fakeAzureTableReaderWriter.ValidateAndUpdateIsNotifiedEntity()).MustHaveHappened();
         }
 
         [Test]
         public void WhenValidateEntityThrowsException_ThenThrowsException()
         {
 
-            A.CallTo(() => _fakeAzureTableReaderWriter.ValidateEntity()).Throws(new NotSupportedException("Fake Exception"));
+            A.CallTo(() => _fakeAzureTableReaderWriter.ValidateAndUpdateIsNotifiedEntity()).Throws(new NotSupportedException("Fake Exception"));
 
             var ex = Assert.Throws<NotSupportedException>(() =>
                 _fakeMonitoringService.MonitorIncompleteTransactions());

@@ -71,8 +71,12 @@
         /// </summary>
         EmptyRequestDateTime = 940017,
         /// <summary>
-        /// 940018 - Updated entity successfully in Azure Table
+        /// 940018 - Updated RequestTime entity successfully in Azure Table
         /// </summary>
-        UpdateEntitySuccessful = 940018
+        UpdateRequestTimeEntitySuccessful = 940018,
+        /// <summary>
+        /// 940019 - Updated ResponseTime entity successfully in Azure Table
+        /// </summary>
+        UpdateResponseTimeEntitySuccessful = 940019
     }
 }

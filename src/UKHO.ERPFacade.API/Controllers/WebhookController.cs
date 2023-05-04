@@ -21,7 +21,6 @@ namespace UKHO.ERPFacade.API.Controllers
         private readonly IXmlHelper _xmlHelper;
 
         public const string TRACEIDKEY = "data.traceId";
-        private const string UPDATE_REQUEST_TIME = "RequestDateTime";
 
         public WebhookController(IHttpContextAccessor contextAccessor,
                                  ILogger<WebhookController> logger,
@@ -87,7 +86,7 @@ namespace UKHO.ERPFacade.API.Controllers
                 throw new Exception();
             }
             _logger.LogInformation(EventIds.DataPushedToSap.ToEventId(), "Data pushed to SAP successfully. | {StatusCode} | {SapResponse}", response.StatusCode, response.Content?.ReadAsStringAsync().Result);
-            await _azureTableReaderWriter.UpdateEntity(traceId, UPDATE_REQUEST_TIME);
+            await _azureTableReaderWriter.UpdateRequestTimeEntity(traceId);
             return new OkObjectResult(StatusCodes.Status200OK);
         }
     }
