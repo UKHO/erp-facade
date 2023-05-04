@@ -9,3 +9,7 @@ output "mock_webapp_name" {
 output "resource_group" {
   value = azurerm_resource_group.rg.name
 }
+
+output "erp_facade_web_app_url" {
+  value = "https://${module.webapp_service.default_site_hostname_ens_stub}"
+}
