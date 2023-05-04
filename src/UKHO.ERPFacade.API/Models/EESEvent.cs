@@ -1,7 +1,9 @@
 ﻿using Newtonsoft.Json;
+using System.Diagnostics.CodeAnalysis;
 
 namespace UKHO.ERPFacade.API.Models
 {
+    [ExcludeFromCodeCoverage]
     public class EESEvent
     {
         [JsonProperty("specversion")]

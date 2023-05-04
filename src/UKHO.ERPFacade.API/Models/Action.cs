@@ -1,5 +1,8 @@
-﻿namespace UKHO.ERPFacade.API.Models
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace UKHO.ERPFacade.API.Models
 {
+    [ExcludeFromCodeCoverage]
     public class Action
     {
         public string ActionNumber { get; set; }

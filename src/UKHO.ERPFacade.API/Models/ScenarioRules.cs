@@ -1,11 +1,15 @@
-﻿namespace UKHO.ERPFacade.API.Models
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace UKHO.ERPFacade.API.Models
 {
+    [ExcludeFromCodeCoverage]
     public class ScenarioRules
     {
         public ScenarioType Scenario { get; set; }
         public List<Rule> Rules { get; set; }
     }
 
+    [ExcludeFromCodeCoverage]
     public class Rule
     {
         public string AttributeDataType { get; set; }
