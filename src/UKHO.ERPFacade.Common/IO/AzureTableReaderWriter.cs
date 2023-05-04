@@ -18,8 +18,6 @@ namespace UKHO.ERPFacade.Common.IO
         private readonly IOptions<AzureStorageConfiguration> _azureStorageConfig;
 
         private const string ErpFacadeTableName = "eesevents";
-        private const string UpdateRequestTime = "RequestDateTime";
-        private const string UpdateResponseTime = "ResponseDateTime";
 
         public AzureTableReaderWriter(ILogger<AzureTableReaderWriter> logger,
                                         IOptions<AzureStorageConfiguration> azureStorageConfig)
@@ -76,22 +74,22 @@ namespace UKHO.ERPFacade.Common.IO
             return records.FirstOrDefault();
         }
 
-        public async Task UpdateEntity(string traceId, string updateColumn)
+        public async Task UpdateRequestTimeEntity(string traceId)
         {
-            var tableClient = GetTableClient(ErpFacadeTableName);
+            TableClient tableClient = GetTableClient(ErpFacadeTableName);
             EESEventEntity existingEntity = await GetEntity(traceId);
-
-            if (updateColumn == UpdateRequestTime)
-            {
-                existingEntity.RequestDateTime = DateTime.UtcNow;
-            }
-            else if (updateColumn == UpdateResponseTime)
-            {
-                existingEntity.ResponseDateTime = DateTime.UtcNow;
-            }
-
+            existingEntity.RequestDateTime = DateTime.UtcNow;
             await tableClient.UpdateEntityAsync(existingEntity, ETag.All, TableUpdateMode.Replace);
-            _logger.LogInformation(EventIds.UpdateEntitySuccessful.ToEventId(), "{updateColumn} is updated in azure table successfully.", updateColumn);
+            _logger.LogInformation(EventIds.UpdateRequestTimeEntitySuccessful.ToEventId(), "RequestDateTime is updated in azure table successfully.");
+        }
+
+        public async Task UpdateResponseTimeEntity(string traceId)
+        {
+            TableClient tableClient = GetTableClient(ErpFacadeTableName);
+            EESEventEntity existingEntity = await GetEntity(traceId);
+            existingEntity.ResponseDateTime = DateTime.UtcNow;
+            await tableClient.UpdateEntityAsync(existingEntity, ETag.All, TableUpdateMode.Replace);
+            _logger.LogInformation(EventIds.UpdateResponseTimeEntitySuccessful.ToEventId(), "ResponseDateTime is updated in azure table successfully.");
         }
 
         //Private Methods

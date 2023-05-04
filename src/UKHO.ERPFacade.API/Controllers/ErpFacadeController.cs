@@ -14,7 +14,6 @@ namespace UKHO.ERPFacade.API.Controllers
         private readonly IAzureBlobEventWriter _azureBlobEventWriter;
 
         private const string TraceIdKey = "data.traceId";
-        private const string UpdateResponseTime = "ResponseDateTime";
 
         public ErpFacadeController(IHttpContextAccessor contextAccessor,
                                    ILogger<ErpFacadeController> logger,
@@ -39,7 +38,7 @@ namespace UKHO.ERPFacade.API.Controllers
                 return new BadRequestObjectResult(StatusCodes.Status400BadRequest);
             }
 
-            await _azureTableReaderWriter.UpdateEntity(traceId, UpdateResponseTime);
+            await _azureTableReaderWriter.UpdateResponseTimeEntity(traceId);
 
             var isBlobExists = _azureBlobEventWriter.CheckIfContainerExists(traceId);
 

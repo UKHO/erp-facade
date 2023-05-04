@@ -7,6 +7,7 @@ namespace UKHO.ERPFacade.Common.IO
     {
         Task UpsertEntity(JObject eesEvent, string traceId);
         Task<EESEventEntity> GetEntity(string traceId);
-        Task UpdateEntity(string traceId, string updateColumn);
+        Task UpdateRequestTimeEntity(string traceId);
+        Task UpdateResponseTimeEntity(string traceId);
     }
 }
