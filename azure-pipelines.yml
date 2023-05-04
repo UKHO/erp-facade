@@ -294,20 +294,10 @@ stages:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
                     AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
 
-                - task: AzureCLI@2
-                  displayName: "Set FT Configuration Application Settings for Mock Webapp"
-                  condition: always()
-                  inputs:
-                    AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
-                    scriptType: 'pscore'
-                    scriptLocation: 'scriptPath'
-                    scriptPath: "$(Build.SourcesDirectory)/set_mock_configuration.ps1"
-                    arguments: '-ftrunning "true" -mockresourcegroup $(ResourceGroup) -mockwebappname $(MOCK_WEB_APP_NAME)'
-
                 - task: FileTransform@2
                   displayName: "File Transform: functionaltests"
                   inputs:
-                    folderPath: "$(Build.SourcesDirectory)/functionaltests"
+                    folderPath: "$(Pipeline.Workspace)/functionaltests"
                     xmlTransformationRules:
                     jsonTargetFiles: 'UKHO.ERPFacade.API.FunctionalTests/appsettings.json'
 
@@ -319,7 +309,7 @@ stages:
                       **/*FunctionalTests*.dll
                       !**/obj/**
                     testRunTitle: "Dev-AutomationTests"
-                    workingDirectory: '$(Build.SourcesDirectory)/functionaltests'
+                    workingDirectory: '$(Pipeline.Workspace)/functionaltests'
 
                 - task: AzureCLI@2
                   displayName: "Set FT Configuration Application Settings for Mock Webapp"
@@ -328,7 +318,7 @@ stages:
                     azureSubscription: "ERP-Facade-Dev-A.011.05.12"
                     scriptType: 'pscore'
                     scriptLocation: 'scriptPath'
-                    scriptPath: "$(Build.SourcesDirectory)/set_mock_configuration.ps1"
+                    scriptPath: "$(Pipeline.Workspace)/terraformartifact/set_mock_configuration.ps1"
                     arguments: '-ftrunning "true" -mockresourcegroup $(ResourceGroup) -mockwebappname $(MOCK_WEB_APP_NAME)'
 
   - stage: QAdeploy
@@ -392,5 +382,5 @@ stages:
                     azureSubscription: "ERP-Facade-Dev-A.011.05.12"
                     scriptType: 'pscore'
                     scriptLocation: 'scriptPath'
-                    scriptPath: "$(Pipeline.Workspace)/set_mock_configuration.ps1"
+                    scriptPath: "$(Pipeline.Workspace)/terraformartifact/set_mock_configuration.ps1"
                     arguments: '-ftrunning "false" -mockresourcegroup $(mockWebAppResourceGroup) -mockwebappname $(mockWebAppName)'
