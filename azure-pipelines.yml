@@ -301,7 +301,7 @@ stages:
                     AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
                     scriptType: 'pscore'
                     scriptLocation: 'scriptPath'
-                    scriptPath: "$(Build.SourcesDirectory)\set_mock_configuration.ps1"
+                    scriptPath: "$(Build.SourcesDirectory)/set_mock_configuration.ps1"
                     arguments: '-ftrunning "true" -mockresourcegroup $(ResourceGroup) -mockwebappname $(MOCK_WEB_APP_NAME)'
 
                 - task: FileTransform@2
@@ -328,7 +328,7 @@ stages:
                     azureSubscription: "ERP-Facade-Dev-A.011.05.12"
                     scriptType: 'pscore'
                     scriptLocation: 'scriptPath'
-                    scriptPath: "$(Build.SourcesDirectory)\set_mock_configuration.ps1"
+                    scriptPath: "$(Build.SourcesDirectory)/set_mock_configuration.ps1"
                     arguments: '-ftrunning "true" -mockresourcegroup $(ResourceGroup) -mockwebappname $(MOCK_WEB_APP_NAME)'
 
   - stage: QAdeploy
@@ -340,7 +340,7 @@ stages:
         value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup
         value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
-    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
+    # condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
     jobs:
       - deployment: QADeployTerraform
         displayName: "QA - Deploy Terraform and Dotnet App"
