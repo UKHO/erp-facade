@@ -301,6 +301,12 @@ stages:
                     xmlTransformationRules:
                     jsonTargetFiles: 'UKHO.ERPFacade.API.FunctionalTests/appsettings.json'
 
+                - task: UseDotNet@2
+                  displayName: 'Use .NET Core sdk'
+                  inputs:
+                    packageType: sdk
+                    version: 6.0.x
+
                 - task: DotNetCoreCLI@2
                   displayName: "Run Functional tests"
                   inputs:
@@ -364,6 +370,12 @@ stages:
                     folderPath: "$(Pipeline.Workspace)/functionaltests"
                     xmlTransformationRules:
                     jsonTargetFiles: 'UKHO.ERPFacade.API.FunctionalTests/appsettings.json'
+
+                - task: UseDotNet@2
+                  displayName: 'Use .NET Core sdk'
+                  inputs:
+                    packageType: sdk
+                    version: 6.0.x
 
                 - task: DotNetCoreCLI@2
                   displayName: "Run Functional tests"
