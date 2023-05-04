@@ -277,12 +277,12 @@ stages:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)\MockSAPService'
               ArtifactName: UKHOMockSAPService
 
-
   - stage: Devdeploy
     displayName: "Devdeploy (inc terraform, webapp deploy)"
     variables:
       - group: "ERP-Facade-Dev"
       - group: "Erp-Dev"
+      - group: "ERP-FACADE-DEV-KV"
     jobs:
       - deployment: DevDeployTerraform
         displayName: "Dev - Deploy Terraform and Dotnet App"
