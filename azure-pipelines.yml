@@ -173,12 +173,6 @@ stages:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)\ERPFacadeAPI'
               ArtifactName: UKHOERPFacadeAPI
 
-          - task: PublishBuildArtifacts@1
-            displayName: "Publish terraform Artifacts"
-            inputs:
-              PathtoPublish: '$(Build.SourcesDirectory)\Deployment'
-              ArtifactName: terraformartifact
-
       - job: PublishFunctionalTestsAndTerraform
         workspace:
           clean: all
@@ -222,11 +216,11 @@ stages:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)\UKHO.ERPFacade.API.FunctionalTests'
               ArtifactName: functionaltests
 
-          #- task: PublishBuildArtifacts@1
-          #  displayName: "Publish terraform Artifacts"
-          #  inputs:
-          #    PathtoPublish: '$(Build.SourcesDirectory)\Deployment'
-          #    ArtifactName: terraformartifact
+          - task: PublishBuildArtifacts@1
+            displayName: "Publish terraform Artifacts"
+            inputs:
+              PathtoPublish: '$(Build.SourcesDirectory)\Deployment'
+              ArtifactName: terraformartifact
 
       - job: BuildAndPublishMockService
         workspace:
@@ -300,6 +294,16 @@ stages:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
                     AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
 
+               - task: AzureCLI@2
+                  displayName: "Set FT Configuration Application Settings for Mock Webapp"
+                  condition: always()
+                  inputs:
+                    azureSubscription: "ERP-Facade-Dev-A.011.05.12"
+                    scriptType: 'pscore'
+                    scriptLocation: 'scriptPath'
+                    scriptPath: "$(Build.SourcesDirectory)\set_mock_configuration.ps1"
+                    arguments: '-ftrunning "true" -mockresourcegroup $(ResourceGroup) -mockwebappname $(MOCK_WEB_APP_NAME)'
+
                 - task: FileTransform@2
                   displayName: "File Transform: functionaltests"
                   inputs:
@@ -317,11 +321,25 @@ stages:
                     testRunTitle: "Dev-AutomationTests"
                     workingDirectory: '$(Build.SourcesDirectory)/functionaltests'
 
+                - task: AzureCLI@2
+                  displayName: "Set FT Configuration Application Settings for Mock Webapp"
+                  condition: always()
+                  inputs:
+                    azureSubscription: "ERP-Facade-Dev-A.011.05.12"
+                    scriptType: 'pscore'
+                    scriptLocation: 'scriptPath'
+                    scriptPath: "$(Build.SourcesDirectory)\set_mock_configuration.ps1"
+                    arguments: '-ftrunning "true" -mockresourcegroup $(ResourceGroup) -mockwebappname $(MOCK_WEB_APP_NAME)'
+
   - stage: QAdeploy
     displayName: "QAdeploy (inc terraform, webapp deploy)"
     variables:
       - group: "ERP-Facade-QA"
       - group: "Erp-QA"
+      - name: mockWebAppName
+        value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
+      - name: mockWebAppResourceGroup
+        value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
     jobs:
       - deployment: QADeployTerraform
@@ -339,3 +357,40 @@ stages:
                   parameters:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
                     AzureSubscription: "ERP-Facade-QA-A.011.05.12"
+
+                - task: AzureCLI@2
+                  displayName: "Set FT Configuration Application Settings for Mock Webapp"
+                  condition: always()
+                  inputs:
+                    azureSubscription: "ERP-Facade-Dev-A.011.05.12"
+                    scriptType: 'pscore'
+                    scriptLocation: 'scriptPath'
+                    scriptPath: "$(Pipeline.Workspace)/terraformartifact/set_mock_configuration.ps1"
+                    arguments: '-ftrunning "true" -mockresourcegroup $(mockWebAppResourceGroup) -mockwebappname $(mockWebAppName)'
+
+                - task: FileTransform@2
+                  displayName: "File Transform: functionaltests"
+                  inputs:
+                    folderPath: "$(Pipeline.Workspace)/functionaltests"
+                    xmlTransformationRules:
+                    jsonTargetFiles: 'UKHO.ERPFacade.API.FunctionalTests/appsettings.json'
+
+                - task: DotNetCoreCLI@2
+                  displayName: "Run Functional tests"
+                  inputs:
+                    command: "test"
+                    projects: |
+                      **/*FunctionalTests*.dll
+                      !**/obj/**
+                    testRunTitle: "QA-AutomationTests"
+                    workingDirectory: '$(Pipeline.Workspace)/functionaltests'
+
+                - task: AzureCLI@2
+                  displayName: "Set FT Configuration Application Settings for Mock Webapp"
+                  condition: always()
+                  inputs:
+                    azureSubscription: "ERP-Facade-Dev-A.011.05.12"
+                    scriptType: 'pscore'
+                    scriptLocation: 'scriptPath'
+                    scriptPath: "$(Pipeline.Workspace)/set_mock_configuration.ps1"
+                    arguments: '-ftrunning "false" -mockresourcegroup $(mockWebAppResourceGroup) -mockwebappname $(mockWebAppName)'
