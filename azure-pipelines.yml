@@ -425,7 +425,7 @@ stages:
                       **/*FunctionalTest*.dll
                       !**/*TestAdapter.dll
                       !**/obj/**
-                    testRunTitle: "Dev-AutomationTests"
+                    testRunTitle: "QA-AutomationTests"
                     workingDirectory: '$(Build.SourcesDirectory)/functionaltests'
 
                 - task: AzureCLI@2
