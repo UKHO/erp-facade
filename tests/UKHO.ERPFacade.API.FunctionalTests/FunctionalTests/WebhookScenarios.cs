@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
+using System.Diagnostics;
 using System.Security.Cryptography.X509Certificates;
 using UKHO.ERPFacade.API.FunctionalTests.Helpers;
 
@@ -13,6 +14,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         private DirectoryInfo _dir;
         private readonly ADAuthTokenProvider _authToken = new ADAuthTokenProvider();
         public static Boolean noRole = false;
+        public List<string> actionsListBasedOnJSON = new List<string>();
+        public List<string> actionsListBasedOnXML = new List<string>();
 
         [SetUp]
         public void Setup()
@@ -82,12 +85,18 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         {
             string filePath = Path.Combine(_dir.FullName, WebhookEndpoint.config.testConfig.PayloadFolder, payloadFileName);
             string expectedXMLfilePath = Path.Combine(_dir.FullName, WebhookEndpoint.config.testConfig.ExpectedXMLFolder, expectedXmlFileName);
-            //string traceID = SapXmlHelper.getTraceID(filePath);
+            string traceID = SapXmlHelper.getTraceID(filePath);
+            string generatedXMLfilePath = Path.Combine(_dir.FullName, WebhookEndpoint.config.testConfig.GeneratedXMLFolderName, traceID);
+
+            // Actions based on JSON Payload
+            int totalCalculatedNumberOfAtions =  SapXmlHelper.calculateTotalNumberOfActions();
+            actionsListBasedOnJSON = SapXmlHelper.getFinalActionsListFromJson(SAPXmlHelper.listFromJson);
+
             var response = await Webhook.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(false));
 
-            // download XML file by passing traceID
-            // currently we have given hardcoded traceID otherwise use above commented string
-            string generatedXMLFilePath = SapXmlHelper.downloadGeneratedXML("367ce4a4-1d62-4f56-b359-59e178d77100"); // string path will be returned
+            //working on generated XML
+            string generatedXMLFilePath = SapXmlHelper.downloadGeneratedXML(generatedXMLfilePath, traceID); // string path will be returned
+            actionsListBasedOnXML = SapXmlHelper.curateListOfActionsFromXmlFile(generatedXMLFilePath);
 
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }

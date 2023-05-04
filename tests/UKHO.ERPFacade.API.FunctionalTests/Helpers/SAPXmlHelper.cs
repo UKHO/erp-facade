@@ -17,13 +17,15 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
     {
         private JsonPayloadHelper jsonPayloadHelper { get; set; }
         private string _storageAccount_connectionString = "";
-        static string _path = @"projectDirectoryaddresslogic\ERPFacadeGeneratedXmlFiles\";
         static int actionCounter = 1;
         static bool actionAttributesValue;
         static List<string> AttrNotMatched = new List<string>();
+        public static List<string> listFromJson = new List<string>();
+        public static List<string> actionsListFromXml = new List<string>();
         public static Config config;
         private static JsonPayloadHelper jsonPayload { get; set; }
         private static SAPXmlPayload xmlPayload { get; set; }
+
 
         public static async Task<bool> CheckXMLAttributes(string requestBody)
         {
@@ -540,21 +542,38 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             ActionAttributesSeq.Add("UNITTYPE");
             return ActionAttributesSeq;
         }
-        public string downloadGeneratedXML(string containerAndBlobName)
+        public string downloadGeneratedXML(string generatedXMlFilePath, string traceID)
         {
             BlobServiceClient blobServiceClient = new BlobServiceClient(_storageAccount_connectionString);
-            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerAndBlobName);
-            BlobClient blobClient = containerClient.GetBlobClient(containerAndBlobName + ".xml");
+            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(traceID);
+            BlobClient blobClient = containerClient.GetBlobClient(traceID + ".xml");
 
             BlobDownloadInfo blobDownload = blobClient.Download();
-            using (FileStream downloadFileStream = new FileStream((_path + containerAndBlobName + ".xml"), FileMode.Create))
+            using (FileStream downloadFileStream = new FileStream((generatedXMlFilePath + ".xml"), FileMode.Create))
             {
                 blobDownload.Content.CopyTo(downloadFileStream);
             }
 
-            return (_path + containerAndBlobName + ".xml");
+            return (generatedXMlFilePath + ".xml");
         }
 
+        public List<string> curateListOfActionsFromXmlFile(string downloadedXMLFilePath)
+        {
+
+            XmlDocument xDoc = new XmlDocument();
+            xDoc.Load(downloadedXMLFilePath + ".xml");
+            XmlNodeList nodeList = xDoc.SelectNodes("//ACTION");
+
+            foreach (XmlNode node in nodeList)
+            {
+                actionsListFromXml.Add(node.InnerText);
+            }
+
+            //actionsListFromXml.Sort();
+            return actionsListFromXml;
+        }
+
+        //  ================  JSON Related Code =======================
         public string getTraceID(string jsonFilePath)
         {
 
@@ -566,5 +585,193 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
             return jsonPayloadHelper.Id;
         }
+
+        public static JsonPayloadHelper getPayloadDeserealized(string jsonPayloadFilePath)
+        {
+            using (StreamReader r = new StreamReader(jsonPayloadFilePath))
+            {
+                string jsonOutput = r.ReadToEnd();
+                JsonPayloadHelper jsonPayloadHelper = JsonConvert.DeserializeObject<JsonPayloadHelper>(jsonOutput);
+
+                return jsonPayloadHelper;
+            }
+        }
+
+        // methods which gets called by action calculator methods to push action data
+        public void updateActionList(int n, string actionMessage)
+        {
+            for (int i = 0; i < n; i++)
+            {
+                listFromJson.Add(actionMessage);
+            }
+            listFromJson.Sort();
+            //returnTrimmedActionsList(list);
+        }
+
+        public List<string> getFinalActionsListFromJson(List<string> actionsList)
+        {
+            //actionsList.Sort();
+            for (int i = 0; i < actionsList.Count; i++)
+            {
+                actionsList[i] = actionsList[i].Substring(4);
+                // Console.WriteLine("update list index "+i+" : "+actionsList[i]);
+            }
+            return actionsList;
+        }
+
+        // ====== Calculation Logic Starts ======
+
+        public int calculateTotalNumberOfActions()
+        {
+            int totalNumberOfActions = 0;
+            totalNumberOfActions = calculateNewCellCount()
+                                 + calculateNewUnitOfSalesCount()
+                                 + calculateCancelledCellCount()
+                                 + calculateCancelUnitOfSalesActionCount()
+                                 + calculateReplaceCellActionCount()
+                                 + calculateAssignCellToUoSActionCount()
+                                 + calculateRemoveCellFromUoSActionCount()
+                                 + calculateUpdateEncCellEditionUpdateNumber();
+
+            Console.WriteLine("Total No. of Actions = " + totalNumberOfActions);
+            return totalNumberOfActions;
+        }
+
+        public int calculateNewCellCount()
+        {   
+            var obj = jsonPayloadHelper;
+            int count = 0;
+
+            foreach (Product product in obj.Data.Products)
+            {
+                if (product.Status.IsNewCell == true)
+                {
+                    count++;
+                }
+            }
+
+            updateActionList(count, "1.  CREATE ENC CELL");
+            Console.WriteLine("New Cells: " + count);
+            return count;
+        }
+
+        public int calculateNewUnitOfSalesCount()
+        {
+            var obj = jsonPayloadHelper;
+            int newUoSCount = 0;
+
+            foreach (UnitOfSale unitOfSale in obj.Data.UnitsOfSales)
+            {
+                if (unitOfSale.IsNewUnitOfSale == true)
+                {
+                    newUoSCount++;
+                }
+            }
+
+            updateActionList(newUoSCount, "2.  CREATE AVCS UNIT OF SALE");
+            Console.WriteLine("New UoS Count: " + newUoSCount);
+            return newUoSCount;
+        }
+        public int calculateAssignCellToUoSActionCount()
+        {
+            var obj = jsonPayloadHelper;
+            int count = 0;
+            foreach (UnitOfSale unitOfSale in obj.Data.UnitsOfSales)
+            {
+                count = count + unitOfSale.CompositionChanges.AddProducts.Count;
+            }
+            updateActionList(count, "3.  ASSIGN CELL TO AVCS UNIT OF SALE");
+            Console.WriteLine("Total Assign Cell to UoS action: " + count);
+            return count;
+        }
+        public int calculateReplaceCellActionCount()
+        {
+            var obj = jsonPayloadHelper;
+            int count = 0;
+            foreach (Product product in obj.Data.Products)
+            {
+                if (product.Status.IsNewCell == false && ((product.ReplacedBy.Count) > 0))
+                {
+                    count = count + product.ReplacedBy.Count;
+                }
+            }
+            updateActionList(count, "4.  REPLACE WITH NEW ENC CELL");
+            Console.WriteLine("Total Replace ENC Cell Action: " + count);
+            return count;
+        }
+
+        public int calculateUpdateEncCellEditionUpdateNumber()
+        {
+            var obj = jsonPayloadHelper;
+            int count = 0;
+            foreach (Product product in obj.Data.Products)
+            {
+                if (product.ContentChanged == true && product.Status.IsNewCell == false
+                    && (product.Status.StatusName == "Update" || product.Status.StatusName == "New Edition"))
+                {
+                    count = count++;
+                }
+            }
+            updateActionList(count, "7.  UPDATE ENC CELL EDITION UPDATE NUMBER");
+            Console.WriteLine("Total no. of ENC Cell Edition Update: " + count);
+            return count;
+        }
+
+        public int calculateRemoveCellFromUoSActionCount()
+        {
+            var obj = jsonPayloadHelper;
+            int count = 0;
+            foreach (UnitOfSale unitOfSale in obj.Data.UnitsOfSales)
+            {
+                if (unitOfSale.CompositionChanges.RemoveProducts.Count > 0)
+                {
+                    count = count + unitOfSale.CompositionChanges.RemoveProducts.Count;
+                }
+            }
+            updateActionList(count, "8.  REMOVE CELL FROM AVCS UNIT OF SALE");
+            Console.WriteLine("Remove Cell from UoS Action Count: " + count);
+            return count;
+        }
+
+        public int calculateCancelledCellCount()
+        {
+            var obj = jsonPayloadHelper;
+            int cancelledCellCount = 0;
+
+            foreach (Product product in obj.Data.Products)
+            {
+                /*if (product.Status.IsNewCell == false && ((product.ReplacedBy.Count)>0))
+                {
+                    cancelledCellCount++;
+                }*/
+
+                if (product.Status.StatusName == "Cancellation Update")
+                {
+                    cancelledCellCount++;
+                }
+            }
+            updateActionList(cancelledCellCount, "9.  CANCEL ENC CELL");
+            Console.WriteLine("Total No. of Cancelled Cells: " + cancelledCellCount);
+            return cancelledCellCount;
+        }
+
+        public int calculateCancelUnitOfSalesActionCount()
+        {
+            var obj = jsonPayloadHelper;
+            int cancelledUoSCount = 0;
+
+            foreach (UnitOfSale unitOfSale in obj.Data.UnitsOfSales)
+            {
+                if (unitOfSale.Status == "NotForSale")
+                {
+                    cancelledUoSCount++;
+                }
+            }
+            updateActionList(cancelledUoSCount, "99. CANCEL AVCS UNIT OF SALE");
+            Console.WriteLine("Total No. of Cancelled UoS: " + cancelledUoSCount);
+            return cancelledUoSCount;
+        }
+
+
     }
 }
