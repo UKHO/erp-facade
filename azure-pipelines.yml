@@ -332,6 +332,7 @@ stages:
     variables:
       - group: "ERP-Facade-QA"
       - group: "Erp-QA"
+      - group: "ERP-FACADE-QA-KV"
       - name: mockWebAppName
         value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup
