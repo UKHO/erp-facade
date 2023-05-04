@@ -5,7 +5,6 @@ using System.Xml;
 
 namespace UKHO.ERPFacade.Common.IO
 {
-    [ExcludeFromCodeCoverage]
     public class ObjectXMLSerializer<T> where T : class
     {
         public static string SerializeObject(T serializableObject)
