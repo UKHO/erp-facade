@@ -199,7 +199,7 @@
         "status": {
           "statusName": "New Edition",
           "statusDate": "2023-03-03T00:00:00.00+01:00",
-          "isNewCell": true
+          "isNewCell": false
         },
         "replaces": [],
         "replacedBy": [],
@@ -321,8 +321,8 @@
         },
         "compositionChanges": {
           "addProducts": [
-            "MX545010",
-            "US4AK6NT"
+            "MX545010"
+            
           ],
           "removeProducts": [
 
@@ -375,45 +375,15 @@
         },
         "compositionChanges": {
           "addProducts": [
-            "MX545010",
-            "US4AK6NT"
+            "MX545010"
+            
           ],
           "removeProducts": [
 
           ]
         }
-      },
-      {
-        "unitName": "US4AK6NT",
-        "title": "Norton Sound - Alaska",
-        "unitOfSaleType": "unit",
-        "_ENUM": [
-          "unit",
-          "folio"
-        ],
-
-        "unitType": "AVCS Units Coastal",
-        "status": "ForSale",
-        "isNewUnitOfSale": true,
-        "_COMMENT": "avcs_cat has either boundingBox or polygon - should both be included?",
-        "geographicLimit": {
-          "boundingBox": {
-            "northLimit": 22.643255,
-            "southLimit": 22.4625767,
-            "eastLimit": 120.34972,
-            "westLimit": 120.219475
-          },
-          "polygons": [
-            {
-              "polygon": []
-            }
-          ]
-        },
-        "compositionChanges": {
-          "addProducts": [ "US4AK6NT" ],
-          "removeProducts": []
-        }
       }
+      
     ]
   }
 }

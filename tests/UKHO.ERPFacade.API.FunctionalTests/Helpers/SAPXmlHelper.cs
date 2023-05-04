@@ -19,13 +19,11 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         private static JsonPayloadHelper jsonPayload { get; set; }
         private static SAPXmlPayload xmlPayload { get; set; }
 
-        public static async Task<bool> CheckXMLAttributes(string requestBody,string XMLFilePath)
+        public static async Task<bool> CheckXMLAttributes(JsonPayloadHelper jsonPayload, string XMLFilePath)
         {
-            //Below line added for testing purpose once container is ready then will download xml from there using traceid
-            //string XMLFilePath = "C:\\Users\\Sadha1501493\\GitHubRepo\\erp-facade\\tests\\UKHO.ERPFacade.API.FunctionalTests\\ERPFacadePayloadTestData\\SAPNewCell.xml";
             
-            //Deserialize JSOn and XML payloads
-            jsonPayload = JsonConvert.DeserializeObject<JsonPayloadHelper>(requestBody);
+            SAPXmlHelper.jsonPayload = jsonPayload;
+
             XmlSerializer serializer = new XmlSerializer(typeof(SAPXmlPayload));
 
             using (Stream reader = new FileStream(XMLFilePath, FileMode.Open))
