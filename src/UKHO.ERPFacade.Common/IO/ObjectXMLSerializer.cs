@@ -10,6 +10,11 @@ namespace UKHO.ERPFacade.Common.IO
     {
         public static string SerializeObject(T serializableObject)
         {
+            if (serializableObject == null)
+            {
+                return null;
+            }
+
             var serializer = new XmlSerializer(typeof(T));
 
             var sb = new StringBuilder();
