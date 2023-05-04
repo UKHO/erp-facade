@@ -301,7 +301,7 @@ stages:
                     azureSubscription: "ERP-Facade-Dev-A.011.05.12"
                     scriptType: 'pscore'
                     scriptLocation: 'scriptPath'
-                    scriptPath: "$(Build.SourcesDirectory)\set_mock_configuration.ps1"
+                    scriptPath: "$(Build.SourcesDirectory)/set_mock_configuration.ps1"
                     arguments: '-ftrunning "true" -mockresourcegroup $(ResourceGroup) -mockwebappname $(MOCK_WEB_APP_NAME)'
 
                 - task: FileTransform@2
@@ -328,7 +328,7 @@ stages:
                     azureSubscription: "ERP-Facade-Dev-A.011.05.12"
                     scriptType: 'pscore'
                     scriptLocation: 'scriptPath'
-                    scriptPath: "$(Build.SourcesDirectory)\set_mock_configuration.ps1"
+                    scriptPath: "$(Build.SourcesDirectory)/set_mock_configuration.ps1"
                     arguments: '-ftrunning "true" -mockresourcegroup $(ResourceGroup) -mockwebappname $(MOCK_WEB_APP_NAME)'
 
   - stage: QAdeploy
