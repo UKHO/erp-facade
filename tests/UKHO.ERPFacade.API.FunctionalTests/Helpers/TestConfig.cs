@@ -5,6 +5,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
     {
         public string PayloadFolder { get; set; }
         public string WebhookPayloadFileName { get; set; }
+        public string WebhookInvalidPayloadFileName { get; set; }
         public string SAPXmlPayloads { get; set; }
         public Erpfacadeconfiguration ErpFacadeConfiguration { get; set; }
         public Azureadconfiguration AzureadConfiguration { get; set; }

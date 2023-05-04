@@ -18,6 +18,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         {
             //Below line added for testing purpose once container is ready then will download xml from there using traceid
             string XMLFilePath = "C:\\Users\\Sadha1501493\\GitHubRepo\\erp-facade\\tests\\UKHO.ERPFacade.API.FunctionalTests\\ERPFacadePayloadTestData\\SAPNewCell.xml";
+            
             //Deserialize JSOn and XML payloads
             jsonPayload = JsonConvert.DeserializeObject<WebhookPayload>(requestBody);
             XmlSerializer serializer = new XmlSerializer(typeof(SAPXmlPayload));
@@ -35,16 +36,23 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             Assert.True(VerifyPresenseOfMandatoryXMLAtrributes(nodeList).Result);
 
             //verification of action atrribute's value
-            foreach(Item item in xmlPayload.IM_MATINFO.ACTIONITEMS.Item)
+            foreach (Item item in xmlPayload.IM_MATINFO.ACTIONITEMS.Item)
             {
-                          
+
                 if (item.ACTION == "CREATE ENC CELL")
                     Assert.True(verifyCreateENCCell(item.CHILDCELL, item));
                 else if (item.ACTION == "CREATE AVCS UNIT OF SALE")
                     Assert.True(verifyCreateAVCSUnitOfSale(item.PRODUCTNAME, item));
                 else if (item.ACTION == "ASSIGN CELL TO AVCS UNIT OF SALE")
                     Assert.True(verifyAssignCellToAVCSUnitOfSale(item.CHILDCELL, item.PRODUCTNAME, item));
-
+                else if (item.ACTION == "REPLACE WITH ENC CELL")
+                    Assert.True(verifyReplaceWithENCCell(item.CHILDCELL, item.PRODUCTNAME, item));
+                else if (item.ACTION == "REMOVE ENC CELL FROM AVCS UNIT OF SALE")
+                    Assert.True(verifyRemoveENCCellFromAVCSUnitOFSale(item.CHILDCELL, item.PRODUCTNAME, item));
+                else if (item.ACTION == "CANCEL ENC CELL")
+                    Assert.True(verifyCancelENCCell(item.CHILDCELL, item.PRODUCTNAME, item));
+                else if (item.ACTION == "CANCEL AVCS UNIT OF SALE")
+                    Assert.True(verifyCancelToAVCSUnitOfSale(item.PRODUCTNAME, item));
                 actionCounter++;
 
             }
@@ -53,14 +61,242 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return true;
         }
 
+        private static bool? verifyCancelToAVCSUnitOfSale(string productName, Item item)
+        {
+            Console.WriteLine("Action#:" + actionCounter + ".UnitOfSale:" + productName);
+            foreach (UnitOfSale unitOfSale in jsonPayload.Data.UnitsOfSales)
+            {
+
+                if ((productName == unitOfSale.UnitName) && (unitOfSale.Status.Equals("NotForSale")))
+                {
+                    AttrNotMatched.Clear();
+                    if (!item.ACTIONNUMBER.Equals(actionCounter.ToString()))
+                        AttrNotMatched.Add(nameof(item.ACTIONNUMBER));
+                    //xmlAttributes[1] is skipped as already checked
+                    if (!item.PRODUCT.Equals("AVCS UNIT"))
+                        AttrNotMatched.Add(nameof(item.PRODUCT));
+                    if (!item.PRODTYPE.Equals((getProductInfo(unitOfSale.CompositionChanges.RemoveProducts)).ProductType))
+                        AttrNotMatched.Add(nameof(item.PRODTYPE));
+                    if (!item.CANCELLED.Equals(""))
+                        AttrNotMatched.Add(nameof(item.CANCELLED));
+                    if (!item.REPLACEDBY.Equals(""))
+                        AttrNotMatched.Add(nameof(item.REPLACEDBY));
+                    if (!item.AGENCY.Equals(""))
+                        AttrNotMatched.Add(nameof(item.AGENCY));
+                    if (!item.PROVIDER.Equals(""))
+                        AttrNotMatched.Add(nameof(item.PROVIDER));
+                    if (!item.ENCSIZE.Equals(""))
+                        AttrNotMatched.Add(nameof(item.ENCSIZE));
+                    if (!item.TITLE.Equals(""))
+                        AttrNotMatched.Add(nameof(item.TITLE));                    
+                    if (!item.EDITIONNO.Equals(""))
+                        AttrNotMatched.Add(nameof(item.EDITIONNO));
+                    if (!item.UPDATENO.Equals(""))
+                        AttrNotMatched.Add(nameof(item.UPDATENO));
+                    if(!item.UNITTYPE.Equals(""))
+                        AttrNotMatched.Add(nameof(item.UNITTYPE));
+
+                    if (AttrNotMatched.Count == 0)
+                    {
+                        Console.WriteLine("CANCEL AVCS UNIT OF SALE Action's Data is correct");
+                        return true;
+                    }
+
+                    else
+                    {
+                        Console.WriteLine("CANCEL AVCS UNIT OF SALE Action's Data is incorrect");
+                        Console.WriteLine("Not matching attributes are:");
+                        foreach (string attribute in AttrNotMatched)
+                        { Console.WriteLine(attribute); }
+                        return false;
+                    }
+                }
+
+            }
+            return false;
+        }
+
+        private static bool? verifyCancelENCCell(string childCell, string productName, Item item)
+        {
+            Console.WriteLine("Action#:" + actionCounter + ".ENC Cell:" + childCell);
+            foreach (Product product in jsonPayload.Data.Products)
+            {
+
+                if ((childCell == product.ProductName) && (product.Status.Equals("Cancellation update")) && (product.InUnitsOfSale.Contains(productName)) )
+                {
+                    AttrNotMatched.Clear();
+                    if (!item.ACTIONNUMBER.Equals(actionCounter.ToString()))
+                        AttrNotMatched.Add(nameof(item.ACTIONNUMBER));
+                    //xmlAttributes[1] is skipped as already checked
+                    if (!item.PRODUCT.Equals("ENC CELL"))
+                        AttrNotMatched.Add(nameof(item.PRODUCT));
+                    if (!item.PRODTYPE.Equals(product.ProductType))
+                        AttrNotMatched.Add(nameof(item.PRODTYPE));
+                    if (!item.CANCELLED.Equals(""))
+                        AttrNotMatched.Add(nameof(item.CANCELLED));
+                    if (!item.REPLACEDBY.Equals(""))
+                        AttrNotMatched.Add(nameof(item.REPLACEDBY));
+                    if (!item.AGENCY.Equals(""))
+                        AttrNotMatched.Add(nameof(item.AGENCY));
+                    if (!item.PROVIDER.Equals(""))
+                        AttrNotMatched.Add(nameof(item.PROVIDER));
+                    if (!item.ENCSIZE.Equals(""))
+                        AttrNotMatched.Add(nameof(item.ENCSIZE));
+                    if (!item.TITLE.Equals(""))
+                        AttrNotMatched.Add(nameof(item.TITLE));
+                    if (!item.EDITIONNO.Equals(""))
+                        AttrNotMatched.Add(nameof(item.EDITIONNO));
+                    if (!item.UPDATENO.Equals(""))
+                        AttrNotMatched.Add(nameof(item.UPDATENO));
+                    if (!item.UNITTYPE.Equals(""))
+                        AttrNotMatched.Add(nameof(item.UNITTYPE));
+
+                    if (AttrNotMatched.Count == 0)
+                    {
+                        Console.WriteLine("CANCEL ENC CELL Action's Data is correct");
+                        return true;
+                    }
+
+                    else
+                    {
+                        Console.WriteLine("CANCEL ENC CELL Action's Data is incorrect");
+                        Console.WriteLine("Not matching attributes are:");
+                        foreach (string attribute in AttrNotMatched)
+                        { Console.WriteLine(attribute); }
+                        return false;
+                    }
+                }
+
+            }
+            return false;
+        }
+    
+
+        private static bool? verifyRemoveENCCellFromAVCSUnitOFSale(string childCell, string productName, Item item)
+        {
+
+            Console.WriteLine("Action#:" + actionCounter + ".AVCSUnitOfSale:" + productName);
+            foreach (UnitOfSale unitOfSale in jsonPayload.Data.UnitsOfSales)
+            {
+                List<string> pdts = unitOfSale.CompositionChanges.RemoveProducts;
+                foreach (string pdt in pdts)
+                {
+                    if ((childCell == pdt) && (productName == unitOfSale.UnitName))
+                    {
+
+                        AttrNotMatched.Clear();
+                        if (!item.ACTIONNUMBER.Equals(actionCounter.ToString()))
+                            AttrNotMatched.Add(nameof(item.ACTIONNUMBER));
+                        if (!item.PRODUCT.Equals("AVCS UNIT"))
+                            AttrNotMatched.Add(nameof(item.PRODUCT));
+                        if (!item.PRODTYPE.Equals((getProductInfo(unitOfSale.CompositionChanges.AddProducts)).ProductType))
+                            AttrNotMatched.Add(nameof(item.PRODTYPE));
+                        //xmlAttributes[4] & [5] are skipped as already checked
+                        //Below code to check rest all attributes are blank
+                        if (!item.CANCELLED.Equals(""))
+                            AttrNotMatched.Add(nameof(item.CANCELLED));
+                        if (!item.REPLACEDBY.Equals(""))
+                            AttrNotMatched.Add(nameof(item.REPLACEDBY));
+                        if (!item.AGENCY.Equals(""))
+                            AttrNotMatched.Add(nameof(item.AGENCY));
+                        if (!item.PROVIDER.Equals(""))
+                            AttrNotMatched.Add(nameof(item.PROVIDER));
+                        if (!item.ENCSIZE.Equals(""))
+                            AttrNotMatched.Add(nameof(item.ENCSIZE));
+                        if (!item.TITLE.Equals(""))
+                            AttrNotMatched.Add(nameof(item.TITLE));
+                        if (!item.EDITIONNO.Equals(""))
+                            AttrNotMatched.Add(nameof(item.EDITIONNO));
+                        if (!item.UPDATENO.Equals(""))
+                            AttrNotMatched.Add(nameof(item.UPDATENO));
+                        if (!item.UNITTYPE.Equals(""))
+                            AttrNotMatched.Add(nameof(item.UNITTYPE));
+                        if (AttrNotMatched.Count == 0)
+                        {
+                            Console.WriteLine("REMOVE ENC CELL FROM AVCS UNIT OF SALE Action's Data is correct");
+                            return true;
+                        }
+
+                        else
+                        {
+                            Console.WriteLine("REMOVE ENC CELL FROM AVCS UNIT OF SALE Action's Data is incorrect");
+                            Console.WriteLine("Not matching attributes are:");
+                            foreach (string attribute in AttrNotMatched)
+                            { Console.WriteLine(attribute); }
+                            return false;
+                        }
+
+                    }
+
+
+                }
+
+            }
+            return false;
+        }
+
+        private static bool? verifyReplaceWithENCCell(string childCell, string replaceBy, Item item)
+        {
+            Console.WriteLine("Action#:" + actionCounter + ".ENC Cell:" + childCell);
+            foreach (Product product in jsonPayload.Data.Products)
+            {
+
+                if ((childCell == product.ProductName) && (product.ReplacedBy.Contains(replaceBy)))
+                {
+                    AttrNotMatched.Clear();
+                    if (!item.ACTIONNUMBER.Equals(actionCounter.ToString()))
+                        AttrNotMatched.Add(nameof(item.ACTIONNUMBER));
+                    //xmlAttributes[1] is skipped as already checked
+                    if (!item.PRODUCT.Equals("ENC CELL"))
+                        AttrNotMatched.Add(nameof(item.PRODUCT));
+                    if (!item.PRODTYPE.Equals(product.ProductType))
+                        AttrNotMatched.Add(nameof(item.PRODTYPE));
+                    if (!product.InUnitsOfSale.Contains(item.PRODUCTNAME))
+                        AttrNotMatched.Add(nameof(item.PRODUCTNAME));
+                    if (!item.CANCELLED.Equals(""))
+                        AttrNotMatched.Add(nameof(item.CANCELLED));                    
+                    if (!item.AGENCY.Equals(""))
+                        AttrNotMatched.Add(nameof(item.AGENCY));
+                    if (!item.PROVIDER.Equals(""))
+                        AttrNotMatched.Add(nameof(item.PROVIDER));
+                    if (!item.ENCSIZE.Equals(""))
+                        AttrNotMatched.Add(nameof(item.ENCSIZE));
+                    if (!item.TITLE.Equals(""))
+                        AttrNotMatched.Add(nameof(item.TITLE));
+                    if (!item.EDITIONNO.Equals(""))
+                        AttrNotMatched.Add(nameof(item.EDITIONNO));
+                    if (!item.UPDATENO.Equals(""))
+                        AttrNotMatched.Add(nameof(item.UPDATENO));
+                    if (!item.UNITTYPE.Equals(""))
+                        AttrNotMatched.Add(nameof(item.UNITTYPE));
+
+                    if (AttrNotMatched.Count == 0)
+                    {
+                        Console.WriteLine("REPLACE WITH ENC CELL Action's Data is correct");
+                        return true;
+                    }
+
+                    else
+                    {
+                        Console.WriteLine("REPLACE WITH ENC CELL Action's Data is incorrect");
+                        Console.WriteLine("Not matching attributes are:");
+                        foreach (string attribute in AttrNotMatched)
+                        { Console.WriteLine(attribute); }
+                        return false;
+                    }
+                }
+
+            }
+            return false;
+        }
 
         public static async Task<bool> VerifyPresenseOfMandatoryXMLAtrributes(XmlNodeList nodeList)
         {
-            List<string> ActionAttributesSeq = formActionAtrributes();            
+            List<string> ActionAttributesSeq = formActionAtrributes();
             foreach (XmlNode node in nodeList)
             {
                 XmlNodeList dd = node.ChildNodes;
-                
+
                 for (int i = 0; i < 15; i++)
                 {
                     if (dd[i].Name != ActionAttributesSeq[i])
@@ -68,7 +304,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         Console.WriteLine("First missed Attribute is:" + ActionAttributesSeq[i] + " for action number:" + dd[0].InnerText);
                         return false;
                     }
-                }                
+                }
 
             }
             await Task.CompletedTask;
@@ -78,7 +314,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         private static bool verifyAssignCellToAVCSUnitOfSale(string childCell, string productName, Item item)
         {
 
-            Console.WriteLine("Action#:"+actionCounter + ".AVCSUnitOfSale:" + productName);
+            Console.WriteLine("Action#:" + actionCounter + ".AVCSUnitOfSale:" + productName);
             foreach (UnitOfSale unitOfSale in jsonPayload.Data.UnitsOfSales)
             {
                 //bool flagMatchProduct = false;
@@ -193,7 +429,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return false;
         }
 
-       
+
         private static bool verifyCreateENCCell(string childCell, Item item)
         {
             Console.WriteLine("Action#:" + actionCounter + ".Childcell:" + childCell);
@@ -227,7 +463,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     if (!item.CANCELLED.Equals(""))
                         AttrNotMatched.Add(nameof(item.CANCELLED));
                     if (!item.REPLACEDBY.Equals(""))
-                        AttrNotMatched.Add(nameof(item.REPLACEDBY)  );
+                        AttrNotMatched.Add(nameof(item.REPLACEDBY));
                     if (!item.UNITTYPE.Equals(""))
                         AttrNotMatched.Add(nameof(item.UNITTYPE));
 
@@ -245,7 +481,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         { Console.WriteLine(attribute); }
                         return false;
                     }
-                }            
+                }
 
             }
             return false;
