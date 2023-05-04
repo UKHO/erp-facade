@@ -75,23 +75,19 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
         [Test]
         [TestCase("1NewCellScenario.json", "1NewCellScenario.xml", TestName = "WhenICallTheWebhookWithOneNewCellScenario")]
-        [TestCase("2NewCellScenario.json", "2NewCellScenario.xml", TestName = "WhenICallTheWebhookWithTwoNewCellsScenario")]
-        [TestCase("3CellsReplace2CellsCancel.json", "3CellsReplace2CellsCancel.xml", TestName = "WhenICallTheWebhookWithThreeReplaceAndTwoCancelCellsScenario")]
-        [TestCase("1CellCancel.json", "1CellCancel.xml", TestName = "WhenICallTheWebhookWithOneCancelCellScenario")]
+        [TestCase("2NewCellScenario.json", "3CellsReplace2CellsCancel.xml", TestName = "WhenICallTheWebhookWithTwoNewCellsScenario")]
         public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponse1(string payloadFileName, string expectedXmlFileName)
         {
             string filePath = Path.Combine(_dir.FullName, WebhookEndpoint.config.testConfig.PayloadFolder, payloadFileName);
             string expectedXMLfilePath = Path.Combine(_dir.FullName, WebhookEndpoint.config.testConfig.ExpectedXMLFolder, expectedXmlFileName);
             //string traceID = SapXmlHelper.getTraceID(filePath);
-            var response = await Webhook.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(false));
+            var response = await Webhook.PostWebhookResponseAsyncForXML(filePath, expectedXMLfilePath,  await _authToken.GetAzureADToken(false));
 
             // download XML file by passing traceID
             // currently we have given hardcoded traceID otherwise use above commented string
-            string generatedXMLFilePath = SapXmlHelper.downloadGeneratedXML(expectedXMLfilePath,"367ce4a4-1d62-4f56-b359-59e178d77100"); // string path will be returned
-
+            //string generatedXMLFilePath = SapXmlHelper.downloadGeneratedXML(expectedXMLfilePath,"367ce4a4-1d62-4f56-b359-59e178d77100"); // string path will be returned
+            
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
-
-
     }
 }

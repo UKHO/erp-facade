@@ -375,3 +375,6 @@ terraform_output.json
 
 # Ignore VS Code ionide extension temp folder
 /.ionide/
+/tests/UKHO.ERPFacade.API.FunctionalTests/ERPFacadePayloadTestData/1NewCellScenario.JSON
+/tests/UKHO.ERPFacade.API.FunctionalTests/ERPFacadeExpectedXmlTestData/1NewCellScenario.xml
+/tests/UKHO.ERPFacade.API.FunctionalTests/ERPFacadePayloadTestData/2NewCellScenario.JSON

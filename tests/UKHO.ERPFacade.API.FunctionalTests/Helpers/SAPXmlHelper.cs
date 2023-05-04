@@ -10,11 +10,13 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
     public class SAPXmlHelper
     {
-        private JsonPayloadHelper jsonPayloadHelper { get; set; }
+        private static JsonPayloadHelper jsonPayloadHelper { get; set; }
         
         static int actionCounter = 1;
         
         static List<string> AttrNotMatched = new List<string>();
+        public static List<string> listFromJson = new List<string>();
+        public static List<string> actionsListFromXml = new List<string>();
         public static Config config=new Config();
         private static JsonPayloadHelper jsonPayload { get; set; }
         private static SAPXmlPayload xmlPayload { get; set; }
@@ -545,16 +547,314 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return (expectedXMLfilePath + "\\" + containerAndBlobName + ".xml");
         }
 
-        public string getTraceID(string jsonFilePath)
+        public static string getRequiredXMLText(string generatedXMLFilePath,string tagName)
+        {
+            XmlDocument xDoc = new XmlDocument();
+            xDoc.Load(generatedXMLFilePath);
+            XmlNode node = xDoc.SelectSingleNode("//"+tagName);
+            
+
+            return node.InnerText;
+        }
+
+
+        public static bool verifyOrderOfActions(JsonPayloadHelper jsonPayload, string generatedXMLFilePath)
+        {
+            //listFromJson
+
+            bool areEqual = getFinalActionsListFromJson(listFromJson).SequenceEqual(curateListOfActionsFromXmlFile(generatedXMLFilePath));
+            if (areEqual)
+            {
+               return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public static bool verifyInitialXMLHeaders(JsonPayloadHelper jsonPayload, string generatedXMLFilePath) 
+        {
+            bool b = verifyNOOFACTIONSHeader(jsonPayload, generatedXMLFilePath);
+            bool a = verifyRECTIMEHeader(jsonPayload, generatedXMLFilePath);
+            bool c = verifyCORRIDHeader(jsonPayload, generatedXMLFilePath);
+            bool d = verifyORGHeader(jsonPayload, generatedXMLFilePath);
+
+            if (a && b && c && d == true)
+            {
+                return true;
+            }
+            else 
+            {
+                return false;
+            }
+            
+        }
+
+        public static bool verifyRECTIMEHeader(JsonPayloadHelper jsonPayload, string generatedXMLFilePath)
         {
 
-            using (StreamReader r = new StreamReader(jsonFilePath))
+            string time = jsonPayload.Time;
+            DateTime dt = DateTime.Parse(time);
+            string timeFromJSON = dt.ToString("yyyyMMdd");
+
+            string timeFromXML = getRequiredXMLText(generatedXMLFilePath, "RECDATE");
+
+            if (timeFromJSON == timeFromXML)
             {
-                string jsonOutput = r.ReadToEnd();
-                jsonPayloadHelper = JsonConvert.DeserializeObject<JsonPayloadHelper>(jsonOutput);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public static bool verifyNOOFACTIONSHeader(JsonPayloadHelper jsonPayload, string generatedXMLFilePath)
+        {
+
+            string a = calculateTotalNumberOfActions(jsonPayload).ToString();
+            string b = getRequiredXMLText(generatedXMLFilePath, "NOOFACTIONS");
+
+            if (a == b)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public static bool verifyCORRIDHeader(JsonPayloadHelper jsonPayload, string generatedXMLFilePath)
+        {
+
+            string traceID = jsonPayload.Data.TraceId;
+            string corrID = getRequiredXMLText(generatedXMLFilePath, "CORRID");
+
+            if (traceID == corrID)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public static bool verifyORGHeader(JsonPayloadHelper jsonPayload, string generatedXMLFilePath)
+        {
+            string orgValueFromXMl = getRequiredXMLText(generatedXMLFilePath, "ORG");
+
+            if (orgValueFromXMl == "UKHO")
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public static List<string> curateListOfActionsFromXmlFile(string downloadedXMLFilePath)
+        {
+            XmlDocument xDoc = new XmlDocument();
+            xDoc.Load(downloadedXMLFilePath);
+            XmlNodeList nodeList = xDoc.SelectNodes("//ACTION");
+
+            foreach (XmlNode node in nodeList)
+            {
+                actionsListFromXml.Add(node.InnerText);
             }
 
-            return jsonPayloadHelper.Data.TraceId;
+            //actionsListFromXml.Sort();
+            return actionsListFromXml;
+        }
+
+        public static JsonPayloadHelper getPayloadDeserealized(string jsonPayloadFilePath)
+        {
+            using (StreamReader r = new StreamReader(jsonPayloadFilePath))
+            {
+                string jsonOutput = r.ReadToEnd();
+                JsonPayloadHelper jsonPayloadHelper = JsonConvert.DeserializeObject<JsonPayloadHelper>(jsonOutput);
+
+                return jsonPayloadHelper;
+            }
+        }
+
+        // methods which gets called by action calculator methods to push action data
+        public static void updateActionList(int n, string actionMessage)
+        {
+            for (int i = 0; i < n; i++)
+            {
+                listFromJson.Add(actionMessage);
+            }
+            listFromJson.Sort();
+            //returnTrimmedActionsList(list);
+        }
+
+        public static List<string> getFinalActionsListFromJson(List<string> actionsList)
+        {
+            //actionsList.Sort();
+            for (int i = 0; i < actionsList.Count; i++)
+            {
+                actionsList[i] = actionsList[i].Substring(4);
+                // Console.WriteLine("update list index "+i+" : "+actionsList[i]);
+            }
+            return actionsList;
+        }
+
+        // ====== Calculation Logic Starts ======
+
+        public static int calculateTotalNumberOfActions(JsonPayloadHelper jsonPayload)
+        {
+            int totalNumberOfActions = 0;
+            totalNumberOfActions = calculateNewCellCount(jsonPayload)
+                                 + calculateNewUnitOfSalesCount(jsonPayload)
+                                 + calculateCancelledCellCount(jsonPayload)
+                                 + calculateCancelUnitOfSalesActionCount(jsonPayload)
+                                 + calculateReplaceCellActionCount(jsonPayload)
+                                 + calculateAssignCellToUoSActionCount(jsonPayload)
+                                 + calculateRemoveCellFromUoSActionCount(jsonPayload)
+                                 + calculateUpdateEncCellEditionUpdateNumber(jsonPayload);
+
+            Console.WriteLine("Total No. of Actions = " + totalNumberOfActions);
+            return totalNumberOfActions;
+        }
+
+        public static int calculateNewCellCount(JsonPayloadHelper jsonPayload)
+        {
+            var obj = jsonPayload;
+            int count = 0;
+
+            foreach (Product product in obj.Data.Products)
+            {
+                if (product.Status.IsNewCell == true)
+                {
+                    count++;
+                }
+            }
+
+            updateActionList(count, "1.  CREATE ENC CELL");
+            Console.WriteLine("New Cells: " + count);
+            return count;
+        }
+
+        public static int calculateNewUnitOfSalesCount(JsonPayloadHelper jsonPayload)
+        {
+            var obj = jsonPayload;
+            int newUoSCount = 0;
+
+            foreach (UnitOfSale unitOfSale in obj.Data.UnitsOfSales)
+            {
+                if (unitOfSale.IsNewUnitOfSale == true)
+                {
+                    newUoSCount++;
+                }
+            }
+
+            updateActionList(newUoSCount, "2.  CREATE AVCS UNIT OF SALE");
+            Console.WriteLine("New UoS Count: " + newUoSCount);
+            return newUoSCount;
+        }
+        public static int calculateAssignCellToUoSActionCount(JsonPayloadHelper jsonPayload)
+        {
+            var obj = jsonPayload;
+            int count = 0;
+            foreach (UnitOfSale unitOfSale in obj.Data.UnitsOfSales)
+            {
+                count = count + unitOfSale.CompositionChanges.AddProducts.Count;
+            }
+            updateActionList(count, "3.  ASSIGN CELL TO AVCS UNIT OF SALE");
+            Console.WriteLine("Total Assign Cell to UoS action: " + count);
+            return count;
+        }
+        public static int calculateReplaceCellActionCount(JsonPayloadHelper jsonPayload)
+        {
+            var obj = jsonPayload;
+            int count = 0;
+            foreach (Product product in obj.Data.Products)
+            {
+                if (product.Status.IsNewCell == false && ((product.ReplacedBy.Count) > 0))
+                {
+                    count = count + product.ReplacedBy.Count;
+                }
+            }
+            updateActionList(count, "4.  REPLACE WITH NEW ENC CELL");
+            Console.WriteLine("Total Replace ENC Cell Action: " + count);
+            return count;
+        }
+
+        public static int calculateUpdateEncCellEditionUpdateNumber(JsonPayloadHelper jsonPayload)
+        {
+            var obj = jsonPayload;
+            int count = 0;
+            foreach (Product product in obj.Data.Products)
+            {
+                if (product.ContentChanged == true && product.Status.IsNewCell == false
+                    && (product.Status.StatusName == "Update" || product.Status.StatusName == "New Edition"))
+                {
+                    count = count++;
+                }
+            }
+            updateActionList(count, "7.  UPDATE ENC CELL EDITION UPDATE NUMBER");
+            Console.WriteLine("Total no. of ENC Cell Edition Update: " + count);
+            return count;
+        }
+
+        public static int calculateRemoveCellFromUoSActionCount(JsonPayloadHelper jsonPayload)
+        {
+            var obj = jsonPayload;
+            int count = 0;
+            foreach (UnitOfSale unitOfSale in obj.Data.UnitsOfSales)
+            {
+                if (unitOfSale.CompositionChanges.RemoveProducts.Count > 0)
+                {
+                    count = count + unitOfSale.CompositionChanges.RemoveProducts.Count;
+                }
+            }
+            updateActionList(count, "8.  REMOVE CELL FROM AVCS UNIT OF SALE");
+            Console.WriteLine("Remove Cell from UoS Action Count: " + count);
+            return count;
+        }
+
+        public static int calculateCancelledCellCount(JsonPayloadHelper jsonPayload)
+        {
+            var obj = jsonPayload;
+            int cancelledCellCount = 0;
+
+            foreach (Product product in obj.Data.Products)
+            {
+                /*if (product.Status.IsNewCell == false && ((product.ReplacedBy.Count)>0))
+                {
+                    cancelledCellCount++;
+                }*/
+
+                if (product.Status.StatusName == "Cancellation Update")
+                {
+                    cancelledCellCount++;
+                }
+            }
+            updateActionList(cancelledCellCount, "9.  CANCEL ENC CELL");
+            Console.WriteLine("Total No. of Cancelled Cells: " + cancelledCellCount);
+            return cancelledCellCount;
+        }
+
+        public static int calculateCancelUnitOfSalesActionCount(JsonPayloadHelper jsonPayload)
+        {
+            var obj = jsonPayload;
+            int cancelledUoSCount = 0;
+
+            foreach (UnitOfSale unitOfSale in obj.Data.UnitsOfSales)
+            {
+                if (unitOfSale.Status == "NotForSale")
+                {
+                    cancelledUoSCount++;
+                }
+            }
+            updateActionList(cancelledUoSCount, "99. CANCEL AVCS UNIT OF SALE");
+            Console.WriteLine("Total No. of Cancelled UoS: " + cancelledUoSCount);
+            return cancelledUoSCount;
         }
     }
 }
