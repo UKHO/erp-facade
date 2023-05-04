@@ -8,11 +8,13 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         public static Config config;
         private RestClient client;
         private readonly ADAuthTokenProvider _authToken;
+        private SAPXmlHelper SapXmlHelper { get; set; }
 
         public WebhookEndpoint()
         {
             config = new();
             _authToken = new();
+            SapXmlHelper = new SAPXmlHelper();
             var options = new RestClientOptions(config.testConfig.ErpFacadeConfiguration.BaseUrl);
             client = new RestClient(options);
             
@@ -45,6 +47,33 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return response;
         }
 
+        public async Task<RestResponse> PostWebhookResponseAsyncForXML(string filePath, string expectedXMLfilePath, string token)
+        {
+            string requestBody;
+
+            using (StreamReader streamReader = new StreamReader(filePath))
+            {
+                requestBody = streamReader.ReadToEnd();
+            }
+
+            var request = new RestRequest("/webhook/newenccontentpublishedeventreceived", Method.Post);
+            request.AddHeader("Content-Type", "application/json");
+            request.AddHeader("Authorization", "Bearer " + token);
+            request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
+            RestResponse response = await client.ExecuteAsync(request);
+
+            //Logic to get TraceID from JSON
+            string traceID = SapXmlHelper.getTraceID(filePath);
+            //Logic to download XML from container using TraceID from JSON
+
+            string generatedXMLFilePath = SapXmlHelper.downloadGeneratedXML(expectedXMLfilePath,traceID); // string path will be returned
+            //string generatedXMLFilePath = "C:\\Users\\Sadha1501493\\GitHubRepo\\erp-facade\\tests\\UKHO.ERPFacade.API.FunctionalTests\\ERPFacadeGeneratedXmlFiles\\367ce4a4-1d62-4f56-b359-59e178d77100.xml";
+            if (response.StatusCode==System.Net.HttpStatusCode.OK)
+            //Logic to verifyxml                    
+            Assert.That(SAPXmlHelper.CheckXMLAttributes(requestBody, generatedXMLFilePath).Result, Is.True);
+
+            return response;
+        }
         public async Task<RestResponse> PostWebhookResponseAsyncForXML(string filePath, string token)
         {
             string requestBody;
@@ -58,10 +87,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             request.AddHeader("Content-Type", "application/json");
             request.AddHeader("Authorization", "Bearer " + token);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
-            RestResponse response = await client.ExecuteAsync(request);  
-            if (response.StatusCode==System.Net.HttpStatusCode.OK)
-            //Logic to verifyxml                    
-            Assert.That(SAPXmlHelper.CheckXMLAttributes(requestBody).Result, Is.True);
+            RestResponse response = await client.ExecuteAsync(request);
+
+            
 
             return response;
         }

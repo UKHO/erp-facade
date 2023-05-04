@@ -4,31 +4,25 @@ using Newtonsoft.Json;
 using NUnit.Framework;
 using System.Xml;
 using System.Xml.Serialization;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
     public class SAPXmlHelper
     {
         private JsonPayloadHelper jsonPayloadHelper { get; set; }
-        private string _storageAccount_connectionString = "";
-        static string _path = @"projectDirectoryaddresslogic\ERPFacadeGeneratedXmlFiles\";
+        
         static int actionCounter = 1;
-        static bool actionAttributesValue;
+        
         static List<string> AttrNotMatched = new List<string>();
-        public static Config config;
+        public static Config config=new Config();
         private static JsonPayloadHelper jsonPayload { get; set; }
         private static SAPXmlPayload xmlPayload { get; set; }
 
-        public static async Task<bool> CheckXMLAttributes(string requestBody)
+        public static async Task<bool> CheckXMLAttributes(string requestBody,string XMLFilePath)
         {
             //Below line added for testing purpose once container is ready then will download xml from there using traceid
-            string XMLFilePath = "C:\\Users\\Sadha1501493\\GitHubRepo\\erp-facade\\tests\\UKHO.ERPFacade.API.FunctionalTests\\ERPFacadePayloadTestData\\SAPNewCell.xml";
+            //string XMLFilePath = "C:\\Users\\Sadha1501493\\GitHubRepo\\erp-facade\\tests\\UKHO.ERPFacade.API.FunctionalTests\\ERPFacadePayloadTestData\\SAPNewCell.xml";
             
             //Deserialize JSOn and XML payloads
             jsonPayload = JsonConvert.DeserializeObject<JsonPayloadHelper>(requestBody);
@@ -57,7 +51,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 else if (item.ACTION == "ASSIGN CELL TO AVCS UNIT OF SALE")
                     Assert.True(verifyAssignCellToAVCSUnitOfSale(item.CHILDCELL, item.PRODUCTNAME, item));
                 else if (item.ACTION == "REPLACE WITH ENC CELL")
-                    Assert.True(verifyReplaceWithENCCell(item.CHILDCELL, item.PRODUCTNAME, item));
+                    Assert.True(verifyReplaceWithENCCell(item.CHILDCELL, item.REPLACEDBY, item));
                 else if (item.ACTION == "REMOVE ENC CELL FROM AVCS UNIT OF SALE")
                     Assert.True(verifyRemoveENCCellFromAVCSUnitOFSale(item.CHILDCELL, item.PRODUCTNAME, item));
                 else if (item.ACTION == "CANCEL ENC CELL")
@@ -132,8 +126,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             Console.WriteLine("Action#:" + actionCounter + ".ENC Cell:" + childCell);
             foreach (Product product in jsonPayload.Data.Products)
             {
-
-                if ((childCell == product.ProductName) && (product.Status.Equals("Cancellation update")) && (product.InUnitsOfSale.Contains(productName)) )
+                if ((childCell == product.ProductName) && (product.Status.StatusName.Equals("Cancellation Update")) && (product.InUnitsOfSale.Contains(productName)) )
                 {
                     AttrNotMatched.Clear();
                     if (!item.ACTIONNUMBER.Equals(actionCounter.ToString()))
@@ -141,7 +134,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     //xmlAttributes[1] is skipped as already checked
                     if (!item.PRODUCT.Equals("ENC CELL"))
                         AttrNotMatched.Add(nameof(item.PRODUCT));
-                    if (!item.PRODTYPE.Equals(product.ProductType))
+                    if (!item.PRODTYPE.Equals(product.ProductType[4..]))
                         AttrNotMatched.Add(nameof(item.PRODTYPE));
                     if (!item.CANCELLED.Equals(""))
                         AttrNotMatched.Add(nameof(item.CANCELLED));
@@ -200,7 +193,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                             AttrNotMatched.Add(nameof(item.ACTIONNUMBER));
                         if (!item.PRODUCT.Equals("AVCS UNIT"))
                             AttrNotMatched.Add(nameof(item.PRODUCT));
-                        if (!item.PRODTYPE.Equals((getProductInfo(unitOfSale.CompositionChanges.AddProducts)).ProductType))
+                        if (!item.PRODTYPE.Equals((getProductInfo(unitOfSale.CompositionChanges.RemoveProducts)).ProductType))
                             AttrNotMatched.Add(nameof(item.PRODTYPE));
                         //xmlAttributes[4] & [5] are skipped as already checked
                         //Below code to check rest all attributes are blank
@@ -260,7 +253,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     //xmlAttributes[1] is skipped as already checked
                     if (!item.PRODUCT.Equals("ENC CELL"))
                         AttrNotMatched.Add(nameof(item.PRODUCT));
-                    if (!item.PRODTYPE.Equals(product.ProductType))
+                    if (!item.PRODTYPE.Equals(product.ProductType[4..]))
                         AttrNotMatched.Add(nameof(item.PRODTYPE));
                     if (!product.InUnitsOfSale.Contains(item.PRODUCTNAME))
                         AttrNotMatched.Add(nameof(item.PRODUCTNAME));
@@ -540,19 +533,18 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             ActionAttributesSeq.Add("UNITTYPE");
             return ActionAttributesSeq;
         }
-        public string downloadGeneratedXML(string containerAndBlobName)
+        public string downloadGeneratedXML(string expectedXMLfilePath,string containerAndBlobName)
         {
-            BlobServiceClient blobServiceClient = new BlobServiceClient(_storageAccount_connectionString);
-            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerAndBlobName);
-            BlobClient blobClient = containerClient.GetBlobClient(containerAndBlobName + ".xml");
+                BlobServiceClient blobServiceClient = new BlobServiceClient(config.testConfig.AzureStorageConfiguration.ConnectionString);
+                BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerAndBlobName);
+                BlobClient blobClient = containerClient.GetBlobClient(containerAndBlobName + ".xml");
 
-            BlobDownloadInfo blobDownload = blobClient.Download();
-            using (FileStream downloadFileStream = new FileStream((_path + containerAndBlobName + ".xml"), FileMode.Create))
-            {
-                blobDownload.Content.CopyTo(downloadFileStream);
-            }
-
-            return (_path + containerAndBlobName + ".xml");
+                BlobDownloadInfo blobDownload = blobClient.Download();
+                using (FileStream downloadFileStream = new FileStream((expectedXMLfilePath + "\\" + containerAndBlobName + ".xml"), FileMode.Create))
+                {
+                    blobDownload.Content.CopyTo(downloadFileStream);
+                }
+            return (expectedXMLfilePath + "\\" + containerAndBlobName + ".xml");
         }
 
         public string getTraceID(string jsonFilePath)
@@ -564,7 +556,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 jsonPayloadHelper = JsonConvert.DeserializeObject<JsonPayloadHelper>(jsonOutput);
             }
 
-            return jsonPayloadHelper.Id;
+            return jsonPayloadHelper.Data.TraceId;
         }
     }
 }
