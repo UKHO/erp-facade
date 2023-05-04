@@ -1,17 +1,28 @@
-﻿using Newtonsoft.Json;
+﻿using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
+using Newtonsoft.Json;
 using NUnit.Framework;
 using System.Xml;
 using System.Xml.Serialization;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
     public class SAPXmlHelper
     {
+        private JsonPayloadHelper jsonPayloadHelper { get; set; }
+        private string _storageAccount_connectionString = "";
+        static string _path = @"projectDirectoryaddresslogic\ERPFacadeGeneratedXmlFiles\";
         static int actionCounter = 1;
         static bool actionAttributesValue;
         static List<string> AttrNotMatched = new List<string>();
         public static Config config;
-        private static WebhookPayload jsonPayload { get; set; }
+        private static JsonPayloadHelper jsonPayload { get; set; }
         private static SAPXmlPayload xmlPayload { get; set; }
 
         public static async Task<bool> CheckXMLAttributes(string requestBody)
@@ -20,7 +31,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             string XMLFilePath = "C:\\Users\\Sadha1501493\\GitHubRepo\\erp-facade\\tests\\UKHO.ERPFacade.API.FunctionalTests\\ERPFacadePayloadTestData\\SAPNewCell.xml";
             
             //Deserialize JSOn and XML payloads
-            jsonPayload = JsonConvert.DeserializeObject<WebhookPayload>(requestBody);
+            jsonPayload = JsonConvert.DeserializeObject<JsonPayloadHelper>(requestBody);
             XmlSerializer serializer = new XmlSerializer(typeof(SAPXmlPayload));
 
             using (Stream reader = new FileStream(XMLFilePath, FileMode.Open))
@@ -275,7 +286,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         Console.WriteLine("REPLACE WITH ENC CELL Action's Data is correct");
                         return true;
                     }
-
+        
+        
                     else
                     {
                         Console.WriteLine("REPLACE WITH ENC CELL Action's Data is incorrect");
@@ -410,13 +422,13 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     if (!item.UPDATENO.Equals(""))
                         AttrNotMatched.Add(nameof(item.UPDATENO));
                     if (AttrNotMatched.Count == 0)
-                    {
+        {
                         Console.WriteLine("CREATE AVCS UNIT OF SALE Action's Data is correct");
                         return true;
                     }
 
                     else
-                    {
+            {
                         Console.WriteLine("CREATE AVCS UNIT OF SALE Action's Data is incorrect");
                         Console.WriteLine("Not matching attributes are:");
                         foreach (string attribute in AttrNotMatched)
@@ -427,7 +439,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
             }
             return false;
-        }
+            }
 
 
         private static bool verifyCreateENCCell(string childCell, Item item)
@@ -471,10 +483,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     {
                         Console.WriteLine("CREATE ENC CELL Action's Data is correct");
                         return true;
-                    }
+        }
 
                     else
-                    {
+        {
                         Console.WriteLine("CREATE ENC CELL Action's Data is incorrect");
                         Console.WriteLine("Not matching attributes are:");
                         foreach (string attribute in AttrNotMatched)
@@ -486,7 +498,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             }
             return false;
 
-
+            
         }
         private static UoSProductInfo getProductInfo(List<string> addProducts)
         {
@@ -496,7 +508,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 foreach (Product product in jsonPayload.Data.Products)
                 {
                     if (pdt.Equals(product.ProductName))
-                    {
+            {
                         productInfo.ProductType = product.ProductType[4..];
                         productInfo.Agency = product.Agency;
                         productInfo.ProviderCode = product.ProviderCode;
@@ -505,8 +517,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 }
             }
             return productInfo;
-        }
-
+            }
+            
         private static List<string> formActionAtrributes()
         {
 
@@ -528,6 +540,31 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             ActionAttributesSeq.Add("UNITTYPE");
             return ActionAttributesSeq;
         }
+        public string downloadGeneratedXML(string containerAndBlobName)
+        {
+            BlobServiceClient blobServiceClient = new BlobServiceClient(_storageAccount_connectionString);
+            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerAndBlobName);
+            BlobClient blobClient = containerClient.GetBlobClient(containerAndBlobName + ".xml");
 
+            BlobDownloadInfo blobDownload = blobClient.Download();
+            using (FileStream downloadFileStream = new FileStream((_path + containerAndBlobName + ".xml"), FileMode.Create))
+            {
+                blobDownload.Content.CopyTo(downloadFileStream);
+            }
+
+            return (_path + containerAndBlobName + ".xml");
+        }
+
+        public string getTraceID(string jsonFilePath)
+        {
+
+            using (StreamReader r = new StreamReader(jsonFilePath))
+            {
+                string jsonOutput = r.ReadToEnd();
+                jsonPayloadHelper = JsonConvert.DeserializeObject<JsonPayloadHelper>(jsonOutput);
+            }
+
+            return jsonPayloadHelper.Id;
+        }
     }
 }

@@ -1,8 +1,13 @@
 ﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
-    public class WebhookPayload
+    public class JsonPayloadHelper
     {
         [JsonProperty("specversion")]
         public string SpecVersion { get; set; }
@@ -269,37 +274,4 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         [JsonProperty("removeProducts")]
         public List<string> RemoveProducts { get; set; }
     }
-
-    public enum Provider
-    {
-        ICE = 1,
-        ICE_GB = 2,
-        ICE_UK = 3,
-        PRIMAR = 4,
-        VAR_Unique = 5,
-        VAR = 6
-    }
-
-    public enum Size
-    {
-        LARGE = 1,
-        MEDIUM = 2,
-        SMALL = 3
-    }
-
-    public enum BundleType
-    {
-        DVD = 1
-    }
-
-    public enum ProductStatus
-    {
-        NewEdition = 1,
-        Reissue = 2,
-        Update = 3,
-        CancellationUpdate = 4,
-        Withdrawn = 5,
-        Suspended = 6
-    }
 }
-

@@ -33,7 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="SAPXmlPayloads\" />
+    <Folder Include="ERPFacadeGeneratedXmlFiles\" />
   </ItemGroup>
 
 </Project>
