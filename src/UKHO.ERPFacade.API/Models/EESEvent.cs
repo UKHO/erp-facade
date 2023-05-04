@@ -31,6 +31,7 @@ namespace UKHO.ERPFacade.API.Models
         public Data Data { get; set; }
     }
 
+    [ExcludeFromCodeCoverage]
     public class Data
     {
         [JsonProperty("traceId")]
@@ -43,6 +44,7 @@ namespace UKHO.ERPFacade.API.Models
         public List<UnitOfSale> UnitsOfSales { get; set; }
     }
 
+    [ExcludeFromCodeCoverage]
     public class Product
     {
         [JsonProperty("productType")]
@@ -121,6 +123,7 @@ namespace UKHO.ERPFacade.API.Models
         public List<AncillaryFile> AncillaryFiles { get; set; }
     }
 
+    [ExcludeFromCodeCoverage]
     public class UnitOfSale
     {
         [JsonProperty("unitName")]
@@ -151,6 +154,7 @@ namespace UKHO.ERPFacade.API.Models
         public CompositionChanges CompositionChanges { get; set; }
     }
 
+    [ExcludeFromCodeCoverage]
     public class Bundle
     {
         [JsonProperty("bundleType")]
@@ -160,7 +164,7 @@ namespace UKHO.ERPFacade.API.Models
         public string Location { get; set; }
     }
 
-
+    [ExcludeFromCodeCoverage]
     public class Status
     {
         [JsonProperty("statusName")]
@@ -173,6 +177,7 @@ namespace UKHO.ERPFacade.API.Models
         public bool IsNewCell { get; set; }
     }
 
+    [ExcludeFromCodeCoverage]
     public class GeographicLimit
     {
         [JsonProperty("boundingBox")]
@@ -182,6 +187,7 @@ namespace UKHO.ERPFacade.API.Models
         public List<Polygons> Polygons { get; set; }
     }
 
+    [ExcludeFromCodeCoverage]
     public class BoundingBox
     {
         [JsonProperty("northLimit")]
@@ -197,12 +203,14 @@ namespace UKHO.ERPFacade.API.Models
         public double WestLimit { get; set; }
     }
 
+    [ExcludeFromCodeCoverage]
     public class Polygons
     {
         [JsonProperty("polygon")]
         public List<Polygon> Polygon { get; set; }
     }
 
+    [ExcludeFromCodeCoverage]
     public class Polygon
     {
         [JsonProperty("latitude")]
@@ -212,6 +220,7 @@ namespace UKHO.ERPFacade.API.Models
         public double Longitude { get; set; }
     }
 
+    [ExcludeFromCodeCoverage]
     public class S63
     {
         [JsonProperty("name")]
@@ -233,6 +242,7 @@ namespace UKHO.ERPFacade.API.Models
         public string S57Crc { get; set; }
     }
 
+    [ExcludeFromCodeCoverage]
     public class Signature
     {
         [JsonProperty("name")]
@@ -248,6 +258,7 @@ namespace UKHO.ERPFacade.API.Models
         public string FileSize { get; set; }
     }
 
+    [ExcludeFromCodeCoverage]
     public class AncillaryFile
     {
         [JsonProperty("name")]
@@ -263,6 +274,7 @@ namespace UKHO.ERPFacade.API.Models
         public string FileSize { get; set; }
     }
 
+    [ExcludeFromCodeCoverage]
     public class CompositionChanges
     {
         [JsonProperty("addProducts")]
