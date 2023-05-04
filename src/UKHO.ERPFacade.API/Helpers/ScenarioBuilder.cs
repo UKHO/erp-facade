@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.API.Models;
 using UKHO.ERPFacade.Common.IO;
+using UKHO.ERPFacade.Common.Logging;
 
 namespace UKHO.ERPFacade.API.Helpers
 {
@@ -16,8 +17,15 @@ namespace UKHO.ERPFacade.API.Helpers
             _scenarioRuleConfig = scenarioRuleConfig;
         }
 
+        /// <summary>
+        /// Identifies the scenarios based on incoming event.
+        /// </summary>
+        /// <param name="eventData"></param>
+        /// <returns>List<Scenario></returns>
         public List<Scenario> BuildScenarios(EESEvent eventData)
         {
+            _logger.LogInformation(EventIds.IdentifyScenarioStarted.ToEventId(), "Identifying the scenarios based on received ENC content publish event.");
+
             List<Scenario> scenarios = new();
 
             bool restLoop = false;
@@ -58,14 +66,13 @@ namespace UKHO.ERPFacade.API.Helpers
 
                         scenarios.Add(scenarioObj);
 
+                        _logger.LogInformation(EventIds.ScenarioIdentified.ToEventId(), "Scenario identified for {ProductName} is {ScenarioName}.", product.ProductName, scenario.Scenario);
+
                         scenarioIdentified = true;
                     }
-
                     if (scenarioIdentified) break;
-
                 }
             }
-
             return scenarios;
         }
     }

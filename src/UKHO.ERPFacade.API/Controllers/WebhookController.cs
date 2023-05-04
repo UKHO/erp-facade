@@ -66,7 +66,7 @@ namespace UKHO.ERPFacade.API.Controllers
         {
             try
             {
-                _logger.LogInformation(EventIds.NewEncContentPublishedEventReceived.ToEventId(), "ERP Facade webhook has received new enccontentpublished event from EES. | _X-Correlation-ID : {CorrelationId}", GetCurrentCorrelationId());
+                _logger.LogInformation(EventIds.NewEncContentPublishedEventReceived.ToEventId(), "ERP Facade webhook has received new enccontentpublished event from EES.");
 
                 string traceId = requestJson.SelectToken(TRACEIDKEY)?.Value<string>();
 
@@ -101,7 +101,7 @@ namespace UKHO.ERPFacade.API.Controllers
                 }
                 else
                 {
-                    _logger.LogWarning("No scenarios found in incoming EES event.");
+                    _logger.LogWarning(EventIds.NoScenarioFound.ToEventId(), "No scenarios found in incoming EES event.");
                     throw new Exception();
                 }
             }

@@ -2,6 +2,7 @@
 using System.Xml;
 using UKHO.ERPFacade.API.Models;
 using UKHO.ERPFacade.Common.IO;
+using UKHO.ERPFacade.Common.Logging;
 
 namespace UKHO.ERPFacade.API.Helpers
 {
@@ -14,7 +15,6 @@ namespace UKHO.ERPFacade.API.Helpers
         private readonly IOptions<ActionNumberConfiguration> _actionNumberConfig;
 
         private const string SapXmlPath = "SapXmlTemplates\\SAPRequest.xml";
-        private const string SapTemplateMissingMessage = "The SAP message xml template does not exist in specified path : ";
         private const string XpathImMatInfo = $"//*[local-name()='IM_MATINFO']";
         private const string XpathActionItems = $"//*[local-name()='ACTIONITEMS']";
         private const string XpathNoOfActions = $"//*[local-name()='NOOFACTIONS']";
@@ -48,7 +48,7 @@ namespace UKHO.ERPFacade.API.Helpers
         /// </summary>
         /// <param name="scenarios"></param>
         /// <param name="traceId"></param>
-        /// <returns></returns>
+        /// <returns>XmlDocument</returns>
         public XmlDocument BuildSapMessageXml(List<Scenario> scenarios, string traceId)
         {
             var sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, SapXmlPath);
@@ -56,7 +56,8 @@ namespace UKHO.ERPFacade.API.Helpers
             //Check whether template file exists or not
             if (!_fileSystemHelper.IsFileExists(sapXmlTemplatePath))
             {
-                throw new FileNotFoundException(SapTemplateMissingMessage + sapXmlTemplatePath);
+                _logger.LogError(EventIds.SapXmlTemplateNotFound.ToEventId(), "The SAP message xml template does not exist.");
+                throw new FileNotFoundException();
             }
 
             XmlDocument soapXml = _xmlHelper.CreateXmlDocument(sapXmlTemplatePath);
@@ -66,6 +67,8 @@ namespace UKHO.ERPFacade.API.Helpers
 
             foreach (var scenario in scenarios)
             {
+                _logger.LogInformation(EventIds.BuildingSapActionStarted.ToEventId(), "Building SAP actions for scenario {Scenario}.", scenario);
+
                 ActionNumber actionNumbers = _actionNumberConfig.Value.Actions.Where(x => x.Scenario == scenario.ScenarioType.ToString()).FirstOrDefault();
                 List<int> actions = actionNumbers.ActionNumbers.ToList();
 
@@ -103,6 +106,7 @@ namespace UKHO.ERPFacade.API.Helpers
                             actionItemNode.AppendChild(actionNode);
                             break;
                     }
+                    _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created for {Scenario}.", action.Action, scenario);
                 }
             }
 
@@ -122,7 +126,6 @@ namespace UKHO.ERPFacade.API.Helpers
 
             return soapXml;
         }
-
 
         private static XmlNode SortXmlPayload(XmlNode actionItemNode)
         {
@@ -189,7 +192,7 @@ namespace UKHO.ERPFacade.API.Helpers
                 {
                     itemSubNode.InnerText = string.Empty;
                 }
-                actionAttributeList.Add((node.SortingOrder, itemSubNode));                
+                actionAttributeList.Add((node.SortingOrder, itemSubNode));
             }
 
             foreach (var node in action.Attributes.Where(x => x.Section == UnitOfSaleSection))
@@ -206,7 +209,7 @@ namespace UKHO.ERPFacade.API.Helpers
                 else
                 {
                     itemSubNode.InnerText = string.Empty;
-                }                
+                }
                 actionAttributeList.Add((node.SortingOrder, itemSubNode));
             }
             var sortedActionAttributeList = actionAttributeList.OrderBy(x => x.sortingOrder).ToList();
@@ -217,7 +220,7 @@ namespace UKHO.ERPFacade.API.Helpers
             }
             return itemNode;
         }
-        
+
         private static string GetProdType(string prodType)
         {
             var parts = prodType.Split(' ').ToList();

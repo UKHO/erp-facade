@@ -54,5 +54,29 @@
         /// 940013 - Data pushed to SAP
         /// </summary>
         DataPushedToSap = 940013,
+        /// <summary>
+        /// 940014 - No Scenario Found
+        /// </summary>
+        NoScenarioFound = 940014,
+        /// <summary>
+        /// 940015 - Sap Xml Template Not Found
+        /// </summary>
+        SapXmlTemplateNotFound = 940015,
+        /// <summary>
+        /// 940016 - Building Sap Actions Started
+        /// </summary>
+        BuildingSapActionStarted = 940016,
+        /// <summary>
+        /// 940017 - Sap Action Created
+        /// </summary>
+        SapActionCreated = 940017,
+        /// <summary>
+        /// 940018 - Identifying Scenario Started
+        /// </summary>
+        IdentifyScenarioStarted = 940018,
+        /// <summary>
+        /// 940019 - Scenario Identified
+        /// </summary>
+        ScenarioIdentified = 940019,
     }
 }
