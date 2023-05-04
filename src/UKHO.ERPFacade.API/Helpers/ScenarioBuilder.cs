@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
-using System.Reflection;
 using UKHO.ERPFacade.API.Models;
+using UKHO.ERPFacade.Common.IO;
 
 namespace UKHO.ERPFacade.API.Helpers
 {
@@ -32,7 +32,7 @@ namespace UKHO.ERPFacade.API.Helpers
                 {
                     foreach (var rule in scenario.Rules)
                     {
-                        object jsonFieldValue = GetProp(rule.AttributeName, product, product.GetType());
+                        object jsonFieldValue = CommonHelper.GetProp(rule.AttributeName, product, product.GetType());
 
                         if (jsonFieldValue != null && jsonFieldValue.ToString() == rule.AttriuteValue)
                         {
@@ -45,6 +45,7 @@ namespace UKHO.ERPFacade.API.Helpers
                             break;
                         }
                     }
+
                     if (restLoop)
                     {
                         scenarioObj.ScenarioType = scenario.Scenario;
@@ -59,27 +60,13 @@ namespace UKHO.ERPFacade.API.Helpers
 
                         scenarioIdentified = true;
                     }
+
                     if (scenarioIdentified) break;
+
                 }
             }
-            return scenarios;
-        }
 
-        public static object GetProp(string name, object obj, Type type)
-        {
-            var parts = name.Split('.').ToList();
-            var currentPart = parts[0];
-            PropertyInfo info = type.GetProperty(currentPart);
-            if (info == null) { return null; }
-            if (name.IndexOf(".") > -1)
-            {
-                parts.Remove(currentPart);
-                return GetProp(string.Join(".", parts), info.GetValue(obj, null), info.PropertyType);
-            }
-            else
-            {
-                return info.GetValue(obj, null).ToString();
-            }
+            return scenarios;
         }
     }
 }

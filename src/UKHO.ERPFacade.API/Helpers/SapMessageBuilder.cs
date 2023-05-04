@@ -1,6 +1,4 @@
 ﻿using Microsoft.Extensions.Options;
-using System.Collections;
-using System.Reflection;
 using System.Xml;
 using UKHO.ERPFacade.API.Models;
 using UKHO.ERPFacade.Common.IO;
@@ -14,6 +12,23 @@ namespace UKHO.ERPFacade.API.Helpers
         private readonly IFileSystemHelper _fileSystemHelper;
         private readonly IOptions<SapActionConfiguration> _sapActionConfig;
         private readonly IOptions<ActionNumberConfiguration> _actionNumberConfig;
+
+        private const string SAP_XMLPATH = "SapXmlTemplates\\SAPRequest.xml";
+        private const string SAP_TEMPLATE_MISSING_MESSAGE = "The SAP message xml template does not exist in specified path : ";
+        private const string XPATH_IM_MATINFO = $"//*[local-name()='IM_MATINFO']";
+        private const string XPATH_ACTIONITEMS = $"//*[local-name()='ACTIONITEMS']";
+        private const string XPATH_NOOFACTIONS = $"//*[local-name()='NOOFACTIONS']";
+        private const string XPATH_CORRID = $"//*[local-name()='CORRID']";
+        private const string XPATH_RECDATE = $"//*[local-name()='RECDATE']";
+        private const string XPATH_RECTIME = $"//*[local-name()='RECTIME']";
+        private const string ACTIONNUMBER = "ACTIONNUMBER";
+        private const string ITEM = "item";
+        private const string ACTION = "ACTION";
+        private const string PRODUCT = "PRODUCT";
+        private const string PRODUCT_SECTION = "Product";
+        private const string REPLACEDBY = "REPLACEDBY";
+        private const string PRODTYPE = "PRODTYPE";
+        private const string UNITOFSALE_SECTION = "UnitOfSale";
 
         public SapMessageBuilder(ILogger<SapMessageBuilder> logger,
                                  IXmlHelper xmlHelper,
@@ -36,18 +51,18 @@ namespace UKHO.ERPFacade.API.Helpers
         /// <returns></returns>
         public XmlDocument BuildSapMessageXml(List<Scenario> scenarios, string traceId)
         {
-            var sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, "SapXmlTemplates\\SAPRequest.xml");
+            var sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, SAP_XMLPATH);
 
             //Check whether template file exists or not
             if (!_fileSystemHelper.IsFileExists(sapXmlTemplatePath))
             {
-                throw new FileNotFoundException("The SAP message xml template does not exist in specified path : " + sapXmlTemplatePath);
+                throw new FileNotFoundException(SAP_TEMPLATE_MISSING_MESSAGE + sapXmlTemplatePath);
             }
 
             XmlDocument soapXml = _xmlHelper.CreateXmlDocument(sapXmlTemplatePath);
 
-            XmlNode IM_MATINFONode = soapXml.SelectSingleNode($"//*[local-name()='IM_MATINFO']");
-            XmlNode actionItemNode = soapXml.SelectSingleNode($"//*[local-name()='ACTIONITEMS']");
+            XmlNode IM_MATINFONode = soapXml.SelectSingleNode(XPATH_IM_MATINFO);
+            XmlNode actionItemNode = soapXml.SelectSingleNode(XPATH_ACTIONITEMS);
 
             foreach (var scenario in scenarios)
             {
@@ -93,10 +108,10 @@ namespace UKHO.ERPFacade.API.Helpers
 
             XmlNode xmlNode = SortXmlPayload(actionItemNode);
 
-            XmlNode noOfActions = soapXml.SelectSingleNode($"//*[local-name()='NOOFACTIONS']");
-            XmlNode corrId = soapXml.SelectSingleNode($"//*[local-name()='CORRID']");
-            XmlNode recDate = soapXml.SelectSingleNode($"//*[local-name()='RECDATE']");
-            XmlNode recTime = soapXml.SelectSingleNode($"//*[local-name()='RECTIME']");
+            XmlNode noOfActions = soapXml.SelectSingleNode(XPATH_NOOFACTIONS);
+            XmlNode corrId = soapXml.SelectSingleNode(XPATH_CORRID);
+            XmlNode recDate = soapXml.SelectSingleNode(XPATH_RECDATE);
+            XmlNode recTime = soapXml.SelectSingleNode(XPATH_RECTIME);
 
             corrId.InnerText = traceId;
             noOfActions.InnerText = xmlNode.ChildNodes.Count.ToString();
@@ -119,11 +134,11 @@ namespace UKHO.ERPFacade.API.Helpers
                 actionItemList.Add(subNode);
             }
 
-            var sortedActionItemList = actionItemList.Cast<XmlNode>().OrderBy(x => Convert.ToInt32(x.SelectSingleNode("ACTIONNUMBER").InnerText)).ToList();
+            var sortedActionItemList = actionItemList.Cast<XmlNode>().OrderBy(x => Convert.ToInt32(x.SelectSingleNode(ACTIONNUMBER).InnerText)).ToList();
 
             foreach (XmlNode actionItem in sortedActionItemList)
             {
-                actionItem.SelectSingleNode("ACTIONNUMBER").InnerText = sequenceNumber.ToString();
+                actionItem.SelectSingleNode(ACTIONNUMBER).InnerText = sequenceNumber.ToString();
                 sequenceNumber++;
             }
 
@@ -136,15 +151,15 @@ namespace UKHO.ERPFacade.API.Helpers
 
         private static XmlElement BuildAction(XmlDocument soapXml, Scenario scenario, SapAction action, string cell)
         {
-            XmlElement itemNode = soapXml.CreateElement("item");
+            XmlElement itemNode = soapXml.CreateElement(ITEM);
 
-            XmlElement actionNumberNode = soapXml.CreateElement("ACTIONNUMBER");
+            XmlElement actionNumberNode = soapXml.CreateElement(ACTIONNUMBER);
             actionNumberNode.InnerText = action.ActionNumber.ToString();
 
-            XmlElement actionNode = soapXml.CreateElement("ACTION");
+            XmlElement actionNode = soapXml.CreateElement(ACTION);
             actionNode.InnerText = action.Action.ToString();
 
-            XmlElement productNode = soapXml.CreateElement("PRODUCT");
+            XmlElement productNode = soapXml.CreateElement(PRODUCT);
             productNode.InnerText = action.Product.ToString();
 
             itemNode.AppendChild(actionNumberNode);
@@ -153,21 +168,21 @@ namespace UKHO.ERPFacade.API.Helpers
 
             List<(int sortingOrder, XmlElement itemNode)> actionAttributeList = new();
 
-            foreach (var node in action.Attributes.Where(x => x.Section == "Product"))
+            foreach (var node in action.Attributes.Where(x => x.Section == PRODUCT_SECTION))
             {
                 XmlElement itemSubNode = soapXml.CreateElement(node.XmlNodeName);
 
                 if (node.IsRequired)
                 {
-                    if (node.XmlNodeName == "REPLACEDBY")
+                    if (node.XmlNodeName == REPLACEDBY)
                     {
                         itemSubNode.InnerText = string.IsNullOrWhiteSpace(cell.ToString()) ? string.Empty : cell.ToString().Substring(0, Math.Min(250, cell.ToString().Length));
                     }
                     else
                     {
-                        object jsonFieldValue = GetProp(node.JsonPropertyName, scenario.Product, scenario.Product.GetType());
+                        object jsonFieldValue = CommonHelper.GetProp(node.JsonPropertyName, scenario.Product, scenario.Product.GetType());
                         itemSubNode.InnerText = string.IsNullOrWhiteSpace(jsonFieldValue.ToString()) ? string.Empty
-                            : (node.XmlNodeName == "PRODTYPE" ? GetProdType(jsonFieldValue.ToString()) : jsonFieldValue.ToString().Substring(0, Math.Min(250, jsonFieldValue.ToString().Length)));
+                            : (node.XmlNodeName == PRODTYPE ? GetProdType(jsonFieldValue.ToString()) : jsonFieldValue.ToString().Substring(0, Math.Min(250, jsonFieldValue.ToString().Length)));
                     }
                 }
                 else
@@ -177,7 +192,7 @@ namespace UKHO.ERPFacade.API.Helpers
                 actionAttributeList.Add((node.SortingOrder, itemSubNode));                
             }
 
-            foreach (var node in action.Attributes.Where(x => x.Section == "UnitOfSale"))
+            foreach (var node in action.Attributes.Where(x => x.Section == UNITOFSALE_SECTION))
             {
                 XmlElement itemSubNode = soapXml.CreateElement(node.XmlNodeName);
 
@@ -185,7 +200,7 @@ namespace UKHO.ERPFacade.API.Helpers
                 {
                     UnitOfSale unitOfSale = scenario.UnitOfSales.Where(x => x.UnitName == cell).FirstOrDefault();
 
-                    object jsonFieldValue = GetProp(node.JsonPropertyName, unitOfSale, unitOfSale.GetType());
+                    object jsonFieldValue = CommonHelper.GetProp(node.JsonPropertyName, unitOfSale, unitOfSale.GetType());
                     itemSubNode.InnerText = string.IsNullOrWhiteSpace(jsonFieldValue.ToString()) ? string.Empty : jsonFieldValue.ToString().Substring(0, Math.Min(250, jsonFieldValue.ToString().Length));
                 }
                 else
@@ -195,30 +210,14 @@ namespace UKHO.ERPFacade.API.Helpers
                 actionAttributeList.Add((node.SortingOrder, itemSubNode));
             }
             var sortedActionAttributeList = actionAttributeList.OrderBy(x => x.sortingOrder).ToList();
+
             foreach (var itemAttribute in sortedActionAttributeList)
             {
                 itemNode.AppendChild(itemAttribute.itemNode);
             }
             return itemNode;
         }
-
-        public static object GetProp(string name, object obj, Type type)
-        {
-            var parts = name.Split('.').ToList();
-            var currentPart = parts[0];
-            PropertyInfo info = type.GetProperty(currentPart);
-            if (info == null) { return null; }
-            if (name.IndexOf(".") > -1)
-            {
-                parts.Remove(currentPart);
-                return GetProp(string.Join(".", parts), info.GetValue(obj, null), info.PropertyType);
-            }
-            else
-            {
-                return info.GetValue(obj, null).ToString();
-            }
-        }               
-
+        
         private static string GetProdType(string prodType)
         {
             var parts = prodType.Split(' ').ToList();
