@@ -274,7 +274,6 @@ stages:
   - stage: Devdeploy
     displayName: "Devdeploy (inc terraform, webapp deploy)"
     variables:
-
       - group: "ERP-Facade-Dev"
       - group: "Erp-Dev"
       - group: "ERP-FACADE-DEV-KV"
@@ -306,15 +305,23 @@ stages:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
                     AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
 
+                - task: DownloadBuildArtifacts@0
+                  displayName: "Download Functional test Artifact"
+                  inputs:
+                    buildType: 'current'
+                    downloadType: 'single'
+                    artifactName: 'functionaltests'
+                    downloadPath: '$(Build.SourcesDirectory)'
+
                 - task: FileTransform@2
                   displayName: "File Transform: functionaltests"
                   inputs:
-                    folderPath: "$(Pipeline.Workspace)/functionaltests"
+                    folderPath: '$(Build.SourcesDirectory)/functionaltests/'
                     xmlTransformationRules:
                     jsonTargetFiles: '**/appsettings.json'
 
                 - task: UseDotNet@2
-                  displayName: 'Use .NET Core sdk'
+                  displayName: 'Use .NET 6.0.x sdk'
                   inputs:
                     packageType: sdk
                     version: 6.0.x
@@ -324,11 +331,11 @@ stages:
                   inputs:
                     command: "test"
                     projects: |
-                      **/*FunctionalTests*.dll
+                      **/*FunctionalTest*.dll
                       !**/*TestAdapter.dll
                       !**/obj/**
                     testRunTitle: "Dev-AutomationTests"
-                    workingDirectory: '$(Pipeline.Workspace)/functionaltests'
+                    workingDirectory: '$(Build.SourcesDirectory)/functionaltests'
 
                 - task: AzureCLI@2
                   displayName: "Set FT Configuration Application Settings for Mock Webapp"
