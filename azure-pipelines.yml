@@ -298,7 +298,7 @@ stages:
                   displayName: "Set FT Configuration Application Settings for Mock Webapp"
                   condition: always()
                   inputs:
-                    azureSubscription: "ERP-Facade-Dev-A.011.05.12"
+                    AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
                     scriptType: 'pscore'
                     scriptLocation: 'scriptPath'
                     scriptPath: "$(Build.SourcesDirectory)\set_mock_configuration.ps1"
