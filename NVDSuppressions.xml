@@ -112,6 +112,9 @@
 		<notes>
 			<![CDATA[
    file name: Microsoft.AspNetCore.Hosting.Abstractions.dll
+   file name: Microsoft.AspNetCore.Http.Features.dll
+   file name: Microsoft.AspNetCore.Http.Extensions.dll
+   file name: Microsoft.AspNetCore.WebUtilities.dll
    See https://nvd.nist.gov/vuln/detail/CVE-2018-8409 for details on this CVE.
 	Note: This was reanalysed by NIST on 4th October, and is now a breaking issue.
 	This is a temporary suppression pending a fix being available.
@@ -119,10 +122,11 @@
 		</notes>
 		<cve>CVE-2018-8409</cve>
 	</suppress>
-	<suppress>
+	<!--<suppress>
 		<notes>
 			<![CDATA[
    file name: Microsoft.AspNetCore.Http.Features.dll
+   
    ]]>
 		</notes>
 		<cve>CVE-2018-8409</cve>
@@ -143,7 +147,7 @@
    ]]>
 		</notes>
 		<cve>CVE-2018-8409</cve>
-	</suppress>
+	</suppress>-->
 	<suppress>
 		<notes>
 			<![CDATA[
