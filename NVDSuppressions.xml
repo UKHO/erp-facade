@@ -122,32 +122,6 @@
 		</notes>
 		<cve>CVE-2018-8409</cve>
 	</suppress>
-	<!--<suppress>
-		<notes>
-			<![CDATA[
-   file name: Microsoft.AspNetCore.Http.Features.dll
-   
-   ]]>
-		</notes>
-		<cve>CVE-2018-8409</cve>
-	</suppress>
-	<suppress>
-		<notes>
-			<![CDATA[
-   file name: Microsoft.AspNetCore.Http.Extensions.dll
-   ]]>
-		</notes>
-		<cve>CVE-2018-8409</cve>
-	</suppress>
-	<suppress>
-		<notes>
-			<![CDATA[
-   file name: Microsoft.AspNetCore.WebUtilities.dll
-   .NET Core and Visual Studio Denial of service vulnerability exists but when System.IO.Pipelines improperly handles requests
-   ]]>
-		</notes>
-		<cve>CVE-2018-8409</cve>
-	</suppress>-->
 	<suppress>
 		<notes>
 			<![CDATA[
