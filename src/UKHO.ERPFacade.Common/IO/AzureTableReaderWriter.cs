@@ -1,6 +1,6 @@
-﻿using Azure;
+﻿using Azure.Data.Tables.Models;
 using Azure.Data.Tables;
-using Azure.Data.Tables.Models;
+using Azure;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
@@ -17,8 +17,8 @@ namespace UKHO.ERPFacade.Common.IO
         private readonly ILogger<AzureTableReaderWriter> _logger;
         private readonly IOptions<AzureStorageConfiguration> _azureStorageConfig;
         private readonly IOptions<ErpFacadeWebJobConfiguration> _erpFacadeWebjobConfig;
-        private const int DEFAULT_CALLBACK_DURATION = 5;
         private const string ErpFacadeTableName = "eesevents";
+        private const int DefaultCallbackDuration = 5;
 
         public AzureTableReaderWriter(ILogger<AzureTableReaderWriter> logger,
                                         IOptions<AzureStorageConfiguration> azureStorageConfig,
@@ -105,9 +105,9 @@ namespace UKHO.ERPFacade.Common.IO
         public void ValidateAndUpdateIsNotifiedEntity()
         {
             TableClient tableClient = GetTableClient(ErpFacadeTableName);
-            var callBackDuration = string.IsNullOrEmpty(_erpFacadeWebjobConfig.Value.SapCallbackDurationInMins) ? DEFAULT_CALLBACK_DURATION
+            var callBackDuration = string.IsNullOrEmpty(_erpFacadeWebjobConfig.Value.SapCallbackDurationInMins) ? DefaultCallbackDuration
                 : int.Parse(_erpFacadeWebjobConfig.Value.SapCallbackDurationInMins);
-            var entities = tableClient.Query<EESEventEntity>(entity => entity.IsNotified.Value == false);
+            var entities = tableClient.Query<EESEventEntity>(entity => entity.IsNotified!.Value == false);
             foreach (var tableitem in entities)
             {
                 if (tableitem.RequestDateTime.HasValue)
