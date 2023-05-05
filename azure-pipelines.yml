@@ -363,6 +363,7 @@ stages:
       - name: "AzureADConfiguration.ClientSecret"
         value: $(AzureADConfigurationClientSecret)
       - name: "AzureADConfiguration.AutoTestClientIdNoRole"
+        value: $(AzureADConfigurationAutoTestClientIdNoRole)
       - name: "AzureADConfiguration.ClientSecretNoRole"
         value: $(AzureADConfigurationClientSecretNoRole)
       - name: mockWebAppName
