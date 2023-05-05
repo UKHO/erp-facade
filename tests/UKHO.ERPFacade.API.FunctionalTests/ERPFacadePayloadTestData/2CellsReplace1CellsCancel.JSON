@@ -403,6 +403,7 @@
           "unit",
           "folio"
         ],
+        "unitSize": "medium",
         "unitType": "AVCS Units Coastal",
         "status": "ForSale",
         "isNewUnitOfSale": true,

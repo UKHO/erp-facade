@@ -2,7 +2,7 @@
   <IM_MATINFO>
     <CORRID>367ce4a4-1d62-4f56-b359-canrepcell20001</CORRID>
     <NOOFACTIONS>17</NOOFACTIONS>
-    <RECDATE>20230328</RECDATE>
+    <RECDATE>20201013</RECDATE>
     <RECTIME>160000</RECTIME>
     <ORG>UKHO</ORG>
     <ACTIONITEMS>
@@ -17,10 +17,10 @@
         <REPLACEDBY></REPLACEDBY>
         <AGENCY>US</AGENCY>
         <PROVIDER>1</PROVIDER>
-        <ENCSIZE>small</ENCSIZE>
+        <ENCSIZE>medium</ENCSIZE>
         <TITLE>Norton Sound - Alaska</TITLE>
-        <EDITIONNO>1</EDITIONNO>
-        <UPDATENO>0</UPDATENO>
+        <EDITIONNO>8</EDITIONNO>
+        <UPDATENO>2</UPDATENO>
         <UNITTYPE></UNITTYPE>
       </item>
       <item>
@@ -34,10 +34,10 @@
         <REPLACEDBY></REPLACEDBY>
         <AGENCY>US</AGENCY>
         <PROVIDER>1</PROVIDER>
-        <ENCSIZE>small</ENCSIZE>
+        <ENCSIZE>medium</ENCSIZE>
         <TITLE>Norton Sound - Alaska</TITLE>
-        <EDITIONNO>1</EDITIONNO>
-        <UPDATENO>0</UPDATENO>
+        <EDITIONNO>8</EDITIONNO>
+        <UPDATENO>2</UPDATENO>
         <UNITTYPE></UNITTYPE>
       </item>
       <item>
@@ -68,7 +68,7 @@
         <REPLACEDBY></REPLACEDBY>
         <AGENCY>US</AGENCY>
         <PROVIDER>1</PROVIDER>
-        <ENCSIZE>medium</ENCSIZE>
+        <ENCSIZE>large</ENCSIZE>
         <TITLE>Norton Sound - Alaska</TITLE>
         <EDITIONNO></EDITIONNO>
         <UPDATENO></UPDATENO>

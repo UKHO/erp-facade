@@ -13,8 +13,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
     public class SAPXmlHelper
     {
         private static JsonPayloadHelper jsonPayloadHelper { get; set; }
-        
-        static int actionCounter = 1;
+
+        static int actionCounter;
         
         static List<string> AttrNotMatched = new List<string>();
         public static List<string> listFromJson = new List<string>();
@@ -44,6 +44,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             Assert.True(VerifyPresenseOfMandatoryXMLAtrributes(nodeList).Result);
 
             //verification of action atrribute's value
+            actionCounter = 1;
             foreach (Item item in xmlPayload.IM_MATINFO.ACTIONITEMS.Item)
             {
 
@@ -66,6 +67,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             }
             Console.WriteLine("Total verified Actions:" + --actionCounter);
             await Task.CompletedTask;
+            Console.WriteLine("XML has correct data");
             return true;
         }
 
@@ -497,10 +499,13 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             bool areEqual = getFinalActionsListFromJson(listFromJson).SequenceEqual(curateListOfActionsFromXmlFile(generatedXMLFilePath));
             if (areEqual)
             {
-               return true;
+
+                Console.WriteLine("XML has correct action sequence");
+                return true;
             }
             else
             {
+                Console.WriteLine("XML has incorrect action sequence");
                 return false;
             }
         }
@@ -514,10 +519,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
             if (a && b && c && d == true)
             {
+                Console.WriteLine("XML headers are correct");
                 return true;
             }
             else 
             {
+                Console.WriteLine("XML headers are incorrect");
                 return false;
             }
             
@@ -550,10 +557,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
             if (a == b)
             {
+                Console.WriteLine("XML has correct number of actions");
                 return true;
             }
             else
             {
+                Console.WriteLine("XML has incorrect number of actions");
                 return false;
             }
         }
@@ -590,6 +599,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
         public static List<string> curateListOfActionsFromXmlFile(string downloadedXMLFilePath)
         {
+            actionsListFromXml.Clear();
             XmlDocument xDoc = new XmlDocument();
             xDoc.Load(downloadedXMLFilePath);
             XmlNodeList nodeList = xDoc.SelectNodes("//ACTION");
@@ -636,6 +646,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         public static int calculateTotalNumberOfActions(JsonPayloadHelper jsonPayload)
         {
             int totalNumberOfActions = 0;
+            listFromJson.Clear();
             totalNumberOfActions = calculateNewCellCount(jsonPayload)
                                  + calculateNewUnitOfSalesCount(jsonPayload)
                                  + calculateAssignCellToUoSActionCount(jsonPayload)
@@ -727,7 +738,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
             if (count > 0)
             {
-                updateActionList(count, "4.  REPLACE WITH NEW ENC CELL");
+                updateActionList(count, "4.  REPLACE WITH ENC CELL");
             }
             Console.WriteLine("Total no. of Replace With ENC Cell: " + count);
             return count;
@@ -812,7 +823,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
             if (count > 0)
             {
-                updateActionList(count, "8.  REMOVE CELL FROM AVCS UNIT OF SALE");
+                updateActionList(count, "8.  REMOVE ENC CELL FROM AVCS UNIT OF SALE");
             }
             Console.WriteLine("Total no. of Remove Cell from UoS: " + count);
             return count;
