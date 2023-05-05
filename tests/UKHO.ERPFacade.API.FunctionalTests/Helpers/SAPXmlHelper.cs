@@ -6,7 +6,7 @@ using System;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Serialization;
-
+using UKHO.ERPFacade.API.FunctionalTests.Model;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {

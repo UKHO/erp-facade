@@ -2,7 +2,7 @@
 using System.Xml.Serialization;
 using System.Collections.Generic;
 
-namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
+namespace UKHO.ERPFacade.API.FunctionalTests.Model
 {
     [XmlRoot(ElementName = "Z_ADDS_MAT_INFO")]
     public class SAPXmlPayload
@@ -69,7 +69,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         public ACTIONITEMS ACTIONITEMS { get; set; }
     }
 
-    
+
 
 
 }
