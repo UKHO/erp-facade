@@ -47,6 +47,7 @@ stages:
           - task: DotNetCoreCLI@2
             displayName: ".Net Core - NuGet restore non test projects only"
             inputs:
+              command: "restore"
               projects: |
                 **/*.csproj
                 !**/*Tests.csproj
@@ -163,14 +164,33 @@ stages:
               command: "publish"
               publishWebProjects: false
               projects: '**/*UKHO.ERPFacade.API.csproj'
-              arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\ERPFacadeAPI'
-              zipAfterPublish: true
-              modifyOutputPath: true
+              arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\UKHO.ERPFacade.API'
+              zipAfterPublish: false
+              modifyOutputPath: false
+
+          - task: DotNetCoreCLI@2
+            displayName: "Publish ERPFacadeWebjob Code"
+            inputs:
+              command: "publish"
+              publishWebProjects: false
+              projects: "**/UKHO.ERPFacade.WebJob.csproj"
+              arguments: "--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/UKHO.ERPFacade.API/App_Data/jobs/continuous/ERPFacadeWebjob"
+              zipAfterPublish: false
+              modifyOutputPath: false
+
+          - task: ArchiveFiles@2
+            displayName: "Zip ERP Service binaries for Webjob"
+            inputs:
+              rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/UKHO.ERPFacade.API/'
+              includeRootFolder: false
+              archiveType: "zip"
+              archiveFile: '$(Build.ArtifactStagingDirectory)/UKHO.ERPFacade.API/UKHOERPFacadeAPI.zip'
+              replaceExistingArchive: true
 
           - task: PublishBuildArtifacts@1
             displayName: "Publish Web Artifact"
             inputs:
-              PathtoPublish: '$(Build.ArtifactStagingDirectory)\ERPFacadeAPI'
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)\UKHO.ERPFacade.API\UKHOERPFacadeAPI.zip'
               ArtifactName: UKHOERPFacadeAPI
 
       - job: PublishFunctionalTestsAndTerraform
