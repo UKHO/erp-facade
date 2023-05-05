@@ -4,13 +4,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NUnit.Framework;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UKHO.ERPFacade.API.Controllers;
 using UKHO.ERPFacade.API.Helpers;
 using UKHO.ERPFacade.API.Models;
 using UKHO.ERPFacade.Common.Logging;
@@ -83,7 +79,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             var result = _fakeScenarioBuilder.BuildScenarios(fakeEventData);
 
             result.Count().Should().BeGreaterThan(0);
-            result.Should().Satisfy(scenario => scenario.ScenarioType == ScenarioType.NewCell);            
+            result.Should().Satisfy(scenario => scenario.ScenarioType == ScenarioType.NewCell);
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
              && call.GetArgument<LogLevel>(0) == LogLevel.Information
@@ -136,7 +132,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
 
             var result = _fakeScenarioBuilder.BuildScenarios(fakeEventData);
 
-            result.Count().Should().Be(0);            
+            result.Count().Should().Be(0);
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
              && call.GetArgument<LogLevel>(0) == LogLevel.Information
