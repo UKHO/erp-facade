@@ -494,8 +494,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
         public static bool verifyOrderOfActions(JsonPayloadHelper jsonPayload, string generatedXMLFilePath)
         {
-            //listFromJson
-
             bool areEqual = getFinalActionsListFromJson(listFromJson).SequenceEqual(curateListOfActionsFromXmlFile(generatedXMLFilePath));
             if (areEqual)
             {
@@ -601,7 +599,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 actionsListFromXml.Add(node.InnerText);
             }
 
-            //actionsListFromXml.Sort();
             return actionsListFromXml;
         }
 
@@ -616,7 +613,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             }
         }
 
-        // methods which gets called by action calculator methods to push action data
         public static void updateActionList(int n, string actionMessage)
         {
             for (int i = 0; i < n; i++)
@@ -624,16 +620,13 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 listFromJson.Add(actionMessage);
             }
             listFromJson.Sort();
-            //returnTrimmedActionsList(list);
         }
 
         public static List<string> getFinalActionsListFromJson(List<string> actionsList)
         {
-            //actionsList.Sort();
             for (int i = 0; i < actionsList.Count; i++)
             {
                 actionsList[i] = actionsList[i].Substring(4);
-                // Console.WriteLine("update list index "+i+" : "+actionsList[i]);
             }
             return actionsList;
         }
@@ -645,16 +638,19 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             int totalNumberOfActions = 0;
             totalNumberOfActions = calculateNewCellCount(jsonPayload)
                                  + calculateNewUnitOfSalesCount(jsonPayload)
-                                 + calculateCancelledCellCount(jsonPayload)
-                                 + calculateCancelUnitOfSalesActionCount(jsonPayload)
-                                 + calculateReplaceCellActionCount(jsonPayload)
                                  + calculateAssignCellToUoSActionCount(jsonPayload)
+                                 + calculateReplaceCellActionCount(jsonPayload)
+                                 + calculateChangeEncCellActionCount(jsonPayload)
+                                 + calculateChangeUoSActionCount(jsonPayload)
                                  + calculateRemoveCellFromUoSActionCount(jsonPayload)
-                                 + calculateUpdateEncCellEditionUpdateNumber(jsonPayload);
+                                 + calculateUpdateEncCellEditionUpdateNumber(jsonPayload)
+                                 + calculateCancelledCellCount(jsonPayload)
+                                 + calculateCancelUnitOfSalesActionCount(jsonPayload);
 
             Console.WriteLine("Total No. of Actions = " + totalNumberOfActions);
             return totalNumberOfActions;
         }
+
 
         public static int calculateNewCellCount(JsonPayloadHelper jsonPayload)
         {
@@ -668,9 +664,13 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     count++;
                 }
             }
-
-            updateActionList(count, "1.  CREATE ENC CELL");
-            Console.WriteLine("New Cells: " + count);
+            
+            if(count > 0) 
+            { 
+                updateActionList(count, "1.  CREATE ENC CELL");
+            }
+            
+            Console.WriteLine("Total no. of Create ENC Cell: " + count);
             return count;
         }
 
@@ -686,11 +686,16 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     newUoSCount++;
                 }
             }
-
-            updateActionList(newUoSCount, "2.  CREATE AVCS UNIT OF SALE");
-            Console.WriteLine("New UoS Count: " + newUoSCount);
+            
+            if (newUoSCount > 0)
+            {
+                updateActionList(newUoSCount, "2.  CREATE AVCS UNIT OF SALE");
+            }
+            
+            Console.WriteLine("Total no. of Create AVCS Unit of Sale: " + newUoSCount);
             return newUoSCount;
         }
+
         public static int calculateAssignCellToUoSActionCount(JsonPayloadHelper jsonPayload)
         {
             var obj = jsonPayload;
@@ -699,8 +704,13 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             {
                 count = count + unitOfSale.CompositionChanges.AddProducts.Count;
             }
-            updateActionList(count, "3.  ASSIGN CELL TO AVCS UNIT OF SALE");
-            Console.WriteLine("Total Assign Cell to UoS action: " + count);
+
+            if (count > 0)
+            {
+                updateActionList(count, "3.  ASSIGN CELL TO AVCS UNIT OF SALE");
+            }
+            
+            Console.WriteLine("Total no. of Assign Cell to AVCS UoS: " + count);
             return count;
         }
         public static int calculateReplaceCellActionCount(JsonPayloadHelper jsonPayload)
@@ -714,8 +724,56 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     count = count + product.ReplacedBy.Count;
                 }
             }
-            updateActionList(count, "4.  REPLACE WITH NEW ENC CELL");
-            Console.WriteLine("Total Replace ENC Cell Action: " + count);
+
+            if (count > 0)
+            {
+                updateActionList(count, "4.  REPLACE WITH NEW ENC CELL");
+            }
+            Console.WriteLine("Total no. of Replace With ENC Cell: " + count);
+            return count;
+        }
+
+        public static int calculateChangeEncCellActionCount(JsonPayloadHelper jsonPayload)
+        {
+            var obj = jsonPayload;
+            int count = 0;
+
+            foreach (Product product in obj.Data.Products)
+            {
+                if (product.ContentChanged == false)
+                {
+                    count++;
+                }
+            }
+
+            if (count > 0)
+            {
+                updateActionList(count, "5.  CHANGE ENC CELL");
+            }
+
+            Console.WriteLine("Total No. of Change ENC Cell: " + count);
+            return count;
+        }
+
+        public static int calculateChangeUoSActionCount(JsonPayloadHelper jsonPayload)
+        {
+            var obj = jsonPayload;
+            int count = 0;
+
+            foreach (Product product in obj.Data.Products)
+            {
+                if (product.ContentChanged == false)
+                {
+                    count = count + product.InUnitsOfSale.Count;
+                }
+            }
+
+            if (count > 0)
+            {
+                updateActionList(count, "6.  CHANGE AVCS UNIT OF SALE");
+            }
+
+            Console.WriteLine("Total No. of Change AVCS UoS: " + count);
             return count;
         }
 
@@ -731,8 +789,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     count = count++;
                 }
             }
-            updateActionList(count, "7.  UPDATE ENC CELL EDITION UPDATE NUMBER");
-            Console.WriteLine("Total no. of ENC Cell Edition Update: " + count);
+
+            if (count > 0)
+            {
+                updateActionList(count, "7.  UPDATE ENC CELL EDITION UPDATE NUMBER");
+            }
+            Console.WriteLine("Total no. of ENC Cell Edition Update Number: " + count);
             return count;
         }
 
@@ -747,8 +809,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     count = count + unitOfSale.CompositionChanges.RemoveProducts.Count;
                 }
             }
-            updateActionList(count, "8.  REMOVE CELL FROM AVCS UNIT OF SALE");
-            Console.WriteLine("Remove Cell from UoS Action Count: " + count);
+
+            if (count > 0)
+            {
+                updateActionList(count, "8.  REMOVE CELL FROM AVCS UNIT OF SALE");
+            }
+            Console.WriteLine("Total no. of Remove Cell from UoS: " + count);
             return count;
         }
 
@@ -769,8 +835,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     cancelledCellCount++;
                 }
             }
-            updateActionList(cancelledCellCount, "9.  CANCEL ENC CELL");
-            Console.WriteLine("Total No. of Cancelled Cells: " + cancelledCellCount);
+
+            if (cancelledCellCount > 0)
+            {
+                updateActionList(cancelledCellCount, "9.  CANCEL ENC CELL");
+            }
+            Console.WriteLine("Total No. of Cancel ENC Cell: " + cancelledCellCount);
             return cancelledCellCount;
         }
 
@@ -786,9 +856,14 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     cancelledUoSCount++;
                 }
             }
-            updateActionList(cancelledUoSCount, "99. CANCEL AVCS UNIT OF SALE");
-            Console.WriteLine("Total No. of Cancelled UoS: " + cancelledUoSCount);
+
+            if (cancelledUoSCount > 0)
+            {
+                updateActionList(cancelledUoSCount, "99. CANCEL AVCS UNIT OF SALE");
+            }
+            Console.WriteLine("Total No. of Cancel AVCS UoS: " + cancelledUoSCount);
             return cancelledUoSCount;
         }
+        
     }
 }

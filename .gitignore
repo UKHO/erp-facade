@@ -378,3 +378,5 @@ terraform_output.json
 /tests/UKHO.ERPFacade.API.FunctionalTests/ERPFacadePayloadTestData/1NewCellScenario.JSON
 /tests/UKHO.ERPFacade.API.FunctionalTests/ERPFacadeExpectedXmlTestData/1NewCellScenario.xml
 /tests/UKHO.ERPFacade.API.FunctionalTests/ERPFacadePayloadTestData/2NewCellScenario.JSON
+/tests/UKHO.ERPFacade.API.FunctionalTests/ERPFacadePayloadTestData/2CombinationNewCellOldCellScenario.JSON
+/tests/UKHO.ERPFacade.API.FunctionalTests/ERPFacadeExpectedXmlTestData/3CellsReplace2CellsCancel.xml
