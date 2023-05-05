@@ -9,7 +9,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
     {
         private WebhookEndpoint Webhook { get; set; }
         private DirectoryInfo _dir;
-        private readonly ADAuthTokenProvider _authToken = new ADAuthTokenProvider();
+        private readonly ADAuthTokenProvider _authToken = new();
         public static Boolean noRole = false;
 
         [SetUp]
