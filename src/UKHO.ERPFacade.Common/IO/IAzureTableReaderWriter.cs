@@ -10,6 +10,5 @@ namespace UKHO.ERPFacade.Common.IO
         Task UpdateRequestTimeEntity(string traceId);
         Task UpdateResponseTimeEntity(string traceId);
         void ValidateAndUpdateIsNotifiedEntity();
-
     }
 }

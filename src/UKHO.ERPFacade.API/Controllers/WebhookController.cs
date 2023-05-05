@@ -20,7 +20,7 @@ namespace UKHO.ERPFacade.API.Controllers
         private readonly ISapClient _sapClient;
         private readonly IXmlHelper _xmlHelper;
 
-        public const string TRACEIDKEY = "data.traceId";
+        private const string TraceIdKey = "data.traceId";
 
         public WebhookController(IHttpContextAccessor contextAccessor,
                                  ILogger<WebhookController> logger,
@@ -61,7 +61,7 @@ namespace UKHO.ERPFacade.API.Controllers
         {
             _logger.LogInformation(EventIds.NewEncContentPublishedEventReceived.ToEventId(), "ERP Facade webhook has received new enccontentpublished event from EES.");
 
-            string traceId = requestJson.SelectToken(TRACEIDKEY)?.Value<string>();
+            string traceId = requestJson.SelectToken(TraceIdKey)?.Value<string>();
 
             if (string.IsNullOrEmpty(traceId))
             {

@@ -15,11 +15,10 @@ namespace UKHO.ERPFacade.Common.IO
     public class AzureTableReaderWriter : IAzureTableReaderWriter
     {
         private readonly ILogger<AzureTableReaderWriter> _logger;
-        private const string ERP_FACADE_TABLE_NAME = "eesevents";
-        private const int DEFAULT_CALLBACK_DURATION = 5;
-
         private readonly IOptions<AzureStorageConfiguration> _azureStorageConfig;
         private readonly IOptions<ErpFacadeWebJobConfiguration> _erpFacadeWebjobConfig;
+        private const int DEFAULT_CALLBACK_DURATION = 5;
+        private const string ErpFacadeTableName = "eesevents";
 
         public AzureTableReaderWriter(ILogger<AzureTableReaderWriter> logger,
                                         IOptions<AzureStorageConfiguration> azureStorageConfig,
@@ -32,7 +31,7 @@ namespace UKHO.ERPFacade.Common.IO
 
         public async Task UpsertEntity(JObject eesEvent, string traceId)
         {
-            TableClient tableClient = GetTableClient(ERP_FACADE_TABLE_NAME);
+            TableClient tableClient = GetTableClient(ErpFacadeTableName);
 
             EESEventEntity existingEntity = await GetEntity(traceId);
 
@@ -70,7 +69,7 @@ namespace UKHO.ERPFacade.Common.IO
         public async Task<EESEventEntity> GetEntity(string traceId)
         {
             IList<EESEventEntity> records = new List<EESEventEntity>();
-            TableClient tableClient = GetTableClient(ERP_FACADE_TABLE_NAME);
+            TableClient tableClient = GetTableClient(ErpFacadeTableName);
             var entities = tableClient.QueryAsync<EESEventEntity>(filter: TableClient.CreateQueryFilter($"TraceID eq {traceId}"), maxPerPage: 1);
             await foreach (var entity in entities)
             {
@@ -81,25 +80,31 @@ namespace UKHO.ERPFacade.Common.IO
 
         public async Task UpdateRequestTimeEntity(string traceId)
         {
-            TableClient tableClient = GetTableClient(ERP_FACADE_TABLE_NAME);
+            TableClient tableClient = GetTableClient(ErpFacadeTableName);
             EESEventEntity existingEntity = await GetEntity(traceId);
-            existingEntity.RequestDateTime = DateTime.UtcNow;
-            await tableClient.UpdateEntityAsync(existingEntity, ETag.All, TableUpdateMode.Replace);
-            _logger.LogInformation(EventIds.UpdateRequestTimeEntitySuccessful.ToEventId(), "RequestDateTime is updated in azure table successfully.");
+            if (existingEntity != null)
+            {
+                existingEntity.RequestDateTime = DateTime.UtcNow;
+                await tableClient.UpdateEntityAsync(existingEntity, ETag.All, TableUpdateMode.Replace);
+                _logger.LogInformation(EventIds.UpdateRequestTimeEntitySuccessful.ToEventId(), "RequestDateTime is updated in azure table successfully.");
+            }
         }
 
         public async Task UpdateResponseTimeEntity(string traceId)
         {
-            TableClient tableClient = GetTableClient(ERP_FACADE_TABLE_NAME);
+            TableClient tableClient = GetTableClient(ErpFacadeTableName);
             EESEventEntity existingEntity = await GetEntity(traceId);
-            existingEntity.ResponseDateTime = DateTime.UtcNow;
-            await tableClient.UpdateEntityAsync(existingEntity, ETag.All, TableUpdateMode.Replace);
-            _logger.LogInformation(EventIds.UpdateResponseTimeEntitySuccessful.ToEventId(), "ResponseDateTime is updated in azure table successfully.");
+            if (existingEntity != null)
+            {
+                existingEntity.ResponseDateTime = DateTime.UtcNow;
+                await tableClient.UpdateEntityAsync(existingEntity, ETag.All, TableUpdateMode.Replace);
+                _logger.LogInformation(EventIds.UpdateResponseTimeEntitySuccessful.ToEventId(), "ResponseDateTime is updated in azure table successfully.");
+            }
         }
 
         public void ValidateAndUpdateIsNotifiedEntity()
         {
-            TableClient tableClient = GetTableClient(ERP_FACADE_TABLE_NAME);
+            TableClient tableClient = GetTableClient(ErpFacadeTableName);
             var callBackDuration = string.IsNullOrEmpty(_erpFacadeWebjobConfig.Value.SapCallbackDurationInMins) ? DEFAULT_CALLBACK_DURATION
                 : int.Parse(_erpFacadeWebjobConfig.Value.SapCallbackDurationInMins);
             var entities = tableClient.Query<EESEventEntity>(entity => entity.IsNotified.Value == false);

@@ -44,5 +44,15 @@ namespace UKHO.ERPFacade.Common.IO
             BlobClient blobClient = blobContainerClient.GetBlobClient(blobName);
             return blobClient;
         }
+
+        public bool CheckIfContainerExists(string containerName)
+        {
+            BlobServiceClient serviceClient = new(_azureStorageConfig.Value.ConnectionString);
+
+            var container = serviceClient.GetBlobContainerClient(containerName);
+            var isExists = container.Exists();
+
+            return isExists;
+        }
     }
 }
