@@ -5,10 +5,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
     {
         public string PayloadFolder { get; set; }
         public string WebhookPayloadFileName { get; set; } 
-        public string SapApiPayloadFileName { get; set; }
+        public string SapMockApiPayloadFileName { get; set; }
         public Erpfacadeconfiguration ErpFacadeConfiguration { get; set; }
         public Azureadconfiguration AzureadConfiguration { get; set; } 
-        public SapConfiguration SapConfiguration { get; set; }
+        public SapMockConfiguration SapMockConfiguration { get; set; }
     }
 
 
@@ -39,7 +39,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
     }
 
-    public class SapConfiguration
+    public class SapMockConfiguration
     {
         public string BaseUrl { get; set; }
         public string Username { get; set;}
