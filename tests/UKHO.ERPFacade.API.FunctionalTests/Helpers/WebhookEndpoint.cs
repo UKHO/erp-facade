@@ -69,10 +69,15 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             //Logic to download XML from container using TraceID from JSON
 
             //string generatedXMLFilePath = SapXmlHelper.downloadGeneratedXML(expectedXMLfilePath,traceID); // string path will be returned
-            string generatedXMLFilePath = "C:\\Users\\Sadha1501493\\GitHubRepo\\erp-facade\\tests\\UKHO.ERPFacade.API.FunctionalTests\\ERPFacadeGeneratedXmlFiles\\367ce4a4-1d62-4f56-b359-59e178d77100.xml";
-            if (response.StatusCode==System.Net.HttpStatusCode.OK)
+            string generatedXMLFilePath = "C:\\Users\\Prash1501461\\Source\\Repos\\UKHO\\erp-facade\\tests\\UKHO.ERPFacade.API.FunctionalTests\\ERPFacadeExpectedXmlTestData\\3CellsReplace2CellsCancel.xml";
+            //if (response.StatusCode==System.Net.HttpStatusCode.OK)
+
             //Logic to verifyxml                    
+            Assert.That(SAPXmlHelper.verifyInitialXMLHeaders(jsonPayload, generatedXMLFilePath), Is.True);
+            Assert.That(SAPXmlHelper.verifyOrderOfActions(jsonPayload, generatedXMLFilePath), Is.True);
             Assert.That(SAPXmlHelper.CheckXMLAttributes(jsonPayload, generatedXMLFilePath).Result, Is.True);
+            
+
 
             return response;
         }
