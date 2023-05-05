@@ -2,6 +2,8 @@
 using Azure.Storage.Blobs.Models;
 using Newtonsoft.Json;
 using NUnit.Framework;
+using System;
+using System.Reflection;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -15,6 +17,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         static int actionCounter = 1;
         
         static List<string> AttrNotMatched = new List<string>();
+
         public static Config config=new Config();
         private static JsonPayloadHelper jsonPayload { get; set; }
         private static SAPXmlPayload xmlPayload { get; set; }
@@ -24,6 +27,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             
             SAPXmlHelper.jsonPayload = jsonPayload;
 
+            
             XmlSerializer serializer = new XmlSerializer(typeof(SAPXmlPayload));
 
             using (Stream reader = new FileStream(XMLFilePath, FileMode.Open))
@@ -80,25 +84,11 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         AttrNotMatched.Add(nameof(item.PRODUCT));
                     if (!item.PRODTYPE.Equals((getProductInfo(unitOfSale.CompositionChanges.RemoveProducts)).ProductType))
                         AttrNotMatched.Add(nameof(item.PRODTYPE));
-                    if (!item.CANCELLED.Equals(""))
-                        AttrNotMatched.Add(nameof(item.CANCELLED));
-                    if (!item.REPLACEDBY.Equals(""))
-                        AttrNotMatched.Add(nameof(item.REPLACEDBY));
-                    if (!item.AGENCY.Equals(""))
-                        AttrNotMatched.Add(nameof(item.AGENCY));
-                    if (!item.PROVIDER.Equals(""))
-                        AttrNotMatched.Add(nameof(item.PROVIDER));
-                    if (!item.ENCSIZE.Equals(""))
-                        AttrNotMatched.Add(nameof(item.ENCSIZE));
-                    if (!item.TITLE.Equals(""))
-                        AttrNotMatched.Add(nameof(item.TITLE));                    
-                    if (!item.EDITIONNO.Equals(""))
-                        AttrNotMatched.Add(nameof(item.EDITIONNO));
-                    if (!item.UPDATENO.Equals(""))
-                        AttrNotMatched.Add(nameof(item.UPDATENO));
-                    if(!item.UNITTYPE.Equals(""))
-                        AttrNotMatched.Add(nameof(item.UNITTYPE));
 
+                    //Checking blanks
+                    string[] fieldNames = { "CANCELLED", "REPLACEDBY","AGENCY", "PROVIDER","ENCSIZE","TITLE","EDITIONNO","UPDATENO","UNITTYPE" };
+                    var v = VerifyBlankFields(item, fieldNames);
+                    
                     if (AttrNotMatched.Count == 0)
                     {
                         Console.WriteLine("CANCEL AVCS UNIT OF SALE Action's Data is correct");
@@ -134,24 +124,11 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         AttrNotMatched.Add(nameof(item.PRODUCT));
                     if (!item.PRODTYPE.Equals(product.ProductType[4..]))
                         AttrNotMatched.Add(nameof(item.PRODTYPE));
-                    if (!item.CANCELLED.Equals(""))
-                        AttrNotMatched.Add(nameof(item.CANCELLED));
-                    if (!item.REPLACEDBY.Equals(""))
-                        AttrNotMatched.Add(nameof(item.REPLACEDBY));
-                    if (!item.AGENCY.Equals(""))
-                        AttrNotMatched.Add(nameof(item.AGENCY));
-                    if (!item.PROVIDER.Equals(""))
-                        AttrNotMatched.Add(nameof(item.PROVIDER));
-                    if (!item.ENCSIZE.Equals(""))
-                        AttrNotMatched.Add(nameof(item.ENCSIZE));
-                    if (!item.TITLE.Equals(""))
-                        AttrNotMatched.Add(nameof(item.TITLE));
-                    if (!item.EDITIONNO.Equals(""))
-                        AttrNotMatched.Add(nameof(item.EDITIONNO));
-                    if (!item.UPDATENO.Equals(""))
-                        AttrNotMatched.Add(nameof(item.UPDATENO));
-                    if (!item.UNITTYPE.Equals(""))
-                        AttrNotMatched.Add(nameof(item.UNITTYPE));
+
+                    //Checking blanks
+                    string[] fieldNames = { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE" };
+                    var v = VerifyBlankFields(item, fieldNames);
+
 
                     if (AttrNotMatched.Count == 0)
                     {
@@ -194,25 +171,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         if (!item.PRODTYPE.Equals((getProductInfo(unitOfSale.CompositionChanges.RemoveProducts)).ProductType))
                             AttrNotMatched.Add(nameof(item.PRODTYPE));
                         //xmlAttributes[4] & [5] are skipped as already checked
-                        //Below code to check rest all attributes are blank
-                        if (!item.CANCELLED.Equals(""))
-                            AttrNotMatched.Add(nameof(item.CANCELLED));
-                        if (!item.REPLACEDBY.Equals(""))
-                            AttrNotMatched.Add(nameof(item.REPLACEDBY));
-                        if (!item.AGENCY.Equals(""))
-                            AttrNotMatched.Add(nameof(item.AGENCY));
-                        if (!item.PROVIDER.Equals(""))
-                            AttrNotMatched.Add(nameof(item.PROVIDER));
-                        if (!item.ENCSIZE.Equals(""))
-                            AttrNotMatched.Add(nameof(item.ENCSIZE));
-                        if (!item.TITLE.Equals(""))
-                            AttrNotMatched.Add(nameof(item.TITLE));
-                        if (!item.EDITIONNO.Equals(""))
-                            AttrNotMatched.Add(nameof(item.EDITIONNO));
-                        if (!item.UPDATENO.Equals(""))
-                            AttrNotMatched.Add(nameof(item.UPDATENO));
-                        if (!item.UNITTYPE.Equals(""))
-                            AttrNotMatched.Add(nameof(item.UNITTYPE));
+                        //Checking blanks
+                        string[] fieldNames = { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE" };
+                        var v = VerifyBlankFields(item, fieldNames);
+
                         if (AttrNotMatched.Count == 0)
                         {
                             Console.WriteLine("REMOVE ENC CELL FROM AVCS UNIT OF SALE Action's Data is correct");
@@ -255,22 +217,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         AttrNotMatched.Add(nameof(item.PRODTYPE));
                     if (!product.InUnitsOfSale.Contains(item.PRODUCTNAME))
                         AttrNotMatched.Add(nameof(item.PRODUCTNAME));
-                    if (!item.CANCELLED.Equals(""))
-                        AttrNotMatched.Add(nameof(item.CANCELLED));                    
-                    if (!item.AGENCY.Equals(""))
-                        AttrNotMatched.Add(nameof(item.AGENCY));
-                    if (!item.PROVIDER.Equals(""))
-                        AttrNotMatched.Add(nameof(item.PROVIDER));
-                    if (!item.ENCSIZE.Equals(""))
-                        AttrNotMatched.Add(nameof(item.ENCSIZE));
-                    if (!item.TITLE.Equals(""))
-                        AttrNotMatched.Add(nameof(item.TITLE));
-                    if (!item.EDITIONNO.Equals(""))
-                        AttrNotMatched.Add(nameof(item.EDITIONNO));
-                    if (!item.UPDATENO.Equals(""))
-                        AttrNotMatched.Add(nameof(item.UPDATENO));
-                    if (!item.UNITTYPE.Equals(""))
-                        AttrNotMatched.Add(nameof(item.UNITTYPE));
+                    //Checking blanks
+                    string[] fieldNames = { "CANCELLED",  "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE" };
+                    var v = VerifyBlankFields(item, fieldNames);
+
 
                     if (AttrNotMatched.Count == 0)
                     {
@@ -295,7 +245,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
         public static async Task<bool> VerifyPresenseOfMandatoryXMLAtrributes(XmlNodeList nodeList)
         {
-            List<string> ActionAttributesSeq = formActionAtrributes();
+            //List<string> ActionAttributesSeq = formActionAtrributes();
+            List<string> ActionAttributesSeq = new List<string>();
+            ActionAttributesSeq=config.testConfig.XMLActionList.ToList<string>();  
+               
             foreach (XmlNode node in nodeList)
             {
                 XmlNodeList dd = node.ChildNodes;
@@ -310,6 +263,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 }
 
             }
+            Console.WriteLine("Mandatory atrributes are present in all XML actions");
             await Task.CompletedTask;
             return true;
         }
@@ -335,25 +289,11 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         if (!item.PRODTYPE.Equals((getProductInfo(unitOfSale.CompositionChanges.AddProducts)).ProductType))
                             AttrNotMatched.Add(nameof(item.PRODTYPE));
                         //xmlAttributes[4] & [5] are skipped as already checked
-                        //Below code to check rest all attributes are blank
-                        if (!item.CANCELLED.Equals(""))
-                            AttrNotMatched.Add(nameof(item.CANCELLED));
-                        if (!item.REPLACEDBY.Equals(""))
-                            AttrNotMatched.Add(nameof(item.REPLACEDBY));
-                        if (!item.AGENCY.Equals(""))
-                            AttrNotMatched.Add(nameof(item.AGENCY));
-                        if (!item.PROVIDER.Equals(""))
-                            AttrNotMatched.Add(nameof(item.PROVIDER));
-                        if (!item.ENCSIZE.Equals(""))
-                            AttrNotMatched.Add(nameof(item.ENCSIZE));
-                        if (!item.TITLE.Equals(""))
-                            AttrNotMatched.Add(nameof(item.TITLE));
-                        if (!item.EDITIONNO.Equals(""))
-                            AttrNotMatched.Add(nameof(item.EDITIONNO));
-                        if (!item.UPDATENO.Equals(""))
-                            AttrNotMatched.Add(nameof(item.UPDATENO));
-                        if (!item.UNITTYPE.Equals(""))
-                            AttrNotMatched.Add(nameof(item.UNITTYPE));
+                        //Checking blanks
+                        string[] fieldNames = { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE" };
+                        var v = VerifyBlankFields(item, fieldNames);
+
+
                         if (AttrNotMatched.Count == 0)
                         {
                             Console.WriteLine("ASSIGN CELL TO AVCS UNIT OF SALE Action's Data is correct");
@@ -404,14 +344,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         AttrNotMatched.Add(nameof(item.TITLE));
                     if (!item.UNITTYPE.Equals(unitOfSale.UnitType))
                         AttrNotMatched.Add(nameof(item.UNITTYPE));
-                    if (!item.CANCELLED.Equals(""))
-                        AttrNotMatched.Add(nameof(item.CANCELLED));
-                    if (!item.REPLACEDBY.Equals(""))
-                        AttrNotMatched.Add(nameof(item.REPLACEDBY));
-                    if (!item.EDITIONNO.Equals(""))
-                        AttrNotMatched.Add(nameof(item.EDITIONNO));
-                    if (!item.UPDATENO.Equals(""))
-                        AttrNotMatched.Add(nameof(item.UPDATENO));
+                    //Checking blanks
+                    string[] fieldNames = { "CANCELLED", "REPLACEDBY", "EDITIONNO", "UPDATENO" };
+                    var v = VerifyBlankFields(item, fieldNames);
+
                     if (AttrNotMatched.Count == 0)
         {
                         Console.WriteLine("CREATE AVCS UNIT OF SALE Action's Data is correct");
@@ -432,9 +368,21 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return false;
             }
 
+        private static bool VerifyBlankFields(Item item, string[] fieldNames)
+        {
+            bool allBlanks = true;
+            //string[] fieldNames = { "ACTIONNUMBER", "ACTION" };
 
+            foreach (string field in fieldNames)
+            {
+                if(!typeof(Item).GetProperty(field).GetValue(item, null).Equals(""))
+                    AttrNotMatched.Add(typeof(Item).GetProperty(field).Name);
+            }
+            return allBlanks;
+        }
         private static bool verifyCreateENCCell(string childCell, Item item)
         {
+           
             Console.WriteLine("Action#:" + actionCounter + ".Childcell:" + childCell);
             foreach (Product product in jsonPayload.Data.Products)
             {
@@ -463,12 +411,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     if (!item.UPDATENO.Equals(product.UpdateNumber))
                         AttrNotMatched.Add(nameof(item.UPDATENO));
                     //Checking blanks
-                    if (!item.CANCELLED.Equals(""))
-                        AttrNotMatched.Add(nameof(item.CANCELLED));
-                    if (!item.REPLACEDBY.Equals(""))
-                        AttrNotMatched.Add(nameof(item.REPLACEDBY));
-                    if (!item.UNITTYPE.Equals(""))
-                        AttrNotMatched.Add(nameof(item.UNITTYPE));
+                    string[] fieldNames = { "CANCELLED", "REPLACEDBY", "UNITTYPE" };
+                    var v = VerifyBlankFields(item, fieldNames);
+
 
                     if (AttrNotMatched.Count == 0)
                     {
@@ -509,28 +454,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             }
             return productInfo;
             }
-            
-        private static List<string> formActionAtrributes()
-        {
-
-            List<string> ActionAttributesSeq = new List<string>();
-            ActionAttributesSeq.Add("ACTIONNUMBER");
-            ActionAttributesSeq.Add("ACTION");
-            ActionAttributesSeq.Add("PRODUCT");
-            ActionAttributesSeq.Add("PRODTYPE");
-            ActionAttributesSeq.Add("CHILDCELL");
-            ActionAttributesSeq.Add("PRODUCTNAME");
-            ActionAttributesSeq.Add("CANCELLED");
-            ActionAttributesSeq.Add("REPLACEDBY");
-            ActionAttributesSeq.Add("AGENCY");
-            ActionAttributesSeq.Add("PROVIDER");
-            ActionAttributesSeq.Add("ENCSIZE");
-            ActionAttributesSeq.Add("TITLE");
-            ActionAttributesSeq.Add("EDITIONNO");
-            ActionAttributesSeq.Add("UPDATENO");
-            ActionAttributesSeq.Add("UNITTYPE");
-            return ActionAttributesSeq;
-        }
+        
         public string downloadGeneratedXML(string expectedXMLfilePath,string containerAndBlobName)
         {
                 BlobServiceClient blobServiceClient = new BlobServiceClient(config.testConfig.AzureStorageConfiguration.ConnectionString);

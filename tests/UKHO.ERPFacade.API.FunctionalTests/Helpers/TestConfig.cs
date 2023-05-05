@@ -10,10 +10,11 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         public string WebhookInvalidPayloadFileName { get; set; }
 
         public string GeneratedXMLFolder { get; set; }
-        
+
         public Erpfacadeconfiguration ErpFacadeConfiguration { get; set; }
         public Azureadconfiguration AzureadConfiguration { get; set; }
         public AzureStorageConfiguration AzureStorageConfiguration { get; set; }
+        public string[] XMLActionList { get; set; }
     }
 
 
@@ -45,6 +46,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
     public class AzureStorageConfiguration
     {
-        public string ConnectionString { get; set;}
+        public string ConnectionString { get; set; }
     }
+
 }
