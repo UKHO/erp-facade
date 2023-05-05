@@ -21,6 +21,8 @@ namespace UKHO.ERPFacade.Common.Models.TableEntities
 
         public DateTime? ResponseDateTime { get; set; } = default!;
 
+        public bool? IsNotified { get; set; }
+
         public ETag ETag { get; set; } = default!;
     }
 }
