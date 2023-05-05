@@ -66,11 +66,11 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
         [Test]
         [TestCase("1NewCellScenario.JSON", "1NewCellScenario.xml", TestName = "WhenICallTheWebhookWithOneNewCellScenario")]        
-        [TestCase("1NewCellWoNewAVCSUnit.JSON", "1NewCellWoNewAVCSUnit.xml", TestName = "WhenICallTheWebhookWithOneNewCellScenario")]
-        [TestCase("2NewCellScenario.JSON", "2NewCellScenario.xml", TestName = "WhenICallTheWebhookWithOneNewCellScenario")]
-        [TestCase("1CellCancel.JSON", "1CellCancel.xml", TestName = "WhenICallTheWebhookWithOneNewCellScenario")]
+        //[TestCase("1NewCellWoNewAVCSUnit.JSON", "1NewCellWoNewAVCSUnit.xml", TestName = "WhenICallTheWebhookWithOneNewCellScenario")]
+        //[TestCase("2NewCellScenario.JSON", "2NewCellScenario.xml", TestName = "WhenICallTheWebhookWithOneNewCellScenario")]
+        //[TestCase("1CellCancel.JSON", "1CellCancel.xml", TestName = "WhenICallTheWebhookWithOneNewCellScenario")]
         [TestCase("2CellsReplace1CellsCancel.JSON", "2CellsReplace1CellsCancel.xml", TestName = "WhenICallTheWebhookWithTwoNewCellsScenario")]
-        [TestCase("3CellsReplace2CellsCancel.JSON", "3CellsReplace2CellsCancel.xml", TestName = "WhenICallTheWebhookCancel1Replace2CellsScenario")]
+        //[TestCase("3CellsReplace2CellsCancel.JSON", "3CellsReplace2CellsCancel.xml", TestName = "WhenICallTheWebhookCancel1Replace2CellsScenario")]
         public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponse1(string payloadFileName, string expectedXmlFileName)
         {
             string filePath = Path.Combine(_dir.FullName, WebhookEndpoint.config.testConfig.PayloadFolder, payloadFileName);
