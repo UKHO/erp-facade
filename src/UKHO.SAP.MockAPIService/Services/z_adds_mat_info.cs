@@ -10,7 +10,7 @@ namespace UKHO.SAP.MockAPIService.Services
         private readonly IAzureBlobEventWriter _azureBlobEventWriter;
         private readonly MockService _mockService;
 
-        public const string REQUESTFORMAT = "xml";
+        public const string RequestFormat = "xml";
 
         public z_adds_mat_info(IAzureBlobEventWriter azureBlobEventWriter, MockService mockService)
         {
@@ -23,7 +23,7 @@ namespace UKHO.SAP.MockAPIService.Services
         {
             string requestXML = ObjectXMLSerializer<Z_ADDS_MAT_INFO>.SerializeObject(z_ADDS_MAT_INFO);
 
-            Task.Run(async () => await _azureBlobEventWriter.UploadEvent(requestXML, z_ADDS_MAT_INFO.IM_MATINFO.CORRID, z_ADDS_MAT_INFO.IM_MATINFO.CORRID + '.' + REQUESTFORMAT));
+            Task.Run(async () => await _azureBlobEventWriter.UploadEvent(requestXML, z_ADDS_MAT_INFO.IM_MATINFO.CORRID, z_ADDS_MAT_INFO.IM_MATINFO.CORRID + '.' + RequestFormat));
 
             _mockService.CleanUp();
 

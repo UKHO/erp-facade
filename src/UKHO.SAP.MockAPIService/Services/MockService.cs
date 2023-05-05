@@ -6,7 +6,7 @@ namespace UKHO.SAP.MockAPIService.Services
     [ExcludeFromCodeCoverage]
     public class MockService
     {
-        private const string CURRENTTESTFILENAME = "CurrentTestCase.txt";
+        private const string CurrentTestFileName = "CurrentTestCase.txt";
         private readonly string _homeDirectoryPath;
 
         public MockService()
@@ -24,7 +24,7 @@ namespace UKHO.SAP.MockAPIService.Services
 
         public void UpdateTestCase(TestCase testCase)
         {
-            string destPath = Path.Combine(_homeDirectoryPath, CURRENTTESTFILENAME);
+            string destPath = Path.Combine(_homeDirectoryPath, CurrentTestFileName);
 
             CreateIfNotExists(destPath);
 
@@ -33,7 +33,7 @@ namespace UKHO.SAP.MockAPIService.Services
 
         public string GetCurrentTestCase()
         {
-            string destPath = Path.Combine(_homeDirectoryPath, CURRENTTESTFILENAME);
+            string destPath = Path.Combine(_homeDirectoryPath, CurrentTestFileName);
 
             CreateIfNotExists(destPath);
 
@@ -42,7 +42,7 @@ namespace UKHO.SAP.MockAPIService.Services
 
         public void CleanUp()
         {
-            string destPath = Path.Combine(_homeDirectoryPath, CURRENTTESTFILENAME);
+            string destPath = Path.Combine(_homeDirectoryPath, CurrentTestFileName);
             if (Directory.Exists(Path.GetDirectoryName(destPath)))
             {
                 File.Delete(destPath);
