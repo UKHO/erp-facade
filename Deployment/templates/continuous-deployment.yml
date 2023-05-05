@@ -44,7 +44,7 @@ steps:
       azureSubscription: "${{ parameters.AzureSubscription }}"
       appType: webApp
       appName: "$(WEB_APP_NAME)"
-      package: "$(Pipeline.Workspace)/UKHOERPFacadeAPI/UKHO.ERPFacade.API.zip"
+      package: "$(Pipeline.Workspace)/UKHOERPFacadeAPI/UKHOERPFacadeAPI.zip"
 
   - task: FileTransform@1
     displayName: "File Transform: Mock Service Application Settings"
