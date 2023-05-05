@@ -29,7 +29,7 @@
         See https://github.com/dotnet/announcements/issues/112 for full MS Details on the CVE
           A denial of service vulnerability exists when .NET Framework or .NET Core improperly handle web requests, aka '.Net Framework and .Net Core Denial of Service Vulnerability'. This CVE ID is unique from CVE-2019-0820, CVE-2019-0981.
           Vunerability applies to System.Private.Uri version	4.3.0 and 4.3.1. System.Private.Uri is part of the .NetCore runtime, and fixed with version System.Private.Uri version 4.3.2.
-        FSS is pinned to .Net core SDK > 3.1.408 which is not vunerable, and deployed to Azure App Service which will have the security patch applied.
+        ERP Facade is pinned to .Net core SDK > 6.0.101 which is not vunerable, and deployed to Azure App Service which will have the security patch applied.
     ]]>
 		</notes>
 		<cve>CVE-2019-0980</cve>
@@ -43,7 +43,7 @@
         The issue is fixed:         
           2.1.11 or SDK 2.1.507 for Visual Studio 2017 or SDK 2.1.604 for Visual Studio 2019
           2.2.5 or SDK 2.2.107 for Visual Studio 2017 or SDK 2.2.204 for Visual Studio 2019
-        ERP Facade is pinned to .Net core SDK > 3.1.408 which is not vunerable, and deployed to Azure App Service which will have the security patch applied.
+        ERP Facade is pinned to .Net core SDK > 6.0.101 which is not vunerable, and deployed to Azure App Service which will have the security patch applied.
     ]]>
 		</notes>
 		<cve>CVE-2019-0981</cve>
@@ -54,7 +54,7 @@
       file name: Microsoft.AspNetCore.Hosting.Abstractions.dll
         See https://github.com/dotnet/announcements/issues/121 for full MS Details on CVE.
         A denial of service vulnerability exists when .NET Core improperly handles web requests. An attacker who successfully exploited this vulnerability could cause a denial of service against a .NET Core web application. The vulnerability can be exploited remotely, without authentication.
-      This CVE applies to any .NET Core based application running on .NET Core 2.1.0-2.1.12, or .NET Core 2.2.0-2.2.6. FSS is pinned to .Net core SDK > 3.1.408 which is not vunerable, and deployed to Azure App Service which will have the security patch applied.
+      This CVE applies to any .NET Core based application running on .NET Core 2.1.0-2.1.12, or .NET Core 2.2.0-2.2.6. ERP Facade is pinned to .Net core SDK > 3.1.408 which is not vunerable, and deployed to Azure App Service which will have the security patch applied.
     ]]>
 		</notes>
 		<cve>CVE-2019-1301</cve>
@@ -64,7 +64,7 @@
 			<![CDATA[
    file name: Microsoft.AspNetCore.Hosting.Abstractions.dll
     An information disclosure vulnerability exists in .NET Framework and .NET Core which allows bypassing Cross-origin Resource Sharing (CORS) configurations, aka ".NET Framework Information Disclosure Vulnerability."
-    This applies to version of System.Net.Http as deployed as part of .Net core below 2.1.7 or 2.2.1. ERP Facade is pinned to .Net core SDK > 3.1.408 which is not vunerable, and deployed to Azure App Service which will have the security patch applied.
+    This applies to version of System.Net.Http as deployed as part of .Net core below 2.1.7 or 2.2.1. ERP Facade is pinned to .Net core SDK > 6.0.101 which is not vunerable, and deployed to Azure App Service which will have the security patch applied.
    ]]>
 		</notes>
 		<cve>CVE-2019-0545</cve>
@@ -77,7 +77,7 @@
         Package name: System.Text.RegularExpressions.dll (included as part of the .Net Core runtime)
       	Vulnerable versions: 4.3.0 and below
         Secure versions: 4.3.1+
-    This CVE applies to .Net Core versions below 2.2.107 (runtime 2.2.5). ERP Facade is pinned to .Net core SDK > 3.1.408 which is not vunerable, and deployed to Azure App Service which will have the security patch applied.
+    This CVE applies to .Net Core versions below 2.2.107 (runtime 2.2.5). ERP Facade is pinned to .Net core SDK > 6.0.101 which is not vunerable, and deployed to Azure App Service which will have the security patch applied.
    ]]>
 		</notes>
 		<cve>CVE-2019-0820</cve>
@@ -87,7 +87,7 @@
 			<![CDATA[
    file name: Microsoft.AspNetCore.Hosting.Abstractions.dll
     See https://github.com/dotnet/announcements/issues/97 for MS details on this CVE.
-    This CVE only applies to .NetCore versions below 2.1.8 and 2.2.2. ERP Facade is pinned to .Net core SDK > 3.1.408 which is not vunerable, and deployed to Azure App Service which will have the security patch applied.
+    This CVE only applies to .NetCore versions below 2.1.8 and 2.2.2. ERP Facade is pinned to .Net core SDK > 6.0.101 which is not vunerable, and deployed to Azure App Service which will have the security patch applied.
    ]]>
 		</notes>
 		<cve>CVE-2019-0657</cve>
@@ -177,7 +177,7 @@
 		<notes>
 			<![CDATA[
    file name: GetDocument.Insider.dll
-  CVE References ASP.Net versions 1.0-1.1. ERPFacade is built on ASP.Net Core SDK > 6.0.108, not classic ASP.Net.
+  CVE References ASP.Net versions 1.0-1.1. ERPFacade is built on ASP.Net Core SDK > 6.0.101, not classic ASP.Net.
   See https://nvd.nist.gov/vuln/detail/CVE-2005-2224 and https://www.securityfocus.com/bid/14217 for more details.
    ]]>
 		</notes>
@@ -189,7 +189,7 @@
    file name: Microsoft.AspNetCore.Http.Abstractions.dll
    See https://github.com/aspnet/announcements/issues/316 for MS details on this CVE.
    If the highest .NET Core SDK version is less that 2.1.402 or the highest Microsoft.AspNetCore.App runtime version is less that 2.1.4 you are vulnerable to this issue
-   This CVE applies to .Net Core versions below  2.1.402  (runtime 2.1.4). ERP Facade is pinned to .Net core SDK > 6.0.108 which is not vulnerable, and deployed to Azure App Service which will have the security patch applied.
+   This CVE applies to .Net Core versions below  2.1.402  (runtime 2.1.4). ERP Facade is pinned to .Net core SDK > 6.0.101 which is not vulnerable, and deployed to Azure App Service which will have the security patch applied.
    ]]>
 		</notes>
 		<cve>CVE-2018-8409</cve>
@@ -201,7 +201,7 @@
     file name: Microsoft.AspNetCore.Hosting.Abstractions.dll
     See https://github.com/dotnet/announcements/issues/196 for full MS Details on CVE.
     An information disclosure vulnerability exists in .NET 5.0, .NET Core 3.1 and .NET Core 2.1 when dumps created by the tool to collect crash dumps and dumps on demand are created with global read permissions on Linux and macOS.
-    This CVE applies to any .NET Core 3.1 but patch is provided at 3.1.412, ERP Facade is pinned to .Net core SDK > 6.0.108 which is not vunerable, and deployed to Azure App Service which will have the security patch applied.
+    This CVE applies to any .NET Core 3.1 but patch is provided at 3.1.412, ERP Facade is pinned to .Net core SDK > 6.0.101 which is not vunerable, and deployed to Azure App Service which will have the security patch applied.
     ]]>
 		</notes>
 		<cve>CVE-2021-34485</cve>
@@ -219,7 +219,7 @@
 		<notes>
 			<![CDATA[
    file name: WindowsAzure.Storage:9.3.3
-   This CVE applies to .NET Core 2.1, .NET Core 1.0, .NET Core 1.1, PowerShell Core 6.0. MSI is pinned to .Net core SDK > 3.1.408 for .NET and Visual Studio Information Disclosure Vulnerability.
+   This CVE applies to .NET Core 2.1, .NET Core 1.0, .NET Core 1.1, PowerShell Core 6.0. ERP Facade is pinned to .Net core SDK > 6.0.101 for .NET and Visual Studio Information Disclosure Vulnerability.
        This is a temporary suppression pending a fix being available.       
    ]]>
 		</notes>
@@ -244,7 +244,7 @@
 		<notes>
 			<![CDATA[
    file name: System.Private.DataContractSerialization:4.3.0
-   vulnerability: DOS Affects >Net >= 6.0.0, < 6.0.12. Currently running Net 6.0.13, sdk 6.0.405
+   vulnerability: DOS Affects >Net >= 6.0.0, < 6.0.12. Currently running Net 6.0.13, sdk 6.0.405
    ]]>
 		</notes>
 		<cve>CVE-2023-21538</cve>
@@ -273,10 +273,10 @@
 			<![CDATA[
    file name: System.Net.Http:4.3.3
    See https://github.com/dotnet/announcements/issues/111 for MS details on this CVE.
-    Package name: System.Net.Http:4.3.3 (included as part of the .Net Core runtime)
-    Vulnerable versions: 4.3.3 and below
-    Secure versions: 4.3.4+
-    This CVE applies to .NET Core 2.1, .NET Core 1.0, .NET Core 1.1, PowerShell Core 6.0. ESS is pinned to .Net core SDK > 3.1.419 which is not vulnerable, and deployed to Azure App Service which will have the security patch applied.
+    Package name: System.Net.Http:4.3.3 (included as part of the .Net Core runtime)
+    Vulnerable versions: 4.3.3 and below
+    Secure versions: 4.3.4+
+    This CVE applies to .NET Core 2.1, .NET Core 1.0, .NET Core 1.1, PowerShell Core 6.0. ERP Facade is pinned to .Net core SDK > 6.0.101 which is not vulnerable, and deployed to Azure App Service which will have the security patch applied.
    ]]>
 		</notes>
 		<cve>CVE-2018-8292</cve>
@@ -285,7 +285,7 @@
 		<notes>
 			<![CDATA[
    file name: System.Security.Cryptography.Xml:4.7.0
-   vulnerability: Buffer overflow and spoofing Affects .Net 3.1 .Net 5.0 and <= .Net 6.0.8 Currently running Net 6.0.13,  sdk 6.0.405
+   vulnerability: Buffer overflow and spoofing Affects .Net 3.1 .Net 5.0 and <= .Net 6.0.8 Currently running Net 6.0.13,  sdk 6.0.405
    ]]>
 		</notes>
 		<cve>CVE-2022-34716</cve>
