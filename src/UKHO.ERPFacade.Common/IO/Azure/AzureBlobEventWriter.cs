@@ -1,48 +1,48 @@
 ﻿using Azure.Storage.Blobs;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json.Linq;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using UKHO.ERPFacade.Common.Configuration;
-using UKHO.ERPFacade.Common.Logging;
 
 namespace UKHO.ERPFacade.Common.IO.Azure
 {
     [ExcludeFromCodeCoverage]
     public class AzureBlobEventWriter : IAzureBlobEventWriter
     {
-        private readonly ILogger<AzureBlobEventWriter> _logger;
         private readonly IOptions<AzureStorageConfiguration> _azureStorageConfig;
 
-        public AzureBlobEventWriter(ILogger<AzureBlobEventWriter> logger,
-                                        IOptions<AzureStorageConfiguration> azureStorageConfig)
+        public AzureBlobEventWriter(IOptions<AzureStorageConfiguration> azureStorageConfig)
         {
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _azureStorageConfig = azureStorageConfig ?? throw new ArgumentNullException(nameof(azureStorageConfig));
         }
 
-        public async Task UploadEvent(JObject eesEvent, string traceId)
+        public async Task UploadEvent(string requestEvent, string blobContainerName, string blobName)
         {
-            BlobClient blobClient = GetBlobClient(traceId);
+            BlobClient blobClient = GetBlobClient(blobContainerName, blobName);
 
-            Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(eesEvent.ToString() ?? ""));
+            Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(requestEvent ?? ""));
 
             await blobClient.UploadAsync(stream, overwrite: true);
-
-            _logger.LogInformation(EventIds.UploadedEncContentPublishedEventInAzureBlob.ToEventId(), "ENC content published event is uploaded in blob storage successfully.");
         }
 
         //Private Methods
-        private BlobClient GetBlobClient(string containerName)
+        private BlobClient GetBlobClient(string containerName, string blobName)
         {
             BlobContainerClient blobContainerClient = new(_azureStorageConfig.Value.ConnectionString, containerName);
             blobContainerClient.CreateIfNotExists();
 
-            var blobName = containerName + ".json";
-
             BlobClient blobClient = blobContainerClient.GetBlobClient(blobName);
             return blobClient;
+        }
+
+        public bool CheckIfContainerExists(string containerName)
+        {
+            BlobServiceClient serviceClient = new(_azureStorageConfig.Value.ConnectionString);
+
+            var container = serviceClient.GetBlobContainerClient(containerName);
+            var isExists = container.Exists();
+
+            return isExists;
         }
     }
 }

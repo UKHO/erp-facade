@@ -4,8 +4,8 @@ namespace UKHO.ERPFacade.API.Filters
 {
     public class CorrelationIdMiddleware
     {
-        public const string XCORRELATIONIDHEADERKEY = "_X-Correlation-ID";
-        public const string TRACEIDKEY = "data.traceId";
+        public const string XCorrelationIdHeaderKey = "_X-Correlation-ID";
+        public const string TraceIdKey = "data.traceId";
 
         private readonly RequestDelegate _next;
 
@@ -25,17 +25,17 @@ namespace UKHO.ERPFacade.API.Filters
             if (!string.IsNullOrWhiteSpace(bodyAsText))
             {
                 JObject bodyAsJson = JObject.Parse(bodyAsText);
-                correlationId = bodyAsJson.SelectToken(TRACEIDKEY)?.Value<string>();
+                correlationId = bodyAsJson.SelectToken(TraceIdKey)?.Value<string>();
             }
 
             httpContext.Request.Body.Position = 0;
 
-            httpContext.Request.Headers.Add(XCORRELATIONIDHEADERKEY, correlationId);
-            httpContext.Response.Headers.Add(XCORRELATIONIDHEADERKEY, correlationId);
+            httpContext.Request.Headers.Add(XCorrelationIdHeaderKey, correlationId);
+            httpContext.Response.Headers.Add(XCorrelationIdHeaderKey, correlationId);
 
             var state = new Dictionary<string, object>
             {
-                [XCORRELATIONIDHEADERKEY] = correlationId!,
+                [XCorrelationIdHeaderKey] = correlationId!,
             };
 
             var logger = httpContext.RequestServices.GetRequiredService<ILogger<CorrelationIdMiddleware>>();

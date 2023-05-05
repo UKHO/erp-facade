@@ -55,28 +55,68 @@
         /// </summary>
         DataPushedToSap = 940013,
         /// <summary>
-        /// 940014 - No Scenario Found
+        /// 940014- Webjob started to process the incomplete transactions.
         /// </summary>
-        NoScenarioFound = 940014,
+        WebjobProcessEventStarted = 940014,
         /// <summary>
-        /// 940015 - Sap Xml Template Not Found
+        /// 940015- Webjob completed to process the incomplete transactions.
         /// </summary>
-        SapXmlTemplateNotFound = 940015,
+        WebjobProcessEventCompleted = 940015,
         /// <summary>
-        /// 940016 - Building Sap Actions Started
+        /// 940016 - Callback from SAP is timed out.
         /// </summary>
-        BuildingSapActionStarted = 940016,
+        WebjobCallbackTimeoutEventFromSAP = 940016,
         /// <summary>
-        /// 940017 - Sap Action Created
+        /// 940017 - Empty or null RequestDateTime Column in Azure Table.
         /// </summary>
-        SapActionCreated = 940017,
+        EmptyRequestDateTime = 940017,
         /// <summary>
-        /// 940018 - Identifying Scenario Started
+        /// 940018 - Updated RequestTime entity successfully in Azure Table
         /// </summary>
-        IdentifyScenarioStarted = 940018,
+        UpdateRequestTimeEntitySuccessful = 940018,
         /// <summary>
-        /// 940019 - Scenario Identified
+        /// 940019 - Updated ResponseTime entity successfully in Azure Table
         /// </summary>
-        ScenarioIdentified = 940019,
+        UpdateResponseTimeEntitySuccessful = 940019,
+        /// <summary>
+        /// 940020 - Updated entity successfully in Azure Table
+        /// </summary>
+        UpdateEntitySuccessful = 940020,
+        /// <summary>
+        /// 940021 - TraceId is missing in the event received from SAP
+        /// </summary>
+        TraceIdMissingInSAPEvent = 940021,
+        /// <summary>
+        /// 940022 - Blob does not exist for traceID given in SAP event.
+        /// </summary>
+        BlobNotFoundInAzure = 940022,
+        /// <summary>
+        /// 940023 - Blob exists for traceID given in SAP event.
+        /// </summary>
+        BlobExistsInAzure = 940023,
+        /// <summary>
+        /// 940024 - No Scenario Found
+        /// </summary>
+        NoScenarioFound = 940024,
+        /// <summary>
+        /// 940025 - Sap Xml Template Not Found
+        /// </summary>
+        SapXmlTemplateNotFound = 940025,
+        /// <summary>
+        /// 940026 - Building Sap Actions Started
+        /// </summary>
+        BuildingSapActionStarted = 940026,
+        /// <summary>
+        /// 940027 - Sap Action Created
+        /// </summary>
+        SapActionCreated = 940027,
+        /// <summary>
+        /// 940028 - Identifying Scenario Started
+        /// </summary>
+        IdentifyScenarioStarted = 940028,
+        /// <summary>
+        /// 940029 - Scenario Identified
+        /// </summary>
+        ScenarioIdentified = 940029,
     }
 }

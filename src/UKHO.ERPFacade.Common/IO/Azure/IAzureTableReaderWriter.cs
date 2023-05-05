@@ -7,5 +7,8 @@ namespace UKHO.ERPFacade.Common.IO.Azure
     {
         Task UpsertEntity(JObject eesEvent, string traceId);
         Task<EESEventEntity> GetEntity(string traceId);
+        Task UpdateRequestTimeEntity(string traceId);
+        Task UpdateResponseTimeEntity(string traceId);
+        void ValidateAndUpdateIsNotifiedEntity();
     }
 }

@@ -1,6 +1,7 @@
 using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
+using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json.Serialization;
@@ -83,7 +84,7 @@ namespace UKHO.ERPFacade
                             additionalValues["_RemoteIPAddress"] = httpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString();
                             additionalValues["_User-Agent"] = httpContextAccessor.HttpContext.Request.Headers["User-Agent"].FirstOrDefault() ?? string.Empty;
                             additionalValues["_AssemblyVersion"] = Assembly.GetExecutingAssembly().GetCustomAttributes<AssemblyFileVersionAttribute>().Single().Version;
-                            additionalValues["_X-Correlation-ID"] = httpContextAccessor.HttpContext.Request.Headers?[CorrelationIdMiddleware.XCORRELATIONIDHEADERKEY].FirstOrDefault() ?? string.Empty;
+                            additionalValues["_X-Correlation-ID"] = httpContextAccessor.HttpContext.Request.Headers?[CorrelationIdMiddleware.XCorrelationIdHeaderKey].FirstOrDefault() ?? string.Empty;
                         }
                     }
                     logging.AddEventHub(config =>
@@ -114,7 +115,7 @@ namespace UKHO.ERPFacade
 
             builder.Services.AddHeaderPropagation(options =>
             {
-                options.Headers.Add(CorrelationIdMiddleware.XCORRELATIONIDHEADERKEY);
+                options.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey);
             });
 
             var azureAdConfiguration = new AzureADConfiguration();
@@ -126,7 +127,6 @@ namespace UKHO.ERPFacade
                        options.Audience = azureAdConfiguration.ClientId;
                        options.Authority = $"{azureAdConfiguration.MicrosoftOnlineLoginUrl}{azureAdConfiguration.TenantId}";
                    });
-
 
             builder.Services.AddAuthorization(options =>
             {
@@ -141,9 +141,9 @@ namespace UKHO.ERPFacade
                 options.AddPolicy("WebhookCaller", policy => policy.RequireRole("WebhookCaller"));
             });
 
-
-            // The following line enables Application Insights telemetry collection.	
-            builder.Services.AddApplicationInsightsTelemetry();
+            // The following line enables Application Insights telemetry collection.
+            var options = new ApplicationInsightsServiceOptions { ConnectionString = configuration.GetValue<string>("ApplicationInsights:ConnectionString") };
+            builder.Services.AddApplicationInsightsTelemetry(options);
 
             // Add services to the container.
             builder.Services.AddControllers(o =>

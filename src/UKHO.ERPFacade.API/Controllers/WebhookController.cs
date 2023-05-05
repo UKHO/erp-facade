@@ -23,7 +23,8 @@ namespace UKHO.ERPFacade.API.Controllers
         private readonly IScenarioBuilder _scenarioBuilder;
         private readonly ISapMessageBuilder _sapMessageBuilder;
 
-        public const string TRACEIDKEY = "data.traceId";
+        private const string TraceIdKey = "data.traceId";
+        private const string RequestFormat = "json";
 
         public WebhookController(IHttpContextAccessor contextAccessor,
                                  ILogger<WebhookController> logger,
@@ -68,7 +69,7 @@ namespace UKHO.ERPFacade.API.Controllers
             {
                 _logger.LogInformation(EventIds.NewEncContentPublishedEventReceived.ToEventId(), "ERP Facade webhook has received new enccontentpublished event from EES.");
 
-                string traceId = requestJson.SelectToken(TRACEIDKEY)?.Value<string>();
+                string traceId = requestJson.SelectToken(TraceIdKey)?.Value<string>();
 
                 if (string.IsNullOrEmpty(traceId))
                 {
@@ -77,10 +78,14 @@ namespace UKHO.ERPFacade.API.Controllers
                 }
 
                 _logger.LogInformation(EventIds.StoreEncContentPublishedEventInAzureTable.ToEventId(), "Storing the received ENC content published event in azure table.");
+
                 await _azureTableReaderWriter.UpsertEntity(requestJson, traceId);
 
                 _logger.LogInformation(EventIds.UploadEncContentPublishedEventInAzureBlob.ToEventId(), "Uploading the received ENC content published event in blob storage.");
-                await _azureBlobEventWriter.UploadEvent(requestJson, traceId);
+
+                await _azureBlobEventWriter.UploadEvent(requestJson.ToString(), traceId, traceId + '.' + RequestFormat);
+
+                _logger.LogInformation(EventIds.UploadedEncContentPublishedEventInAzureBlob.ToEventId(), "ENC content published event is uploaded in blob storage successfully.");
 
                 List<Scenario> scenarios = _scenarioBuilder.BuildScenarios(JsonConvert.DeserializeObject<EESEvent>(requestJson.ToString()));
 
@@ -96,6 +101,8 @@ namespace UKHO.ERPFacade.API.Controllers
                         throw new Exception();
                     }
                     _logger.LogInformation(EventIds.DataPushedToSap.ToEventId(), "Data pushed to SAP successfully. | {StatusCode}", response.StatusCode);
+
+                    await _azureTableReaderWriter.UpdateRequestTimeEntity(traceId);
 
                     return new OkObjectResult(StatusCodes.Status200OK);
                 }
