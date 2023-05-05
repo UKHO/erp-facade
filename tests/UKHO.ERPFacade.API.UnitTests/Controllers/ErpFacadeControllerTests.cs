@@ -38,13 +38,13 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         }
 
         [Test]
-        public async Task WhenValidRequestReceived_ThenErpFacadeReturns200OkResponse()
+        public async Task WhenValidRequestReceived_ThenPostPriceInformationReturns200OkResponse()
         {
             var fakeSapEventJson = JObject.Parse(@"{""data"":{""traceId"":""123""}}");
 
             A.CallTo(() => _fakeAzureBlobEventWriter.CheckIfContainerExists(A<string>.Ignored)).Returns(true);
 
-            var result = (OkObjectResult)await _fakeErpFacadeController.Post(fakeSapEventJson);
+            var result = (OkObjectResult)await _fakeErpFacadeController.PostPriceInformation(fakeSapEventJson);
             result.StatusCode.Should().Be(200);
 
             A.CallTo(() => _fakeAzureTableReaderWriter.UpdateResponseTimeEntity(A<string>.Ignored)).MustHaveHappened();
@@ -57,11 +57,11 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         }
 
         [Test]
-        public async Task WhenTraceIdIsMissingInRequest_ThenErpFacadeReturnsReturns400BadRequestResponse()
+        public async Task WhenTraceIdIsMissingInRequest_ThenPostPriceInformationReturnsReturns400BadRequestResponse()
         {
             var fakeSapEventJson = JObject.Parse(@"{""data"":{""corId"":""123""}}");
 
-            var result = (BadRequestObjectResult)await _fakeErpFacadeController.Post(fakeSapEventJson);
+            var result = (BadRequestObjectResult)await _fakeErpFacadeController.PostPriceInformation(fakeSapEventJson);
 
             result.StatusCode.Should().Be(400);
 
@@ -75,13 +75,13 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         }
 
         [Test]
-        public async Task WhenInvalidTraceIdInRequest_ThenErpFacadeReturns404NotFoundResponse()
+        public async Task WhenInvalidTraceIdInRequest_ThenPostPriceInformationReturns404NotFoundResponse()
         {
             var fakeSapEventJson = JObject.Parse(@"{""data"":{""traceId"":""123""}}");
 
             A.CallTo(() => _fakeAzureBlobEventWriter.CheckIfContainerExists(A<string>.Ignored)).Returns(false);
 
-            var result = (NotFoundObjectResult)await _fakeErpFacadeController.Post(fakeSapEventJson);
+            var result = (NotFoundObjectResult)await _fakeErpFacadeController.PostPriceInformation(fakeSapEventJson);
 
             result.StatusCode.Should().Be(404);
 
@@ -92,6 +92,15 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
              && call.GetArgument<LogLevel>(0) == LogLevel.Error
              && call.GetArgument<EventId>(1) == EventIds.BlobNotFoundInAzure.ToEventId()
              && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Blob does not exist in the Azure Storage for the trace ID received from SAP event.").MustHaveHappenedOnceExactly();
+        }
+
+        [Test]
+        public async Task WhenValidRequestReceived_ThenPostBulkPriceInformationReturns200OkResponse()
+        {
+            var fakeSapEventJson = JObject.Parse(@"{""data"":{""traceId"":""123""}}");
+
+            var result = (OkObjectResult)await _fakeErpFacadeController.PostBulkPriceInformation(fakeSapEventJson);
+            result.StatusCode.Should().Be(200);
         }
     }
 }
