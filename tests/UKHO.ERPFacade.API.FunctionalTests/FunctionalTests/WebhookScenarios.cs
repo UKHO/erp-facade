@@ -10,7 +10,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         private WebhookEndpoint _webhook;
         private readonly ADAuthTokenProvider _authToken = new();
 
-        private static readonly string _webhookPayloadFilePath = "ERPFacadePayloadTestData/WebhookPayload.json";
+        private static readonly string _webhookPayloadFilePath = "ERPFacadePayloadTestData/WebhookPayload.JSON";
 
         [SetUp]
         public void Setup()
