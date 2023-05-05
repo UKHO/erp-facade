@@ -7,10 +7,10 @@ namespace UKHO.ERPFacade.API.Helpers
 {
     public class ScenarioBuilder : IScenarioBuilder
     {
-        private readonly ILogger<SapMessageBuilder> _logger;
+        private readonly ILogger<ScenarioBuilder> _logger;
         private readonly IOptions<ScenarioRuleConfiguration> _scenarioRuleConfig;
 
-        public ScenarioBuilder(ILogger<SapMessageBuilder> logger,
+        public ScenarioBuilder(ILogger<ScenarioBuilder> logger,
                                 IOptions<ScenarioRuleConfiguration> scenarioRuleConfig)
         {
             _logger = logger;
