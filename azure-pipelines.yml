@@ -28,14 +28,14 @@ variables:
 
 stages:
 
-- stage: Stryker_Mutator
+-   stage: Stryker_Mutator
     displayName: "Stryker Mutator"
     dependsOn: []
     jobs:
-    - job: Stryker
-      workspace:
-        clean: all
-      steps:
+    -   job: Stryker
+        workspace:
+          clean: all
+        steps:
         - task: DotNetCoreCLI@2
           displayName: "Install Stryker"
           inputs:
