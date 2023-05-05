@@ -51,7 +51,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
                         new Product()
                         {
                             ReplacedBy = new List<string>(),
-                            InUnitsOfSale = new List<string> { "UnitOfSale1", "UnitofSale2" },
+                            InUnitsOfSale = new List<string> { "Cell1", "UnitOfSale1", "UnitofSale2" },
                             ProductName = "Cell1",
                             Status = new Status()
                             {
@@ -65,7 +65,25 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
                     {
                         new UnitOfSale()
                         {
+                            UnitName = "Cell1",
+                            CompositionChanges = new CompositionChanges()
+                            {
+                                AddProducts = new List<string> { "Cell1"},
+                                RemoveProducts = new List<string>()
+                            }
+                        },
+                        new UnitOfSale()
+                        {
                             UnitName = "UnitOfSale1",
+                            CompositionChanges = new CompositionChanges()
+                            {
+                                AddProducts = new List<string> { "Cell1"},
+                                RemoveProducts = new List<string>()
+                            }
+                        },
+                        new UnitOfSale()
+                        {
+                            UnitName = "UnitOfSale2",
                             CompositionChanges = new CompositionChanges()
                             {
                                 AddProducts = new List<string> { "Cell1"},
@@ -105,7 +123,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
                         new Product()
                         {
                             ReplacedBy = new List<string>(),
-                            InUnitsOfSale = new List<string> { "UnitOfSale1", "UnitofSale2" },
+                            InUnitsOfSale = new List<string> { "Cell1", "UnitOfSale1", "UnitofSale2" },
                             ProductName = "Cell1",
                             Status = new Status()
                             {
@@ -119,7 +137,25 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
                     {
                         new UnitOfSale()
                         {
+                            UnitName = "Cell1",
+                            CompositionChanges = new CompositionChanges()
+                            {
+                                AddProducts = new List<string> { "Cell1"},
+                                RemoveProducts = new List<string>()
+                            }
+                        },
+                        new UnitOfSale()
+                        {
                             UnitName = "UnitOfSale1",
+                            CompositionChanges = new CompositionChanges()
+                            {
+                                AddProducts = new List<string> { "Cell1"},
+                                RemoveProducts = new List<string>()
+                            }
+                        },
+                        new UnitOfSale()
+                        {
+                            UnitName = "UnitOfSale2",
                             CompositionChanges = new CompositionChanges()
                             {
                                 AddProducts = new List<string> { "Cell1"},
@@ -157,7 +193,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
                         new Product()
                         {
                             ReplacedBy = new List<string> { "Cell2", "Cell3" },
-                            InUnitsOfSale = new List<string> { "UnitOfSale1", "UnitofSale2" },
+                            InUnitsOfSale = new List<string> { "Cell1", "UnitOfSale1", "UnitofSale2" },
                             ProductName = "Cell1",
                             Status = new Status()
                             {
@@ -171,7 +207,25 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
                     {
                         new UnitOfSale()
                         {
+                            UnitName = "Cell1",
+                            CompositionChanges = new CompositionChanges()
+                            {
+                                AddProducts = new List<string> { "Cell2", "Cell3" },
+                                RemoveProducts = new List<string> { "Cell1" }
+                            }
+                        },
+                        new UnitOfSale()
+                        {
                             UnitName = "UnitOfSale1",
+                            CompositionChanges = new CompositionChanges()
+                            {
+                                AddProducts = new List<string> { "Cell2", "Cell3" },
+                                RemoveProducts = new List<string> { "Cell1" }
+                            }
+                        },
+                        new UnitOfSale()
+                        {
+                            UnitName = "UnitOfSale2",
                             CompositionChanges = new CompositionChanges()
                             {
                                 AddProducts = new List<string> { "Cell2", "Cell3" },

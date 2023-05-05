@@ -90,5 +90,16 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
 
             result.Should().BeOfType<XmlDocument>();
         }
+
+        [Test]
+        public void WhenSapXmlTemplateFileNotExist_ThenThrowFileNotFoundException()
+        {
+            var scenarios = JsonConvert.DeserializeObject<List<Scenario>>(scenariosData);
+            var traceId = "2f03a25f-28b3-46ea-b009-5943250a9a41";
+
+            A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(false);            
+
+            Assert.Throws<FileNotFoundException>(() => _fakeSapMessageBuilder.BuildSapMessageXml(scenarios!, traceId));
+        }
     }
 }
