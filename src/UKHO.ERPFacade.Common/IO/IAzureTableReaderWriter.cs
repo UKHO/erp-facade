@@ -9,5 +9,6 @@ namespace UKHO.ERPFacade.Common.IO
         Task<EESEventEntity> GetEntity(string traceId);
         Task UpdateRequestTimeEntity(string traceId);
         Task UpdateResponseTimeEntity(string traceId);
+        void ValidateAndUpdateIsNotifiedEntity();
     }
 }

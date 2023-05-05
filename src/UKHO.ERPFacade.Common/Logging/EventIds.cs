@@ -55,28 +55,44 @@
         /// </summary>
         DataPushedToSap = 940013,
         /// <summary>
-        /// 940014 - Updated entity successfully in Azure Table
+        /// 940014- Webjob started to process the incomplete transactions.
         /// </summary>
-        UpdateEntitySuccessful = 940014,
+        WebjobProcessEventStarted = 940014,
         /// <summary>
-        /// 940015 - TraceId is missing in the event received from SAP
+        /// 940015- Webjob completed to process the incomplete transactions.
         /// </summary>
-        TraceIdMissingInSAPEvent = 940015,
+        WebjobProcessEventCompleted = 940015,
         /// <summary>
-        /// 940016 - Blob does not exist for traceID given in SAP event.
+        /// 940016 - Callback from SAP is timed out.
         /// </summary>
-        BlobNotFoundInAzure = 940016,
+        WebjobCallbackTimeoutEventFromSAP = 940016,
         /// <summary>
-        /// 940017 - Blob exists for traceID given in SAP event.
+        /// 940017 - Empty or null RequestDateTime Column in Azure Table.
         /// </summary>
-        BlobExistsInAzure = 940017,
+        EmptyRequestDateTime = 940017,
         /// <summary>
-        /// 940018 - Updated RequestTime successfully in Azure Table.
+        /// 940018 - Updated RequestTime entity successfully in Azure Table
         /// </summary>
         UpdateRequestTimeEntitySuccessful = 940018,
         /// <summary>
-        /// 940019 - Updated ResponseTime successfully in Azure Table.
+        /// 940019 - Updated ResponseTime entity successfully in Azure Table
         /// </summary>
-        UpdateResponseTimeEntitySuccessful = 940019
+        UpdateResponseTimeEntitySuccessful = 940019,
+        /// <summary>
+        /// 940020 - Updated entity successfully in Azure Table
+        /// </summary>
+        UpdateEntitySuccessful = 940020,
+        /// <summary>
+        /// 940021 - TraceId is missing in the event received from SAP
+        /// </summary>
+        TraceIdMissingInSAPEvent = 940021,
+        /// <summary>
+        /// 940022 - Blob does not exist for traceID given in SAP event.
+        /// </summary>
+        BlobNotFoundInAzure = 940022,
+        /// <summary>
+        /// 940023 - Blob exists for traceID given in SAP event.
+        /// </summary>
+        BlobExistsInAzure = 940023,
     }
 }
