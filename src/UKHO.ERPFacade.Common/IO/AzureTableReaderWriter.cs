@@ -17,7 +17,6 @@ namespace UKHO.ERPFacade.Common.IO
         private readonly ILogger<AzureTableReaderWriter> _logger;
         private readonly IOptions<AzureStorageConfiguration> _azureStorageConfig;
         private readonly IOptions<ErpFacadeWebJobConfiguration> _erpFacadeWebjobConfig;
-
         private const string ErpFacadeTableName = "eesevents";
         private const int DefaultCallbackDuration = 5;
 

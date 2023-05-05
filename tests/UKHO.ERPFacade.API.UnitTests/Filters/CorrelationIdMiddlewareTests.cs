@@ -44,10 +44,10 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
 
             await _middleware.InvokeAsync(_fakeHttpContext);
 
-            A.CallTo(() => _fakeHttpContext.Request.Headers[CorrelationIdMiddleware.XCORRELATIONIDHEADERKEY]).Returns(traceId);
-            A.CallTo(() => _fakeHttpContext.Response.Headers[CorrelationIdMiddleware.XCORRELATIONIDHEADERKEY]).Returns(traceId);
-            A.CallTo(() => _fakeHttpContext.Request.Headers.Add(CorrelationIdMiddleware.XCORRELATIONIDHEADERKEY, traceId)).MustHaveHappenedOnceExactly();
-            A.CallTo(() => _fakeHttpContext.Response.Headers.Add(CorrelationIdMiddleware.XCORRELATIONIDHEADERKEY, traceId)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _fakeHttpContext.Request.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey]).Returns(traceId);
+            A.CallTo(() => _fakeHttpContext.Response.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey]).Returns(traceId);
+            A.CallTo(() => _fakeHttpContext.Request.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey, traceId)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _fakeHttpContext.Response.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey, traceId)).MustHaveHappenedOnceExactly();
             A.CallTo(() => _fakeLogger.BeginScope(A<Dictionary<string, object>>._)).MustHaveHappenedOnceExactly();
         }
 
@@ -64,15 +64,14 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
 
             await _middleware.InvokeAsync(_fakeHttpContext);
 
-            A.CallTo(() => _fakeHttpContext.Request.Headers.ContainsKey(CorrelationIdMiddleware.XCORRELATIONIDHEADERKEY)).Returns(true);
-            A.CallTo(() => _fakeHttpContext.Response.Headers.ContainsKey(CorrelationIdMiddleware.XCORRELATIONIDHEADERKEY)).Returns(true);
+            A.CallTo(() => _fakeHttpContext.Request.Headers.ContainsKey(CorrelationIdMiddleware.XCorrelationIdHeaderKey)).Returns(true);
+            A.CallTo(() => _fakeHttpContext.Response.Headers.ContainsKey(CorrelationIdMiddleware.XCorrelationIdHeaderKey)).Returns(true);
             A.CallTo(() => _fakeLogger.BeginScope(A<Dictionary<string, object>>.Ignored)).MustHaveHappenedOnceExactly();
         }
 
         [Test]
         public async Task WhenInvokeAsyncIsCalled_ThenNextMiddlewareShouldBeInvoked()
-        {
-            var traceId = Guid.NewGuid().ToString();
+        {           
             var bodyAsJson = new JObject { { "data", new JObject { } } };
             var bodyAsText = bodyAsJson.ToString();
 

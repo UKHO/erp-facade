@@ -74,7 +74,7 @@ namespace UKHO.ERPFacade
                             additionalValues["_RemoteIPAddress"] = httpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString();
                             additionalValues["_User-Agent"] = httpContextAccessor.HttpContext.Request.Headers["User-Agent"].FirstOrDefault() ?? string.Empty;
                             additionalValues["_AssemblyVersion"] = Assembly.GetExecutingAssembly().GetCustomAttributes<AssemblyFileVersionAttribute>().Single().Version;
-                            additionalValues["_X-Correlation-ID"] = httpContextAccessor.HttpContext.Request.Headers?[CorrelationIdMiddleware.XCORRELATIONIDHEADERKEY].FirstOrDefault() ?? string.Empty;
+                            additionalValues["_X-Correlation-ID"] = httpContextAccessor.HttpContext.Request.Headers?[CorrelationIdMiddleware.XCorrelationIdHeaderKey].FirstOrDefault() ?? string.Empty;
                         }
                     }
                     logging.AddEventHub(config =>
@@ -105,7 +105,7 @@ namespace UKHO.ERPFacade
 
             builder.Services.AddHeaderPropagation(options =>
             {
-                options.Headers.Add(CorrelationIdMiddleware.XCORRELATIONIDHEADERKEY);
+                options.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey);
             });
 
             var azureAdConfiguration = new AzureADConfiguration();

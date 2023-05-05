@@ -77,6 +77,22 @@
         /// <summary>
         /// 940019 - Updated ResponseTime entity successfully in Azure Table
         /// </summary>
-        UpdateResponseTimeEntitySuccessful = 940019
+        UpdateResponseTimeEntitySuccessful = 940019,
+        /// <summary>
+        /// 940020 - Updated entity successfully in Azure Table
+        /// </summary>
+        UpdateEntitySuccessful = 940020,
+        /// <summary>
+        /// 940021 - TraceId is missing in the event received from SAP
+        /// </summary>
+        TraceIdMissingInSAPEvent = 940021,
+        /// <summary>
+        /// 940022 - Blob does not exist for traceID given in SAP event.
+        /// </summary>
+        BlobNotFoundInAzure = 940022,
+        /// <summary>
+        /// 940023 - Blob exists for traceID given in SAP event.
+        /// </summary>
+        BlobExistsInAzure = 940023,
     }
 }
