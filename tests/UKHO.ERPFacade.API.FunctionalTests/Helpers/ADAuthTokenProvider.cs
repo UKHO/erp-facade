@@ -1,7 +1,4 @@
-﻿
-using Microsoft.Identity.Client;
-using Newtonsoft.Json.Linq;
-using UKHO.ERPFacade.API.FunctionalTests.FunctionalTests;
+﻿using Microsoft.Identity.Client;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
@@ -14,7 +11,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         {
             _config = new();
 
-            AzureADToken = await GenerateAzureADToken(_config.testConfig.AzureadConfiguration.ClientId, _config.testConfig.AzureadConfiguration.ClientSecret, AzureADToken);
+            AzureADToken = await GenerateAzureADToken(_config.TestConfig.AzureadConfiguration.ClientId, _config.TestConfig.AzureadConfiguration.ClientSecret, AzureADToken);
             return AzureADToken;
         }
 
@@ -24,11 +21,11 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             if (noRole)
             {
                 AzureADToken = null;
-                AzureADToken = await GenerateAzureADToken(_config.testConfig.AzureadConfiguration.AutoTestClientIdNoRole, _config.testConfig.AzureadConfiguration.ClientSecretNoRole, AzureADToken);
+                AzureADToken = await GenerateAzureADToken(_config.TestConfig.AzureadConfiguration.AutoTestClientIdNoRole, _config.TestConfig.AzureadConfiguration.ClientSecretNoRole, AzureADToken);
             }
             else
             {
-                AzureADToken = await GenerateAzureADToken(_config.testConfig.AzureadConfiguration.AutoTestClientId, _config.testConfig.AzureadConfiguration.ClientSecret, AzureADToken);
+                AzureADToken = await GenerateAzureADToken(_config.TestConfig.AzureadConfiguration.AutoTestClientId, _config.TestConfig.AzureadConfiguration.ClientSecret, AzureADToken);
             }
             return AzureADToken;
         }
@@ -37,17 +34,17 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         {
             try
             {
-                string[] scopes = new string[] { $"{_config.testConfig.AzureadConfiguration.ClientId}/.default" };
+                string[] scopes = new string[] { $"{_config.TestConfig.AzureadConfiguration.ClientId}/.default" };
                 if (token == null)
                 {
-                    if (_config.testConfig.AzureadConfiguration.IsRunningOnLocalMachine)
+                    if (_config.TestConfig.AzureadConfiguration.IsRunningOnLocalMachine)
                     {
-                        IPublicClientApplication debugApp = PublicClientApplicationBuilder.Create(_config.testConfig.AzureadConfiguration.ClientId).
+                        IPublicClientApplication debugApp = PublicClientApplicationBuilder.Create(_config.TestConfig.AzureadConfiguration.ClientId).
                                                             WithRedirectUri("http://localhost").Build();
 
                         //Acquiring token through user interaction
                         AuthenticationResult tokenTask = await debugApp.AcquireTokenInteractive(scopes)
-                                                                .WithAuthority($"{_config.testConfig.AzureadConfiguration.MicrosoftOnlineLoginUrl}{_config.testConfig.AzureadConfiguration.TenantId}", true)
+                                                                .WithAuthority($"{_config.TestConfig.AzureadConfiguration.MicrosoftOnlineLoginUrl}{_config.TestConfig.AzureadConfiguration.TenantId}", true)
                                                                 .ExecuteAsync();
                         token = tokenTask.AccessToken;
                     }
@@ -56,7 +53,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
                         IConfidentialClientApplication app = ConfidentialClientApplicationBuilder.Create(clientId)
                                                         .WithClientSecret(clientSecret)
-                                                        .WithAuthority(new Uri($"{_config.testConfig.AzureadConfiguration.MicrosoftOnlineLoginUrl}{_config.testConfig.AzureadConfiguration.TenantId}"))
+                                                        .WithAuthority(new Uri($"{_config.TestConfig.AzureadConfiguration.MicrosoftOnlineLoginUrl}{_config.TestConfig.AzureadConfiguration.TenantId}"))
                                                         .Build();
 
                         AuthenticationResult tokenTask = await app.AcquireTokenForClient(scopes).ExecuteAsync();

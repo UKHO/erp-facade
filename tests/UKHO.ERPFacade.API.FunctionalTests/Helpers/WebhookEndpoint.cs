@@ -5,16 +5,15 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
     public class WebhookEndpoint
     {
         public static Config config;
-        private RestClient client;
+        private readonly RestClient client;
         private readonly ADAuthTokenProvider _authToken;
 
         public WebhookEndpoint()
         {
             config = new();
             _authToken = new();
-            var options = new RestClientOptions(config.testConfig.ErpFacadeConfiguration.BaseUrl);
+            var options = new RestClientOptions(config.TestConfig.ErpFacadeConfiguration.BaseUrl);
             client = new RestClient(options);
-            
         }
 
         public async Task<RestResponse> OptionWebhookResponseAsync(string token)
@@ -34,7 +33,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             {
                 requestBody = streamReader.ReadToEnd();
             }
-            
+
             var request = new RestRequest("/webhook/newenccontentpublishedeventreceived", Method.Post);
             request.AddHeader("Content-Type", "application/json");
             request.AddHeader("Authorization", "Bearer " + token);
