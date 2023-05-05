@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UKHO.ERPFacade.WebJob", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UKHO.SAP.MockAPIService", "src\UKHO.SAP.MockAPIService\UKHO.SAP.MockAPIService.csproj", "{2DA52056-E804-4B85-A741-C4CF1258E984}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UKHO.ERPFacade.Common.UnitTests", "tests\UKHO.ERPFacade.Common.UnitTests\UKHO.ERPFacade.Common.UnitTests.csproj", "{4F7E2A82-02A8-4EA6-8EF8-D33D5EFC6BBB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UKHO.ERPFacade.Common.UnitTests", "tests\UKHO.ERPFacade.Common.UnitTests\UKHO.ERPFacade.Common.UnitTests.csproj", "{4F7E2A82-02A8-4EA6-8EF8-D33D5EFC6BBB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
