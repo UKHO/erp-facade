@@ -86,7 +86,7 @@ namespace UKHO.ERPFacade.API.Controllers
                 throw new Exception();
             }
             _logger.LogInformation(EventIds.DataPushedToSap.ToEventId(), "Data pushed to SAP successfully. | {StatusCode} | {SapResponse}", response.StatusCode, response.Content?.ReadAsStringAsync().Result);
-
+            await _azureTableReaderWriter.UpdateRequestTimeEntity(traceId);
             return new OkObjectResult(StatusCodes.Status200OK);
         }
     }
