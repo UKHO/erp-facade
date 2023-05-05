@@ -54,14 +54,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             var response = await Webhook.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(true));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.Forbidden);
         }
-        [Test(Description = "WhenValidEventInNewEncContentPublishedEventReceivedWithXML_ThenWebhookReturns200OkResponse"), Order(0)]
-        public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithXML_ThenWebhookReturns200OkResponse()
-        {
-            string filePath = Path.Combine(_dir.FullName, WebhookEndpoint.config.testConfig.PayloadFolder, WebhookEndpoint.config.testConfig.WebhookPayloadFileName);
-            var generatedXMLFolder = Path.Combine(_dir.FullName, WebhookEndpoint.config.testConfig.GeneratedXMLFolder);
-            var response = await Webhook.PostWebhookResponseAsyncForXML(filePath, generatedXMLFolder, await _authToken.GetAzureADToken(false));
-            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-        }
+
         [Test(Description = "WhenValidEventInNewEncContentPublishedEventReceivedWithXML_ThenWebhookReturns500OkResponse"), Order(1)]
         public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithXML_ThenWebhookReturns500OkResponse()
         {
@@ -71,11 +64,13 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.InternalServerError);
         }
 
-        // ====== Under Maintenance =======
-
         [Test]
-        [TestCase("1NewCellScenario.json", "1NewCellScenario.xml", TestName = "WhenICallTheWebhookWithOneNewCellScenario")]
-        [TestCase("2NewCellScenario.json", "3CellsReplace2CellsCancel.xml", TestName = "WhenICallTheWebhookWithTwoNewCellsScenario")]
+        [TestCase("1NewCellScenario.JSON", "1NewCellScenario.xml", TestName = "WhenICallTheWebhookWithOneNewCellScenario")]        
+        [TestCase("1NewCellWoNewAVCSUnit.JSON", "1NewCellWoNewAVCSUnit.xml", TestName = "WhenICallTheWebhookWithOneNewCellScenario")
+        [TestCase("2NewCellScenario.JSON", "2NewCellScenario.xml", TestName = "WhenICallTheWebhookWithOneNewCellScenario")]
+        [TestCase("1CellCancel.JSON", "1CellCancel.xml", TestName = "WhenICallTheWebhookWithOneNewCellScenario")]
+        [TestCase("2CellsReplace1CellsCancel.JSON", "2CellsReplace1CellsCancel.xml", TestName = "WhenICallTheWebhookWithTwoNewCellsScenario")]
+        [TestCase("3CellsReplace2CellsCancel.JSON", "3CellsReplace2CellsCancel.xml", TestName = "WhenICallTheWebhookCancel1Replace2CellsScenario")]
         public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponse1(string payloadFileName, string expectedXmlFileName)
         {
             string filePath = Path.Combine(_dir.FullName, WebhookEndpoint.config.testConfig.PayloadFolder, payloadFileName);

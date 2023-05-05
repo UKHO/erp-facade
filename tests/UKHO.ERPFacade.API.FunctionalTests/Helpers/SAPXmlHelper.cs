@@ -107,6 +107,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 }
 
             }
+            Console.WriteLine("JSON doesn't have corresponding Unit of Sale.");
             return false;
         }
 
@@ -148,6 +149,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 }
 
             }
+            Console.WriteLine("JSON doesn't have corresponding product.");
             return false;
         }
     
@@ -197,6 +199,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 }
 
             }
+            Console.WriteLine("JSON doesn't have corresponding Unit of Sale.");
+
             return false;
         }
 
@@ -241,6 +245,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 }
 
             }
+
+            Console.WriteLine("JSON doesn't have corresponding product.");
             return false;
         }
 
@@ -316,6 +322,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 }
 
             }
+            Console.WriteLine("JSON doesn't have corresponding Product/Unit of Sale.");
             return false;
         }
 
@@ -366,21 +373,11 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 }
 
             }
+            Console.WriteLine("JSON doesn't have corresponding Unit of Sale.");
             return false;
             }
 
-        private static bool VerifyBlankFields(Item item, string[] fieldNames)
-        {
-            bool allBlanks = true;
-            //string[] fieldNames = { "ACTIONNUMBER", "ACTION" };
-
-            foreach (string field in fieldNames)
-            {
-                if(!typeof(Item).GetProperty(field).GetValue(item, null).Equals(""))
-                    AttrNotMatched.Add(typeof(Item).GetProperty(field).Name);
-            }
-            return allBlanks;
-        }
+        
         private static bool verifyCreateENCCell(string childCell, Item item)
         {
            
@@ -433,9 +430,23 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 }
 
             }
+            Console.WriteLine("JSON doesn't have corresponding product.");
             return false;
 
+
             
+        }
+        private static bool VerifyBlankFields(Item item, string[] fieldNames)
+        {
+            bool allBlanks = true;
+            //string[] fieldNames = { "ACTIONNUMBER", "ACTION" };
+
+            foreach (string field in fieldNames)
+            {
+                if (!typeof(Item).GetProperty(field).GetValue(item, null).Equals(""))
+                    AttrNotMatched.Add(typeof(Item).GetProperty(field).Name);
+            }
+            return allBlanks;
         }
         private static UoSProductInfo getProductInfo(List<string> addProducts)
         {
