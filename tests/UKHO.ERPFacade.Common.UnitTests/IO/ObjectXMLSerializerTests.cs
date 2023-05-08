@@ -32,7 +32,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.IO
 
             var result = ObjectXMLSerializer<Z_ADDS_MAT_INFO>.SerializeObject(z_ADDS_MAT_INFO!);
 
-            Assert.AreEqual(sb.ToString(), result);
+            Assert.That(sb.ToString(), Is.EqualTo(result));
         }
 
         [Test]
