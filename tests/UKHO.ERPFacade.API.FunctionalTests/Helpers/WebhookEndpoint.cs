@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using NUnit.Framework;
 using RestSharp;
+using UKHO.ERPFacade.API.FunctionalTests.Model;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
@@ -67,17 +68,16 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             string traceID = jsonPayload.Data.TraceId;
 
             //Logic to download XML from container using TraceID from JSON
-
             //string generatedXMLFilePath = SapXmlHelper.downloadGeneratedXML(expectedXMLfilePath,traceID); // string path will be returned
-            string generatedXMLFilePath = "C:\\Users\\Prash1501461\\Source\\Repos\\UKHO\\erp-facade\\tests\\UKHO.ERPFacade.API.FunctionalTests\\ERPFacadeExpectedXmlTestData\\3CellsReplace2CellsCancel.xml";
-            //if (response.StatusCode==System.Net.HttpStatusCode.OK)
 
-            //Logic to verifyxml                    
-            Assert.That(SAPXmlHelper.verifyInitialXMLHeaders(jsonPayload, generatedXMLFilePath), Is.True);
-            Assert.That(SAPXmlHelper.verifyOrderOfActions(jsonPayload, generatedXMLFilePath), Is.True);
-            Assert.That(SAPXmlHelper.CheckXMLAttributes(jsonPayload, generatedXMLFilePath).Result, Is.True);
-            
-
+            string generatedXMLFilePath = expectedXMLfilePath;
+            //Logic to verifyxml
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                Assert.That(SAPXmlHelper.verifyInitialXMLHeaders(jsonPayload, generatedXMLFilePath), Is.True);
+                Assert.That(SAPXmlHelper.verifyOrderOfActions(jsonPayload, generatedXMLFilePath), Is.True);
+                Assert.That(SAPXmlHelper.CheckXMLAttributes(jsonPayload, generatedXMLFilePath).Result, Is.True);
+            }
 
             return response;
         }

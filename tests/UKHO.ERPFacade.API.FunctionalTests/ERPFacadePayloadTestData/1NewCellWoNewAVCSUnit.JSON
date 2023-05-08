@@ -8,7 +8,7 @@
   "subject": "MX545010",
   "datacontenttype": "application/json",
   "data": {
-    "traceId": "367ce4a4-1d62-4f56-b359-59e178d77100",
+    "traceId": "367ce4a4-1d62-4f56-b359-newcell20001",
     "products": [
       {
         "productType": "ENC S57",
@@ -168,7 +168,7 @@
           "ForSale",
           "NotForSale"
         ],
-        "isNewUnitOfSale": true,
+        "isNewUnitOfSale": false,
         "_COMMENT": "BoundingBox or polygon or both or neither",
         "geographicLimit": {
           "boundingBox": {
