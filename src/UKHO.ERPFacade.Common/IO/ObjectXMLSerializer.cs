@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Text;
+﻿using System.Text;
 using System.Xml.Serialization;
 using System.Xml;
 
@@ -18,11 +17,16 @@ namespace UKHO.ERPFacade.Common.IO
 
             var sb = new StringBuilder();
 
-            var settings = new XmlWriterSettings { Indent = true, };
+            var settings = new XmlWriterSettings
+            {
+                NewLineChars = Environment.NewLine,
+                Indent = true,
+                ConformanceLevel = ConformanceLevel.Document
+            };
 
             using (var xw = XmlWriter.Create(sb, settings))
             {
-                serializer.Serialize(xw, serializableObject);
+                serializer.Serialize(new XmlWriterHelper(xw), serializableObject);
             }
 
             return sb.ToString();
