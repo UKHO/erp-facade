@@ -38,7 +38,7 @@
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "ReplacedBy",
-            "XmlNodeName": "REPLACEDBY",
+            "XmlNodeName": "REPLACEBY",
             "SortingOrder": 5
           },
           {
@@ -129,7 +129,7 @@
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "ReplacedBy",
-            "XmlNodeName": "REPLACEDBY",
+            "XmlNodeName": "REPLACEBY",
             "SortingOrder": 5
           },
           {
@@ -220,7 +220,7 @@
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "ReplacedBy",
-            "XmlNodeName": "REPLACEDBY",
+            "XmlNodeName": "REPLACEBY",
             "SortingOrder": 5
           },
           {
@@ -311,7 +311,7 @@
             "IsRequired": true,
             "Section": "Product",
             "JsonPropertyName": "ReplacedBy",
-            "XmlNodeName": "REPLACEDBY",
+            "XmlNodeName": "REPLACEBY",
             "SortingOrder": 5
           },
           {
@@ -412,7 +412,7 @@
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "ReplacedBy",
-            "XmlNodeName": "REPLACEDBY",
+            "XmlNodeName": "REPLACEBY",
             "SortingOrder": 5
           },
           {
@@ -503,7 +503,7 @@
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "ReplacedBy",
-            "XmlNodeName": "REPLACEDBY",
+            "XmlNodeName": "REPLACEBY",
             "SortingOrder": 5
           },
           {
@@ -594,7 +594,7 @@
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "ReplacedBy",
-            "XmlNodeName": "REPLACEDBY",
+            "XmlNodeName": "REPLACEBY",
             "SortingOrder": 5
           },
           {
@@ -685,7 +685,7 @@
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "ReplacedBy",
-            "XmlNodeName": "REPLACEDBY",
+            "XmlNodeName": "REPLACEBY",
             "SortingOrder": 5
           },
           {
