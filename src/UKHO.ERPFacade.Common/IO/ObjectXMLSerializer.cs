@@ -17,16 +17,11 @@ namespace UKHO.ERPFacade.Common.IO
 
             var sb = new StringBuilder();
 
-            var settings = new XmlWriterSettings
-            {
-                NewLineChars = Environment.NewLine,
-                Indent = true,
-                ConformanceLevel = ConformanceLevel.Document
-            };
+            var settings = new XmlWriterSettings { Indent = true };
 
             using (var xw = XmlWriter.Create(sb, settings))
             {
-                serializer.Serialize(new XmlWriterHelper(xw), serializableObject);
+                serializer.Serialize(xw, serializableObject);
             }
 
             return sb.ToString();
