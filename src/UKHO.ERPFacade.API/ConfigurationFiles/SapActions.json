@@ -38,7 +38,7 @@
             "IsRequired": false,
             "Section": "Product",
             "JsonPropertyName": "ReplacedBy",
-            "XmlNodeName": "REPLACEBY",
+            "XmlNodeName": "REPLACEDBY",
             "SortingOrder": 5
           },
           {
