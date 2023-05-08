@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using System.Text;
 
 namespace UKHO.ERPFacade.Common.IO
 {
@@ -21,6 +22,27 @@ namespace UKHO.ERPFacade.Common.IO
             {
                 return info.GetValue(obj, null)!.ToString();
             }
+        }
+
+        public static string WriteXmlClosingTags(this string xmlString)
+        {
+            var sb = new StringBuilder();
+            var xmlTags = xmlString.Split('\r');
+            foreach (var tag in xmlTags)
+            {
+                if (tag.Contains("/>"))
+                {
+                    var tagValue = tag.Replace("<", "").Replace("/>", "").Trim();
+                    var firstPart = tag.Substring(0, tag.IndexOf('<'));
+                    var newTag = $"{firstPart}<{tagValue}></{tagValue}>";
+                    sb.Append(newTag);
+                }
+                else
+                {
+                    sb.Append(tag);
+                }
+            }
+            return sb.ToString();
         }
     }
 }

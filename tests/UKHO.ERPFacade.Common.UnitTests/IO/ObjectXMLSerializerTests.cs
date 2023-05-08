@@ -25,16 +25,11 @@ namespace UKHO.ERPFacade.Common.UnitTests.IO
 
             var serializer = new XmlSerializer(typeof(Z_ADDS_MAT_INFO));
             var sb = new StringBuilder();
-            var settings = new XmlWriterSettings
-            {
-                NewLineChars = Environment.NewLine,
-                Indent = true,
-                ConformanceLevel = ConformanceLevel.Document
-            };
+            var settings = new XmlWriterSettings { Indent = true };
 
             using (var xw = XmlWriter.Create(sb, settings))
             {
-                serializer.Serialize(new XmlWriterHelper(xw), z_ADDS_MAT_INFO);
+                serializer.Serialize(xw, z_ADDS_MAT_INFO);
             }
 
             var result = ObjectXMLSerializer<Z_ADDS_MAT_INFO>.SerializeObject(z_ADDS_MAT_INFO!);
@@ -49,16 +44,11 @@ namespace UKHO.ERPFacade.Common.UnitTests.IO
 
             var serializer = new XmlSerializer(typeof(Z_ADDS_MAT_INFO));
             var sb = new StringBuilder();
-            var settings = new XmlWriterSettings
-            {
-                NewLineChars = Environment.NewLine,
-                Indent = true,
-                ConformanceLevel = ConformanceLevel.Document
-            };
+            var settings = new XmlWriterSettings { Indent = true };
 
             using (var xw = XmlWriter.Create(sb, settings))
             {
-                serializer.Serialize(new XmlWriterHelper(xw), nullObject);
+                serializer.Serialize(xw, nullObject);
             }
 
             var result = ObjectXMLSerializer<Z_ADDS_MAT_INFO>.SerializeObject(nullObject!);
