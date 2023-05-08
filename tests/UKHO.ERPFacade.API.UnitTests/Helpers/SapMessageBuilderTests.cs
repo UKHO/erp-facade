@@ -7,10 +7,12 @@ using Newtonsoft.Json;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml;
 using UKHO.ERPFacade.API.Helpers;
 using UKHO.ERPFacade.API.Models;
 using UKHO.ERPFacade.Common.IO;
+using UKHO.ERPFacade.Common.Logging;
 
 namespace UKHO.ERPFacade.API.UnitTests.Helpers
 {
@@ -97,9 +99,14 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             var scenarios = JsonConvert.DeserializeObject<List<Scenario>>(scenariosData);
             var traceId = "2f03a25f-28b3-46ea-b009-5943250a9a41";
 
-            A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(false);            
+            A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(false);
 
             Assert.Throws<FileNotFoundException>(() => _fakeSapMessageBuilder.BuildSapMessageXml(scenarios!, traceId));
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+            && call.GetArgument<LogLevel>(0) == LogLevel.Error
+            && call.GetArgument<EventId>(1) == EventIds.SapXmlTemplateNotFound.ToEventId()
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "The SAP message xml template does not exist.").MustHaveHappenedOnceExactly();
         }
     }
 }
