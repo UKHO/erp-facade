@@ -173,6 +173,9 @@ namespace UKHO.SAP.MockAPIService.Models
 
         private string uPDATENOField;
 
+        private string uNITTYPEField;
+
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElement("ACTIONNUMBER", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string ACTIONNUMBER
@@ -366,6 +369,20 @@ namespace UKHO.SAP.MockAPIService.Models
             set
             {
                 this.uPDATENOField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElement("UNITTYPE", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string UNITTYPE
+        {
+            get
+            {
+                return this.uNITTYPEField;
+            }
+            set
+            {
+                this.uNITTYPEField = value;
             }
         }
     }
