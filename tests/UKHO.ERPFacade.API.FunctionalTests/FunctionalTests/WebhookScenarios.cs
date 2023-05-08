@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
+using System.Security.Cryptography.X509Certificates;
 using UKHO.ERPFacade.API.FunctionalTests.Helpers;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
@@ -8,6 +9,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
     public class WebhookScenarios
     {
         private WebhookEndpoint Webhook { get; set; }
+        private SAPXmlHelper SapXmlHelper{ get; set; }
         private DirectoryInfo _dir;
         private readonly ADAuthTokenProvider _authToken = new();
         public static Boolean noRole = false;
@@ -16,6 +18,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         public void Setup()
         {
             Webhook = new WebhookEndpoint();
+            SapXmlHelper = new SAPXmlHelper();
             _dir = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent;
         }
 
@@ -50,6 +53,41 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             string filePath = Path.Combine(_dir.FullName, WebhookEndpoint.config.testConfig.PayloadFolder, WebhookEndpoint.config.testConfig.WebhookPayloadFileName);
             var response = await Webhook.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(true));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.Forbidden);
+        }
+        [Test(Description = "WhenValidEventInNewEncContentPublishedEventReceivedWithXML_ThenWebhookReturns200OkResponse"), Order(0)]
+        public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithXML_ThenWebhookReturns200OkResponse()
+        {
+            string filePath = Path.Combine(_dir.FullName, WebhookEndpoint.config.testConfig.PayloadFolder, WebhookEndpoint.config.testConfig.WebhookPayloadFileName);
+            var generatedXMLFolder = Path.Combine(_dir.FullName, WebhookEndpoint.config.testConfig.GeneratedXMLFolder);
+            var response = await Webhook.PostWebhookResponseAsyncForXML(filePath, generatedXMLFolder, await _authToken.GetAzureADToken(false));
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        }
+        [Test(Description = "WhenValidEventInNewEncContentPublishedEventReceivedWithXML_ThenWebhookReturns500OkResponse"), Order(1)]
+        public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithXML_ThenWebhookReturns500OkResponse()
+        {
+            string filePath = Path.Combine(_dir.FullName, WebhookEndpoint.config.testConfig.PayloadFolder, WebhookEndpoint.config.testConfig.WebhookInvalidPayloadFileName);
+
+            var response = await Webhook.PostWebhookResponseAsyncForXML(filePath, await _authToken.GetAzureADToken(false));
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.InternalServerError);
+        }
+
+        // ====== Under Maintenance =======
+
+        [Test]
+        [TestCase("1NewCellScenario.json", "1NewCellScenario.xml", TestName = "WhenICallTheWebhookWithOneNewCellScenario")]
+        [TestCase("2NewCellScenario.json", "3CellsReplace2CellsCancel.xml", TestName = "WhenICallTheWebhookWithTwoNewCellsScenario")]
+        public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponse1(string payloadFileName, string expectedXmlFileName)
+        {
+            string filePath = Path.Combine(_dir.FullName, WebhookEndpoint.config.testConfig.PayloadFolder, payloadFileName);
+            string expectedXMLfilePath = Path.Combine(_dir.FullName, WebhookEndpoint.config.testConfig.ExpectedXMLFolder, expectedXmlFileName);
+            //string traceID = SapXmlHelper.getTraceID(filePath);
+            var response = await Webhook.PostWebhookResponseAsyncForXML(filePath, expectedXMLfilePath,  await _authToken.GetAzureADToken(false));
+
+            // download XML file by passing traceID
+            // currently we have given hardcoded traceID otherwise use above commented string
+            //string generatedXMLFilePath = SapXmlHelper.downloadGeneratedXML(expectedXMLfilePath,"367ce4a4-1d62-4f56-b359-59e178d77100"); // string path will be returned
+            
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
     }
 }
