@@ -11,7 +11,7 @@ namespace UKHO.SAP.MockAPIService.Services
 
         public MockService(IConfiguration configuration)
         {
-            _homeDirectoryPath = Path.Combine(configuration["HOME"], configuration["TestCaseConfigurationFolderName"]);
+            _homeDirectoryPath = Path.Combine(configuration["HOME"]);
         }
 
         public void CreateIfNotExists(string destPath)
