@@ -275,7 +275,7 @@ namespace UKHO.SAP.MockAPIService.Models
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElement("REPLACEBY", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlElement("REPLACEDBY", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string REPLACEDBY
         {
             get
