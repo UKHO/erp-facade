@@ -68,9 +68,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             string traceID = jsonPayload.Data.TraceId;
 
             //Logic to download XML from container using TraceID from JSON
-            //string generatedXMLFilePath = SapXmlHelper.downloadGeneratedXML(expectedXMLfilePath,traceID); // string path will be returned
-
-            string generatedXMLFilePath = expectedXMLfilePath;
+            string generatedXMLFilePath = SapXmlHelper.downloadGeneratedXML(expectedXMLfilePath,traceID); // string path will be returned
+            
+            //string generatedXMLFilePath = expectedXMLfilePath;
+            
+            //string generatedXMLFilePath = "C:\\Users\\Prash1501461\\Source\\Repos\\UKHO\\erp-facade\\tests\\UKHO.ERPFacade.API.FunctionalTests\\ERPFacadeGeneratedXmlFiles\\NewCellScenario.xml";
+            
             //Logic to verifyxml
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {

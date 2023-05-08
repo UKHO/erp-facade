@@ -486,7 +486,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         public static string getRequiredXMLText(string generatedXMLFilePath,string tagName)
         {
             XmlDocument xDoc = new XmlDocument();
-            xDoc.Load(generatedXMLFilePath);
+            //xDoc.Load(generatedXMLFilePath);
+            xDoc.LoadXml(File.ReadAllText(generatedXMLFilePath));
             XmlNode node = xDoc.SelectSingleNode("//"+tagName);
             
 
@@ -601,7 +602,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         {
             actionsListFromXml.Clear();
             XmlDocument xDoc = new XmlDocument();
-            xDoc.Load(downloadedXMLFilePath);
+            //xDoc.Load(downloadedXMLFilePath);
+            xDoc.LoadXml(File.ReadAllText(downloadedXMLFilePath));
             XmlNodeList nodeList = xDoc.SelectNodes("//ACTION");
 
             foreach (XmlNode node in nodeList)

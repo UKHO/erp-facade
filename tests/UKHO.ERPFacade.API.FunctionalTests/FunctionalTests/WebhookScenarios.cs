@@ -74,7 +74,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponse1(string payloadFileName, string expectedXmlFileName)
         {
             string filePath = Path.Combine(_dir.FullName, WebhookEndpoint.config.testConfig.PayloadFolder, payloadFileName);
-            string expectedXMLfilePath = Path.Combine(_dir.FullName, WebhookEndpoint.config.testConfig.ExpectedXMLFolder, expectedXmlFileName);
+            string expectedXMLfilePath = Path.Combine(_dir.FullName, WebhookEndpoint.config.testConfig.GeneratedXMLFolder);
             //string traceID = SapXmlHelper.getTraceID(filePath);
             var response = await Webhook.PostWebhookResponseAsyncForXML(filePath, expectedXMLfilePath,  await _authToken.GetAzureADToken(false));
 
