@@ -33,9 +33,9 @@ namespace UKHO.ERPFacade.WebJob
             try
             {
                 //Code to monitor the table records.
-                _logger.LogInformation(EventIds.WebjobProcessEventStarted.ToEventId(), "Webjob started for the processing the incomplete transactions.");
+                _logger.LogInformation(EventIds.WebjobProcessEventStarted.ToEventId(), "Webjob started for monitoring the callbacks from SAP.");
                 _monitoringService.MonitorIncompleteTransactions();
-                _logger.LogInformation(EventIds.WebjobProcessEventCompleted.ToEventId(), "Webjob completed for processing the incomplete transactions.");
+                _logger.LogInformation(EventIds.WebjobProcessEventCompleted.ToEventId(), "Webjob completed the monitoring of callbacks from SAP.");
             }
             catch (Exception ex)
             {
