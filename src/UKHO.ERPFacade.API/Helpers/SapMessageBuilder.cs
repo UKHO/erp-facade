@@ -224,7 +224,10 @@ namespace UKHO.ERPFacade.API.Helpers
         private static string GetProdType(string prodType)
         {
             var parts = prodType.Split(' ').ToList();
-            return parts[1];
+            if (parts != null)
+                return parts.Count > 1 ? parts[1] : parts[0];
+            else
+                return string.Empty;
         }
     }
 }

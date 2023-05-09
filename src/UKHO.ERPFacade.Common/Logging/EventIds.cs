@@ -117,6 +117,6 @@
         /// <summary>
         /// 940029 - Scenario Identified
         /// </summary>
-        ScenarioIdentified = 940029,
+        ScenarioIdentified = 940029
     }
 }
