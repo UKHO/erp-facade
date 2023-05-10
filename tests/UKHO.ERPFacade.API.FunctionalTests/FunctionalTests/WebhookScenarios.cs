@@ -49,12 +49,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [Test(Description = "WhenICallMockSapApiWithValidRequestAndValidAuthenticationButSapApiServiceIsDown_ThenItShouldReturn500IntervalServerErrorResponse"), Order(0)]
         public async Task WhenICallMockSapApiWithValidRequestAndValidAuthenticationButSapApiServiceIsDown_ThenItShouldReturn500IntervalServerErrorResponse()
         {
-            string filePath = Path.Combine(_dir.FullName, WebhookEndpoint.config.testConfig.PayloadFolder, WebhookEndpoint.config.testConfig.WebhookPayloadFileName);
-            string XmlFilePath = Path.Combine(_dir.FullName, WebhookEndpoint.config.testConfig.PayloadFolder, WebhookEndpoint.config.testConfig.SapMockApiPayloadFileName);
-           
-            Webhook.PostMockSapResponseAsync(XmlFilePath);
-            
-            var response = await Webhook.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(false));
+            var XmlFilePath = "ERPFacadePayloadTestData/SapMockApiConfigure.xml";
+            _webhook.PostMockSapResponseAsync(XmlFilePath);            
+            var response = await _webhook.PostWebhookResponseAsync(_webhookPayloadFilePath, await _authToken.GetAzureADToken(false));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.InternalServerError);
         }
     }

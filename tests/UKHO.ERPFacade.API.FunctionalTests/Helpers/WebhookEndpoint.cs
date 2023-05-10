@@ -17,7 +17,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             _authToken = new();
             var options = new RestClientOptions(config.TestConfig.ErpFacadeConfiguration.BaseUrl);
             client = new RestClient(options);
-            var options2 = new RestClientOptions(config.testConfig.SapMockConfiguration.BaseUrl);
+            var options2 = new RestClientOptions(config.TestConfig.SapMockConfiguration.BaseUrl);
             client2 = new RestClient(options2);
 
         }
@@ -52,7 +52,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         public async void PostMockSapResponseAsync(string filePath)
         {
             string requestBody;
-            var cred = $"{config.testConfig.SapMockConfiguration.Username}:{config.testConfig.SapMockConfiguration.Password}";
+            var cred = $"{config.TestConfig.SapMockConfiguration.Username}:{config.TestConfig.SapMockConfiguration.Password}";
 
             using (StreamReader streamReader = new StreamReader(filePath))
             {
