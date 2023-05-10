@@ -276,7 +276,7 @@
       },
       {
         "ActionNumber": 4,
-        "Action": "REPLACE WITH ENC CELL",
+        "Action": "REPLACED WITH ENC CELL",
         "Product": "ENC CELL",
         "Attributes": [
           {
