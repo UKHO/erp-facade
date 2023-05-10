@@ -6,6 +6,7 @@ namespace UKHO.ERPFacade.API.Filters
     {
         public const string XCorrelationIdHeaderKey = "_X-Correlation-ID";
         public const string TraceIdKey = "data.traceId";
+
         private readonly RequestDelegate _next;
 
         public CorrelationIdMiddleware(RequestDelegate next)

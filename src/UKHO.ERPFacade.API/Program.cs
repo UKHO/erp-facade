@@ -1,15 +1,17 @@
 using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
+using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Logging.Configuration;
 using Newtonsoft.Json.Serialization;
 using Serilog;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using UKHO.ERPFacade.API.Filters;
 using UKHO.ERPFacade.Common.Configuration;
+using UKHO.ERPFacade.Common.Helpers;
+using UKHO.ERPFacade.Common.HttpClients;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.Logging.EventHubLogProvider;
 
@@ -116,7 +118,6 @@ namespace UKHO.ERPFacade
                        options.Authority = $"{azureAdConfiguration.MicrosoftOnlineLoginUrl}{azureAdConfiguration.TenantId}";
                    });
 
-
             builder.Services.AddAuthorization(options =>
             {
                 options.DefaultPolicy = new AuthorizationPolicyBuilder()
@@ -127,12 +128,12 @@ namespace UKHO.ERPFacade
 
             builder.Services.AddAuthorization(options =>
             {
-              options.AddPolicy("WebhookCaller", policy => policy.RequireRole("WebhookCaller"));
+                options.AddPolicy("WebhookCaller", policy => policy.RequireRole("WebhookCaller"));
             });
 
-
-            // The following line enables Application Insights telemetry collection.	
-            builder.Services.AddApplicationInsightsTelemetry();
+            // The following line enables Application Insights telemetry collection.
+            var options = new ApplicationInsightsServiceOptions { ConnectionString = configuration.GetValue<string>("ApplicationInsights:ConnectionString") };
+            builder.Services.AddApplicationInsightsTelemetry(options);
 
             // Add services to the container.
             builder.Services.AddControllers(o =>
@@ -144,11 +145,18 @@ namespace UKHO.ERPFacade
             });
 
             builder.Services.Configure<AzureStorageConfiguration>(configuration.GetSection("AzureStorageConfiguration"));
-
-            builder.Services.AddSingleton<IAzureTableReaderWriter, AzureTableReaderWriter>();
-            builder.Services.AddSingleton<IAzureBlobEventWriter, AzureBlobEventWriter>();
+            builder.Services.Configure<SapConfiguration>(configuration.GetSection("SapConfiguration"));
 
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            builder.Services.AddSingleton<IAzureTableReaderWriter, AzureTableReaderWriter>();
+            builder.Services.AddSingleton<IAzureBlobEventWriter, AzureBlobEventWriter>();
+            builder.Services.AddSingleton<ISapConfiguration, SapConfiguration>();
+            builder.Services.AddSingleton<IXmlHelper, XmlHelper>();
+
+            builder.Services.AddHttpClient<ISapClient, SapClient>(c =>
+            {
+                c.BaseAddress = new Uri(configuration.GetValue<string>("SapConfiguration:BaseAddress"));
+            });
 
             var app = builder.Build();
 

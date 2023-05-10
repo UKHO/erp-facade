@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <Z_ADDS_MAT_INFO xmlns="urn:sap-com:document:sap:rfc:functions">
+      <Z_ADDS_MAT_INFO>
+        <IM_MATINFO xmlns="">
+         <CORRID>WS78_210_WS92511B</CORRID>
+         <NOOFACTIONS>5</NOOFACTIONS>
+         <RECDATE>20230328</RECDATE>
+         <RECTIME>160000</RECTIME>
+         <ORG>UKHO</ORG>
+          <ACTIONITEMS xmlns="urn:sap-com:document:sap:rfc:functions">
+             <item  xmlns="">
+               <ACTIONNUMBER>1</ACTIONNUMBER>
+               <ACTION>CREATE ENC CELL</ACTION>
+               <PRODUCT>ENC CELL</PRODUCT>
+               <PRODTYPE>S57</PRODTYPE>
+               <CHILDCELL>WS92511B</CHILDCELL>
+               <PRODUCTNAME>WS92511B</PRODUCTNAME>
+               <CANCELLED />
+               <REPLACEDBY />
+               <AGENCY>WS</AGENCY>
+               <PROVIDER>1</PROVIDER>
+               <ENCSIZE>LARGE</ENCSIZE>
+               <TITLE>Western Approach WS92511B</TITLE>
+               <EDITIONNO />
+               <UPDATENO />
+               <UNITTYPE />
+            </item>
+            <item xmlns="">
+               <ACTIONNUMBER>2</ACTIONNUMBER>
+               <ACTION>CREATE AVCS UNIT OF SALE</ACTION>
+               <PRODUCT>AVCS UNIT</PRODUCT>
+               <PRODTYPE>S57</PRODTYPE>
+               <CHILDCELL />
+               <PRODUCTNAME>WS92511B</PRODUCTNAME>
+               <CANCELLED />
+               <REPLACEDBY />
+               <AGENCY>WS</AGENCY>
+               <PROVIDER>1</PROVIDER>
+               <ENCSIZE>LARGE</ENCSIZE>
+               <TITLE>Western Approach WS92511B</TITLE>
+               <EDITIONNO>1</EDITIONNO>
+               <UPDATENO>1</UPDATENO>
+               <UNITTYPE>C12</UNITTYPE>
+            </item>
+            <item xmlns="">
+               <ACTIONNUMBER>3</ACTIONNUMBER>
+               <ACTION>ASSIGN CELL TO AVCS UNIT OF SALE</ACTION>
+               <PRODUCT>AVCS UNIT</PRODUCT>
+               <PRODTYPE>S57</PRODTYPE>
+               <CHILDCELL>WS92511B</CHILDCELL>
+               <PRODUCTNAME>WS92511B</PRODUCTNAME>
+               <CANCELLED />
+               <REPLACEDBY />
+               <AGENCY />
+               <PROVIDER />
+               <ENCSIZE />
+               <TITLE />
+               <EDITIONNO />
+               <UPDATENO />
+               <UNITTYPE />
+            </item>
+            <item xmlns="">
+               <ACTIONNUMBER>4</ACTIONNUMBER>
+               <ACTION>ASSIGN CELL TO AVCS UNIT OF SALE</ACTION>
+               <PRODUCT>AVCS UNIT</PRODUCT>
+               <PRODTYPE>S57</PRODTYPE>
+               <CHILDCELL>WS92511B</CHILDCELL>
+               <PRODUCTNAME>AVCSO</PRODUCTNAME>
+               <CANCELLED />
+               <REPLACEDBY />
+               <AGENCY />
+               <PROVIDER />
+               <ENCSIZE />
+               <TITLE />
+               <EDITIONNO />
+               <UPDATENO />
+               <UNITTYPE />
+            </item>
+            <item xmlns="">
+               <ACTIONNUMBER>5</ACTIONNUMBER>
+               <ACTION>ASSIGN CELL TO AVCS UNIT OF SALE</ACTION>
+               <PRODUCT>AVCS UNIT</PRODUCT>
+               <PRODTYPE>S57</PRODTYPE>
+               <CHILDCELL>WS92511B</CHILDCELL>
+               <PRODUCTNAME>PAYSF</PRODUCTNAME>
+               <CANCELLED />
+               <REPLACEDBY />
+               <AGENCY />
+               <PROVIDER />
+               <ENCSIZE />
+               <TITLE />
+               <EDITIONNO />
+               <UPDATENO />
+               <UNITTYPE />
+            </item>
+          </ACTIONITEMS>
+        </IM_MATINFO>
+      </Z_ADDS_MAT_INFO>
+    </Z_ADDS_MAT_INFO>
+  </soap:Body>
+</soap:Envelope>

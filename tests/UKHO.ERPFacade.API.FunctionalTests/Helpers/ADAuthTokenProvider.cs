@@ -8,7 +8,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
     public class ADAuthTokenProvider
     {
         static string AzureADToken = null;
-        public static Config _config;
+        private static Config _config;
 
         public async Task<string> GetAzureADToken()
         {
@@ -18,7 +18,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return AzureADToken;
         }
 
-        public async Task<string> GetAzureADToken(Boolean noRole)
+        public async Task<string> GetAzureADToken(bool noRole)
         {
             _config = new();
             if (noRole)
@@ -33,12 +33,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return AzureADToken;
         }
 
-        private static async Task<string> GenerateAzureADToken(string ClientId, string ClientSecret, string Token)
+        private static async Task<string> GenerateAzureADToken(string clientId, string clientSecret, string token)
         {
             try
             {
                 string[] scopes = new string[] { $"{_config.testConfig.AzureadConfiguration.ClientId}/.default" };
-                if (Token == null)
+                if (token == null)
                 {
                     if (_config.testConfig.AzureadConfiguration.IsRunningOnLocalMachine)
                     {
@@ -49,18 +49,18 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         AuthenticationResult tokenTask = await debugApp.AcquireTokenInteractive(scopes)
                                                                 .WithAuthority($"{_config.testConfig.AzureadConfiguration.MicrosoftOnlineLoginUrl}{_config.testConfig.AzureadConfiguration.TenantId}", true)
                                                                 .ExecuteAsync();
-                        Token = tokenTask.AccessToken;
+                        token = tokenTask.AccessToken;
                     }
                     else
                     {
 
-                        IConfidentialClientApplication app = ConfidentialClientApplicationBuilder.Create(ClientId)
-                                                        .WithClientSecret(ClientSecret)
+                        IConfidentialClientApplication app = ConfidentialClientApplicationBuilder.Create(clientId)
+                                                        .WithClientSecret(clientSecret)
                                                         .WithAuthority(new Uri($"{_config.testConfig.AzureadConfiguration.MicrosoftOnlineLoginUrl}{_config.testConfig.AzureadConfiguration.TenantId}"))
                                                         .Build();
 
                         AuthenticationResult tokenTask = await app.AcquireTokenForClient(scopes).ExecuteAsync();
-                        Token = tokenTask.AccessToken;
+                        token = tokenTask.AccessToken;
 
 
 
@@ -72,7 +72,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             {
                 Console.WriteLine(ex.ToString());
             }
-            return Token;
+            return token;
         }
     }
 }

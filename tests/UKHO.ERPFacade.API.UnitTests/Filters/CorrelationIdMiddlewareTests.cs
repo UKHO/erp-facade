@@ -71,8 +71,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
 
         [Test]
         public async Task WhenInvokeAsyncIsCalled_ThenNextMiddlewareShouldBeInvoked()
-        {
-            var traceId = Guid.NewGuid().ToString();
+        {           
             var bodyAsJson = new JObject { { "data", new JObject { } } };
             var bodyAsText = bodyAsJson.ToString();
 
