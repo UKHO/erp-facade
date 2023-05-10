@@ -40,7 +40,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         [Test]
         public async Task WhenValidRequestReceived_ThenErpFacadeReturns200OkResponse()
         {
-            var fakeSapEventJson = JObject.Parse(@"{""data"":{""traceId"":""123""}}");
+            var fakeSapEventJson = JArray.Parse(@"{""corrid"":""123""}");
 
             A.CallTo(() => _fakeAzureBlobEventWriter.CheckIfContainerExists(A<string>.Ignored)).Returns(true);
 
@@ -59,7 +59,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         [Test]
         public async Task WhenTraceIdIsMissingInRequest_ThenErpFacadeReturnsReturns400BadRequestResponse()
         {
-            var fakeSapEventJson = JObject.Parse(@"{""data"":{""corId"":""123""}}");
+            var fakeSapEventJson = JArray.Parse(@"{""corrid"":""123""}");
 
             var result = (BadRequestObjectResult)await _fakeErpFacadeController.Post(fakeSapEventJson);
 
@@ -77,7 +77,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         [Test]
         public async Task WhenInvalidTraceIdInRequest_ThenErpFacadeReturns404NotFoundResponse()
         {
-            var fakeSapEventJson = JObject.Parse(@"{""data"":{""traceId"":""123""}}");
+            var fakeSapEventJson = JArray.Parse(@"{""corrid"":""123""}");
 
             A.CallTo(() => _fakeAzureBlobEventWriter.CheckIfContainerExists(A<string>.Ignored)).Returns(false);
 
