@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.Amqp.Framing;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System;
 using System.Globalization;
-using System.Security.Policy;
-using System.Text.Json.Nodes;
 using UKHO.ERPFacade.API.Models;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
@@ -61,80 +57,94 @@ namespace UKHO.ERPFacade.API.Controllers
 
             //Add code to map SAP event data to UnitOfSale event with price information
 
-            var sapEvent = JsonConvert.DeserializeObject<List<PriceInformationEvent>>(requestJson.ToString());
+            var priceInformationList = JsonConvert.DeserializeObject<List<PriceInformationEvent>>(requestJson.ToString());
 
             List<UnitsOfSalePrices> unitsOfSalePriceList = new();
 
-            if (sapEvent != null)
+            if (priceInformationList.Count > 0)
             {
-                //var unitNames = sapEvent.Select(x => x.ProductName).Distinct<string>().ToList();
-                foreach (var item in sapEvent)
+                foreach (var priceInformation in priceInformationList)
                 {
+                    UnitsOfSalePrices unitsOfSalePrice = new();
                     List<Price> priceList = new();
-                    UnitsOfSalePrices unitsOfSalePrices = new();
-                    Price price = new();
-                    Standard standard = new();
-                    PriceDurations priceDurations = new();
 
-                    var sapEventData = unitsOfSalePriceList.Where(x => x.UnitName.Contains(item.ProductName)).ToList();
+                    var unitOfSalePriceExists = unitsOfSalePriceList.Any(x => x.UnitName.Contains(priceInformation.ProductName));
 
-                    if (sapEventData.Count > 0)
+                    if (!unitOfSalePriceExists)
                     {
-
-                        if (!string.IsNullOrEmpty(item.EffectiveDate))
+                        if (!string.IsNullOrEmpty(priceInformation.EffectiveDate))
                         {
+                            Price price = new();
+                            Standard standard = new();
+                            PriceDurations priceDurations = new();
+
                             List<PriceDurations> priceDurationsList = new();
 
-                            priceDurations.NumberOfMonths = Convert.ToInt32(item.Duration);
-                            priceDurations.Rrp = Convert.ToDouble(item.Price);
+                            priceDurations.NumberOfMonths = Convert.ToInt32(priceInformation.Duration);
+                            priceDurations.Rrp = Convert.ToDouble(priceInformation.Price);
                             priceDurationsList.Add(priceDurations);
 
                             standard.PriceDurations = priceDurationsList;
 
-                            price.EffectiveDate = Convert.ToDateTime(DateTime.ParseExact(item.EffectiveDate, "yyyyMMdd", CultureInfo.InvariantCulture));
-                            price.Currency = item.Currency;
+                            price.EffectiveDate = Convert.ToDateTime(DateTime.ParseExact(priceInformation.EffectiveDate, "yyyyMMdd", CultureInfo.InvariantCulture));
+                            price.Currency = priceInformation.Currency;
                             price.Standard = standard;
                             priceList.Add(price);
                         }
+
+                        if (!string.IsNullOrEmpty(priceInformation.FutureDate))
+                        {
+                            Price price = new();
+                            Standard standard = new();
+                            PriceDurations priceDurations = new();
+
+                            List<PriceDurations> priceDurationsList = new();
+
+                            priceDurations.NumberOfMonths = Convert.ToInt32(priceInformation.Duration);
+                            priceDurations.Rrp = Convert.ToDouble(priceInformation.FuturePrice);
+                            priceDurationsList.Add(priceDurations);
+
+                            standard.PriceDurations = priceDurationsList;
+
+                            price.EffectiveDate = Convert.ToDateTime(DateTime.ParseExact(priceInformation.FutureDate, "yyyyMMdd", CultureInfo.InvariantCulture));
+                            price.Currency = priceInformation.Currency;
+                            price.Standard = standard;
+                            priceList.Add(price);
+                        }
+
+                        unitsOfSalePrice.UnitName = priceInformation.ProductName;
+                        unitsOfSalePrice.Price = priceList;
+
+                        unitsOfSalePriceList.Add(unitsOfSalePrice);
                     }
-                     
 
+                    else
+                    {
+                        PriceDurations priceDuration = new();
 
+                        var existingUnitOfSalePrice = unitsOfSalePriceList.Where(x => x.UnitName.Contains(priceInformation.ProductName)).FirstOrDefault();
 
+                        var effectiveUnitOfSalePriceDurations = existingUnitOfSalePrice.Price.Where(x => x.EffectiveDate.ToString("yyyyMMdd") == priceInformation.EffectiveDate).ToList();
+                        var effectiveStandard = effectiveUnitOfSalePriceDurations.Select(x => x.Standard).FirstOrDefault();
 
-                    //var futureDates = sapEventData.Select(x => x.FutureDate).Distinct<string>().Where(i => !string.IsNullOrEmpty(i)).ToList();
+                        var futureUnitOfSalePriceDurations = existingUnitOfSalePrice.Price.Where(x => x.EffectiveDate.ToString("yyyyMMdd") == priceInformation.FutureDate).ToList();
+                        var futureStandard = futureUnitOfSalePriceDurations.Select(x => x.Standard).FirstOrDefault();
 
-                    //foreach (var futureDate in futureDates)
-                    //{
-                    //    Price futurePrice = new();
-                    //    Standard futureStandard = new();
+                        if (!string.IsNullOrEmpty(priceInformation.EffectiveDate))
+                        {
+                            priceDuration.NumberOfMonths = Convert.ToInt32(priceInformation.Duration);
+                            priceDuration.Rrp = Convert.ToDouble(priceInformation.Price);
 
-                    //    List<PriceDurations> priceDurationsList1 = new();
+                            effectiveStandard.PriceDurations.Add(priceDuration);
+                        }
+                        if (!string.IsNullOrEmpty(priceInformation.FutureDate))
+                        {
+                            priceDuration.NumberOfMonths = Convert.ToInt32(priceInformation.Duration);
+                            priceDuration.Rrp = Convert.ToDouble(priceInformation.FuturePrice);
 
-                    //    if (!string.IsNullOrEmpty(futureDate))
-                    //    {
-                    //        var sapEventDataUnit = sapEventData.Where(x => x.FutureDate.Contains(futureDate)).ToList();
-
-                    //        foreach (var data in sapEventDataUnit)
-                    //        {
-                    //            PriceDurations priceDurations = new();
-                                
-                    //            priceDurations.NumberOfMonths = Convert.ToInt32(data.Duration);
-                    //            priceDurations.Rrp = Convert.ToDouble(data.FuturePrice);
-                    //            priceDurationsList1.Add(priceDurations);
-                    //        }
-                    //    }
-                        
-                    //    futureStandard.PriceDurations = priceDurationsList1;
-
-                    //    futurePrice.EffectiveDate = Convert.ToDateTime(DateTime.ParseExact(futureDate, "yyyyMMdd", CultureInfo.InvariantCulture));
-                    //    futurePrice.Currency = sapEventData.Select(x => x.FutureCurr).First();
-                    //    futurePrice.Standard = futureStandard;
-                    //    priceList.Add(futurePrice);
-                    //}
-
-                    //unitsOfSalePrices.Price = priceList;
-                    //unitsOfSalePriceList.Add(unitsOfSalePrices);
+                            futureStandard.PriceDurations.Add(priceDuration);
+                        }
+                    }
                 }
             }
             return new OkObjectResult(StatusCodes.Status200OK);
