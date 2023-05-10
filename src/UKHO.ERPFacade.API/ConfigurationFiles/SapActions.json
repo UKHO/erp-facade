@@ -3,7 +3,7 @@
     "SapActions": [
       {
         "ActionNumber": 1,
-        "Action": "CREATE NEW CELL",
+        "Action": "CREATE ENC CELL",
         "Product": "ENC CELL",
         "Attributes": [
           {
@@ -276,7 +276,7 @@
       },
       {
         "ActionNumber": 4,
-        "Action": "REPLACE WITH ENC CELL",
+        "Action": "REPLACED WITH ENC CELL",
         "Product": "ENC CELL",
         "Attributes": [
           {

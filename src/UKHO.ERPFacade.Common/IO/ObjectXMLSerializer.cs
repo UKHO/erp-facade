@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Text;
+﻿using System.Text;
 using System.Xml.Serialization;
 using System.Xml;
 
@@ -18,7 +17,7 @@ namespace UKHO.ERPFacade.Common.IO
 
             var sb = new StringBuilder();
 
-            var settings = new XmlWriterSettings { Indent = true, };
+            var settings = new XmlWriterSettings { Indent = true };
 
             using (var xw = XmlWriter.Create(sb, settings))
             {
