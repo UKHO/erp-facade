@@ -182,12 +182,12 @@ namespace UKHO.ERPFacade.API.Helpers
                 {
                     if (node.XmlNodeName == ReplacedBy)
                     {
-                        itemSubNode.InnerText = GetPropValue(cell.ToString());
+                        itemSubNode.InnerText = GetXmlNodeValue(cell.ToString());
                     }
                     else
                     {
-                        object jsonFieldValue = CommonHelper.GetProp(node.JsonPropertyName, scenario.Product, scenario.Product.GetType());
-                        itemSubNode.InnerText = GetPropValue(jsonFieldValue.ToString(), node.XmlNodeName);
+                        object jsonFieldValue = CommonHelper.ParseXmlNode(node.JsonPropertyName, scenario.Product, scenario.Product.GetType());
+                        itemSubNode.InnerText = GetXmlNodeValue(jsonFieldValue.ToString(), node.XmlNodeName);
                     }
                 }
                 else
@@ -205,8 +205,8 @@ namespace UKHO.ERPFacade.API.Helpers
                 {
                     UnitOfSale unitOfSale = scenario.UnitOfSales.Where(x => x.UnitName == cell).FirstOrDefault();
 
-                    object jsonFieldValue = CommonHelper.GetProp(node.JsonPropertyName, unitOfSale, unitOfSale.GetType());
-                    itemSubNode.InnerText = GetPropValue(jsonFieldValue.ToString());
+                    object jsonFieldValue = CommonHelper.ParseXmlNode(node.JsonPropertyName, unitOfSale, unitOfSale.GetType());
+                    itemSubNode.InnerText = GetXmlNodeValue(jsonFieldValue.ToString());
                 }
                 else
                 {
@@ -232,7 +232,7 @@ namespace UKHO.ERPFacade.API.Helpers
                 return string.Empty;
         }
 
-        private static string GetPropValue(string fieldValue, string xmlNodeName = null)
+        private static string GetXmlNodeValue(string fieldValue, string xmlNodeName = null)
         {
             if (string.IsNullOrWhiteSpace(fieldValue))
                 return string.Empty;

@@ -15,8 +15,6 @@ namespace UKHO.ERPFacade.WebJob
         private readonly IOptions<ErpFacadeWebJobConfiguration> _erpFacadeWebJobConfig;
         private readonly IMonitoringService _monitoringService;
 
-
-
         public ErpFacadeWebJob(ILogger<ErpFacadeWebJob> logger,
                                IOptions<AzureStorageConfiguration> azureStorageConfig,
                                IOptions<ErpFacadeWebJobConfiguration> erpFacadeWebJobConfig,
@@ -33,7 +31,7 @@ namespace UKHO.ERPFacade.WebJob
             try
             {
                 //Code to monitor the table records.
-                _logger.LogInformation(EventIds.WebjobProcessEventStarted.ToEventId(), "Webjob started for monitoring the callbacks from SAP.");
+                _logger.LogInformation(EventIds.WebjobProcessEventStarted.ToEventId(), "Webjob started the monitoring of callbacks from SAP.");
                 _monitoringService.MonitorIncompleteTransactions();
                 _logger.LogInformation(EventIds.WebjobProcessEventCompleted.ToEventId(), "Webjob completed the monitoring of callbacks from SAP.");
             }

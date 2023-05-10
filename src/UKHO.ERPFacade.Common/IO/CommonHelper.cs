@@ -7,7 +7,7 @@ namespace UKHO.ERPFacade.Common.IO
     [ExcludeFromCodeCoverage]
     public static class CommonHelper
     {
-        public static object GetProp(string name, object obj, Type type)
+        public static object ParseXmlNode(string name, object obj, Type type)
         {
             var parts = name.Split('.').ToList();
             var currentPart = parts[0];
@@ -16,7 +16,7 @@ namespace UKHO.ERPFacade.Common.IO
             if (name.IndexOf(".") > -1)
             {
                 parts.Remove(currentPart);
-                return GetProp(string.Join(".", parts), info.GetValue(obj, null), info.PropertyType);
+                return ParseXmlNode(string.Join(".", parts), info.GetValue(obj, null), info.PropertyType);
             }
             else
             {

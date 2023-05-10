@@ -40,7 +40,7 @@ namespace UKHO.ERPFacade.API.Helpers
                 {
                     foreach (var rule in scenario.Rules)
                     {
-                        object jsonFieldValue = CommonHelper.GetProp(rule.AttributeName, product, product.GetType());
+                        object jsonFieldValue = CommonHelper.ParseXmlNode(rule.AttributeName, product, product.GetType());
 
                         if (jsonFieldValue != null && jsonFieldValue.ToString() == rule.AttriuteValue)
                         {
