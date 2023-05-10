@@ -1,11 +1,14 @@
 ﻿using RestSharp;
+using System.Text;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
     public class WebhookEndpoint
     {
         public static Config config;
-        private readonly RestClient client;
+        private RestClient client;
+        private RestClient client2;
+
         private readonly ADAuthTokenProvider _authToken;
 
         public WebhookEndpoint()
@@ -14,6 +17,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             _authToken = new();
             var options = new RestClientOptions(config.TestConfig.ErpFacadeConfiguration.BaseUrl);
             client = new RestClient(options);
+            var options2 = new RestClientOptions(config.testConfig.SapMockConfiguration.BaseUrl);
+            client2 = new RestClient(options2);
+
         }
 
         public async Task<RestResponse> OptionWebhookResponseAsync(string token)
@@ -42,5 +48,24 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             RestResponse response = await client.ExecuteAsync(request);
             return response;
         }
+
+        public async void PostMockSapResponseAsync(string filePath)
+        {
+            string requestBody;
+            var cred = $"{config.testConfig.SapMockConfiguration.Username}:{config.testConfig.SapMockConfiguration.Password}";
+
+            using (StreamReader streamReader = new StreamReader(filePath))
+            {
+                requestBody = streamReader.ReadToEnd();
+            }
+
+            var request = new RestRequest("/z_adds_mat_info.asmx", Method.Post);
+            request.AddHeader("Content-Type", "application/xml");
+            request.AddHeader("Authorization", "Basic " +Convert.ToBase64String(Encoding.UTF8.GetBytes(cred)));
+            request.AddParameter("application/xml", requestBody, ParameterType.RequestBody);
+
+            RestResponse response = await client2.ExecuteAsync(request);
+        }
+
     }
 }
