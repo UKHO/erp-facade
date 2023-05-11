@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Xml;
 
-namespace UKHO.ERPFacade.Common.Helpers
+namespace UKHO.ERPFacade.Common.IO
 {
     [ExcludeFromCodeCoverage]
     public class XmlHelper : IXmlHelper

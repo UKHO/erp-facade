@@ -4,7 +4,7 @@ using Azure.Security.KeyVault.Secrets;
 using SoapCore;
 using System.Diagnostics.CodeAnalysis;
 using UKHO.ERPFacade.Common.Configuration;
-using UKHO.ERPFacade.Common.IO;
+using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.SAP.MockAPIService.Filters;
 using UKHO.SAP.MockAPIService.Services;
 

@@ -10,7 +10,7 @@ using Serilog;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using UKHO.ERPFacade.Common.Configuration;
-using UKHO.ERPFacade.Common.IO;
+using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.WebJob.Services;
 using UKHO.Logging.EventHubLogProvider;
 

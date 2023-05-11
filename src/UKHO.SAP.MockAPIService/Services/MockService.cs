@@ -9,9 +9,9 @@ namespace UKHO.SAP.MockAPIService.Services
         private const string CurrentTestFileName = "CurrentTestCase.txt";
         private readonly string _homeDirectoryPath;
 
-        public MockService()
+        public MockService(IConfiguration configuration)
         {
-            _homeDirectoryPath = Environment.CurrentDirectory;
+            _homeDirectoryPath = Path.Combine(configuration["HOME"]);
         }
 
         public void CreateIfNotExists(string destPath)
