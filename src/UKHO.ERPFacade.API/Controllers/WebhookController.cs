@@ -1,10 +1,12 @@
-﻿using System.Xml;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using UKHO.ERPFacade.Common.Helpers;
+using System.Xml;
+using UKHO.ERPFacade.API.Helpers;
+using UKHO.ERPFacade.API.Models;
 using UKHO.ERPFacade.Common.HttpClients;
-using UKHO.ERPFacade.Common.IO;
+using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
 
 namespace UKHO.ERPFacade.API.Controllers
@@ -18,7 +20,8 @@ namespace UKHO.ERPFacade.API.Controllers
         private readonly IAzureTableReaderWriter _azureTableReaderWriter;
         private readonly IAzureBlobEventWriter _azureBlobEventWriter;
         private readonly ISapClient _sapClient;
-        private readonly IXmlHelper _xmlHelper;
+        private readonly IScenarioBuilder _scenarioBuilder;
+        private readonly ISapMessageBuilder _sapMessageBuilder;
 
         private const string TraceIdKey = "data.traceId";
         private const string RequestFormat = "json";
@@ -28,14 +31,16 @@ namespace UKHO.ERPFacade.API.Controllers
                                  IAzureTableReaderWriter azureTableReaderWriter,
                                  IAzureBlobEventWriter azureBlobEventWriter,
                                  ISapClient sapClient,
-                                 IXmlHelper xmlHelper)
+                                 IScenarioBuilder scenarioBuilder,
+                                 ISapMessageBuilder sapMessageBuilder)
         : base(contextAccessor)
         {
             _logger = logger;
             _azureTableReaderWriter = azureTableReaderWriter;
             _azureBlobEventWriter = azureBlobEventWriter;
             _sapClient = sapClient;
-            _xmlHelper = xmlHelper;
+            _scenarioBuilder = scenarioBuilder;
+            _sapMessageBuilder = sapMessageBuilder;
         }
 
         [HttpOptions]
@@ -60,40 +65,57 @@ namespace UKHO.ERPFacade.API.Controllers
         [Authorize(Policy = "WebhookCaller")]
         public virtual async Task<IActionResult> NewEncContentPublishedEventReceived([FromBody] JObject requestJson)
         {
-            _logger.LogInformation(EventIds.NewEncContentPublishedEventReceived.ToEventId(), "ERP Facade webhook has received new enccontentpublished event from EES.");
-
-            string traceId = requestJson.SelectToken(TraceIdKey)?.Value<string>();
-
-            if (string.IsNullOrEmpty(traceId))
+            try
             {
-                _logger.LogWarning(EventIds.TraceIdMissingInEvent.ToEventId(), "TraceId is missing in ENC content published event.");
-                return new BadRequestObjectResult(StatusCodes.Status400BadRequest);
+                _logger.LogInformation(EventIds.NewEncContentPublishedEventReceived.ToEventId(), "ERP Facade webhook has received new enccontentpublished event from EES.");
+
+                string traceId = requestJson.SelectToken(TraceIdKey)?.Value<string>();
+
+                if (string.IsNullOrEmpty(traceId))
+                {
+                    _logger.LogWarning(EventIds.TraceIdMissingInEvent.ToEventId(), "TraceId is missing in ENC content published event.");
+                    return new BadRequestObjectResult(StatusCodes.Status400BadRequest);
+                }
+
+                _logger.LogInformation(EventIds.StoreEncContentPublishedEventInAzureTable.ToEventId(), "Storing the received ENC content published event in azure table.");
+
+                await _azureTableReaderWriter.UpsertEntity(requestJson, traceId);
+
+                _logger.LogInformation(EventIds.UploadEncContentPublishedEventInAzureBlob.ToEventId(), "Uploading the received ENC content published event in blob storage.");
+
+                await _azureBlobEventWriter.UploadEvent(requestJson.ToString(), traceId, traceId + '.' + RequestFormat);
+
+                _logger.LogInformation(EventIds.UploadedEncContentPublishedEventInAzureBlob.ToEventId(), "ENC content published event is uploaded in blob storage successfully.");
+
+                List<Scenario> scenarios = _scenarioBuilder.BuildScenarios(JsonConvert.DeserializeObject<EESEvent>(requestJson.ToString()));
+
+                if (scenarios.Count > 0)
+                {
+                    XmlDocument sapPayload = _sapMessageBuilder.BuildSapMessageXml(scenarios, traceId);
+
+                    HttpResponseMessage response = await _sapClient.PostEventData(sapPayload, "Z_ADDS_MAT_INFO");
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        _logger.LogError(EventIds.SapConnectionFailed.ToEventId(), "Could not connect to SAP. | {StatusCode}", response.StatusCode);
+                        throw new Exception();
+                    }
+                    _logger.LogInformation(EventIds.DataPushedToSap.ToEventId(), "Data pushed to SAP successfully. | {StatusCode}", response.StatusCode);
+
+                    await _azureTableReaderWriter.UpdateRequestTimeEntity(traceId);
+
+                    return new OkObjectResult(StatusCodes.Status200OK);
+                }
+                else
+                {
+                    _logger.LogWarning(EventIds.NoScenarioFound.ToEventId(), "No scenarios found in incoming EES event.");
+                    throw new Exception();
+                }
             }
-
-            _logger.LogInformation(EventIds.StoreEncContentPublishedEventInAzureTable.ToEventId(), "Storing the received ENC content published event in azure table.");
-
-            await _azureTableReaderWriter.UpsertEntity(requestJson, traceId);
-
-            _logger.LogInformation(EventIds.UploadEncContentPublishedEventInAzureBlob.ToEventId(), "Uploading the received ENC content published event in blob storage.");
-
-            await _azureBlobEventWriter.UploadEvent(requestJson.ToString(), traceId, traceId + '.' + RequestFormat);
-
-            _logger.LogInformation(EventIds.UploadedEncContentPublishedEventInAzureBlob.ToEventId(), "ENC content published event is uploaded in blob storage successfully.");
-
-            //Below line is added temporary only to send sample xml to mock service for local testing.
-            XmlDocument soapXml = _xmlHelper.CreateXmlDocument(Path.Combine(Environment.CurrentDirectory, "SapXmlTemplates\\SAPRequest.xml"));
-
-            HttpResponseMessage response = await _sapClient.PostEventData(soapXml, "Z_ADDS_MAT_INFO");
-
-            if (!response.IsSuccessStatusCode)
+            catch (Exception ex)
             {
-                _logger.LogError(EventIds.SapConnectionFailed.ToEventId(), "Could not connect to SAP. | {StatusCode} | {SapResponse}", response.StatusCode, response.Content?.ReadAsStringAsync().Result);
-                throw new Exception();
+                throw new Exception(ex.Message);
             }
-
-            _logger.LogInformation(EventIds.DataPushedToSap.ToEventId(), "Data pushed to SAP successfully. | {StatusCode} | {SapResponse}", response.StatusCode, response.Content?.ReadAsStringAsync().Result);
-            await _azureTableReaderWriter.UpdateRequestTimeEntity(traceId);
-            return new OkObjectResult(StatusCodes.Status200OK);
         }
     }
 }

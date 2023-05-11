@@ -1,4 +1,4 @@
-﻿namespace UKHO.ERPFacade.Common.IO
+﻿namespace UKHO.ERPFacade.Common.IO.Azure
 {
     public interface IAzureBlobEventWriter
     {
