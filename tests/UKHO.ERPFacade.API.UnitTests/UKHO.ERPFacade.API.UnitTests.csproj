@@ -6,27 +6,30 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <NoWarn>8618</NoWarn>
+    <NoWarn>8618;8602;8625;8634</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <NoWarn>8618</NoWarn>
+    <NoWarn>8618;8602;8625;8634</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Azure.Data.Tables" Version="12.8.0" />
-    <PackageReference Include="Azure.Storage.Blobs" Version="12.15.1" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.13.0" />
     <PackageReference Include="FakeItEasy" Version="7.3.1" />
     <PackageReference Include="FluentAssertions" Version="6.10.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="NUnit" Version="3.13.2" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.0.0" />
     <PackageReference Include="coverlet.collector" Version="3.1.0" />
 	<PackageReference Include="coverlet.msbuild" Version="3.1.0" />
+	<PackageReference Include="UKHO.Logging.EventHubLogProvider" Version="1.22047.3" />
 	  
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\UKHO.ERPFacade.API\UKHO.ERPFacade.API.csproj" />
+    <ProjectReference Include="..\..\src\UKHO.ERPFacade.WebJob\UKHO.ERPFacade.WebJob.csproj" />
   </ItemGroup>
 
 </Project>

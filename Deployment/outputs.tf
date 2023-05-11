@@ -5,3 +5,8 @@ output "webapp_name" {
 output "mock_webapp_name" {
    value = local.env_name == "dev" ? local.mock_web_app_name : null
 }
+
+output "storage_connection_string" {
+   value = module.storage.storage_connection_string
+   sensitive = true
+}
