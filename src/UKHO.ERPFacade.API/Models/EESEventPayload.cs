@@ -27,11 +27,11 @@ namespace UKHO.ERPFacade.API.Models
         public string DataContentType { get; set; }
 
         [JsonProperty("data")]
-        public EssEventData Data { get; set; }
+        public EesEventData Data { get; set; }
     }
 
     [ExcludeFromCodeCoverage]
-    public class EssEventData
+    public class EesEventData
     {
         [JsonProperty("traceId")]
         public string TraceId { get; set; }

@@ -12,6 +12,7 @@ using System.Reflection;
 using UKHO.ERPFacade.API.Filters;
 using UKHO.ERPFacade.API.Helpers;
 using UKHO.ERPFacade.API.Models;
+using UKHO.ERPFacade.API.Services;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.HttpClients;
 using UKHO.ERPFacade.Common.IO;
@@ -175,6 +176,7 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<IXmlHelper, XmlHelper>();
             builder.Services.AddScoped<IFileSystemHelper, FileSystemHelper>();
             builder.Services.AddScoped<IFileSystem, FileSystem>();
+            builder.Services.AddScoped<IERPFacadeService, ERPFacadeService>();
 
             builder.Services.AddHttpClient<ISapClient, SapClient>(c =>
             {

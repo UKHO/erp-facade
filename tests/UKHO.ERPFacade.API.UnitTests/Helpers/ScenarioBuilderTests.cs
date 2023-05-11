@@ -44,7 +44,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         {
             var fakeEventData = new EESEventPayload()
             {
-                Data = new EssEventData()
+                Data = new EesEventData()
                 {
                     Products = new List<Product>()
                     {
@@ -116,7 +116,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         {
             var fakeEventData = new EESEventPayload()
             {
-                Data = new EssEventData()
+                Data = new EesEventData()
                 {
                     Products = new List<Product>()
                     {
@@ -186,7 +186,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         {
             var fakeEventData = new EESEventPayload()
             {
-                Data = new EssEventData()
+                Data = new EesEventData()
                 {
                     Products = new List<Product>()
                     {

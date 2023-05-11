@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UKHO.ERPFacade.API.Controllers;
+using UKHO.ERPFacade.API.Services;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
 
@@ -20,6 +21,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         private ILogger<ErpFacadeController> _fakeLogger;
         private IAzureTableReaderWriter _fakeAzureTableReaderWriter;
         private IAzureBlobEventWriter _fakeAzureBlobEventWriter;
+        private IERPFacadeService _fakeErpFacadeService;
 
         private ErpFacadeController _fakeErpFacadeController;
 
@@ -30,11 +32,13 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             _fakeLogger = A.Fake<ILogger<ErpFacadeController>>();
             _fakeAzureTableReaderWriter = A.Fake<IAzureTableReaderWriter>();
             _fakeAzureBlobEventWriter = A.Fake<IAzureBlobEventWriter>();
+            _fakeErpFacadeService = A.Fake<IERPFacadeService>();
 
             _fakeErpFacadeController = new ErpFacadeController(_fakeHttpContextAccessor,
                                                            _fakeLogger,
                                                            _fakeAzureTableReaderWriter,
-                                                           _fakeAzureBlobEventWriter);
+                                                           _fakeAzureBlobEventWriter,
+                                                           _fakeErpFacadeService);
         }
 
         [Test]

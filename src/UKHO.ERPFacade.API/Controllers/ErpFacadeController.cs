@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Diagnostics;
 using System.Globalization;
 using UKHO.ERPFacade.API.Models;
+using UKHO.ERPFacade.API.Services;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
 
@@ -15,18 +17,22 @@ namespace UKHO.ERPFacade.API.Controllers
         private readonly ILogger<ErpFacadeController> _logger;
         private readonly IAzureTableReaderWriter _azureTableReaderWriter;
         private readonly IAzureBlobEventWriter _azureBlobEventWriter;
+        private readonly IERPFacadeService _erpFacadeService;
 
         private const string CorrIdKey = "corrid";
+        private const string RequestFormat = "json";
 
         public ErpFacadeController(IHttpContextAccessor contextAccessor,
                                    ILogger<ErpFacadeController> logger,
                                    IAzureTableReaderWriter azureTableReaderWriter,
-                                   IAzureBlobEventWriter azureBlobEventWriter)
+                                   IAzureBlobEventWriter azureBlobEventWriter,
+                                   IERPFacadeService erpFacadeService)
         : base(contextAccessor)
         {
             _logger = logger;
             _azureTableReaderWriter = azureTableReaderWriter;
             _azureBlobEventWriter = azureBlobEventWriter;
+            _erpFacadeService = erpFacadeService;
         }
 
         [HttpPost]
@@ -55,104 +61,20 @@ namespace UKHO.ERPFacade.API.Controllers
 
             _logger.LogInformation(EventIds.BlobExistsInAzure.ToEventId(), "Blob exists in the Azure Storage for the correlation ID received from SAP event.");
 
-            //Add code to map SAP event data to UnitOfSale event with price information
-
-            var priceInformationList = JsonConvert.DeserializeObject<List<PriceInformationEvent>>(requestJson.ToString());
-
-            List<UnitsOfSalePrices> unitsOfSalePriceList = new();
+            List<PriceInformationEvent> priceInformationList = JsonConvert.DeserializeObject<List<PriceInformationEvent>>(requestJson.ToString());
 
             if (priceInformationList.Count > 0)
             {
-                foreach (var priceInformation in priceInformationList)
-                {
-                    UnitsOfSalePrices unitsOfSalePrice = new();
-                    List<Price> priceList = new();
+                List<UnitsOfSalePrices> unitsOfSalePriceList = _erpFacadeService.BuildUnitOfSalePricePayload(priceInformationList);
 
-                    var unitOfSalePriceExists = unitsOfSalePriceList.Any(x => x.UnitName.Contains(priceInformation.ProductName));
+                _logger.LogInformation("Downloading the existing EES event from blob storage with give Correlation ID.");
 
-                    if (!unitOfSalePriceExists)
-                    {
-                        if (!string.IsNullOrEmpty(priceInformation.EffectiveDate))
-                        {
-                            Price effectivePrice = BuildPricePayload(priceInformation.Duration, priceInformation.Price, priceInformation.EffectiveDate, priceInformation.Currency);
-                            priceList.Add(effectivePrice);
-                        }
+                JObject exisitingEesEvent = JObject.Parse(_azureBlobEventWriter.DownloadEvent(corrId + '.' + RequestFormat, corrId));
 
-                        if (!string.IsNullOrEmpty(priceInformation.FutureDate))
-                        {
-                            Price futurePrice = BuildPricePayload(priceInformation.Duration, priceInformation.FuturePrice, priceInformation.FutureDate, priceInformation.FutureCurr);
-                            priceList.Add(futurePrice);
-                        }
-
-                        unitsOfSalePrice.UnitName = priceInformation.ProductName;
-                        unitsOfSalePrice.Price = priceList;
-
-                        unitsOfSalePriceList.Add(unitsOfSalePrice);
-                    }
-                    else
-                    {
-                        PriceDurations priceDuration = new();
-
-                        var existingUnitOfSalePrice = unitsOfSalePriceList.Where(x => x.UnitName.Contains(priceInformation.ProductName)).FirstOrDefault();
-
-                        var effectiveUnitOfSalePriceDurations = existingUnitOfSalePrice.Price.Where(x => x.EffectiveDate.ToString("yyyyMMdd") == priceInformation.EffectiveDate).ToList();
-                        var effectiveStandard = effectiveUnitOfSalePriceDurations.Select(x => x.Standard).FirstOrDefault();
-
-                        var futureUnitOfSalePriceDurations = existingUnitOfSalePrice.Price.Where(x => x.EffectiveDate.ToString("yyyyMMdd") == priceInformation.FutureDate).ToList();
-                        var futureStandard = futureUnitOfSalePriceDurations.Select(x => x.Standard).FirstOrDefault();
-
-                        if (effectiveStandard != null && !string.IsNullOrEmpty(priceInformation.EffectiveDate))
-                        {
-                            priceDuration.NumberOfMonths = Convert.ToInt32(priceInformation.Duration);
-                            priceDuration.Rrp = Convert.ToDouble(priceInformation.Price);
-
-                            effectiveStandard.PriceDurations.Add(priceDuration);
-                        }
-                        else
-                        {
-                            Price effectivePrice = BuildPricePayload(priceInformation.Duration, priceInformation.Price, priceInformation.EffectiveDate, priceInformation.Currency);
-                            existingUnitOfSalePrice.Price.Add(effectivePrice);
-                        }
-                        if (futureStandard != null && !string.IsNullOrEmpty(priceInformation.FutureDate))
-                        {
-                            priceDuration.NumberOfMonths = Convert.ToInt32(priceInformation.Duration);
-                            priceDuration.Rrp = Convert.ToDouble(priceInformation.FuturePrice);
-
-                            futureStandard.PriceDurations.Add(priceDuration);
-                        }
-                        else
-                        {
-                            if (!string.IsNullOrEmpty(priceInformation.FutureDate))
-                            {
-                                Price futurePrice = BuildPricePayload(priceInformation.Duration, priceInformation.FuturePrice, priceInformation.FutureDate, priceInformation.FutureCurr);
-                                existingUnitOfSalePrice.Price.Add(futurePrice);
-                            }
-                        }
-                    }
-                }
+                _logger.LogInformation("Existing EES event is downloaded from blob storage successfully.");
             }
+
             return new OkObjectResult(StatusCodes.Status200OK);
-        }
-
-        private static Price BuildPricePayload(string duration, string rrp, string date, string currency)
-        {
-            Price price = new();
-            Standard standard = new();
-            PriceDurations priceDurations = new();
-
-            List<PriceDurations> priceDurationsList = new();
-
-            priceDurations.NumberOfMonths = Convert.ToInt32(duration);
-            priceDurations.Rrp = Convert.ToDouble(rrp);
-            priceDurationsList.Add(priceDurations);
-
-            standard.PriceDurations = priceDurationsList;
-
-            price.EffectiveDate = Convert.ToDateTime(DateTime.ParseExact(date, "yyyyMMdd", CultureInfo.InvariantCulture));
-            price.Currency = currency;
-            price.Standard = standard;
-
-            return price;
         }
     }
 }
