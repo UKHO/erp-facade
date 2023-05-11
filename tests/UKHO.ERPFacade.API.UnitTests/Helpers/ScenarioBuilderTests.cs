@@ -42,9 +42,9 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         [Test]
         public void WhenEesEventDataPassedWithIsNewCellAsTrue_ThenReturnsNewCellScenario()
         {
-            var fakeEventData = new EESEvent()
+            var fakeEventData = new EESEventPayload()
             {
-                Data = new Data()
+                Data = new EssEventData()
                 {
                     Products = new List<Product>()
                     {
@@ -114,9 +114,9 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         [Test]
         public void WhenEesEventDataDoesNotMatchAnyScenarioCondition_ThenEmptyScenarioList()
         {
-            var fakeEventData = new EESEvent()
+            var fakeEventData = new EESEventPayload()
             {
-                Data = new Data()
+                Data = new EssEventData()
                 {
                     Products = new List<Product>()
                     {
@@ -184,9 +184,9 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         [Test]
         public void WhenEesEventDataPassedWithStatusNameAsCancellationUpdateAndContentChangedAsTrue_ThenReturnsCancellAndReplaceCellScenario()
         {
-            var fakeEventData = new EESEvent()
+            var fakeEventData = new EESEventPayload()
             {
-                Data = new Data()
+                Data = new EssEventData()
                 {
                     Products = new List<Product>()
                     {

@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Globalization;
 using UKHO.ERPFacade.API.Models;
-using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
 
@@ -75,42 +74,14 @@ namespace UKHO.ERPFacade.API.Controllers
                     {
                         if (!string.IsNullOrEmpty(priceInformation.EffectiveDate))
                         {
-                            Price price = new();
-                            Standard standard = new();
-                            PriceDurations priceDurations = new();
-
-                            List<PriceDurations> priceDurationsList = new();
-
-                            priceDurations.NumberOfMonths = Convert.ToInt32(priceInformation.Duration);
-                            priceDurations.Rrp = Convert.ToDouble(priceInformation.Price);
-                            priceDurationsList.Add(priceDurations);
-
-                            standard.PriceDurations = priceDurationsList;
-
-                            price.EffectiveDate = Convert.ToDateTime(DateTime.ParseExact(priceInformation.EffectiveDate, "yyyyMMdd", CultureInfo.InvariantCulture));
-                            price.Currency = priceInformation.Currency;
-                            price.Standard = standard;
-                            priceList.Add(price);
+                            Price effectivePrice = BuildPricePayload(priceInformation.Duration, priceInformation.Price, priceInformation.EffectiveDate, priceInformation.Currency);
+                            priceList.Add(effectivePrice);
                         }
 
                         if (!string.IsNullOrEmpty(priceInformation.FutureDate))
                         {
-                            Price price = new();
-                            Standard standard = new();
-                            PriceDurations priceDurations = new();
-
-                            List<PriceDurations> priceDurationsList = new();
-
-                            priceDurations.NumberOfMonths = Convert.ToInt32(priceInformation.Duration);
-                            priceDurations.Rrp = Convert.ToDouble(priceInformation.FuturePrice);
-                            priceDurationsList.Add(priceDurations);
-
-                            standard.PriceDurations = priceDurationsList;
-
-                            price.EffectiveDate = Convert.ToDateTime(DateTime.ParseExact(priceInformation.FutureDate, "yyyyMMdd", CultureInfo.InvariantCulture));
-                            price.Currency = priceInformation.Currency;
-                            price.Standard = standard;
-                            priceList.Add(price);
+                            Price futurePrice = BuildPricePayload(priceInformation.Duration, priceInformation.FuturePrice, priceInformation.FutureDate, priceInformation.FutureCurr);
+                            priceList.Add(futurePrice);
                         }
 
                         unitsOfSalePrice.UnitName = priceInformation.ProductName;
@@ -118,7 +89,6 @@ namespace UKHO.ERPFacade.API.Controllers
 
                         unitsOfSalePriceList.Add(unitsOfSalePrice);
                     }
-
                     else
                     {
                         PriceDurations priceDuration = new();
@@ -131,24 +101,58 @@ namespace UKHO.ERPFacade.API.Controllers
                         var futureUnitOfSalePriceDurations = existingUnitOfSalePrice.Price.Where(x => x.EffectiveDate.ToString("yyyyMMdd") == priceInformation.FutureDate).ToList();
                         var futureStandard = futureUnitOfSalePriceDurations.Select(x => x.Standard).FirstOrDefault();
 
-                        if (!string.IsNullOrEmpty(priceInformation.EffectiveDate))
+                        if (effectiveStandard != null && !string.IsNullOrEmpty(priceInformation.EffectiveDate))
                         {
                             priceDuration.NumberOfMonths = Convert.ToInt32(priceInformation.Duration);
                             priceDuration.Rrp = Convert.ToDouble(priceInformation.Price);
 
                             effectiveStandard.PriceDurations.Add(priceDuration);
                         }
-                        if (!string.IsNullOrEmpty(priceInformation.FutureDate))
+                        else
+                        {
+                            Price effectivePrice = BuildPricePayload(priceInformation.Duration, priceInformation.Price, priceInformation.EffectiveDate, priceInformation.Currency);
+                            existingUnitOfSalePrice.Price.Add(effectivePrice);
+                        }
+                        if (futureStandard != null && !string.IsNullOrEmpty(priceInformation.FutureDate))
                         {
                             priceDuration.NumberOfMonths = Convert.ToInt32(priceInformation.Duration);
                             priceDuration.Rrp = Convert.ToDouble(priceInformation.FuturePrice);
 
                             futureStandard.PriceDurations.Add(priceDuration);
                         }
+                        else
+                        {
+                            if (!string.IsNullOrEmpty(priceInformation.FutureDate))
+                            {
+                                Price futurePrice = BuildPricePayload(priceInformation.Duration, priceInformation.FuturePrice, priceInformation.FutureDate, priceInformation.FutureCurr);
+                                existingUnitOfSalePrice.Price.Add(futurePrice);
+                            }
+                        }
                     }
                 }
             }
             return new OkObjectResult(StatusCodes.Status200OK);
+        }
+
+        private static Price BuildPricePayload(string duration, string rrp, string date, string currency)
+        {
+            Price price = new();
+            Standard standard = new();
+            PriceDurations priceDurations = new();
+
+            List<PriceDurations> priceDurationsList = new();
+
+            priceDurations.NumberOfMonths = Convert.ToInt32(duration);
+            priceDurations.Rrp = Convert.ToDouble(rrp);
+            priceDurationsList.Add(priceDurations);
+
+            standard.PriceDurations = priceDurationsList;
+
+            price.EffectiveDate = Convert.ToDateTime(DateTime.ParseExact(date, "yyyyMMdd", CultureInfo.InvariantCulture));
+            price.Currency = currency;
+            price.Standard = standard;
+
+            return price;
         }
     }
 }

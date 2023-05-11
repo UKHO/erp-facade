@@ -87,7 +87,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
                 _logger.LogInformation(EventIds.UploadedEncContentPublishedEventInAzureBlob.ToEventId(), "ENC content published event is uploaded in blob storage successfully.");
 
-                List<Scenario> scenarios = _scenarioBuilder.BuildScenarios(JsonConvert.DeserializeObject<EESEvent>(requestJson.ToString()));
+                List<Scenario> scenarios = _scenarioBuilder.BuildScenarios(JsonConvert.DeserializeObject<EESEventPayload>(requestJson.ToString()));
 
                 if (scenarios.Count > 0)
                 {
