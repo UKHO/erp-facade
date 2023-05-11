@@ -70,7 +70,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
              && call.GetArgument<LogLevel>(0) == LogLevel.Warning
-             && call.GetArgument<EventId>(1) == EventIds.TraceIdMissingInSAPEvent.ToEventId()
+             && call.GetArgument<EventId>(1) == EventIds.CorrIdMissingInSAPEvent.ToEventId()
              && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "TraceId is missing in the event received from the SAP.").MustHaveHappenedOnceExactly();
         }
 
