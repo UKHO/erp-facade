@@ -5,17 +5,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml;
-using System;
 using UKHO.ERPFacade.API.Controllers;
-using UKHO.ERPFacade.Common.Helpers;
+using UKHO.ERPFacade.API.Helpers;
+using UKHO.ERPFacade.API.Models;
 using UKHO.ERPFacade.Common.HttpClients;
 using UKHO.ERPFacade.Common.IO;
+using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
 
 namespace UKHO.ERPFacade.API.UnitTests.Controllers
@@ -29,7 +31,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         private IAzureBlobEventWriter _fakeAzureBlobEventWriter;
         private ISapClient _fakeSapClient;
         private IXmlHelper _fakeXmlHelper;
-
+        private IScenarioBuilder _fakeScenarioBuilder;
+        private ISapMessageBuilder _fakeSapMessageBuilder;
         private WebhookController _fakeWebHookController;
 
         [SetUp]
@@ -41,13 +44,16 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             _fakeAzureBlobEventWriter = A.Fake<IAzureBlobEventWriter>();
             _fakeSapClient = A.Fake<ISapClient>();
             _fakeXmlHelper = A.Fake<IXmlHelper>();
+            _fakeScenarioBuilder = A.Fake<IScenarioBuilder>();
+            _fakeSapMessageBuilder = A.Fake<ISapMessageBuilder>();
 
             _fakeWebHookController = new WebhookController(_fakeHttpContextAccessor,
                                                            _fakeLogger,
                                                            _fakeAzureTableReaderWriter,
                                                            _fakeAzureBlobEventWriter,
                                                            _fakeSapClient,
-                                                           _fakeXmlHelper);
+                                                           _fakeScenarioBuilder,
+                                                           _fakeSapMessageBuilder);
         }
 
         [Test]
@@ -84,7 +90,19 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             XmlDocument xmlDocument = new();
 
             var fakeEncEventJson = JObject.Parse(@"{""data"":{""traceId"":""123""}}");
+            List<Scenario> fakeScenario = new()
+            {
+                new Scenario()
+                {
+                    InUnitOfSales = new() { "Fake" },
+                    IsCellReplaced = false,
+                    Product = new(),
+                    ScenarioType = ScenarioType.NewCell,
+                    UnitOfSales = new()
+                }
+            };
 
+            A.CallTo(() => _fakeScenarioBuilder.BuildScenarios(A<EESEvent>.Ignored)).Returns(fakeScenario);
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(xmlDocument);
             A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored))
                 .Returns(new HttpResponseMessage()
@@ -97,6 +115,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             A.CallTo(() => _fakeAzureTableReaderWriter.UpsertEntity(A<JObject>.Ignored, A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureTableReaderWriter.UpdateRequestTimeEntity(A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureBlobEventWriter.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, "Z_ADDS_MAT_INFO")).MustHaveHappened();
 
             result.StatusCode.Should().Be(200);
 
@@ -123,7 +142,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
              && call.GetArgument<LogLevel>(0) == LogLevel.Information
              && call.GetArgument<EventId>(1) == EventIds.DataPushedToSap.ToEventId()
-             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Data pushed to SAP successfully. | {StatusCode} | {SapResponse}").MustHaveHappenedOnceExactly();
+             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Data pushed to SAP successfully. | {StatusCode}").MustHaveHappenedOnceExactly();
         }
 
         [Test]
@@ -149,9 +168,21 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         public void WhenSapDoesNotRespond200Ok_ThenWebhookReturns500InternalServerResponse()
         {
             XmlDocument xmlDocument = new();
+            List<Scenario> fakeScenario = new()
+            {
+                new Scenario()
+                {
+                    InUnitOfSales = new() { "Fake" },
+                    IsCellReplaced = false,
+                    Product = new(),
+                    ScenarioType = ScenarioType.NewCell,
+                    UnitOfSales = new()
+                }
+            };
 
             var fakeEncEventJson = JObject.Parse(@"{""data"":{""traceId"":""123""}}");
 
+            A.CallTo(() => _fakeScenarioBuilder.BuildScenarios(A<EESEvent>.Ignored)).Returns(fakeScenario);
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(xmlDocument);
             A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored))
                 .Returns(new HttpResponseMessage()
@@ -188,7 +219,49 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
              && call.GetArgument<LogLevel>(0) == LogLevel.Error
              && call.GetArgument<EventId>(1) == EventIds.SapConnectionFailed.ToEventId()
-             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Could not connect to SAP. | {StatusCode} | {SapResponse}").MustHaveHappenedOnceExactly();
+             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Could not connect to SAP. | {StatusCode}").MustHaveHappenedOnceExactly();
+        }
+
+        [Test]
+        public void WhenBuildScenariosReturnsNoScenerios_ThenWebhookReturns500InternalServerResponse()
+        {
+            XmlDocument xmlDocument = new();
+            List<Scenario> fakeScenario = new();
+
+            var fakeEncEventJson = JObject.Parse(@"{""data"":{""traceId"":""123""}}");
+
+            A.CallTo(() => _fakeScenarioBuilder.BuildScenarios(A<EESEvent>.Ignored)).Returns(fakeScenario);
+            A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(xmlDocument);
+            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored))
+                .Returns(new HttpResponseMessage()
+                {
+                    StatusCode = HttpStatusCode.Unauthorized
+                });
+
+            Assert.ThrowsAsync<Exception>(() => _fakeWebHookController.NewEncContentPublishedEventReceived(fakeEncEventJson));
+
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpsertEntity(A<JObject>.Ignored, A<string>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeAzureBlobEventWriter.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+             && call.GetArgument<LogLevel>(0) == LogLevel.Information
+             && call.GetArgument<EventId>(1) == EventIds.NewEncContentPublishedEventReceived.ToEventId()
+             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "ERP Facade webhook has received new enccontentpublished event from EES.").MustHaveHappenedOnceExactly();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+             && call.GetArgument<LogLevel>(0) == LogLevel.Information
+             && call.GetArgument<EventId>(1) == EventIds.StoreEncContentPublishedEventInAzureTable.ToEventId()
+             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Storing the received ENC content published event in azure table.").MustHaveHappenedOnceExactly();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+             && call.GetArgument<LogLevel>(0) == LogLevel.Information
+             && call.GetArgument<EventId>(1) == EventIds.UploadEncContentPublishedEventInAzureBlob.ToEventId()
+             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Uploading the received ENC content published event in blob storage.").MustHaveHappenedOnceExactly();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+             && call.GetArgument<LogLevel>(0) == LogLevel.Warning
+             && call.GetArgument<EventId>(1) == EventIds.NoScenarioFound.ToEventId()
+             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "No scenarios found in incoming EES event.").MustHaveHappenedOnceExactly();
         }
     }
 }
