@@ -641,7 +641,7 @@
       {
         "ActionNumber": 8,
         "Action": "REMOVE ENC CELL FROM AVCS UNIT OF SALE",
-        "Product": "ENC CELL",
+        "Product": "AVCS UNIT",
         "Attributes": [
           {
             "IsRequired": true,
