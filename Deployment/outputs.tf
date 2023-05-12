@@ -6,6 +6,12 @@ output "mock_webapp_name" {
    value = local.env_name == "dev" ? local.mock_web_app_name : null
 }
 
+output "storage_connection_string" {
+   value = module.storage.storage_connection_string
+   sensitive = true
+}
+
+
 output "resource_group" {
   value = azurerm_resource_group.rg.name
 }

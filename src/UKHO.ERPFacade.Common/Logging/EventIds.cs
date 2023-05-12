@@ -94,5 +94,29 @@
         /// 940023 - Blob exists for traceID given in SAP event.
         /// </summary>
         BlobExistsInAzure = 940023,
+        /// <summary>
+        /// 940024 - No Scenario Found
+        /// </summary>
+        NoScenarioFound = 940024,
+        /// <summary>
+        /// 940025 - Sap Xml Template Not Found
+        /// </summary>
+        SapXmlTemplateNotFound = 940025,
+        /// <summary>
+        /// 940026 - Building Sap Actions Started
+        /// </summary>
+        BuildingSapActionStarted = 940026,
+        /// <summary>
+        /// 940027 - Sap Action Created
+        /// </summary>
+        SapActionCreated = 940027,
+        /// <summary>
+        /// 940028 - Identifying Scenario Started
+        /// </summary>
+        IdentifyScenarioStarted = 940028,
+        /// <summary>
+        /// 940029 - Scenario Identified
+        /// </summary>
+        ScenarioIdentified = 940029
     }
 }

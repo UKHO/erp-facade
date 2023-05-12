@@ -58,6 +58,7 @@ Write-Host "##vso[task.setvariable variable=ResourceGroup]$($terraformOutput.res
 Write-Host "##vso[task.setvariable variable=mockWebApp;isOutput=true]$($terraformOutput.mock_webapp_name.value)"
 Write-Host "##vso[task.setvariable variable=mockWebAppResourceGroupName;isOutput=true]$($terraformOutput.resource_group.value)"
 Write-Host "##vso[task.setvariable variable=ErpFacadeConfiguration.BaseUrl]$($terraformOutput.erp_facade_web_app_url.value)"
+Write-Host "##vso[task.setvariable variable=AzureStorageConfiguration.ConnectionString;issecret=true]$($terraformOutput.storage_connection_string.value)"
 
 $terraformOutput | ConvertTo-Json -Depth 5 > $terraformJsonOutputFile
 

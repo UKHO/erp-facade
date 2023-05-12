@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UKHO.ERPFacade.API.Controllers;
-using UKHO.ERPFacade.Common.IO;
+using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
 
 namespace UKHO.ERPFacade.API.UnitTests.Controllers

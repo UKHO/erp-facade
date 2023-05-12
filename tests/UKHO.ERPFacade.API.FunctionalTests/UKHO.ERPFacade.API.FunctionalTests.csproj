@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.15.1" />
     <PackageReference Include="FluentAssertions" Version="6.10.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="7.0.4" />
@@ -29,9 +30,40 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ERPFacadePayloadTestData\2NewCellScenario.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\1NewCellScenario.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\1NewCellScenario.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\1NewCellWoNewAVCSUnit.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\2NewCellScenario.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\1CellCancel.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\3CellsReplace2CellsCancel.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\2CellsReplace1CellsCancel.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ERPFacadePayloadTestData\WebhookPayload.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ERPFacadePayloadTestData\WebhookPayload_Invalid.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ERPFacadeGeneratedXmlFiles\" />
   </ItemGroup>
 
 </Project>

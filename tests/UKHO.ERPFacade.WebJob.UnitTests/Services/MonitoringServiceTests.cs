@@ -2,7 +2,7 @@
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
-using UKHO.ERPFacade.Common.IO;
+using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.WebJob.Services;
 
 namespace UKHO.ERPFacade.WebJob.UnitTests.Services
