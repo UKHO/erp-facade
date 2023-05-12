@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Globalization;
 using UKHO.ERPFacade.API.Helpers;
 using UKHO.ERPFacade.API.Models;
@@ -87,6 +89,34 @@ namespace UKHO.ERPFacade.API.Services
             }
 
             return unitsOfSalePriceList;
+        }
+
+        public JObject BuildEESEventWithPriceInformation(List<UnitsOfSalePrices> unitsOfSalePriceList, string exisitingEesEvent)
+        {
+            EESEventPayload eESEventPayload = JsonConvert.DeserializeObject<EESEventPayload>(exisitingEesEvent);
+
+            UnitOfSalePriceEventPayload unitOfSalePriceEventPayload = new();
+            UnitOfSalePriceEventData unitOfSalePriceEventData = new();
+
+            unitOfSalePriceEventData.TraceId = eESEventPayload.Data.TraceId;
+            unitOfSalePriceEventData.Products = eESEventPayload.Data.Products;
+            unitOfSalePriceEventData._COMMENT = "Prices for all units in event will be included, including Cancelled Cell";
+            unitOfSalePriceEventData.UnitsOfSales = eESEventPayload.Data.UnitsOfSales;
+            unitOfSalePriceEventData.UnitsOfSalePrices = unitsOfSalePriceList;
+
+            unitOfSalePriceEventPayload.SpecVersion = eESEventPayload.SpecVersion;
+            unitOfSalePriceEventPayload.Type = eESEventPayload.Type;
+            unitOfSalePriceEventPayload.Source = eESEventPayload.Source;
+            unitOfSalePriceEventPayload.Id = eESEventPayload.Id;
+            unitOfSalePriceEventPayload.Time = eESEventPayload.Time;
+            unitOfSalePriceEventPayload._COMMENT = "A comma separated list of products";
+            unitOfSalePriceEventPayload.Subject = eESEventPayload.Subject;
+            unitOfSalePriceEventPayload.DataContentType = eESEventPayload.DataContentType;
+            unitOfSalePriceEventPayload.Data = unitOfSalePriceEventData;
+
+            JObject unitOfSalePriceEventPayloadJson = JObject.Parse(JsonConvert.SerializeObject(unitOfSalePriceEventPayload));
+
+            return unitOfSalePriceEventPayloadJson;
         }
 
         private static Price BuildPricePayload(string duration, string rrp, string date, string currency)

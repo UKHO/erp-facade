@@ -2,7 +2,9 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
+using System.Text.Encodings.Web;
 using UKHO.ERPFacade.API.Models;
 using UKHO.ERPFacade.API.Services;
 using UKHO.ERPFacade.Common.IO.Azure;
@@ -69,9 +71,13 @@ namespace UKHO.ERPFacade.API.Controllers
 
                 _logger.LogInformation("Downloading the existing EES event from blob storage with give Correlation ID.");
 
-                JObject exisitingEesEvent = JObject.Parse(_azureBlobEventWriter.DownloadEvent(corrId + '.' + RequestFormat, corrId));
+                var exisitingEesEvent = _azureBlobEventWriter.DownloadEvent(corrId + '.' + RequestFormat, corrId);
 
                 _logger.LogInformation("Existing EES event is downloaded from blob storage successfully.");
+
+                JObject eESEventReponseJson = _erpFacadeService.BuildEESEventWithPriceInformation(unitsOfSalePriceList, exisitingEesEvent);
+
+                Console.WriteLine(" Final EES Event JSon Payload created");
             }
 
             return new OkObjectResult(StatusCodes.Status200OK);
