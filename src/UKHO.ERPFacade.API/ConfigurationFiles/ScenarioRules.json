@@ -32,7 +32,12 @@
           {
             "AttributeDataType": "string",
             "AttributeName": "Status.StatusName",
-            "AttriuteValue": "Update"
+            "AttriuteValue": "Update | New Edition"
+          },
+          {
+            "AttributeDataType": "bool",
+            "AttributeName": "Status.IsNewCell",
+            "AttriuteValue": "False"
           },
           {
             "AttributeDataType": "bool",
