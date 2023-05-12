@@ -67,7 +67,7 @@ resource "azurerm_windows_web_app" "mock_webapp_service" {
     }
 
   lifecycle {
-    ignore_changes = [ private_service_connection ]
+    ignore_changes = [ azurerm_private_endpoint ]
    }
 
   https_only = true
