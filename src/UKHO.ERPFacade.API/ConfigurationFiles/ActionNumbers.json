@@ -12,7 +12,11 @@
       {
         "Scenario": "CancelReplaceCell",
         "ActionNumbers": [ 4, 8, 9, 10 ]
-      }
+      },
+      {
+        "Scenario": "ChangeMoveCell",
+        "ActionNumbers": [ 5, 6, 11, 8 ]
+      }      
     ]
   }
 }

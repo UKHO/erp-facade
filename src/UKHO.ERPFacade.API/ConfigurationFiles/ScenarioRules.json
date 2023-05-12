@@ -40,7 +40,17 @@
             "AttriuteValue": "True"
           }
         ]
-      }
+      },
+      {
+        "Scenario": "ChangeMoveCell",
+        "Rules": [
+          {
+            "AttributeDataType": "bool",
+            "AttributeName": "ContentChanged",
+            "AttriuteValue": "False"
+          }
+        ]
+      }      
     ]
   }
 }
