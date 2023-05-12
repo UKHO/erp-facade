@@ -87,16 +87,24 @@ namespace UKHO.ERPFacade.API.Helpers
                             }
                             break;
                         case 3:
-                        case 6:
+                        case 6:                        
                         case 8:
                             foreach (var cell in scenario.InUnitOfSales)
                             {
-                                if (scenario.ScenarioType == ScenarioType.ChangeMoveCell && action.ActionNumber == 8)
+                                if (scenario.ScenarioType == ScenarioType.ChangeMoveCell && (action.ActionNumber == 3 || action.ActionNumber == 8))
                                 {
                                     var uos = scenario.UnitOfSales.Where(x => x.UnitName == cell).FirstOrDefault();
 
-                                    if (action.ActionNumber == 8)
+                                    if (action.ActionNumber == 3)
                                     {
+                                        foreach (var product in uos.CompositionChanges.AddProducts)
+                                        {
+                                            actionNode = BuildAction(soapXml, scenario, action, cell);
+                                            actionItemNode.AppendChild(actionNode);
+                                        }
+                                    }
+                                    else if (action.ActionNumber == 8)
+                                    {                                        
                                         foreach (var product in uos.CompositionChanges.RemoveProducts)
                                         {
                                             actionNode = BuildAction(soapXml, scenario, action, cell);
@@ -118,18 +126,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                 actionItemNode.AppendChild(actionNode);
                             }
                             break;
-                        case 11:
-                            foreach (var cell in scenario.InUnitOfSales)
-                            {
-                                var uos = scenario.UnitOfSales.Where(x => x.UnitName == cell).FirstOrDefault();
 
-                                foreach (var product in uos.CompositionChanges.AddProducts)
-                                {
-                                    actionNode = BuildAction(soapXml, scenario, action, cell);
-                                    actionItemNode.AppendChild(actionNode);
-                                }
-                            }
-                            break;
                         default:
                             actionNode = BuildAction(soapXml, scenario, action, scenario.Product.ProductName);
                             actionItemNode.AppendChild(actionNode);
