@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 
@@ -10,6 +10,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
         [XmlElement(ElementName = "IM_MATINFO")]
         public IM_MATINFO IM_MATINFO { get; set; }
     }
+
     [XmlRoot(ElementName = "item")]
     public class Item
     {
@@ -73,3 +74,4 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
 
 
 }
+*/

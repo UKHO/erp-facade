@@ -136,7 +136,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "", IsNullable = false)]
+    //[System.Xml.Serialization.XmlRootAttribute(Namespace = "", IsNullable = false)]
     public partial class Item
     {
 
@@ -370,7 +370,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:sap-com:document:sap:rfc:functions")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "urn:sap-com:document:sap:rfc:functions", IsNullable = false)]
+    //[System.Xml.Serialization.XmlRootAttribute(Namespace = "urn:sap-com:document:sap:rfc:functions", IsNullable = false)]
     public partial class ACTIONITEMS
     {
 
@@ -390,8 +390,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
             }
         }
     }
-
-
 
 
 }

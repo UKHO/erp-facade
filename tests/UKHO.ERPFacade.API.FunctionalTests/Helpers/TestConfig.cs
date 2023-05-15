@@ -7,21 +7,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         public string WebhookPayloadFileName { get; set; } 
         public string SapMockApiPayloadFileName { get; set; }
         public string ExpectedXMLFolder { get; set; }
-        public string WebhookPayloadFileName { get; set; }
-
         public string WebhookInvalidPayloadFileName { get; set; }
-
-        public string GeneratedXMLFolder { get; set; }
-
-
-        public string WebhookInvalidPayloadFileName { get; set; }
-
         public string GeneratedXMLFolder { get; set; }
 
         public Erpfacadeconfiguration ErpFacadeConfiguration { get; set; }
         public Azureadconfiguration AzureadConfiguration { get; set; } 
         public SapMockConfiguration SapMockConfiguration { get; set; }
-        public Azureadconfiguration AzureadConfiguration { get; set; }
         public AzureStorageConfiguration AzureStorageConfiguration { get; set; }
         public string[] XMLActionList { get; set; }
     }

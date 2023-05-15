@@ -82,13 +82,16 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         //[TestCase("2NewCellScenario.JSON", "2NewCellScenario.xml", TestName = "WhenICallTheWebhookWithOneNewCellScenario")]
         //[TestCase("1CellCancel.JSON", "1CellCancel.xml", TestName = "WhenICallTheWebhookWithOneNewCellScenario")]
         [TestCase("2CellsReplace1CellsCancel.JSON", "2CellsReplace1CellsCancel.xml", TestName = "WhenICallTheWebhookWithTwoNewCellsScenario")]
+        [TestCase("cellMove.JSON", "cellMove.xml", TestName = "WhenICallTheWebhookWithCellMoveScenario")]
+        [TestCase("MetadataChange.JSON", "MetadataChange.xml", TestName = "WhenICallTheWebhookWithMetadataChangeScenario")]
+        [TestCase("UpdateSimple.JSON", "UpdateSimple.xml", TestName = "WhenICallTheWebhookWithSimpleUpdateScenario")]
         //[TestCase("3CellsReplace2CellsCancel.JSON", "3CellsReplace2CellsCancel.xml", TestName = "WhenICallTheWebhookCancel1Replace2CellsScenario")]
         public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponse1(string payloadFileName, string expectedXmlFileName)
         {
             string filePath = Path.Combine(_dir.FullName, WebhookEndpoint.config.testConfig.PayloadFolder, payloadFileName);
             string expectedXMLfilePath = Path.Combine(_dir.FullName, WebhookEndpoint.config.testConfig.GeneratedXMLFolder);
             //string traceID = SapXmlHelper.getTraceID(filePath);
-            var response = await Webhook.PostWebhookResponseAsyncForXML(filePath, expectedXMLfilePath,  await _authToken.GetAzureADToken(false));
+            var response = await Webhook.PostWebhookResponseAsyncForXML(filePath, expectedXMLfilePath, await _authToken.GetAzureADToken(false));
 
             // download XML file by passing traceID
             // currently we have given hardcoded traceID otherwise use above commented string
