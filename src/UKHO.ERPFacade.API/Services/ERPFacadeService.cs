@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Globalization;
 using UKHO.ERPFacade.API.Helpers;
 using UKHO.ERPFacade.API.Models;
@@ -31,13 +32,15 @@ namespace UKHO.ERPFacade.API.Services
                 {
                     if (!string.IsNullOrEmpty(priceInformation.EffectiveDate))
                     {
-                        Price effectivePrice = BuildPricePayload(priceInformation.Duration, priceInformation.Price, priceInformation.EffectiveDate, priceInformation.Currency);
+                        DateTimeOffset effectiveDate = GetDate(priceInformation.EffectiveDate, priceInformation.EffectiveTime);
+                        Price effectivePrice = BuildPricePayload(priceInformation.Duration, priceInformation.Price, effectiveDate, priceInformation.Currency);
                         priceList.Add(effectivePrice);
                     }
 
                     if (!string.IsNullOrEmpty(priceInformation.FutureDate))
                     {
-                        Price futurePrice = BuildPricePayload(priceInformation.Duration, priceInformation.FuturePrice, priceInformation.FutureDate, priceInformation.FutureCurr);
+                        DateTimeOffset futureDate = GetDate(priceInformation.FutureDate, priceInformation.FutureTime);
+                        Price futurePrice = BuildPricePayload(priceInformation.Duration, priceInformation.FuturePrice, futureDate, priceInformation.FutureCurr);
                         priceList.Add(futurePrice);
                     }
 
@@ -67,8 +70,12 @@ namespace UKHO.ERPFacade.API.Services
                     }
                     else
                     {
-                        Price effectivePrice = BuildPricePayload(priceInformation.Duration, priceInformation.Price, priceInformation.EffectiveDate, priceInformation.Currency);
-                        existingUnitOfSalePrice.Price.Add(effectivePrice);
+                        if (!string.IsNullOrEmpty(priceInformation.EffectiveDate))
+                        {
+                            DateTimeOffset effectiveDate = GetDate(priceInformation.EffectiveDate, priceInformation.EffectiveTime);
+                            Price effectivePrice = BuildPricePayload(priceInformation.Duration, priceInformation.Price, effectiveDate, priceInformation.Currency);
+                            existingUnitOfSalePrice.Price.Add(effectivePrice);
+                        }
                     }
                     if (futureStandard != null && !string.IsNullOrEmpty(priceInformation.FutureDate))
                     {
@@ -81,7 +88,8 @@ namespace UKHO.ERPFacade.API.Services
                     {
                         if (!string.IsNullOrEmpty(priceInformation.FutureDate))
                         {
-                            Price futurePrice = BuildPricePayload(priceInformation.Duration, priceInformation.FuturePrice, priceInformation.FutureDate, priceInformation.FutureCurr);
+                            DateTimeOffset futureDate = GetDate(priceInformation.FutureDate, priceInformation.FutureTime);
+                            Price futurePrice = BuildPricePayload(priceInformation.Duration, priceInformation.FuturePrice, futureDate, priceInformation.FutureCurr);
                             existingUnitOfSalePrice.Price.Add(futurePrice);
                         }
                     }
@@ -119,7 +127,7 @@ namespace UKHO.ERPFacade.API.Services
             return unitOfSalePriceEventPayloadJson;
         }
 
-        private static Price BuildPricePayload(string duration, string rrp, string date, string currency)
+        private static Price BuildPricePayload(string duration, string rrp, DateTimeOffset date, string currency)
         {
             Price price = new();
             Standard standard = new();
@@ -133,11 +141,19 @@ namespace UKHO.ERPFacade.API.Services
 
             standard.PriceDurations = priceDurationsList;
 
-            price.EffectiveDate = Convert.ToDateTime(DateTime.ParseExact(date, "yyyyMMdd", CultureInfo.InvariantCulture));
+            price.EffectiveDate = date;
             price.Currency = currency;
             price.Standard = standard;
 
             return price;
+        }
+
+        private static DateTimeOffset GetDate(string date, string time)
+        {
+            DateTime dateTime = Convert.ToDateTime(DateTime.ParseExact(date+""+time, "yyyyMMddhhmmss", CultureInfo.InvariantCulture));
+            DateTimeOffset dateTimeOffset = new DateTimeOffset(dateTime);
+
+            return dateTimeOffset;
         }
     }
 }

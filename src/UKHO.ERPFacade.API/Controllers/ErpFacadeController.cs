@@ -4,9 +4,11 @@ using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
+using System.Text;
 using System.Text.Encodings.Web;
 using UKHO.ERPFacade.API.Models;
 using UKHO.ERPFacade.API.Services;
+using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
 
@@ -75,9 +77,15 @@ namespace UKHO.ERPFacade.API.Controllers
 
                 _logger.LogInformation("Existing EES event is downloaded from blob storage successfully.");
 
-                JObject eESEventReponseJson = _erpFacadeService.BuildEESEventWithPriceInformation(unitsOfSalePriceList, exisitingEesEvent);
+                JObject eesEventReponseJson = _erpFacadeService.BuildEESEventWithPriceInformation(unitsOfSalePriceList, exisitingEesEvent);
 
-                Console.WriteLine(" Final EES Event JSon Payload created");
+                //Check the size of final event. It should not more than 1 MB
+                var eventSize = CommonHelper.GetEventSize(eesEventReponseJson);
+
+                if (eventSize > 1000000)
+                {
+                    _logger.LogWarning("EES Event size exceeds the limit of 1 MB");
+                }
             }
 
             return new OkObjectResult(StatusCodes.Status200OK);

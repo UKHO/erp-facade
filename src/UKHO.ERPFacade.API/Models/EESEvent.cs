@@ -257,7 +257,7 @@ namespace UKHO.ERPFacade.API.Models
     public class Price
     {
         [JsonProperty("effectiveDate")]
-        public DateTime EffectiveDate { get; set; }
+        public DateTimeOffset EffectiveDate { get; set; }
 
         [JsonProperty("currency")]
         public string Currency { get; set; }
