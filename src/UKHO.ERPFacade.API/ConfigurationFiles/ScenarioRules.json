@@ -7,7 +7,7 @@
           {
             "AttributeDataType": "bool",
             "AttributeName": "Status.IsNewCell",
-            "AttriuteValue": "True"
+            "AttributeValue": "True"
           }
         ]
       },
@@ -17,12 +17,12 @@
           {
             "AttributeDataType": "string",
             "AttributeName": "Status.StatusName",
-            "AttriuteValue": "Cancellation Update"
+            "AttributeValue": "Cancellation Update"
           },
           {
             "AttributeDataType": "bool",
             "AttributeName": "ContentChanged",
-            "AttriuteValue": "True"
+            "AttributeValue": "True"
           }
         ]
       },
@@ -32,17 +32,17 @@
           {
             "AttributeDataType": "string",
             "AttributeName": "Status.StatusName",
-            "AttriuteValue": "Update | New Edition | Re-issue"
+            "AttributeValue": "Update | New Edition | Re-issue"
           },
           {
             "AttributeDataType": "bool",
             "AttributeName": "Status.IsNewCell",
-            "AttriuteValue": "False"
+            "AttributeValue": "False"
           },
           {
             "AttributeDataType": "bool",
             "AttributeName": "ContentChanged",
-            "AttriuteValue": "True"
+            "AttributeValue": "True"
           }
         ]
       },
@@ -52,7 +52,7 @@
           {
             "AttributeDataType": "bool",
             "AttributeName": "ContentChanged",
-            "AttriuteValue": "False"
+            "AttributeValue": "False"
           }
         ]
       }      

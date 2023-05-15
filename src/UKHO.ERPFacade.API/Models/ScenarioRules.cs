@@ -14,7 +14,7 @@ namespace UKHO.ERPFacade.API.Models
     {
         public string AttributeDataType { get; set; }
         public string AttributeName { get; set; }
-        public string AttriuteValue { get; set; }
+        public string AttributeValue { get; set; }
     }
 
     public enum ScenarioType

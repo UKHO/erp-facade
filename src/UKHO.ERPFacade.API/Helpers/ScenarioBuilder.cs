@@ -45,7 +45,7 @@ namespace UKHO.ERPFacade.API.Helpers
                     {
                         object jsonFieldValue = CommonHelper.ParseXmlNode(rule.AttributeName, product, product.GetType());
 
-                        if (jsonFieldValue != null && IsValidValue(jsonFieldValue.ToString(), rule.AttriuteValue))
+                        if (jsonFieldValue != null && IsValidValue(jsonFieldValue.ToString(), rule.AttributeValue))
                         {
                             restLoop = true;
                             continue;
