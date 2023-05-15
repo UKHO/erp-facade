@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
+using System.Data;
 using UKHO.ERPFacade.API.Models;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
@@ -42,7 +43,7 @@ namespace UKHO.ERPFacade.API.Helpers
                     {
                         object jsonFieldValue = CommonHelper.ParseXmlNode(rule.AttributeName, product, product.GetType());
 
-                        if (jsonFieldValue != null && jsonFieldValue.ToString() == rule.AttriuteValue)
+                        if (jsonFieldValue != null && IsValidValue(jsonFieldValue.ToString(), rule.AttriuteValue))
                         {
                             restLoop = true;
                             continue;
@@ -74,6 +75,26 @@ namespace UKHO.ERPFacade.API.Helpers
                 }
             }
             return scenarios;
+        }
+
+        private bool IsValidValue(string jsonFieldValue,string attributeValue)
+        {
+            if(attributeValue.Contains('|'))
+            {
+                string[] values = attributeValue.Split('|');
+                foreach (string value in values)
+                {
+                    if(jsonFieldValue == value.Trim())
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            else
+            {
+                return jsonFieldValue == attributeValue;
+            }
         }
     }
 }

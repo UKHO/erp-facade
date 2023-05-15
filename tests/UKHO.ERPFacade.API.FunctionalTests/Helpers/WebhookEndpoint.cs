@@ -10,8 +10,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
     public class WebhookEndpoint
     {
         public static Config config;
-        private RestClient client;
-        private RestClient client2;
+        private readonly RestClient client;
+        private readonly RestClient client2;
         private readonly ADAuthTokenProvider _authToken;
         private SAPXmlHelper SapXmlHelper { get; set; }
 

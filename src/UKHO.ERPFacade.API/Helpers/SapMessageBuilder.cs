@@ -86,16 +86,39 @@ namespace UKHO.ERPFacade.API.Helpers
                                 actionItemNode.AppendChild(actionNode);
                             }
                             break;
-
                         case 3:
+                        case 6:                        
                         case 8:
                             foreach (var cell in scenario.InUnitOfSales)
                             {
-                                actionNode = BuildAction(soapXml, scenario, action, cell);
-                                actionItemNode.AppendChild(actionNode);
+                                if (scenario.ScenarioType == ScenarioType.ChangeMoveCell && (action.ActionNumber == 3 || action.ActionNumber == 8))
+                                {
+                                    var uos = scenario.UnitOfSales.Where(x => x.UnitName == cell).FirstOrDefault();
+
+                                    if (action.ActionNumber == 3)
+                                    {
+                                        foreach (var product in uos.CompositionChanges.AddProducts)
+                                        {
+                                            actionNode = BuildAction(soapXml, scenario, action, cell);
+                                            actionItemNode.AppendChild(actionNode);
+                                        }
+                                    }
+                                    else if (action.ActionNumber == 8)
+                                    {                                        
+                                        foreach (var product in uos.CompositionChanges.RemoveProducts)
+                                        {
+                                            actionNode = BuildAction(soapXml, scenario, action, cell);
+                                            actionItemNode.AppendChild(actionNode);
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    actionNode = BuildAction(soapXml, scenario, action, cell);
+                                    actionItemNode.AppendChild(actionNode);
+                                }
                             }
                             break;
-
                         case 4:
                             foreach (var cell in scenario.Product.ReplacedBy)
                             {

@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
-using System.Security.Cryptography.X509Certificates;
 using UKHO.ERPFacade.API.FunctionalTests.Helpers;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
@@ -12,7 +11,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         private SAPXmlHelper SapXmlHelper { get; set; }
         private DirectoryInfo _dir;
         private readonly ADAuthTokenProvider _authToken = new();
-        public static Boolean noRole = false;
+        public static Boolean noRole = false;  
 
         [SetUp]
         public void Setup()

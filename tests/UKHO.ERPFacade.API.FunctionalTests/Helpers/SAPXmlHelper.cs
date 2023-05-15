@@ -656,6 +656,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 actionsListFromXml.Add(node.InnerText);
             }
 
+            Console.WriteLine("=========== XML LIST ===========");
+            foreach (string val in actionsListFromXml)
+            {
+                Console.WriteLine(val);
+            }
+
             return actionsListFromXml;
         }
 
@@ -681,9 +687,11 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
         public static List<string> getFinalActionsListFromJson(List<string> actionsList)
         {
+            Console.WriteLine("-------------- ListFromJSON --------------");
             for (int i = 0; i < actionsList.Count; i++)
             {
                 actionsList[i] = actionsList[i].Substring(4);
+                Console.WriteLine(actionsList[i]);
             }
             return actionsList;
         }
@@ -847,9 +855,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             foreach (Product product in obj.Data.Products)
             {
                 if (product.ContentChanged == true && product.Status.IsNewCell == false
-                    && (product.Status.StatusName == "Update" || product.Status.StatusName == "New Edition"))
+                    && (product.Status.StatusName == "Update" || product.Status.StatusName == "New Edition" || product.Status.StatusName == "Re-issue"))
                 {
-                    count = count++;
+                    count++;
                 }
             }
 

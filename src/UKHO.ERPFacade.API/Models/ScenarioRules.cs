@@ -22,7 +22,7 @@ namespace UKHO.ERPFacade.API.Models
         NewCell = 1,
         CancelReplaceCell = 2,
         UpdateCell = 3,
-        ChangeCell = 4,
+        ChangeMoveCell = 4,
         ChangeUnitOfSale = 5
     }
 }
