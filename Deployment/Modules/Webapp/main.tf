@@ -66,10 +66,6 @@ resource "azurerm_windows_web_app" "mock_webapp_service" {
     type = "SystemAssigned"
     }
 
-  lifecycle {
-    ignore_changes = [ privateEndpointConnections ]
-   }
-
   https_only = true
    }
 
