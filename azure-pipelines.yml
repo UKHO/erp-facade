@@ -340,7 +340,7 @@ stages:
       - deployment: DevDeployTerraform
         displayName: "Dev - Deploy Terraform and Dotnet App"
         environment: "ERP-Dev"
-        pool: $(DeploymentPool)
+        pool: $(DeploymentPoolBuildAgent)
         container: ${{variables.Container}}
         workspace:
           clean: all
