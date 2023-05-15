@@ -1,4 +1,5 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -60,6 +61,10 @@
     <None Update="ERPFacadePayloadTestData\WebhookPayload_Invalid.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ERPFacadeGeneratedXmlFiles\" />
   </ItemGroup>
 
 </Project>

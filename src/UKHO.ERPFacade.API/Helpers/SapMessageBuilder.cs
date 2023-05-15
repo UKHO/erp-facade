@@ -86,6 +86,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                 actionItemNode.AppendChild(actionNode);
                             }
                             break;
+
                         case 3:
                         case 8:
                             foreach (var cell in scenario.InUnitOfSales)
@@ -94,6 +95,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                 actionItemNode.AppendChild(actionNode);
                             }
                             break;
+
                         case 4:
                             foreach (var cell in scenario.Product.ReplacedBy)
                             {
@@ -101,6 +103,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                 actionItemNode.AppendChild(actionNode);
                             }
                             break;
+
                         default:
                             actionNode = BuildAction(soapXml, scenario, action, scenario.Product.ProductName);
                             actionItemNode.AppendChild(actionNode);
@@ -179,13 +182,12 @@ namespace UKHO.ERPFacade.API.Helpers
                 {
                     if (node.XmlNodeName == ReplacedBy)
                     {
-                        itemSubNode.InnerText = string.IsNullOrWhiteSpace(cell.ToString()) ? string.Empty : cell.ToString().Substring(0, Math.Min(250, cell.ToString().Length));
+                        itemSubNode.InnerText = GetXmlNodeValue(cell.ToString());
                     }
                     else
                     {
-                        object jsonFieldValue = CommonHelper.GetProp(node.JsonPropertyName, scenario.Product, scenario.Product.GetType());
-                        itemSubNode.InnerText = string.IsNullOrWhiteSpace(jsonFieldValue.ToString()) ? string.Empty
-                            : (node.XmlNodeName == ProdType ? GetProdType(jsonFieldValue.ToString()) : jsonFieldValue.ToString().Substring(0, Math.Min(250, jsonFieldValue.ToString().Length)));
+                        object jsonFieldValue = CommonHelper.ParseXmlNode(node.JsonPropertyName, scenario.Product, scenario.Product.GetType());
+                        itemSubNode.InnerText = GetXmlNodeValue(jsonFieldValue.ToString(), node.XmlNodeName);
                     }
                 }
                 else
@@ -203,8 +205,8 @@ namespace UKHO.ERPFacade.API.Helpers
                 {
                     UnitOfSale unitOfSale = scenario.UnitOfSales.Where(x => x.UnitName == cell).FirstOrDefault();
 
-                    object jsonFieldValue = CommonHelper.GetProp(node.JsonPropertyName, unitOfSale, unitOfSale.GetType());
-                    itemSubNode.InnerText = string.IsNullOrWhiteSpace(jsonFieldValue.ToString()) ? string.Empty : jsonFieldValue.ToString().Substring(0, Math.Min(250, jsonFieldValue.ToString().Length));
+                    object jsonFieldValue = CommonHelper.ParseXmlNode(node.JsonPropertyName, unitOfSale, unitOfSale.GetType());
+                    itemSubNode.InnerText = GetXmlNodeValue(jsonFieldValue.ToString());
                 }
                 else
                 {
@@ -224,7 +226,23 @@ namespace UKHO.ERPFacade.API.Helpers
         private static string GetProdType(string prodType)
         {
             var parts = prodType.Split(' ').ToList();
-            return parts[1];
+            if (parts != null)
+                return parts.Count > 1 ? parts[1] : parts[0];
+            else
+                return string.Empty;
+        }
+
+        private static string GetXmlNodeValue(string fieldValue, string xmlNodeName = null)
+        {
+            if (string.IsNullOrWhiteSpace(fieldValue))
+                return string.Empty;
+
+            if (xmlNodeName == ProdType)
+            {
+                return GetProdType(fieldValue);
+            }
+
+            return fieldValue.Substring(0, Math.Min(250, fieldValue.Length));
         }
     }
 }
