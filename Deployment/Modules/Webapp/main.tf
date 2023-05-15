@@ -53,11 +53,6 @@ resource "azurerm_windows_web_app" "mock_webapp_service" {
     always_on  = true
     ftps_state = "Disabled"
 
-
-    ip_restriction {
-      virtual_network_subnet_id = var.agent_id
-    }
-
   }
      
   app_settings = var.mock_app_settings
