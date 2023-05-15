@@ -69,7 +69,7 @@ namespace UKHO.ERPFacade.API.Helpers
 
                         scenarios.Add(scenarioObj);
 
-                        _logger.LogInformation(EventIds.ScenarioIdentified.ToEventId(), "Scenario identified for {ProductName} is {ScenarioName}.", product.ProductName, scenario.Scenario);
+                        _logger.LogInformation(EventIds.ScenarioIdentified.ToEventId(), "Scenario identified for {ProductName} is {ScenarioName}.", product.ProductName, scenario.Scenario.ToString());
 
                         scenarioIdentified = true;
                     }

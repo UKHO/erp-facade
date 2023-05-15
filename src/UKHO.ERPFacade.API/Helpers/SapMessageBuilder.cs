@@ -67,7 +67,7 @@ namespace UKHO.ERPFacade.API.Helpers
 
             foreach (var scenario in scenarios)
             {
-                _logger.LogInformation(EventIds.BuildingSapActionStarted.ToEventId(), "Building SAP actions for scenario {Scenario}.", scenario);
+                _logger.LogInformation(EventIds.BuildingSapActionStarted.ToEventId(), "Building SAP actions for {Scenario} scenario.", scenario.ScenarioType.ToString());
 
                 ActionNumber actionNumbers = _actionNumberConfig.Value.Actions.Where(x => x.Scenario == scenario.ScenarioType.ToString()).FirstOrDefault();
                 List<int> actions = actionNumbers.ActionNumbers.ToList();
@@ -135,7 +135,7 @@ namespace UKHO.ERPFacade.API.Helpers
                             actionItemNode.AppendChild(actionNode);
                             break;
                     }
-                    _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created for {Scenario}.", action.Action, scenario);
+                    _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created for {Scenario}.", action.Action, scenario.ScenarioType.ToString());
                 }
             }
 
