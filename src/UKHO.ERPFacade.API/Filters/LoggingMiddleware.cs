@@ -1,28 +1,47 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Net;
+﻿using System.Net;
+using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Logging;
 
 namespace UKHO.ERPFacade.API.Filters
 {
-    [ExcludeFromCodeCoverage]
-    public static class LoggingMiddleware
+    public class LoggingMiddleware
     {
-        public static IApplicationBuilder UseErrorLogging(this IApplicationBuilder appBuilder, ILoggerFactory loggerFactory)
+        private readonly RequestDelegate _next;
+
+        public ILoggerFactory _loggerFactory { get; }
+
+        public LoggingMiddleware(RequestDelegate next, ILoggerFactory loggerFactory)
         {
-            return appBuilder.Use(async (context, func) =>
+            _next = next;
+            _loggerFactory = loggerFactory;
+        }
+
+        public async Task InvokeAsync(HttpContext httpContext)
+        {
+            try
             {
-                try
+                await _next(httpContext);
+            }
+            catch (Exception exception)
+            {
+                var exceptionType = exception.GetType();
+
+                if (exceptionType == typeof(ERPFacadeException))
                 {
-                    await func();
+                    EventIds eventId = (EventIds)((ERPFacadeException)exception).EventId.Id;
+                    _loggerFactory
+                        .CreateLogger(httpContext.Request.Path)
+                        .LogError(eventId.ToEventId(), exception, eventId.ToString());
                 }
-                catch (Exception e)
+                else
                 {
-                    loggerFactory
-                        .CreateLogger(context.Request.Path)
-                        .LogError(EventIds.UnhandledControllerException.ToEventId(), e, "Unhandled controller exception {Exception}", e);
-                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                    _loggerFactory
+                    .CreateLogger(httpContext.Request.Path)
+                    .LogError(EventIds.UnhandledException.ToEventId(), exception, "Exception occured while processing ErpFacade API.");
                 }
-            });
+
+                httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            }
         }
     }
 }

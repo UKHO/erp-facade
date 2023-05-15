@@ -14,8 +14,8 @@ using UKHO.ERPFacade.API.Helpers;
 using UKHO.ERPFacade.API.Models;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.HttpClients;
-using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.IO.Azure;
+using UKHO.ERPFacade.Common.IO;
 using UKHO.Logging.EventHubLogProvider;
 
 namespace UKHO.ERPFacade
@@ -182,6 +182,9 @@ namespace UKHO.ERPFacade
             });
 
             var app = builder.Build();
+
+            var logger = app.Services.GetRequiredService<ILoggerFactory>();
+            app.UseLoggingMiddleware(logger);
 
             app.UseHttpsRedirection();
 
