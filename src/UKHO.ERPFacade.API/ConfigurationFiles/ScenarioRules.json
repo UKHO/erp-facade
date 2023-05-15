@@ -32,7 +32,7 @@
           {
             "AttributeDataType": "string",
             "AttributeName": "Status.StatusName",
-            "AttriuteValue": "Update | New Edition"
+            "AttriuteValue": "Update | New Edition | Re-issue"
           },
           {
             "AttributeDataType": "bool",

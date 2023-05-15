@@ -39,6 +39,8 @@ namespace UKHO.ERPFacade.API.Helpers
 
                 foreach (var scenario in _scenarioRuleConfig.Value.ScenarioRules)
                 {
+                    scenarioIdentified = false;
+
                     foreach (var rule in scenario.Rules)
                     {
                         object jsonFieldValue = CommonHelper.ParseXmlNode(rule.AttributeName, product, product.GetType());
@@ -77,14 +79,14 @@ namespace UKHO.ERPFacade.API.Helpers
             return scenarios;
         }
 
-        private bool IsValidValue(string jsonFieldValue,string attributeValue)
+        private bool IsValidValue(string jsonFieldValue, string attributeValue)
         {
-            if(attributeValue.Contains('|'))
+            if (attributeValue.Contains('|'))
             {
                 string[] values = attributeValue.Split('|');
                 foreach (string value in values)
                 {
-                    if(jsonFieldValue == value.Trim())
+                    if (jsonFieldValue == value.Trim())
                     {
                         return true;
                     }
