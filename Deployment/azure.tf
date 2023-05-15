@@ -15,10 +15,4 @@ terraform {
 
 provider "azurerm" {
   features {}
-  alias = "build_agent"
-  subscription_id = var.agent_subscription_id
-}
-
-provider "azurerm" {
-  features {}
 }
