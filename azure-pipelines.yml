@@ -27,6 +27,8 @@ variables:
     value: "UKHO Ubuntu 1804"
   - name: DeploymentPoolBuildAgent
     value: "Tiberius"
+  - name: DeploymentPoolPrivateLink
+    value: "Private Link Deployments (BUS)"
 
 stages:
   - stage: Stryker_Mutator
@@ -340,7 +342,7 @@ stages:
       - deployment: DevDeployTerraform
         displayName: "Dev - Deploy Terraform and Dotnet App"
         environment: "ERP-Dev"
-        pool: $(DeploymentPoolBuildAgent)
+        pool: $(DeploymentPoolPrivateLink)
         container: ${{variables.Container}}
         workspace:
           clean: all
