@@ -19,3 +19,7 @@ output "resource_group" {
 output "erp_facade_web_app_url" {
   value = "https://${module.webapp_service.default_site_hostname}"
 }
+
+output "erp_facade_mock_service_url" {
+  value = "https://${module.mock_webapp_service.default_site_hostname_mock}"
+}
