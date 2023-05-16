@@ -103,7 +103,8 @@ namespace UKHO.ERPFacade.API.Helpers
                                             foreach (var product in uos.CompositionChanges.AddProducts)
                                             {
                                                 actionNode = BuildAction(soapXml, scenario, action, cell, product);
-                                                actionItemNode.AppendChild(actionNode);
+                                                if(!actionItemNode.InnerXml.Contains(actionNode.InnerXml))
+                                                    actionItemNode.AppendChild(actionNode);
                                             }
                                         }
                                         else if (action.ActionNumber == 8)
@@ -118,7 +119,8 @@ namespace UKHO.ERPFacade.API.Helpers
                                     else
                                     {
                                         actionNode = BuildAction(soapXml, scenario, action, cell);
-                                        actionItemNode.AppendChild(actionNode);
+                                        if (!actionItemNode.InnerXml.Contains(actionNode.InnerXml))
+                                            actionItemNode.AppendChild(actionNode);
                                     }
                                 }
                             }
