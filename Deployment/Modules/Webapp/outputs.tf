@@ -19,6 +19,6 @@ output "mock_web_app_object_id" {
 }
 
 output "default_site_hostname_mock" {
-  value = var.env_name == "dev" ? azurerm_windows_web_app.mock_webapp_service.default_hostname : nul
+  value = var.env_name == "dev" ? azurerm_windows_web_app.mock_webapp_service.default_hostname : null
 }
 
