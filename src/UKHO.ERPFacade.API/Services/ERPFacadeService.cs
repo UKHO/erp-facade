@@ -99,7 +99,7 @@ namespace UKHO.ERPFacade.API.Services
             return unitsOfSalePriceList;
         }
 
-        public JObject BuildEESEventWithPriceInformation(List<UnitsOfSalePrices> unitsOfSalePriceList, string exisitingEesEvent)
+        public JObject BuildPriceEventPayload(List<UnitsOfSalePrices> unitsOfSalePriceList, string exisitingEesEvent)
         {
             EESEventPayload eESEventPayload = JsonConvert.DeserializeObject<EESEventPayload>(exisitingEesEvent);
 
@@ -127,6 +127,7 @@ namespace UKHO.ERPFacade.API.Services
             return unitOfSalePriceEventPayloadJson;
         }
 
+        //private methods
         private static Price BuildPricePayload(string duration, string rrp, DateTimeOffset date, string currency)
         {
             Price price = new();

@@ -74,19 +74,15 @@ namespace UKHO.ERPFacade.API.Controllers
                 List<UnitsOfSalePrices> unitsOfSalePriceList = _erpFacadeService.BuildUnitOfSalePricePayload(priceInformationList);
 
                 _logger.LogInformation("Downloading the existing EES event from blob storage with give Correlation ID.");
-
                 var exisitingEesEvent = _azureBlobEventWriter.DownloadEvent(corrId + '.' + RequestFormat, corrId);
-
                 _logger.LogInformation("Existing EES event is downloaded from blob storage successfully.");
 
-                JObject eesEventReponseJson = _erpFacadeService.BuildEESEventWithPriceInformation(unitsOfSalePriceList, exisitingEesEvent);
+                JObject eesPriceEventPayloadJson = _erpFacadeService.BuildPriceEventPayload(unitsOfSalePriceList, exisitingEesEvent);
 
-                //Check the size of final event. It should not more than 1 MB
-                var eventSize = CommonHelper.GetEventSize(eesEventReponseJson);
-
+                var eventSize = CommonHelper.GetEventSize(eesPriceEventPayloadJson);
                 if (eventSize > EventSizeLimit)
                 {
-                    _logger.LogWarning("EES Event size exceeds the limit of 1 MB");
+                    _logger.LogWarning("EES Price Event size exceeds the limit of 1 MB");
                     throw new Exception();
                 }
             }
