@@ -6,15 +6,15 @@
   "id": "2f03a25f-28b3-46ea-b009-5943250a9a41",
   "time": "2023-05-16T12:08:03.4880776Z",
   "_COMMENT": "A comma separated list of products",
-  "subject": "US4FL1YE",
+  "subject": "UK45TRI",
   "datacontenttype": "application/json",
   "data": {
-    "traceId": "3674e4a4-1d62-4f56-b359-59e1799203",
+    "traceId": "3699e4a4-1d62-4f56-b359-59e178d79900",
     "products": [
       {
         "productType": "ENC S57",
-        "dataSetName": "US4FL1YE.001",
-        "productName": "US4FL1YE",
+        "dataSetName": "UK45TRI.001",
+        "productName": "UK45TRI",
         "title": "Some Title",
         "scale": 90000,
         "usageBand": 1,
@@ -25,35 +25,37 @@
         "permit": "permitString",
         "providerCode": 1,
         "providerDesc": "ICE",
-        "_COMMENT": "provider code and descrption are n-1 mapping",
-        "_ENUM": [
-          "ICE",
-          "ICE_GB",
-          "ICE_UK",
-          "PRIMAR",
-          "VAR Unique",
-          "VAR"
-        ],
-
+			"_COMMENT": "provider code and descrption are n-1 mapping",           
+			"_ENUM": [
+				"ICE",
+				"ICE_GB",
+				"ICE_UK",
+				"PRIMAR",
+				"VAR Unique",
+				"VAR"
+			  ]
+			,
+				       
         "size": "mdeium",
-        "_COMMENT": " size code not included as will be mapped in SAP",
-        "_ENUM": [
-          "large",
-          "medium",
-          "small"
-        ],
+		  "_COMMENT": " size code not included as will be mapped in SAP",   
+          "_ENUM": [
+            "large",
+            "medium",
+            "small"
+          ]
+        ,
         "agency": "US",
         "bundle": [
           {
             "bundleType": "DVD",
             "_ENUM": [
-              "DVD"
-            ],
+				  "DVD"
+				],
             "location": "M2;B1"
           }
         ],
         "status": {
-          "statusName": "Update",
+          "statusName": "New Edition",
           "_ENUM": [
             "New Edition",
             "Re-issue",
@@ -66,7 +68,7 @@
           "isNewCell": false,
           "_COMMENT": "A cell new to the service"
         },
-        "replaces": [
+        "replaces": [         
         ],
         "replacedBy": [],
         "additionalCoverage": [],
@@ -122,9 +124,9 @@
         },
         "_COMMENT": "The units of sale in which product is included, including any 1-1 unit",
         "inUnitsOfSale": [
-          "US4FL1YE",
+        	  "UK45TRI",
           "AVCSO",
-          "PAYSF"
+          "PAYSF"          
         ],
         "s63": {
           "name": "GB302409.001",
@@ -165,35 +167,36 @@
     "_COMMENT": "All units will be included, including Cancelled Cell units",
     "unitsOfSale": [
       {
-        "unitName": "US4FL1YE",
+        "unitName": "UK45TRI",
         "title": "Unit Title",
         "unitOfSaleType": "unit",
-        "_ENUM": [
-          "unit",
-          "folio"
-        ],
-        "unitSize": "medium",
-        "_COMMENT": " size code not included as will be mapped in SAP",
-        "_ENUM": [
-          "large",
-          "medium",
-          "small"
-        ],
+        	"_ENUM": [
+				"unit",
+				"folio"
+				],
+		"unitSize": "medium",
+			"_COMMENT": " size code not included as will be mapped in SAP",   
+			  "_ENUM": [
+            "large",
+            "medium",
+            "small"
+			  ]
+        ,
         "unitType": "AVCS Units Coastal",
         "_ENUM": [
-          "AVCS Units Overview",
-          "AVCS Units General",
-          "AVCS Units Coastal",
-          "AVCS Units Approach",
-          "AVCS Units Harbour",
-          "AVCS Units Berthing"
+			"AVCS Units Overview",
+			"AVCS Units General",
+			"AVCS Units Coastal",
+			"AVCS Units Approach",
+			"AVCS Units Harbour",
+			"AVCS Units Berthing"
         ],
         "status": "ForSale",
-        "_ENUM": [
-          "ForSale",
-          "NotForSale"
-        ],
-        "isNewUnitOfSale": false,
+			"_ENUM": [
+			  "ForSale",
+			  "NotForSale"
+			],
+		"isNewUnitOfSale": false,
         "_COMMENT": "BoundingBox or polygon or both or neither",
         "geographicLimit": {
           "boundingBox": {
@@ -213,25 +216,26 @@
         "unitName": "AVCSO",
         "title": "Title",
         "unitOfSaleType": "folio",
-        "_ENUM": [
-          "unit",
-          "folio"
-        ],
-        "unitSize": "large",
-        "_COMMENT": " size code not included as will be mapped in SAP",
-        "_ENUM": [
-          "large",
-          "medium",
-          "small"
-        ],
+        	"_ENUM": [
+				"unit",
+				"folio"
+				],
+		"unitSize": "large",
+			"_COMMENT": " size code not included as will be mapped in SAP",   
+			  "_ENUM": [
+            "large",
+            "medium",
+            "small"
+			  ]
+        ,
         "unitType": "AVCS Units Coastal",
         "_ENUM": [
-          "AVCS Units Overview",
-          "AVCS Units General",
-          "AVCS Units Coastal",
-          "AVCS Units Approach",
-          "AVCS Units Harbour",
-          "AVCS Units Berthing"
+			"AVCS Units Overview",
+			"AVCS Units General",
+			"AVCS Units Coastal",
+			"AVCS Units Approach",
+			"AVCS Units Harbour",
+			"AVCS Units Berthing"
         ],
         "status": "ForSale",
         "isNewUnitOfSale": false,
@@ -262,10 +266,10 @@
         },
         "compositionChanges": {
           "addProducts": [
-
+            
           ],
           "removeProducts": [
-
+            
           ]
         }
       },
@@ -273,25 +277,26 @@
         "unitName": "PAYSF",
         "title": "World Folio",
         "unitOfSaleType": "folio",
-        "_ENUM": [
-          "unit",
-          "folio"
-        ],
-        "unitSize": "large",
-        "_COMMENT": " size code not included as will be mapped in SAP",
-        "_ENUM": [
-          "large",
-          "medium",
-          "small"
-        ],
+        	"_ENUM": [
+				"unit",
+				"folio"
+				],
+		"unitSize": "large",
+			"_COMMENT": " size code not included as will be mapped in SAP",   
+			  "_ENUM": [
+            "large",
+            "medium",
+            "small"
+			  ]
+        ,
         "unitType": "AVCS Units Coastal",
         "_ENUM": [
-          "AVCS Units Overview",
-          "AVCS Units General",
-          "AVCS Units Coastal",
-          "AVCS Units Approach",
-          "AVCS Units Harbour",
-          "AVCS Units Berthing"
+			"AVCS Units Overview",
+			"AVCS Units General",
+			"AVCS Units Coastal",
+			"AVCS Units Approach",
+			"AVCS Units Harbour",
+			"AVCS Units Berthing"
         ],
         "status": "ForSale",
         "isNewUnitOfSale": false,
@@ -334,10 +339,10 @@
         },
         "compositionChanges": {
           "addProducts": [
-
+            
           ],
           "removeProducts": [
-
+           
           ]
         }
       }

@@ -76,26 +76,38 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         }
 
         [Test, Order(0)]
-        [TestCase("1NewCellScenario.JSON", "1NewCellScenario.xml", TestName = "WhenICallTheWebhookWithOneNewCellScenario")]        
-        //[TestCase("1NewCellWoNewAVCSUnit.JSON", "1NewCellWoNewAVCSUnit.xml", TestName = "WhenICallTheWebhookWithOneNewCellScenario")]
-        //[TestCase("2NewCellScenario.JSON", "2NewCellScenario.xml", TestName = "WhenICallTheWebhookWithOneNewCellScenario")]
-        //[TestCase("1CellCancel.JSON", "1CellCancel.xml", TestName = "WhenICallTheWebhookWithOneNewCellScenario")]
-        [TestCase("2CellsReplace1CellsCancel.JSON", "2CellsReplace1CellsCancel.xml", TestName = "WhenICallTheWebhookWithTwoNewCellsScenario")]
-        [TestCase("cellMove.JSON", "cellMove.xml", TestName = "WhenICallTheWebhookWithCellMoveScenario")]
-        [TestCase("MetadataChange.JSON", "MetadataChange.xml", TestName = "WhenICallTheWebhookWithMetadataChangeScenario")]
-        [TestCase("UpdateSimple.JSON", "UpdateSimple.xml", TestName = "WhenICallTheWebhookWithSimpleUpdateScenario")]
+        //New Cell
+        [TestCase("1NewCellScenario.JSON", "1NewCellScenario.xml", TestName = "WhenICallTheWebhookWithOneNewCellScenario_ThenWebhookReturns200Response")]
+        [TestCase("2NewCellScenario.JSON", "2NewCellScenario.xml", TestName = "WhenICallTheWebhookWithTwoNewCellScenario_ThenWebhookReturns200Response")]
+
+        //Cancel & Replace
+        [TestCase("2CellsReplace1CellsCancel.JSON", "2CellsReplace1CellsCancel.xml", TestName = "WhenICallTheWebhookWithTwoNewCellsScenario_ThenWebhookReturns200Response")]
+        [TestCase("1CellCancel.JSON", "1CellCancel.xml", TestName = "WhenICallTheWebhookWithOneCancelCellScenario_ThenWebhookReturns200Response")]
+
+        //Move Cell
+        [TestCase("cellMove.JSON", "cellMove.xml", TestName = "WhenICallTheWebhookWithCellMoveScenario_ThenWebhookReturns200Response")]
+        
+        //Metadata Change
+        [TestCase("MetadataChange.JSON", "MetadataChange.xml", TestName = "WhenICallTheWebhookWithMetadataChangeScenario_ThenWebhookReturns200Response")]
+        [TestCase("2CellMetadataChange.JSON", "2CellMetadataChange.xml", TestName = "WhenICallTheWebhookWith2CellMetadataChangeScenario_ThenWebhookReturns200Response")]
+        
+        //Update
+        [TestCase("UpdateSimple.JSON", "UpdateSimple.xml", TestName = "WhenICallTheWebhookWithSimpleUpdateScenarioHavingOneCellWithStatusNameAsUpdate_ThenWebhookReturns200Response")]
+        [TestCase("updateOneCellWithNewEditionStatus.JSON", "UpdateSimple.xml", TestName = "WhenICallTheWebhookWithSimpleUpdateScenarioHavingOneCellWithStatusNameAsNewEdition_ThenWebhookReturns200Response")]
+        [TestCase("updateOneCellWithReIssueStatus.JSON", "UpdateSimple.xml", TestName = "WhenICallTheWebhookWithSimpleUpdateScenarioHavingOneCellStatusNameAsReIssue_ThenWebhookReturns200Response")]
+        [TestCase("updateTwoCellsWithDifferentStatusName.JSON", "UpdateSimple.xml", TestName = "WhenICallTheWebhookWithSimpleUpdateScenarioHavingTwoCellsWithDifferentStatusName_ThenWebhookReturns200Response")]
+
         //[TestCase("3CellsReplace2CellsCancel.JSON", "3CellsReplace2CellsCancel.xml", TestName = "WhenICallTheWebhookCancel1Replace2CellsScenario")]
+        //[TestCase("1NewCellWoNewAVCSUnit.JSON", "1NewCellWoNewAVCSUnit.xml", TestName = "WhenICallTheWebhookWithOneNewCellScenario")]
+        
+
         public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponse1(string payloadFileName, string expectedXmlFileName)
         {
             string filePath = Path.Combine(_dir.FullName, WebhookEndpoint.config.testConfig.PayloadFolder, payloadFileName);
             string expectedXMLfilePath = Path.Combine(_dir.FullName, WebhookEndpoint.config.testConfig.GeneratedXMLFolder);
             //string traceID = SapXmlHelper.getTraceID(filePath);
             var response = await Webhook.PostWebhookResponseAsyncForXML(filePath, expectedXMLfilePath, await _authToken.GetAzureADToken(false));
-
-            // download XML file by passing traceID
-            // currently we have given hardcoded traceID otherwise use above commented string
-            //string generatedXMLFilePath = SapXmlHelper.downloadGeneratedXML(expectedXMLfilePath,"367ce4a4-1d62-4f56-b359-59e178d77100"); // string path will be returned
-            
+    
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
     }
