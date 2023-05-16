@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
@@ -25,6 +26,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
         private const string CorrIdKey = "corrid";
         private const string RequestFormat = "json";
+        private const int EventSizeLimit = 1000000;
 
         public ErpFacadeController(IHttpContextAccessor contextAccessor,
                                    ILogger<ErpFacadeController> logger,
@@ -41,7 +43,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
         [HttpPost]
         [Route("/erpfacade/priceinformation")]
-        public virtual async Task<IActionResult> Post([FromBody] JArray requestJson)
+        public virtual async Task<IActionResult> PostPriceInformation([FromBody] JArray requestJson)
         {
             _logger.LogInformation("ERP Facade has received UnitOfSale event from SAP with price information.");
 
@@ -82,9 +84,10 @@ namespace UKHO.ERPFacade.API.Controllers
                 //Check the size of final event. It should not more than 1 MB
                 var eventSize = CommonHelper.GetEventSize(eesEventReponseJson);
 
-                if (eventSize > 1000000)
+                if (eventSize > EventSizeLimit)
                 {
                     _logger.LogWarning("EES Event size exceeds the limit of 1 MB");
+                    throw new Exception();
                 }
             }
 
