@@ -342,7 +342,10 @@ stages:
       - deployment: DevDeployTerraform
         displayName: "Dev - Deploy Terraform and Dotnet App"
         environment: "ERP-Dev"
-        pool: $(DeploymentPoolPrivateLink)
+        pool: 
+         name: $(DeploymentPoolPrivateLink)
+         demands:
+         - Agent.Version -equals HTFSPRDPRA01-ukhydro-Benny-A01 
         container: ${{variables.Container}}
         workspace:
           clean: all
