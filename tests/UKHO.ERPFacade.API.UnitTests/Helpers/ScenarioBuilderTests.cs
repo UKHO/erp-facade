@@ -107,7 +107,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
              && call.GetArgument<LogLevel>(0) == LogLevel.Information
              && call.GetArgument<EventId>(1) == EventIds.ScenarioIdentified.ToEventId()
-             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Scenario identified for {ProductName} is {ScenarioName}.").MustHaveHappenedOnceExactly();
+             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Scenario identified for {ProductName} is {Scenario}.").MustHaveHappenedOnceExactly();
         }
 
 
@@ -178,7 +178,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
              && call.GetArgument<LogLevel>(0) == LogLevel.Information
              && call.GetArgument<EventId>(1) == EventIds.ScenarioIdentified.ToEventId()
-             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Scenario identified for {ProductName} is {ScenarioName}.").MustNotHaveHappened();
+             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Scenario identified for {ProductName} is {Scenario}.").MustNotHaveHappened();
         }
 
         [Test]
@@ -249,7 +249,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
              && call.GetArgument<LogLevel>(0) == LogLevel.Information
              && call.GetArgument<EventId>(1) == EventIds.ScenarioIdentified.ToEventId()
-             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Scenario identified for {ProductName} is {ScenarioName}.").MustHaveHappenedOnceExactly();
+             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Scenario identified for {ProductName} is {Scenario}.").MustHaveHappenedOnceExactly();
         }
 
         [Test]
@@ -320,7 +320,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
              && call.GetArgument<LogLevel>(0) == LogLevel.Information
              && call.GetArgument<EventId>(1) == EventIds.ScenarioIdentified.ToEventId()
-             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Scenario identified for {ProductName} is {ScenarioName}.").MustHaveHappenedOnceExactly();
+             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Scenario identified for {ProductName} is {Scenario}.").MustHaveHappenedOnceExactly();
         }
 
         [Test]
@@ -391,7 +391,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
              && call.GetArgument<LogLevel>(0) == LogLevel.Information
              && call.GetArgument<EventId>(1) == EventIds.ScenarioIdentified.ToEventId()
-             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Scenario identified for {ProductName} is {ScenarioName}.").MustHaveHappenedOnceExactly();
+             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Scenario identified for {ProductName} is {Scenario}.").MustHaveHappenedOnceExactly();
         }
 
         [Test]
@@ -462,7 +462,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
              && call.GetArgument<LogLevel>(0) == LogLevel.Information
              && call.GetArgument<EventId>(1) == EventIds.ScenarioIdentified.ToEventId()
-             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Scenario identified for {ProductName} is {ScenarioName}.").MustHaveHappenedOnceExactly();
+             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Scenario identified for {ProductName} is {Scenario}.").MustHaveHappenedOnceExactly();
         }
 
 

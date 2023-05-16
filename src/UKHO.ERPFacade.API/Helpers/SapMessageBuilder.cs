@@ -67,7 +67,7 @@ namespace UKHO.ERPFacade.API.Helpers
 
             foreach (var scenario in scenarios)
             {
-                _logger.LogInformation(EventIds.BuildingSapActionStarted.ToEventId(), "Building SAP actions for scenario {Scenario}.", scenario);
+                _logger.LogInformation(EventIds.BuildingSapActionStarted.ToEventId(), "Building SAP actions for {Scenario} scenario.", scenario.ScenarioType.ToString());
 
                 ActionNumber actionNumbers = _actionNumberConfig.Value.Actions.Where(x => x.Scenario == scenario.ScenarioType.ToString()).FirstOrDefault();
                 List<int> actions = actionNumbers.ActionNumbers.ToList();
@@ -80,14 +80,14 @@ namespace UKHO.ERPFacade.API.Helpers
                     {
                         case 2:
                             var unitOfSale = scenario.UnitOfSales.Where(x => x.UnitName == scenario.Product.ProductName).FirstOrDefault();
-                            if (unitOfSale.IsNewUnitOfSale)
+                            if (unitOfSale != null && unitOfSale.IsNewUnitOfSale)
                             {
                                 actionNode = BuildAction(soapXml, scenario, action, scenario.Product.ProductName);
                                 actionItemNode.AppendChild(actionNode);
                             }
                             break;
                         case 3:
-                        case 6:                        
+                        case 6:
                         case 8:
                             foreach (var cell in scenario.InUnitOfSales)
                             {
@@ -95,20 +95,23 @@ namespace UKHO.ERPFacade.API.Helpers
                                 {
                                     var uos = scenario.UnitOfSales.Where(x => x.UnitName == cell).FirstOrDefault();
 
-                                    if (action.ActionNumber == 3)
+                                    if (uos != null)
                                     {
-                                        foreach (var product in uos.CompositionChanges.AddProducts)
+                                        if (action.ActionNumber == 3)
                                         {
-                                            actionNode = BuildAction(soapXml, scenario, action, cell);
-                                            actionItemNode.AppendChild(actionNode);
+                                            foreach (var product in uos.CompositionChanges.AddProducts)
+                                            {
+                                                actionNode = BuildAction(soapXml, scenario, action, cell);
+                                                actionItemNode.AppendChild(actionNode);
+                                            }
                                         }
-                                    }
-                                    else if (action.ActionNumber == 8)
-                                    {                                        
-                                        foreach (var product in uos.CompositionChanges.RemoveProducts)
+                                        else if (action.ActionNumber == 8)
                                         {
-                                            actionNode = BuildAction(soapXml, scenario, action, cell);
-                                            actionItemNode.AppendChild(actionNode);
+                                            foreach (var product in uos.CompositionChanges.RemoveProducts)
+                                            {
+                                                actionNode = BuildAction(soapXml, scenario, action, cell);
+                                                actionItemNode.AppendChild(actionNode);
+                                            }
                                         }
                                     }
                                 }
@@ -132,7 +135,7 @@ namespace UKHO.ERPFacade.API.Helpers
                             actionItemNode.AppendChild(actionNode);
                             break;
                     }
-                    _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created for {Scenario}.", action.Action, scenario);
+                    _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created for {Scenario}.", action.Action, scenario.ScenarioType.ToString());
                 }
             }
 
@@ -227,9 +230,15 @@ namespace UKHO.ERPFacade.API.Helpers
                 if (node.IsRequired)
                 {
                     UnitOfSale unitOfSale = scenario.UnitOfSales.Where(x => x.UnitName == cell).FirstOrDefault();
-
-                    object jsonFieldValue = CommonHelper.ParseXmlNode(node.JsonPropertyName, unitOfSale, unitOfSale.GetType());
-                    itemSubNode.InnerText = GetXmlNodeValue(jsonFieldValue.ToString());
+                    if (unitOfSale != null)
+                    {
+                        object jsonFieldValue = CommonHelper.ParseXmlNode(node.JsonPropertyName, unitOfSale, unitOfSale.GetType());
+                        itemSubNode.InnerText = GetXmlNodeValue(jsonFieldValue.ToString());
+                    }
+                    else
+                    {
+                        itemSubNode.InnerText = string.Empty;
+                    }
                 }
                 else
                 {
