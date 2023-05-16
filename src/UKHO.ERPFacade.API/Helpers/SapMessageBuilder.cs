@@ -27,6 +27,7 @@ namespace UKHO.ERPFacade.API.Helpers
         private const string Product = "PRODUCT";
         private const string ProductSection = "Product";
         private const string ReplacedBy = "REPLACEDBY";
+        private const string ChildCell = "CHILDCELL";
         private const string ProdType = "PRODTYPE";
         private const string UnitOfSaleSection = "UnitOfSale";
 
@@ -91,17 +92,17 @@ namespace UKHO.ERPFacade.API.Helpers
                         case 8:
                             foreach (var cell in scenario.InUnitOfSales)
                             {
-                                if (scenario.ScenarioType == ScenarioType.ChangeMoveCell && (action.ActionNumber == 3 || action.ActionNumber == 8))
-                                {
-                                    var uos = scenario.UnitOfSales.Where(x => x.UnitName == cell).FirstOrDefault();
+                                var uos = scenario.UnitOfSales.Where(x => x.UnitName == cell).FirstOrDefault();
 
-                                    if (uos != null)
+                                if (uos != null)
+                                {
+                                    if (scenario.ScenarioType == ScenarioType.ChangeMoveCell && (action.ActionNumber == 3 || action.ActionNumber == 8))
                                     {
                                         if (action.ActionNumber == 3)
                                         {
                                             foreach (var product in uos.CompositionChanges.AddProducts)
                                             {
-                                                actionNode = BuildAction(soapXml, scenario, action, cell);
+                                                actionNode = BuildAction(soapXml, scenario, action, cell, product);
                                                 actionItemNode.AppendChild(actionNode);
                                             }
                                         }
@@ -114,11 +115,11 @@ namespace UKHO.ERPFacade.API.Helpers
                                             }
                                         }
                                     }
-                                }
-                                else
-                                {
-                                    actionNode = BuildAction(soapXml, scenario, action, cell);
-                                    actionItemNode.AppendChild(actionNode);
+                                    else
+                                    {
+                                        actionNode = BuildAction(soapXml, scenario, action, cell);
+                                        actionItemNode.AppendChild(actionNode);
+                                    }
                                 }
                             }
                             break;
@@ -181,7 +182,7 @@ namespace UKHO.ERPFacade.API.Helpers
             return actionItemNode;
         }
 
-        private static XmlElement BuildAction(XmlDocument soapXml, Scenario scenario, SapAction action, string cell)
+        private static XmlElement BuildAction(XmlDocument soapXml, Scenario scenario, SapAction action, string cell, string childCell = null)
         {
             XmlElement itemNode = soapXml.CreateElement(Item);
 
@@ -209,6 +210,10 @@ namespace UKHO.ERPFacade.API.Helpers
                     if (node.XmlNodeName == ReplacedBy)
                     {
                         itemSubNode.InnerText = GetXmlNodeValue(cell.ToString());
+                    }
+                    else if (node.XmlNodeName == ChildCell && childCell != null)
+                    {
+                        itemSubNode.InnerText = GetXmlNodeValue(childCell.ToString());
                     }
                     else
                     {
