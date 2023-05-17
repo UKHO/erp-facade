@@ -57,7 +57,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return response;
         }
 
-        public async Task<RestResponse> PostWebhookResponseAsyncForXML(string filePath, string expectedXMLfilePath, string token)
+        public async Task<RestResponse> PostWebhookResponseAsyncForXML(string filePath, string generatedXMLFolder, string token)
         {
             string requestBody;
 
@@ -77,7 +77,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             string traceID = jsonPayload.Data.TraceId;
 
             //Logic to download XML from container using TraceID from JSON
-            string generatedXMLFilePath = SapXmlHelper.downloadGeneratedXML(expectedXMLfilePath,traceID); // string path will be returned
+            string generatedXMLFilePath = SapXmlHelper.downloadGeneratedXML(generatedXMLFolder, traceID); // string path will be returned
 
             //string generatedXMLFilePath = expectedXMLfilePath;
             //string generatedXMLFilePath = "C:\\Users\\Sadha1501493\\GitHubRepo\\erp-facade\\tests\\UKHO.ERPFacade.API.FunctionalTests\\ERPFacadeGeneratedXmlFiles\\367ce4a4-1d62-4f56-b359-newcell30001.xml";

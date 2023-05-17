@@ -45,7 +45,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
 
         private uint rECDATEField;
 
-        private ushort rECTIMEField;
+        private uint rECTIMEField;
 
         private string oRGField;
 
@@ -91,7 +91,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
         }
 
         /// <remarks/>
-        public ushort RECTIME
+        public uint RECTIME
         {
             get
             {
