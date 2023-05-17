@@ -41,6 +41,8 @@ namespace UKHO.SAP.MockAPIService
             }
 
             // Add services to the container.
+
+            builder.Services.AddControllers();
             builder.Services.AddSoapCore();
 
             builder.Services.Configure<SapConfiguration>(configuration.GetSection("SapConfiguration"));
@@ -52,9 +54,10 @@ namespace UKHO.SAP.MockAPIService
             builder.Services.AddSingleton<MockService>();
 
             var app = builder.Build();
+            app.UseHttpsRedirection();
 
             app.BasicAuthCustomMiddleware();
-
+            app.MapControllers();
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
