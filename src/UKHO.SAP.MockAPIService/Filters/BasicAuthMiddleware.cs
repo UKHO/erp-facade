@@ -62,7 +62,7 @@ namespace UKHO.SAP.MockAPIService.Filters
                 {
                     string currentTestCase = _mockService.GetCurrentTestCase();
 
-                    if (currentTestCase == TestCase.InternalServerError500_SAP.ToString())
+                    if (currentTestCase == TestCase.SAPInternalServerError500.ToString())
                     {
                         context.Response.StatusCode = StatusCodes.Status500InternalServerError;
                     }
