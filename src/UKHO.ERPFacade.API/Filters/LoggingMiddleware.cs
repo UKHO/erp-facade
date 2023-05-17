@@ -25,19 +25,19 @@ namespace UKHO.ERPFacade.API.Filters
             catch (Exception exception)
             {
                 var exceptionType = exception.GetType();
-
+                var correlationId = httpContext!.Request.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey].FirstOrDefault()!;
                 if (exceptionType == typeof(ERPFacadeException))
                 {
                     EventIds eventId = (EventIds)((ERPFacadeException)exception).EventId.Id;
                     _loggerFactory
                         .CreateLogger(httpContext.Request.Path)
-                        .LogError(eventId.ToEventId(), exception, eventId.ToString());
+                        .LogError(eventId.ToEventId(), exception, eventId.ToString() + ". | _X-Correlation-ID : {_X-Correlation-ID}", correlationId);
                 }
                 else
                 {
                     _loggerFactory
                     .CreateLogger(httpContext.Request.Path)
-                    .LogError(EventIds.UnhandledException.ToEventId(), exception, "Exception occured while processing ErpFacade API.");
+                    .LogError(EventIds.UnhandledException.ToEventId(), exception, "Exception occured while processing ErpFacade API." + " | _X-Correlation-ID : {_X-Correlation-ID}", correlationId);
                 }
 
                 httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
