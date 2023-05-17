@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
@@ -25,6 +26,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
         private const string CorrIdKey = "corrid";
         private const string RequestFormat = "json";
+        private const int EventSizeLimit = 1000000;
 
         public ErpFacadeController(IHttpContextAccessor contextAccessor,
                                    ILogger<ErpFacadeController> logger,
@@ -41,7 +43,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
         [HttpPost]
         [Route("/erpfacade/priceinformation")]
-        public virtual async Task<IActionResult> Post([FromBody] JArray requestJson)
+        public virtual async Task<IActionResult> PostPriceInformation([FromBody] JArray requestJson)
         {
             _logger.LogInformation("ERP Facade has received UnitOfSale event from SAP with price information.");
 
@@ -72,19 +74,16 @@ namespace UKHO.ERPFacade.API.Controllers
                 List<UnitsOfSalePrices> unitsOfSalePriceList = _erpFacadeService.BuildUnitOfSalePricePayload(priceInformationList);
 
                 _logger.LogInformation("Downloading the existing EES event from blob storage with give Correlation ID.");
-
                 var exisitingEesEvent = _azureBlobEventWriter.DownloadEvent(corrId + '.' + RequestFormat, corrId);
-
                 _logger.LogInformation("Existing EES event is downloaded from blob storage successfully.");
 
-                JObject eesEventReponseJson = _erpFacadeService.BuildEESEventWithPriceInformation(unitsOfSalePriceList, exisitingEesEvent);
+                JObject eesPriceEventPayloadJson = _erpFacadeService.BuildPriceEventPayload(unitsOfSalePriceList, exisitingEesEvent);
 
-                //Check the size of final event. It should not more than 1 MB
-                var eventSize = CommonHelper.GetEventSize(eesEventReponseJson);
-
-                if (eventSize > 1000000)
+                var eventSize = CommonHelper.GetEventSize(eesPriceEventPayloadJson);
+                if (eventSize > EventSizeLimit)
                 {
-                    _logger.LogWarning("EES Event size exceeds the limit of 1 MB");
+                    _logger.LogWarning("EES Price Event size exceeds the limit of 1 MB");
+                    throw new Exception();
                 }
             }
 
