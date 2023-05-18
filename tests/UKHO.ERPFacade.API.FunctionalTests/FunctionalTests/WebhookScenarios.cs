@@ -13,6 +13,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         public static Boolean noRole = false;
         private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
         //private static readonly string _webhookPayloadFilePath = "ERPFacadePayloadTestData/WebhookPayload.JSON";
+        //private readonly string _localProjectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
 
         [SetUp]
         public void Setup()
