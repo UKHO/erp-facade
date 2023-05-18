@@ -183,8 +183,7 @@ namespace UKHO.ERPFacade
 
             var app = builder.Build();
 
-            var logger = app.Services.GetRequiredService<ILoggerFactory>();
-            app.UseLoggingMiddleware(logger);
+            app.UseLoggingMiddleware();
 
             app.UseHttpsRedirection();
 

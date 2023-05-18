@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using UKHO.ERPFacade.API.Controllers;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Logging;
 
@@ -8,12 +9,12 @@ namespace UKHO.ERPFacade.API.Filters
     {
         private readonly RequestDelegate _next;
 
-        public ILoggerFactory _loggerFactory { get; }
+        private readonly ILogger<LoggingMiddleware> _logger;
 
-        public LoggingMiddleware(RequestDelegate next, ILoggerFactory loggerFactory)
+        public LoggingMiddleware(RequestDelegate next, ILogger<LoggingMiddleware> logger)
         {
             _next = next;
-            _loggerFactory = loggerFactory;
+            _logger = logger;
         }
 
         public async Task InvokeAsync(HttpContext httpContext)
@@ -26,18 +27,15 @@ namespace UKHO.ERPFacade.API.Filters
             {
                 var exceptionType = exception.GetType();
                 var correlationId = httpContext!.Request.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey].FirstOrDefault()!;
+
                 if (exceptionType == typeof(ERPFacadeException))
                 {
                     EventIds eventId = (EventIds)((ERPFacadeException)exception).EventId.Id;
-                    _loggerFactory
-                        .CreateLogger(httpContext.Request.Path)
-                        .LogError(eventId.ToEventId(), exception, eventId.ToString() + ". | _X-Correlation-ID : {_X-Correlation-ID}", correlationId);
+                    _logger.LogError(eventId.ToEventId(), exception, eventId.ToString() + ". | _X-Correlation-ID : {_X-Correlation-ID}", correlationId);
                 }
                 else
                 {
-                    _loggerFactory
-                    .CreateLogger(httpContext.Request.Path)
-                    .LogError(EventIds.UnhandledException.ToEventId(), exception, "Exception occured while processing ErpFacade API." + " | _X-Correlation-ID : {_X-Correlation-ID}", correlationId);
+                    _logger.LogError(EventIds.UnhandledException.ToEventId(), exception, "Exception occured while processing ErpFacade API." + " | _X-Correlation-ID : {_X-Correlation-ID}", correlationId);
                 }
 
                 httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
