@@ -44,8 +44,13 @@ stages:
           - task: Powershell@2
             displayName: "Run Stryker"
             inputs:
-              workingDirectory: '$(Build.SourcesDirectory)/tests/*.UnitTests'
+              workingDirectory: '$(Build.SourcesDirectory)'
+              filePath: |
+                **/*.csproj
+                !**/*Tests.csproj   
+                !UKHO.SAP.MockAPIService.csproj          
               targetType: 'inline'
+              arguments:
               pwsh: true
               script: $(Agent.BuildDirectory)/tools/dotnet-stryker
           - task: PublishMutationReport@0
