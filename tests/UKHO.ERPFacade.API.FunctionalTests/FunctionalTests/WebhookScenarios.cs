@@ -12,6 +12,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         private DirectoryInfo _dir;
         private readonly ADAuthTokenProvider _authToken = new();
         public static Boolean noRole = false;
+        private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
 
         [SetUp]
         public void Setup()
@@ -31,7 +32,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [Test(Description = "WhenValidEventInNewEncContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponse"), Order(1)]
         public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponse()
         {
-            string filePath = Path.Combine(_dir.FullName, WebhookEndpoint.config.testConfig.PayloadFolder, WebhookEndpoint.config.testConfig.WebhookPayloadFileName);
+            string filePath = Path.Combine(_projectDir, WebhookEndpoint.config.testConfig.PayloadFolder, WebhookEndpoint.config.testConfig.WebhookPayloadFileName);
             var response = await Webhook.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(false));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
@@ -39,7 +40,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [Test(Description = "WhenValidEventInNewEncContentPublishedEventReceivedWithInvalidToken_ThenWebhookReturns401UnAuthorizedResponse"), Order(2)]
         public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithInvalidToken_ThenWebhookReturns401UnAuthorizedResponse()
         {
-            string filePath = Path.Combine(_dir.FullName, WebhookEndpoint.config.testConfig.PayloadFolder, WebhookEndpoint.config.testConfig.WebhookPayloadFileName);
+            string filePath = Path.Combine(_projectDir, WebhookEndpoint.config.testConfig.PayloadFolder, WebhookEndpoint.config.testConfig.WebhookPayloadFileName);
 
             var response = await Webhook.PostWebhookResponseAsync(filePath, "invalidToken_abcd");
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
@@ -48,7 +49,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [Test(Description = "WhenValidEventInNewEncContentPublishedEventReceivedWithTokenHavingNoRole_ThenWebhookReturns403ForbiddenResponse"), Order(2)]
         public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithTokenHavingNoRole_ThenWebhookReturns403ForbiddenResponse()
         {
-            string filePath = Path.Combine(_dir.FullName, WebhookEndpoint.config.testConfig.PayloadFolder, WebhookEndpoint.config.testConfig.WebhookPayloadFileName);
+            string filePath = Path.Combine(_projectDir, WebhookEndpoint.config.testConfig.PayloadFolder, WebhookEndpoint.config.testConfig.WebhookPayloadFileName);
             var response = await Webhook.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(true));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.Forbidden);
         }
@@ -56,8 +57,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [Test(Description = "WhenICallMockSapApiWithValidRequestAndValidAuthenticationButSapApiServiceIsDown_ThenItShouldReturn500IntervalServerErrorResponse"), Order(0)]
         public async Task WhenICallMockSapApiWithValidRequestAndValidAuthenticationButSapApiServiceIsDown_ThenItShouldReturn500IntervalServerErrorResponse()
         {
-            string filePath = Path.Combine(_dir.FullName, WebhookEndpoint.config.testConfig.PayloadFolder, WebhookEndpoint.config.testConfig.WebhookPayloadFileName);
-            string XmlFilePath = Path.Combine(_dir.FullName, WebhookEndpoint.config.testConfig.PayloadFolder, WebhookEndpoint.config.testConfig.SapMockApiPayloadFileName);
+            string filePath = Path.Combine(_projectDir, WebhookEndpoint.config.testConfig.PayloadFolder, WebhookEndpoint.config.testConfig.WebhookPayloadFileName);
+            string XmlFilePath = Path.Combine(_projectDir, WebhookEndpoint.config.testConfig.PayloadFolder, WebhookEndpoint.config.testConfig.SapMockApiPayloadFileName);
            
             Webhook.PostMockSapResponseAsync(XmlFilePath);
             
@@ -66,9 +67,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         }
 
         [Test(Description = "WhenInvalidEventInNewEncContentPublishedEventReceivedWithXML_ThenWebhookReturns500Response"), Order(1)]
-        public async Task WhenInValidEventInNewEncContentPublishedEventReceivedWithValidToken_ThenWebhookReturns500OkResponse()
+        public async Task WhenInvalidEventInNewEncContentPublishedEventReceivedWithValidToken_ThenWebhookReturns500OkResponse()
         {
-            string filePath = Path.Combine(_dir.FullName, WebhookEndpoint.config.testConfig.PayloadFolder, WebhookEndpoint.config.testConfig.WebhookInvalidPayloadFileName);
+            string filePath = Path.Combine(_projectDir, WebhookEndpoint.config.testConfig.PayloadFolder, WebhookEndpoint.config.testConfig.WebhookInvalidPayloadFileName);
 
             var response = await Webhook.PostWebhookResponseAsyncForXML(filePath, await _authToken.GetAzureADToken(false));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.InternalServerError);
@@ -80,14 +81,14 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [TestCase("2NewCellScenario.JSON", TestName = "WhenICallTheWebhookWithTwoNewCellScenario_ThenWebhookReturns200Response")]
 
         //Cancel & Replace
-        [TestCase("2CellsReplace1CellsCancel.JSON", TestName = "WhenICallTheWebhookWithTwoNewCellsScenario_ThenWebhookReturns200Response")]
+        [TestCase("2CellsReplace1CellsCancel.JSON", TestName = "WhenICallTheWebhookWithTwoNewCellsReplacingOneCellScenario_ThenWebhookReturns200Response")]
         [TestCase("1CellCancel.JSON", TestName = "WhenICallTheWebhookWithOneCancelCellScenario_ThenWebhookReturns200Response")]
 
         //Move Cell
-        [TestCase("cellMove.JSON", TestName = "WhenICallTheWebhookWithCellMoveScenario_ThenWebhookReturns200Response")]
+        [TestCase("cellMove.JSON", TestName = "WhenICallTheWebhookWithMoveCellScenario_ThenWebhookReturns200Response")]
         
         //Metadata Change
-        [TestCase("MetadataChange.JSON", TestName = "WhenICallTheWebhookWithMetadataChangeScenario_ThenWebhookReturns200Response")]
+        [TestCase("MetadataChange.JSON", TestName = "WhenICallTheWebhookWithSimpleMetadataChangeScenario_ThenWebhookReturns200Response")]
         [TestCase("2CellMetadataChange.JSON", TestName = "WhenICallTheWebhookWith2CellMetadataChangeScenario_ThenWebhookReturns200Response")]
         
         //Update
@@ -101,8 +102,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         
         public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponse1(string payloadJsonFileName)
         {
-            string filePath = Path.Combine(_dir.FullName, WebhookEndpoint.config.testConfig.PayloadFolder, payloadJsonFileName);
-            string generatedXMLFolder = Path.Combine(_dir.FullName, WebhookEndpoint.config.testConfig.GeneratedXMLFolder);
+            string filePath = Path.Combine(_projectDir, WebhookEndpoint.config.testConfig.PayloadFolder, payloadJsonFileName);
+            string generatedXMLFolder = Path.Combine(_projectDir, WebhookEndpoint.config.testConfig.GeneratedXMLFolder);
             //string traceID = SapXmlHelper.getTraceID(filePath);
             
             var response = await Webhook.PostWebhookResponseAsyncForXML(filePath, generatedXMLFolder, await _authToken.GetAzureADToken(false));
