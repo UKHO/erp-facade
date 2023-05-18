@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
+using System.Linq;
 using System.Xml;
 using UKHO.ERPFacade.API.Models;
 using UKHO.ERPFacade.Common.IO;
@@ -30,6 +31,8 @@ namespace UKHO.ERPFacade.API.Helpers
         private const string ChildCell = "CHILDCELL";
         private const string ProdType = "PRODTYPE";
         private const string UnitOfSaleSection = "UnitOfSale";
+        private const string NotForSale = "NotForSale";
+        private const string UnitSaleType = "unit";
 
         public SapMessageBuilder(ILogger<SapMessageBuilder> logger,
                                  IXmlHelper xmlHelper,
@@ -79,6 +82,14 @@ namespace UKHO.ERPFacade.API.Helpers
 
                     switch (action.ActionNumber)
                     {
+                        case 1:
+                            var uosUnitOfSaleType = scenario.UnitOfSales.Where(x => x.UnitOfSaleType == UnitSaleType).FirstOrDefault();
+                            if (uosUnitOfSaleType != null)
+                            {
+                                actionNode = BuildAction(soapXml, scenario, action, uosUnitOfSaleType.UnitName);
+                                actionItemNode.AppendChild(actionNode);
+                            }
+                            break;
                         case 2:
                             var unitOfSale = scenario.UnitOfSales.Where(x => x.UnitName == scenario.Product.ProductName).FirstOrDefault();
                             if (unitOfSale != null && unitOfSale.IsNewUnitOfSale)
@@ -88,37 +99,15 @@ namespace UKHO.ERPFacade.API.Helpers
                             }
                             break;
                         case 3:
-                        case 6:
-                        case 8:
                             foreach (var cell in scenario.InUnitOfSales)
                             {
                                 var uos = scenario.UnitOfSales.Where(x => x.UnitName == cell).FirstOrDefault();
 
                                 if (uos != null)
                                 {
-                                    if (scenario.ScenarioType == ScenarioType.ChangeMoveCell && (action.ActionNumber == 3 || action.ActionNumber == 8))
+                                    foreach (var product in uos.CompositionChanges.AddProducts)
                                     {
-                                        if (action.ActionNumber == 3)
-                                        {
-                                            foreach (var product in uos.CompositionChanges.AddProducts)
-                                            {
-                                                actionNode = BuildAction(soapXml, scenario, action, cell, product);
-                                                if(!actionItemNode.InnerXml.Contains(actionNode.InnerXml))
-                                                    actionItemNode.AppendChild(actionNode);
-                                            }
-                                        }
-                                        else if (action.ActionNumber == 8)
-                                        {
-                                            foreach (var product in uos.CompositionChanges.RemoveProducts)
-                                            {
-                                                actionNode = BuildAction(soapXml, scenario, action, cell);
-                                                actionItemNode.AppendChild(actionNode);
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        actionNode = BuildAction(soapXml, scenario, action, cell);
+                                        actionNode = BuildAction(soapXml, scenario, action, cell, product);
                                         if (!actionItemNode.InnerXml.Contains(actionNode.InnerXml))
                                             actionItemNode.AppendChild(actionNode);
                                     }
@@ -126,13 +115,50 @@ namespace UKHO.ERPFacade.API.Helpers
                             }
                             break;
                         case 4:
-                            foreach (var cell in scenario.Product.ReplacedBy)
+                            foreach (var cell in scenario.InUnitOfSales)
+                            {
+                                var uos = scenario.UnitOfSales.Where(x => x.UnitOfSaleType == UnitSaleType && x.UnitName == cell).FirstOrDefault();
+                                if (uos != null)
+                                {
+                                    foreach (var product in scenario.Product.ReplacedBy)
+                                    {
+                                        actionNode = BuildAction(soapXml, scenario, action, cell, null, product);
+                                        actionItemNode.AppendChild(actionNode);
+                                    }
+                                }
+                            }
+                            break;
+                        case 6:
+                            foreach (var cell in scenario.InUnitOfSales)
                             {
                                 actionNode = BuildAction(soapXml, scenario, action, cell);
+                                if (!actionItemNode.InnerXml.Contains(actionNode.InnerXml))
+                                    actionItemNode.AppendChild(actionNode);
+                            }
+                            break;
+                        case 8:
+                            foreach (var cell in scenario.InUnitOfSales)
+                            {
+                                var uos = scenario.UnitOfSales.Where(x => x.UnitName == cell).FirstOrDefault();
+
+                                if (uos != null)
+                                {
+                                    foreach (var product in uos.CompositionChanges.RemoveProducts)
+                                    {
+                                        actionNode = BuildAction(soapXml, scenario, action, cell);
+                                        actionItemNode.AppendChild(actionNode);
+                                    }
+                                }
+                            }
+                            break;                       
+                        case 10:
+                            var uosNotForSale = scenario.UnitOfSales.Where(x => x.Status == NotForSale).FirstOrDefault();
+                            if (uosNotForSale != null)
+                            {
+                                actionNode = BuildAction(soapXml, scenario, action, uosNotForSale.UnitName);
                                 actionItemNode.AppendChild(actionNode);
                             }
                             break;
-
                         default:
                             actionNode = BuildAction(soapXml, scenario, action, scenario.Product.ProductName);
                             actionItemNode.AppendChild(actionNode);
@@ -184,7 +210,7 @@ namespace UKHO.ERPFacade.API.Helpers
             return actionItemNode;
         }
 
-        private static XmlElement BuildAction(XmlDocument soapXml, Scenario scenario, SapAction action, string cell, string childCell = null)
+        private static XmlElement BuildAction(XmlDocument soapXml, Scenario scenario, SapAction action, string cell, string childCell = null, string replacedByProduct = null)
         {
             XmlElement itemNode = soapXml.CreateElement(Item);
 
@@ -209,9 +235,9 @@ namespace UKHO.ERPFacade.API.Helpers
 
                 if (node.IsRequired)
                 {
-                    if (node.XmlNodeName == ReplacedBy)
+                    if (node.XmlNodeName == ReplacedBy && replacedByProduct != null)
                     {
-                        itemSubNode.InnerText = GetXmlNodeValue(cell.ToString());
+                        itemSubNode.InnerText = GetXmlNodeValue(replacedByProduct.ToString());
                     }
                     else if (node.XmlNodeName == ChildCell && childCell != null)
                     {

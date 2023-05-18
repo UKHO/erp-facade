@@ -22,8 +22,8 @@
           },
           {
             "IsRequired": true,
-            "Section": "Product",
-            "JsonPropertyName": "ProductName",
+            "Section": "UnitOfSale",
+            "JsonPropertyName": "UnitName",
             "XmlNodeName": "PRODUCTNAME",
             "SortingOrder": 3
           },
@@ -113,8 +113,8 @@
           },
           {
             "IsRequired": true,
-            "Section": "Product",
-            "JsonPropertyName": "ProductName",
+            "Section": "UnitOfSale",
+            "JsonPropertyName": "UnitName",
             "XmlNodeName": "PRODUCTNAME",
             "SortingOrder": 3
           },
@@ -295,8 +295,8 @@
           },
           {
             "IsRequired": true,
-            "Section": "Product",
-            "JsonPropertyName": "ProductName",
+            "Section": "UnitOfSale",
+            "JsonPropertyName": "UnitName",
             "XmlNodeName": "PRODUCTNAME",
             "SortingOrder": 3
           },
@@ -512,8 +512,8 @@
           },
           {
             "IsRequired": true,
-            "Section": "Product",
-            "JsonPropertyName": "Size",
+            "Section": "UnitOfSale",
+            "JsonPropertyName": "UnitSize",
             "XmlNodeName": "ENCSIZE",
             "SortingOrder": 8
           },
@@ -539,7 +539,7 @@
             "SortingOrder": 11
           },
           {
-            "IsRequired": false,
+            "IsRequired": true,
             "Section": "UnitOfSale",
             "JsonPropertyName": "UnitType",
             "XmlNodeName": "UNITTYPE",
@@ -750,8 +750,8 @@
           },
           {
             "IsRequired": true,
-            "Section": "Product",
-            "JsonPropertyName": "ProductName",
+            "Section": "UnitOfSale",
+            "JsonPropertyName": "UnitName",
             "XmlNodeName": "PRODUCTNAME",
             "SortingOrder": 3
           },
@@ -841,8 +841,8 @@
           },
           {
             "IsRequired": true,
-            "Section": "Product",
-            "JsonPropertyName": "ProductName",
+            "Section": "UnitOfSale",
+            "JsonPropertyName": "UnitName",
             "XmlNodeName": "PRODUCTNAME",
             "SortingOrder": 3
           },
@@ -910,7 +910,7 @@
             "SortingOrder": 12
           }
         ]
-      }      
+      }
     ]
   }
 }
