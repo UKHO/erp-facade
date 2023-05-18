@@ -42,47 +42,47 @@ stages:
               custom: tool
               arguments: install dotnet-stryker --tool-path $(Agent.BuildDirectory)/tools
 
-          - task: Powershell@2
-            displayName: "Run Stryker for ERP Facade API"
-            inputs:
-              workingDirectory: '$(Build.SourcesDirectory)\src\UKHO.ERPFacade.API'
-              targetType: 'inline'
-              pwsh: true
-              script: $(Agent.BuildDirectory)/tools/dotnet-stryker
+          #- task: Powershell@2
+          #  displayName: "Run Stryker for ERP Facade API"
+          #  inputs:
+          #    workingDirectory: '$(Build.SourcesDirectory)\src\UKHO.ERPFacade.API'
+          #    targetType: 'inline'
+          #    pwsh: true
+          #    script: $(Agent.BuildDirectory)/tools/dotnet-stryker
 
-          - task: PublishMutationReport@0
-            displayName: 'Publish Strkyer Mutator Report : ERP Facade API'
-            inputs:
-              reportPattern: '**/mutation-report.html'
-              reportDisplayName: 'ERPFacadeApiStryker Report'
+          #- task: PublishMutationReport@0
+          #  displayName: 'Publish Strkyer Mutator Report : ERP Facade API'
+          #  inputs:
+          #    reportPattern: '**/mutation-report.html'
+          #    reportDisplayName: 'ERPFacadeApiStryker Report'
 
-          - task: Powershell@2
-            displayName: "Run Stryker for WebJob Project"
-            inputs:
-              workingDirectory: '$(Build.SourcesDirectory)\src\UKHO.ERPFacade.WebJob'
-              targetType: 'inline'
-              pwsh: true
-              script: $(Agent.BuildDirectory)/tools/dotnet-stryker
+          #- task: Powershell@2
+          #  displayName: "Run Stryker for WebJob Project"
+          #  inputs:
+          #    workingDirectory: '$(Build.SourcesDirectory)\src\UKHO.ERPFacade.WebJob'
+          #    targetType: 'inline'
+          #    pwsh: true
+          #    script: $(Agent.BuildDirectory)/tools/dotnet-stryker
 
-          - task: PublishMutationReport@0
-            displayName: 'Publish Strkyer Mutator Report : WebJob'
-            inputs:
-              reportPattern: '**/mutation-report.html'
-              reportDisplayName: 'CallBackWeJobStryker Report'
+          #- task: PublishMutationReport@0
+          #  displayName: 'Publish Strkyer Mutator Report : WebJob'
+          #  inputs:
+          #    reportPattern: '**/mutation-report.html'
+          #    reportDisplayName: 'CallBackWeJobStryker Report'
 
-          - task: Powershell@2
-            displayName: "Run Stryker for Common Project"
-            inputs:
-              workingDirectory: '$(Build.SourcesDirectory)\src\UKHO.ERPFacade.Common'
-              targetType: 'inline'
-              pwsh: true
-              script: $(Agent.BuildDirectory)/tools/dotnet-stryker
+          #- task: Powershell@2
+          #  displayName: "Run Stryker for Common Project"
+          #  inputs:
+          #    workingDirectory: '$(Build.SourcesDirectory)\src\UKHO.ERPFacade.Common'
+          #    targetType: 'inline'
+          #    pwsh: true
+          #    script: $(Agent.BuildDirectory)/tools/dotnet-stryker
 
-          - task: PublishMutationReport@0
-            displayName: 'Publish Strkyer Mutator Report : Common'
-            inputs:
-              reportPattern: '**/mutation-report.html'
-              reportDisplayName: 'CommonStryker Report'
+          #- task: PublishMutationReport@0
+          #  displayName: 'Publish Strkyer Mutator Report : Common'
+          #  inputs:
+          #    reportPattern: '**/mutation-report.html'
+          #    reportDisplayName: 'CommonStryker Report'
 
           - task: Powershell@2
             displayName: "Run Stryker ERP Facade Tests"
