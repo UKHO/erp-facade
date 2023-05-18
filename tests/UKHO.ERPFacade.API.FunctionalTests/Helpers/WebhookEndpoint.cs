@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 using NUnit.Framework;
 using RestSharp;
-using UKHO.ERPFacade.API.FunctionalTests.Model;
 using System.Text;
+using UKHO.ERPFacade.API.FunctionalTests.Model;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
@@ -19,9 +19,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             config = new();
             _authToken = new();
             SapXmlHelper = new SAPXmlHelper();
-            var options = new RestClientOptions(config.testConfig.ErpFacadeConfiguration.BaseUrl);
+            var options = new RestClientOptions(config.TestConfig.ErpFacadeConfiguration.BaseUrl);
             client = new RestClient(options);
-            var options2 = new RestClientOptions(config.testConfig.SapMockConfiguration.BaseUrl);
+            var options2 = new RestClientOptions(config.TestConfig.SapMockConfiguration.BaseUrl);
             client2 = new RestClient(options2);
 
         }
@@ -43,7 +43,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             {
                 requestBody = streamReader.ReadToEnd();
             }
-            
+
             var request = new RestRequest("/webhook/newenccontentpublishedeventreceived", Method.Post);
             request.AddHeader("Content-Type", "application/json");
             request.AddHeader("Authorization", "Bearer " + token);
@@ -68,7 +68,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
             RestResponse response = await client.ExecuteAsync(request);
 
-            JsonPayloadHelper jsonPayload  = JsonConvert.DeserializeObject<JsonPayloadHelper>(requestBody);
+            JsonPayloadHelper jsonPayload = JsonConvert.DeserializeObject<JsonPayloadHelper>(requestBody);
             string traceID = jsonPayload.Data.TraceId;
 
             //Logic to download XML from container using TraceID from JSON
@@ -100,7 +100,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
             RestResponse response = await client.ExecuteAsync(request);
 
-            
+
 
             return response;
         }
@@ -108,7 +108,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         public async void PostMockSapResponseAsync(string filePath)
         {
             string requestBody;
-            var cred = $"{config.testConfig.SapMockConfiguration.Username}:{config.testConfig.SapMockConfiguration.Password}";
+            var cred = $"{config.TestConfig.SapMockConfiguration.Username}:{config.TestConfig.SapMockConfiguration.Password}";
 
             using (StreamReader streamReader = new StreamReader(filePath))
             {
@@ -117,7 +117,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
             var request = new RestRequest("/z_adds_mat_info.asmx", Method.Post);
             request.AddHeader("Content-Type", "application/xml");
-            request.AddHeader("Authorization", "Basic " +Convert.ToBase64String(Encoding.UTF8.GetBytes(cred)));
+            request.AddHeader("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(cred)));
             request.AddParameter("application/xml", requestBody, ParameterType.RequestBody);
 
             RestResponse response = await client2.ExecuteAsync(request);

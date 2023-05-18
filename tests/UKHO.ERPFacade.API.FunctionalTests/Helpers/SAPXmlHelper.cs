@@ -2,8 +2,6 @@
 using Azure.Storage.Blobs.Models;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using System;
-using System.Reflection;
 using System.Xml;
 using System.Xml.Serialization;
 using UKHO.ERPFacade.API.FunctionalTests.Model;
@@ -15,20 +13,20 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         private static JsonPayloadHelper jsonPayloadHelper { get; set; }
 
         static int actionCounter;
-        
-        static List<string> AttrNotMatched = new List<string>();
+
+        static readonly List<string> AttrNotMatched = new List<string>();
         public static List<string> listFromJson = new List<string>();
         public static List<string> actionsListFromXml = new List<string>();
-        public static Config config=new Config();
+        public static Config config = new Config();
         private static JsonPayloadHelper jsonPayload { get; set; }
         private static SAPXmlPayload xmlPayload { get; set; }
 
         public static async Task<bool> CheckXMLAttributes(JsonPayloadHelper jsonPayload, string XMLFilePath)
         {
-            
+
             SAPXmlHelper.jsonPayload = jsonPayload;
 
-            
+
             XmlSerializer serializer = new XmlSerializer(typeof(SAPXmlPayload));
 
             using (Stream reader = new FileStream(XMLFilePath, FileMode.Open))
@@ -89,9 +87,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         AttrNotMatched.Add(nameof(item.PRODTYPE));
 
                     //Checking blanks
-                    string[] fieldNames = { "CANCELLED", "REPLACEDBY","AGENCY", "PROVIDER","ENCSIZE","TITLE","EDITIONNO","UPDATENO","UNITTYPE" };
+                    string[] fieldNames = { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE" };
                     var v = VerifyBlankFields(item, fieldNames);
-                    
+
                     if (AttrNotMatched.Count == 0)
                     {
                         Console.WriteLine("CANCEL AVCS UNIT OF SALE Action's Data is correct");
@@ -118,7 +116,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             Console.WriteLine("Action#:" + actionCounter + ".ENC Cell:" + childCell);
             foreach (Product product in jsonPayload.Data.Products)
             {
-                if ((childCell == product.ProductName) && (product.Status.StatusName.Equals("Cancellation Update")) && (product.InUnitsOfSale.Contains(productName)) )
+                if ((childCell == product.ProductName) && (product.Status.StatusName.Equals("Cancellation Update")) && (product.InUnitsOfSale.Contains(productName)))
                 {
                     AttrNotMatched.Clear();
                     if (!item.ACTIONNUMBER.Equals(actionCounter.ToString()))
@@ -154,7 +152,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             Console.WriteLine("JSON doesn't have corresponding product.");
             return false;
         }
-    
+
 
         private static bool? verifyRemoveENCCellFromAVCSUnitOFSale(string childCell, string productName, Item item)
         {
@@ -225,7 +223,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     if (!product.InUnitsOfSale.Contains(item.PRODUCTNAME))
                         AttrNotMatched.Add(nameof(item.PRODUCTNAME));
                     //Checking blanks
-                    string[] fieldNames = { "CANCELLED",  "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE" };
+                    string[] fieldNames = { "CANCELLED", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE" };
                     var v = VerifyBlankFields(item, fieldNames);
 
 
@@ -234,8 +232,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         Console.WriteLine("REPLACE WITH ENC CELL Action's Data is correct");
                         return true;
                     }
-        
-        
+
+
                     else
                     {
                         Console.WriteLine("REPLACE WITH ENC CELL Action's Data is incorrect");
@@ -256,8 +254,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         {
             //List<string> ActionAttributesSeq = formActionAtrributes();
             List<string> ActionAttributesSeq = new List<string>();
-            ActionAttributesSeq=config.testConfig.XMLActionList.ToList<string>();  
-               
+            ActionAttributesSeq = config.TestConfig.XMLActionList.ToList<string>();
+
             foreach (XmlNode node in nodeList)
             {
                 XmlNodeList dd = node.ChildNodes;
@@ -359,13 +357,13 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     var v = VerifyBlankFields(item, fieldNames);
 
                     if (AttrNotMatched.Count == 0)
-        {
+                    {
                         Console.WriteLine("CREATE AVCS UNIT OF SALE Action's Data is correct");
                         return true;
                     }
 
                     else
-            {
+                    {
                         Console.WriteLine("CREATE AVCS UNIT OF SALE Action's Data is incorrect");
                         Console.WriteLine("Not matching attributes are:");
                         foreach (string attribute in AttrNotMatched)
@@ -377,12 +375,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             }
             Console.WriteLine("JSON doesn't have corresponding Unit of Sale.");
             return false;
-            }
+        }
 
-        
+
         private static bool verifyCreateENCCell(string childCell, Item item)
         {
-           
+
             Console.WriteLine("Action#:" + actionCounter + ".Childcell:" + childCell);
             foreach (Product product in jsonPayload.Data.Products)
             {
@@ -419,10 +417,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     {
                         Console.WriteLine("CREATE ENC CELL Action's Data is correct");
                         return true;
-        }
+                    }
 
                     else
-        {
+                    {
                         Console.WriteLine("CREATE ENC CELL Action's Data is incorrect");
                         Console.WriteLine("Not matching attributes are:");
                         foreach (string attribute in AttrNotMatched)
@@ -436,7 +434,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return false;
 
 
-            
+
         }
         private static bool VerifyBlankFields(Item item, string[] fieldNames)
         {
@@ -458,7 +456,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 foreach (Product product in jsonPayload.Data.Products)
                 {
                     if (pdt.Equals(product.ProductName))
-            {
+                    {
                         productInfo.ProductType = product.ProductType[4..];
                         productInfo.Agency = product.Agency;
                         productInfo.ProviderCode = product.ProviderCode;
@@ -467,28 +465,28 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 }
             }
             return productInfo;
-            }
-        
-        public string downloadGeneratedXML(string expectedXMLfilePath,string containerAndBlobName)
-        {
-                BlobServiceClient blobServiceClient = new BlobServiceClient(config.testConfig.AzureStorageConfiguration.ConnectionString);
-                BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerAndBlobName);
-                BlobClient blobClient = containerClient.GetBlobClient(containerAndBlobName + ".xml");
+        }
 
-                BlobDownloadInfo blobDownload = blobClient.Download();
-                using (FileStream downloadFileStream = new FileStream((expectedXMLfilePath + "\\" + containerAndBlobName + ".xml"), FileMode.Create))
-                {
-                    blobDownload.Content.CopyTo(downloadFileStream);
-                }
+        public string downloadGeneratedXML(string expectedXMLfilePath, string containerAndBlobName)
+        {
+            BlobServiceClient blobServiceClient = new BlobServiceClient(config.TestConfig.AzureStorageConfiguration.ConnectionString);
+            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerAndBlobName);
+            BlobClient blobClient = containerClient.GetBlobClient(containerAndBlobName + ".xml");
+
+            BlobDownloadInfo blobDownload = blobClient.Download();
+            using (FileStream downloadFileStream = new FileStream((expectedXMLfilePath + "\\" + containerAndBlobName + ".xml"), FileMode.Create))
+            {
+                blobDownload.Content.CopyTo(downloadFileStream);
+            }
             return (expectedXMLfilePath + "\\" + containerAndBlobName + ".xml");
         }
 
-        public static string getRequiredXMLText(string generatedXMLFilePath,string tagName)
+        public static string getRequiredXMLText(string generatedXMLFilePath, string tagName)
         {
             XmlDocument xDoc = new XmlDocument();
             xDoc.Load(generatedXMLFilePath);
-            XmlNode node = xDoc.SelectSingleNode("//"+tagName);
-            
+            XmlNode node = xDoc.SelectSingleNode("//" + tagName);
+
 
             return node.InnerText;
         }
@@ -510,7 +508,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             }
         }
 
-        public static bool verifyInitialXMLHeaders(JsonPayloadHelper jsonPayload, string generatedXMLFilePath) 
+        public static bool verifyInitialXMLHeaders(JsonPayloadHelper jsonPayload, string generatedXMLFilePath)
         {
             bool b = verifyNOOFACTIONSHeader(jsonPayload, generatedXMLFilePath);
             bool a = verifyRECTIMEHeader(jsonPayload, generatedXMLFilePath);
@@ -522,12 +520,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 Console.WriteLine("XML headers are correct");
                 return true;
             }
-            else 
+            else
             {
                 Console.WriteLine("XML headers are incorrect");
                 return false;
             }
-            
+
         }
 
         public static bool verifyRECTIMEHeader(JsonPayloadHelper jsonPayload, string generatedXMLFilePath)
@@ -675,12 +673,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     count++;
                 }
             }
-            
-            if(count > 0) 
-            { 
+
+            if (count > 0)
+            {
                 updateActionList(count, "1.  CREATE ENC CELL");
             }
-            
+
             Console.WriteLine("Total no. of Create ENC Cell: " + count);
             return count;
         }
@@ -697,12 +695,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     newUoSCount++;
                 }
             }
-            
+
             if (newUoSCount > 0)
             {
                 updateActionList(newUoSCount, "2.  CREATE AVCS UNIT OF SALE");
             }
-            
+
             Console.WriteLine("Total no. of Create AVCS Unit of Sale: " + newUoSCount);
             return newUoSCount;
         }
@@ -720,7 +718,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             {
                 updateActionList(count, "3.  ASSIGN CELL TO AVCS UNIT OF SALE");
             }
-            
+
             Console.WriteLine("Total no. of Assign Cell to AVCS UoS: " + count);
             return count;
         }
@@ -875,6 +873,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             Console.WriteLine("Total No. of Cancel AVCS UoS: " + cancelledUoSCount);
             return cancelledUoSCount;
         }
-        
+
     }
 }
