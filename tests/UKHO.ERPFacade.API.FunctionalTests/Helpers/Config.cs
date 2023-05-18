@@ -5,7 +5,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
     public class Config
     {
-        public TestConfig testConfig { get; set; }
+        public TestConfig TestConfig { get; set; }
 
         public Config()
         {
@@ -14,8 +14,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                                .AddEnvironmentVariables()
                                .Build();
 
-            testConfig = new();
-            ConfigurationRoot.Bind(testConfig);
+            TestConfig = new();
+            ConfigurationRoot.Bind(TestConfig);
         }
     }
 }

@@ -3,9 +3,6 @@ using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using System;
-using System.Data.SqlTypes;
-using System.Reflection;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
@@ -19,18 +16,18 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         private static JsonPayloadHelper jsonPayloadHelper { get; set; }
 
         static int actionCounter;
-        
-        static List<string> AttrNotMatched = new List<string>();
+
+        static readonly List<string> AttrNotMatched = new List<string>();
         public static List<string> listFromJson = new List<string>();
         public static List<string> actionsListFromXml = new List<string>();
-        public static Config config=new Config();
+        public static Config config = new Config();
         private static JsonPayloadHelper jsonPayload { get; set; }
         //private static SAPXmlPayload xmlPayload { get; set; }
         private static Z_ADDS_MAT_INFO xmlPayload { get; set; }
 
         public static async Task<bool> CheckXMLAttributes(JsonPayloadHelper jsonPayload, string XMLFilePath)
         {
-            
+
             SAPXmlHelper.jsonPayload = jsonPayload;
             XmlDocument xDoc = new XmlDocument();
             //load up the xml from the location 
@@ -271,7 +268,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         {
             //List<string> ActionAttributesSeq = formActionAtrributes();
             List<string> ActionAttributesSeq = new List<string>();
-            ActionAttributesSeq = config.testConfig.XMLActionList.ToList<string>();
+            ActionAttributesSeq = config.TestConfig.XMLActionList.ToList<string>();
 
             foreach (XmlNode node in nodeList)
             {
@@ -489,7 +486,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         {
             //List<string> ActionAttributesSeq = formActionAtrributes();
             List<string> ActionAttributesSeq = new List<string>();
-            ActionAttributesSeq = config.testConfig.XMLActionList.ToList<string>();
+            ActionAttributesSeq = config.TestConfig.XMLActionList.ToList<string>();
 
             foreach (XmlNode node in nodeList)
             {
@@ -516,19 +513,19 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         }
         public string downloadGeneratedXML(string expectedXMLfilePath,string containerAndBlobName)
         {
-                BlobServiceClient blobServiceClient = new BlobServiceClient(config.testConfig.AzureStorageConfiguration.ConnectionString);
-                BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerAndBlobName);
-                BlobClient blobClient = containerClient.GetBlobClient(containerAndBlobName + ".xml");
+            BlobServiceClient blobServiceClient = new BlobServiceClient(config.TestConfig.AzureStorageConfiguration.ConnectionString);
+            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerAndBlobName);
+            BlobClient blobClient = containerClient.GetBlobClient(containerAndBlobName + ".xml");
 
-                BlobDownloadInfo blobDownload = blobClient.Download();
-                using (FileStream downloadFileStream = new FileStream((expectedXMLfilePath + "\\" + containerAndBlobName + ".xml"), FileMode.Create))
-                {
-                    blobDownload.Content.CopyTo(downloadFileStream);
-                }
+            BlobDownloadInfo blobDownload = blobClient.Download();
+            using (FileStream downloadFileStream = new FileStream((expectedXMLfilePath + "\\" + containerAndBlobName + ".xml"), FileMode.Create))
+            {
+                blobDownload.Content.CopyTo(downloadFileStream);
+            }
             return (expectedXMLfilePath + "\\" + containerAndBlobName + ".xml");
         }
 
-        public static string getRequiredXMLText(string generatedXMLFilePath,string tagName)
+        public static string getRequiredXMLText(string generatedXMLFilePath, string tagName)
         {
             XmlDocument xDoc = new XmlDocument();
             //xDoc.Load(generatedXMLFilePath);
@@ -556,7 +553,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             }
         }
 
-        public static bool verifyInitialXMLHeaders(JsonPayloadHelper jsonPayload, string generatedXMLFilePath) 
+        public static bool verifyInitialXMLHeaders(JsonPayloadHelper jsonPayload, string generatedXMLFilePath)
         {
             bool b = verifyNOOFACTIONSHeader(jsonPayload, generatedXMLFilePath);
             bool a = verifyRECTIMEHeader(jsonPayload, generatedXMLFilePath);
@@ -568,12 +565,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 Console.WriteLine("XML headers are correct");
                 return true;
             }
-            else 
+            else
             {
                 Console.WriteLine("XML headers are incorrect");
                 return false;
             }
-            
+
         }
 
         public static bool verifyRECTIMEHeader(JsonPayloadHelper jsonPayload, string generatedXMLFilePath)
@@ -730,9 +727,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     count++;
                 }
             }
-            
-            if(count > 0) 
-            { 
+
+            if (count > 0)
+            {
                 updateActionList(count, "1.  CREATE ENC CELL");
                 Console.WriteLine("Total no. of Create ENC Cell: " + count);
             }
@@ -753,7 +750,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     newUoSCount++;
                 }
             }
-            
+
             if (newUoSCount > 0)
             {
                 updateActionList(newUoSCount, "2.  CREATE AVCS UNIT OF SALE");
@@ -940,6 +937,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             
             return cancelledUoSCount;
         }
-        
+
     }
 }
