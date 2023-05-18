@@ -11,7 +11,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         private SAPXmlHelper SapXmlHelper { get; set; }
         private readonly ADAuthTokenProvider _authToken = new();
         public static Boolean noRole = false;
-        private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
+        private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
         //private static readonly string _webhookPayloadFilePath = "ERPFacadePayloadTestData/WebhookPayload.JSON";
 
         [SetUp]
