@@ -45,7 +45,7 @@ stages:
           - task: Powershell@2
             displayName: "Run Stryker for ERP Facade API"
             inputs:
-              workingDirectory: '$(Build.SourcesDirectory)/src/UKHO.ERPFacade.API'
+              workingDirectory: '$(Build.SourcesDirectory)/tests/UKHO.ERPFacade.API.UnitTests'
               targetType: 'inline'
               pwsh: true
               script: $(Agent.BuildDirectory)/tools/dotnet-stryker
@@ -59,7 +59,7 @@ stages:
           - task: Powershell@2
             displayName: "Run Stryker for WebJob Project"
             inputs:
-              workingDirectory: '$(Build.SourcesDirectory)/src/UKHO.ERPFacade.WebJob'
+              workingDirectory: '$(Build.SourcesDirectory)/tests/UKHO.ERPFacade.WebJob.UnitTests'
               targetType: 'inline'
               pwsh: true
               script: $(Agent.BuildDirectory)/tools/dotnet-stryker
@@ -73,7 +73,7 @@ stages:
           - task: Powershell@2
             displayName: "Run Stryker for Common Project"
             inputs:
-              workingDirectory: '$(Build.SourcesDirectory)/src/UKHO.ERPFacade.Common'
+              workingDirectory: '$(Build.SourcesDirectory)/src/UKHO.ERPFacade.Common.UnitTests'
               targetType: 'inline'
               pwsh: true
               script: $(Agent.BuildDirectory)/tools/dotnet-stryker
@@ -84,19 +84,19 @@ stages:
               reportPattern: '**/mutation-report.html'
               reportDisplayName: 'CommonStryker Report'
 
-          - task: Powershell@2
-            displayName: "Run Stryker ERP Facade Tests"
-            inputs:
-              workingDirectory: '$(Build.SourcesDirectory)/tests/UKHO.ERPFacade.API.UnitTests'
-              targetType: 'inline'
-              pwsh: true
-              script: $(Agent.BuildDirectory)/tools/dotnet-stryker
+          #- task: Powershell@2
+          #  displayName: "Run Stryker ERP Facade Tests"
+          #  inputs:
+          #    workingDirectory: '$(Build.SourcesDirectory)/tests/UKHO.ERPFacade.API.UnitTests'
+          #    targetType: 'inline'
+          #    pwsh: true
+          #    script: $(Agent.BuildDirectory)/tools/dotnet-stryker
 
-          - task: PublishMutationReport@0
-            displayName: 'Publish Strkyer Mutator Report : ERP Facade Tests'
-            inputs:
-              reportPattern: '**/mutation-report.html'
-              reportDisplayName: 'ERPFacade Tests report'
+          #- task: PublishMutationReport@0
+          #  displayName: 'Publish Strkyer Mutator Report : ERP Facade Tests'
+          #  inputs:
+          #    reportPattern: '**/mutation-report.html'
+          #    reportDisplayName: 'ERPFacade Tests report'
 
   - stage: PERFORM_DEPENDENCYCHECK_DOTNETBUILD_DOTNETTEST_AND_PUBLISH
     displayName: "Build (DependencyChecker, Dotnet Build & Restore , Dotnet Test and Publish Artifact )"
