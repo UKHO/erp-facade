@@ -30,6 +30,9 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ERPFacadePayloadTestData\2CellMetadataChange.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ERPFacadePayloadTestData\2NewCellScenario.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -48,13 +51,28 @@
     <None Update="ERPFacadePayloadTestData\1CellCancel.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPFacadePayloadTestData\3CellsReplace2CellsCancel.JSON">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="ERPFacadePayloadTestData\2CellsReplace1CellsCancel.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ERPFacadePayloadTestData\cellMove.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\MetadataChange.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ERPFacadePayloadTestData\SapMockApiConfigure.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\updateOneCellWithNewEditionStatus.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\updateOneCellWithReIssueStatus.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\UpdateSimple.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\updateTwoCellsWithDifferentStatusName.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPFacadePayloadTestData\WebhookPayload.JSON">

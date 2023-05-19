@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using RestSharp;
 using System.Text;
@@ -44,7 +45,11 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 requestBody = streamReader.ReadToEnd();
             }
 
+            requestBody = SAPXmlHelper.updateTimeField(requestBody);
+
             var request = new RestRequest("/webhook/newenccontentpublishedeventreceived", Method.Post);
+            var now1 = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.fffffff'z'");
+
             request.AddHeader("Content-Type", "application/json");
             request.AddHeader("Authorization", "Bearer " + token);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
@@ -53,7 +58,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return response;
         }
 
-        public async Task<RestResponse> PostWebhookResponseAsyncForXML(string filePath, string expectedXMLfilePath, string token)
+        public async Task<RestResponse> PostWebhookResponseAsyncForXML(string filePath, string generatedXMLFolder, string token)
         {
             string requestBody;
 
@@ -61,6 +66,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             {
                 requestBody = streamReader.ReadToEnd();
             }
+
+            requestBody = SAPXmlHelper.updateTimeField(requestBody);
 
             var request = new RestRequest("/webhook/newenccontentpublishedeventreceived", Method.Post);
             request.AddHeader("Content-Type", "application/json");
@@ -72,9 +79,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             string traceID = jsonPayload.Data.TraceId;
 
             //Logic to download XML from container using TraceID from JSON
-            //string generatedXMLFilePath = SapXmlHelper.downloadGeneratedXML(expectedXMLfilePath,traceID); // string path will be returned
+            string generatedXMLFilePath = SapXmlHelper.downloadGeneratedXML(generatedXMLFolder, traceID); // string path will be returned
 
-            string generatedXMLFilePath = expectedXMLfilePath;
+
             //Logic to verifyxml
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
@@ -100,8 +107,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
             RestResponse response = await client.ExecuteAsync(request);
 
-
-
             return response;
         }
 
@@ -115,10 +120,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 requestBody = streamReader.ReadToEnd();
             }
 
-            var request = new RestRequest("/z_adds_mat_info.asmx", Method.Post);
+            var request = new RestRequest("/api/ConfigureTestCase/SAPInternalServerError500", Method.Post);
             request.AddHeader("Content-Type", "application/xml");
             request.AddHeader("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(cred)));
-            request.AddParameter("application/xml", requestBody, ParameterType.RequestBody);
+            //request.AddParameter("application/xml", requestBody, ParameterType.RequestBody);
 
             RestResponse response = await client2.ExecuteAsync(request);
         }
