@@ -8,5 +8,7 @@ namespace UKHO.ERPFacade.API.Services
         List<UnitsOfSalePrices> BuildUnitOfSalePricePayload(List<PriceInformationEvent> priceInformationList);
 
         JObject BuildPriceEventPayload(List<UnitsOfSalePrices> unitsOfSalePriceList, string exisitingEesEvent);
+
+        JObject BuildBulkPriceEventPayload(UnitsOfSalePrices unitsOfSalePriceList);
     }
 }

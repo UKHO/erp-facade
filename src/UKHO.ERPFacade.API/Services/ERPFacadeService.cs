@@ -127,6 +127,26 @@ namespace UKHO.ERPFacade.API.Services
             return unitOfSalePriceEventPayloadJson;
         }
 
+        public JObject BuildBulkPriceEventPayload(UnitsOfSalePrices unitsOfSalePriceList)
+        {
+            BulkPriceEventPayload bulkPriceEventPayload = new();
+            BulkPriceEventData bulkPriceEventData = new();
+
+            bulkPriceEventData.TraceId = Guid.NewGuid().ToString();
+            bulkPriceEventData.UnitsOfSalePrices = unitsOfSalePriceList;
+
+            bulkPriceEventPayload.SpecVersion = "1.0";
+            bulkPriceEventPayload.Type = "uk.gov.ukho.erp.bulkpricechange.v1";
+            bulkPriceEventPayload.Source = "https://erp.ukho.gov.uk";
+            bulkPriceEventPayload.Id = Guid.NewGuid().ToString();
+            bulkPriceEventPayload.Time = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ");
+            bulkPriceEventPayload.Data = bulkPriceEventData;
+
+            JObject bulkPriceEventPayloadJson = JObject.Parse(JsonConvert.SerializeObject(bulkPriceEventPayload));
+
+            return bulkPriceEventPayloadJson;
+        }
+
         //private methods
         private static Price BuildPricePayload(string duration, string rrp, DateTimeOffset date, string currency)
         {

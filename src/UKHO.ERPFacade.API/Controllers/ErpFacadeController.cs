@@ -82,8 +82,31 @@ namespace UKHO.ERPFacade.API.Controllers
                 var eventSize = CommonHelper.GetEventSize(eesPriceEventPayloadJson);
                 if (eventSize > EventSizeLimit)
                 {
-                    _logger.LogWarning("EES Price Event size exceeds the limit of 1 MB");
+                    _logger.LogWarning("EES Price Event exceeds the size limit of 1 MB");
                     throw new Exception();
+                }
+            }
+
+            return new OkObjectResult(StatusCodes.Status200OK);
+        }
+
+        [HttpPost]
+        [Route("/erpfacade/bulkpriceinformation")]
+        public virtual async Task<IActionResult> PostBulkPriceInformation([FromBody] JArray requestJson)
+        {
+            _logger.LogInformation("ERP Facade has received bulk price event from SAP.");
+
+            List<PriceInformationEvent> bulkpriceInformationList = JsonConvert.DeserializeObject<List<PriceInformationEvent>>(requestJson.ToString());
+
+            if (bulkpriceInformationList.Count > 0)
+            {
+                List<UnitsOfSalePrices> unitsOfSalePriceList = _erpFacadeService.BuildUnitOfSalePricePayload(bulkpriceInformationList);
+                
+                foreach(var priceList  in unitsOfSalePriceList)
+                {
+                    JObject eesBulkPriceEventPayloadJson = _erpFacadeService.BuildBulkPriceEventPayload(priceList);
+
+                    //Add code to publish this event to EES
                 }
             }
 

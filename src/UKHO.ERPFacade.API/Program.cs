@@ -4,6 +4,7 @@ using Azure.Security.KeyVault.Secrets;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Newtonsoft.Json.Serialization;
 using Serilog;
 using System.Diagnostics.CodeAnalysis;
@@ -153,6 +154,11 @@ namespace UKHO.ERPFacade
             }).AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            });
+
+            builder.Services.Configure<KestrelServerOptions>(options =>
+            {
+                options.Limits.MaxRequestBodySize = 50 * 1024 * 1024;
             });
 
             builder.Services.Configure<AzureStorageConfiguration>(configuration.GetSection("AzureStorageConfiguration"));
