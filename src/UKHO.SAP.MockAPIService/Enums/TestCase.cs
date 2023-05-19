@@ -2,6 +2,7 @@
 {
     public enum TestCase
     {
-        InternalServerError500 = 1
+        SAPInternalServerError500 = 1,
+        EESInternalServerError401 = 2
     }
 }

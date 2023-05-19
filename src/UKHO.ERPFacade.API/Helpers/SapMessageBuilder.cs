@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
+using System.Linq;
 using System.Xml;
 using UKHO.ERPFacade.API.Models;
 using UKHO.ERPFacade.Common.IO;
@@ -27,8 +28,11 @@ namespace UKHO.ERPFacade.API.Helpers
         private const string Product = "PRODUCT";
         private const string ProductSection = "Product";
         private const string ReplacedBy = "REPLACEDBY";
+        private const string ChildCell = "CHILDCELL";
         private const string ProdType = "PRODTYPE";
         private const string UnitOfSaleSection = "UnitOfSale";
+        private const string NotForSale = "NotForSale";
+        private const string UnitSaleType = "unit";
 
         public SapMessageBuilder(ILogger<SapMessageBuilder> logger,
                                  IXmlHelper xmlHelper,
@@ -67,7 +71,7 @@ namespace UKHO.ERPFacade.API.Helpers
 
             foreach (var scenario in scenarios)
             {
-                _logger.LogInformation(EventIds.BuildingSapActionStarted.ToEventId(), "Building SAP actions for scenario {Scenario}.", scenario);
+                _logger.LogInformation(EventIds.BuildingSapActionStarted.ToEventId(), "Building SAP actions for {Scenario} scenario.", scenario.ScenarioType.ToString());
 
                 ActionNumber actionNumbers = _actionNumberConfig.Value.Actions.Where(x => x.Scenario == scenario.ScenarioType.ToString()).FirstOrDefault();
                 List<int> actions = actionNumbers.ActionNumbers.ToList();
@@ -78,38 +82,95 @@ namespace UKHO.ERPFacade.API.Helpers
 
                     switch (action.ActionNumber)
                     {
-                        case 2:
-                            var unitOfSale = scenario.UnitOfSales.Where(x => x.UnitName == scenario.Product.ProductName).FirstOrDefault();
-                            if (unitOfSale.IsNewUnitOfSale)
+                        case 1:
+                            var uosUnitOfSaleType = scenario.UnitOfSales.Where(x => x.UnitOfSaleType == UnitSaleType).FirstOrDefault();
+                            if (uosUnitOfSaleType != null)
                             {
-                                actionNode = BuildAction(soapXml, scenario, action, scenario.Product.ProductName);
-                                actionItemNode.AppendChild(actionNode);
+                                actionNode = BuildAction(soapXml, scenario, action, uosUnitOfSaleType.UnitName);
+                                if (!actionItemNode.InnerXml.Contains(actionNode.InnerXml))
+                                    actionItemNode.AppendChild(actionNode);
                             }
                             break;
-
+                        case 2:
+                            var unitOfSale = scenario.UnitOfSales.Where(x => x.UnitName == scenario.Product.ProductName).FirstOrDefault();
+                            if (unitOfSale != null && unitOfSale.IsNewUnitOfSale)
+                            {
+                                actionNode = BuildAction(soapXml, scenario, action, scenario.Product.ProductName);
+                                if (!actionItemNode.InnerXml.Contains(actionNode.InnerXml))
+                                    actionItemNode.AppendChild(actionNode);
+                            }
+                            break;
                         case 3:
-                        case 8:
+                            foreach (var cell in scenario.InUnitOfSales)
+                            {
+                                var uos = scenario.UnitOfSales.Where(x => x.UnitName == cell).FirstOrDefault();
+
+                                if (uos != null)
+                                {
+                                    foreach (var product in uos.CompositionChanges.AddProducts)
+                                    {
+                                        actionNode = BuildAction(soapXml, scenario, action, cell, product);
+                                        if (!actionItemNode.InnerXml.Contains(actionNode.InnerXml))
+                                            actionItemNode.AppendChild(actionNode);
+                                    }
+                                }
+                            }
+                            break;
+                        case 4:
+                            foreach (var cell in scenario.InUnitOfSales)
+                            {
+                                var uos = scenario.UnitOfSales.Where(x => x.UnitOfSaleType == UnitSaleType && x.UnitName == cell).FirstOrDefault();
+                                if (uos != null)
+                                {
+                                    foreach (var product in scenario.Product.ReplacedBy)
+                                    {
+                                        actionNode = BuildAction(soapXml, scenario, action, cell, null, product);
+                                        if (!actionItemNode.InnerXml.Contains(actionNode.InnerXml))
+                                            actionItemNode.AppendChild(actionNode);
+                                    }
+                                }
+                            }
+                            break;
+                        case 6:
                             foreach (var cell in scenario.InUnitOfSales)
                             {
                                 actionNode = BuildAction(soapXml, scenario, action, cell);
-                                actionItemNode.AppendChild(actionNode);
+                                if (!actionItemNode.InnerXml.Contains(actionNode.InnerXml))
+                                    actionItemNode.AppendChild(actionNode);
                             }
                             break;
-
-                        case 4:
-                            foreach (var cell in scenario.Product.ReplacedBy)
+                        case 8:
+                            foreach (var cell in scenario.InUnitOfSales)
                             {
-                                actionNode = BuildAction(soapXml, scenario, action, cell);
-                                actionItemNode.AppendChild(actionNode);
+                                var uos = scenario.UnitOfSales.Where(x => x.UnitName == cell).FirstOrDefault();
+
+                                if (uos != null)
+                                {
+                                    foreach (var product in uos.CompositionChanges.RemoveProducts)
+                                    {
+                                        actionNode = BuildAction(soapXml, scenario, action, cell);
+                                        if (!actionItemNode.InnerXml.Contains(actionNode.InnerXml))
+                                            actionItemNode.AppendChild(actionNode);
+                                    }
+                                }
+                            }
+                            break;                       
+                        case 10:
+                            var uosNotForSale = scenario.UnitOfSales.Where(x => x.Status == NotForSale).FirstOrDefault();
+                            if (uosNotForSale != null)
+                            {
+                                actionNode = BuildAction(soapXml, scenario, action, uosNotForSale.UnitName);
+                                if (!actionItemNode.InnerXml.Contains(actionNode.InnerXml))
+                                    actionItemNode.AppendChild(actionNode);
                             }
                             break;
-
                         default:
                             actionNode = BuildAction(soapXml, scenario, action, scenario.Product.ProductName);
-                            actionItemNode.AppendChild(actionNode);
+                            if (!actionItemNode.InnerXml.Contains(actionNode.InnerXml))
+                                actionItemNode.AppendChild(actionNode);
                             break;
                     }
-                    _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created for {Scenario}.", action.Action, scenario);
+                    _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created for {Scenario}.", action.Action, scenario.ScenarioType.ToString());
                 }
             }
 
@@ -155,7 +216,7 @@ namespace UKHO.ERPFacade.API.Helpers
             return actionItemNode;
         }
 
-        private static XmlElement BuildAction(XmlDocument soapXml, Scenario scenario, SapAction action, string cell)
+        private static XmlElement BuildAction(XmlDocument soapXml, Scenario scenario, SapAction action, string cell, string childCell = null, string replacedByProduct = null)
         {
             XmlElement itemNode = soapXml.CreateElement(Item);
 
@@ -180,9 +241,13 @@ namespace UKHO.ERPFacade.API.Helpers
 
                 if (node.IsRequired)
                 {
-                    if (node.XmlNodeName == ReplacedBy)
+                    if (node.XmlNodeName == ReplacedBy && replacedByProduct != null)
                     {
-                        itemSubNode.InnerText = GetXmlNodeValue(cell.ToString());
+                        itemSubNode.InnerText = GetXmlNodeValue(replacedByProduct.ToString());
+                    }
+                    else if (node.XmlNodeName == ChildCell && childCell != null)
+                    {
+                        itemSubNode.InnerText = GetXmlNodeValue(childCell.ToString());
                     }
                     else
                     {
@@ -204,9 +269,15 @@ namespace UKHO.ERPFacade.API.Helpers
                 if (node.IsRequired)
                 {
                     UnitOfSale unitOfSale = scenario.UnitOfSales.Where(x => x.UnitName == cell).FirstOrDefault();
-
-                    object jsonFieldValue = CommonHelper.ParseXmlNode(node.JsonPropertyName, unitOfSale, unitOfSale.GetType());
-                    itemSubNode.InnerText = GetXmlNodeValue(jsonFieldValue.ToString());
+                    if (unitOfSale != null)
+                    {
+                        object jsonFieldValue = CommonHelper.ParseXmlNode(node.JsonPropertyName, unitOfSale, unitOfSale.GetType());
+                        itemSubNode.InnerText = GetXmlNodeValue(jsonFieldValue.ToString());
+                    }
+                    else
+                    {
+                        itemSubNode.InnerText = string.Empty;
+                    }
                 }
                 else
                 {
