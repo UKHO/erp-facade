@@ -3,9 +3,6 @@ using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using System;
-using System.Data.SqlTypes;
-using System.Reflection;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
@@ -454,11 +451,11 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return false;
         }
 
-        /*  public static async Task<bool> VerifyPresenseOfMandatoryXMLAtrributes(XmlNodeList nodeList)
-            {
-                //List<string> ActionAttributesSeq = formActionAtrributes();
-                List<string> ActionAttributesSeq = new List<string>();
-                ActionAttributesSeq = config.testConfig.XMLActionList.ToList<string>();
+    /*  public static async Task<bool> VerifyPresenseOfMandatoryXMLAtrributes(XmlNodeList nodeList)
+        {
+            //List<string> ActionAttributesSeq = formActionAtrributes();
+            List<string> ActionAttributesSeq = new List<string>();
+            ActionAttributesSeq = config.TestConfig.XMLActionList.ToList<string>();
 
                 foreach (XmlNode node in nodeList)
                 {
@@ -691,7 +688,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         {
             //List<string> ActionAttributesSeq = formActionAtrributes();
             List<string> ActionAttributesSeq = new List<string>();
-            ActionAttributesSeq = config.testConfig.XMLActionList.ToList<string>();
+            ActionAttributesSeq = config.TestConfig.XMLActionList.ToList<string>();
 
             foreach (XmlNode node in nodeList)
             {
@@ -718,7 +715,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         }
         public string downloadGeneratedXML(string expectedXMLfilePath, string containerAndBlobName)
         {
-            BlobServiceClient blobServiceClient = new BlobServiceClient(config.testConfig.AzureStorageConfiguration.ConnectionString);
+            BlobServiceClient blobServiceClient = new BlobServiceClient(config.TestConfig.AzureStorageConfiguration.ConnectionString);
             BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerAndBlobName);
             BlobClient blobClient = containerClient.GetBlobClient(containerAndBlobName + ".xml");
 
