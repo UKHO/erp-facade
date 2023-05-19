@@ -14,6 +14,7 @@ using UKHO.ERPFacade.API.Helpers;
 using UKHO.ERPFacade.API.Models;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.HttpClients;
+using UKHO.ERPFacade.Common.Infrastructure;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.Logging.EventHubLogProvider;
@@ -164,6 +165,8 @@ namespace UKHO.ERPFacade
             mappingConfiguration = configuration.GetSection("ScenarioRuleConfiguration").Get<ScenarioRuleConfiguration>()!;
             actionNumberConfiguration = configuration.GetSection("ActionNumberConfiguration").Get<ActionNumberConfiguration>()!;
             sapActionConfiguration = configuration.GetSection("SapActionConfiguration").Get<SapActionConfiguration>()!;
+
+            builder.Services.AddInfrastructure();
 
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
