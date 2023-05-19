@@ -446,32 +446,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return false;
         }
 
-        /*  public static async Task<bool> VerifyPresenseOfMandatoryXMLAtrributes(XmlNodeList nodeList)
-            {
-                //List<string> ActionAttributesSeq = formActionAtrributes();
-                List<string> ActionAttributesSeq = new List<string>();
-                ActionAttributesSeq = config.TestConfig.XMLActionList.ToList<string>();
-
-                    foreach (XmlNode node in nodeList)
-                    {
-                        XmlNodeList dd = node.ChildNodes;
-
-                        for (int i = 0; i < 15; i++)
-                        {
-                            if (dd[i].Name != ActionAttributesSeq[i])
-                            {
-                                Console.WriteLine("First missed Attribute is:" + ActionAttributesSeq[i] + " for action number:" + dd[0].InnerText);
-                                return false;
-                            }
-                        }
-
-                    }
-                    Console.WriteLine("Mandatory atrributes are present in all XML actions");
-                    await Task.CompletedTask;
-                    return true;
-                }
-            */
-
         private static bool verifyAssignCellToAVCSUnitOfSale(string childCell, string productName, Item item)
         {
 
@@ -841,7 +815,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         {
             actionsListFromXml.Clear();
             XmlDocument xDoc = new XmlDocument();
-            //xDoc.Load(downloadedXMLFilePath);
             xDoc.LoadXml(File.ReadAllText(downloadedXMLFilePath));
             XmlNodeList nodeList = xDoc.SelectNodes("//ACTION");
 

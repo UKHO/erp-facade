@@ -79,8 +79,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             string traceID = jsonPayload.Data.TraceId;
 
             //Logic to download XML from container using TraceID from JSON
-            string generatedXMLFilePath = SapXmlHelper.downloadGeneratedXML(generatedXMLFolder, traceID); // string path will be returned
-
+            string generatedXMLFilePath = SapXmlHelper.downloadGeneratedXML(generatedXMLFolder, traceID);
 
             //Logic to verifyxml
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
@@ -123,7 +122,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             var request = new RestRequest("/api/ConfigureTestCase/SAPInternalServerError500", Method.Post);
             request.AddHeader("Content-Type", "application/xml");
             request.AddHeader("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(cred)));
-            //request.AddParameter("application/xml", requestBody, ParameterType.RequestBody);
 
             RestResponse response = await client2.ExecuteAsync(request);
         }
