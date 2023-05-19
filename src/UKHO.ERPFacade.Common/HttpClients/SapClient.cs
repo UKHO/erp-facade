@@ -15,7 +15,7 @@ namespace UKHO.ERPFacade.Common.HttpClients
         public SapClient(HttpClient httpClient, IOptions<SapConfiguration> sapConfig)
         {
             _httpClient = httpClient;
-            _sapConfig = sapConfig;
+            _sapConfig = sapConfig ?? throw new ArgumentNullException(nameof(sapConfig));
 
             var credentials = "Basic " + Convert.ToBase64String(Encoding.ASCII.GetBytes(_sapConfig.Value.Username + ":" + _sapConfig.Value.Password));
 

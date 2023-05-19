@@ -1,6 +1,5 @@
 ﻿using FakeItEasy;
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.WebJob.Services;
@@ -10,7 +9,6 @@ namespace UKHO.ERPFacade.WebJob.UnitTests.Services
     [TestFixture]
     public class MonitoringServiceTests
     {
-        private ILogger<MonitoringService> _fakeLogger;
         private IAzureTableReaderWriter _fakeAzureTableReaderWriter;
 
         private MonitoringService _fakeMonitoringService;
@@ -18,9 +16,8 @@ namespace UKHO.ERPFacade.WebJob.UnitTests.Services
         [SetUp]
         public void Setup()
         {
-            _fakeLogger = A.Fake<ILogger<MonitoringService>>();
             _fakeAzureTableReaderWriter = A.Fake<IAzureTableReaderWriter>();
-            _fakeMonitoringService = new MonitoringService(_fakeLogger, _fakeAzureTableReaderWriter);
+            _fakeMonitoringService = new MonitoringService(_fakeAzureTableReaderWriter);
         }
 
         [Test]
@@ -34,28 +31,21 @@ namespace UKHO.ERPFacade.WebJob.UnitTests.Services
         [Test]
         public void WhenValidateEntityThrowsException_ThenThrowsException()
         {
-
             A.CallTo(() => _fakeAzureTableReaderWriter.ValidateAndUpdateIsNotifiedEntity()).Throws(new NotSupportedException("Fake Exception"));
 
             var ex = Assert.Throws<NotSupportedException>(() =>
                 _fakeMonitoringService.MonitorIncompleteTransactions());
 
             Assert.That(ex.Message, Is.EqualTo("Fake Exception"));
-
         }
 
         [Test]
         public void Does_Constructor_Throws_ArgumentNullException_When_Paramter_Is_Null()
         {
             Assert.Throws<ArgumentNullException>(
-             () => new MonitoringService(_fakeLogger, null))
+             () => new MonitoringService(null))
              .ParamName
              .Should().Be("azureTableReaderWriter");
-
-            Assert.Throws<ArgumentNullException>(
-             () => new MonitoringService(null, _fakeAzureTableReaderWriter))
-             .ParamName
-             .Should().Be("logger");
         }
     }
 }
