@@ -87,7 +87,8 @@ namespace UKHO.ERPFacade.API.Helpers
                             if (uosUnitOfSaleType != null)
                             {
                                 actionNode = BuildAction(soapXml, scenario, action, uosUnitOfSaleType.UnitName);
-                                actionItemNode.AppendChild(actionNode);
+                                if (!actionItemNode.InnerXml.Contains(actionNode.InnerXml))
+                                    actionItemNode.AppendChild(actionNode);
                             }
                             break;
                         case 2:
@@ -95,7 +96,8 @@ namespace UKHO.ERPFacade.API.Helpers
                             if (unitOfSale != null && unitOfSale.IsNewUnitOfSale)
                             {
                                 actionNode = BuildAction(soapXml, scenario, action, scenario.Product.ProductName);
-                                actionItemNode.AppendChild(actionNode);
+                                if (!actionItemNode.InnerXml.Contains(actionNode.InnerXml))
+                                    actionItemNode.AppendChild(actionNode);
                             }
                             break;
                         case 3:
@@ -123,7 +125,8 @@ namespace UKHO.ERPFacade.API.Helpers
                                     foreach (var product in scenario.Product.ReplacedBy)
                                     {
                                         actionNode = BuildAction(soapXml, scenario, action, cell, null, product);
-                                        actionItemNode.AppendChild(actionNode);
+                                        if (!actionItemNode.InnerXml.Contains(actionNode.InnerXml))
+                                            actionItemNode.AppendChild(actionNode);
                                     }
                                 }
                             }
@@ -146,7 +149,8 @@ namespace UKHO.ERPFacade.API.Helpers
                                     foreach (var product in uos.CompositionChanges.RemoveProducts)
                                     {
                                         actionNode = BuildAction(soapXml, scenario, action, cell);
-                                        actionItemNode.AppendChild(actionNode);
+                                        if (!actionItemNode.InnerXml.Contains(actionNode.InnerXml))
+                                            actionItemNode.AppendChild(actionNode);
                                     }
                                 }
                             }
@@ -156,12 +160,14 @@ namespace UKHO.ERPFacade.API.Helpers
                             if (uosNotForSale != null)
                             {
                                 actionNode = BuildAction(soapXml, scenario, action, uosNotForSale.UnitName);
-                                actionItemNode.AppendChild(actionNode);
+                                if (!actionItemNode.InnerXml.Contains(actionNode.InnerXml))
+                                    actionItemNode.AppendChild(actionNode);
                             }
                             break;
                         default:
                             actionNode = BuildAction(soapXml, scenario, action, scenario.Product.ProductName);
-                            actionItemNode.AppendChild(actionNode);
+                            if (!actionItemNode.InnerXml.Contains(actionNode.InnerXml))
+                                actionItemNode.AppendChild(actionNode);
                             break;
                     }
                     _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created for {Scenario}.", action.Action, scenario.ScenarioType.ToString());
