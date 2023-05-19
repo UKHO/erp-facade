@@ -73,7 +73,7 @@ stages:
           - task: Powershell@2
             displayName: "Run Stryker for Common Project"
             inputs:
-              workingDirectory: '$(Build.SourcesDirectory)/src/UKHO.ERPFacade.Common.UnitTests'
+              workingDirectory: '$(Build.SourcesDirectory)/tests/UKHO.ERPFacade.Common.UnitTests'
               targetType: 'inline'
               pwsh: true
               script: $(Agent.BuildDirectory)/tools/dotnet-stryker
