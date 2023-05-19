@@ -107,7 +107,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
              && call.GetArgument<LogLevel>(0) == LogLevel.Information
              && call.GetArgument<EventId>(1) == EventIds.ScenarioIdentified.ToEventId()
-             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Scenario identified for {ProductName} is {ScenarioName}.").MustHaveHappenedOnceExactly();
+             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Scenario identified for {ProductName} is {Scenario}.").MustHaveHappenedOnceExactly();
         }
 
 
@@ -128,9 +128,9 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
                             Status = new Status()
                             {
                             IsNewCell= false,
-                            StatusName="New Edition"
+                            StatusName="Withdrawn"
                             },
-                            ContentChanged=false
+                            ContentChanged=true
                         }
                     },
                     UnitsOfSales = new List<UnitOfSale>()
@@ -140,7 +140,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
                             UnitName = "Cell1",
                             CompositionChanges = new CompositionChanges()
                             {
-                                AddProducts = new List<string> { "Cell1"},
+                                AddProducts = new List<string>(),
                                 RemoveProducts = new List<string>()
                             }
                         },
@@ -149,7 +149,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
                             UnitName = "UnitOfSale1",
                             CompositionChanges = new CompositionChanges()
                             {
-                                AddProducts = new List<string> { "Cell1"},
+                                AddProducts = new List<string>(),
                                 RemoveProducts = new List<string>()
                             }
                         },
@@ -158,7 +158,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
                             UnitName = "UnitOfSale2",
                             CompositionChanges = new CompositionChanges()
                             {
-                                AddProducts = new List<string> { "Cell1"},
+                                AddProducts = new List<string>(),
                                 RemoveProducts = new List<string>()
                             }
                         }
@@ -178,7 +178,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
              && call.GetArgument<LogLevel>(0) == LogLevel.Information
              && call.GetArgument<EventId>(1) == EventIds.ScenarioIdentified.ToEventId()
-             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Scenario identified for {ProductName} is {ScenarioName}.").MustNotHaveHappened();
+             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Scenario identified for {ProductName} is {Scenario}.").MustNotHaveHappened();
         }
 
         [Test]
@@ -249,8 +249,293 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
              && call.GetArgument<LogLevel>(0) == LogLevel.Information
              && call.GetArgument<EventId>(1) == EventIds.ScenarioIdentified.ToEventId()
-             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Scenario identified for {ProductName} is {ScenarioName}.").MustHaveHappenedOnceExactly();
+             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Scenario identified for {ProductName} is {Scenario}.").MustHaveHappenedOnceExactly();
         }
+
+        [Test]
+        public void WhenEesEventDataPassedWithContentChangedAsFalse_ThenReturnsChangeMoveCellScenario()
+        {
+            var fakeEventData = new EESEvent()
+            {
+                Data = new Data()
+                {
+                    Products = new List<Product>()
+                    {
+                        new Product()
+                        {
+                            ReplacedBy = new List<string>(),
+                            InUnitsOfSale = new List<string> { "Cell1", "UnitOfSale1", "UnitofSale2" },
+                            ProductName = "Cell1",
+                            Status = new Status()
+                            {
+                            IsNewCell= false,
+                            StatusName="New Edition"
+                            },
+                            ContentChanged=false
+                        }
+                    },
+                    UnitsOfSales = new List<UnitOfSale>()
+                    {
+                        new UnitOfSale()
+                        {
+                            UnitName = "Cell1",
+                            CompositionChanges = new CompositionChanges()
+                            {
+                                AddProducts = new List<string>(),
+                                RemoveProducts = new List<string>{ "Cell1"}
+                            }
+                        },
+                        new UnitOfSale()
+                        {
+                            UnitName = "UnitOfSale1",
+                            CompositionChanges = new CompositionChanges()
+                            {
+                                AddProducts = new List<string> { "Cell1"},
+                                RemoveProducts = new List<string>()
+                            }
+                        },
+                        new UnitOfSale()
+                        {
+                            UnitName = "UnitOfSale2",
+                            CompositionChanges = new CompositionChanges()
+                            {
+                                AddProducts = new List<string>(),
+                                RemoveProducts = new List<string>()
+                            }
+                        }
+                    },
+                }
+            };
+
+            var result = _fakeScenarioBuilder.BuildScenarios(fakeEventData);
+
+            result.Count().Should().BeGreaterThan(0);
+            result.Should().Satisfy(scenario => scenario.ScenarioType == ScenarioType.ChangeMoveCell);
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+             && call.GetArgument<LogLevel>(0) == LogLevel.Information
+             && call.GetArgument<EventId>(1) == EventIds.IdentifyScenarioStarted.ToEventId()
+             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Identifying the scenarios based on received ENC content publish event.").MustHaveHappenedOnceExactly();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+             && call.GetArgument<LogLevel>(0) == LogLevel.Information
+             && call.GetArgument<EventId>(1) == EventIds.ScenarioIdentified.ToEventId()
+             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Scenario identified for {ProductName} is {Scenario}.").MustHaveHappenedOnceExactly();
+        }
+
+        [Test]
+        public void WhenEesEventDataPassedWithStatusNameAsUpdateAndContentChangedAsTrue_ThenReturnsUpdateScenario()
+        {
+            var fakeEventData = new EESEvent()
+            {
+                Data = new Data()
+                {
+                    Products = new List<Product>()
+                    {
+                        new Product()
+                        {
+                            ReplacedBy = new List<string> { "Cell2", "Cell3" },
+                            InUnitsOfSale = new List<string> { "Cell1", "UnitOfSale1", "UnitofSale2" },
+                            ProductName = "Cell1",
+                            Status = new Status()
+                            {
+                            IsNewCell= false,
+                            StatusName="Update"
+                            },
+                            ContentChanged=true
+                        }
+                    },
+                    UnitsOfSales = new List<UnitOfSale>()
+                    {
+                        new UnitOfSale()
+                        {
+                            UnitName = "Cell1",
+                            CompositionChanges = new CompositionChanges()
+                            {
+                                AddProducts = new List<string> { "Cell2", "Cell3" },
+                                RemoveProducts = new List<string> { "Cell1" }
+                            }
+                        },
+                        new UnitOfSale()
+                        {
+                            UnitName = "UnitOfSale1",
+                            CompositionChanges = new CompositionChanges()
+                            {
+                                AddProducts = new List<string> { "Cell2", "Cell3" },
+                                RemoveProducts = new List<string> { "Cell1" }
+                            }
+                        },
+                        new UnitOfSale()
+                        {
+                            UnitName = "UnitOfSale2",
+                            CompositionChanges = new CompositionChanges()
+                            {
+                                AddProducts = new List<string> { "Cell2", "Cell3" },
+                                RemoveProducts = new List<string> { "Cell1" }
+                            }
+                        }
+                    },
+                }
+            };
+
+            var result = _fakeScenarioBuilder.BuildScenarios(fakeEventData);
+
+            result.Count().Should().BeGreaterThan(0);
+            result.Should().Satisfy(scenario => scenario.ScenarioType == ScenarioType.UpdateCell);
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+             && call.GetArgument<LogLevel>(0) == LogLevel.Information
+             && call.GetArgument<EventId>(1) == EventIds.IdentifyScenarioStarted.ToEventId()
+             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Identifying the scenarios based on received ENC content publish event.").MustHaveHappenedOnceExactly();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+             && call.GetArgument<LogLevel>(0) == LogLevel.Information
+             && call.GetArgument<EventId>(1) == EventIds.ScenarioIdentified.ToEventId()
+             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Scenario identified for {ProductName} is {Scenario}.").MustHaveHappenedOnceExactly();
+        }
+
+        [Test]
+        public void WhenEesEventDataPassedWithStatusNameAsNewEditionAndContentChangedAsTrueAndIsNewCellAsFalse_ThenReturnsUpdateScenario()
+        {
+            var fakeEventData = new EESEvent()
+            {
+                Data = new Data()
+                {
+                    Products = new List<Product>()
+                    {
+                        new Product()
+                        {
+                            ReplacedBy = new List<string> { "Cell2", "Cell3" },
+                            InUnitsOfSale = new List<string> { "Cell1", "UnitOfSale1", "UnitofSale2" },
+                            ProductName = "Cell1",
+                            Status = new Status()
+                            {
+                            IsNewCell= false,
+                            StatusName="New Edition"
+                            },
+                            ContentChanged=true
+                        }
+                    },
+                    UnitsOfSales = new List<UnitOfSale>()
+                    {
+                        new UnitOfSale()
+                        {
+                            UnitName = "Cell1",
+                            CompositionChanges = new CompositionChanges()
+                            {
+                                AddProducts = new List<string> { "Cell2", "Cell3" },
+                                RemoveProducts = new List<string> { "Cell1" }
+                            }
+                        },
+                        new UnitOfSale()
+                        {
+                            UnitName = "UnitOfSale1",
+                            CompositionChanges = new CompositionChanges()
+                            {
+                                AddProducts = new List<string> { "Cell2", "Cell3" },
+                                RemoveProducts = new List<string> { "Cell1" }
+                            }
+                        },
+                        new UnitOfSale()
+                        {
+                            UnitName = "UnitOfSale2",
+                            CompositionChanges = new CompositionChanges()
+                            {
+                                AddProducts = new List<string> { "Cell2", "Cell3" },
+                                RemoveProducts = new List<string> { "Cell1" }
+                            }
+                        }
+                    },
+                }
+            };
+
+            var result = _fakeScenarioBuilder.BuildScenarios(fakeEventData);
+
+            result.Count().Should().BeGreaterThan(0);
+            result.Should().Satisfy(scenario => scenario.ScenarioType == ScenarioType.UpdateCell);
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+             && call.GetArgument<LogLevel>(0) == LogLevel.Information
+             && call.GetArgument<EventId>(1) == EventIds.IdentifyScenarioStarted.ToEventId()
+             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Identifying the scenarios based on received ENC content publish event.").MustHaveHappenedOnceExactly();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+             && call.GetArgument<LogLevel>(0) == LogLevel.Information
+             && call.GetArgument<EventId>(1) == EventIds.ScenarioIdentified.ToEventId()
+             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Scenario identified for {ProductName} is {Scenario}.").MustHaveHappenedOnceExactly();
+        }
+
+        [Test]
+        public void WhenEesEventDataPassedWithStatusNameAsReIssueAndContentChangedAsTrueAndIsNewCellAsFalse_ThenReturnsUpdateScenario()
+        {
+            var fakeEventData = new EESEvent()
+            {
+                Data = new Data()
+                {
+                    Products = new List<Product>()
+                    {
+                        new Product()
+                        {
+                            ReplacedBy = new List<string> { "Cell2", "Cell3" },
+                            InUnitsOfSale = new List<string> { "Cell1", "UnitOfSale1", "UnitofSale2" },
+                            ProductName = "Cell1",
+                            Status = new Status()
+                            {
+                            IsNewCell= false,
+                            StatusName="Re-issue"
+                            },
+                            ContentChanged=true
+                        }
+                    },
+                    UnitsOfSales = new List<UnitOfSale>()
+                    {
+                        new UnitOfSale()
+                        {
+                            UnitName = "Cell1",
+                            CompositionChanges = new CompositionChanges()
+                            {
+                                AddProducts = new List<string> { "Cell2", "Cell3" },
+                                RemoveProducts = new List<string> { "Cell1" }
+                            }
+                        },
+                        new UnitOfSale()
+                        {
+                            UnitName = "UnitOfSale1",
+                            CompositionChanges = new CompositionChanges()
+                            {
+                                AddProducts = new List<string> { "Cell2", "Cell3" },
+                                RemoveProducts = new List<string> { "Cell1" }
+                            }
+                        },
+                        new UnitOfSale()
+                        {
+                            UnitName = "UnitOfSale2",
+                            CompositionChanges = new CompositionChanges()
+                            {
+                                AddProducts = new List<string> { "Cell2", "Cell3" },
+                                RemoveProducts = new List<string> { "Cell1" }
+                            }
+                        }
+                    },
+                }
+            };
+
+            var result = _fakeScenarioBuilder.BuildScenarios(fakeEventData);
+
+            result.Count().Should().BeGreaterThan(0);
+            result.Should().Satisfy(scenario => scenario.ScenarioType == ScenarioType.UpdateCell);
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+             && call.GetArgument<LogLevel>(0) == LogLevel.Information
+             && call.GetArgument<EventId>(1) == EventIds.IdentifyScenarioStarted.ToEventId()
+             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Identifying the scenarios based on received ENC content publish event.").MustHaveHappenedOnceExactly();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+             && call.GetArgument<LogLevel>(0) == LogLevel.Information
+             && call.GetArgument<EventId>(1) == EventIds.ScenarioIdentified.ToEventId()
+             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Scenario identified for {ProductName} is {Scenario}.").MustHaveHappenedOnceExactly();
+        }
+
 
     }
 }
