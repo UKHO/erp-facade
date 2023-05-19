@@ -1,0 +1,16 @@
+{
+  "stryker-config": {
+
+    "reporters": [
+      "html",
+      "progress"
+    ],
+    "thresholds": {
+      "high": 0,
+      "low": 0,
+      "break": 0
+    },
+    "project": "UKHO.ERPFacade.WebJob.csproj"
+
+  }
+}
