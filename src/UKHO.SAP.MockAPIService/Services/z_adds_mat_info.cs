@@ -1,8 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
-using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.IO;
-using UKHO.SAP.MockAPIService.Enums;
+using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.SAP.MockAPIService.Models;
 
 namespace UKHO.SAP.MockAPIService.Services
@@ -34,18 +33,6 @@ namespace UKHO.SAP.MockAPIService.Services
             {
                 EX_MESSAGE = "Record successfully received for " + z_ADDS_MAT_INFO.IM_MATINFO.CORRID,
                 EX_STATUS = "0"
-            };
-        }
-
-        [return: XmlElement("Z_ADDS_MAT_INFOResponse", Namespace = "urn:sap-com:document:sap:rfc:functions")]
-        public Z_ADDS_MAT_INFOResponse ConfigureTestCase([XmlElement("TestCase", Namespace = "urn:sap-com:document:sap:rfc:functions")] TestCase testCase)
-        {
-            _mockService.UpdateTestCase(testCase);
-
-            return new Z_ADDS_MAT_INFOResponse()
-            {
-                EX_MESSAGE = "ConfigureTestCase successful for " + testCase.ToString(),
-                EX_STATUS = _mockService.GetCurrentTestCase().ToString()
             };
         }
     }
