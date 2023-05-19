@@ -12,7 +12,8 @@
     },
     "project": [
       "UKHO.ERPFacade.API.csproj",
-      "UKHO.ERPFacade.Common.csproj"
+      "UKHO.ERPFacade.Common.csproj",
+      "UKHO.ERPFacade.WebJob.csproj"
     ]
   }
 }
