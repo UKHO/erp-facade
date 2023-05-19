@@ -49,6 +49,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
     
             var request = new RestRequest("/webhook/newenccontentpublishedeventreceived", Method.Post);
             var now1 = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.fffffff'z'");
+
             request.AddHeader("Content-Type", "application/json");
             request.AddHeader("Authorization", "Bearer " + token);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);

@@ -3,12 +3,12 @@
   "type": "uk.gov.ukho.encpublishing.enccontentpublished.v2",
   "source": "https://encpublishing.ukho.gov.uk",
   "id": "2f03a25f-28b3-46ea-b009-5943250a9a41",
-  "time": "2023-05-16T12:08:03.4880776Z",
+  "time": "2023-05-18T12:08:03.4880776Z",
   "_COMMENT": "A comma separated list of products",
   "subject": "US5AK83M,US4AK6NT,US4AK6NU",
   "datacontenttype": "application/json",
   "data": {
-    "traceId": "367ce4a4-1d62-4f56-b359-99f178d779501",
+    "traceId": "367ce4a4-1d62-4f56-b359-230510replcan001",
     "products": [
       {
         "productType": "ENC S57",
