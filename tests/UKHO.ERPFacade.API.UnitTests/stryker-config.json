@@ -10,8 +10,7 @@
       "low": 80,
       "break": 80
     },
-    "project": [
-      "UKHO.ERPFacade.API.csproj"
-    ]
+    "project": "UKHO.ERPFacade.API.csproj"
+ 
   }
 }
