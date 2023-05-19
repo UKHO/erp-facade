@@ -26,7 +26,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         public static List<string> actionsListFromXml = new List<string>();
         public static Config config = new Config();
         private static JsonPayloadHelper jsonPayload { get; set; }
-        //private static SAPXmlPayload xmlPayload { get; set; }
         private static Z_ADDS_MAT_INFO xmlPayload { get; set; }
 
         public static async Task<bool> CheckXMLAttributes(JsonPayloadHelper jsonPayload, string XMLFilePath)
@@ -36,8 +35,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             XmlDocument xDoc = new XmlDocument();
             //load up the xml from the location 
             xDoc.LoadXml(File.ReadAllText(XMLFilePath));
-            //xDoc.Load(XMLFilePath);
-
+            
             var ns = new XmlNamespaceManager(xDoc.NameTable);
             ns.AddNamespace("xmlnamsp", "urn:sap-com:document:sap:rfc:functions");
             ns.AddNamespace("xsisp", "http://www.w3.org/2001/XMLSchema-instance");
@@ -51,12 +49,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             StreamReader stream = new StreamReader(fs, Encoding.UTF8);
             xmlPayload = (Z_ADDS_MAT_INFO)xsw.Deserialize(new XmlTextReader(stream));
 
-            //XmlDocument xDoc = new XmlDocument();
-            //load up the xml from the location 
-            //xDoc.Load(XMLFilePath);
-            //XmlNodeList nodeList = xDoc.SelectNodes("/Z_ADDS_MAT_INFO/IM_MATINFO/ACTIONITEMS/item");
             Assert.True(VerifyPresenseOfMandatoryXMLAtrributes(nodeList).Result);
-
 
             //verification of action atrribute's value
             actionCounter = 1;
@@ -857,12 +850,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 actionsListFromXml.Add(node.InnerText);
             }
 
-            Console.WriteLine("=========== XML LIST ===========");
-            foreach (string val in actionsListFromXml)
-            {
-                Console.WriteLine(val);
-            }
-
             return actionsListFromXml;
         }
 
@@ -888,11 +875,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
         public static List<string> getFinalActionsListFromJson(List<string> actionsList)
         {
-            Console.WriteLine("-------------- ListFromJSON --------------");
             for (int i = 0; i < actionsList.Count; i++)
             {
                 actionsList[i] = actionsList[i].Substring(4);
-                Console.WriteLine(actionsList[i]);
             }
             return actionsList;
         }
