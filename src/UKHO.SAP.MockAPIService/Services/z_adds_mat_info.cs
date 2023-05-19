@@ -1,10 +1,12 @@
-﻿using System.Xml.Serialization;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Xml.Serialization;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.SAP.MockAPIService.Models;
 
 namespace UKHO.SAP.MockAPIService.Services
 {
+    [ExcludeFromCodeCoverage]
     public class z_adds_mat_info : Iz_adds_mat_info
     {
         private readonly IAzureBlobEventWriter _azureBlobEventWriter;

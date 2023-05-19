@@ -14,7 +14,7 @@ namespace UKHO.ERPFacade.API.Models
     {
         public string AttributeDataType { get; set; }
         public string AttributeName { get; set; }
-        public string AttriuteValue { get; set; }
+        public string AttributeValue { get; set; }
     }
 
     public enum ScenarioType
@@ -22,7 +22,7 @@ namespace UKHO.ERPFacade.API.Models
         NewCell = 1,
         CancelReplaceCell = 2,
         UpdateCell = 3,
-        ChangeCell = 4,
+        ChangeMoveCell = 4,
         ChangeUnitOfSale = 5
     }
 }
