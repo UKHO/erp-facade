@@ -280,7 +280,7 @@ namespace UKHO.ERPFacade.API.Models
         public int NumberOfMonths { get; set; }
 
         [JsonProperty("rrp")]
-        public double Rrp { get; set; }
+        public string Rrp { get; set; }
     }
 
     public enum Provider

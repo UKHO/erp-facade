@@ -5,6 +5,7 @@ using System;
 using System.Globalization;
 using UKHO.ERPFacade.API.Helpers;
 using UKHO.ERPFacade.API.Models;
+using UKHO.ERPFacade.Common.Logging;
 
 namespace UKHO.ERPFacade.API.Services
 {
@@ -64,7 +65,7 @@ namespace UKHO.ERPFacade.API.Services
                     if (effectiveStandard != null && !string.IsNullOrEmpty(priceInformation.EffectiveDate))
                     {
                         priceDuration.NumberOfMonths = Convert.ToInt32(priceInformation.Duration);
-                        priceDuration.Rrp = Convert.ToDouble(priceInformation.Price);
+                        priceDuration.Rrp = priceInformation.Price;
 
                         effectiveStandard.PriceDurations.Add(priceDuration);
                     }
@@ -80,7 +81,7 @@ namespace UKHO.ERPFacade.API.Services
                     if (futureStandard != null && !string.IsNullOrEmpty(priceInformation.FutureDate))
                     {
                         priceDuration.NumberOfMonths = Convert.ToInt32(priceInformation.Duration);
-                        priceDuration.Rrp = Convert.ToDouble(priceInformation.FuturePrice);
+                        priceDuration.Rrp = priceInformation.FuturePrice;
 
                         futureStandard.PriceDurations.Add(priceDuration);
                     }
@@ -101,6 +102,8 @@ namespace UKHO.ERPFacade.API.Services
 
         public JObject BuildPriceEventPayload(List<UnitsOfSalePrices> unitsOfSalePriceList, string exisitingEesEvent)
         {
+            _logger.LogInformation(EventIds.BuildingPriceEventStarted.ToEventId(), "Building unit of sale price event started.");
+            
             EESEventPayload eESEventPayload = JsonConvert.DeserializeObject<EESEventPayload>(exisitingEesEvent);
 
             UnitOfSalePriceEventPayload unitOfSalePriceEventPayload = new();
@@ -123,12 +126,16 @@ namespace UKHO.ERPFacade.API.Services
             unitOfSalePriceEventPayload.Data = unitOfSalePriceEventData;
 
             JObject unitOfSalePriceEventPayloadJson = JObject.Parse(JsonConvert.SerializeObject(unitOfSalePriceEventPayload));
+            
+            _logger.LogInformation(EventIds.PriceEventCreated.ToEventId(), "Unit of sale price event created.");
 
             return unitOfSalePriceEventPayloadJson;
         }
 
         public JObject BuildBulkPriceEventPayload(UnitsOfSalePrices unitsOfSalePriceList)
         {
+            _logger.LogInformation(EventIds.BuildingBulkPriceEventStarted.ToEventId(), "Building bulk price event started.");
+
             BulkPriceEventPayload bulkPriceEventPayload = new();
             BulkPriceEventData bulkPriceEventData = new();
 
@@ -144,6 +151,8 @@ namespace UKHO.ERPFacade.API.Services
 
             JObject bulkPriceEventPayloadJson = JObject.Parse(JsonConvert.SerializeObject(bulkPriceEventPayload));
 
+            _logger.LogInformation(EventIds.BulkPriceEventCreated.ToEventId(), "Bulk price event created.");
+
             return bulkPriceEventPayloadJson;
         }
 
@@ -157,7 +166,7 @@ namespace UKHO.ERPFacade.API.Services
             List<PriceDurations> priceDurationsList = new();
 
             priceDurations.NumberOfMonths = Convert.ToInt32(duration);
-            priceDurations.Rrp = Convert.ToDouble(rrp);
+            priceDurations.Rrp = rrp;
             priceDurationsList.Add(priceDurations);
 
             standard.PriceDurations = priceDurationsList;

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
@@ -9,6 +10,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using UKHO.ERPFacade.API.Models;
 using UKHO.ERPFacade.API.Services;
+using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
@@ -45,7 +47,7 @@ namespace UKHO.ERPFacade.API.Controllers
         [Route("/erpfacade/priceinformation")]
         public virtual async Task<IActionResult> PostPriceInformation([FromBody] JArray requestJson)
         {
-            _logger.LogInformation("ERP Facade has received UnitOfSale event from SAP with price information.");
+            _logger.LogInformation(EventIds.SapUnitOfSalePriceEventReceived.ToEventId(), "ERP Facade has received UnitOfSale price event from SAP.");
 
             var corrId = requestJson.First.SelectToken(CorrIdKey)?.Value<string>();
 
@@ -73,18 +75,23 @@ namespace UKHO.ERPFacade.API.Controllers
             {
                 List<UnitsOfSalePrices> unitsOfSalePriceList = _erpFacadeService.BuildUnitOfSalePricePayload(priceInformationList);
 
-                _logger.LogInformation("Downloading the existing EES event from blob storage with give Correlation ID.");
+                _logger.LogInformation(EventIds.DownloadExistingEesEventFromBlob.ToEventId(), "Downloading the existing EES event from azure blob storage with give Correlation ID.");
                 var exisitingEesEvent = _azureBlobEventWriter.DownloadEvent(corrId + '.' + RequestFormat, corrId);
-                _logger.LogInformation("Existing EES event is downloaded from blob storage successfully.");
+                _logger.LogInformation(EventIds.DownloadedExistingEesEventFromBlob.ToEventId(), "Existing EES event is downloaded from azure blob storage successfully.");
 
                 JObject eesPriceEventPayloadJson = _erpFacadeService.BuildPriceEventPayload(unitsOfSalePriceList, exisitingEesEvent);
 
                 var eventSize = CommonHelper.GetEventSize(eesPriceEventPayloadJson);
                 if (eventSize > EventSizeLimit)
                 {
-                    _logger.LogWarning("EES Price Event exceeds the size limit of 1 MB");
-                    throw new Exception();
+                    _logger.LogWarning(EventIds.PriceEventExceedSizeLimit.ToEventId(), "Unit of Sale Price Event exceeds the size limit of 1 MB.");
+                    throw new ERPFacadeException(EventIds.PriceEventExceedSizeLimit.ToEventId());
                 }
+            }
+            else
+            {
+                _logger.LogError(EventIds.NoPriceInformationFound.ToEventId(), "No price information found in incoming SAP event.");
+                throw new ERPFacadeException(EventIds.NoPriceInformationFound.ToEventId());
             }
 
             return new OkObjectResult(StatusCodes.Status200OK);
@@ -94,7 +101,7 @@ namespace UKHO.ERPFacade.API.Controllers
         [Route("/erpfacade/bulkpriceinformation")]
         public virtual async Task<IActionResult> PostBulkPriceInformation([FromBody] JArray requestJson)
         {
-            _logger.LogInformation("ERP Facade has received bulk price event from SAP.");
+            _logger.LogInformation(EventIds.SapBulkPriceEventReceived.ToEventId(), "ERP Facade has received bulk price event from SAP.");
 
             List<PriceInformationEvent> bulkpriceInformationList = JsonConvert.DeserializeObject<List<PriceInformationEvent>>(requestJson.ToString());
 
@@ -108,6 +115,11 @@ namespace UKHO.ERPFacade.API.Controllers
 
                     //Add code to publish this event to EES
                 }
+            }
+            else
+            {
+                _logger.LogError(EventIds.NoBulkPriceInformationFound.ToEventId(), "No bulk price information found in incoming SAP event.");
+                throw new ERPFacadeException(EventIds.NoBulkPriceInformationFound.ToEventId());
             }
 
             return new OkObjectResult(StatusCodes.Status200OK);
