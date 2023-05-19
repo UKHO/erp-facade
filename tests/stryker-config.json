@@ -11,9 +11,7 @@
       "break": 80
     },
     "project": [
-      "UKHO.ERPFacade.API.csproj",
-      "UKHO.ERPFacade.Common.csproj",
-      "UKHO.ERPFacade.WebJob.csproj"
+      "UKHO.ERPFacade.API.csproj"
     ]
   }
 }
