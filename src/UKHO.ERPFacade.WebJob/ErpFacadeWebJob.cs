@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using System.Diagnostics.CodeAnalysis;
-using UKHO.ERPFacade.Common.Configuration;
+using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.WebJob.Services;
 
@@ -11,18 +10,12 @@ namespace UKHO.ERPFacade.WebJob
     public class ErpFacadeWebJob
     {
         private readonly ILogger<ErpFacadeWebJob> _logger;
-        private readonly IOptions<AzureStorageConfiguration> _azureStorageConfig;
-        private readonly IOptions<ErpFacadeWebJobConfiguration> _erpFacadeWebJobConfig;
         private readonly IMonitoringService _monitoringService;
 
         public ErpFacadeWebJob(ILogger<ErpFacadeWebJob> logger,
-                               IOptions<AzureStorageConfiguration> azureStorageConfig,
-                               IOptions<ErpFacadeWebJobConfiguration> erpFacadeWebJobConfig,
                                IMonitoringService monitoringService)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _azureStorageConfig = azureStorageConfig ?? throw new ArgumentNullException(nameof(azureStorageConfig));
-            _erpFacadeWebJobConfig = erpFacadeWebJobConfig ?? throw new ArgumentNullException(nameof(erpFacadeWebJobConfig));
             _monitoringService = monitoringService ?? throw new ArgumentNullException(nameof(monitoringService));
         }
 
@@ -32,12 +25,24 @@ namespace UKHO.ERPFacade.WebJob
             {
                 //Code to monitor the table records.
                 _logger.LogInformation(EventIds.WebjobProcessEventStarted.ToEventId(), "Webjob started the monitoring of callbacks from SAP.");
+
                 _monitoringService.MonitorIncompleteTransactions();
+
                 _logger.LogInformation(EventIds.WebjobProcessEventCompleted.ToEventId(), "Webjob completed the monitoring of callbacks from SAP.");
             }
             catch (Exception ex)
             {
-                throw ex;
+                var exceptionType = ex.GetType();
+
+                if (exceptionType == typeof(ERPFacadeException))
+                {
+                    EventIds eventId = (EventIds)((ERPFacadeException)ex).EventId.Id;
+                    _logger.LogError(eventId.ToEventId(), ex, eventId.ToString());
+                }
+                else
+                {
+                    _logger.LogError(EventIds.UnhandledException.ToEventId(), ex, "Exception occured while processing ErpFacade WebJob.");
+                }
             }
         }
     }
