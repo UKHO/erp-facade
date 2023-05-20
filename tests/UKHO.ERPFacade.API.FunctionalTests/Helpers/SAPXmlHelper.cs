@@ -699,10 +699,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         public static string getRequiredXMLText(string generatedXMLFilePath, string tagName)
         {
             XmlDocument xDoc = new XmlDocument();
-            //xDoc.Load(generatedXMLFilePath);
             xDoc.LoadXml(File.ReadAllText(generatedXMLFilePath));
             XmlNode node = xDoc.SelectSingleNode("//" + tagName);
-
 
             return node.InnerText;
         }
@@ -713,7 +711,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             bool areEqual = getFinalActionsListFromJson(listFromJson).SequenceEqual(curateListOfActionsFromXmlFile(generatedXMLFilePath));
             if (areEqual)
             {
-
                 Console.WriteLine("XML has correct action sequence");
                 return true;
             }
@@ -807,6 +804,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             }
             else
             {
+                Console.WriteLine("ORG Header failed to match");
                 return false;
             }
         }
@@ -871,7 +869,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                                  + calculateUpdateEncCellEditionUpdateNumber(jsonPayload)
                                  + calculateCancelledCellCount(jsonPayload)
                                  + calculateCancelUnitOfSalesActionCount(jsonPayload);
-            Console.WriteLine();
+            
             Console.WriteLine("Total No. of Actions = " + totalNumberOfActions);
             return totalNumberOfActions;
         }

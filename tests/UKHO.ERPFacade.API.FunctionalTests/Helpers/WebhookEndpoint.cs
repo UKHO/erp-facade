@@ -109,21 +109,15 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return response;
         }
 
-        public async void PostMockSapResponseAsync(string filePath)
+        public async void PostMockSapResponseAsync()
         {
-            string requestBody;
             var cred = $"{config.TestConfig.SapMockConfiguration.Username}:{config.TestConfig.SapMockConfiguration.Password}";
-
-            using (StreamReader streamReader = new StreamReader(filePath))
-            {
-                requestBody = streamReader.ReadToEnd();
-            }
 
             var request = new RestRequest("/api/ConfigureTestCase/SAPInternalServerError500", Method.Post);
             request.AddHeader("Content-Type", "application/xml");
             request.AddHeader("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(cred)));
 
-            RestResponse response = await client2.ExecuteAsync(request);
+            await client2.ExecuteAsync(request);
         }
 
     }
