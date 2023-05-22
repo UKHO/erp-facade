@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Options;
-using System.Linq;
 using System.Xml;
 using UKHO.ERPFacade.API.Models;
 using UKHO.ERPFacade.Common.IO;
@@ -15,6 +14,8 @@ namespace UKHO.ERPFacade.API.Helpers
         private readonly IOptions<SapActionConfiguration> _sapActionConfig;
         private readonly IOptions<ActionNumberConfiguration> _actionNumberConfig;
 
+        private const string XmlNameSpaceURI = "urn:sap-com:document:sap:rfc:functions";
+        private const string SapXmlPathDev = "SapXmlTemplates\\SAPRequestDev.xml";
         private const string SapXmlPath = "SapXmlTemplates\\SAPRequest.xml";
         private const string XpathImMatInfo = $"//*[local-name()='IM_MATINFO']";
         private const string XpathActionItems = $"//*[local-name()='ACTIONITEMS']";
@@ -55,7 +56,16 @@ namespace UKHO.ERPFacade.API.Helpers
         /// <returns>XmlDocument</returns>
         public XmlDocument BuildSapMessageXml(List<Scenario> scenarios, string traceId)
         {
-            var sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, SapXmlPath);
+            string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, SapXmlPath);
+
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            var isDevelopment = environment == Environments.Development;
+
+            if (isDevelopment)
+            {
+                sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, SapXmlPathDev);
+                _logger.LogInformation(EventIds.EnvironmentName.ToEventId(), "Environment name is {environment}", environment);
+            }
 
             //Check whether template file exists or not
             if (!_fileSystemHelper.IsFileExists(sapXmlTemplatePath))
@@ -91,6 +101,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                     actionItemNode.AppendChild(actionNode);
                             }
                             break;
+
                         case 2:
                             var unitOfSale = scenario.UnitOfSales.Where(x => x.UnitName == scenario.Product.ProductName).FirstOrDefault();
                             if (unitOfSale != null && unitOfSale.IsNewUnitOfSale)
@@ -100,6 +111,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                     actionItemNode.AppendChild(actionNode);
                             }
                             break;
+
                         case 3:
                             foreach (var cell in scenario.InUnitOfSales)
                             {
@@ -116,6 +128,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                 }
                             }
                             break;
+
                         case 4:
                             foreach (var cell in scenario.InUnitOfSales)
                             {
@@ -131,6 +144,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                 }
                             }
                             break;
+
                         case 6:
                             foreach (var cell in scenario.InUnitOfSales)
                             {
@@ -139,6 +153,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                     actionItemNode.AppendChild(actionNode);
                             }
                             break;
+
                         case 8:
                             foreach (var cell in scenario.InUnitOfSales)
                             {
@@ -154,7 +169,8 @@ namespace UKHO.ERPFacade.API.Helpers
                                     }
                                 }
                             }
-                            break;                       
+                            break;
+
                         case 10:
                             var uosNotForSale = scenario.UnitOfSales.Where(x => x.Status == NotForSale).FirstOrDefault();
                             if (uosNotForSale != null)
@@ -164,6 +180,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                     actionItemNode.AppendChild(actionNode);
                             }
                             break;
+
                         default:
                             actionNode = BuildAction(soapXml, scenario, action, scenario.Product.ProductName);
                             if (!actionItemNode.InnerXml.Contains(actionNode.InnerXml))
@@ -218,7 +235,7 @@ namespace UKHO.ERPFacade.API.Helpers
 
         private static XmlElement BuildAction(XmlDocument soapXml, Scenario scenario, SapAction action, string cell, string childCell = null, string replacedByProduct = null)
         {
-            XmlElement itemNode = soapXml.CreateElement(Item);
+            XmlElement itemNode = soapXml.CreateElement(Item, XmlNameSpaceURI);
 
             XmlElement actionNumberNode = soapXml.CreateElement(ActionNumber);
             actionNumberNode.InnerText = action.ActionNumber.ToString();
