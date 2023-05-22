@@ -87,7 +87,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [TestCase("1CellCancel.JSON", TestName = "WhenICallTheWebhookWithOneCancelCellScenario_ThenWebhookReturns200Response")]
 
         //Metadata Change
-        //[TestCase("2CellMetadataChange.JSON", TestName = "WhenICallTheWebhookWith2CellMetadataChangeScenario_ThenWebhookReturns200Response")]
+        [TestCase("2CellMetadataChange.JSON", TestName = "WhenICallTheWebhookWith2CellMetadataChangeScenario_ThenWebhookReturns200Response")]
         [TestCase("MetadataChange.JSON", TestName = "WhenICallTheWebhookWithMetadataChangeScenario_ThenWebhookReturns200Response")]
 
         //Update

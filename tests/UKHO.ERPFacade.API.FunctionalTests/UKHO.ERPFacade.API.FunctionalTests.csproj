@@ -30,6 +30,9 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ERPFacadeGeneratedXmlFiles\1CellCancel.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ERPFacadePayloadTestData\1NewCellScenario.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -75,10 +78,6 @@
     <None Update="ERPFacadePayloadTestData\WebhookPayload_Invalid.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="ERPFacadeGeneratedXmlFiles\" />
   </ItemGroup>
 
 </Project>
