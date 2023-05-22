@@ -490,3 +490,26 @@ stages:
                     scriptLocation: 'scriptPath'
                     scriptPath: "$(Pipeline.Workspace)/terraformartifact/set_mock_configuration.ps1"
                     arguments: '-ftrunning "false" -mockresourcegroup $(mockWebAppResourceGroup) -mockwebappname $(mockWebAppName)'
+
+  - stage: Livedeploy
+    displayName: "Livedeploy (inc terraform, webapp deploy)"
+    variables:
+      - group: "ERP-Facade-Live"
+      - group: "Erp-Live"
+    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
+    jobs:
+      - deployment: LiveDeployTerraform
+        displayName: "Live - Deploy Terraform and Dotnet App"
+        environment: "ERP-Live"
+        pool: $(DeploymentPool)
+        container: ${{variables.Container}}
+        workspace:
+          clean: all
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - template: Deployment/templates/continuous-deployment.yml
+                  parameters:
+                    ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
+                    AzureSubscription: "ERP-Facade-Live-A.011.05.12"
