@@ -3,12 +3,12 @@
   "type": "uk.gov.ukho.encpublishing.enccontentpublished.v2",
   "source": "https://encpublishing.ukho.gov.uk",
   "id": "2f03a25f-28b3-46ea-b009-5943250a9a41",
-  "time": "2023-05-19T12:08:03.4880776Z",
+  "time": "2023-05-22T12:08:03.4880776Z",
   "_COMMENT": "A comma separated list of products",
   "subject": "MX545010",
   "datacontenttype": "application/json",
   "data": {
-    "traceId": "467ce4a4-1d62-4f56-b359-230518metadatachange003",
+    "traceId": "367ce4a4-1d62-4f56-b359-59e178d77100",
     "products": [
       {
         "productType": "ENC S57",
@@ -161,13 +161,8 @@
       {
         "unitName": "MX545010",
         "title": "Isla Clarion",
-        "unitOfSaleType": "unit",
-        "_ENUM": [
-          "unit",
-          "folio"
-        ],
-        "unitType": "",
-        "unitSize": "medium",
+        "unitType": "AVCS Units Coastal",
+        "unitSize": "large",
         "status": "ForSale",
         "_ENUM": [
           "ForSale",
@@ -191,14 +186,9 @@
       },
       {
         "unitName": "AVCSO",
-        "title": "Isla Clarion",
-        "unitOfSaleType": "unit",
-        "_ENUM": [
-          "unit",
-          "folio"
-        ],
-        "unitSize": "medium",
-        "unitType": "",
+        "title": "AVCS Online Folio Some Title",
+        "unitSize": "large",
+        "unitType": "AVCS Online Folio",
         "status": "ForSale",
         "isNewUnitOfSale": false,
         "geographicLimit": {
@@ -234,14 +224,9 @@
       },
       {
         "unitName": "PAYSF",
-        "title": "Isla Clarion",
-        "unitOfSaleType": "unit",
-        "_ENUM": [
-          "unit",
-          "folio"
-        ],
-        "unitType": "",
-        "unitSize": "medium",
+        "title": "World Folio",
+        "unitType": "AVCS Folio Transit",
+        "unitSize": "large",
         "status": "ForSale",
         "isNewUnitOfSale": false,
         "geographicLimit": {
@@ -282,7 +267,9 @@
           ]
         },
         "compositionChanges": {
-          "addProducts": [],
+          "addProducts": [
+            "MX545010"
+          ],
           "removeProducts": [
 
           ]

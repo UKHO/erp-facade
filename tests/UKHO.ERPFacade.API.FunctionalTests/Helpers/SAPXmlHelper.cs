@@ -5,9 +5,9 @@ using Newtonsoft.Json;
 using NUnit.Framework;
 using System.Text;
 using System.Xml;
-using System.Xml.Linq;
 using System.Xml.Serialization;
 using UKHO.ERPFacade.API.FunctionalTests.Model;
+
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
@@ -19,7 +19,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
         static List<string> AttrNotMatched = new List<string>();
         static List<string> ChangeAVCSUoS = new List<string>();
-        static List<string> ChangeENCCell = new List<string>();
+        static Dictionary<string, List<string>> ChangeENCCell = new Dictionary<string, List<string>>();
+
+        //static List<string> ChangeENCCell = new List<string>();
         public static List<string> listFromJson = new List<string>();
         public static List<string> actionsListFromXml = new List<string>();
         public static Config config = new Config();
@@ -96,45 +98,59 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         private static bool? verifyChangeAVCSUnitOfSale(string productName, Item item)
         {
             Console.WriteLine("Action#:" + actionCounter + ".UnitOfSale:" + productName);
-            if (ChangeAVCSUoS.Contains(productName))
+            foreach (KeyValuePair<string, List<string>> ele2 in ChangeENCCell)
             {
-                AttrNotMatched.Clear();
-                if (!item.ACTIONNUMBER.Equals(actionCounter.ToString()))
-                    AttrNotMatched.Add(nameof(item.ACTIONNUMBER));
-                if (!item.PRODUCT.Equals("AVCS UNIT"))
-                    AttrNotMatched.Add(nameof(item.PRODUCT));
-                if (!item.PRODTYPE.Equals(getProductInfo(ChangeENCCell).ProductType))
-                    AttrNotMatched.Add(nameof(item.PRODTYPE));
-                //if (getUoSInfo(productName).UnitOfSaleType.Equals("unit"))
-                if (!item.AGENCY.Equals((getProductInfo(ChangeENCCell)).Agency))
-                    AttrNotMatched.Add(nameof(item.AGENCY));
-                if (!item.PROVIDER.Equals(getProductInfo(ChangeENCCell).ProviderCode))
-                    AttrNotMatched.Add(nameof(item.PROVIDER));
-                if (!item.ENCSIZE.Equals(getUoSInfo(productName).UnitSize))
-                    AttrNotMatched.Add(nameof(item.ENCSIZE));
-                if (!item.TITLE.Equals(getUoSInfo(productName).Title))
-                    AttrNotMatched.Add(nameof(item.TITLE));
-                if (!item.UNITTYPE.Equals(getUoSInfo(productName).UnitType))
-                    AttrNotMatched.Add(nameof(item.UNITTYPE));
-                //Checking blanks
-                string[] fieldNames = { "CANCELLED", "REPLACEDBY", "EDITIONNO", "UPDATENO" };
-                var v = VerifyBlankFields(item, fieldNames);
+                ChangeAVCSUoS = ele2.Value;
+                
 
-
-                if (AttrNotMatched.Count == 0)
+                if (ChangeAVCSUoS.Contains(productName))
                 {
-                    Console.WriteLine("CHANGE AVCS UNIT OF SALE Action's Data is correct");
-                    return true;
+                    
+                    AttrNotMatched.Clear();
+                    if (!item.ACTIONNUMBER.Equals(actionCounter.ToString()))
+                        AttrNotMatched.Add(nameof(item.ACTIONNUMBER));
+                    if (!item.PRODUCT.Equals("AVCS UNIT"))
+                        AttrNotMatched.Add(nameof(item.PRODUCT));
+                    if (!item.PRODTYPE.Equals(getProductInfo(ele2.Key).ProductType))
+                        AttrNotMatched.Add(nameof(item.PRODTYPE));
+                    //if (getUoSInfo(productName).UnitOfSaleType.Equals("unit"))
+                    if (!item.AGENCY.Equals((getProductInfo(ele2.Key)).Agency))
+                        AttrNotMatched.Add(nameof(item.AGENCY));
+                    if (!item.PROVIDER.Equals(getProductInfo(ele2.Key).ProviderCode))
+                        AttrNotMatched.Add(nameof(item.PROVIDER));
+                    if (!item.ENCSIZE.Equals(getUoSInfo(productName).UnitSize))
+                        AttrNotMatched.Add(nameof(item.ENCSIZE));
+                    if (!item.TITLE.Equals((getProductInfo(ele2.Key)).Title))
+                        AttrNotMatched.Add(nameof(item.TITLE));
+                    if (!item.UNITTYPE.Equals(getUoSInfo(productName).UnitType))
+                        AttrNotMatched.Add(nameof(item.UNITTYPE));
+                    //Checking blanks
+                    string[] fieldNames = { "CANCELLED", "REPLACEDBY", "EDITIONNO", "UPDATENO" };
+                    var v = VerifyBlankFields(item, fieldNames);
+
+
+                    if (AttrNotMatched.Count == 0)
+                    {
+                        Console.WriteLine("CHANGE AVCS UNIT OF SALE Action's Data is correct");
+                        var valueindex = ele2.Value.IndexOf(productName);
+                        ChangeAVCSUoS[valueindex] = ChangeAVCSUoS[valueindex].Replace(productName, "skip");                   
+
+                        return true;                       
+                        
+                    }
+
+                    else
+                    {
+                        Console.WriteLine("CHANGE AVCS UNIT OF SALE Action's Data is incorrect");
+                        Console.WriteLine("Not matching attributes are:");
+                        foreach (string attribute in AttrNotMatched)
+                        { Console.WriteLine(attribute); }
+                        return false;
+                    }
                 }
 
-                else
-                {
-                    Console.WriteLine("CHANGE AVCS UNIT OF SALE Action's Data is incorrect");
-                    Console.WriteLine("Not matching attributes are:");
-                    foreach (string attribute in AttrNotMatched)
-                    { Console.WriteLine(attribute); }
-                    return false;
-                }
+                //ChangeENCCell.Remove(ele2.Key);
+                   
             }
             Console.WriteLine("JSON doesn't have corresponding Unit of Sale.");
             return false;
@@ -181,8 +197,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     if (AttrNotMatched.Count == 0)
                     {
                         Console.WriteLine("UPDATE ENC CELL EDITION UPDATE NUMBER Action's Data is correct");
-                        ChangeAVCSUoS = product.InUnitsOfSale;
-                        ChangeENCCell.Add(childCell);
                         return true;
                     }
 
@@ -204,10 +218,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
         }
 
-        private static bool getUoSUnitType(string pRODUCTNAME)
-        {
-            throw new NotImplementedException();
-        }
 
         private static bool? verifyChangeENCCell(string childCell, Item item)
         {
@@ -246,8 +256,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     if (AttrNotMatched.Count == 0)
                     {
                         Console.WriteLine("CHANGE ENC CELL Action's Data is correct");
-                        ChangeAVCSUoS = product.InUnitsOfSale;
-                        ChangeENCCell.Add(childCell);
+                        //ChangeAVCSUoS = product.InUnitsOfSale;
+                        //ChangeENCCell.Add(childCell);
+                        ChangeENCCell.Add(childCell, product.InUnitsOfSale);
                         return true;
                     }
 
@@ -663,13 +674,31 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         productInfo.ProductType = product.ProductType[4..];
                         productInfo.Agency = product.Agency;
                         productInfo.ProviderCode = product.ProviderCode;
+                        productInfo.Title = product.Title;
                     }
 
                 }
             }
             return productInfo;
         }
-        private static ProductUoSInfo getUoSInfo(string productName)
+            private static UoSProductInfo getProductInfo(string products)
+            {
+                UoSProductInfo productInfo = new UoSProductInfo();
+                foreach (Product product in jsonPayload.Data.Products)
+                    {
+                        if (products.Equals(product.ProductName))
+                        {
+                            productInfo.ProductType = product.ProductType[4..];
+                            productInfo.Agency = product.Agency;
+                            productInfo.ProviderCode = product.ProviderCode;
+                            productInfo.Title = product.Title;
+                        }
+
+                    }
+                
+                return productInfo;
+            }
+            private static ProductUoSInfo getUoSInfo(string productName)
         {
             ProductUoSInfo UoSInfo = new ProductUoSInfo();
             foreach (UnitOfSale uos in jsonPayload.Data.UnitsOfSales)
@@ -1141,4 +1170,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         }
 
     }
-}
+
+        
+    }

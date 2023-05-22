@@ -18,5 +18,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
 
         [JsonProperty("agency")]
         public string Agency { get; set; }
+
+        [JsonProperty("title")]
+        public string Title { get; set; }
     }
 }
