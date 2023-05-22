@@ -33,6 +33,7 @@ namespace UKHO.ERPFacade.API.Helpers
         private const string UnitOfSaleSection = "UnitOfSale";
         private const string NotForSale = "NotForSale";
         private const string UnitSaleType = "unit";
+        private const string DevEnvName = "dev";
 
         public SapMessageBuilder(ILogger<SapMessageBuilder> logger,
                                  IXmlHelper xmlHelper,
@@ -57,12 +58,11 @@ namespace UKHO.ERPFacade.API.Helpers
         {
             string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, SapXmlPath);
 
-            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            var isDevelopment = environment == Environments.Development;
+            string environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
             _logger.LogInformation(EventIds.EnvironmentName.ToEventId(), "Environment name is {environment}", environment);
 
-            if (isDevelopment)
+            if (environment == DevEnvName)
             {
                 sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, SapXmlPathDev);
             }
