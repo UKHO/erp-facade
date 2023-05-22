@@ -21,15 +21,6 @@ namespace UKHO.ERPFacade.API.Models
         [JsonProperty("time")]
         public string Time { get; set; }
 
-        [JsonProperty("_COMMENT")]
-        public string _COMMENT { get; set; }
-
-        [JsonProperty("subject")]
-        public string Subject { get; set; }
-
-        [JsonProperty("datacontenttype")]
-        public string DataContentType { get; set; }
-
         [JsonProperty("data")]
         public BulkPriceEventData Data { get; set; }
     }
@@ -41,6 +32,6 @@ namespace UKHO.ERPFacade.API.Models
         public string TraceId { get; set; }
          
         [JsonProperty("unitsOfSalePrices")]
-        public List<UnitsOfSalePrices> UnitsOfSalePrices { get; set; }
+        public UnitsOfSalePrices UnitsOfSalePrices { get; set; }
     }
 }

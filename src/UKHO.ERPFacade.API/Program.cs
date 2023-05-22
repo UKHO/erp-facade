@@ -4,6 +4,7 @@ using Azure.Security.KeyVault.Secrets;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Newtonsoft.Json.Serialization;
 using Serilog;
 using System.Diagnostics.CodeAnalysis;
@@ -15,8 +16,8 @@ using UKHO.ERPFacade.API.Models;
 using UKHO.ERPFacade.API.Services;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.HttpClients;
-using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.IO.Azure;
+using UKHO.ERPFacade.Common.IO;
 using UKHO.Logging.EventHubLogProvider;
 
 namespace UKHO.ERPFacade
@@ -155,6 +156,11 @@ namespace UKHO.ERPFacade
                 options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             });
 
+            builder.Services.Configure<KestrelServerOptions>(options =>
+            {
+                options.Limits.MaxRequestBodySize = 50 * 1024 * 1024;
+            });
+
             builder.Services.Configure<AzureStorageConfiguration>(configuration.GetSection("AzureStorageConfiguration"));
             builder.Services.Configure<SapConfiguration>(configuration.GetSection("SapConfiguration"));
 
@@ -184,6 +190,8 @@ namespace UKHO.ERPFacade
             });
 
             var app = builder.Build();
+
+            app.UseLoggingMiddleware();
 
             app.UseHttpsRedirection();
 
