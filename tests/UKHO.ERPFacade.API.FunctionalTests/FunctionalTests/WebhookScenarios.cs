@@ -60,9 +60,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         {
             string filePath = Path.Combine(_projectDir, WebhookEndpoint.config.TestConfig.PayloadFolder, WebhookEndpoint.config.TestConfig.WebhookPayloadFileName);
 
-            _webhook.PostMockSapResponseAsync();
-            Thread.Sleep(3500);
-
+            var task = _webhook.PostMockSapResponseAsync();
+            task.Wait();
+          
             var response = await _webhook.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(false));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.InternalServerError);
         }

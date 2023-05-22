@@ -30,7 +30,7 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPFacadeGeneratedXmlFiles\1CellCancel.JSON">
+    <None Update="ERPFacadeGeneratedXmlFiles\we123s-sds3-df333-d3d.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPFacadePayloadTestData\1NewCellScenario.JSON">
