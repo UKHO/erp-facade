@@ -54,6 +54,9 @@
     <None Update="ERPFacadePayloadTestData\2CellsReplace1CellsCancel.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ERPFacadePayloadTestData\SapMockApiConfigure.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ERPFacadePayloadTestData\WebhookPayload.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

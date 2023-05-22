@@ -17,6 +17,7 @@ using UKHO.ERPFacade.Common.HttpClients;
 using UKHO.ERPFacade.Common.Infrastructure;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.IO.Azure;
+using UKHO.ERPFacade.Common.IO;
 using UKHO.Logging.EventHubLogProvider;
 
 namespace UKHO.ERPFacade
@@ -185,6 +186,8 @@ namespace UKHO.ERPFacade
             });
 
             var app = builder.Build();
+
+            app.UseLoggingMiddleware();
 
             app.UseHttpsRedirection();
 

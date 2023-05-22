@@ -8,6 +8,7 @@ using System.Diagnostics.CodeAnalysis;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models.TableEntities;
+using UKHO.ERPFacade.Common.Exceptions;
 
 namespace UKHO.ERPFacade.Common.IO.Azure
 {
@@ -142,7 +143,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
 
             if (tableExists == null)
             {
-                throw new Exception();
+                throw new ERPFacadeException(EventIds.AzureTableNotFound.ToEventId());
             }
 
             TableClient tableClient = serviceClient.GetTableClient(tableName);
