@@ -1,10 +1,15 @@
 ﻿using System.Xml;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using UKHO.ERPFacade.Common.Helpers;
+using UKHO.ERPFacade.API.Helpers;
+using UKHO.ERPFacade.API.Models;
+using UKHO.ERPFacade.Common.Configuration;
+using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.HttpClients;
-using UKHO.ERPFacade.Common.IO;
+using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
 
 namespace UKHO.ERPFacade.API.Controllers
@@ -18,7 +23,9 @@ namespace UKHO.ERPFacade.API.Controllers
         private readonly IAzureTableReaderWriter _azureTableReaderWriter;
         private readonly IAzureBlobEventWriter _azureBlobEventWriter;
         private readonly ISapClient _sapClient;
-        private readonly IXmlHelper _xmlHelper;
+        private readonly IScenarioBuilder _scenarioBuilder;
+        private readonly ISapMessageBuilder _sapMessageBuilder;
+        private readonly IOptions<SapConfiguration> _sapConfig;
 
         private const string TraceIdKey = "data.traceId";
         private const string RequestFormat = "json";
@@ -28,14 +35,18 @@ namespace UKHO.ERPFacade.API.Controllers
                                  IAzureTableReaderWriter azureTableReaderWriter,
                                  IAzureBlobEventWriter azureBlobEventWriter,
                                  ISapClient sapClient,
-                                 IXmlHelper xmlHelper)
+                                 IScenarioBuilder scenarioBuilder,
+                                 ISapMessageBuilder sapMessageBuilder,
+                                    IOptions<SapConfiguration> sapConfig)
         : base(contextAccessor)
         {
             _logger = logger;
             _azureTableReaderWriter = azureTableReaderWriter;
             _azureBlobEventWriter = azureBlobEventWriter;
             _sapClient = sapClient;
-            _xmlHelper = xmlHelper;
+            _scenarioBuilder = scenarioBuilder;
+            _sapMessageBuilder = sapMessageBuilder;
+            _sapConfig = sapConfig ?? throw new ArgumentNullException(nameof(sapConfig));
         }
 
         [HttpOptions]
@@ -80,20 +91,30 @@ namespace UKHO.ERPFacade.API.Controllers
 
             _logger.LogInformation(EventIds.UploadedEncContentPublishedEventInAzureBlob.ToEventId(), "ENC content published event is uploaded in blob storage successfully.");
 
-            //Below line is added temporary only to send sample xml to mock service for local testing.
-            XmlDocument soapXml = _xmlHelper.CreateXmlDocument(Path.Combine(Environment.CurrentDirectory, "SapXmlTemplates\\SAPRequest.xml"));
+            List<Scenario> scenarios = _scenarioBuilder.BuildScenarios(JsonConvert.DeserializeObject<EESEvent>(requestJson.ToString()));
 
-            HttpResponseMessage response = await _sapClient.PostEventData(soapXml, "Z_ADDS_MAT_INFO");
-
-            if (!response.IsSuccessStatusCode)
+            if (scenarios.Count > 0)
             {
-                _logger.LogError(EventIds.SapConnectionFailed.ToEventId(), "Could not connect to SAP. | {StatusCode} | {SapResponse}", response.StatusCode, response.Content?.ReadAsStringAsync().Result);
-                throw new Exception();
-            }
+                XmlDocument sapPayload = _sapMessageBuilder.BuildSapMessageXml(scenarios, traceId);
 
-            _logger.LogInformation(EventIds.DataPushedToSap.ToEventId(), "Data pushed to SAP successfully. | {StatusCode} | {SapResponse}", response.StatusCode, response.Content?.ReadAsStringAsync().Result);
-            await _azureTableReaderWriter.UpdateRequestTimeEntity(traceId);
-            return new OkObjectResult(StatusCodes.Status200OK);
+                HttpResponseMessage response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapServiceOperation);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logger.LogError(EventIds.SapConnectionFailed.ToEventId(), "Could not connect to SAP. | {StatusCode}", response.StatusCode);
+                    throw new ERPFacadeException(EventIds.SapConnectionFailed.ToEventId());
+                }
+                _logger.LogInformation(EventIds.DataPushedToSap.ToEventId(), "Data pushed to SAP successfully. | {StatusCode}", response.StatusCode);
+
+                await _azureTableReaderWriter.UpdateRequestTimeEntity(traceId);
+
+                return new OkObjectResult(StatusCodes.Status200OK);
+            }
+            else
+            {
+                _logger.LogError(EventIds.NoScenarioFound.ToEventId(), "No scenarios found in incoming EES event.");
+                throw new ERPFacadeException(EventIds.NoScenarioFound.ToEventId());
+            }
         }
     }
 }

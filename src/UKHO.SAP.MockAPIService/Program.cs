@@ -1,10 +1,11 @@
 using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
+using Newtonsoft.Json.Serialization;
 using SoapCore;
 using System.Diagnostics.CodeAnalysis;
 using UKHO.ERPFacade.Common.Configuration;
-using UKHO.ERPFacade.Common.IO;
+using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.SAP.MockAPIService.Filters;
 using UKHO.SAP.MockAPIService.Services;
 
@@ -41,6 +42,7 @@ namespace UKHO.SAP.MockAPIService
             }
 
             // Add services to the container.
+                       
             builder.Services.AddSoapCore();
 
             builder.Services.Configure<SapConfiguration>(configuration.GetSection("SapConfiguration"));
@@ -50,10 +52,20 @@ namespace UKHO.SAP.MockAPIService
             builder.Services.AddSingleton<ISapConfiguration, SapConfiguration>();
             builder.Services.AddSingleton<IAzureBlobEventWriter, AzureBlobEventWriter>();
             builder.Services.AddSingleton<MockService>();
+            builder.Services.AddControllers(o =>
+            {
+                o.AllowEmptyInputInBodyModelBinding = true;
+            }).AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            });
 
             var app = builder.Build();
+            app.UseHttpsRedirection();
 
-            app.BasicAuthCustomMiddleware();
+            app.BasicAuthCustomMiddleware();            
+
+            app.MapControllers();
 
             app.UseRouting();
 

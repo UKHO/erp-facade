@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using UKHO.ERPFacade.Common.Configuration;
 
-namespace UKHO.ERPFacade.Common.IO
+namespace UKHO.ERPFacade.Common.IO.Azure
 {
     [ExcludeFromCodeCoverage]
     public class AzureBlobEventWriter : IAzureBlobEventWriter

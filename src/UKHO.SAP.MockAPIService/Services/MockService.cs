@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using UKHO.SAP.MockAPIService.Enums;
 
 namespace UKHO.SAP.MockAPIService.Services
 {
@@ -9,9 +8,9 @@ namespace UKHO.SAP.MockAPIService.Services
         private const string CurrentTestFileName = "CurrentTestCase.txt";
         private readonly string _homeDirectoryPath;
 
-        public MockService()
+        public MockService(IConfiguration configuration)
         {
-            _homeDirectoryPath = Environment.CurrentDirectory;
+            _homeDirectoryPath = Path.Combine(configuration["HOME"]);
         }
 
         public void CreateIfNotExists(string destPath)
@@ -22,13 +21,13 @@ namespace UKHO.SAP.MockAPIService.Services
             }
         }
 
-        public void UpdateTestCase(TestCase testCase)
+        public void UpdateTestCase(string testCase)
         {
             string destPath = Path.Combine(_homeDirectoryPath, CurrentTestFileName);
 
             CreateIfNotExists(destPath);
 
-            File.WriteAllText(destPath, testCase.ToString());
+            File.WriteAllText(destPath, testCase);
         }
 
         public string GetCurrentTestCase()
