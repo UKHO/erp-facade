@@ -60,7 +60,7 @@ stages:
   - stage: PERFORM_DEPENDENCYCHECK_DOTNETBUILD_DOTNETTEST_AND_PUBLISH
     displayName: "Build (DependencyChecker, Dotnet Build & Restore , Dotnet Test and Publish Artifact )"
     dependsOn: []
-    #jobs:
+    jobs:
     #  - job: Dependencychecker
     #    workspace:
     #      clean: all
