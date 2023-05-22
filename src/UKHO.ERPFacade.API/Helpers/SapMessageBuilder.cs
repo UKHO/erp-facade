@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Options;
-using System.Linq;
 using System.Xml;
 using UKHO.ERPFacade.API.Models;
 using UKHO.ERPFacade.Common.IO;
@@ -15,6 +14,7 @@ namespace UKHO.ERPFacade.API.Helpers
         private readonly IOptions<SapActionConfiguration> _sapActionConfig;
         private readonly IOptions<ActionNumberConfiguration> _actionNumberConfig;
 
+        private const string SapXmlPathDev = "SapXmlTemplates\\SAPRequestDev.xml";
         private const string SapXmlPath = "SapXmlTemplates\\SAPRequest.xml";
         private const string XpathImMatInfo = $"//*[local-name()='IM_MATINFO']";
         private const string XpathActionItems = $"//*[local-name()='ACTIONITEMS']";
@@ -55,7 +55,16 @@ namespace UKHO.ERPFacade.API.Helpers
         /// <returns>XmlDocument</returns>
         public XmlDocument BuildSapMessageXml(List<Scenario> scenarios, string traceId)
         {
-            var sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, SapXmlPath);
+            string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, SapXmlPath);
+
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            var isDevelopment = environment == Environments.Development;
+
+            if (isDevelopment)
+            {
+                sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, SapXmlPathDev);
+                _logger.LogInformation(EventIds.EnvironmentName.ToEventId(), "Environment name is {environment}", environment);
+            }
 
             //Check whether template file exists or not
             if (!_fileSystemHelper.IsFileExists(sapXmlTemplatePath))
@@ -154,7 +163,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                     }
                                 }
                             }
-                            break;                       
+                            break;
                         case 10:
                             var uosNotForSale = scenario.UnitOfSales.Where(x => x.Status == NotForSale).FirstOrDefault();
                             if (uosNotForSale != null)
