@@ -24,5 +24,15 @@ namespace UKHO.SAP.MockAPIService.Controller
             await Task.CompletedTask;
             return new OkObjectResult(StatusCodes.Status200OK);
         }
+
+        [HttpGet]
+        [Route("/api/ConfigureTestCase")]
+        public virtual async Task<IActionResult> GetCurrentTestCase()
+        {
+            string currentTestCase = _mockService.GetCurrentTestCase();
+
+            await Task.CompletedTask;
+            return new OkObjectResult(currentTestCase);
+        }
     }
 }
