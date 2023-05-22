@@ -60,10 +60,11 @@ namespace UKHO.ERPFacade.API.Helpers
             var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             var isDevelopment = environment == Environments.Development;
 
+            _logger.LogInformation(EventIds.EnvironmentName.ToEventId(), "Environment name is {environment}", environment);
+
             if (isDevelopment)
             {
                 sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, SapXmlPathDev);
-                _logger.LogInformation(EventIds.EnvironmentName.ToEventId(), "Environment name is {environment}", environment);
             }
 
             //Check whether template file exists or not
