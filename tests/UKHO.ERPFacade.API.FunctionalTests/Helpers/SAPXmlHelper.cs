@@ -2,7 +2,9 @@
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NUnit.Framework;
+using System.Runtime.Intrinsics.X86;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
@@ -1167,6 +1169,32 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             }
 
             return cancelledUoSCount;
+        }
+
+        public static string generateRandomTraceId() 
+        {
+            Guid guid = Guid.NewGuid();
+
+            string randomtraceID = guid.ToString("N");
+            
+            randomtraceID = randomtraceID.Insert(8,"-");
+            randomtraceID = randomtraceID.Insert(13, "-");
+            randomtraceID = randomtraceID.Insert(18, "-");
+            randomtraceID = randomtraceID.Insert(23, "-");
+
+            Console.WriteLine("Generated TraceId = " + randomtraceID);
+            return randomtraceID;
+        }
+
+        public static string updateTimeField(string requestBody)
+        {
+            var currentTimeStamp = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.sssssss'z'");
+            //string newTraceId = SAPXmlHelper.generateRandomTraceId();
+
+            JObject jsonObj = JObject.Parse(requestBody);
+            jsonObj["time"] = currentTimeStamp;
+            string updatedRequestBody = jsonObj.ToString();
+            return updatedRequestBody;
         }
 
     }

@@ -44,9 +44,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             {
                 requestBody = streamReader.ReadToEnd();
             }
-            var now = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.sssssss'z'");
-            requestBody = requestBody.Replace("CURTIME", now);
-    
+
+            requestBody = SAPXmlHelper.updateTimeField(requestBody);
+
             var request = new RestRequest("/webhook/newenccontentpublishedeventreceived", Method.Post);
             var now1 = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.fffffff'z'");
 
@@ -67,6 +67,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 requestBody = streamReader.ReadToEnd();
             }
 
+            requestBody =  SAPXmlHelper.updateTimeField(requestBody);            
 
             var request = new RestRequest("/webhook/newenccontentpublishedeventreceived", Method.Post);
             request.AddHeader("Content-Type", "application/json");
@@ -79,9 +80,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
             //Logic to download XML from container using TraceID from JSON
             string generatedXMLFilePath = SapXmlHelper.downloadGeneratedXML(generatedXMLFolder, traceID); // string path will be returned
-
-            //string generatedXMLFilePath = expectedXMLfilePath;
-            //string generatedXMLFilePath = "C:\\Users\\Sadha1501493\\GitHubRepo\\erp-facade\\tests\\UKHO.ERPFacade.API.FunctionalTests\\ERPFacadeGeneratedXmlFiles\\367ce4a4-1d62-4f56-b359-newcell30001.xml";
+            
+            
             //Logic to verifyxml
              if (response.StatusCode == System.Net.HttpStatusCode.OK)
              {
@@ -106,8 +106,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             request.AddHeader("Authorization", "Bearer " + token);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
             RestResponse response = await client.ExecuteAsync(request);
-
-
 
             return response;
         }
