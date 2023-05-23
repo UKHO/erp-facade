@@ -150,6 +150,11 @@
         /// <summary>
         /// 940030 - Azure Table Not Found
         /// </summary>
-        AzureTableNotFound = 940030
+        AzureTableNotFound = 940030,
+
+        /// <summary>
+        /// 940031 - Environment Name
+        /// </summary>
+        EnvironmentName = 940031
     }
 }

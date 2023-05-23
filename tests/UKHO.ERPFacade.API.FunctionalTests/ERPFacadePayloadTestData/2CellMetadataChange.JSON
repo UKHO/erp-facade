@@ -3,27 +3,27 @@
   "type": "uk.gov.ukho.encpublishing.enccontentpublished.v2",
   "source": "https://encpublishing.ukho.gov.uk",
   "id": "2f03a25f-28b3-46ea-b009-5943250a9a41",
-  "time": "2020-10-13T12:08:03.4880776Z",
+  "time": "2023-05-18T12:08:03.4880776Z",
   "_COMMENT": "A comma separated list of products",
-  "subject": "US5AK83M,US4AK6NT,US4AK6NU",
+  "subject": "MX545010, MX545012",
   "datacontenttype": "application/json",
   "data": {
-    "traceId": "367ce4a4-1d62-4f56-b359-canrepcell30001",
+    "traceId": "367ce4a4-1drr-4f56-b359-59e165699231",
     "products": [
       {
         "productType": "ENC S57",
-        "dataSetName": "US5AK83M.001",
-        "productName": "US5AK83M",
-        "title": "St. Michael Bay",
+        "dataSetName": "MX545010.001",
+        "productName": "MX545010",
+        "title": "Isla Clarion",
         "scale": 90000,
         "usageBand": 5,
-        "editionNumber": 0,
-        "updateNumber": 1,
-        "mayAffectHoldings": true,
-        "contentChanged": true,
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": false,
+        "contentChanged": false,
         "permit": "permitString",
-        "providerCode": 1,
-        "providerDesc": "ICE",
+        "providerCode": 2,
+        "providerDesc": "PRIMAR",
         "_COMMENT": "provider code and descrption are a n-1 mapping",
         "_ENUM": [
           "ICE",
@@ -34,14 +34,14 @@
           "VAR"
         ],
 
-        "size": "small",
-        "_COMMENT": "size code not included as will be in ERP Facade",
+        "size": "medium",
+        "_COMMENT": " size code not included as will be in ERP Facade",
         "_ENUM": [
           "large",
           "medium",
           "small"
         ],
-        "agency": "US",
+        "agency": "MX",
         "bundle": [
           {
             "bundleType": "DVD",
@@ -52,7 +52,7 @@
           }
         ],
         "status": {
-          "statusName": "Cancellation Update",
+          "statusName": "New Edition",
           "_ENUM": [
             "New Edition",
             "Re-issue",
@@ -66,7 +66,7 @@
           "_COMMENT": "A cell new to the service"
         },
         "replaces": [],
-        "replacedBy": [ "US4AK6NT", "US4AK6NU" ],
+        "replacedBy": [],
         "additionalCoverage": [],
         "geographicLimit": {
           "boundingBox": {
@@ -119,9 +119,9 @@
           ]
         },
         "_COMMENT": "The units in which product is included, including any 1-1 unit",
-        "inUnitsOfSale": [ "US5AK83M", "AVCSO", "PAYSF" ],
+        "inUnitsOfSale": [ "MX545010", "AVCSO", "PAYSF" ],
         "s63": {
-          "name": "US5AK83M.001",
+          "name": "XXXXXXXX.001",
           "hash": "5160204288db0a543850da177ec637b71ed55946e7f3843e6180b1906ee4f4ea",
           "location": "8198201e-78ce-4af8-9145-ad68ba0472e2",
           "fileSize": "4500",
@@ -129,26 +129,26 @@
           "s57Crc": "5C06E104"
         },
         "signature": {
-          "name": "US5AK83M.001",
+          "name": "XXXXXXXX.001",
           "hash": "fd0c9e5f95c0b664a1a27c2ff98812c648ebd113b117f5639f74536c397fbac9",
           "location": "0ecf2f38-a876-4d77-bd0e-0d901d3a0e73",
           "fileSize": "2500"
         },
         "ancillaryFiles": [
           {
-            "name": "GB123_04.TXT",
+            "name": "GBXXXXXXXX_04.TXT",
             "hash": "d030b93ad8a0801e6955e4f52599f6200d01310155882a1b80eec78c9b93662b",
             "location": "2a29932e-dcb8-4e3a-b8a2-b3cfc335ede5",
             "fileSize": "1240"
           },
           {
-            "name": "GB125_01.TXT",
+            "name": "GBXXXXXXXX_01.TXT",
             "hash": "bb8042082bd1d37236801837585fa0df5e96097fb8d2281b41888af2b23ceb0b",
             "location": "1ad0f9c3-8c93-495a-99a1-06a36410faa9",
             "fileSize": "1360"
           },
           {
-            "name": "GB162_01.TXT",
+            "name": "GBXXXXXXXX_01.TXT",
             "hash": "81470666f387a9035f6b33f59fb9bbf0872e9c296fecee58c4e919d6a1d87ab6",
             "location": "eb443aad-394c-4eb0-b391-415a261605a1",
             "fileSize": "1360"
@@ -157,18 +157,18 @@
       },
       {
         "productType": "ENC S57",
-        "dataSetName": "US4AK6NT.001",
-        "productName": "US4AK6NT",
-        "title": "Norton Sound - Alaska",
-        "scale": 12000,
-        "usageBand": 6,
-        "editionNumber": 8,
-        "updateNumber": 2,
-        "mayAffectHoldings": true,
-        "contentChanged": true,
-        "permit": "4A4E096BC7SDSAFEQAE71194324",
-        "providerCode": 1,
-        "providerDesc": "ICE",
+        "dataSetName": "MX545012.001",
+        "productName": "MX545012",
+        "title": "Isla Clarion - II",
+        "scale": 90000,
+        "usageBand": 5,
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": false,
+        "contentChanged": false,
+        "permit": "permitString",
+        "providerCode": 2,
+        "providerDesc": "PRIMAR",
         "_COMMENT": "provider code and descrption are a n-1 mapping",
         "_ENUM": [
           "ICE",
@@ -186,7 +186,7 @@
           "medium",
           "small"
         ],
-        "agency": "US",
+        "agency": "MX",
         "bundle": [
           {
             "bundleType": "DVD",
@@ -197,46 +197,76 @@
           }
         ],
         "status": {
-          "statusName": "New Edition",
+          "statusName": "Re-issue",
+          "_ENUM": [
+            "New Edition",
+            "Re-issue",
+            "Update",
+            "Cancellation Update",
+            "Withdrawn",
+            "Suspended"
+          ],
           "statusDate": "2023-03-03T00:00:00.00+01:00",
-          "isNewCell": true
+          "isNewCell": false,
+          "_COMMENT": "A cell new to the service"
         },
-        "replaces": [ "US5AK83M" ],
+        "replaces": [],
         "replacedBy": [],
         "additionalCoverage": [],
         "geographicLimit": {
           "boundingBox": {
-            "northLimit": 63,
-            "southLimit": 63,
-            "eastLimit": 162,
-            "westLimit": 161
+            "northLimit": 24.0,
+            "southLimit": 22.0,
+            "eastLimit": 120.0,
+            "westLimit": 119.0
           },
           "polygons": [
             {
               "polygon": [
                 {
-                  "latitude": 22.57515,
-                  "longitude": 120.21948
+                  "latitude": 24,
+                  "longitude": 121.5
                 },
                 {
-                  "latitude": 22.64326,
-                  "longitude": 120
+                  "latitude": 121,
+                  "longitude": 56
                 },
                 {
-                  "latitude": 22.57154,
-                  "longitude": 120
+                  "latitude": 45,
+                  "longitude": 78
                 },
                 {
-                  "latitude": 22.57515,
-                  "longitude": 121.21948
+                  "latitude": 119,
+                  "longitude": 121.5
+                }
+              ]
+            },
+            {
+              "polygon": [
+                {
+                  "latitude": 24,
+                  "longitude": 121.5
+                },
+                {
+                  "latitude": 121,
+                  "longitude": 56
+                },
+                {
+                  "latitude": 45,
+                  "longitude": 78
+                },
+                {
+                  "latitude": 119,
+                  "longitude": 121.5
                 }
               ]
             }
           ]
         },
-        "inUnitsOfSale": [ "US4AK6NT", "AVCSO", "PAYSF" ],
+        "_COMMENT": "The units in which product is included, including any 1-1 unit",
+        "inUnitsOfSale": [ "MX545012", "AVCSO", "PAYSF" ],
         "s63": {
-          "name": "US4AK6NT.001",
+          "name": "XXXXXXXX.001",
           "hash": "5160204288db0a543850da177ec637b71ed55946e7f3843e6180b1906ee4f4ea",
           "location": "8198201e-78ce-4af8-9145-ad68ba0472e2",
           "fileSize": "4500",
@@ -244,120 +274,29 @@
           "s57Crc": "5C06E104"
         },
         "signature": {
-          "name": "US4AK6NT.001",
+          "name": "XXXXXXXX.001",
           "hash": "fd0c9e5f95c0b664a1a27c2ff98812c648ebd113b117f5639f74536c397fbac9",
           "location": "0ecf2f38-a876-4d77-bd0e-0d901d3a0e73",
           "fileSize": "2500"
         },
         "ancillaryFiles": [
           {
-            "name": "US4AK6NT_04.TXT",
+            "name": "GBXXXXXXXX_04.TXT",
             "hash": "d030b93ad8a0801e6955e4f52599f6200d01310155882a1b80eec78c9b93662b",
             "location": "2a29932e-dcb8-4e3a-b8a2-b3cfc335ede5",
             "fileSize": "1240"
-          }
-        ]
-      },
-      {
-        "productType": "ENC S57",
-        "dataSetName": "US4AK6NU.001",
-        "productName": "US4AK6NU",
-        "title": "Norton Sound - Alaska",
-        "scale": 12000,
-        "usageBand": 6,
-        "editionNumber": 8,
-        "updateNumber": 2,
-        "mayAffectHoldings": true,
-        "contentChanged": true,
-        "permit": "4A4E096BC7SDSAFEQAE71194324",
-        "providerCode": 1,
-        "providerDesc": "ICE",
-        "_COMMENT": "provider code and descrption are a n-1 mapping",
-        "_ENUM": [
-          "ICE",
-          "ICE_GB",
-          "ICE_UK",
-          "PRIMAR",
-          "VAR Unique",
-          "VAR"
-        ],
-
-        "size": "medium",
-        "_COMMENT": " size code not included as will be in ERP Facade",
-        "_ENUM": [
-          "large",
-          "medium",
-          "small"
-        ],
-        "agency": "US",
-        "bundle": [
-          {
-            "bundleType": "DVD",
-            "_ENUM": [
-              "DVD"
-            ],
-            "location": "M1;B1"
-          }
-        ],
-        "status": {
-          "statusName": "New Edition",
-          "statusDate": "2023-03-03T00:00:00.00+01:00",
-          "isNewCell": true
-        },
-        "replaces": [ "US5AK83M" ],
-        "replacedBy": [],
-        "additionalCoverage": [],
-        "geographicLimit": {
-          "boundingBox": {
-            "northLimit": 63,
-            "southLimit": 63,
-            "eastLimit": 162,
-            "westLimit": 161
           },
-          "polygons": [
-            {
-              "polygon": [
-                {
-                  "latitude": 22.57515,
-                  "longitude": 120.21948
-                },
-                {
-                  "latitude": 22.64326,
-                  "longitude": 120
-                },
-                {
-                  "latitude": 22.57154,
-                  "longitude": 120
-                },
-                {
-                  "latitude": 22.57515,
-                  "longitude": 121.21948
-                }
-              ]
-            }
-          ]
-        },
-        "inUnitsOfSale": [ "US4AK6NU", "AVCSO", "PAYSF" ],
-        "s63": {
-          "name": "US4AK6NU.001",
-          "hash": "5160204288db0a543850da177ec637b71ed55946e7f3843e6180b1906ee4f4ea",
-          "location": "8198201e-78ce-4af8-9145-ad68ba0472e2",
-          "fileSize": "4500",
-          "compression": true,
-          "s57Crc": "5C06E104"
-        },
-        "signature": {
-          "name": "US4AK6NU.001",
-          "hash": "fd0c9e5f95c0b664a1a27c2ff98812c648ebd113b117f5639f74536c397fbac9",
-          "location": "0ecf2f38-a876-4d77-bd0e-0d901d3a0e73",
-          "fileSize": "2500"
-        },
-        "ancillaryFiles": [
           {
-            "name": "US4AK6NU_04.TXT",
-            "hash": "d030b93ad8a0801e6955e4f52599f6200d01310155882a1b80eec78c9b93662b",
-            "location": "2a29932e-dcb8-4e3a-b8a2-b3cfc335ede5",
-            "fileSize": "1240"
+            "name": "GBXXXXXXXX_01.TXT",
+            "hash": "bb8042082bd1d37236801837585fa0df5e96097fb8d2281b41888af2b23ceb0b",
+            "location": "1ad0f9c3-8c93-495a-99a1-06a36410faa9",
+            "fileSize": "1360"
+          },
+          {
+            "name": "GBXXXXXXXX_01.TXT",
+            "hash": "81470666f387a9035f6b33f59fb9bbf0872e9c296fecee58c4e919d6a1d87ab6",
+            "location": "eb443aad-394c-4eb0-b391-415a261605a1",
+            "fileSize": "1360"
           }
         ]
       }
@@ -365,21 +304,16 @@
     "_COMMENT": "Prices for all units in event will be included, including Cancelled Cell",
     "unitsOfSale": [
       {
-        "unitName": "US5AK83M",
-        "title": "St. Michael Bay",
-        "unitOfSaleType": "unit",
-        "_ENUM": [
-          "unit",
-          "folio"
-        ],
-        "unitSize": "large",
+        "unitName": "MX545010",
+        "title": "Isla Clarion",
         "unitType": "AVCS Units Coastal",
-        "status": "NotForSale",
-        "isNewUnitOfSale": false,
+        "unitSize": "large",
+        "status": "ForSale",
         "_ENUM": [
           "ForSale",
           "NotForSale"
         ],
+        "isNewUnitOfSale": false,
         "_COMMENT": "BoundingBox or polygon or both or neither",
         "geographicLimit": {
           "boundingBox": {
@@ -392,78 +326,38 @@
         },
         "compositionChanges": {
           "addProducts": [],
-          "removeProducts": [ "US5AK83M" ]
-        }
-      },
-      {
-        "unitName": "US4AK6NT",
-        "title": "Norton Sound - Alaska",
-        "unitOfSaleType": "unit",
-        "_ENUM": [
-          "unit",
-          "folio"
-        ],
-        "unitType": "AVCS Units Coastal",
-        "status": "ForSale",
-        "isNewUnitOfSale": true,
-        "_COMMENT": "avcs_cat has either boundingBox or polygon - should both be included?",
-        "geographicLimit": {
-          "boundingBox": {
-            "northLimit": 22.643255,
-            "southLimit": 22.4625767,
-            "eastLimit": 120.34972,
-            "westLimit": 120.219475
-          },
-          "polygons": [
-            {
-              "polygon": []
-            }
-          ]
-        },
-        "compositionChanges": {
-          "addProducts": [ "US4AK6NT" ],
           "removeProducts": []
         }
       },
       {
-        "unitName": "US4AK6NU",
-        "title": "Norton Sound - Alaska",
-        "unitOfSaleType": "unit",
-        "_ENUM": [
-          "unit",
-          "folio"
-        ],
-        "unitSize": "large",
+        "unitName": "MX545012",
+        "title": "Isla Clarion-II",
         "unitType": "AVCS Units Coastal",
+        "unitSize": "large",
         "status": "ForSale",
-        "isNewUnitOfSale": true,
-        "_COMMENT": "avcs_cat has either boundingBox or polygon - should both be included?",
+        "_ENUM": [
+          "ForSale",
+          "NotForSale"
+        ],
+        "isNewUnitOfSale": false,
+        "_COMMENT": "BoundingBox or polygon or both or neither",
         "geographicLimit": {
           "boundingBox": {
-            "northLimit": 22.643255,
-            "southLimit": 22.4625767,
-            "eastLimit": 120.34972,
-            "westLimit": 120.219475
+            "northLimit": 24.146815,
+            "southLimit": 22.581615,
+            "eastLimit": 120.349635,
+            "westLimit": 119.39142
           },
-          "polygons": [
-            {
-              "polygon": []
-            }
-          ]
+          "polygons": []
         },
         "compositionChanges": {
-          "addProducts": [ "US4AK6NU" ],
+          "addProducts": [],
           "removeProducts": []
         }
       },
       {
         "unitName": "AVCSO",
         "title": "AVCS Online Folio Some Title",
-        "unitOfSaleType": "folio",
-        "_ENUM": [
-          "unit",
-          "folio"
-        ],
         "unitSize": "large",
         "unitType": "AVCS Online Folio",
         "status": "ForSale",
@@ -495,11 +389,8 @@
         },
         "compositionChanges": {
           "addProducts": [
-            "US4AK6NT",
-            "US4AK6NU"
           ],
           "removeProducts": [
-            "US5AK83M"
           ]
         }
       },
@@ -507,11 +398,7 @@
         "unitName": "PAYSF",
         "title": "World Folio",
         "unitType": "AVCS Folio Transit",
-        "unitOfSaleType": "folio",
-        "_ENUM": [
-          "unit",
-          "folio"
-        ],
+        "unitSize": "large",
         "status": "ForSale",
         "isNewUnitOfSale": false,
         "geographicLimit": {
@@ -553,11 +440,9 @@
         },
         "compositionChanges": {
           "addProducts": [
-            "US4AK6NT",
-            "US4AK6NU"
           ],
           "removeProducts": [
-            "US5AK83M"
+
           ]
         }
       }
