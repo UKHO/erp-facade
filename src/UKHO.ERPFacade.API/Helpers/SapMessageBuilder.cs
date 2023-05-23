@@ -1,10 +1,4 @@
-﻿using Microsoft.Extensions.Options;
-using System.Xml;
-using UKHO.ERPFacade.API.Models;
-using UKHO.ERPFacade.Common.IO;
-using UKHO.ERPFacade.Common.Logging;
-
-namespace UKHO.ERPFacade.API.Helpers
+﻿namespace UKHO.ERPFacade.API.Helpers
 {
     public class SapMessageBuilder : ISapMessageBuilder
     {
@@ -34,6 +28,7 @@ namespace UKHO.ERPFacade.API.Helpers
         private const string UnitOfSaleSection = "UnitOfSale";
         private const string NotForSale = "NotForSale";
         private const string UnitSaleType = "unit";
+        private const string DevEnvName = "dev";
 
         public SapMessageBuilder(ILogger<SapMessageBuilder> logger,
                                  IXmlHelper xmlHelper,
@@ -58,13 +53,13 @@ namespace UKHO.ERPFacade.API.Helpers
         {
             string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, SapXmlPath);
 
-            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            var isDevelopment = environment == Environments.Development;
+            string environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
-            if (isDevelopment)
+            _logger.LogInformation(EventIds.EnvironmentName.ToEventId(), "Environment name is {environment}", environment);
+
+            if (environment == DevEnvName)
             {
                 sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, SapXmlPathDev);
-                _logger.LogInformation(EventIds.EnvironmentName.ToEventId(), "Environment name is {environment}", environment);
             }
 
             //Check whether template file exists or not
@@ -170,7 +165,6 @@ namespace UKHO.ERPFacade.API.Helpers
                                 }
                             }
                             break;
-
                         case 10:
                             var uosNotForSale = scenario.UnitOfSales.Where(x => x.Status == NotForSale).FirstOrDefault();
                             if (uosNotForSale != null)
