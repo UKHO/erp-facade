@@ -235,7 +235,7 @@ namespace UKHO.ERPFacade.API.Helpers
 
         private static XmlElement BuildAction(XmlDocument soapXml, Scenario scenario, SapAction action, string cell, string childCell = null, string replacedByProduct = null)
         {
-            XmlElement itemNode = soapXml.CreateElement(Item, XmlNameSpaceURI);
+            XmlElement itemNode = soapXml.CreateElement(Item);
 
             XmlElement actionNumberNode = soapXml.CreateElement(ActionNumber);
             actionNumberNode.InnerText = action.ActionNumber.ToString();

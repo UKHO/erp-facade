@@ -33,7 +33,7 @@ namespace UKHO.SAP.MockAPIService.Models
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.1.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "urn:sap-com:document:sap:rfc:functions")]
+    [System.Xml.Serialization.XmlTypeAttribute()]
     public partial class ZMAT_INFO
     {
 
