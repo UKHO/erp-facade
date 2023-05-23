@@ -155,7 +155,7 @@
           },
           {
             "IsRequired": true,
-            "Section": "Product",
+            "Section": "UnitOfSale",
             "JsonPropertyName": "Title",
             "XmlNodeName": "TITLE",
             "SortingOrder": 9
@@ -246,7 +246,7 @@
           },
           {
             "IsRequired": false,
-            "Section": "Product",
+            "Section": "UnitOfSale",
             "JsonPropertyName": "Title",
             "XmlNodeName": "TITLE",
             "SortingOrder": 9
@@ -519,7 +519,7 @@
           },
           {
             "IsRequired": true,
-            "Section": "Product",
+            "Section": "UnitOfSale",
             "JsonPropertyName": "Title",
             "XmlNodeName": "TITLE",
             "SortingOrder": 9
@@ -701,7 +701,7 @@
           },
           {
             "IsRequired": false,
-            "Section": "Product",
+            "Section": "UnitOfSale",
             "JsonPropertyName": "Title",
             "XmlNodeName": "TITLE",
             "SortingOrder": 9
@@ -883,7 +883,7 @@
           },
           {
             "IsRequired": false,
-            "Section": "Product",
+            "Section": "UnitOfSale",
             "JsonPropertyName": "Title",
             "XmlNodeName": "TITLE",
             "SortingOrder": 9
