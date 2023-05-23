@@ -70,6 +70,7 @@ resource "azurerm_app_service_virtual_network_swift_connection" "webapp_vnet_int
 }
 
 resource "azurerm_private_endpoint" "Privateendpoint" {
+  name = "m-erptosap-qa-pe"
   lifecycle {
     ignore_changes = [
       parameters,
