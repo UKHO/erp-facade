@@ -87,6 +87,8 @@ namespace UKHO.ERPFacade.API.Controllers
                     _logger.LogWarning(EventIds.PriceEventExceedSizeLimit.ToEventId(), "Unit of Sale Price Event exceeds the size limit of 1 MB.");
                     throw new ERPFacadeException(EventIds.PriceEventExceedSizeLimit.ToEventId());
                 }
+
+                // Add code to publish the event in EES
             }
             else
             {
