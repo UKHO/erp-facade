@@ -35,25 +35,25 @@ namespace UKHO.ERPFacade.API.Controllers
         [Route("/priceinformation")]
         public virtual async Task<IActionResult> Post([FromBody] JObject requestJson)
         {
-            var traceId = requestJson.SelectToken(TraceIdKey)?.Value<string>();
+            //var traceId = requestJson.SelectToken(TraceIdKey)?.Value<string>();
 
-            if (string.IsNullOrEmpty(traceId))
-            {
-                _logger.LogWarning(EventIds.TraceIdMissingInSAPEvent.ToEventId(), "TraceId is missing in the event received from the SAP.");
-                return new BadRequestObjectResult(StatusCodes.Status400BadRequest);
-            }
+            //if (string.IsNullOrEmpty(traceId))
+            //{
+            //    _logger.LogWarning(EventIds.TraceIdMissingInSAPEvent.ToEventId(), "TraceId is missing in the event received from the SAP.");
+            //    return new BadRequestObjectResult(StatusCodes.Status400BadRequest);
+            //}
 
-            await _azureTableReaderWriter.UpdateResponseTimeEntity(traceId);
+            //await _azureTableReaderWriter.UpdateResponseTimeEntity(traceId);
 
-            var isBlobExists = _azureBlobEventWriter.CheckIfContainerExists(traceId);
+            //var isBlobExists = _azureBlobEventWriter.CheckIfContainerExists(traceId);
 
-            if (!isBlobExists)
-            {
-                _logger.LogError(EventIds.BlobNotFoundInAzure.ToEventId(), "Blob does not exist in the Azure Storage for the trace ID received from SAP event.");
-                return new NotFoundObjectResult(StatusCodes.Status404NotFound);
-            }
+            //if (!isBlobExists)
+            //{
+            //    _logger.LogError(EventIds.BlobNotFoundInAzure.ToEventId(), "Blob does not exist in the Azure Storage for the trace ID received from SAP event.");
+            //    return new NotFoundObjectResult(StatusCodes.Status404NotFound);
+            //}
 
-            _logger.LogInformation(EventIds.BlobExistsInAzure.ToEventId(), "Blob exists in the Azure Storage for the trace ID received from SAP event.");
+            //_logger.LogInformation(EventIds.BlobExistsInAzure.ToEventId(), "Blob exists in the Azure Storage for the trace ID received from SAP event.");
 
             var payload = CreateUnitOfSalePriceEventPayload(requestJson);
             await _eventPublisher.Publish(payload);
