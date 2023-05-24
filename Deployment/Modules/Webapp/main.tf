@@ -64,7 +64,7 @@ resource "azurerm_windows_web_app" "mock_webapp_service" {
   https_only = true
 
   lifecycle {
-    ignore_changes = [ip_restriction]
+    ignore_changes = [ ip_restriction[] ]
   }
    }
 
