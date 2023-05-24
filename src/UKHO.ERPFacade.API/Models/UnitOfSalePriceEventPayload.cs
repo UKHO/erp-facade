@@ -1,10 +1,23 @@
 ﻿using Newtonsoft.Json;
 using System.Diagnostics.CodeAnalysis;
+using UKHO.ERPFacade.Common.Infrastructure;
 
 namespace UKHO.ERPFacade.API.Models
 {
     [ExcludeFromCodeCoverage]
-    public class UnitOfSalePriceEventPayload
+    public class UnitOfSalePriceEventPayload : EventBase<UnitOfSalePriceEvent>
+    {
+        public UnitOfSalePriceEventPayload(UnitOfSalePriceEvent unitOfSalePriceEvent)
+        {
+            EventData = unitOfSalePriceEvent;
+        }
+
+        public override string EventName => "uk.gov.ukho.encpublishing.enccontentpublished.v2";
+        public override string Subject => EventData.Subject;
+    }
+
+    [ExcludeFromCodeCoverage]
+    public class UnitOfSalePriceEvent
     {
         [JsonProperty("specversion")]
         public string SpecVersion { get; set; }

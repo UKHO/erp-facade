@@ -1,18 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
-using System.Diagnostics;
-using System.Drawing;
-using System.Globalization;
-using System.Text;
-using System.Text.Encodings.Web;
+using Newtonsoft.Json;
 using UKHO.ERPFacade.API.Models;
 using UKHO.ERPFacade.API.Services;
 using UKHO.ERPFacade.Common.Exceptions;
-using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.IO.Azure;
+using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
 
 namespace UKHO.ERPFacade.API.Controllers
@@ -79,7 +72,9 @@ namespace UKHO.ERPFacade.API.Controllers
                 var exisitingEesEvent = _azureBlobEventWriter.DownloadEvent(corrId + '.' + RequestFormat, corrId);
                 _logger.LogInformation(EventIds.DownloadedExistingEesEventFromBlob.ToEventId(), "Existing EES event is downloaded from azure blob storage successfully.");
 
-                JObject eesPriceEventPayloadJson = _erpFacadeService.BuildPriceEventPayload(unitsOfSalePriceList, exisitingEesEvent);
+                var eesPriceEventPayload = _erpFacadeService.BuildPriceEventPayload(unitsOfSalePriceList, exisitingEesEvent);
+
+                JObject eesPriceEventPayloadJson = JObject.Parse(JsonConvert.SerializeObject(eesPriceEventPayload));
 
                 var eventSize = CommonHelper.GetEventSize(eesPriceEventPayloadJson);
                 if (eventSize > EventSizeLimit)
@@ -87,6 +82,8 @@ namespace UKHO.ERPFacade.API.Controllers
                     _logger.LogWarning(EventIds.PriceEventExceedSizeLimit.ToEventId(), "Unit of Sale Price Event exceeds the size limit of 1 MB.");
                     throw new ERPFacadeException(EventIds.PriceEventExceedSizeLimit.ToEventId());
                 }
+
+                // Add code to publish the event in EES
             }
             else
             {
@@ -108,10 +105,10 @@ namespace UKHO.ERPFacade.API.Controllers
             if (bulkpriceInformationList.Count > 0)
             {
                 List<UnitsOfSalePrices> unitsOfSalePriceList = _erpFacadeService.BuildUnitOfSalePricePayload(bulkpriceInformationList);
-                
-                foreach(var priceList  in unitsOfSalePriceList)
+
+                foreach (var priceList in unitsOfSalePriceList)
                 {
-                    JObject eesBulkPriceEventPayloadJson = _erpFacadeService.BuildBulkPriceEventPayload(priceList);
+                    var eesBulkPriceEventPayload = _erpFacadeService.BuildBulkPriceEventPayload(priceList);
 
                     //Add code to publish this event to EES
                 }

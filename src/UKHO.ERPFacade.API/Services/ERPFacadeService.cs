@@ -1,9 +1,5 @@
-﻿using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using Newtonsoft.Json;
 using System.Globalization;
-using UKHO.ERPFacade.API.Helpers;
 using UKHO.ERPFacade.API.Models;
 using UKHO.ERPFacade.Common.Logging;
 
@@ -100,60 +96,54 @@ namespace UKHO.ERPFacade.API.Services
             return unitsOfSalePriceList;
         }
 
-        public JObject BuildPriceEventPayload(List<UnitsOfSalePrices> unitsOfSalePriceList, string exisitingEesEvent)
+        public UnitOfSalePriceEventPayload BuildPriceEventPayload(List<UnitsOfSalePrices> unitsOfSalePriceList, string exisitingEesEvent)
         {
             _logger.LogInformation(EventIds.BuildingPriceEventStarted.ToEventId(), "Building unit of sale price event started.");
-            
+
             EESEventPayload eESEventPayload = JsonConvert.DeserializeObject<EESEventPayload>(exisitingEesEvent);
 
-            UnitOfSalePriceEventPayload unitOfSalePriceEventPayload = new();
-            UnitOfSalePriceEventData unitOfSalePriceEventData = new();
-
-            unitOfSalePriceEventData.TraceId = eESEventPayload.Data.TraceId;
-            unitOfSalePriceEventData.Products = eESEventPayload.Data.Products;
-            unitOfSalePriceEventData._COMMENT = "Prices for all units in event will be included, including Cancelled Cell";
-            unitOfSalePriceEventData.UnitsOfSales = eESEventPayload.Data.UnitsOfSales;
-            unitOfSalePriceEventData.UnitsOfSalePrices = unitsOfSalePriceList;
-
-            unitOfSalePriceEventPayload.SpecVersion = eESEventPayload.SpecVersion;
-            unitOfSalePriceEventPayload.Type = eESEventPayload.Type;
-            unitOfSalePriceEventPayload.Source = eESEventPayload.Source;
-            unitOfSalePriceEventPayload.Id = eESEventPayload.Id;
-            unitOfSalePriceEventPayload.Time = eESEventPayload.Time;
-            unitOfSalePriceEventPayload._COMMENT = "A comma separated list of products";
-            unitOfSalePriceEventPayload.Subject = eESEventPayload.Subject;
-            unitOfSalePriceEventPayload.DataContentType = eESEventPayload.DataContentType;
-            unitOfSalePriceEventPayload.Data = unitOfSalePriceEventData;
-
-            JObject unitOfSalePriceEventPayloadJson = JObject.Parse(JsonConvert.SerializeObject(unitOfSalePriceEventPayload));
-            
             _logger.LogInformation(EventIds.PriceEventCreated.ToEventId(), "Unit of sale price event created.");
 
-            return unitOfSalePriceEventPayloadJson;
+            return new UnitOfSalePriceEventPayload(new UnitOfSalePriceEvent
+            {
+                SpecVersion = eESEventPayload.SpecVersion,
+                Type = eESEventPayload.Type,
+                Source = eESEventPayload.Source,
+                Id = eESEventPayload.Id,
+                Time = eESEventPayload.Time,
+                _COMMENT = "A comma separated list of products",
+                Subject = eESEventPayload.Subject,
+                DataContentType = eESEventPayload.DataContentType,
+                Data = new UnitOfSalePriceEventData
+                {
+                    TraceId = eESEventPayload.Data.TraceId,
+                    Products = eESEventPayload.Data.Products,
+                    _COMMENT = "Prices for all units in event will be included, including Cancelled Cell",
+                    UnitsOfSales = eESEventPayload.Data.UnitsOfSales,
+                    UnitsOfSalePrices = unitsOfSalePriceList,
+                }
+            });
         }
 
-        public JObject BuildBulkPriceEventPayload(UnitsOfSalePrices unitsOfSalePriceList)
+        public BulkPriceEventPayload BuildBulkPriceEventPayload(UnitsOfSalePrices unitsOfSalePriceList)
         {
             _logger.LogInformation(EventIds.BuildingBulkPriceEventStarted.ToEventId(), "Building bulk price event started.");
 
-            BulkPriceEventPayload bulkPriceEventPayload = new();
-            BulkPriceEventData bulkPriceEventData = new();
-
-            bulkPriceEventData.TraceId = Guid.NewGuid().ToString();
-            bulkPriceEventData.UnitsOfSalePrices = unitsOfSalePriceList;
-
-            bulkPriceEventPayload.SpecVersion = "1.0";
-            bulkPriceEventPayload.Type = "uk.gov.ukho.erp.bulkpricechange.v1";
-            bulkPriceEventPayload.Source = "https://erp.ukho.gov.uk";
-            bulkPriceEventPayload.Id = Guid.NewGuid().ToString();
-            bulkPriceEventPayload.Time = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ");
-            bulkPriceEventPayload.Data = bulkPriceEventData;
-
-            JObject bulkPriceEventPayloadJson = JObject.Parse(JsonConvert.SerializeObject(bulkPriceEventPayload));
-
             _logger.LogInformation(EventIds.BulkPriceEventCreated.ToEventId(), "Bulk price event created.");
 
-            return bulkPriceEventPayloadJson;
+            return new BulkPriceEventPayload(new BulkPriceEvent
+            {
+                SpecVersion = "1.0",
+                Type = "uk.gov.ukho.erp.bulkpricechange.v1",
+                Source = "https://erp.ukho.gov.uk",
+                Id = Guid.NewGuid().ToString(),
+                Time = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"),
+                Data = new BulkPriceEventData
+                {
+                    TraceId = Guid.NewGuid().ToString(),
+                    UnitsOfSalePrices = unitsOfSalePriceList
+                }
+            });
         }
 
         //private methods
@@ -180,7 +170,7 @@ namespace UKHO.ERPFacade.API.Services
 
         private static DateTimeOffset GetDate(string date, string time)
         {
-            DateTime dateTime = Convert.ToDateTime(DateTime.ParseExact(date+""+time, "yyyyMMddhhmmss", CultureInfo.InvariantCulture));
+            DateTime dateTime = Convert.ToDateTime(DateTime.ParseExact(date + "" + time, "yyyyMMddhhmmss", CultureInfo.InvariantCulture));
             DateTimeOffset dateTimeOffset = new DateTimeOffset(dateTime);
 
             return dateTimeOffset;
