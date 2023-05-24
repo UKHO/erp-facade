@@ -31,6 +31,7 @@ data "azurerm_subnet" "main_subnet" {
     location                  = azurerm_resource_group.rg.location
     sku_name                  = var.sku_name[local.env_name]
     subnet_id                 = data.azurerm_subnet.main_subnet.id
+    ignore_changes            = local.env_name == "qa" ? [ virtual_network_subnet_id , ip_restriction ] : [ virtual_network_subnet_id ]
     app_settings = {
       "KeyVaultSettings:ServiceUri"                              = "https://${local.key_vault_name}.vault.azure.net/"
       "EventHubLoggingConfiguration:Environment"                 = local.env_name

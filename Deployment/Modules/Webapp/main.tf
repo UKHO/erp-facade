@@ -13,6 +13,7 @@ resource "azurerm_windows_web_app" "webapp_service" {
   resource_group_name = var.resource_group_name
   service_plan_id     = azurerm_service_plan.app_service_plan.id
   tags                = var.tags
+  
 
   site_config {
      application_stack {    
@@ -31,10 +32,7 @@ resource "azurerm_windows_web_app" "webapp_service" {
     }
 
   lifecycle {
-    ignore_changes = [ 
-      virtual_network_subnet_id,
-      ip_restriction 
-    ]
+    ignore_changes = var.ignore_changes
    }
 
   https_only = true
