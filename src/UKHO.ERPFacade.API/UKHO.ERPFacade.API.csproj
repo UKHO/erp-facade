@@ -12,6 +12,12 @@
     <NoWarn>8600;8602;8604;8618;8625</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Service\**" />
+    <Content Remove="Service\**" />
+    <EmbeddedResource Remove="Service\**" />
+    <None Remove="Service\**" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Remove="Filters\LogCorrelationIdMiddleware.cs" />
     <Compile Remove="Filters\LogCorrelationIdMiddlewareExtensions.cs" />
   </ItemGroup>
@@ -42,8 +48,5 @@
     <None Update="SapXmlTemplates\SAPRequest.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Service\" />
   </ItemGroup>
 </Project>

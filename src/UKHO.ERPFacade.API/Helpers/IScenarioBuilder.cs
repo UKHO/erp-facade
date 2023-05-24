@@ -4,6 +4,6 @@ namespace UKHO.ERPFacade.API.Helpers
 {
     public interface IScenarioBuilder
     {
-        List<Scenario> BuildScenarios(EESEvent eventData);
+        List<Scenario> BuildScenarios(EESEventPayload eventData);
     }
 }

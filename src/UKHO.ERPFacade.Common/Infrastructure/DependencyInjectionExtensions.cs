@@ -1,13 +1,14 @@
-﻿using System.Net.Http.Headers;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Polly;
 using Polly.Extensions.Http;
+using Polly;
+using System.Net.Http.Headers;
 using UKHO.ERPFacade.Common.Infrastructure.Authentication;
 using UKHO.ERPFacade.Common.Infrastructure.Config;
-using UKHO.ERPFacade.Common.Infrastructure.EventService;
 using UKHO.ERPFacade.Common.Infrastructure.EventService.EventProvider;
+using UKHO.ERPFacade.Common.Infrastructure.EventService;
+using UKHO.ERPFacade.Common.Providers;
 
 namespace UKHO.ERPFacade.Common.Infrastructure
 {
@@ -26,10 +27,13 @@ namespace UKHO.ERPFacade.Common.Infrastructure
                 configuration.GetSection("InteractiveLoginConfiguration").Bind(settings);
             });
 
+            services.AddSingleton<IDateTimeProvider, DateTimeProvider>()
+                    .AddSingleton<IUniqueIdentifierFactory, UniqueIdentifierFactory>();
+
             services.AddSingleton<ICloudEventFactory, CloudEventFactory>()
-                    .AddSingleton<IEventPublisher, EnterpriseEventServiceEventPublisher>()
-                    .AddSingleton<IAccessTokenCache, AccessTokenCache>()
-                    .AddLazyCache();
+                    .AddSingleton<IEventPublisher, EnterpriseEventServiceEventPublisher>();
+            //.AddSingleton<IAccessTokenCache, AccessTokenCache>()
+            //.AddLazyCache();
 
             services.AddSingleton<InteractiveTokenProvider>();
             services.AddSingleton<ManagedIdentityTokenProvider>();

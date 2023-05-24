@@ -110,7 +110,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
                 }
             };
 
-            A.CallTo(() => _fakeScenarioBuilder.BuildScenarios(A<EESEvent>.Ignored)).Returns(fakeScenario);
+            A.CallTo(() => _fakeScenarioBuilder.BuildScenarios(A<EESEventPayload>.Ignored)).Returns(fakeScenario);
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(xmlDocument);
             A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored))
                 .Returns(new HttpResponseMessage()
@@ -190,7 +190,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
 
             var fakeEncEventJson = JObject.Parse(@"{""data"":{""traceId"":""123""}}");
 
-            A.CallTo(() => _fakeScenarioBuilder.BuildScenarios(A<EESEvent>.Ignored)).Returns(fakeScenario);
+            A.CallTo(() => _fakeScenarioBuilder.BuildScenarios(A<EESEventPayload>.Ignored)).Returns(fakeScenario);
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(xmlDocument);
             A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored))
                 .Returns(new HttpResponseMessage()
@@ -238,7 +238,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
 
             var fakeEncEventJson = JObject.Parse(@"{""data"":{""traceId"":""123""}}");
 
-            A.CallTo(() => _fakeScenarioBuilder.BuildScenarios(A<EESEvent>.Ignored)).Returns(fakeScenario);
+            A.CallTo(() => _fakeScenarioBuilder.BuildScenarios(A<EESEventPayload>.Ignored)).Returns(fakeScenario);
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(xmlDocument);
             A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored))
                 .Returns(new HttpResponseMessage()
