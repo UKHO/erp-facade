@@ -31,9 +31,9 @@ resource "azurerm_windows_web_app" "webapp_service" {
     type = "SystemAssigned"
     }
 
-  lifecycle {
-    ignore_changes = local.env_name == "qa" ? [ virtual_network_subnet_id , ip_restriction ] : [ virtual_network_subnet_id ]
-   }
+#  lifecycle {
+#   ignore_changes = local.env_name == "qa" ? [ virtual_network_subnet_id , ip_restriction ] : [ virtual_network_subnet_id ]
+#  }
 
   https_only = true
   }
@@ -69,4 +69,14 @@ resource "azurerm_windows_web_app" "mock_webapp_service" {
 resource "azurerm_app_service_virtual_network_swift_connection" "webapp_vnet_integration" {
   app_service_id = azurerm_windows_web_app.webapp_service.id
   subnet_id      = var.subnet_id
+}
+
+resource "azurerm_private_endpoint" "Privateendpoint" {
+  count     = var.env_name == "qa" ? 1 : 0
+  name      = "m-erptosap-qa-pe"
+
+  lifecycle {
+    ignore_changes = all
+  }
+
 }
