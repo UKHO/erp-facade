@@ -40,7 +40,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         }
 
         [Test]
-        public void WhenEESEventPayloadDataPassedWithIsNewCellAsTrue_ThenReturnsNewCellScenario()
+        public void WhenEesEventDataPassedWithIsNewCellAsTrue_ThenReturnsNewCellScenario()
         {
             var fakeEventData = new EESEventPayload()
             {
@@ -112,7 +112,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
 
 
         [Test]
-        public void WhenEESEventPayloadDataDoesNotMatchAnyScenarioCondition_ThenEmptyScenarioList()
+        public void WhenEesEventDataDoesNotMatchAnyScenarioCondition_ThenEmptyScenarioList()
         {
             var fakeEventData = new EESEventPayload()
             {
@@ -182,7 +182,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         }
 
         [Test]
-        public void WhenEESEventPayloadDataPassedWithStatusNameAsCancellationUpdateAndContentChangedAsTrue_ThenReturnsCancellAndReplaceCellScenario()
+        public void WhenEesEventDataPassedWithStatusNameAsCancellationUpdateAndContentChangedAsTrue_ThenReturnsCancellAndReplaceCellScenario()
         {
             var fakeEventData = new EESEventPayload()
             {
@@ -253,7 +253,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         }
 
         [Test]
-        public void WhenEESEventPayloadDataPassedWithContentChangedAsFalse_ThenReturnsChangeMoveCellScenario()
+        public void WhenEesEventDataPassedWithContentChangedAsFalse_ThenReturnsChangeMoveCellScenario()
         {
             var fakeEventData = new EESEventPayload()
             {
@@ -324,7 +324,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         }
 
         [Test]
-        public void WhenEESEventPayloadDataPassedWithStatusNameAsUpdateAndContentChangedAsTrue_ThenReturnsUpdateScenario()
+        public void WhenEesEventDataPassedWithStatusNameAsUpdateAndContentChangedAsTrue_ThenReturnsUpdateScenario()
         {
             var fakeEventData = new EESEventPayload()
             {
@@ -395,7 +395,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         }
 
         [Test]
-        public void WhenEESEventPayloadDataPassedWithStatusNameAsNewEditionAndContentChangedAsTrueAndIsNewCellAsFalse_ThenReturnsUpdateScenario()
+        public void WhenEesEventDataPassedWithStatusNameAsNewEditionAndContentChangedAsTrueAndIsNewCellAsFalse_ThenReturnsUpdateScenario()
         {
             var fakeEventData = new EESEventPayload()
             {
@@ -466,7 +466,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         }
 
         [Test]
-        public void WhenEESEventPayloadDataPassedWithStatusNameAsReIssueAndContentChangedAsTrueAndIsNewCellAsFalse_ThenReturnsUpdateScenario()
+        public void WhenEesEventDataPassedWithStatusNameAsReIssueAndContentChangedAsTrueAndIsNewCellAsFalse_ThenReturnsUpdateScenario()
         {
             var fakeEventData = new EESEventPayload()
             {
