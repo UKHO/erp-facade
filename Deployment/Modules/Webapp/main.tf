@@ -73,7 +73,7 @@ resource "azurerm_private_endpoint" "Privateendpoint" {
   name      = "m-erptosap-qa-pe"
   subnet_id = "pe-subnet"
   location  = var.location
-  resource_group_name = m-pe-rg
+  resource_group_name = "m-pe-rg"
 
   private_service_connection {
     name                           = "network-cd229294-82e3-449a-96aa-ea24f2b9b167"
