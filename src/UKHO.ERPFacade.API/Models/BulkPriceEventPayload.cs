@@ -1,10 +1,23 @@
 ﻿using Newtonsoft.Json;
 using System.Diagnostics.CodeAnalysis;
+using UKHO.ERPFacade.Common.Infrastructure;
 
 namespace UKHO.ERPFacade.API.Models
 {
     [ExcludeFromCodeCoverage]
-    public class BulkPriceEventPayload
+    public class BulkPriceEventPayload : EventBase<BulkPriceEvent>
+    {
+        public BulkPriceEventPayload(BulkPriceEvent bulkPriceEvent)
+        {
+            EventData = bulkPriceEvent;
+        }
+
+        public override string EventName => "uk.gov.ukho.encpublishing.enccontentpublished.v2";
+        public override string Subject => "";
+    }
+
+    [ExcludeFromCodeCoverage]
+    public class BulkPriceEvent
     {
         [JsonProperty("specversion")]
         public string SpecVersion { get; set; }
@@ -30,7 +43,7 @@ namespace UKHO.ERPFacade.API.Models
     {
         [JsonProperty("traceId")]
         public string TraceId { get; set; }
-         
+
         [JsonProperty("unitsOfSalePrices")]
         public UnitsOfSalePrices UnitsOfSalePrices { get; set; }
     }
