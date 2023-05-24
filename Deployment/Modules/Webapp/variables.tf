@@ -44,5 +44,5 @@ variable "subnet_id" {
 }
 
 variable "ignore_changes"{
-  type = list
+
  }
