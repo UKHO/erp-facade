@@ -12,11 +12,11 @@ namespace UKHO.SAP.MockAPIService.Models
     public partial class Z_ADDS_MAT_INFO
     {
 
-        private ZMAT_INFO iM_MATINFOField;
+        private IM_MATINFO iM_MATINFOField;
 
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 0)]
-        public ZMAT_INFO IM_MATINFO
+        public IM_MATINFO IM_MATINFO
         {
             get
             {
@@ -33,8 +33,8 @@ namespace UKHO.SAP.MockAPIService.Models
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.1.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute()]
-    public partial class ZMAT_INFO
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "")]
+    public partial class IM_MATINFO
     {
 
         private string cORRIDField;
@@ -141,7 +141,7 @@ namespace UKHO.SAP.MockAPIService.Models
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "urn:sap-com:document:sap:rfc:functions")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
     public partial class ZMAT_ACTIONITEMS
     {
 

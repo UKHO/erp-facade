@@ -57,16 +57,7 @@ namespace UKHO.ERPFacade.API.Helpers
         /// <returns>XmlDocument</returns>
         public XmlDocument BuildSapMessageXml(List<Scenario> scenarios, string traceId)
         {
-            string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, SapXmlPath);
-
-            string environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-
-            _logger.LogInformation(EventIds.EnvironmentName.ToEventId(), "Environment name is {environment}", environment);
-
-            if (environment == DevEnvName)
-            {
-                sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, SapXmlPathDev);
-            }
+            string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, SapXmlPath);           
 
             //Check whether template file exists or not
             if (!_fileSystemHelper.IsFileExists(sapXmlTemplatePath))
