@@ -62,29 +62,13 @@ resource "azurerm_windows_web_app" "mock_webapp_service" {
     }
 
   https_only = true
+
+  lifecycle {
+    ignore_changes = [ip_restriction]
+  }
    }
 
 resource "azurerm_app_service_virtual_network_swift_connection" "webapp_vnet_integration" {
   app_service_id = azurerm_windows_web_app.webapp_service.id
   subnet_id      = var.subnet_id
-}
-
-resource "azurerm_private_endpoint" "Privateendpoint" {
-  name      = "m-erptosap-qa-pe"
-  subnet_id = "pe-subnet"
-  location  = var.location
-  resource_group_name = "m-pe-rg"
-
-  private_service_connection {
-    name                           = "network-cd229294-82e3-449a-96aa-ea24f2b9b167"
-    is_manual_connection           = false
-  }
-  lifecycle {
-    ignore_changes = [
-      parameters,
-      private_service_connection,
-      private_dns_zone_group
-    ]
-  }
-
 }
