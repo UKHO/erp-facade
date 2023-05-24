@@ -43,6 +43,6 @@ variable "subnet_id" {
   type = string
 }
 
-variable "ignore_changes"{
+#variable "ignore_changes"{
 
- }
+ #}

@@ -32,7 +32,7 @@ resource "azurerm_windows_web_app" "webapp_service" {
     }
 
   lifecycle {
-    ignore_changes = var.ignore_changes
+    ignore_changes = local.env_name == "qa" ? [ virtual_network_subnet_id , ip_restriction ] : [ virtual_network_subnet_id ]
    }
 
   https_only = true
