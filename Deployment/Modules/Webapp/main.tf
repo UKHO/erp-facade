@@ -69,7 +69,7 @@ resource "azurerm_app_service_virtual_network_swift_connection" "webapp_vnet_int
   subnet_id      = var.subnet_id
 }
 
-data "azurerm_private_endpoint" "Privateendpoint" {
+resource "azurerm_private_endpoint" "Privateendpoint" {
   name      = "m-erptosap-qa-pe"
   subnet_id = "pe-subnet"
   lifecycle {
