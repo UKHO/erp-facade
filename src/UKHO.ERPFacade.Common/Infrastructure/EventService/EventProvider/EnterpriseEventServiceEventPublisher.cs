@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using System.Net.Http.Headers;
+﻿using System.Net.Http.Headers;
 using System.Text.Json;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Converters;
 using UKHO.ERPFacade.Common.Infrastructure.Config;
 
@@ -32,6 +32,7 @@ namespace UKHO.ERPFacade.Common.Infrastructure.EventService.EventProvider
             var cloudEventPayload = JsonSerializer.SerializeToUtf8Bytes(cloudEventData, serializerOptions);
 
             var content = new ByteArrayContent(cloudEventPayload);
+
             content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/cloudevents+json; charset=utf-8");
 
             using var client = _httpClientFactory.CreateClient(EventServiceClientName);
@@ -51,5 +52,4 @@ namespace UKHO.ERPFacade.Common.Infrastructure.EventService.EventProvider
             }
         }
     }
-
 }
