@@ -39,10 +39,9 @@ resource "azurerm_windows_web_app" "webapp_service" {
      "virtual_network_subnet",
    ]
   }
- }
 
   https_only = true
-  }
+}
 
 resource "azurerm_windows_web_app" "mock_webapp_service" {
   count               = var.env_name == "dev" ? 1 : 0
