@@ -64,7 +64,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
             List<PriceInformationEvent> priceInformationList = JsonConvert.DeserializeObject<List<PriceInformationEvent>>(requestJson.ToString());
 
-            if (priceInformationList.Count > 0)
+            if (priceInformationList.Count > 0 && priceInformationList.Any(x => x.ProductName != string.Empty))
             {
                 List<UnitsOfSalePrices> unitsOfSalePriceList = _erpFacadeService.BuildUnitOfSalePricePayload(priceInformationList);
 
