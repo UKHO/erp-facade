@@ -31,20 +31,16 @@ resource "azurerm_windows_web_app" "webapp_service" {
     type = "SystemAssigned"
     }
 
-lifecycle {
+  lifecycle {
     ignore_changes = [
-      ip_restrictions,
-      virtual_network_subnet_id,
-    ]
-
- 
+        ip_restrictions,
+        virtual_network_subnet_id
+       ]
 
     ignore_changes {
       attribute = "ip_restrictions"
       for_each  = var.environment == "qa" ? [1] : []
     }
-
- 
 
     ignore_changes {
       attribute = "virtual_network_subnet_id"
