@@ -38,12 +38,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             xDoc.LoadXml(File.ReadAllText(XMLFilePath));
             
             var ns = new XmlNamespaceManager(xDoc.NameTable);
-            ns.AddNamespace("xmlnamsp", "urn:sap-com:document:sap:rfc:functions");
             ns.AddNamespace("xsisp", "http://www.w3.org/2001/XMLSchema-instance");
             ns.AddNamespace("xsdsp", "http://www.w3.org/2001/XMLSchema");
-            XmlNodeList nodeList1 = xDoc.DocumentElement.SelectNodes("//xmlnamsp:item", ns);
-
-            XmlNodeList nodeList = xDoc.SelectNodes("//*[local-name()='IM_MATINFO']/xmlnamsp:ACTIONITEMS/item", ns);
+            
+            XmlNodeList nodeList = xDoc.SelectNodes("//*[local-name()='IM_MATINFO']/ACTIONITEMS/item", ns);
 
             XmlSerializer xsw = new XmlSerializer(typeof(Z_ADDS_MAT_INFO));
             FileStream fs = new FileStream(XMLFilePath, FileMode.Open);
