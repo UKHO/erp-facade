@@ -32,19 +32,13 @@ resource "azurerm_windows_web_app" "webapp_service" {
     }
 
   lifecycle {
-    ignore_changes = [
-        ip_restrictions,
-        virtual_network_subnet_id
-    ]
-
-    ignore_changes {
-        attribute = "ip_restrictions"
-        for_each = var.environment == "qa" ? [1] : []
-    }
-
-    ignore_changes {
-        attribute = "virtual_network_subnet_id"
-    }
+     ignore_changes = [
+    # Ignore changes to ip_restrictions in the QA environment
+      var.environment == "qa" ? "ip_restrictions" : null,
+    # Ignore changes to virtual_network_subnet in all environments
+     "virtual_network_subnet",
+   ]
+  }
  }
 
   https_only = true
