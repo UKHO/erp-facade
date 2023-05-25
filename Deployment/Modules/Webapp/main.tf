@@ -36,7 +36,7 @@ resource "azurerm_windows_web_app" "webapp_service" {
     # Ignore changes to ip_restrictions in the QA environment
       var.environment == "qa" ? "ip_restrictions" : null,
     # Ignore changes to virtual_network_subnet in all environments
-     "virtual_network_subnet",
+     "virtual_network_subnet"
    ]
   }
 
