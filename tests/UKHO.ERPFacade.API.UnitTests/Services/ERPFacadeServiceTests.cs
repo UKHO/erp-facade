@@ -13,15 +13,15 @@ namespace UKHO.ERPFacade.API.UnitTests.Services
     [TestFixture]
     public class ERPFacadeServiceTests
     {
-        private ILogger<ERPFacadeService> _fakeLogger;
+        private ILogger<ErpFacadeService> _fakeLogger;
 
-        private ERPFacadeService _fakeERPFacadeService;
+        private ErpFacadeService _fakeERPFacadeService;
 
         [SetUp]
         public void Setup()
         {
-            _fakeLogger = A.Fake<ILogger<ERPFacadeService>>();
-            _fakeERPFacadeService = new ERPFacadeService(_fakeLogger);
+            _fakeLogger = A.Fake<ILogger<ErpFacadeService>>();
+            _fakeERPFacadeService = new ErpFacadeService(_fakeLogger);
         }
 
         #region Data
@@ -46,20 +46,10 @@ namespace UKHO.ERPFacade.API.UnitTests.Services
         {
             var unitsOfSalePricesList = GetUnitOfSalePriceData();
 
-            var exisitingEESJson = JsonConvert.DeserializeObject(encContentPublishedJson);
-            var result = _fakeERPFacadeService.BuildPriceEventPayload(unitsOfSalePricesList, exisitingEESJson.ToString()!);
+            var existingEESJson = JsonConvert.DeserializeObject(encContentPublishedJson);
+            var result = _fakeERPFacadeService.BuildPriceEventPayload(unitsOfSalePricesList, existingEESJson.ToString()!);
 
             result.Should().BeOfType<UnitOfSalePriceEventPayload>();
-        }
-
-        [Test]
-        public void WhenValidInformationIsPassed_ThenReturnsBulkPriceEventPayload()
-        {
-            var unitsOfSalePricesList = GetUnitOfSalePriceData();
-
-            var result = _fakeERPFacadeService.BuildBulkPriceEventPayload(unitsOfSalePricesList.FirstOrDefault()!);
-
-            result.Should().BeOfType<BulkPriceEventPayload>();
         }
 
         private List<PriceInformationEvent> GetPriceInformationEventData()

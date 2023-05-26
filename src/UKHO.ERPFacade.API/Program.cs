@@ -182,7 +182,7 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<IXmlHelper, XmlHelper>();
             builder.Services.AddScoped<IFileSystemHelper, FileSystemHelper>();
             builder.Services.AddScoped<IFileSystem, FileSystem>();
-            builder.Services.AddScoped<IERPFacadeService, ERPFacadeService>();
+            builder.Services.AddScoped<IErpFacadeService, ErpFacadeService>();
 
             builder.Services.AddHttpClient<ISapClient, SapClient>(c =>
             {

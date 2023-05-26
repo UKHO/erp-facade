@@ -5,11 +5,11 @@ using UKHO.ERPFacade.Common.Logging;
 
 namespace UKHO.ERPFacade.API.Services
 {
-    public class ERPFacadeService : IERPFacadeService
+    public class ErpFacadeService : IErpFacadeService
     {
-        private readonly ILogger<ERPFacadeService> _logger;
+        private readonly ILogger<ErpFacadeService> _logger;
 
-        public ERPFacadeService(ILogger<ERPFacadeService> logger)
+        public ErpFacadeService(ILogger<ErpFacadeService> logger)
         {
             _logger = logger;
         }
@@ -96,11 +96,11 @@ namespace UKHO.ERPFacade.API.Services
             return unitsOfSalePriceList;
         }
 
-        public UnitOfSalePriceEventPayload BuildPriceEventPayload(List<UnitsOfSalePrices> unitsOfSalePriceList, string exisitingEesEvent)
+        public UnitOfSalePriceEventPayload BuildPriceEventPayload(List<UnitsOfSalePrices> unitsOfSalePriceList, string existingEesEvent)
         {
             _logger.LogInformation(EventIds.BuildingPriceEventStarted.ToEventId(), "Building unit of sale price event started.");
 
-            EESEventPayload eESEventPayload = JsonConvert.DeserializeObject<EESEventPayload>(exisitingEesEvent);
+            EESEventPayload eESEventPayload = JsonConvert.DeserializeObject<EESEventPayload>(existingEesEvent);
 
             _logger.LogInformation(EventIds.PriceEventCreated.ToEventId(), "Unit of sale price event created.");
 
@@ -121,27 +121,6 @@ namespace UKHO.ERPFacade.API.Services
                     _COMMENT = "Prices for all units in event will be included, including Cancelled Cell",
                     UnitsOfSales = eESEventPayload.Data.UnitsOfSales,
                     UnitsOfSalePrices = unitsOfSalePriceList,
-                }
-            });
-        }
-
-        public BulkPriceEventPayload BuildBulkPriceEventPayload(UnitsOfSalePrices unitsOfSalePriceList)
-        {
-            _logger.LogInformation(EventIds.BuildingBulkPriceEventStarted.ToEventId(), "Building bulk price event started.");
-
-            _logger.LogInformation(EventIds.BulkPriceEventCreated.ToEventId(), "Bulk price event created.");
-
-            return new BulkPriceEventPayload(new BulkPriceEvent
-            {
-                SpecVersion = "1.0",
-                Type = "uk.gov.ukho.erp.bulkpricechange.v1",
-                Source = "https://erp.ukho.gov.uk",
-                Id = Guid.NewGuid().ToString(),
-                Time = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"),
-                Data = new BulkPriceEventData
-                {
-                    TraceId = Guid.NewGuid().ToString(),
-                    UnitsOfSalePrices = unitsOfSalePriceList
                 }
             });
         }
@@ -171,7 +150,7 @@ namespace UKHO.ERPFacade.API.Services
         private static DateTimeOffset GetDate(string date, string time)
         {
             DateTime dateTime = Convert.ToDateTime(DateTime.ParseExact(date + "" + time, "yyyyMMddhhmmss", CultureInfo.InvariantCulture));
-            DateTimeOffset dateTimeOffset = new DateTimeOffset(dateTime);
+            DateTimeOffset dateTimeOffset = new(dateTime);
 
             return dateTimeOffset;
         }

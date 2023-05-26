@@ -79,7 +79,7 @@ namespace UKHO.ERPFacade.API.Helpers
             return scenarios;
         }
 
-        private bool IsValidValue(string jsonFieldValue, string attributeValue)
+        private static bool IsValidValue(string jsonFieldValue, string attributeValue)
         {
             if (attributeValue.Contains('|'))
             {

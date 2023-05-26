@@ -3,12 +3,10 @@ using UKHO.ERPFacade.API.Models;
 
 namespace UKHO.ERPFacade.API.Services
 {
-    public interface IERPFacadeService
+    public interface IErpFacadeService
     {
         List<UnitsOfSalePrices> BuildUnitOfSalePricePayload(List<PriceInformationEvent> priceInformationList);
 
-        UnitOfSalePriceEventPayload BuildPriceEventPayload(List<UnitsOfSalePrices> unitsOfSalePriceList, string exisitingEesEvent);
-
-        BulkPriceEventPayload BuildBulkPriceEventPayload(UnitsOfSalePrices unitsOfSalePriceList);
+        UnitOfSalePriceEventPayload BuildPriceEventPayload(List<UnitsOfSalePrices> unitsOfSalePriceList, string existingEesEvent);        
     }
 }

@@ -33,9 +33,9 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             BlobClient blobClient = blobContainerClient.GetBlobClient(blobName);
 
             BlobDownloadResult downloadResult = blobClient.DownloadContent();
-            string exisitingEesEvent = downloadResult.Content.ToString();
+            string existingEesEvent = downloadResult.Content.ToString();
 
-            return exisitingEesEvent;
+            return existingEesEvent;
         }
 
         //Private Methods
