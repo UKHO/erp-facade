@@ -68,7 +68,7 @@ namespace UKHO.ERPFacade.API.Controllers
             {
                 List<UnitsOfSalePrices> unitsOfSalePriceList = _erpFacadeService.BuildUnitOfSalePricePayload(priceInformationList);
 
-                _logger.LogInformation(EventIds.DownloadExistingEesEventFromBlob.ToEventId(), "Downloading the existing EES event from azure blob storage with give Correlation ID.");
+                _logger.LogInformation(EventIds.DownloadExistingEesEventFromBlob.ToEventId(), "Downloading the existing EES event from azure blob storage with given Correlation ID.");
                 var existingEesEvent = _azureBlobEventWriter.DownloadEvent(corrId + '.' + RequestFormat, corrId);
                 _logger.LogInformation(EventIds.DownloadedExistingEesEventFromBlob.ToEventId(), "Existing EES event is downloaded from azure blob storage successfully.");
 
