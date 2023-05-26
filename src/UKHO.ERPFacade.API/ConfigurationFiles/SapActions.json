@@ -5,6 +5,17 @@
         "ActionNumber": 1,
         "Action": "CREATE ENC CELL",
         "Product": "ENC CELL",
+        "Rules": [
+          {
+            "Conditions": [
+              {
+                "AttributeDataType": "bool",
+                "AttributeName": "Status.IsNewCell",
+                "AttributeValue": "True"
+              }
+            ]
+          }
+        ],
         "Attributes": [
           {
             "IsRequired": true,
@@ -96,6 +107,17 @@
         "ActionNumber": 2,
         "Action": "CREATE AVCS UNIT OF SALE",
         "Product": "AVCS UNIT",
+        "Rules": [
+          {
+            "Conditions": [
+              {
+                "AttributeDataType": "bool",
+                "AttributeName": "IsNewUnitOfSale",
+                "AttributeValue": "True"
+              }
+            ]
+          }
+        ],
         "Attributes": [
           {
             "IsRequired": true,
@@ -187,6 +209,13 @@
         "ActionNumber": 3,
         "Action": "ASSIGN CELL TO AVCS UNIT OF SALE",
         "Product": "AVCS UNIT",
+        "Rules": [
+          {
+            "Conditions": [
+
+            ]
+          }
+        ],
         "Attributes": [
           {
             "IsRequired": true,
@@ -278,6 +307,17 @@
         "ActionNumber": 4,
         "Action": "REPLACED WITH ENC CELL",
         "Product": "ENC CELL",
+        "Rules": [
+          {
+            "Conditions": [
+              {
+                "AttributeDataType": "bool",
+                "AttributeName": "Status.IsNewCell",
+                "AttributeValue": "True"
+              }
+            ]
+          }
+        ],
         "Attributes": [
           {
             "IsRequired": true,
@@ -369,6 +409,17 @@
         "ActionNumber": 5,
         "Action": "CHANGE ENC CELL",
         "Product": "ENC CELL",
+        "Rules": [
+          {
+            "Conditions": [
+              {
+                "AttributeDataType": "bool",
+                "AttributeName": "Status.IsNewCell",
+                "AttributeValue": "True"
+              }
+            ]
+          }
+        ],
         "Attributes": [
           {
             "IsRequired": true,
@@ -460,6 +511,17 @@
         "ActionNumber": 6,
         "Action": "CHANGE AVCS UNIT OF SALE",
         "Product": "AVCS UNIT",
+        "Rules": [
+          {
+            "Conditions": [
+              {
+                "AttributeDataType": "bool",
+                "AttributeName": "Status.IsNewCell",
+                "AttributeValue": "True"
+              }
+            ]
+          }
+        ],
         "Attributes": [
           {
             "IsRequired": true,
@@ -551,6 +613,36 @@
         "ActionNumber": 7,
         "Action": "UPDATE ENC CELL EDITION UPDATE NUMBER",
         "Product": "ENC CELL",
+        "Rules": [
+          {
+            "Conditions": [
+              {
+                "AttributeDataType": "bool",
+                "AttributeName": "Status.IsNewCell",
+                "AttributeValue": "False"
+              },
+              {
+                "AttributeDataType": "bool",
+                "AttributeName": "contentChanged",
+                "AttributeValue": "True"
+              },
+              {
+                "AttributeDataType": "string",
+                "AttributeName": "Status.StatusName",
+                "AttributeValue": "Update | New Edition | Re-issue"
+              }
+            ]
+          },
+          {
+            "Conditions": [
+              {
+                "AttributeDataType": "string",
+                "AttributeName": "Status.StatusName",
+                "AttributeValue": "Suspended"
+              }
+            ]
+          }
+        ],
         "Attributes": [
           {
             "IsRequired": true,
@@ -642,6 +734,17 @@
         "ActionNumber": 8,
         "Action": "REMOVE ENC CELL FROM AVCS UNIT OF SALE",
         "Product": "AVCS UNIT",
+        "Rules": [
+          {
+            "Conditions": [
+              {
+                "AttributeDataType": "bool",
+                "AttributeName": "Status.IsNewCell",
+                "AttributeValue": "True"
+              }
+            ]
+          }
+        ],
         "Attributes": [
           {
             "IsRequired": true,
@@ -733,6 +836,17 @@
         "ActionNumber": 9,
         "Action": "CANCEL ENC CELL",
         "Product": "ENC CELL",
+        "Rules": [
+          {
+            "Conditions": [
+              {
+                "AttributeDataType": "bool",
+                "AttributeName": "Status.IsNewCell",
+                "AttributeValue": "True"
+              }
+            ]
+          }
+        ],
         "Attributes": [
           {
             "IsRequired": true,
@@ -824,6 +938,17 @@
         "ActionNumber": 10,
         "Action": "CANCEL AVCS UNIT OF SALE",
         "Product": "AVCS UNIT",
+        "Rules": [
+          {
+            "Conditions": [
+              {
+                "AttributeDataType": "bool",
+                "AttributeName": "Status.IsNewCell",
+                "AttributeValue": "True"
+              }
+            ]
+          }
+        ],
         "Attributes": [
           {
             "IsRequired": true,

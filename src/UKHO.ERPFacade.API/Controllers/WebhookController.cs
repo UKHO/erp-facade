@@ -23,10 +23,10 @@ namespace UKHO.ERPFacade.API.Controllers
         private readonly IAzureTableReaderWriter _azureTableReaderWriter;
         private readonly IAzureBlobEventWriter _azureBlobEventWriter;
         private readonly ISapClient _sapClient;
-        private readonly IScenarioBuilder _scenarioBuilder;
-        private readonly ISapMessageBuilder _sapMessageBuilder;
+        //private readonly IScenarioBuilder _scenarioBuilder;
+        //private readonly ISapMessageBuilder _sapMessageBuilder;
         private readonly IOptions<SapConfiguration> _sapConfig;
-
+        private readonly IXmlBuilder _xmlBuilder;
         private const string TraceIdKey = "data.traceId";
         private const string RequestFormat = "json";
 
@@ -35,8 +35,9 @@ namespace UKHO.ERPFacade.API.Controllers
                                  IAzureTableReaderWriter azureTableReaderWriter,
                                  IAzureBlobEventWriter azureBlobEventWriter,
                                  ISapClient sapClient,
-                                 IScenarioBuilder scenarioBuilder,
-                                 ISapMessageBuilder sapMessageBuilder,
+                                 IXmlBuilder xmlBuilder,
+                                 //IScenarioBuilder scenarioBuilder,
+                                 //ISapMessageBuilder sapMessageBuilder,
                                     IOptions<SapConfiguration> sapConfig)
         : base(contextAccessor)
         {
@@ -44,8 +45,9 @@ namespace UKHO.ERPFacade.API.Controllers
             _azureTableReaderWriter = azureTableReaderWriter;
             _azureBlobEventWriter = azureBlobEventWriter;
             _sapClient = sapClient;
-            _scenarioBuilder = scenarioBuilder;
-            _sapMessageBuilder = sapMessageBuilder;
+            //_scenarioBuilder = scenarioBuilder;
+            //_sapMessageBuilder = sapMessageBuilder;
+            _xmlBuilder = xmlBuilder;
             _sapConfig = sapConfig ?? throw new ArgumentNullException(nameof(sapConfig));
         }
 
@@ -91,11 +93,12 @@ namespace UKHO.ERPFacade.API.Controllers
 
             _logger.LogInformation(EventIds.UploadedEncContentPublishedEventInAzureBlob.ToEventId(), "ENC content published event is uploaded in blob storage successfully.");
 
-            List<Scenario> scenarios = _scenarioBuilder.BuildScenarios(JsonConvert.DeserializeObject<EESEvent>(requestJson.ToString()));
+            //List<Scenario> scenarios = _scenarioBuilder.BuildScenarios(JsonConvert.DeserializeObject<EESEvent>(requestJson.ToString()));
 
-            if (scenarios.Count > 0)
+
+            //if (scenarios.Count > 0)
             {
-                XmlDocument sapPayload = _sapMessageBuilder.BuildSapMessageXml(scenarios, traceId);
+                XmlDocument sapPayload = _xmlBuilder.BuildSapMessageXml(JsonConvert.DeserializeObject<EESEvent>(requestJson.ToString()), traceId);
 
                 HttpResponseMessage response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapServiceOperation);
 
@@ -110,11 +113,11 @@ namespace UKHO.ERPFacade.API.Controllers
 
                 return new OkObjectResult(StatusCodes.Status200OK);
             }
-            else
-            {
-                _logger.LogError(EventIds.NoScenarioFound.ToEventId(), "No scenarios found in incoming EES event.");
-                throw new ERPFacadeException(EventIds.NoScenarioFound.ToEventId());
-            }
+            //else
+            //{
+            //    _logger.LogError(EventIds.NoScenarioFound.ToEventId(), "No scenarios found in incoming EES event.");
+            //    throw new ERPFacadeException(EventIds.NoScenarioFound.ToEventId());
+            //}
         }
     }
 }
