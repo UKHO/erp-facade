@@ -30,11 +30,11 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             _erpFacadeWebjobConfig = erpFacadeWebjobConfig ?? throw new ArgumentNullException(nameof(erpFacadeWebjobConfig));
         }
 
-        public async Task UpsertEntity(JObject eesEvent, string traceId)
+        public async Task UpsertEntity(JObject eesEvent, string correlationId)
         {
             TableClient tableClient = GetTableClient(ErpFacadeTableName);
 
-            EESEventEntity existingEntity = await GetEntity(traceId);
+            EESEventEntity existingEntity = await GetEntity(correlationId);
 
             if (existingEntity == null)
             {
@@ -43,7 +43,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
                     RowKey = Guid.NewGuid().ToString(),
                     PartitionKey = Guid.NewGuid().ToString(),
                     Timestamp = DateTime.UtcNow,
-                    TraceID = traceId,
+                    CorrelationID = correlationId,
                     EventData = eesEvent.ToString(),
                     RequestDateTime = null,
                     ResponseDateTime = null,
@@ -67,11 +67,11 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             }
         }
 
-        public async Task<EESEventEntity> GetEntity(string traceId)
+        public async Task<EESEventEntity> GetEntity(string correlationId)
         {
             IList<EESEventEntity> records = new List<EESEventEntity>();
             TableClient tableClient = GetTableClient(ErpFacadeTableName);
-            var entities = tableClient.QueryAsync<EESEventEntity>(filter: TableClient.CreateQueryFilter($"TraceID eq {traceId}"), maxPerPage: 1);
+            var entities = tableClient.QueryAsync<EESEventEntity>(filter: TableClient.CreateQueryFilter($"CorrelationID eq {correlationId}"), maxPerPage: 1);
             await foreach (var entity in entities)
             {
                 records.Add(entity);
@@ -79,10 +79,10 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             return records.FirstOrDefault();
         }
 
-        public async Task UpdateRequestTimeEntity(string traceId)
+        public async Task UpdateRequestTimeEntity(string correlationId)
         {
             TableClient tableClient = GetTableClient(ErpFacadeTableName);
-            EESEventEntity existingEntity = await GetEntity(traceId);
+            EESEventEntity existingEntity = await GetEntity(correlationId);
             if (existingEntity != null)
             {
                 existingEntity.RequestDateTime = DateTime.UtcNow;
@@ -91,10 +91,10 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             }
         }
 
-        public async Task UpdateResponseTimeEntity(string traceId)
+        public async Task UpdateResponseTimeEntity(string correlationId)
         {
             TableClient tableClient = GetTableClient(ErpFacadeTableName);
-            EESEventEntity existingEntity = await GetEntity(traceId);
+            EESEventEntity existingEntity = await GetEntity(correlationId);
             if (existingEntity != null)
             {
                 existingEntity.ResponseDateTime = DateTime.UtcNow;
@@ -117,7 +117,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
                         ||
                         tableitem.ResponseDateTime.HasValue && ((tableitem.ResponseDateTime.Value - tableitem.RequestDateTime.Value) > TimeSpan.FromMinutes(callBackDuration)))
                     {
-                        _logger.LogWarning(EventIds.WebjobCallbackTimeoutEventFromSAP.ToEventId(), $"Request is timed out for the traceid : {tableitem.TraceID}.");
+                        _logger.LogWarning(EventIds.WebjobCallbackTimeoutEventFromSAP.ToEventId(), $"Request is timed out for the correlationid : {tableitem.CorrelationID}.");
 
                         TableEntity tableEntity = new TableEntity(tableitem.PartitionKey, tableitem.RowKey)
                             {
@@ -129,7 +129,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
                 }
                 else
                 {
-                    _logger.LogError(EventIds.EmptyRequestDateTime.ToEventId(), $"Empty RequestDateTime column for traceid : {tableitem.TraceID}");
+                    _logger.LogError(EventIds.EmptyRequestDateTime.ToEventId(), $"Empty RequestDateTime column for correlationid : {tableitem.CorrelationID}");
                 }
             }
         }

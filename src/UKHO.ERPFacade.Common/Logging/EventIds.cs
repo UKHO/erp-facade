@@ -23,9 +23,9 @@
         NewEncContentPublishedEventReceived = 940004,
 
         /// <summary>
-        /// 940005 - TraceId is missing in ENC content published event.
+        /// 940005 - CorrelationId is missing in ENC content published event.
         /// </summary>
-        TraceIdMissingInEvent = 940005,
+        CorrelationIdMissingInEvent = 940005,
 
         /// <summary>
         /// 940006 - Storing the received ENC content published event in azure table.
@@ -103,17 +103,17 @@
         UpdateEntitySuccessful = 940020,
 
         /// <summary>
-        /// 940021 - TraceId is missing in the event received from SAP
+        /// 940021 - CorrelationId is missing in the event received from SAP
         /// </summary>
-        TraceIdMissingInSAPEvent = 940021,
+        CorrelationIdMissingInSAPEvent = 940021,
 
         /// <summary>
-        /// 940022 - Blob does not exist for traceID given in SAP event.
+        /// 940022 - Blob does not exist for CorrelationID given in SAP event.
         /// </summary>
         BlobNotFoundInAzure = 940022,
 
         /// <summary>
-        /// 940023 - Blob exists for traceID given in SAP event.
+        /// 940023 - Blob exists for CorrelationID given in SAP event.
         /// </summary>
         BlobExistsInAzure = 940023,
 

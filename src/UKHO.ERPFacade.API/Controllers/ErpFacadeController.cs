@@ -13,7 +13,7 @@ namespace UKHO.ERPFacade.API.Controllers
         private readonly IAzureTableReaderWriter _azureTableReaderWriter;
         private readonly IAzureBlobEventWriter _azureBlobEventWriter;
 
-        private const string TraceIdKey = "data.traceId";
+        private const string CorrelationIdKey = "data.correlationId";
 
         public ErpFacadeController(IHttpContextAccessor contextAccessor,
                                    ILogger<ErpFacadeController> logger,
@@ -30,25 +30,25 @@ namespace UKHO.ERPFacade.API.Controllers
         [Route("/erpfacade/priceinformation")]
         public virtual async Task<IActionResult> Post([FromBody] JObject requestJson)
         {
-            var traceId = requestJson.SelectToken(TraceIdKey)?.Value<string>();
+            var correlationId = requestJson.SelectToken(CorrelationIdKey)?.Value<string>();
 
-            if (string.IsNullOrEmpty(traceId))
+            if (string.IsNullOrEmpty(correlationId))
             {
-                _logger.LogWarning(EventIds.TraceIdMissingInSAPEvent.ToEventId(), "TraceId is missing in the event received from the SAP.");
+                _logger.LogWarning(EventIds.CorrelationIdMissingInSAPEvent.ToEventId(), "CorrelationId is missing in the event received from the SAP.");
                 return new BadRequestObjectResult(StatusCodes.Status400BadRequest);
             }
 
-            await _azureTableReaderWriter.UpdateResponseTimeEntity(traceId);
+            await _azureTableReaderWriter.UpdateResponseTimeEntity(correlationId);
 
-            var isBlobExists = _azureBlobEventWriter.CheckIfContainerExists(traceId);
+            var isBlobExists = _azureBlobEventWriter.CheckIfContainerExists(correlationId);
 
             if (!isBlobExists)
             {
-                _logger.LogError(EventIds.BlobNotFoundInAzure.ToEventId(), "Blob does not exist in the Azure Storage for the trace ID received from SAP event.");
+                _logger.LogError(EventIds.BlobNotFoundInAzure.ToEventId(), "Blob does not exist in the Azure Storage for the Correlation ID received from SAP event.");
                 return new NotFoundObjectResult(StatusCodes.Status404NotFound);
             }
 
-            _logger.LogInformation(EventIds.BlobExistsInAzure.ToEventId(), "Blob exists in the Azure Storage for the trace ID received from SAP event.");
+            _logger.LogInformation(EventIds.BlobExistsInAzure.ToEventId(), "Blob exists in the Azure Storage for the Correlation ID received from SAP event.");
             return new OkObjectResult(StatusCodes.Status200OK);
         }
     }

@@ -5,7 +5,7 @@ namespace UKHO.ERPFacade.API.Filters
     public class CorrelationIdMiddleware
     {
         public const string XCorrelationIdHeaderKey = "_X-Correlation-ID";
-        public const string TraceIdKey = "data.traceId";
+        public const string CorrelationIdKey = "data.correlationId";
 
         private readonly RequestDelegate _next;
 
@@ -25,7 +25,7 @@ namespace UKHO.ERPFacade.API.Filters
             if (!string.IsNullOrWhiteSpace(bodyAsText))
             {
                 JObject bodyAsJson = JObject.Parse(bodyAsText);
-                correlationId = bodyAsJson.SelectToken(TraceIdKey)?.Value<string>();
+                correlationId = bodyAsJson.SelectToken(CorrelationIdKey)?.Value<string>();
             }
 
             httpContext.Request.Body.Position = 0;

@@ -27,7 +27,7 @@ namespace UKHO.ERPFacade.API.Controllers
         private readonly ISapMessageBuilder _sapMessageBuilder;
         private readonly IOptions<SapConfiguration> _sapConfig;
 
-        private const string TraceIdKey = "data.traceId";
+        private const string CorrelationIdKey = "data.correlationId";
         private const string RequestFormat = "json";
 
         public WebhookController(IHttpContextAccessor contextAccessor,
@@ -73,21 +73,21 @@ namespace UKHO.ERPFacade.API.Controllers
         {
             _logger.LogInformation(EventIds.NewEncContentPublishedEventReceived.ToEventId(), "ERP Facade webhook has received new enccontentpublished event from EES.");
 
-            string traceId = requestJson.SelectToken(TraceIdKey)?.Value<string>();
+            string correlationId = requestJson.SelectToken(CorrelationIdKey)?.Value<string>();
 
-            if (string.IsNullOrEmpty(traceId))
+            if (string.IsNullOrEmpty(correlationId))
             {
-                _logger.LogWarning(EventIds.TraceIdMissingInEvent.ToEventId(), "TraceId is missing in ENC content published event.");
+                _logger.LogWarning(EventIds.CorrelationIdMissingInEvent.ToEventId(), "CorrelationId is missing in ENC content published event.");
                 return new BadRequestObjectResult(StatusCodes.Status400BadRequest);
             }
 
             _logger.LogInformation(EventIds.StoreEncContentPublishedEventInAzureTable.ToEventId(), "Storing the received ENC content published event in azure table.");
 
-            await _azureTableReaderWriter.UpsertEntity(requestJson, traceId);
+            await _azureTableReaderWriter.UpsertEntity(requestJson, correlationId);
 
             _logger.LogInformation(EventIds.UploadEncContentPublishedEventInAzureBlob.ToEventId(), "Uploading the received ENC content published event in blob storage.");
 
-            await _azureBlobEventWriter.UploadEvent(requestJson.ToString(), traceId, traceId + '.' + RequestFormat);
+            await _azureBlobEventWriter.UploadEvent(requestJson.ToString(), correlationId, correlationId + '.' + RequestFormat);
 
             _logger.LogInformation(EventIds.UploadedEncContentPublishedEventInAzureBlob.ToEventId(), "ENC content published event is uploaded in blob storage successfully.");
 
@@ -95,7 +95,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
             if (scenarios.Count > 0)
             {
-                XmlDocument sapPayload = _sapMessageBuilder.BuildSapMessageXml(scenarios, traceId);
+                XmlDocument sapPayload = _sapMessageBuilder.BuildSapMessageXml(scenarios, correlationId);
 
                 HttpResponseMessage response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapServiceOperation);
 
@@ -106,7 +106,7 @@ namespace UKHO.ERPFacade.API.Controllers
                 }
                 _logger.LogInformation(EventIds.DataPushedToSap.ToEventId(), "Data pushed to SAP successfully. | {StatusCode}", response.StatusCode);
 
-                await _azureTableReaderWriter.UpdateRequestTimeEntity(traceId);
+                await _azureTableReaderWriter.UpdateRequestTimeEntity(correlationId);
 
                 return new OkObjectResult(StatusCodes.Status200OK);
             }

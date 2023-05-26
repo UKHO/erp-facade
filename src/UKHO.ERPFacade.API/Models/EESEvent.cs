@@ -34,6 +34,9 @@ namespace UKHO.ERPFacade.API.Models
     [ExcludeFromCodeCoverage]
     public class Data
     {
+        [JsonProperty("correlationId")]
+        public string CorrelationId { get; set; }
+
         [JsonProperty("traceId")]
         public string TraceId { get; set; }
 
