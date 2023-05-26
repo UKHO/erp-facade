@@ -189,6 +189,25 @@
         /// <summary>
         /// 940038 - Price Event exceeds the size limit of 1 MB
         /// </summary>
-        PriceEventExceedSizeLimit = 940038
+        PriceEventExceedSizeLimit = 940038,
+        /// <summary>
+        /// 940039 - SAP bulk price event received from 
+        /// </summary>
+        SapBulkPriceEventReceived = 940039,
+
+        /// <summary>
+        /// 940040 - No bulk price information found in incoming SAP event
+        /// </summary>
+        NoBulkPriceInformationFound = 940040,
+
+        /// <summary>
+        /// 940041 - Building unit of sale price event started
+        /// </summary>
+        BuildingBulkPriceEventStarted = 940041,
+
+        /// <summary>
+        /// 940042 - Unit of sale price event created
+        /// </summary>
+        BulkPriceEventCreated = 940042
     }
 }

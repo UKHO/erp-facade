@@ -194,6 +194,16 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "No price information found in incoming SAP event.").MustHaveHappenedOnceExactly();
         }
 
+        [Test]
+        public void WhenValidInformationIsPassed_ThenReturnsBulkPriceEventPayload()
+        {
+            var unitsOfSalePricesList = GetUnitOfSalePriceData();
+
+            var result = _fakeErpFacadeService.BuildBulkPriceEventPayload(unitsOfSalePricesList.FirstOrDefault()!);
+
+            result.Should().BeOfType<BulkPriceEventPayload>();
+        }
+
         private List<PriceInformationEvent> GetPriceInformationEventData()
         {
             var requestJson = JsonConvert.DeserializeObject(jsonString);

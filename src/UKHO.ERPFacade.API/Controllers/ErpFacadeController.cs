@@ -93,5 +93,33 @@ namespace UKHO.ERPFacade.API.Controllers
 
             return new OkObjectResult(StatusCodes.Status200OK);
         }
+
+        [HttpPost]
+        [Route("/erpfacade/bulkpriceinformation")]
+        public virtual async Task<IActionResult> PostBulkPriceInformation([FromBody] JArray requestJson)
+        {
+            _logger.LogInformation(EventIds.SapBulkPriceEventReceived.ToEventId(), "ERP Facade has received bulk price event from SAP.");
+
+            List<PriceInformationEvent> bulkpriceInformationList = JsonConvert.DeserializeObject<List<PriceInformationEvent>>(requestJson.ToString());
+
+            if (bulkpriceInformationList.Count > 0)
+            {
+                List<UnitsOfSalePrices> unitsOfSalePriceList = _erpFacadeService.BuildUnitOfSalePricePayload(bulkpriceInformationList);
+
+                foreach (var priceList in unitsOfSalePriceList)
+                {
+                    var eesBulkPriceEventPayload = _erpFacadeService.BuildBulkPriceEventPayload(priceList);
+
+                    //Add code to publish this event to EES
+                }
+            }
+            else
+            {
+                _logger.LogError(EventIds.NoBulkPriceInformationFound.ToEventId(), "No bulk price information found in incoming SAP event.");
+                throw new ERPFacadeException(EventIds.NoBulkPriceInformationFound.ToEventId());
+            }
+
+            return new OkObjectResult(StatusCodes.Status200OK);
+        }
     }
 }

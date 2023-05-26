@@ -125,6 +125,27 @@ namespace UKHO.ERPFacade.API.Services
             });
         }
 
+        public BulkPriceEventPayload BuildBulkPriceEventPayload(UnitsOfSalePrices unitsOfSalePriceList)
+        {
+            _logger.LogInformation(EventIds.BuildingBulkPriceEventStarted.ToEventId(), "Building bulk price event started.");
+
+            _logger.LogInformation(EventIds.BulkPriceEventCreated.ToEventId(), "Bulk price event created.");
+
+            return new BulkPriceEventPayload(new BulkPriceEvent
+            {
+                SpecVersion = "1.0",
+                Type = "uk.gov.ukho.erp.bulkpricechange.v1",
+                Source = "https://erp.ukho.gov.uk",
+                Id = Guid.NewGuid().ToString(),
+                Time = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"),
+                Data = new BulkPriceEventData
+                {
+                    TraceId = Guid.NewGuid().ToString(),
+                    UnitsOfSalePrices = unitsOfSalePriceList
+                }
+            });
+        }
+
         //private methods
         private static Price BuildPricePayload(string duration, string rrp, DateTimeOffset date, string currency)
         {
