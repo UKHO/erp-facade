@@ -115,7 +115,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         AttrNotMatched.Add(nameof(item.PROVIDER));
                     if (!item.ENCSIZE.Equals(getUoSInfo(productName).UnitSize))
                         AttrNotMatched.Add(nameof(item.ENCSIZE));
-                    if (!item.TITLE.Equals((getUoSInfo(ele2.Key)).Title))
+                    if (!item.TITLE.Equals((getUoSInfo(productName)).Title))
                         AttrNotMatched.Add(nameof(item.TITLE));
                     if (!item.UNITTYPE.Equals(getUoSInfo(productName).UnitType))
                         AttrNotMatched.Add(nameof(item.UNITTYPE));
