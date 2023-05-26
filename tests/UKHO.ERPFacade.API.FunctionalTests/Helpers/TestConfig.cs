@@ -14,6 +14,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         public Azureadconfiguration AzureadConfiguration { get; set; }
         public AzureStorageConfiguration AzureStorageConfiguration { get; set; }
         public string[] XMLActionList { get; set; }
+        public string UoSPayloadFileName { get; set; }
     }
 
 
@@ -36,6 +37,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
         public string ClientSecretNoRole { get; set; }
 
+        public string AutoTestClientIdPricingInformationCaller { get; set; }
+
+        public string ClientSecretPricingInformationCaller { get; set; }
     }
 
     public class Erpfacadeconfiguration

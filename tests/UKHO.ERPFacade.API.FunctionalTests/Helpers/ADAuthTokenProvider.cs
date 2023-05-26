@@ -29,6 +29,25 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             }
             return AzureADToken;
         }
+        public async Task<string> GetAzureADToken(bool noRole,string endPointName)
+        {
+            _config = new();
+            if (noRole)
+            {
+                AzureADToken = null;
+                AzureADToken = await GenerateAzureADToken(_config.TestConfig.AzureadConfiguration.AutoTestClientIdNoRole, _config.TestConfig.AzureadConfiguration.ClientSecretNoRole, AzureADToken);
+            }
+            else if (endPointName == "UnitOfSale") 
+            {
+                
+                AzureADToken = await GenerateAzureADToken(_config.TestConfig.AzureadConfiguration.AutoTestClientIdPricingInformationCaller, _config.TestConfig.AzureadConfiguration.ClientSecretPricingInformationCaller, AzureADToken);
+            }
+            else
+            {
+                AzureADToken = await GenerateAzureADToken(_config.TestConfig.AzureadConfiguration.AutoTestClientId, _config.TestConfig.AzureadConfiguration.ClientSecret, AzureADToken);
+            }
+            return AzureADToken;
+        }
 
         private static async Task<string> GenerateAzureADToken(string clientId, string clientSecret, string token)
         {
