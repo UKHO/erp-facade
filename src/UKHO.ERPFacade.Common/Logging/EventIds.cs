@@ -152,58 +152,43 @@
         AzureTableNotFound = 940030,
 
         /// <summary>
-        /// 940031 - UnitOfSale price event received from SAP
+        /// 940031 - Environment Name
         /// </summary>
-        SapUnitOfSalePriceEventReceived = 940031,
+        EnvironmentName = 940031,
+        
+        /// <summary>
+        /// 940032 - UnitOfSale price event received from SAP
+        /// </summary>
+        SapUnitOfSalePriceEventReceived = 940032,
 
         /// <summary>
-        /// 940032 - Downloading exisiting ees event from azure blob storage
+        /// 940033 - Downloading exisiting ees event from azure blob storage
         /// </summary>
-        DownloadExistingEesEventFromBlob = 940032,
+        DownloadExistingEesEventFromBlob = 940033,
 
         /// <summary>
-        /// 940033 - Downloaded exisiting ees event from azure blob storage successfully
+        /// 940034 - Downloaded exisiting ees event from azure blob storage successfully
         /// </summary>
-        DownloadedExistingEesEventFromBlob = 940033,
+        DownloadedExistingEesEventFromBlob = 940034,
 
         /// <summary>
-        /// 940034 - No price information found in incoming SAP event
+        /// 940035 - No price information found in incoming SAP event
         /// </summary>
-        NoPriceInformationFound = 940034,
+        NoPriceInformationFound = 940035,
 
         /// <summary>
-        /// 940035 - Building unit of sale price event started
+        /// 940036 - Building unit of sale price event started
         /// </summary>
-        BuildingPriceEventStarted = 940035,
+        BuildingPriceEventStarted = 940036,
 
         /// <summary>
-        /// 940036 - Unit of sale price event created
+        /// 940037 - Unit of sale price event created
         /// </summary>
-        PriceEventCreated = 940036,
+        PriceEventCreated = 940037,
 
         /// <summary>
-        /// 940037 - Bulk price event received from SAP
+        /// 940038 - Price Event exceeds the size limit of 1 MB
         /// </summary>
-        SapBulkPriceEventReceived = 940037,
-
-        /// <summary>
-        /// 940038 - No bulk price information found in incoming SAP event
-        /// </summary>
-        NoBulkPriceInformationFound = 940038,
-
-        /// <summary>
-        /// 940039 - Building bulk price event started
-        /// </summary>
-        BuildingBulkPriceEventStarted = 940039,
-
-        /// <summary>
-        /// 940040 - Bulk price event created
-        /// </summary>
-        BulkPriceEventCreated = 940040,
-
-        /// <summary>
-        /// 940041 - Price Event exceeds the size limit of 1 MB
-        /// </summary>
-        PriceEventExceedSizeLimit = 940041
+        PriceEventExceedSizeLimit = 940038
     }
 }

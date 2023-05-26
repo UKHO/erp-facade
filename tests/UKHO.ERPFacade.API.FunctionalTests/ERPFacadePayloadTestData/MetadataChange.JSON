@@ -3,12 +3,12 @@
   "type": "uk.gov.ukho.encpublishing.enccontentpublished.v2",
   "source": "https://encpublishing.ukho.gov.uk",
   "id": "2f03a25f-28b3-46ea-b009-5943250a9a41",
-  "time": "2020-10-13T12:08:03.4880776Z",
+  "time": "2023-05-19T12:08:03.4880776Z",
   "_COMMENT": "A comma separated list of products",
   "subject": "MX545010",
   "datacontenttype": "application/json",
   "data": {
-    "traceId": "367ce4a4-1d62-4f56-b359-newcell20001",
+    "traceId": "467ce4a4-1d62-4f56-b359-230518metadatachange003",
     "products": [
       {
         "productType": "ENC S57",
@@ -19,11 +19,11 @@
         "usageBand": 5,
         "editionNumber": 1,
         "updateNumber": 0,
-        "mayAffectHoldings": true,
-        "contentChanged": true,
+        "mayAffectHoldings": false,
+        "contentChanged": false,
         "permit": "permitString",
-        "providerCode": 1,
-        "providerDesc": "ICE",
+        "providerCode": 2,
+        "providerDesc": "PRIMAR",
         "_COMMENT": "provider code and descrption are a n-1 mapping",
         "_ENUM": [
           "ICE",
@@ -62,7 +62,7 @@
             "Suspended"
           ],
           "statusDate": "2023-03-03T00:00:00.00+01:00",
-          "isNewCell": true,
+          "isNewCell": false,
           "_COMMENT": "A cell new to the service"
         },
         "replaces": [],
@@ -166,8 +166,8 @@
           "unit",
           "folio"
         ],
-        "unitType": "AVCS Units Coastal",
-        "unitSize": "large",
+        "unitType": "",
+        "unitSize": "medium",
         "status": "ForSale",
         "_ENUM": [
           "ForSale",
@@ -185,15 +185,20 @@
           "polygons": []
         },
         "compositionChanges": {
-          "addProducts": [ "MX545010" ],
+          "addProducts": [],
           "removeProducts": []
         }
       },
       {
         "unitName": "AVCSO",
-        "title": "AVCS Online Folio Some Title",
-        "unitSize": "large",
-        "unitType": "AVCS Online Folio",
+        "title": "Isla Clarion",
+        "unitOfSaleType": "unit",
+        "_ENUM": [
+          "unit",
+          "folio"
+        ],
+        "unitSize": "medium",
+        "unitType": "",
         "status": "ForSale",
         "isNewUnitOfSale": false,
         "geographicLimit": {
@@ -222,19 +227,21 @@
           ]
         },
         "compositionChanges": {
-          "addProducts": [
-            "MX545010"
-          ],
+          "addProducts": [],
           "removeProducts": [
-
           ]
         }
       },
       {
         "unitName": "PAYSF",
-        "title": "World Folio",
-        "unitType": "AVCS Folio Transit",
-        "unitSize": "large",
+        "title": "Isla Clarion",
+        "unitOfSaleType": "unit",
+        "_ENUM": [
+          "unit",
+          "folio"
+        ],
+        "unitType": "",
+        "unitSize": "medium",
         "status": "ForSale",
         "isNewUnitOfSale": false,
         "geographicLimit": {
@@ -275,9 +282,7 @@
           ]
         },
         "compositionChanges": {
-          "addProducts": [
-            "MX545010"
-          ],
+          "addProducts": [],
           "removeProducts": [
 
           ]
