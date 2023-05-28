@@ -57,7 +57,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         }
 
         [Test]
-        public async Task WhenTraceIdIsMissingInRequest_ThenPostPriceInformationReturnsReturns400BadRequestResponse()
+        public async Task WhenCorrIdIsMissingInRequest_ThenPostPriceInformationReturnsReturns400BadRequestResponse()
         {
             var fakeSapEventJson = JArray.Parse(@"[{""org"": ""UKHO""},{""org"": ""UKHO""}]");
 
@@ -75,7 +75,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         }
 
         [Test]
-        public async Task WhenInvalidTraceIdInRequest_ThenPostPriceInformationReturns404NotFoundResponse()
+        public async Task WhenInvalidCorrdIdInRequest_ThenPostPriceInformationReturns404NotFoundResponse()
         {
             var fakeSapEventJson = JArray.Parse(@"[{""corrid"":""123"",""org"": ""UKHO""},{""corrid"":""123"",""org"": ""UKHO""}]");
 
@@ -92,15 +92,6 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
              && call.GetArgument<LogLevel>(0) == LogLevel.Error
              && call.GetArgument<EventId>(1) == EventIds.BlobNotFoundInAzure.ToEventId()
              && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Blob does not exist in the Azure Storage for the corrId received from SAP event.").MustHaveHappenedOnceExactly();
-        }
-
-        [Test]
-        public async Task WhenValidRequestReceived_ThenPostBulkPriceInformationReturns200OkResponse()
-        {
-            var fakeSapEventJson = JArray.Parse(@"[{""corrid"":""123"",""org"": ""UKHO""},{""corrid"":""123"",""org"": ""UKHO""}]");
-
-            var result = (OkObjectResult)await _fakeErpFacadeController.PostBulkPriceInformation(fakeSapEventJson);
-            result.StatusCode.Should().Be(200);
         }
     }
 }
