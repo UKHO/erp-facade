@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
@@ -8,7 +7,6 @@ namespace UKHO.ERPFacade.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class ErpFacadeController : BaseController<ErpFacadeController>
     {
         private readonly ILogger<ErpFacadeController> _logger;
@@ -30,7 +28,6 @@ namespace UKHO.ERPFacade.API.Controllers
 
         [HttpPost]
         [Route("/erpfacade/priceinformation")]
-        [Authorize(Policy = "PriceInformationApiCaller")]
         public virtual async Task<IActionResult> PostPriceInformation([FromBody] JArray requestJson)
         {
             var traceId = requestJson.SelectToken(TraceIdKey)?.Value<string>();
