@@ -14,8 +14,8 @@ using UKHO.ERPFacade.API.Helpers;
 using UKHO.ERPFacade.API.Models;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.HttpClients;
-using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.IO;
+using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.Logging.EventHubLogProvider;
 
 namespace UKHO.ERPFacade
@@ -139,7 +139,6 @@ namespace UKHO.ERPFacade
             builder.Services.AddAuthorization(options =>
             {
                 options.AddPolicy("WebhookCaller", policy => policy.RequireRole("WebhookCaller"));
-                options.AddPolicy("PriceInformationApiCaller", policy => policy.RequireRole("PriceInformationApiCaller"));
             });
 
             // The following line enables Application Insights telemetry collection.

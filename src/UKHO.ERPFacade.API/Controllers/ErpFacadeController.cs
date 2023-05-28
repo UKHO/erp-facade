@@ -15,7 +15,7 @@ namespace UKHO.ERPFacade.API.Controllers
         private readonly IAzureTableReaderWriter _azureTableReaderWriter;
         private readonly IAzureBlobEventWriter _azureBlobEventWriter;
 
-        private const string CorrIdKey = "corrid";
+        private const string TraceIdKey = "data.traceId";
 
         public ErpFacadeController(IHttpContextAccessor contextAccessor,
                                    ILogger<ErpFacadeController> logger,
@@ -33,34 +33,25 @@ namespace UKHO.ERPFacade.API.Controllers
         [Authorize(Policy = "PriceInformationApiCaller")]
         public virtual async Task<IActionResult> PostPriceInformation([FromBody] JArray requestJson)
         {
-            var corrId = requestJson.First.SelectToken(CorrIdKey)?.Value<string>();
+            var traceId = requestJson.SelectToken(TraceIdKey)?.Value<string>();
 
-            if (string.IsNullOrEmpty(corrId))
+            if (string.IsNullOrEmpty(traceId))
             {
-                _logger.LogWarning(EventIds.TraceIdMissingInSAPEvent.ToEventId(), "CorrId is missing in the event received from the SAP.");
+                _logger.LogWarning(EventIds.TraceIdMissingInSAPEvent.ToEventId(), "TraceId is missing in the event received from the SAP.");
                 return new BadRequestObjectResult(StatusCodes.Status400BadRequest);
             }
 
-            await _azureTableReaderWriter.UpdateResponseTimeEntity(corrId);
+            await _azureTableReaderWriter.UpdateResponseTimeEntity(traceId);
 
-            var isBlobExists = _azureBlobEventWriter.CheckIfContainerExists(corrId);
+            var isBlobExists = _azureBlobEventWriter.CheckIfContainerExists(traceId);
 
             if (!isBlobExists)
             {
-                _logger.LogError(EventIds.BlobNotFoundInAzure.ToEventId(), "Blob does not exist in the Azure Storage for the corrId received from SAP event.");
+                _logger.LogError(EventIds.BlobNotFoundInAzure.ToEventId(), "Blob does not exist in the Azure Storage for the trace ID received from SAP event.");
                 return new NotFoundObjectResult(StatusCodes.Status404NotFound);
             }
 
-            _logger.LogInformation(EventIds.BlobExistsInAzure.ToEventId(), "Blob exists in the Azure Storage for the corrId received from SAP event.");
-            return new OkObjectResult(StatusCodes.Status200OK);
-        }
-
-        [HttpPost]
-        [Route("/erpfacade/bulkpriceinformation")]
-        [Authorize(Policy = "PriceInformationApiCaller")]
-        public virtual async Task<IActionResult> PostBulkPriceInformation([FromBody] JArray requestJson)
-        {
-            await Task.CompletedTask;
+            _logger.LogInformation(EventIds.BlobExistsInAzure.ToEventId(), "Blob exists in the Azure Storage for the trace ID received from SAP event.");
             return new OkObjectResult(StatusCodes.Status200OK);
         }
     }
