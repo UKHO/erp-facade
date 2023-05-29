@@ -40,7 +40,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         [Test]
         public async Task WhenValidRequestReceived_ThenErpFacadeReturns200OkResponse()
         {
-            var fakeSapEventJson = JObject.Parse(@"{""data"":{""traceId"":""123""}}");
+            var fakeSapEventJson = JObject.Parse(@"{""data"":{""correlationId"":""123""}}");
 
             A.CallTo(() => _fakeAzureBlobEventWriter.CheckIfContainerExists(A<string>.Ignored)).Returns(true);
 
@@ -53,11 +53,11 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
              && call.GetArgument<LogLevel>(0) == LogLevel.Information
              && call.GetArgument<EventId>(1) == EventIds.BlobExistsInAzure.ToEventId()
-             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Blob exists in the Azure Storage for the trace ID received from SAP event.").MustHaveHappenedOnceExactly();
+             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Blob exists in the Azure Storage for the Correlation ID received from SAP event.").MustHaveHappenedOnceExactly();
         }
 
         [Test]
-        public async Task WhenTraceIdIsMissingInRequest_ThenErpFacadeReturnsReturns400BadRequestResponse()
+        public async Task WhenCorrelationIdIsMissingInRequest_ThenErpFacadeReturnsReturns400BadRequestResponse()
         {
             var fakeSapEventJson = JObject.Parse(@"{""data"":{""corId"":""123""}}");
 
@@ -71,13 +71,13 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
              && call.GetArgument<LogLevel>(0) == LogLevel.Warning
              && call.GetArgument<EventId>(1) == EventIds.CorrelationIdMissingInEvent.ToEventId()
-             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "TraceId is missing in the event received from the SAP.").MustHaveHappenedOnceExactly();
+             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "CorrelationId is missing in the event received from the SAP.").MustHaveHappenedOnceExactly();
         }
 
         [Test]
-        public async Task WhenInvalidTraceIdInRequest_ThenErpFacadeReturns404NotFoundResponse()
+        public async Task WhenInvalidCorrelationIdInRequest_ThenErpFacadeReturns404NotFoundResponse()
         {
-            var fakeSapEventJson = JObject.Parse(@"{""data"":{""traceId"":""123""}}");
+            var fakeSapEventJson = JObject.Parse(@"{""data"":{""correlationId"":""123""}}");
 
             A.CallTo(() => _fakeAzureBlobEventWriter.CheckIfContainerExists(A<string>.Ignored)).Returns(false);
 
@@ -91,7 +91,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
              && call.GetArgument<LogLevel>(0) == LogLevel.Error
              && call.GetArgument<EventId>(1) == EventIds.BlobNotFoundInAzure.ToEventId()
-             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Blob does not exist in the Azure Storage for the trace ID received from SAP event.").MustHaveHappenedOnceExactly();
+             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Blob does not exist in the Azure Storage for the Correlation ID received from SAP event.").MustHaveHappenedOnceExactly();
         }
     }
 }

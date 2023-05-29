@@ -82,7 +82,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         public void WhenBuildSapMessageXmlIsCalledWithCancelReplacecellScenario_ThenReturnXMLDocument()
         {
             var scenarios = JsonConvert.DeserializeObject<List<Scenario>>(scenariosDataCancelReplaceCell);
-            var traceId = "2f03a25f-28b3-46ea-b009-5943250a9a41";
+            var correlationId = "2f03a25f-28b3-46ea-b009-5943250a9a41";
 
             XmlDocument soapXml = new XmlDocument();
             soapXml.LoadXml(sapXmlFile);
@@ -90,7 +90,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
 
-            var result = _fakeSapMessageBuilder.BuildSapMessageXml(scenarios!, traceId);
+            var result = _fakeSapMessageBuilder.BuildSapMessageXml(scenarios!, correlationId);
 
             result.Should().BeOfType<XmlDocument>();
 
@@ -109,7 +109,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         public void WhenBuildSapMessageXmlIsCalledWithChangeMoveCellScenario_ThenReturnXMLDocument()
         {
             var scenarios = JsonConvert.DeserializeObject<List<Scenario>>(scenariosDataChangeMoveCell);
-            var traceId = "2f03a25f-28b3-46ea-b009-5943250a9a41";
+            var correlationId = "2f03a25f-28b3-46ea-b009-5943250a9a41";
 
             XmlDocument soapXml = new XmlDocument();
             soapXml.LoadXml(sapXmlFile);
@@ -117,7 +117,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
 
-            var result = _fakeSapMessageBuilder.BuildSapMessageXml(scenarios!, traceId);
+            var result = _fakeSapMessageBuilder.BuildSapMessageXml(scenarios!, correlationId);
 
             result.Should().BeOfType<XmlDocument>();
 
@@ -136,11 +136,11 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         public void WhenSapXmlTemplateFileNotExist_ThenThrowFileNotFoundException()
         {
             var scenarios = JsonConvert.DeserializeObject<List<Scenario>>(scenariosDataCancelReplaceCell);
-            var traceId = "2f03a25f-28b3-46ea-b009-5943250a9a41";
+            var correlationId = "2f03a25f-28b3-46ea-b009-5943250a9a41";
 
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(false);
 
-            Assert.Throws<FileNotFoundException>(() => _fakeSapMessageBuilder.BuildSapMessageXml(scenarios!, traceId));
+            Assert.Throws<FileNotFoundException>(() => _fakeSapMessageBuilder.BuildSapMessageXml(scenarios!, correlationId));
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Error

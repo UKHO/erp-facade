@@ -43,7 +43,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
                     RowKey = Guid.NewGuid().ToString(),
                     PartitionKey = Guid.NewGuid().ToString(),
                     Timestamp = DateTime.UtcNow,
-                    CorrelationID = correlationId,
+                    CorrelationId = correlationId,
                     EventData = eesEvent.ToString(),
                     RequestDateTime = null,
                     ResponseDateTime = null,
@@ -117,7 +117,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
                         ||
                         tableitem.ResponseDateTime.HasValue && ((tableitem.ResponseDateTime.Value - tableitem.RequestDateTime.Value) > TimeSpan.FromMinutes(callBackDuration)))
                     {
-                        _logger.LogWarning(EventIds.WebjobCallbackTimeoutEventFromSAP.ToEventId(), $"Request is timed out for the correlationid : {tableitem.CorrelationID}.");
+                        _logger.LogWarning(EventIds.WebjobCallbackTimeoutEventFromSAP.ToEventId(), $"Request is timed out for the correlationid : {tableitem.CorrelationId}.");
 
                         TableEntity tableEntity = new TableEntity(tableitem.PartitionKey, tableitem.RowKey)
                             {
@@ -129,7 +129,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
                 }
                 else
                 {
-                    _logger.LogError(EventIds.EmptyRequestDateTime.ToEventId(), $"Empty RequestDateTime column for correlationid : {tableitem.CorrelationID}");
+                    _logger.LogError(EventIds.EmptyRequestDateTime.ToEventId(), $"Empty RequestDateTime column for correlationid : {tableitem.CorrelationId}");
                 }
             }
         }

@@ -97,7 +97,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         {
             XmlDocument xmlDocument = new();
 
-            var fakeEncEventJson = JObject.Parse(@"{""data"":{""traceId"":""123""}}");
+            var fakeEncEventJson = JObject.Parse(@"{""data"":{""correlationId"":""123""}}");
             List<Scenario> fakeScenario = new()
             {
                 new Scenario()
@@ -154,7 +154,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         }
 
         [Test]
-        public async Task WhenTraceIdIsMissingInNewEncContentPublishedEvent_ThenWebhookReturns400BadRequestResponse()
+        public async Task WhenCorrelationIdIsMissingInNewEncContentPublishedEvent_ThenWebhookReturns400BadRequestResponse()
         {
             var fakeEncEventJson = JObject.Parse(@"{""data"":{""corId"":""123""}}");
 
@@ -169,7 +169,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
              && call.GetArgument<LogLevel>(0) == LogLevel.Warning
              && call.GetArgument<EventId>(1) == EventIds.CorrelationIdMissingInEvent.ToEventId()
-             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "TraceId is missing in ENC content published event.").MustHaveHappenedOnceExactly();
+             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "CorrelationId is missing in ENC content published event.").MustHaveHappenedOnceExactly();
         }
 
         [Test]
@@ -188,7 +188,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
                 }
             };
 
-            var fakeEncEventJson = JObject.Parse(@"{""data"":{""traceId"":""123""}}");
+            var fakeEncEventJson = JObject.Parse(@"{""data"":{""correlationId"":""123""}}");
 
             A.CallTo(() => _fakeScenarioBuilder.BuildScenarios(A<EESEvent>.Ignored)).Returns(fakeScenario);
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(xmlDocument);
@@ -236,7 +236,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             XmlDocument xmlDocument = new();
             List<Scenario> fakeScenario = new();
 
-            var fakeEncEventJson = JObject.Parse(@"{""data"":{""traceId"":""123""}}");
+            var fakeEncEventJson = JObject.Parse(@"{""data"":{""correlationId"":""123""}}");
 
             A.CallTo(() => _fakeScenarioBuilder.BuildScenarios(A<EESEvent>.Ignored)).Returns(fakeScenario);
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(xmlDocument);
