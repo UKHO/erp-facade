@@ -8,7 +8,7 @@
         <RECDATE></RECDATE>
         <RECTIME></RECTIME>
         <ORG>UKHO</ORG>
-        <ACTIONITEMS>
+        <ACTIONITEMS xmlns="urn:sap-com:document:sap:rfc:functions">
         </ACTIONITEMS>
       </IM_MATINFO>
     </Z_ADDS_MAT_INFO>
