@@ -18,6 +18,7 @@ namespace UKHO.ERPFacade.API.Controllers
         private readonly IAzureTableReaderWriter _azureTableReaderWriter;
         private readonly IAzureBlobEventWriter _azureBlobEventWriter;
         private readonly IErpFacadeService _erpFacadeService;
+        private readonly IJsonHelper _jsonHelper;
 
         private const string CorrIdKey = "corrid";
         private const string RequestFormat = "json";
@@ -27,13 +28,15 @@ namespace UKHO.ERPFacade.API.Controllers
                                    ILogger<ErpFacadeController> logger,
                                    IAzureTableReaderWriter azureTableReaderWriter,
                                    IAzureBlobEventWriter azureBlobEventWriter,
-                                   IErpFacadeService ErpFacadeService)
+                                   IErpFacadeService ErpFacadeService,
+                                   IJsonHelper jsonHelper)
         : base(contextAccessor)
         {
             _logger = logger;
             _azureTableReaderWriter = azureTableReaderWriter;
             _azureBlobEventWriter = azureBlobEventWriter;
             _erpFacadeService = ErpFacadeService;
+            _jsonHelper = jsonHelper;
         }
 
         [HttpPost]
@@ -76,7 +79,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
                 JObject unitsOfSaleUpdatedEventPayloadJson = JObject.Parse(JsonConvert.SerializeObject(unitsOfSaleUpdatedEventPayload));
 
-                var eventSize = CommonHelper.GetEventSize(unitsOfSaleUpdatedEventPayloadJson);
+                var eventSize = _jsonHelper.GetPayloadJsonSize(unitsOfSaleUpdatedEventPayloadJson.ToString());
                 if (eventSize > EventSizeLimit)
                 {
                     _logger.LogError(EventIds.PriceEventExceedSizeLimit.ToEventId(), "UnitsOfSale price event exceeds the size limit of 1 MB.");

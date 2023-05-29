@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using FakeItEasy;
+﻿using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NUnit.Framework;
+using System.Collections.Generic;
+using System.Linq;
 using UKHO.ERPFacade.API.Models;
 using UKHO.ERPFacade.API.Services;
+using UKHO.ERPFacade.Common.Logging;
 
 namespace UKHO.ERPFacade.API.UnitTests.Services
 {
@@ -35,7 +36,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Services
         [Test]
         public void WhenPriceInformationDetailIsPassed_ThenReturnsUnitsOfSalePrices()
         {
-            var priceInformationList = GetPriceInformationEventData();
+            var priceInformationList = GetPriceInformationData();
             var result = _fakeERPFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList);
 
             result.Should().BeOfType<List<UnitsOfSalePrices>>();
@@ -44,24 +45,34 @@ namespace UKHO.ERPFacade.API.UnitTests.Services
         [Test]
         public void WhenValidInformationIsPassed_ThenReturnsPriceEventPayload()
         {
-            var unitsOfSalePricesList = GetUnitOfSalePriceData();
+            var unitsOfSalePricesList = GetUnitsOfSalePriceList();
 
             var existingEESJson = JsonConvert.DeserializeObject(encContentPublishedJson);
             var result = _fakeERPFacadeService.BuildUnitsOfSaleUpdatedEventPayload(unitsOfSalePricesList, existingEESJson.ToString()!);
 
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+         && call.GetArgument<LogLevel>(0) == LogLevel.Information
+         && call.GetArgument<EventId>(1) == EventIds.AppendingUnitofSalePricesToEncEvent.ToEventId()
+         && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Appending UnitofSale prices to ENC event.").MustHaveHappenedOnceExactly();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+         && call.GetArgument<LogLevel>(0) == LogLevel.Information
+         && call.GetArgument<EventId>(1) == EventIds.UnitsOfSaleUpdatedEventPayloadCreated.ToEventId()
+         && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "UnitofSale updated event payload created.").MustHaveHappenedOnceExactly();
+
             result.Should().BeOfType<UnitOfSaleUpdatedEventPayload>();
         }
 
-        private List<PriceInformation> GetPriceInformationEventData()
+        private List<PriceInformation> GetPriceInformationData()
         {
             var requestJson = JsonConvert.DeserializeObject(jsonString);
             var priceInformationList = JsonConvert.DeserializeObject<List<PriceInformation>>(requestJson.ToString()!);
             return priceInformationList!;
         }
 
-        private List<UnitsOfSalePrices> GetUnitOfSalePriceData()
+        private List<UnitsOfSalePrices> GetUnitsOfSalePriceList()
         {
-            var priceInformationList = GetPriceInformationEventData();
+            var priceInformationList = GetPriceInformationData();
             var unitsOfSalePricesList = _fakeERPFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList);
 
             return unitsOfSalePricesList!;

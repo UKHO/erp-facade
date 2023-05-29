@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text;
 
@@ -44,13 +43,6 @@ namespace UKHO.ERPFacade.Common.IO
                 }
             }
             return sb.ToString();
-        }
-
-        public static int GetEventSize(JObject eesEventResponseJson)
-        {
-            var eventSize = UTF8Encoding.UTF8.GetBytes(eesEventResponseJson.ToString()).Length;
-
-            return eventSize;
         }
     }
 }
