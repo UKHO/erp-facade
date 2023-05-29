@@ -38,7 +38,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         }
 
         [Test]
-        public async Task WhenValidRequestReceived_ThenPostPriceInformationReturns200OkResponse()
+        public async Task WhenValidRequestReceived_ThenErpFacadeReturns200OkResponse()
         {
             var fakeSapEventJson = JObject.Parse(@"{""data"":{""traceId"":""123""}}");
 
@@ -57,7 +57,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         }
 
         [Test]
-        public async Task WhenTraceIdIsMissingInRequest_ThenPostPriceInformationReturnsReturns400BadRequestResponse()
+        public async Task WhenTraceIdIsMissingInRequest_ThenErpFacadeReturnsReturns400BadRequestResponse()
         {
             var fakeSapEventJson = JObject.Parse(@"{""data"":{""corId"":""123""}}");
 
@@ -75,7 +75,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         }
 
         [Test]
-        public async Task WhenInvalidTraceIdInRequest_ThenPostPriceInformationReturns404NotFoundResponse()
+        public async Task WhenInvalidTraceIdInRequest_ThenErpFacadeReturns404NotFoundResponse()
         {
             var fakeSapEventJson = JObject.Parse(@"{""data"":{""traceId"":""123""}}");
 
