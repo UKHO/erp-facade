@@ -30,7 +30,10 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPFacadePayloadTestData\cellMove.JSON">
+    <None Update="ERPFacadePayloadTestData\ID15_oneNewCellAndOneMoveOneCell.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\ID14_moveOneCell.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPFacadePayloadTestData\ID10_UpdateSimple.JSON">

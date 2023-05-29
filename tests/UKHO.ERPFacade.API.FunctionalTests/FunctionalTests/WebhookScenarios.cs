@@ -93,6 +93,13 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [TestCase("ID12_updateOneCellWithReIssueStatus.JSON", TestName = "WhenICallTheWebhookWithSimpleUpdateScenarioHavingOneCellStatusNameAsReIssue_ThenWebhookReturns200Response")]
         [TestCase("ID13_updateTwoCellsWithDifferentStatusName.JSON", TestName = "WhenICallTheWebhookWithSimpleUpdateScenarioHavingTwoCellsWithDifferentStatusName_ThenWebhookReturns200Response")]
 
+        //Move Cell
+        [TestCase("ID14_moveOneCell.JSON", TestName = "WhenICallTheWebhookWithSimpleMoveCellScenario_ThenWebhookReturns200Response")]
+        [TestCase("ID15_oneNewCellAndOneMoveOneCell.JSON", TestName = "WhenICallTheWebhookWithOneNewCellAndOneMoveOneCellScenario_ThenWebhookReturns200Response")]
+
+        //Mixed Scenario
+        [TestCase("ID16_oneNewCellAndOneMoveOneCell.JSON", TestName = "WhenICallTheWebhookWithOneMixScenario_ThenWebhookReturns200Response")]
+
         public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponse1(string payloadJsonFileName)
         {
             string filePath = Path.Combine(_projectDir, WebhookEndpoint.config.TestConfig.PayloadFolder, payloadJsonFileName);
