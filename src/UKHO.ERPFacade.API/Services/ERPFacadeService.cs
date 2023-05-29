@@ -14,7 +14,7 @@ namespace UKHO.ERPFacade.API.Services
             _logger = logger;
         }
 
-        public List<UnitsOfSalePrices> BuildUnitOfSalePricePayload(List<PriceInformationEvent> priceInformationList)
+        public List<UnitsOfSalePrices> MapAndBuildUnitsOfSalePrices(List<PriceInformation> priceInformationList)
         {
             List<UnitsOfSalePrices> unitsOfSalePriceList = new();
 
@@ -23,9 +23,9 @@ namespace UKHO.ERPFacade.API.Services
                 UnitsOfSalePrices unitsOfSalePrice = new();
                 List<Price> priceList = new();
 
-                var unitOfSalePriceExists = unitsOfSalePriceList.Any(x => x.UnitName.Contains(priceInformation.ProductName));
+                var isUnitOfSalePriceExists = unitsOfSalePriceList.Any(x => x.UnitName.Contains(priceInformation.ProductName));
 
-                if (!unitOfSalePriceExists)
+                if (!isUnitOfSalePriceExists)
                 {
                     if (!string.IsNullOrEmpty(priceInformation.EffectiveDate))
                     {
@@ -96,30 +96,31 @@ namespace UKHO.ERPFacade.API.Services
             return unitsOfSalePriceList;
         }
 
-        public UnitOfSalePriceEventPayload BuildPriceEventPayload(List<UnitsOfSalePrices> unitsOfSalePriceList, string existingEesEvent)
+        public UnitOfSaleUpdatedEventPayload BuildUnitsOfSaleUpdatedEventPayload(List<UnitsOfSalePrices> unitsOfSalePriceList, string encEventPayloadJson)
         {
-            _logger.LogInformation(EventIds.BuildingPriceEventStarted.ToEventId(), "Building unit of sale price event started.");
+            _logger.LogInformation(EventIds.AppendingUnitofSalePricesToEncEvent.ToEventId(), "Appending UnitofSale prices to ENC event.");
 
-            EESEventPayload eESEventPayload = JsonConvert.DeserializeObject<EESEventPayload>(existingEesEvent);
+            EncEventPayload encEventPayload = JsonConvert.DeserializeObject<EncEventPayload>(encEventPayloadJson);
 
-            _logger.LogInformation(EventIds.PriceEventCreated.ToEventId(), "Unit of sale price event created.");
+            
+            _logger.LogInformation(EventIds.UnitsOfSaleUpdatedEventPayloadCreated.ToEventId(), "UnitofSale updated event payload created.");
 
-            return new UnitOfSalePriceEventPayload(new UnitOfSalePriceEvent
+            return new UnitOfSaleUpdatedEventPayload(new UnitOfSaleUpdatedEvent
             {
-                SpecVersion = eESEventPayload.SpecVersion,
-                Type = eESEventPayload.Type,
-                Source = eESEventPayload.Source,
-                Id = eESEventPayload.Id,
-                Time = eESEventPayload.Time,
+                SpecVersion = encEventPayload.SpecVersion,
+                Type = encEventPayload.Type,
+                Source = encEventPayload.Source,
+                Id = encEventPayload.Id,
+                Time = encEventPayload.Time,
                 _COMMENT = "A comma separated list of products",
-                Subject = eESEventPayload.Subject,
-                DataContentType = eESEventPayload.DataContentType,
-                Data = new UnitOfSalePriceEventData
+                Subject = encEventPayload.Subject,
+                DataContentType = encEventPayload.DataContentType,
+                Data = new UnitOfSaleUpdatedEventData
                 {
-                    TraceId = eESEventPayload.Data.TraceId,
-                    Products = eESEventPayload.Data.Products,
+                    TraceId = encEventPayload.Data.TraceId,
+                    Products = encEventPayload.Data.Products,
                     _COMMENT = "Prices for all units in event will be included, including Cancelled Cell",
-                    UnitsOfSales = eESEventPayload.Data.UnitsOfSales,
+                    UnitsOfSales = encEventPayload.Data.UnitsOfSales,
                     UnitsOfSalePrices = unitsOfSalePriceList,
                 }
             });

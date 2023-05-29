@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace UKHO.ERPFacade.API.Models
 {
     [ExcludeFromCodeCoverage]
-    public class PriceInformationEvent 
+    public class PriceInformation 
     {
         [JsonProperty("corrid")]
         public string Corrid { get; set; }

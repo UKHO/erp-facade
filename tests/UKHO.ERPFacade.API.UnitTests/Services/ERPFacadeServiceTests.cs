@@ -36,7 +36,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Services
         public void WhenPriceInformationDetailIsPassed_ThenReturnsUnitsOfSalePrices()
         {
             var priceInformationList = GetPriceInformationEventData();
-            var result = _fakeERPFacadeService.BuildUnitOfSalePricePayload(priceInformationList);
+            var result = _fakeERPFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList);
 
             result.Should().BeOfType<List<UnitsOfSalePrices>>();
         }
@@ -47,22 +47,22 @@ namespace UKHO.ERPFacade.API.UnitTests.Services
             var unitsOfSalePricesList = GetUnitOfSalePriceData();
 
             var existingEESJson = JsonConvert.DeserializeObject(encContentPublishedJson);
-            var result = _fakeERPFacadeService.BuildPriceEventPayload(unitsOfSalePricesList, existingEESJson.ToString()!);
+            var result = _fakeERPFacadeService.BuildUnitsOfSaleUpdatedEventPayload(unitsOfSalePricesList, existingEESJson.ToString()!);
 
-            result.Should().BeOfType<UnitOfSalePriceEventPayload>();
+            result.Should().BeOfType<UnitOfSaleUpdatedEventPayload>();
         }
 
-        private List<PriceInformationEvent> GetPriceInformationEventData()
+        private List<PriceInformation> GetPriceInformationEventData()
         {
             var requestJson = JsonConvert.DeserializeObject(jsonString);
-            var priceInformationList = JsonConvert.DeserializeObject<List<PriceInformationEvent>>(requestJson.ToString()!);
+            var priceInformationList = JsonConvert.DeserializeObject<List<PriceInformation>>(requestJson.ToString()!);
             return priceInformationList!;
         }
 
         private List<UnitsOfSalePrices> GetUnitOfSalePriceData()
         {
             var priceInformationList = GetPriceInformationEventData();
-            var unitsOfSalePricesList = _fakeERPFacadeService.BuildUnitOfSalePricePayload(priceInformationList);
+            var unitsOfSalePricesList = _fakeERPFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList);
 
             return unitsOfSalePricesList!;
         }

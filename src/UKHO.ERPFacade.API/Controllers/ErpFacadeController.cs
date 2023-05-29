@@ -38,15 +38,15 @@ namespace UKHO.ERPFacade.API.Controllers
 
         [HttpPost]
         [Route("/erpfacade/priceinformation")]
-        public virtual async Task<IActionResult> PostPriceInformation([FromBody] JArray requestJson)
+        public virtual async Task<IActionResult> PostPriceInformation([FromBody] JArray priceInformationJson)
         {
-            _logger.LogInformation(EventIds.SapUnitOfSalePriceEventReceived.ToEventId(), "ERP Facade has received UnitOfSale price event from SAP.");
+            _logger.LogInformation(EventIds.SapUnitsOfSalePriceInformationPayloadReceived.ToEventId(), "UnitsOfSale price information payload received from SAP.");
 
-            var corrId = requestJson.First.SelectToken(CorrIdKey)?.Value<string>();
+            var corrId = priceInformationJson.First.SelectToken(CorrIdKey)?.Value<string>();
 
             if (string.IsNullOrEmpty(corrId))
             {
-                _logger.LogWarning(EventIds.CorrIdMissingInSAPEvent.ToEventId(), "Correlation Id is missing in the event received from the SAP.");
+                _logger.LogWarning(EventIds.CorrIdMissingInSAPPriceInformationPayload.ToEventId(), "CorrId is missing in price information payload recieved from SAP.");
                 return new BadRequestObjectResult(StatusCodes.Status400BadRequest);
             }
 
@@ -56,30 +56,30 @@ namespace UKHO.ERPFacade.API.Controllers
 
             if (!isBlobExists)
             {
-                _logger.LogError(EventIds.BlobNotFoundInAzure.ToEventId(), "Blob does not exist in the Azure Storage for the correlation ID received from SAP event.");
+                _logger.LogError(EventIds.ERPFacadeToSAPRequestNotFound.ToEventId(), "Invalid SAP callback. Request from ERP Facade to SAP not found.");
                 return new NotFoundObjectResult(StatusCodes.Status404NotFound);
             }
 
-            _logger.LogInformation(EventIds.BlobExistsInAzure.ToEventId(), "Blob exists in the Azure Storage for the correlation ID received from SAP event.");
+            _logger.LogInformation(EventIds.ERPFacadeToSAPRequestFound.ToEventId(), "Valid SAP callback.");
 
-            List<PriceInformationEvent> priceInformationList = JsonConvert.DeserializeObject<List<PriceInformationEvent>>(requestJson.ToString());
+            List<PriceInformation> priceInformationList = JsonConvert.DeserializeObject<List<PriceInformation>>(priceInformationJson.ToString());
 
             if (priceInformationList.Count > 0 && priceInformationList.Any(x => x.ProductName != string.Empty))
             {
-                List<UnitsOfSalePrices> unitsOfSalePriceList = _erpFacadeService.BuildUnitOfSalePricePayload(priceInformationList);
+                List<UnitsOfSalePrices> unitsOfSalePriceList = _erpFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList);
 
-                _logger.LogInformation(EventIds.DownloadExistingEesEventFromBlob.ToEventId(), "Downloading the existing EES event from azure blob storage with given Correlation ID.");
-                var existingEesEvent = _azureBlobEventWriter.DownloadEvent(corrId + '.' + RequestFormat, corrId);
-                _logger.LogInformation(EventIds.DownloadedExistingEesEventFromBlob.ToEventId(), "Existing EES event is downloaded from azure blob storage successfully.");
+                _logger.LogInformation(EventIds.DownloadEncEventPayloadStarted.ToEventId(), "Downloading the ENC event payload from azure blob storage.");
+                var encEventPayloadJson = _azureBlobEventWriter.DownloadEvent(corrId + '.' + RequestFormat, corrId);
+                _logger.LogInformation(EventIds.DownloadEncEventPayloadCompleted.ToEventId(), "ENC event payload is downloaded from azure blob storage successfully.");
 
-                var eesPriceEventPayload = _erpFacadeService.BuildPriceEventPayload(unitsOfSalePriceList, existingEesEvent);
+                var unitsOfSaleUpdatedEventPayload = _erpFacadeService.BuildUnitsOfSaleUpdatedEventPayload(unitsOfSalePriceList, encEventPayloadJson);
 
-                JObject eesPriceEventPayloadJson = JObject.Parse(JsonConvert.SerializeObject(eesPriceEventPayload));
+                JObject unitsOfSaleUpdatedEventPayloadJson = JObject.Parse(JsonConvert.SerializeObject(unitsOfSaleUpdatedEventPayload));
 
-                var eventSize = CommonHelper.GetEventSize(eesPriceEventPayloadJson);
+                var eventSize = CommonHelper.GetEventSize(unitsOfSaleUpdatedEventPayloadJson);
                 if (eventSize > EventSizeLimit)
                 {
-                    _logger.LogWarning(EventIds.PriceEventExceedSizeLimit.ToEventId(), "Unit of Sale Price Event exceeds the size limit of 1 MB.");
+                    _logger.LogError(EventIds.PriceEventExceedSizeLimit.ToEventId(), "UnitsOfSale price event exceeds the size limit of 1 MB.");
                     throw new ERPFacadeException(EventIds.PriceEventExceedSizeLimit.ToEventId());
                 }
 
@@ -87,8 +87,8 @@ namespace UKHO.ERPFacade.API.Controllers
             }
             else
             {
-                _logger.LogError(EventIds.NoPriceInformationFound.ToEventId(), "No price information found in incoming SAP event.");
-                throw new ERPFacadeException(EventIds.NoPriceInformationFound.ToEventId());
+                _logger.LogError(EventIds.NoDataFoundInSAPPriceInformationPayload.ToEventId(), "No data found in SAP price information payload.");
+                throw new ERPFacadeException(EventIds.NoDataFoundInSAPPriceInformationPayload.ToEventId());
             }
 
             return new OkObjectResult(StatusCodes.Status200OK);

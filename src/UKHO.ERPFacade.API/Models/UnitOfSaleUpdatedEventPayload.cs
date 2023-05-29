@@ -1,9 +1,23 @@
 ﻿using Newtonsoft.Json;
 using System.Diagnostics.CodeAnalysis;
+using UKHO.ERPFacade.Common.Infrastructure;
 
 namespace UKHO.ERPFacade.API.Models
 {
-    public class EESEventPayload
+    [ExcludeFromCodeCoverage]
+    public class UnitOfSaleUpdatedEventPayload : EventBase<UnitOfSaleUpdatedEvent>
+    {
+        public UnitOfSaleUpdatedEventPayload(UnitOfSaleUpdatedEvent unitOfSalePriceEvent)
+        {
+            EventData = unitOfSalePriceEvent;
+        }
+
+        public override string EventName => "uk.gov.ukho.erpFacade.unitOfSaleUpdated.v1";
+        public override string Subject => EventData.Subject;
+    }
+
+    [ExcludeFromCodeCoverage]
+    public class UnitOfSaleUpdatedEvent
     {
         [JsonProperty("specversion")]
         public string SpecVersion { get; set; }
@@ -20,6 +34,9 @@ namespace UKHO.ERPFacade.API.Models
         [JsonProperty("time")]
         public string Time { get; set; }
 
+        [JsonProperty("_COMMENT")]
+        public string _COMMENT { get; set; }
+
         [JsonProperty("subject")]
         public string Subject { get; set; }
 
@@ -27,11 +44,11 @@ namespace UKHO.ERPFacade.API.Models
         public string DataContentType { get; set; }
 
         [JsonProperty("data")]
-        public EesEventData Data { get; set; }
+        public UnitOfSaleUpdatedEventData Data { get; set; }
     }
 
     [ExcludeFromCodeCoverage]
-    public class EesEventData
+    public class UnitOfSaleUpdatedEventData
     {
         [JsonProperty("traceId")]
         public string TraceId { get; set; }
@@ -39,7 +56,13 @@ namespace UKHO.ERPFacade.API.Models
         [JsonProperty("products")]
         public List<Product> Products { get; set; }
 
+        [JsonProperty("_COMMENT")]
+        public string _COMMENT { get; set; }
+
         [JsonProperty("unitsOfSale")]
         public List<UnitOfSale> UnitsOfSales { get; set; }
+
+        [JsonProperty("unitsOfSalePrices")]
+        public List<UnitsOfSalePrices> UnitsOfSalePrices { get; set; }
     }
 }

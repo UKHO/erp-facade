@@ -110,7 +110,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
                 }
             };
 
-            A.CallTo(() => _fakeScenarioBuilder.BuildScenarios(A<EESEventPayload>.Ignored)).Returns(fakeScenario);
+            A.CallTo(() => _fakeScenarioBuilder.BuildScenarios(A<EncEventPayload>.Ignored)).Returns(fakeScenario);
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(xmlDocument);
             A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored))
                 .Returns(new HttpResponseMessage()
@@ -149,7 +149,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
              && call.GetArgument<LogLevel>(0) == LogLevel.Information
-             && call.GetArgument<EventId>(1) == EventIds.DataPushedToSap.ToEventId()
+             && call.GetArgument<EventId>(1) == EventIds.EncUpdatePushedToSap.ToEventId()
              && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Data pushed to SAP successfully. | {StatusCode}").MustHaveHappenedOnceExactly();
         }
 
@@ -190,7 +190,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
 
             var fakeEncEventJson = JObject.Parse(@"{""data"":{""traceId"":""123""}}");
 
-            A.CallTo(() => _fakeScenarioBuilder.BuildScenarios(A<EESEventPayload>.Ignored)).Returns(fakeScenario);
+            A.CallTo(() => _fakeScenarioBuilder.BuildScenarios(A<EncEventPayload>.Ignored)).Returns(fakeScenario);
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(xmlDocument);
             A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored))
                 .Returns(new HttpResponseMessage()
@@ -226,7 +226,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
              && call.GetArgument<LogLevel>(0) == LogLevel.Error
-             && call.GetArgument<EventId>(1) == EventIds.SapConnectionFailed.ToEventId()
+             && call.GetArgument<EventId>(1) == EventIds.ErrorOccuredInSap.ToEventId()
              && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Could not connect to SAP. | {StatusCode}").MustHaveHappenedOnceExactly();
         }
 
@@ -238,7 +238,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
 
             var fakeEncEventJson = JObject.Parse(@"{""data"":{""traceId"":""123""}}");
 
-            A.CallTo(() => _fakeScenarioBuilder.BuildScenarios(A<EESEventPayload>.Ignored)).Returns(fakeScenario);
+            A.CallTo(() => _fakeScenarioBuilder.BuildScenarios(A<EncEventPayload>.Ignored)).Returns(fakeScenario);
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(xmlDocument);
             A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored))
                 .Returns(new HttpResponseMessage()

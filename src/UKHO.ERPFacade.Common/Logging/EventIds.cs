@@ -60,12 +60,12 @@
         /// <summary>
         /// 940012 - Could not connect to SAP
         /// </summary>
-        SapConnectionFailed = 940012,
+        ErrorOccuredInSap = 940012,
 
         /// <summary>
         /// 940013 - Data pushed to SAP
         /// </summary>
-        DataPushedToSap = 940013,
+        EncUpdatePushedToSap = 940013,
 
         /// <summary>
         /// 940014- Webjob started to process the incomplete transactions.
@@ -103,18 +103,18 @@
         UpdateEntitySuccessful = 940020,
 
         /// <summary>
-        /// 940021 - Correlation Id is missing in the event received from SAP
+        /// 940021 - CorrId is missing in price information payload recieved from SAP.
         /// </summary>
-        CorrIdMissingInSAPEvent = 940021,
+        CorrIdMissingInSAPPriceInformationPayload = 940021,
         /// <summary>
-        /// 940022 - Blob does not exist for traceID given in SAP event.
+        /// 940022 - Invalid SAP callback. Request from ERP Facade to SAP not found for CorrId.
         /// </summary>
-        BlobNotFoundInAzure = 940022,
+        ERPFacadeToSAPRequestNotFound = 940022,
 
         /// <summary>
-        /// 940023 - Blob exists for traceID given in SAP event.
+        /// 940023 - Valid SAP callback for CorrId.
         /// </summary>
-        BlobExistsInAzure = 940023,
+        ERPFacadeToSAPRequestFound = 940023,
 
         /// <summary>
         /// 940024 - No Scenario Found
@@ -157,34 +157,34 @@
         EnvironmentName = 940031,
         
         /// <summary>
-        /// 940032 - UnitOfSale price event received from SAP
+        /// 940032 - UnitOfSale price information payload received from SAP
         /// </summary>
-        SapUnitOfSalePriceEventReceived = 940032,
+        SapUnitsOfSalePriceInformationPayloadReceived = 940032,
 
         /// <summary>
         /// 940033 - Downloading exisiting ees event from azure blob storage
         /// </summary>
-        DownloadExistingEesEventFromBlob = 940033,
+        DownloadEncEventPayloadStarted = 940033,
 
         /// <summary>
         /// 940034 - Downloaded exisiting ees event from azure blob storage successfully
         /// </summary>
-        DownloadedExistingEesEventFromBlob = 940034,
+        DownloadEncEventPayloadCompleted = 940034,
 
         /// <summary>
         /// 940035 - No price information found in incoming SAP event
         /// </summary>
-        NoPriceInformationFound = 940035,
+        NoDataFoundInSAPPriceInformationPayload = 940035,
 
         /// <summary>
         /// 940036 - Building unit of sale price event started
         /// </summary>
-        BuildingPriceEventStarted = 940036,
+        AppendingUnitofSalePricesToEncEvent = 940036,
 
         /// <summary>
         /// 940037 - Unit of sale price event created
         /// </summary>
-        PriceEventCreated = 940037,
+        UnitsOfSaleUpdatedEventPayloadCreated = 940037,
 
         /// <summary>
         /// 940038 - Price Event exceeds the size limit of 1 MB
