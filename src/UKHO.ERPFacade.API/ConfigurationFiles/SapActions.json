@@ -212,7 +212,6 @@
         "Rules": [
           {
             "Conditions": [
-
             ]
           }
         ],
@@ -309,12 +308,7 @@
         "Product": "ENC CELL",
         "Rules": [
           {
-            "Conditions": [
-              {
-                "AttributeDataType": "bool",
-                "AttributeName": "Status.IsNewCell",
-                "AttributeValue": "True"
-              }
+            "Conditions": [              
             ]
           }
         ],
@@ -414,8 +408,8 @@
             "Conditions": [
               {
                 "AttributeDataType": "bool",
-                "AttributeName": "Status.IsNewCell",
-                "AttributeValue": "True"
+                "AttributeName": "ContentChanged",
+                "AttributeValue": "False"
               }
             ]
           }
@@ -516,8 +510,8 @@
             "Conditions": [
               {
                 "AttributeDataType": "bool",
-                "AttributeName": "Status.IsNewCell",
-                "AttributeValue": "True"
+                "AttributeName": "ContentChanged",
+                "AttributeValue": "False"
               }
             ]
           }
@@ -623,7 +617,7 @@
               },
               {
                 "AttributeDataType": "bool",
-                "AttributeName": "contentChanged",
+                "AttributeName": "ContentChanged",
                 "AttributeValue": "True"
               },
               {
@@ -736,12 +730,7 @@
         "Product": "AVCS UNIT",
         "Rules": [
           {
-            "Conditions": [
-              {
-                "AttributeDataType": "bool",
-                "AttributeName": "Status.IsNewCell",
-                "AttributeValue": "True"
-              }
+            "Conditions": [ 
             ]
           }
         ],
@@ -840,10 +829,10 @@
           {
             "Conditions": [
               {
-                "AttributeDataType": "bool",
-                "AttributeName": "Status.IsNewCell",
-                "AttributeValue": "True"
-              }
+                "AttributeDataType": "string",
+                "AttributeName": "Status.StatusName",
+                "AttributeValue": "Cancellation Update"
+              }              
             ]
           }
         ],
@@ -942,9 +931,9 @@
           {
             "Conditions": [
               {
-                "AttributeDataType": "bool",
-                "AttributeName": "Status.IsNewCell",
-                "AttributeValue": "True"
+                "AttributeDataType": "string",
+                "AttributeName": "Status",
+                "AttributeValue": "NotForSale"
               }
             ]
           }

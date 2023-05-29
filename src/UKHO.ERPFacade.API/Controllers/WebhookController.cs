@@ -23,10 +23,9 @@ namespace UKHO.ERPFacade.API.Controllers
         private readonly IAzureTableReaderWriter _azureTableReaderWriter;
         private readonly IAzureBlobEventWriter _azureBlobEventWriter;
         private readonly ISapClient _sapClient;
-        //private readonly IScenarioBuilder _scenarioBuilder;
-        //private readonly ISapMessageBuilder _sapMessageBuilder;
+        private readonly ISapMessageBuilder _sapMessageBuilder;
         private readonly IOptions<SapConfiguration> _sapConfig;
-        private readonly IXmlBuilder _xmlBuilder;
+
         private const string TraceIdKey = "data.traceId";
         private const string RequestFormat = "json";
 
@@ -34,10 +33,8 @@ namespace UKHO.ERPFacade.API.Controllers
                                  ILogger<WebhookController> logger,
                                  IAzureTableReaderWriter azureTableReaderWriter,
                                  IAzureBlobEventWriter azureBlobEventWriter,
-                                 ISapClient sapClient,
-                                 IXmlBuilder xmlBuilder,
-                                 //IScenarioBuilder scenarioBuilder,
-                                 //ISapMessageBuilder sapMessageBuilder,
+                                 ISapClient sapClient,                                 
+                                 ISapMessageBuilder sapMessageBuilder,
                                     IOptions<SapConfiguration> sapConfig)
         : base(contextAccessor)
         {
@@ -45,9 +42,7 @@ namespace UKHO.ERPFacade.API.Controllers
             _azureTableReaderWriter = azureTableReaderWriter;
             _azureBlobEventWriter = azureBlobEventWriter;
             _sapClient = sapClient;
-            //_scenarioBuilder = scenarioBuilder;
-            //_sapMessageBuilder = sapMessageBuilder;
-            _xmlBuilder = xmlBuilder;
+            _sapMessageBuilder = sapMessageBuilder;
             _sapConfig = sapConfig ?? throw new ArgumentNullException(nameof(sapConfig));
         }
 
@@ -93,31 +88,21 @@ namespace UKHO.ERPFacade.API.Controllers
 
             _logger.LogInformation(EventIds.UploadedEncContentPublishedEventInAzureBlob.ToEventId(), "ENC content published event is uploaded in blob storage successfully.");
 
-            //List<Scenario> scenarios = _scenarioBuilder.BuildScenarios(JsonConvert.DeserializeObject<EESEvent>(requestJson.ToString()));
+            XmlDocument sapPayload = _sapMessageBuilder.BuildSapMessageXml(JsonConvert.DeserializeObject<EESEvent>(requestJson.ToString()), traceId);
 
+            HttpResponseMessage response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapServiceOperation);
 
-            //if (scenarios.Count > 0)
+            if (!response.IsSuccessStatusCode)
             {
-                XmlDocument sapPayload = _xmlBuilder.BuildSapMessageXml(JsonConvert.DeserializeObject<EESEvent>(requestJson.ToString()), traceId);
-
-                HttpResponseMessage response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapServiceOperation);
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    _logger.LogError(EventIds.SapConnectionFailed.ToEventId(), "Could not connect to SAP. | {StatusCode}", response.StatusCode);
-                    throw new ERPFacadeException(EventIds.SapConnectionFailed.ToEventId());
-                }
-                _logger.LogInformation(EventIds.DataPushedToSap.ToEventId(), "Data pushed to SAP successfully. | {StatusCode}", response.StatusCode);
-
-                await _azureTableReaderWriter.UpdateRequestTimeEntity(traceId);
-
-                return new OkObjectResult(StatusCodes.Status200OK);
+                _logger.LogError(EventIds.SapConnectionFailed.ToEventId(), "Could not connect to SAP. | {StatusCode}", response.StatusCode);
+                throw new ERPFacadeException(EventIds.SapConnectionFailed.ToEventId());
             }
-            //else
-            //{
-            //    _logger.LogError(EventIds.NoScenarioFound.ToEventId(), "No scenarios found in incoming EES event.");
-            //    throw new ERPFacadeException(EventIds.NoScenarioFound.ToEventId());
-            //}
+            _logger.LogInformation(EventIds.DataPushedToSap.ToEventId(), "Data pushed to SAP successfully. | {StatusCode}", response.StatusCode);
+
+            await _azureTableReaderWriter.UpdateRequestTimeEntity(traceId);
+
+            return new OkObjectResult(StatusCodes.Status200OK);
+
         }
     }
 }
