@@ -37,11 +37,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 AzureADToken = null;
                 AzureADToken = await GenerateAzureADToken(_config.TestConfig.AzureadConfiguration.AutoTestClientIdNoRole, _config.TestConfig.AzureadConfiguration.ClientSecretNoRole, AzureADToken);
             }
-            else if (endPointName == "UnitOfSale") 
+            else if (endPointName == "UnitOfSale"|| endPointName == "BulkPriceUpdate") 
             {
                 
                 AzureADToken = await GenerateAzureADToken(_config.TestConfig.AzureadConfiguration.AutoTestClientIdPricingInformationCaller, _config.TestConfig.AzureadConfiguration.ClientSecretPricingInformationCaller, AzureADToken);
             }
+
             else
             {
                 AzureADToken = await GenerateAzureADToken(_config.TestConfig.AzureadConfiguration.AutoTestClientId, _config.TestConfig.AzureadConfiguration.ClientSecret, AzureADToken);

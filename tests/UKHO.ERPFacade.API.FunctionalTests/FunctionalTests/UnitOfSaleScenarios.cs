@@ -36,14 +36,29 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [Test(Description = "WhenValidEventReceivedWithValidToken_ThenUoSReturns200OkResponse"), Order(0)]
         public async Task WhenValidEventReceivedWithValidToken_ThenUoSReturns200OkResponse()
         {
-            string filePath = Path.Combine(_projectDir, config.TestConfig.PayloadFolder, config.TestConfig.UoSPayloadFileName);
-                        
+            string filePath = Path.Combine(_projectDir, config.TestConfig.PayloadFolder, config.TestConfig.UoSPayloadFileName);            
             var response = await _unitOfSale.PostUoSResponseAsync(filePath, await _authToken.GetAzureADToken(false, "UnitOfSale"));
-            
-
-            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+           response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         }
-        
+        [Test(Description = "WhenValidEventReceivedWithInvalidToken_ThenUoSReturns401UnAuthorizedResponse"), Order(1)]
+        public async Task WhenValidEventReceivedWithInvalidToken_ThenUoSReturns401UnAuthorizedResponse()
+        {
+            string filePath = Path.Combine(_projectDir, config.TestConfig.PayloadFolder, config.TestConfig.UoSPayloadFileName);
+
+            var response = await _unitOfSale.PostUoSResponseAsync(filePath, "invalidToken_abcd");
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
+
+        }
+        [Test(Description = "WhenValidEventReceivedWithTokenHavingNoRole_ThenUoSReturns403ForbiddenResponse"), Order(2)]
+        public async Task WhenValidEventReceivedWithInvalidToken_ThenUoSReturns403UnAuthorizedResponse()
+        {
+            string filePath = Path.Combine(_projectDir, config.TestConfig.PayloadFolder, config.TestConfig.UoSPayloadFileName);
+
+            var response = await _unitOfSale.PostUoSResponseAsync(filePath, await _authToken.GetAzureADToken(true));
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.Forbidden);
+
+        }
+
     }
 }

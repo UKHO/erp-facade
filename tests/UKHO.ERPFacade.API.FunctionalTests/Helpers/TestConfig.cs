@@ -15,6 +15,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         public AzureStorageConfiguration AzureStorageConfiguration { get; set; }
         public string[] XMLActionList { get; set; }
         public string UoSPayloadFileName { get; set; }
+        public string BPUpdatePayloadFileName { get; set; }
     }
 
 
