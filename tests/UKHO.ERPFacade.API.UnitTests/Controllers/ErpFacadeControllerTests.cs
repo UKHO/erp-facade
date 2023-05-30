@@ -191,7 +191,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         }
 
         [Test]
-        public async Task WhenUnitsOfSaleUpdatedEventPayloadJsonSizeGreaterThanOneMb_ThenErpFacadeThrowsException()
+        public void WhenUnitsOfSaleUpdatedEventPayloadJsonSizeGreaterThanOneMb_ThenErpFacadeThrowsException()
         {
             var requestJson = JArray.Parse(JsonConvert.DeserializeObject(jsonString).ToString()!);
             var unitsOfSalePricesList = GetUnitsOfSalePriceList();
