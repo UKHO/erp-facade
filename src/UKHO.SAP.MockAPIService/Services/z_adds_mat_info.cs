@@ -37,7 +37,7 @@ namespace UKHO.SAP.MockAPIService.Services
 
             return new Z_ADDS_MAT_INFOResponse()
             {
-                EX_MESSAGE = "Record successfully received for " + iM_MATINFO.CORRID,
+                EX_MESSAGE = "Record successfully received for CorrelationId :" + iM_MATINFO.CORRID,
                 EX_STATUS = "0"
             };
         }

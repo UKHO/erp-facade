@@ -17,13 +17,13 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
         static int actionCounter;
 
-        static readonly List<string> AttrNotMatched = new List<string>();
-        static List<string> ChangeAVCSUoS = new List<string>();
-        static readonly Dictionary<string, List<string>> ChangeENCCell = new Dictionary<string, List<string>>();
-        public static List<string> listFromJson = new List<string>();
-        public static List<string> actionsListFromXml = new List<string>();
+        static readonly List<string> AttrNotMatched = new();
+        static List<string> ChangeAVCSUoS = new();
+        static readonly Dictionary<string, List<string>> ChangeENCCell = new();
+        public static List<string> listFromJson = new();
+        public static List<string> actionsListFromXml = new();
 
-        public static Config config = new Config();
+        public static Config config = new();
         private static JsonPayloadHelper jsonPayload { get; set; }
         private static Z_ADDS_MAT_INFO xmlPayload { get; set; }
 

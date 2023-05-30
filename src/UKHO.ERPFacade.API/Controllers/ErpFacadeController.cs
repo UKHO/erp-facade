@@ -34,7 +34,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
             if (string.IsNullOrEmpty(corrId))
             {
-                _logger.LogWarning(EventIds.TraceIdMissingInSAPEvent.ToEventId(), "CorrId is missing in the event received from the SAP.");
+                _logger.LogWarning(EventIds.CorrIdMissingInSAPEvent.ToEventId(), "CorrId is missing in the event received from the SAP.");
                 return new BadRequestObjectResult(StatusCodes.Status400BadRequest);
             }
 

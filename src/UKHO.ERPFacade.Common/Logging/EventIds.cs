@@ -103,9 +103,9 @@
         UpdateEntitySuccessful = 940020,
 
         /// <summary>
-        /// 940021 - TraceId is missing in the event received from SAP
+        /// 940021 - CorrId is missing in the event received from SAP
         /// </summary>
-        TraceIdMissingInSAPEvent = 940021,
+        CorrIdMissingInSAPEvent = 940021,
 
         /// <summary>
         /// 940022 - Blob does not exist for traceID given in SAP event.
