@@ -1,7 +1,6 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json.Linq;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using UKHO.ERPFacade.Common.Configuration;

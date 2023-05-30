@@ -28,14 +28,14 @@ namespace UKHO.ERPFacade.API.Controllers
                                    ILogger<ErpFacadeController> logger,
                                    IAzureTableReaderWriter azureTableReaderWriter,
                                    IAzureBlobEventWriter azureBlobEventWriter,
-                                   IErpFacadeService ErpFacadeService,
+                                   IErpFacadeService erpFacadeService,
                                    IJsonHelper jsonHelper)
         : base(contextAccessor)
         {
             _logger = logger;
             _azureTableReaderWriter = azureTableReaderWriter;
             _azureBlobEventWriter = azureBlobEventWriter;
-            _erpFacadeService = ErpFacadeService;
+            _erpFacadeService = erpFacadeService;
             _jsonHelper = jsonHelper;
         }
 
