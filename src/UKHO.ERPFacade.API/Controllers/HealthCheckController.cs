@@ -18,7 +18,7 @@ namespace UKHO.ERPFacade.API.Controllers
         [Route("/erpfacade/healthcheck")]
         public virtual async Task<IActionResult> ApiHealthCheckEvent() {
 
-            return new   OkObjectResult(StatusCodes.Status200OK);
+            return new OkObjectResult(StatusCodes.Status200OK);
         }
 
 
