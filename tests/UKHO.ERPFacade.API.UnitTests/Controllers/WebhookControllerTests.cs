@@ -21,6 +21,7 @@ using UKHO.ERPFacade.Common.HttpClients;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
+using System;
 
 namespace UKHO.ERPFacade.API.UnitTests.Controllers
 {
@@ -201,6 +202,21 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
              && call.GetArgument<LogLevel>(0) == LogLevel.Error
              && call.GetArgument<EventId>(1) == EventIds.SapConnectionFailed.ToEventId()
              && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Could not connect to SAP. | {StatusCode}").MustHaveHappenedOnceExactly();
+        }
+
+        [Test]
+        public void Does_Constructor_Throws_ArgumentNullException_When_Paramter_Is_Null()
+        {
+            Assert.Throws<ArgumentNullException>(
+             () => new WebhookController(_fakeHttpContextAccessor,
+                                                           _fakeLogger,
+                                                           _fakeAzureTableReaderWriter,
+                                                           _fakeAzureBlobEventWriter,
+                                                           _fakeSapClient,
+                                                           _fakeSapMessageBuilder,
+                                                           null))
+             .ParamName
+             .Should().Be("sapConfig");
         }
     }
 }
