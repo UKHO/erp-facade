@@ -22,9 +22,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         private readonly ADAuthTokenProvider _authToken = new();
         public static bool noRole = false;
         //for pipeline
-        //private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
+        private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
         //for local
-        private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
+        //private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
 
         [OneTimeSetUp]
         public void Setup()
