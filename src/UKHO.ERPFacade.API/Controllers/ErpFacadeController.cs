@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UKHO.ERPFacade.API.Models;
 using UKHO.ERPFacade.API.Services;
 using UKHO.ERPFacade.Common.Exceptions;
-using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.IO;
+using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
 
 namespace UKHO.ERPFacade.API.Controllers
@@ -43,6 +43,8 @@ namespace UKHO.ERPFacade.API.Controllers
         [Route("/erpfacade/priceinformation")]
         public virtual async Task<IActionResult> PostPriceInformation([FromBody] JArray priceInformationJson)
         {
+            JObject unitsOfSaleUpdatedEventPayloadJson;
+
             _logger.LogInformation(EventIds.SapUnitsOfSalePriceInformationPayloadReceived.ToEventId(), "UnitsOfSale price information payload received from SAP.");
 
             var corrId = priceInformationJson.First.SelectToken(CorrIdKey)?.Value<string>();
@@ -77,7 +79,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
                 var unitsOfSaleUpdatedEventPayload = _erpFacadeService.BuildUnitsOfSaleUpdatedEventPayload(unitsOfSalePriceList, encEventPayloadJson);
 
-                JObject unitsOfSaleUpdatedEventPayloadJson = JObject.Parse(JsonConvert.SerializeObject(unitsOfSaleUpdatedEventPayload));
+                unitsOfSaleUpdatedEventPayloadJson = JObject.Parse(JsonConvert.SerializeObject(unitsOfSaleUpdatedEventPayload));
 
                 var eventSize = _jsonHelper.GetPayloadJsonSize(unitsOfSaleUpdatedEventPayloadJson.ToString());
                 if (eventSize > EventSizeLimit)
@@ -94,7 +96,7 @@ namespace UKHO.ERPFacade.API.Controllers
                 throw new ERPFacadeException(EventIds.NoDataFoundInSAPPriceInformationPayload.ToEventId());
             }
 
-            return new OkObjectResult(StatusCodes.Status200OK);
+            return new OkObjectResult(unitsOfSaleUpdatedEventPayloadJson);
         }
     }
 }
