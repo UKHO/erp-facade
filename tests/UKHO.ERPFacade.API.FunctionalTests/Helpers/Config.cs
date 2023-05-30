@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using System.Security.Authentication.ExtendedProtection;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
@@ -10,11 +12,19 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         {
             IConfiguration ConfigurationRoot = new ConfigurationBuilder()
                                .AddJsonFile("appsettings.json", false)
+#if DEBUG
+                //Add development overrides configuration
+                .AddJsonFile("appsettings.local.overrides.json", true, true)
+#endif
                                .AddEnvironmentVariables()
                                .Build();
 
+            
             TestConfig = new();
             ConfigurationRoot.Bind(TestConfig);
+         
+
+
         }
     }
 }
