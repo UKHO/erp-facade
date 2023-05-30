@@ -1140,7 +1140,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
         public static string updateTimeField(string requestBody)
         {
-            var currentTimeStamp = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.sssssss'z'");
+            var currentTimeStamp = DateTime.Now.ToString("yyyy-MM-dd");
             //string newTraceId = SAPXmlHelper.generateRandomTraceId();
 
             JObject jsonObj = JObject.Parse(requestBody);
