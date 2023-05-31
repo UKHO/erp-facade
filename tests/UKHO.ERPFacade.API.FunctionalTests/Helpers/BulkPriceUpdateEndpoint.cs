@@ -1,11 +1,5 @@
-﻿
-using Microsoft.Identity.Client;
-using RestSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using RestSharp;
+
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
@@ -13,21 +7,17 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
     {
 
         private readonly RestClient client;
-        private readonly RestClient client2;
-        private readonly ADAuthTokenProvider _authToken;
         
 
         public BulkPriceUpdateEndpoint(string url)
         {
-            _authToken = new();
             var options = new RestClientOptions(url);
             client = new RestClient(options);         
 
         }
         public void  PostBulkPriceUpdateResponse()
         {
-            Console.WriteLine("In Bulk Price Update");
-           
+            Console.WriteLine("In Bulk Price Update");           
             return;
         }
 

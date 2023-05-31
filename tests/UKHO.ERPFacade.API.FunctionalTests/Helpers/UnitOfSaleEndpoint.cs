@@ -1,13 +1,7 @@
 ﻿
-using Microsoft.Identity.Client;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using RestSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UKHO.ERPFacade.API.FunctionalTests.Model;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
@@ -16,22 +10,19 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
     {
 
         private readonly RestClient client;
-        private readonly RestClient client2;
-        private readonly ADAuthTokenProvider _authToken;
+
         private AzureTableHelper azureTableHelper { get; set; }
 
 
         public UnitOfSaleEndpoint(string url)
         {
-            _authToken = new();
             var options = new RestClientOptions(url);
             client = new RestClient(options);
             azureTableHelper = new AzureTableHelper();
         }
         public void  PostUnitOfSaleResponse()
         {
-            Console.WriteLine("In Unit of Sale");
-           
+            Console.WriteLine("In Unit of Sale");           
             return;
         }
 
@@ -62,7 +53,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             {
                 Assert.That(azureTableHelper.CheckResponseDateTime(traceID), Is.True, "ResponseDateTime Not updated in Azure table");
             }
-            //Assert.That(azureTableHelper.CheckResponseDateTime(traceID), Is.True, "ResponseDateTime Not updated in Azure table");
+            
             return response;
         }
     }
