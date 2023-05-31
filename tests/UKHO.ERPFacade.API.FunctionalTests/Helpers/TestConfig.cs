@@ -10,8 +10,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         public string WebhookInvalidPayloadFileName { get; set; }
         public string GeneratedXMLFolder { get; set; }
         public SapMockConfiguration SapMockConfiguration { get; set; }
-        public Erpfacadeconfiguration ErpFacadeConfiguration { get; set; }
-        public AzureADconfiguration AzureADconfiguration { get; set; }
+        public ErpFacadeConfiguration ErpFacadeConfiguration { get; set; }
+        public AzureADconfiguration AzureADConfiguration { get; set; }
         public AzureStorageConfiguration AzureStorageConfiguration { get; set; }
         public string[] XMLActionList { get; set; }
         public string UoSPayloadFileName { get; set; }
@@ -43,7 +43,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         public string ClientSecretPricingInformationCaller { get; set; }
     }
 
-    public class Erpfacadeconfiguration
+    public class ErpFacadeConfiguration
     {
         public string BaseUrl { get; set; }
 

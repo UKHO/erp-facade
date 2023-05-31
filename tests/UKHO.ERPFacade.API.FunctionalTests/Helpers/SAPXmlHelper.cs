@@ -19,7 +19,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
         static readonly List<string> AttrNotMatched = new List<string>();
         static List<string> ChangeAVCSUoS = new List<string>();
-        static readonly Dictionary<string, List<string>> ChangeENCCell = new Dictionary<string, List<string>>();
+        static readonly Dictionary<string, List<string>> ChangeENCCell = new ();
         public static List<string> listFromJson = new List<string>();
         public static List<string> actionsListFromXml = new List<string>();
 
