@@ -92,7 +92,7 @@ namespace UKHO.ERPFacade.API.Helpers
                         case 1:
                         case 7:
                         case 9:
-                            var unitOfSale = eventData.Data.UnitsOfSales.Where(x => x.UnitOfSaleType == UnitSaleType && x.UnitName == product.ProductName).FirstOrDefault();
+                            var unitOfSale = eventData.Data.UnitsOfSales.Where(x => x.UnitOfSaleType == UnitSaleType && product.InUnitsOfSale.Contains(x.UnitName)).FirstOrDefault();
                             foreach (var rules in action.Rules)
                             {
                                 foreach (var conditions in rules.Conditions)
@@ -121,7 +121,7 @@ namespace UKHO.ERPFacade.API.Helpers
                             break;
 
                         case 4:
-                            var unitOfSaleReplace = eventData.Data.UnitsOfSales.Where(x => x.UnitOfSaleType == UnitSaleType && x.UnitName == product.ProductName).FirstOrDefault();
+                            var unitOfSaleReplace = eventData.Data.UnitsOfSales.Where(x => x.UnitOfSaleType == UnitSaleType && product.InUnitsOfSale.Contains(x.UnitName)).FirstOrDefault();
 
                             foreach (var replacedProduct in product.ReplacedBy)
                             {
