@@ -51,7 +51,7 @@ steps:
     inputs:
       targetType: filePath
       filePath: "$(Pipeline.Workspace)/terraformartifact/check_service_status.ps1"
-      arguments: "-healthEndPointUrl $(ErpFacadeConfiguration.BaseUrl)/healthcheck -waitTimeInMinute $(waitTimeInMinute)"
+      arguments: "-healthEndPointUrl $(ErpFacadeConfiguration.BaseUrl)/erpfacade/healthcheck -waitTimeInMinute $(waitTimeInMinute)"
 
   - task: FileTransform@1
     displayName: "File Transform: Mock Service Application Settings"
