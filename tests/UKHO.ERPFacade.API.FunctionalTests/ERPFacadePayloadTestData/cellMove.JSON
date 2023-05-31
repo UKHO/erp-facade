@@ -3,12 +3,12 @@
   "type": "uk.gov.ukho.encpublishing.enccontentpublished.v2",
   "source": "https://encpublishing.ukho.gov.uk",
   "id": "2f03a25f-28b3-46ea-b009-5943250a9a41",
-  "time": "2020-10-13T12:08:03.4880776Z",
+  "time": "2023-05-18T12:08:03.4880776Z",
   "_COMMENT": "A comma separated list of products",
   "subject": "MX545010",
   "datacontenttype": "application/json",
   "data": {
-    "traceId": "367ce4a4-1d62-4f56-b359-newcell20001",
+    "traceId": "367ce4a4-ddd1-4f56-b359-69e178d87810",
     "products": [
       {
         "productType": "ENC S57",
@@ -20,7 +20,7 @@
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChanged": true,
+        "contentChanged": false,
         "permit": "permitString",
         "providerCode": 1,
         "providerDesc": "ICE",
@@ -62,7 +62,7 @@
             "Suspended"
           ],
           "statusDate": "2023-03-03T00:00:00.00+01:00",
-          "isNewCell": true,
+          "isNewCell": false,
           "_COMMENT": "A cell new to the service"
         },
         "replaces": [],
@@ -119,7 +119,7 @@
           ]
         },
         "_COMMENT": "The units in which product is included, including any 1-1 unit",
-        "inUnitsOfSale": [ "MX545010", "AVCSO", "PAYSF" ],
+        "inUnitsOfSale": [ "MX545010", "MX509226", "AVCSO", "PAYSF" ],
         "s63": {
           "name": "XXXXXXXX.001",
           "hash": "5160204288db0a543850da177ec637b71ed55946e7f3843e6180b1906ee4f4ea",
@@ -161,11 +161,32 @@
       {
         "unitName": "MX545010",
         "title": "Isla Clarion",
-        "unitOfSaleType": "unit",
+        "unitType": "AVCS Units Coastal",
+        "unitSize": "large",
+        "status": "ForSale",
         "_ENUM": [
-          "unit",
-          "folio"
+          "ForSale",
+          "NotForSale"
         ],
+        "isNewUnitOfSale": false,
+        "_COMMENT": "BoundingBox or polygon or both or neither",
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 24.146815,
+            "southLimit": 22.581615,
+            "eastLimit": 120.349635,
+            "westLimit": 119.39142
+          },
+          "polygons": []
+        },
+        "compositionChanges": {
+          "addProducts": [],
+          "removeProducts": [ "MX545010" ]
+        }
+      },
+      {
+        "unitName": "MX509226",
+        "title": "Playa del Carmen",
         "unitType": "AVCS Units Coastal",
         "unitSize": "large",
         "status": "ForSale",
@@ -222,9 +243,7 @@
           ]
         },
         "compositionChanges": {
-          "addProducts": [
-            "MX545010"
-          ],
+          "addProducts": [],
           "removeProducts": [
 
           ]
@@ -276,7 +295,6 @@
         },
         "compositionChanges": {
           "addProducts": [
-            "MX545010"
           ],
           "removeProducts": [
 
