@@ -78,3 +78,4 @@ resource "azurerm_private_endpoint" "private_endpoint" {
     ignore_changes = ["*"]
    }
  }
+}
