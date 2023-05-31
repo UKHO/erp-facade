@@ -5,15 +5,15 @@ namespace UKHO.ERPFacade.API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class HealthCheckController : BaseController<HealthCheckController>
-    {      
+    {
         public HealthCheckController(IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
         {
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("/erpfacade/healthcheck")]
-        public virtual async Task<IActionResult> ApiHealthCheckEvent() {
-
+        public virtual async Task<IActionResult> ApiHealthCheckEvent()
+        {
             await Task.CompletedTask;
 
             return new OkObjectResult(StatusCodes.Status200OK);
