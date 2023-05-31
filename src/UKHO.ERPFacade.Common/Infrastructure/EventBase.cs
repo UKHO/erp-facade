@@ -10,6 +10,5 @@ namespace UKHO.ERPFacade.Common.Infrastructure
         public abstract string Subject { get; }
 
         public T EventData { get; set; }
-
     }
 }

@@ -254,8 +254,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         private UnitOfSaleUpdatedEventPayload GetUnitsOfSaleUpdatedEventPayloadData()
         {
             var unitsOfSalePricesList = GetUnitsOfSalePriceList();
-            var exisitingEESJson = JsonConvert.DeserializeObject(encContentPublishedJson);
-            var eesPriceEventPayload = _fakeErpFacadeService.BuildUnitsOfSaleUpdatedEventPayload(unitsOfSalePricesList, exisitingEESJson.ToString()!);
+            var existingEESJson = JsonConvert.DeserializeObject(encContentPublishedJson);
+            var eesPriceEventPayload = _fakeErpFacadeService.BuildUnitsOfSaleUpdatedEventPayload(unitsOfSalePricesList, existingEESJson.ToString()!);
 
             return eesPriceEventPayload;
         }

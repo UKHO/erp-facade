@@ -58,12 +58,12 @@
         UploadedEncContentPublishedEventInAzureBlob = 940011,
 
         /// <summary>
-        /// 940012 - Could not connect to SAP
+        /// 940012 - Error occured while connecting SAP
         /// </summary>
         ErrorOccuredInSap = 940012,
 
         /// <summary>
-        /// 940013 - Data pushed to SAP
+        /// 940013 - ENC Update pushed to SAP
         /// </summary>
         EncUpdatePushedToSap = 940013,
 
@@ -155,19 +155,19 @@
         /// 940031 - Environment Name
         /// </summary>
         EnvironmentName = 940031,
-        
+
         /// <summary>
         /// 940032 - UnitOfSale price information payload received from SAP
         /// </summary>
         SapUnitsOfSalePriceInformationPayloadReceived = 940032,
 
         /// <summary>
-        /// 940033 - Downloading exisiting ees event from azure blob storage
+        /// 940033 - Downloading existing ees event from azure blob storage
         /// </summary>
         DownloadEncEventPayloadStarted = 940033,
 
         /// <summary>
-        /// 940034 - Downloaded exisiting ees event from azure blob storage successfully
+        /// 940034 - Downloaded existing ees event from azure blob storage successfully
         /// </summary>
         DownloadEncEventPayloadCompleted = 940034,
 

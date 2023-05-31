@@ -92,7 +92,6 @@ namespace UKHO.ERPFacade.API.Services
                     }
                 }
             }
-
             return unitsOfSalePriceList;
         }
 
@@ -102,7 +101,7 @@ namespace UKHO.ERPFacade.API.Services
 
             EncEventPayload encEventPayload = JsonConvert.DeserializeObject<EncEventPayload>(encEventPayloadJson);
 
-            
+
             _logger.LogInformation(EventIds.UnitsOfSaleUpdatedEventPayloadCreated.ToEventId(), "UnitofSale updated event payload created.");
 
             return new UnitOfSaleUpdatedEventPayload(new UnitOfSaleUpdatedEvent
