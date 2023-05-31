@@ -18,8 +18,5 @@ namespace UKHO.ERPFacade.API.Controllers
 
             return new OkObjectResult(StatusCodes.Status200OK);
         }
-
-
-
     }
 }
