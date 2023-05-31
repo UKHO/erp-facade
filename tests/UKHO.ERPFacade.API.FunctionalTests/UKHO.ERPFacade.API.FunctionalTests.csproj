@@ -33,49 +33,64 @@
     <None Update="ERPFacadeGeneratedXmlFiles\we123s-sds3-df333-d3d.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPFacadePayloadTestData\1NewCellScenario.JSON">
+    <None Update="ERPFacadePayloadTestData\ID10_UpdateSimple.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPFacadePayloadTestData\2CellMetadataChange.JSON">
+    <None Update="ERPFacadePayloadTestData\ID11_updateOneCellWithNewEditionStatus.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPFacadePayloadTestData\2NewCellScenario.JSON">
+    <None Update="ERPFacadePayloadTestData\ID12_updateOneCellWithReIssueStatus.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPFacadePayloadTestData\1NewCellWoNewAVCSUnit.JSON">
+    <None Update="ERPFacadePayloadTestData\ID13_updateTwoCellsWithDifferentStatusName.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPFacadePayloadTestData\1CellCancel.JSON">
+    <None Update="ERPFacadePayloadTestData\ID14_moveOneCell.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPFacadePayloadTestData\2CellsReplace1CellsCancel.JSON">
+    <None Update="ERPFacadePayloadTestData\ID15_oneNewCellAndOneMoveOneCell.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPFacadePayloadTestData\cellMove.JSON">
+    <None Update="ERPFacadePayloadTestData\ID16_newCell_updateCell_metadataChange.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPFacadePayloadTestData\MetadataChange.JSON">
+    <None Update="ERPFacadePayloadTestData\ID17_newCell_and_CancelReplace.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\ID18_CancelReplace_UpdateCell.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\ID19_CR_metadata_move.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\ID1_WebhookPayload.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\ID2_WebhookPayload_Invalid.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\ID3_1NewCellScenario.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\ID4_2NewCellScenario.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\ID5_1NewCellWoNewAVCSUnit.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\ID6_2CellsReplace1CellsCancel.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\ID7_1CellCancel.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\ID8_2CellMetadataChange.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\ID9_MetadataChange.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPFacadePayloadTestData\SapMockApiConfigure.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ERPFacadePayloadTestData\updateOneCellWithNewEditionStatus.JSON">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ERPFacadePayloadTestData\updateOneCellWithReIssueStatus.JSON">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ERPFacadePayloadTestData\UpdateSimple.JSON">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ERPFacadePayloadTestData\updateTwoCellsWithDifferentStatusName.JSON">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ERPFacadePayloadTestData\WebhookPayload.JSON">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ERPFacadePayloadTestData\WebhookPayload_Invalid.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
