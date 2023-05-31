@@ -68,3 +68,13 @@ resource "azurerm_app_service_virtual_network_swift_connection" "webapp_vnet_int
   app_service_id = azurerm_windows_web_app.webapp_service.id
   subnet_id      = var.subnet_id
 }
+
+resource "azurerm_private_endpoint" "private_endpoint" {
+  name = "m-erptosap-qa-pe"
+
+  dynamic "lifecycle" {
+  for_each = var.environment == "qa" ? [1] : []
+   content {
+    ignore_changes = ["*"]
+   }
+ }
