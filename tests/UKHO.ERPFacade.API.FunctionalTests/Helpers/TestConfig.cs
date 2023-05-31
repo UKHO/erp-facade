@@ -11,7 +11,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         public string GeneratedXMLFolder { get; set; }
         public SapMockConfiguration SapMockConfiguration { get; set; }
         public Erpfacadeconfiguration ErpFacadeConfiguration { get; set; }
-        public Azureadconfiguration AzureadConfiguration { get; set; }
+        public AzureADconfiguration AzureADconfiguration { get; set; }
         public AzureStorageConfiguration AzureStorageConfiguration { get; set; }
         public string[] XMLActionList { get; set; }
         public string UoSPayloadFileName { get; set; }
@@ -19,7 +19,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
     }
 
 
-    public class Azureadconfiguration
+    public class AzureADconfiguration
     {
 
         public string MicrosoftOnlineLoginUrl { get; set; }
