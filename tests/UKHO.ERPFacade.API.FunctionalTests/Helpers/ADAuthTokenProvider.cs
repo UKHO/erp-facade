@@ -4,14 +4,18 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
     public class ADAuthTokenProvider
     {
-        static string AzureADToken = null;
+        static string AzureADToken;
         private static Config _config;
-
+        public ADAuthTokenProvider()
+        {
+            AzureADToken = null;
+        }
         public async Task<string> GetAzureADToken()
         {
             _config = new();
-
             AzureADToken = await GenerateAzureADToken(_config.TestConfig.AzureADConfiguration.ClientId, _config.TestConfig.AzureADConfiguration.ClientSecret, AzureADToken);
+            await Console.Out.WriteLineAsync("value1:"+ _config.TestConfig.AzureADConfiguration.ClientId);
+            await Console.Out.WriteLineAsync("value1:" + _config.TestConfig.AzureADConfiguration.ClientSecret);
             return AzureADToken;
         }
 
