@@ -111,7 +111,7 @@
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Namespace = "urn:sap-com:document:sap:rfc:functions")]
+        [System.Xml.Serialization.XmlArrayAttribute(Namespace = "")]
         [System.Xml.Serialization.XmlArrayItemAttribute("item", Namespace = "", IsNullable = false)]
         public Item[] ACTIONITEMS
         {
