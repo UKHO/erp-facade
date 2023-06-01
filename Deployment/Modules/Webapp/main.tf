@@ -35,7 +35,7 @@ resource "azurerm_windows_web_app" "webapp_service" {
     }
 
   lifecycle {
-    ignore_changes = [ virtual_network_subnet_id, scm_ip_restriction ]
+    ignore_changes = [ virtual_network_subnet_id ]
    }
 
   https_only = true
