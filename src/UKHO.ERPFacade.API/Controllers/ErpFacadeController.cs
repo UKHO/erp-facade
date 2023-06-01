@@ -58,7 +58,7 @@ namespace UKHO.ERPFacade.API.Controllers
         [HttpPost]
         [Route("/erpfacade/bulkpriceinformation")]
         [Authorize(Policy = "PriceInformationApiCaller")]
-        public virtual async Task<IActionResult> PostBulkPriceInformation([FromBody] JObject requestJson)
+        public virtual async Task<IActionResult> PostBulkPriceInformation([FromBody] JArray requestJson)
         {
             await Task.CompletedTask;
             return new OkObjectResult(StatusCodes.Status200OK);
