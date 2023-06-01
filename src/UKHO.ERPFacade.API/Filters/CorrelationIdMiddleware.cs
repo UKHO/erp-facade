@@ -23,16 +23,19 @@ namespace UKHO.ERPFacade.API.Filters
             using var streamReader = new StreamReader(httpContext.Request.Body);
             var bodyAsText = await streamReader.ReadToEndAsync();
 
-            JToken bodyAsJson = JToken.Parse(bodyAsText);
-            if (bodyAsJson is JArray)
+            if (!string.IsNullOrWhiteSpace(bodyAsText))
             {
-                JArray requestJArray = JArray.Parse(bodyAsText);
-                correlationId = requestJArray.First.SelectToken(CorrIdKey)?.Value<string>();
-            }
-            if (bodyAsJson is JObject)
-            {
-                JObject requestJObject = JObject.Parse(bodyAsText);
-                correlationId = requestJObject.SelectToken(TraceIdKey)?.Value<string>();
+                JToken bodyAsJson = JToken.Parse(bodyAsText);
+                if (bodyAsJson is JArray)
+                {
+                    JArray requestJArray = JArray.Parse(bodyAsText);
+                    correlationId = requestJArray.First.SelectToken(CorrIdKey)?.Value<string>();
+                }
+                if (bodyAsJson is JObject)
+                {
+                    JObject requestJObject = JObject.Parse(bodyAsText);
+                    correlationId = requestJObject.SelectToken(TraceIdKey)?.Value<string>();
+                }
             }
 
             httpContext.Request.Body.Position = 0;
