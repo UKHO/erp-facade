@@ -1,8 +1,7 @@
 ﻿using NUnit.Framework;
 using System.Text;
-using System.Xml.Serialization;
 using System.Xml;
-using System;
+using System.Xml.Serialization;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.SAP.MockAPIService.Models;
 
@@ -20,7 +19,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.IO
         {
             Z_ADDS_MAT_INFO z_ADDS_MAT_INFO = new()
             {
-                IM_MATINFO = new ZMAT_INFO() { CORRID = "123456" }
+                IM_MATINFO = new() { CORRID = "123456" }
             };
 
             var serializer = new XmlSerializer(typeof(Z_ADDS_MAT_INFO));
