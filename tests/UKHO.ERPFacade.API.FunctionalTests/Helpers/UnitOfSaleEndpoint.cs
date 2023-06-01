@@ -44,9 +44,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
 
             RestResponse response = await client.ExecuteAsync(request);
-            JsonPayloadHelper jsonPayload = JsonConvert.DeserializeObject<JsonPayloadHelper>(requestBody);
-            string traceID = jsonPayload.Data.TraceId;
-
+            List<UoSInputJSONHelper> jsonPayload = JsonConvert.DeserializeObject<List<UoSInputJSONHelper>>(requestBody);
+            string traceID = jsonPayload[0].Corrid;
 
 
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
