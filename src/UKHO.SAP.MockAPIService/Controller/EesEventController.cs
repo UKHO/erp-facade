@@ -38,12 +38,12 @@ namespace UKHO.SAP.MockAPIService.Controller
 
             var unitOfSalePriceEvent = JsonConvert.DeserializeObject<CloudEvent<UnitOfSalePriceEvent>>(Encoding.UTF8.GetString(byteArray));
 
-            JObject cloudEventPayload = JObject.Parse(JsonConvert.SerializeObject(unitOfSalePriceEvent));
-            JObject eventJson = JObject.Parse(JsonConvert.SerializeObject(unitOfSalePriceEvent.Data));
+            JObject unitsOfSaleUpdatedEventPayloadJson = JObject.Parse(JsonConvert.SerializeObject(unitOfSalePriceEvent));
+            JObject encEventPayloadJson = JObject.Parse(JsonConvert.SerializeObject(unitOfSalePriceEvent.Data));
 
-            var traceId = eventJson.SelectToken(TraceIdKey)?.Value<string>();
+            var traceId = encEventPayloadJson.SelectToken(TraceIdKey)?.Value<string>();
 
-            await _azureBlobEventWriter.UploadEvent(eventJson.ToString(), traceId!, traceId + "_ees." + RequestFormat);
+            await _azureBlobEventWriter.UploadEvent(encEventPayloadJson.ToString(), traceId!, traceId + "_ees." + RequestFormat);
 
             if (bool.Parse(_configuration["IsFTRunning"]))
             {

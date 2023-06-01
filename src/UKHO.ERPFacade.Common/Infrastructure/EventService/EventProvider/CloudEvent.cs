@@ -1,7 +1,9 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 
 namespace UKHO.ERPFacade.Common.Infrastructure.EventService.EventProvider
 {
+    [ExcludeFromCodeCoverage]
     public class CloudEvent<T>
     {
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

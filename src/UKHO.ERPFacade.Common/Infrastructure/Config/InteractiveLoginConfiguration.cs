@@ -1,5 +1,8 @@
-﻿namespace UKHO.ERPFacade.Common.Infrastructure.Config
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace UKHO.ERPFacade.Common.Infrastructure.Config
 {
+    [ExcludeFromCodeCoverage]
     public class InteractiveLoginConfiguration
     {
         public string MicrosoftOnlineLoginUrl { get; set; }

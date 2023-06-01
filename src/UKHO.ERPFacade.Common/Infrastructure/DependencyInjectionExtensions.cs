@@ -9,9 +9,11 @@ using UKHO.ERPFacade.Common.Infrastructure.Config;
 using UKHO.ERPFacade.Common.Infrastructure.EventService.EventProvider;
 using UKHO.ERPFacade.Common.Infrastructure.EventService;
 using UKHO.ERPFacade.Common.Providers;
+using System.Diagnostics.CodeAnalysis;
 
 namespace UKHO.ERPFacade.Common.Infrastructure
 {
+    [ExcludeFromCodeCoverage]
     public static class DependencyInjectionExtensions
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
