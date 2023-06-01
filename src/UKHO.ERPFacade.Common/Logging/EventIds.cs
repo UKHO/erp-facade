@@ -189,6 +189,11 @@
         /// <summary>
         /// 940038 - Price Event exceeds the size limit of 1 MB
         /// </summary>
-        PriceEventExceedSizeLimit = 940038
+        PriceEventExceedSizeLimit = 940038,
+
+        /// <summary>
+        /// 940039 - UnitsOfSale NotFound In SAP PriceInformation Payload
+        /// </summary>
+        UnitsOfSaleNotFoundInSAPPriceInformationPayload = 940039
     }
 }

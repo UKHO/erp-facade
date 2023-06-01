@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using System.Globalization;
+﻿using System.Globalization;
+using Newtonsoft.Json;
 using UKHO.ERPFacade.API.Models;
 using UKHO.ERPFacade.Common.Logging;
 
@@ -14,14 +14,22 @@ namespace UKHO.ERPFacade.API.Services
             _logger = logger;
         }
 
-        public List<UnitsOfSalePrices> MapAndBuildUnitsOfSalePrices(List<PriceInformation> priceInformationList)
+        public List<UnitsOfSalePrices> MapAndBuildUnitsOfSalePrices(List<PriceInformation> priceInformationList, List<UnitOfSale> encEventUnitOfSaleList)
         {
             List<UnitsOfSalePrices> unitsOfSalePriceList = new();
 
-            foreach (var priceInformation in priceInformationList)
+            var distinctPriceInformationList = priceInformationList.DistinctBy(x => new { x.ProductName, x.Duration, x.EffectiveDate, x.Price }).ToList();
+
+            foreach (var priceInformation in distinctPriceInformationList)
             {
                 UnitsOfSalePrices unitsOfSalePrice = new();
                 List<Price> priceList = new();
+
+                var isEncEventUnitOfSaleExists = encEventUnitOfSaleList.Any(x => x.UnitName.Contains(priceInformation.ProductName));
+                if (!isEncEventUnitOfSaleExists)
+                {
+                    _logger.LogWarning(EventIds.UnitsOfSaleNotFoundInSAPPriceInformationPayload.ToEventId(), "PriceInformation is missing for {UnitName} in price information payload received from SAP ", priceInformation.ProductName);
+                }
 
                 var isUnitOfSalePriceExists = unitsOfSalePriceList.Any(x => x.UnitName.Contains(priceInformation.ProductName));
 
@@ -42,7 +50,7 @@ namespace UKHO.ERPFacade.API.Services
                     }
 
                     unitsOfSalePrice.UnitName = priceInformation.ProductName;
-                    unitsOfSalePrice.Price = priceList;
+                    unitsOfSalePrice.Price = isEncEventUnitOfSaleExists  ? priceList : new();
 
                     unitsOfSalePriceList.Add(unitsOfSalePrice);
                 }
@@ -53,6 +61,7 @@ namespace UKHO.ERPFacade.API.Services
                     var existingUnitOfSalePrice = unitsOfSalePriceList.Where(x => x.UnitName.Contains(priceInformation.ProductName)).FirstOrDefault();
 
                     var effectiveUnitOfSalePriceDurations = existingUnitOfSalePrice.Price.Where(x => x.EffectiveDate.ToString("yyyyMMdd") == priceInformation.EffectiveDate).ToList();
+
                     var effectiveStandard = effectiveUnitOfSalePriceDurations.Select(x => x.Standard).FirstOrDefault();
 
                     var futureUnitOfSalePriceDurations = existingUnitOfSalePrice.Price.Where(x => x.EffectiveDate.ToString("yyyyMMdd") == priceInformation.FutureDate).ToList();
@@ -62,7 +71,6 @@ namespace UKHO.ERPFacade.API.Services
                     {
                         priceDuration.NumberOfMonths = Convert.ToInt32(priceInformation.Duration);
                         priceDuration.Rrp = priceInformation.Price;
-
                         effectiveStandard.PriceDurations.Add(priceDuration);
                     }
                     else
@@ -78,7 +86,6 @@ namespace UKHO.ERPFacade.API.Services
                     {
                         priceDuration.NumberOfMonths = Convert.ToInt32(priceInformation.Duration);
                         priceDuration.Rrp = priceInformation.FuturePrice;
-
                         futureStandard.PriceDurations.Add(priceDuration);
                     }
                     else
@@ -100,7 +107,6 @@ namespace UKHO.ERPFacade.API.Services
             _logger.LogInformation(EventIds.AppendingUnitofSalePricesToEncEvent.ToEventId(), "Appending UnitofSale prices to ENC event.");
 
             EncEventPayload encEventPayload = JsonConvert.DeserializeObject<EncEventPayload>(encEventPayloadJson);
-
 
             _logger.LogInformation(EventIds.UnitsOfSaleUpdatedEventPayloadCreated.ToEventId(), "UnitofSale updated event payload created.");
 

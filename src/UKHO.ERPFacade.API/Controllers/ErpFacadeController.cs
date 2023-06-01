@@ -71,11 +71,19 @@ namespace UKHO.ERPFacade.API.Controllers
 
             if (priceInformationList.Count > 0 && priceInformationList.Any(x => x.ProductName != string.Empty))
             {
-                List<UnitsOfSalePrices> unitsOfSalePriceList = _erpFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList);
 
                 _logger.LogInformation(EventIds.DownloadEncEventPayloadStarted.ToEventId(), "Downloading the ENC event payload from azure blob storage.");
                 var encEventPayloadJson = _azureBlobEventWriter.DownloadEvent(corrId + '.' + RequestFormat, corrId);
+
+                var encEventPayloadData = JsonConvert.DeserializeObject<EncEventPayload>(encEventPayloadJson.ToString());
+
                 _logger.LogInformation(EventIds.DownloadEncEventPayloadCompleted.ToEventId(), "ENC event payload is downloaded from azure blob storage successfully.");
+
+
+
+                List<UnitsOfSalePrices> unitsOfSalePriceList = _erpFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList, encEventPayloadData.Data.UnitsOfSales);
+
+                
 
                 var unitsOfSaleUpdatedEventPayload = _erpFacadeService.BuildUnitsOfSaleUpdatedEventPayload(unitsOfSalePriceList, encEventPayloadJson);
 
