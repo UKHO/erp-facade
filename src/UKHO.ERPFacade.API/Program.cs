@@ -4,6 +4,7 @@ using Azure.Security.KeyVault.Secrets;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Newtonsoft.Json.Serialization;
 using Serilog;
 using System.Diagnostics.CodeAnalysis;
@@ -12,11 +13,12 @@ using System.Reflection;
 using UKHO.ERPFacade.API.Filters;
 using UKHO.ERPFacade.API.Helpers;
 using UKHO.ERPFacade.API.Models;
+using UKHO.ERPFacade.API.Services;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.HttpClients;
+using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Infrastructure;
 using UKHO.ERPFacade.Common.IO.Azure;
-using UKHO.ERPFacade.Common.IO;
 using UKHO.Logging.EventHubLogProvider;
 
 namespace UKHO.ERPFacade
@@ -140,6 +142,7 @@ namespace UKHO.ERPFacade
             builder.Services.AddAuthorization(options =>
             {
                 options.AddPolicy("WebhookCaller", policy => policy.RequireRole("WebhookCaller"));
+                options.AddPolicy("PriceInformationApiCaller", policy => policy.RequireRole("PriceInformationApiCaller"));
             });
 
             // The following line enables Application Insights telemetry collection.
@@ -153,6 +156,11 @@ namespace UKHO.ERPFacade
             }).AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            });
+
+            builder.Services.Configure<KestrelServerOptions>(options =>
+            {
+                options.Limits.MaxRequestBodySize = 50 * 1024 * 1024;
             });
 
             builder.Services.Configure<AzureStorageConfiguration>(configuration.GetSection("AzureStorageConfiguration"));
@@ -178,6 +186,8 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<IXmlHelper, XmlHelper>();
             builder.Services.AddScoped<IFileSystemHelper, FileSystemHelper>();
             builder.Services.AddScoped<IFileSystem, FileSystem>();
+            builder.Services.AddScoped<IErpFacadeService, ErpFacadeService>();
+            builder.Services.AddScoped<IJsonHelper, JsonHelper>();
 
             builder.Services.AddHttpClient<ISapClient, SapClient>(c =>
             {

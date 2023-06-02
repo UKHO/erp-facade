@@ -23,7 +23,7 @@ namespace UKHO.ERPFacade.API.Helpers
         /// </summary>
         /// <param name="eventData"></param>
         /// <returns>List<Scenario></returns>
-        public List<Scenario> BuildScenarios(EESEventPayload eventData)
+        public List<Scenario> BuildScenarios(EncEventPayload eventData)
         {
             _logger.LogInformation(EventIds.IdentifyScenarioStarted.ToEventId(), "Identifying the scenarios based on received ENC content publish event.");
 
@@ -79,7 +79,7 @@ namespace UKHO.ERPFacade.API.Helpers
             return scenarios;
         }
 
-        private bool IsValidValue(string jsonFieldValue, string attributeValue)
+        private static bool IsValidValue(string jsonFieldValue, string attributeValue)
         {
             if (attributeValue.Contains('|'))
             {

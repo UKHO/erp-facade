@@ -43,7 +43,7 @@ namespace UKHO.SAP.MockAPIService.Controller
 
             var traceId = encEventPayloadJson.SelectToken(TraceIdKey)?.Value<string>();
 
-            await _azureBlobEventWriter.UploadEvent(encEventPayloadJson.ToString(), traceId!, traceId + "_ees." + RequestFormat);
+            await _azureBlobEventWriter.UploadEvent(unitsOfSaleUpdatedEventPayloadJson.ToString(), traceId!, traceId + "_ees." + RequestFormat);
 
             if (bool.Parse(_configuration["IsFTRunning"]))
             {

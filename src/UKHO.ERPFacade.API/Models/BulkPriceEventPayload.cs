@@ -4,6 +4,7 @@ using UKHO.ERPFacade.Common.Infrastructure;
 
 namespace UKHO.ERPFacade.API.Models
 {
+    [ExcludeFromCodeCoverage]
     public class BulkPriceEventPayload : EventBase<BulkPriceEvent>
     {
         public BulkPriceEventPayload(BulkPriceEvent bulkPriceEvent)
@@ -12,7 +13,7 @@ namespace UKHO.ERPFacade.API.Models
         }
 
         public override string EventName => "uk.gov.ukho.encpublishing.enccontentpublished.v2";
-        public override string Subject => EventData.Subject;
+        public override string Subject => "";
     }
 
     [ExcludeFromCodeCoverage]

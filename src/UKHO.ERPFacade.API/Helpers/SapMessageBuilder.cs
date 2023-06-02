@@ -14,7 +14,7 @@ namespace UKHO.ERPFacade.API.Helpers
         private readonly IOptions<SapActionConfiguration> _sapActionConfig;
         private readonly IOptions<ActionNumberConfiguration> _actionNumberConfig;
 
-        private const string SapXmlPathDev = "SapXmlTemplates\\SAPRequestDev.xml";
+        private const string XmlNameSpaceURI = "urn:sap-com:document:sap:rfc:functions";
         private const string SapXmlPath = "SapXmlTemplates\\SAPRequest.xml";
         private const string XpathImMatInfo = $"//*[local-name()='IM_MATINFO']";
         private const string XpathActionItems = $"//*[local-name()='ACTIONITEMS']";
@@ -32,8 +32,7 @@ namespace UKHO.ERPFacade.API.Helpers
         private const string ProdType = "PRODTYPE";
         private const string UnitOfSaleSection = "UnitOfSale";
         private const string NotForSale = "NotForSale";
-        private const string UnitSaleType = "unit";
-        private const string DevEnvName = "dev";
+        private const string UnitSaleType = "unit";        
 
         public SapMessageBuilder(ILogger<SapMessageBuilder> logger,
                                  IXmlHelper xmlHelper,
@@ -57,15 +56,6 @@ namespace UKHO.ERPFacade.API.Helpers
         public XmlDocument BuildSapMessageXml(List<Scenario> scenarios, string traceId)
         {
             string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, SapXmlPath);
-
-            string environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-
-            _logger.LogInformation(EventIds.EnvironmentName.ToEventId(), "Environment name is {environment}", environment);
-
-            if (environment == DevEnvName)
-            {
-                sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, SapXmlPathDev);
-            }
 
             //Check whether template file exists or not
             if (!_fileSystemHelper.IsFileExists(sapXmlTemplatePath))

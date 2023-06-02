@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace UKHO.ERPFacade.API.Models
 {
-    public class EESEventPayload
+    public class EncEventPayload
     {
         [JsonProperty("specversion")]
         public string SpecVersion { get; set; }
@@ -30,7 +30,7 @@ namespace UKHO.ERPFacade.API.Models
         public EesEventData Data { get; set; }
     }
 
-    [ExcludeFromCodeCoverage]
+    
     public class EesEventData
     {
         [JsonProperty("traceId")]
