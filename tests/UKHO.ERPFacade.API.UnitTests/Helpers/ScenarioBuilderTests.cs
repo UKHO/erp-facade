@@ -42,9 +42,9 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         [Test]
         public void WhenEesEventDataPassedWithIsNewCellAsTrue_ThenReturnsNewCellScenario()
         {
-            var fakeEventData = new EESEvent()
+            var fakeEventData = new EncEventPayload()
             {
-                Data = new Data()
+                Data = new EesEventData()
                 {
                     Products = new List<Product>()
                     {
@@ -114,9 +114,9 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         [Test]
         public void WhenEesEventDataDoesNotMatchAnyScenarioCondition_ThenEmptyScenarioList()
         {
-            var fakeEventData = new EESEvent()
+            var fakeEventData = new EncEventPayload()
             {
-                Data = new Data()
+                Data = new EesEventData()
                 {
                     Products = new List<Product>()
                     {
@@ -184,9 +184,9 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         [Test]
         public void WhenEesEventDataPassedWithStatusNameAsCancellationUpdateAndContentChangedAsTrue_ThenReturnsCancellAndReplaceCellScenario()
         {
-            var fakeEventData = new EESEvent()
+            var fakeEventData = new EncEventPayload()
             {
-                Data = new Data()
+                Data = new EesEventData()
                 {
                     Products = new List<Product>()
                     {
@@ -255,9 +255,9 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         [Test]
         public void WhenEesEventDataPassedWithContentChangedAsFalse_ThenReturnsChangeMoveCellScenario()
         {
-            var fakeEventData = new EESEvent()
+            var fakeEventData = new EncEventPayload()
             {
-                Data = new Data()
+                Data = new EesEventData()
                 {
                     Products = new List<Product>()
                     {
@@ -326,9 +326,9 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         [Test]
         public void WhenEesEventDataPassedWithStatusNameAsUpdateAndContentChangedAsTrue_ThenReturnsUpdateScenario()
         {
-            var fakeEventData = new EESEvent()
+            var fakeEventData = new EncEventPayload()
             {
-                Data = new Data()
+                Data = new EesEventData()
                 {
                     Products = new List<Product>()
                     {
@@ -397,9 +397,9 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         [Test]
         public void WhenEesEventDataPassedWithStatusNameAsNewEditionAndContentChangedAsTrueAndIsNewCellAsFalse_ThenReturnsUpdateScenario()
         {
-            var fakeEventData = new EESEvent()
+            var fakeEventData = new EncEventPayload()
             {
-                Data = new Data()
+                Data = new EesEventData()
                 {
                     Products = new List<Product>()
                     {
@@ -468,9 +468,9 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         [Test]
         public void WhenEesEventDataPassedWithStatusNameAsReIssueAndContentChangedAsTrueAndIsNewCellAsFalse_ThenReturnsUpdateScenario()
         {
-            var fakeEventData = new EESEvent()
+            var fakeEventData = new EncEventPayload()
             {
-                Data = new Data()
+                Data = new EesEventData()
                 {
                     Products = new List<Product>()
                     {

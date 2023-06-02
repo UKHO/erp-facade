@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.AspNetCore.Mvc;
 using UKHO.SAP.MockAPIService.Enums;
 using UKHO.SAP.MockAPIService.Services;
 
 namespace UKHO.SAP.MockAPIService.Controller
 {
+    [ExcludeFromCodeCoverage]
     [Route("api/[controller]")]
     [ApiController]
     public class MockController : ControllerBase

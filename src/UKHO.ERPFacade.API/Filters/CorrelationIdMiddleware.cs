@@ -26,12 +26,12 @@ namespace UKHO.ERPFacade.API.Filters
             if (!string.IsNullOrWhiteSpace(bodyAsText))
             {
                 JToken bodyAsJson = JToken.Parse(bodyAsText);
-                if (bodyAsJson is JArray)
+                if(bodyAsJson is JArray)
                 {
                     JArray requestJArray = JArray.Parse(bodyAsText);
                     correlationId = requestJArray.First.SelectToken(CorrIdKey)?.Value<string>();
                 }
-                if (bodyAsJson is JObject)
+                if(bodyAsJson is JObject)
                 {
                     JObject requestJObject = JObject.Parse(bodyAsText);
                     correlationId = requestJObject.SelectToken(TraceIdKey)?.Value<string>();

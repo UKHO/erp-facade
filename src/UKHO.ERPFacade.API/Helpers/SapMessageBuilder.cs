@@ -32,7 +32,7 @@ namespace UKHO.ERPFacade.API.Helpers
         private const string ProdType = "PRODTYPE";
         private const string UnitOfSaleSection = "UnitOfSale";
         private const string NotForSale = "NotForSale";
-        private const string UnitSaleType = "unit";
+        private const string UnitSaleType = "unit";        
 
         public SapMessageBuilder(ILogger<SapMessageBuilder> logger,
                                  IXmlHelper xmlHelper,
