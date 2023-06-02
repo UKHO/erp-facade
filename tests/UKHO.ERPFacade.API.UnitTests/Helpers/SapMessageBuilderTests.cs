@@ -80,7 +80,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         [Test]
         public void WhenBuildSapMessageXmlIsCalledWithCancelReplacecellScenario_ThenReturnXMLDocument()
         {
-            var scenarios = JsonConvert.DeserializeObject<EESEvent>(scenariosDataCancelReplaceCell);
+            var scenarios = JsonConvert.DeserializeObject<EncEventPayload>(scenariosDataCancelReplaceCell);
             var traceId = "367ce4a4-1d62-4f56-b359-59e178d77100";
 
             XmlDocument soapXml = new();
@@ -107,7 +107,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         [Test]
         public void WhenBuildSapMessageXmlIsCalledWithChangeMoveCellScenario_ThenReturnXMLDocument()
         {
-            var scenarios = JsonConvert.DeserializeObject<EESEvent>(scenariosDataChangeMoveCell);
+            var scenarios = JsonConvert.DeserializeObject<EncEventPayload>(scenariosDataChangeMoveCell);
             var traceId = "367ce4a4-1d62-4f56-b359-59e178d77100";
 
             XmlDocument soapXml = new();
@@ -134,7 +134,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         [Test]
         public void WhenSapXmlTemplateFileNotExist_ThenThrowFileNotFoundException()
         {
-            var scenarios = JsonConvert.DeserializeObject<EESEvent>(scenariosDataCancelReplaceCell);
+            var scenarios = JsonConvert.DeserializeObject<EncEventPayload>(scenariosDataCancelReplaceCell);
             var traceId = "367ce4a4-1d62-4f56-b359-59e178d77100";
 
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(false);
@@ -150,7 +150,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         [Test]
         public void WhenBuildSapMessageXmlIsCalledWithSimpleUpdateCellScenario_ThenReturnXMLDocument()
         {
-            var scenarios = JsonConvert.DeserializeObject<EESEvent>(scenariosDataSimpleUpdate);
+            var scenarios = JsonConvert.DeserializeObject<EncEventPayload>(scenariosDataSimpleUpdate);
             var traceId = "367ce4a4-1d62-4f56-b359-59e178d77100";
 
             XmlDocument soapXml = new XmlDocument();

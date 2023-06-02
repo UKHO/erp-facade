@@ -53,7 +53,7 @@ namespace UKHO.ERPFacade.API.Helpers
         /// <param name="eventData"></param>
         /// <param name="traceId"></param>
         /// <returns>XmlDocument</returns>
-        public XmlDocument BuildSapMessageXml(EESEvent eventData, string traceId)
+        public XmlDocument BuildSapMessageXml(EncEventPayload eventData, string traceId)
         {
             string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, SapXmlPath);
 
