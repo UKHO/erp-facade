@@ -3,12 +3,12 @@
   "type": "uk.gov.ukho.encpublishing.enccontentpublished.v2",
   "source": "https://encpublishing.ukho.gov.uk",
   "id": "2f03a25f-28b3-46ea-b009-5943250a9a41",
-  "time": "2020-10-13T12:08:03.4880776Z",
+  "time": "2023-05-19T12:08:03.4880776Z",
   "_COMMENT": "A comma separated list of products",
   "subject": "MX545010",
   "datacontenttype": "application/json",
   "data": {
-    "traceId": "367ce4a4-1d62-4f56-b359-newcell20001",
+    "traceId": "f28a8635-ff03-4a21-b19d-d0cebcbea9f4",
     "products": [
       {
         "productType": "ENC S57",
@@ -173,7 +173,7 @@
           "ForSale",
           "NotForSale"
         ],
-        "isNewUnitOfSale": false,
+        "isNewUnitOfSale": true,
         "_COMMENT": "BoundingBox or polygon or both or neither",
         "geographicLimit": {
           "boundingBox": {
@@ -190,6 +190,7 @@
         }
       },
       {
+
         "unitName": "AVCSO",
         "title": "AVCS Online Folio Some Title",
         "unitSize": "large",

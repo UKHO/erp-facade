@@ -118,7 +118,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             request.AddHeader("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(cred)));
 
             await client2.ExecuteAsync(request);
-            
+
         }
 
     }

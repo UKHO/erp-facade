@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 
+
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
     public class Config
@@ -10,11 +11,19 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         {
             IConfiguration ConfigurationRoot = new ConfigurationBuilder()
                                .AddJsonFile("appsettings.json", false)
+#if DEBUG
+                //Add development overrides configuration
+                .AddJsonFile("appsettings.local.overrides.json", true, true)
+#endif
                                .AddEnvironmentVariables()
                                .Build();
 
+            
             TestConfig = new();
             ConfigurationRoot.Bind(TestConfig);
+         
+
+
         }
     }
 }
