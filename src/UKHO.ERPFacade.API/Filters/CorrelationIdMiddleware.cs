@@ -6,6 +6,7 @@ namespace UKHO.ERPFacade.API.Filters
     {
         public const string XCorrelationIdHeaderKey = "_X-Correlation-ID";
         public const string TraceIdKey = "data.traceId";
+        public const string CorrIdKey = "corrid";
 
         private readonly RequestDelegate _next;
 
@@ -24,8 +25,17 @@ namespace UKHO.ERPFacade.API.Filters
 
             if (!string.IsNullOrWhiteSpace(bodyAsText))
             {
-                JObject bodyAsJson = JObject.Parse(bodyAsText);
-                correlationId = bodyAsJson.SelectToken(TraceIdKey)?.Value<string>();
+                JToken bodyAsJson = JToken.Parse(bodyAsText);
+                if(bodyAsJson is JArray)
+                {
+                    JArray requestJArray = JArray.Parse(bodyAsText);
+                    correlationId = requestJArray.First.SelectToken(CorrIdKey)?.Value<string>();
+                }
+                if(bodyAsJson is JObject)
+                {
+                    JObject requestJObject = JObject.Parse(bodyAsText);
+                    correlationId = requestJObject.SelectToken(TraceIdKey)?.Value<string>();
+                }
             }
 
             httpContext.Request.Body.Position = 0;

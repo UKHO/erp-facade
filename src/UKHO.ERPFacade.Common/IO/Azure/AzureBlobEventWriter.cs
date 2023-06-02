@@ -1,4 +1,5 @@
 ﻿using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 using Microsoft.Extensions.Options;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
@@ -23,6 +24,17 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(requestEvent ?? ""));
 
             await blobClient.UploadAsync(stream, overwrite: true);
+        }
+
+        public string DownloadEvent(string blobName, string blobContainerName)
+        {
+            BlobContainerClient blobContainerClient = new(_azureStorageConfig.Value.ConnectionString, blobContainerName);
+            BlobClient blobClient = blobContainerClient.GetBlobClient(blobName);
+
+            BlobDownloadResult downloadResult = blobClient.DownloadContent();
+            string existingEesEvent = downloadResult.Content.ToString();
+
+            return existingEesEvent;
         }
 
         //Private Methods

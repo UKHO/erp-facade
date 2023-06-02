@@ -10,7 +10,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         private WebhookEndpoint _webhook { get; set; }
         private SAPXmlHelper SapXmlHelper { get; set; }
         private readonly ADAuthTokenProvider _authToken = new();
-        public static Boolean noRole = false;
+        public static bool noRole = false;
         private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
         //for local
         //private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));

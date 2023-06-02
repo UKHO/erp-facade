@@ -66,11 +66,11 @@ namespace UKHO.ERPFacade.API.Controllers
         [HttpPost]
         [Route("/webhook/newenccontentpublishedeventreceived")]
         [Authorize(Policy = "WebhookCaller")]
-        public virtual async Task<IActionResult> NewEncContentPublishedEventReceived([FromBody] JObject requestJson)
+        public virtual async Task<IActionResult> NewEncContentPublishedEventReceived([FromBody] JObject encEventJson)
         {
             _logger.LogInformation(EventIds.NewEncContentPublishedEventReceived.ToEventId(), "ERP Facade webhook has received new enccontentpublished event from EES.");
 
-            string traceId = requestJson.SelectToken(TraceIdKey)?.Value<string>();
+            string traceId = encEventJson.SelectToken(TraceIdKey)?.Value<string>();
 
             if (string.IsNullOrEmpty(traceId))
             {
@@ -80,11 +80,11 @@ namespace UKHO.ERPFacade.API.Controllers
 
             _logger.LogInformation(EventIds.StoreEncContentPublishedEventInAzureTable.ToEventId(), "Storing the received ENC content published event in azure table.");
 
-            await _azureTableReaderWriter.UpsertEntity(requestJson, traceId);
+            await _azureTableReaderWriter.UpsertEntity(encEventJson, traceId);
 
             _logger.LogInformation(EventIds.UploadEncContentPublishedEventInAzureBlob.ToEventId(), "Uploading the received ENC content published event in blob storage.");
 
-            await _azureBlobEventWriter.UploadEvent(requestJson.ToString(), traceId, traceId + '.' + RequestFormat);
+            await _azureBlobEventWriter.UploadEvent(encEventJson.ToString(), traceId, traceId + '.' + RequestFormat);
 
             _logger.LogInformation(EventIds.UploadedEncContentPublishedEventInAzureBlob.ToEventId(), "ENC content published event is uploaded in blob storage successfully.");
 
@@ -92,12 +92,12 @@ namespace UKHO.ERPFacade.API.Controllers
 
             HttpResponseMessage response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapServiceOperation);
 
-            if (!response.IsSuccessStatusCode)
-            {
-                _logger.LogError(EventIds.SapConnectionFailed.ToEventId(), "Could not connect to SAP. | {StatusCode}", response.StatusCode);
-                throw new ERPFacadeException(EventIds.SapConnectionFailed.ToEventId());
-            }
-            _logger.LogInformation(EventIds.DataPushedToSap.ToEventId(), "Data pushed to SAP successfully. | {StatusCode}", response.StatusCode);
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logger.LogError(EventIds.ErrorOccuredInSap.ToEventId(), "An error occured while processing your request in SAP. | {StatusCode}", response.StatusCode);
+                    throw new ERPFacadeException(EventIds.ErrorOccuredInSap.ToEventId());
+                }
+                _logger.LogInformation(EventIds.EncUpdatePushedToSap.ToEventId(), "ENC update has been sent to SAP successfully. | {StatusCode}", response.StatusCode);
 
             await _azureTableReaderWriter.UpdateRequestTimeEntity(traceId);
 

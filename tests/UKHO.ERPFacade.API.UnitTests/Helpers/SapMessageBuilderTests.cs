@@ -83,7 +83,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             var scenarios = JsonConvert.DeserializeObject<EESEvent>(scenariosDataCancelReplaceCell);
             var traceId = "367ce4a4-1d62-4f56-b359-59e178d77100";
 
-            XmlDocument soapXml = new XmlDocument();
+            XmlDocument soapXml = new();
             soapXml.LoadXml(sapXmlFile);
 
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
@@ -110,7 +110,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             var scenarios = JsonConvert.DeserializeObject<EESEvent>(scenariosDataChangeMoveCell);
             var traceId = "367ce4a4-1d62-4f56-b359-59e178d77100";
 
-            XmlDocument soapXml = new XmlDocument();
+            XmlDocument soapXml = new();
             soapXml.LoadXml(sapXmlFile);
 
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
