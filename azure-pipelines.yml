@@ -340,6 +340,10 @@ stages:
         value: $(AzureADConfigurationAutoTestClientIdNoRole)
       - name: "AzureADConfiguration.ClientSecretNoRole"
         value: $(AzureADConfigurationClientSecretNoRole)
+      - name: "AzureADConfiguration.AutoTestClientIdPricingInformationCaller"
+        value: $(ERP-API-TEST-AUTOTEST-PRICEINFORMATIONAPICALLER-APPLICATION-ID)
+      - name: "AzureADConfiguration.ClientSecretPricingInformationCaller"
+        value: $(ERP-API-TEST-AUTOTEST-PRICEINFORMATIONAPICALLER-SECRET)
     jobs:
       - deployment: DevDeployTerraform
         displayName: "Dev - Deploy Terraform and Dotnet App"
@@ -417,6 +421,10 @@ stages:
         value: $(AzureADConfigurationAutoTestClientIdNoRole)
       - name: "AzureADConfiguration.ClientSecretNoRole"
         value: $(AzureADConfigurationClientSecretNoRole)
+      - name: "AzureADConfiguration.AutoTestClientIdPricingInformationCaller"
+        value: $(ERP-API-TEST-AUTOTEST-PRICEINFORMATIONAPICALLER-APPLICATION-ID)
+      - name: "AzureADConfiguration.ClientSecretPricingInformationCaller"
+        value: $(ERP-API-TEST-AUTOTEST-PRICEINFORMATIONAPICALLER-SECRET)
       - name: mockWebAppName
         value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup

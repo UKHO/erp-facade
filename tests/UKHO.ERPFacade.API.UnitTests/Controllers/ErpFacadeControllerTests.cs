@@ -259,5 +259,14 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
 
             return eesPriceEventPayload;
         }
+
+        [Test]
+        public async Task WhenValidRequestReceived_ThenPostBulkPriceInformationReturns200OkResponse()
+        {
+            var fakeSapEventJson = JArray.Parse(@"[{""corrid"":""123"",""org"": ""UKHO""},{""corrid"":""123"",""org"": ""UKHO""}]");
+
+            var result = (OkObjectResult)await _fakeErpFacadeController.PostBulkPriceInformation(fakeSapEventJson);
+            result.StatusCode.Should().Be(200);
+        }
     }
 }

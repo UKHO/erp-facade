@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Xml;
 using System.Xml.Serialization;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.IO.Azure;

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UKHO.ERPFacade.API.Models;
@@ -12,6 +13,7 @@ namespace UKHO.ERPFacade.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ErpFacadeController : BaseController<ErpFacadeController>
     {
         private readonly ILogger<ErpFacadeController> _logger;
@@ -41,6 +43,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
         [HttpPost]
         [Route("/erpfacade/priceinformation")]
+        [Authorize(Policy = "PriceInformationApiCaller")]
         public virtual async Task<IActionResult> PostPriceInformation([FromBody] JArray priceInformationJson)
         {
             JObject unitsOfSaleUpdatedEventPayloadJson;
@@ -97,6 +100,15 @@ namespace UKHO.ERPFacade.API.Controllers
             }
 
             return new OkObjectResult(unitsOfSaleUpdatedEventPayloadJson);
+        }
+
+        [HttpPost]
+        [Route("/erpfacade/bulkpriceinformation")]
+        [Authorize(Policy = "PriceInformationApiCaller")]
+        public virtual async Task<IActionResult> PostBulkPriceInformation([FromBody] JArray requestJson)
+        {
+            await Task.CompletedTask;
+            return new OkObjectResult(StatusCodes.Status200OK);
         }
     }
 }
