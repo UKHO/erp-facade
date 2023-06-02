@@ -15,7 +15,6 @@ namespace UKHO.ERPFacade.API.Helpers
         private readonly IOptions<ActionNumberConfiguration> _actionNumberConfig;
 
         private const string XmlNameSpaceURI = "urn:sap-com:document:sap:rfc:functions";
-        private const string SapXmlPathDev = "SapXmlTemplates\\SAPRequestDev.xml";
         private const string SapXmlPath = "SapXmlTemplates\\SAPRequest.xml";
         private const string XpathImMatInfo = $"//*[local-name()='IM_MATINFO']";
         private const string XpathActionItems = $"//*[local-name()='ACTIONITEMS']";
@@ -34,7 +33,6 @@ namespace UKHO.ERPFacade.API.Helpers
         private const string UnitOfSaleSection = "UnitOfSale";
         private const string NotForSale = "NotForSale";
         private const string UnitSaleType = "unit";
-        private const string DevEnvName = "dev";
 
         public SapMessageBuilder(ILogger<SapMessageBuilder> logger,
                                  IXmlHelper xmlHelper,
@@ -57,7 +55,7 @@ namespace UKHO.ERPFacade.API.Helpers
         /// <returns>XmlDocument</returns>
         public XmlDocument BuildSapMessageXml(List<Scenario> scenarios, string traceId)
         {
-            string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, SapXmlPath);           
+            string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, SapXmlPath);
 
             //Check whether template file exists or not
             if (!_fileSystemHelper.IsFileExists(sapXmlTemplatePath))
@@ -93,7 +91,6 @@ namespace UKHO.ERPFacade.API.Helpers
                                     actionItemNode.AppendChild(actionNode);
                             }
                             break;
-
                         case 2:
                             var unitOfSale = scenario.UnitOfSales.Where(x => x.UnitName == scenario.Product.ProductName).FirstOrDefault();
                             if (unitOfSale != null && unitOfSale.IsNewUnitOfSale)
@@ -103,7 +100,6 @@ namespace UKHO.ERPFacade.API.Helpers
                                     actionItemNode.AppendChild(actionNode);
                             }
                             break;
-
                         case 3:
                             foreach (var cell in scenario.InUnitOfSales)
                             {
@@ -120,7 +116,6 @@ namespace UKHO.ERPFacade.API.Helpers
                                 }
                             }
                             break;
-
                         case 4:
                             foreach (var cell in scenario.InUnitOfSales)
                             {
@@ -136,7 +131,6 @@ namespace UKHO.ERPFacade.API.Helpers
                                 }
                             }
                             break;
-
                         case 6:
                             foreach (var cell in scenario.InUnitOfSales)
                             {
@@ -145,7 +139,6 @@ namespace UKHO.ERPFacade.API.Helpers
                                     actionItemNode.AppendChild(actionNode);
                             }
                             break;
-
                         case 8:
                             foreach (var cell in scenario.InUnitOfSales)
                             {
@@ -171,7 +164,6 @@ namespace UKHO.ERPFacade.API.Helpers
                                     actionItemNode.AppendChild(actionNode);
                             }
                             break;
-
                         default:
                             actionNode = BuildAction(soapXml, scenario, action, scenario.Product.ProductName);
                             if (!actionItemNode.InnerXml.Contains(actionNode.InnerXml))

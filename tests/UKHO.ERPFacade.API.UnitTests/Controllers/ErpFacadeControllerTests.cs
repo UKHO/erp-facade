@@ -93,5 +93,14 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
              && call.GetArgument<EventId>(1) == EventIds.BlobNotFoundInAzure.ToEventId()
              && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Blob does not exist in the Azure Storage for the corrId received from SAP event.").MustHaveHappenedOnceExactly();
         }
+
+        [Test]
+        public async Task WhenValidRequestReceived_ThenPostBulkPriceInformationReturns200OkResponse()
+        {
+            var fakeSapEventJson = JArray.Parse(@"[{""corrid"":""123"",""org"": ""UKHO""},{""corrid"":""123"",""org"": ""UKHO""}]");
+
+            var result = (OkObjectResult)await _fakeErpFacadeController.PostBulkPriceInformation(fakeSapEventJson);
+            result.StatusCode.Should().Be(200);
+        }
     }
 }

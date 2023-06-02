@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
@@ -7,6 +8,7 @@ namespace UKHO.ERPFacade.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ErpFacadeController : BaseController<ErpFacadeController>
     {
         private readonly ILogger<ErpFacadeController> _logger;
@@ -28,6 +30,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
         [HttpPost]
         [Route("/erpfacade/priceinformation")]
+        [Authorize(Policy = "PriceInformationApiCaller")]
         public virtual async Task<IActionResult> PostPriceInformation([FromBody] JArray requestJson)
         {
             var corrId = requestJson.First.SelectToken(CorrIdKey)?.Value<string>();
@@ -49,6 +52,15 @@ namespace UKHO.ERPFacade.API.Controllers
             }
 
             _logger.LogInformation(EventIds.BlobExistsInAzure.ToEventId(), "Blob exists in the Azure Storage for the corrId received from SAP event.");
+            return new OkObjectResult(StatusCodes.Status200OK);
+        }
+
+        [HttpPost]
+        [Route("/erpfacade/bulkpriceinformation")]
+        [Authorize(Policy = "PriceInformationApiCaller")]
+        public virtual async Task<IActionResult> PostBulkPriceInformation([FromBody] JArray requestJson)
+        {
+            await Task.CompletedTask;
             return new OkObjectResult(StatusCodes.Status200OK);
         }
     }
