@@ -29,7 +29,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\UKHO.ERPFacade.API\UKHO.ERPFacade.API.csproj" />
-    <ProjectReference Include="..\..\src\UKHO.ERPFacade.WebJob\UKHO.ERPFacade.Monitoring.WebJob.csproj" />
   </ItemGroup>
 
 </Project>
