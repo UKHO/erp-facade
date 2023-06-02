@@ -59,7 +59,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         #endregion Data
 
         [Test]
-        public async Task WhenValidRequestReceived_ThenErpFacadeReturns200OkResponse()
+        public async Task WhenValidRequestReceived_ThenPostPriceInformationReturns200OkResponse()
         {
             var fakePriceInformationJson = JArray.Parse(@"[{""corrid"":""123""}]");
 
