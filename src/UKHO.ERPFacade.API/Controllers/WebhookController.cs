@@ -23,7 +23,6 @@ namespace UKHO.ERPFacade.API.Controllers
         private readonly IAzureTableReaderWriter _azureTableReaderWriter;
         private readonly IAzureBlobEventWriter _azureBlobEventWriter;
         private readonly ISapClient _sapClient;
-        private readonly IScenarioBuilder _scenarioBuilder;
         private readonly ISapMessageBuilder _sapMessageBuilder;
         private readonly IOptions<SapConfiguration> _sapConfig;
 
@@ -35,7 +34,6 @@ namespace UKHO.ERPFacade.API.Controllers
                                  IAzureTableReaderWriter azureTableReaderWriter,
                                  IAzureBlobEventWriter azureBlobEventWriter,
                                  ISapClient sapClient,
-                                 IScenarioBuilder scenarioBuilder,
                                  ISapMessageBuilder sapMessageBuilder,
                                     IOptions<SapConfiguration> sapConfig)
         : base(contextAccessor)
@@ -44,7 +42,6 @@ namespace UKHO.ERPFacade.API.Controllers
             _azureTableReaderWriter = azureTableReaderWriter;
             _azureBlobEventWriter = azureBlobEventWriter;
             _sapClient = sapClient;
-            _scenarioBuilder = scenarioBuilder;
             _sapMessageBuilder = sapMessageBuilder;
             _sapConfig = sapConfig ?? throw new ArgumentNullException(nameof(sapConfig));
         }
@@ -91,13 +88,9 @@ namespace UKHO.ERPFacade.API.Controllers
 
             _logger.LogInformation(EventIds.UploadedEncContentPublishedEventInAzureBlob.ToEventId(), "ENC content published event is uploaded in blob storage successfully.");
 
-            List<Scenario> scenarios = _scenarioBuilder.BuildScenarios(JsonConvert.DeserializeObject<EncEventPayload>(encEventJson.ToString()));
+            XmlDocument sapPayload = _sapMessageBuilder.BuildSapMessageXml(JsonConvert.DeserializeObject<EncEventPayload>(encEventJson.ToString()), traceId);
 
-            if (scenarios.Count > 0)
-            {
-                XmlDocument sapPayload = _sapMessageBuilder.BuildSapMessageXml(scenarios, traceId);
-
-                HttpResponseMessage response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapServiceOperation);
+            HttpResponseMessage response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapServiceOperation);
 
                 if (!response.IsSuccessStatusCode)
                 {
@@ -106,15 +99,10 @@ namespace UKHO.ERPFacade.API.Controllers
                 }
                 _logger.LogInformation(EventIds.EncUpdatePushedToSap.ToEventId(), "ENC update has been sent to SAP successfully. | {StatusCode}", response.StatusCode);
 
-                await _azureTableReaderWriter.UpdateRequestTimeEntity(traceId);
+            await _azureTableReaderWriter.UpdateRequestTimeEntity(traceId);
 
-                return new OkObjectResult(StatusCodes.Status200OK);
-            }
-            else
-            {
-                _logger.LogError(EventIds.NoScenarioFound.ToEventId(), "No scenarios found in incoming EES event.");
-                throw new ERPFacadeException(EventIds.NoScenarioFound.ToEventId());
-            }
+            return new OkObjectResult(StatusCodes.Status200OK);
+
         }
     }
 }

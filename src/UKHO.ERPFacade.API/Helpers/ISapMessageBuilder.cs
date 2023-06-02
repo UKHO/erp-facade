@@ -5,6 +5,6 @@ namespace UKHO.ERPFacade.API.Helpers
 {
     public interface ISapMessageBuilder
     {
-        XmlDocument BuildSapMessageXml(List<Scenario> scenarios, string traceId);
+        XmlDocument BuildSapMessageXml(EncEventPayload eventData, string traceId);
     }
 }

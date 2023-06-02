@@ -112,7 +112,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         AttrNotMatched.Add(nameof(item.PROVIDER));
                     if (!item.ENCSIZE.Equals(getUoSInfo(productName).UnitSize))
                         AttrNotMatched.Add(nameof(item.ENCSIZE));
-                    if (!item.TITLE.Equals((getProductInfo(ele2.Key)).Title))
+                    if (!item.TITLE.Equals((getUoSInfo(productName)).Title))
                         AttrNotMatched.Add(nameof(item.TITLE));
                     if (!item.UNITTYPE.Equals(getUoSInfo(productName).UnitType))
                         AttrNotMatched.Add(nameof(item.UNITTYPE));
@@ -573,7 +573,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         AttrNotMatched.Add(nameof(item.PRODUCT));
                     if (!item.PRODTYPE.Equals(product.ProductType[4..]))
                         AttrNotMatched.Add(nameof(item.PRODTYPE));
-                    if (!item.PRODUCTNAME.Equals(product.ProductName))
+                    //if (!item.PRODUCTNAME.Equals(product.ProductName))(!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!getUoSInfo(item.PRODUCTNAME).UnitType.Contains("Unit"))
+                    if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!getUoSInfo(item.PRODUCTNAME).UnitType.Contains("Unit")))
                         AttrNotMatched.Add(nameof(item.PRODUCTNAME));
                     if (!item.AGENCY.Equals(product.Agency))
                         AttrNotMatched.Add(nameof(item.AGENCY));
