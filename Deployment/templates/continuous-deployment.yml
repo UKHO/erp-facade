@@ -42,6 +42,15 @@ steps:
       fileType: 'json'
       targetFiles: '**/appsettings.json'
 
+  - task: AzureCLI@2
+    displayName: "Disable Private End Point Network Policies"
+    condition: always()
+    inputs:
+      azureSubscription: "${{ parameters.AzureSubscription }}"
+      scriptType: 'pscore'
+      scriptLocation: 'scriptPath'
+      scriptPath: "$(Pipeline.Workspace)/terraformartifact/set_network_policy_env.ps1"
+
   - task: AzureWebApp@1
     displayName: "Azure App Deploy: ERPFacade-$(Environment)-API"
     inputs:

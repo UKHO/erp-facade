@@ -1,0 +1,1 @@
+az network vnet subnet update --name pe-subnet --resource-group m-spokeconfig-rg --vnet-name ERPFacadeQA-vnet --disable-private-endpoint-network-policies true
