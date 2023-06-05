@@ -1139,13 +1139,14 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return randomtraceID;
         }
 
-        public static string updateTimeField(string requestBody)
+        public static string updateTimeField(string requestBody, string genratedTraceId)
         {
             var currentTimeStamp = DateTime.Now.ToString("yyyy-MM-dd");
             //string newTraceId = SAPXmlHelper.generateRandomTraceId();
 
             JObject jsonObj = JObject.Parse(requestBody);
             jsonObj["time"] = currentTimeStamp;
+            jsonObj["data"]["traceId"] = genratedTraceId;
             string updatedRequestBody = jsonObj.ToString();
             return updatedRequestBody;
         }

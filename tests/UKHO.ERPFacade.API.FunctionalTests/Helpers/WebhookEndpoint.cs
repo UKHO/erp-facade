@@ -14,6 +14,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         private readonly RestClient client2;
         private readonly ADAuthTokenProvider _authToken;
         private SAPXmlHelper SapXmlHelper { get; set; }
+        public static Dictionary<string, string> genratedTraceId1 = new();
 
         public WebhookEndpoint()
         {
@@ -44,8 +45,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             {
                 requestBody = streamReader.ReadToEnd();
             }
-
-            requestBody = SAPXmlHelper.updateTimeField(requestBody);
+            
+            genratedTraceId = SAPXmlHelper.generateRandomTraceId();
+            requestBody = SAPXmlHelper.updateTimeField(requestBody, genratedTraceId);
 
             var request = new RestRequest("/webhook/newenccontentpublishedeventreceived", Method.Post);
             var now1 = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.fffffff'z'");
@@ -67,7 +69,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 requestBody = streamReader.ReadToEnd();
             }
 
-            requestBody = SAPXmlHelper.updateTimeField(requestBody);
+            genratedTraceId1.Add("traceId",SAPXmlHelper.generateRandomTraceId());
+            requestBody = SAPXmlHelper.updateTimeField(requestBody, genratedTraceId1["traceId"]);
 
             var request = new RestRequest("/webhook/newenccontentpublishedeventreceived", Method.Post);
             request.AddHeader("Content-Type", "application/json");
