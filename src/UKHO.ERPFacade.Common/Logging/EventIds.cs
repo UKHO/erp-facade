@@ -58,14 +58,14 @@
         UploadedEncContentPublishedEventInAzureBlob = 940011,
 
         /// <summary>
-        /// 940012 - Could not connect to SAP
+        /// 940012 - Error occured while connecting SAP
         /// </summary>
-        SapConnectionFailed = 940012,
+        ErrorOccuredInSap = 940012,
 
         /// <summary>
-        /// 940013 - Data pushed to SAP
+        /// 940013 - ENC Update pushed to SAP
         /// </summary>
-        DataPushedToSap = 940013,
+        EncUpdatePushedToSap = 940013,
 
         /// <summary>
         /// 940014- Webjob started to process the incomplete transactions.
@@ -103,19 +103,19 @@
         UpdateEntitySuccessful = 940020,
 
         /// <summary>
-        /// 940021 - CorrelationId is missing in the event received from SAP
+        /// 940021 - CorrelationId is missing in price information payload recieved from SAP.
         /// </summary>
-        CorrelationIdMissingInSAPEvent = 940021,
+        CorrelationIdMissingInSAPPriceInformationPayload = 940021,
 
         /// <summary>
-        /// 940022 - Blob does not exist for CorrelationID given in SAP event.
+        /// 940022 - Invalid SAP callback. Request from ERP Facade to SAP not found for CorrelationId.
         /// </summary>
-        BlobNotFoundInAzure = 940022,
+        ERPFacadeToSAPRequestNotFound = 940022,
 
         /// <summary>
-        /// 940023 - Blob exists for CorrelationID given in SAP event.
+        /// 940023 - Valid SAP callback for CorrelationId.
         /// </summary>
-        BlobExistsInAzure = 940023,
+        ERPFacadeToSAPRequestFound = 940023,
 
         /// <summary>
         /// 940024 - No Scenario Found
@@ -155,6 +155,41 @@
         /// <summary>
         /// 940031 - Environment Name
         /// </summary>
-        EnvironmentName = 940031
+        EnvironmentName = 940031,
+
+        /// <summary>
+        /// 940032 - UnitOfSale price information payload received from SAP
+        /// </summary>
+        SapUnitsOfSalePriceInformationPayloadReceived = 940032,
+
+        /// <summary>
+        /// 940033 - Downloading existing ees event from azure blob storage
+        /// </summary>
+        DownloadEncEventPayloadStarted = 940033,
+
+        /// <summary>
+        /// 940034 - Downloaded existing ees event from azure blob storage successfully
+        /// </summary>
+        DownloadEncEventPayloadCompleted = 940034,
+
+        /// <summary>
+        /// 940035 - No price information found in incoming SAP event
+        /// </summary>
+        NoDataFoundInSAPPriceInformationPayload = 940035,
+
+        /// <summary>
+        /// 940036 - Building unit of sale price event started
+        /// </summary>
+        AppendingUnitofSalePricesToEncEvent = 940036,
+
+        /// <summary>
+        /// 940037 - Unit of sale price event created
+        /// </summary>
+        UnitsOfSaleUpdatedEventPayloadCreated = 940037,
+
+        /// <summary>
+        /// 940038 - Price Event exceeds the size limit of 1 MB
+        /// </summary>
+        PriceEventExceedSizeLimit = 940038
     }
 }

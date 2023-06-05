@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace UKHO.ERPFacade.API.FunctionalTests.Model
+﻿namespace UKHO.ERPFacade.API.FunctionalTests.Model
 {
 
     // NOTE: Generated code may require at least .NET Framework 4.5 or .NET Core/Standard 2.0.
@@ -117,7 +111,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Namespace = "urn:sap-com:document:sap:rfc:functions")]
+        [System.Xml.Serialization.XmlArrayAttribute(Namespace = "")]
         [System.Xml.Serialization.XmlArrayItemAttribute("item", Namespace = "", IsNullable = false)]
         public Item[] ACTIONITEMS
         {

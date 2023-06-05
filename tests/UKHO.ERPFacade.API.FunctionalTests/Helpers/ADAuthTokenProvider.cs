@@ -4,14 +4,18 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
     public class ADAuthTokenProvider
     {
-        static string AzureADToken = null;
+        static string AzureADToken;
         private static Config _config;
-
+        public ADAuthTokenProvider()
+        {
+            AzureADToken = null;
+        }
         public async Task<string> GetAzureADToken()
         {
             _config = new();
-
-            AzureADToken = await GenerateAzureADToken(_config.TestConfig.AzureadConfiguration.ClientId, _config.TestConfig.AzureadConfiguration.ClientSecret, AzureADToken);
+            AzureADToken = await GenerateAzureADToken(_config.TestConfig.AzureADConfiguration.ClientId, _config.TestConfig.AzureADConfiguration.ClientSecret, AzureADToken);
+            await Console.Out.WriteLineAsync("value1:"+ _config.TestConfig.AzureADConfiguration.ClientId);
+            await Console.Out.WriteLineAsync("value1:" + _config.TestConfig.AzureADConfiguration.ClientSecret);
             return AzureADToken;
         }
 
@@ -21,11 +25,31 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             if (noRole)
             {
                 AzureADToken = null;
-                AzureADToken = await GenerateAzureADToken(_config.TestConfig.AzureadConfiguration.AutoTestClientIdNoRole, _config.TestConfig.AzureadConfiguration.ClientSecretNoRole, AzureADToken);
+                AzureADToken = await GenerateAzureADToken(_config.TestConfig.AzureADConfiguration.AutoTestClientIdNoRole, _config.TestConfig.AzureADConfiguration.ClientSecretNoRole, AzureADToken);
             }
             else
             {
-                AzureADToken = await GenerateAzureADToken(_config.TestConfig.AzureadConfiguration.AutoTestClientId, _config.TestConfig.AzureadConfiguration.ClientSecret, AzureADToken);
+                AzureADToken = await GenerateAzureADToken(_config.TestConfig.AzureADConfiguration.AutoTestClientId, _config.TestConfig.AzureADConfiguration.ClientSecret, AzureADToken);
+            }
+            return AzureADToken;
+        }
+        public async Task<string> GetAzureADToken(bool noRole,string endPointName)
+        {
+            _config = new();
+            if (noRole)
+            {
+                AzureADToken = null;
+                AzureADToken = await GenerateAzureADToken(_config.TestConfig.AzureADConfiguration.AutoTestClientIdNoRole, _config.TestConfig.AzureADConfiguration.ClientSecretNoRole, AzureADToken);
+            }
+            else if (endPointName == "UnitOfSale"|| endPointName == "BulkPriceUpdate") 
+            {
+                
+                AzureADToken = await GenerateAzureADToken(_config.TestConfig.AzureADConfiguration.AutoTestClientIdPricingInformationCaller, _config.TestConfig.AzureADConfiguration.ClientSecretPricingInformationCaller, AzureADToken);
+            }
+
+            else
+            {
+                AzureADToken = await GenerateAzureADToken(_config.TestConfig.AzureADConfiguration.AutoTestClientId, _config.TestConfig.AzureADConfiguration.ClientSecret, AzureADToken);
             }
             return AzureADToken;
         }
@@ -34,17 +58,17 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         {
             try
             {
-                string[] scopes = new string[] { $"{_config.TestConfig.AzureadConfiguration.ClientId}/.default" };
+                string[] scopes = new string[] { $"{_config.TestConfig.AzureADConfiguration.ClientId}/.default" };
                 if (token == null)
                 {
-                    if (_config.TestConfig.AzureadConfiguration.IsRunningOnLocalMachine)
+                    if (_config.TestConfig.AzureADConfiguration.IsRunningOnLocalMachine)
                     {
-                        IPublicClientApplication debugApp = PublicClientApplicationBuilder.Create(_config.TestConfig.AzureadConfiguration.ClientId).
+                        IPublicClientApplication debugApp = PublicClientApplicationBuilder.Create(_config.TestConfig.AzureADConfiguration.ClientId).
                                                             WithRedirectUri("http://localhost").Build();
 
                         //Acquiring token through user interaction
                         AuthenticationResult tokenTask = await debugApp.AcquireTokenInteractive(scopes)
-                                                                .WithAuthority($"{_config.TestConfig.AzureadConfiguration.MicrosoftOnlineLoginUrl}{_config.TestConfig.AzureadConfiguration.TenantId}", true)
+                                                                .WithAuthority($"{_config.TestConfig.AzureADConfiguration.MicrosoftOnlineLoginUrl}{_config.TestConfig.AzureADConfiguration.TenantId}", true)
                                                                 .ExecuteAsync();
                         token = tokenTask.AccessToken;
                     }
@@ -53,7 +77,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
                         IConfidentialClientApplication app = ConfidentialClientApplicationBuilder.Create(clientId)
                                                         .WithClientSecret(clientSecret)
-                                                        .WithAuthority(new Uri($"{_config.TestConfig.AzureadConfiguration.MicrosoftOnlineLoginUrl}{_config.TestConfig.AzureadConfiguration.TenantId}"))
+                                                        .WithAuthority(new Uri($"{_config.TestConfig.AzureADConfiguration.MicrosoftOnlineLoginUrl}{_config.TestConfig.AzureADConfiguration.TenantId}"))
                                                         .Build();
 
                         AuthenticationResult tokenTask = await app.AcquireTokenForClient(scopes).ExecuteAsync();

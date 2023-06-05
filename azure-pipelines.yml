@@ -340,6 +340,10 @@ stages:
         value: $(AzureADConfigurationAutoTestClientIdNoRole)
       - name: "AzureADConfiguration.ClientSecretNoRole"
         value: $(AzureADConfigurationClientSecretNoRole)
+      - name: "AzureADConfiguration.AutoTestClientIdPricingInformationCaller"
+        value: $(ERP-API-TEST-AUTOTEST-PRICEINFORMATIONAPICALLER-APPLICATION-ID)
+      - name: "AzureADConfiguration.ClientSecretPricingInformationCaller"
+        value: $(ERP-API-TEST-AUTOTEST-PRICEINFORMATIONAPICALLER-SECRET)
     jobs:
       - deployment: DevDeployTerraform
         displayName: "Dev - Deploy Terraform and Dotnet App"
@@ -382,6 +386,7 @@ stages:
                   displayName: "Run Functional tests"
                   inputs:
                     command: "test"
+                    arguments: "--filter TestCategory=DevEnvFT"
                     projects: |
                       **/*FunctionalTest*.dll
                       !**/*TestAdapter.dll
@@ -417,11 +422,18 @@ stages:
         value: $(AzureADConfigurationAutoTestClientIdNoRole)
       - name: "AzureADConfiguration.ClientSecretNoRole"
         value: $(AzureADConfigurationClientSecretNoRole)
+      - name: "AzureADConfiguration.AutoTestClientIdPricingInformationCaller"
+        value: $(ERP-API-TEST-AUTOTEST-PRICEINFORMATIONAPICALLER-APPLICATION-ID)
+      - name: "AzureADConfiguration.ClientSecretPricingInformationCaller"
+        value: $(ERP-API-TEST-AUTOTEST-PRICEINFORMATIONAPICALLER-SECRET)
       - name: mockWebAppName
         value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup
         value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
+      - name: SapMockConfiguration.BaseUrl
+        value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.SapMockConfiguration.BaseUrlQA']  ]
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
+    
     jobs:
       - deployment: QADeployTerraform
         displayName: "QA - Deploy Terraform and Dotnet App"
@@ -474,6 +486,7 @@ stages:
                   displayName: "Run Functional tests"
                   inputs:
                     command: "test"
+                    arguments: "--filter TestCategory=QAEnvFT"
                     projects: |
                       **/*FunctionalTest*.dll
                       !**/*TestAdapter.dll

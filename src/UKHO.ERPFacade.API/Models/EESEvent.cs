@@ -287,6 +287,46 @@ namespace UKHO.ERPFacade.API.Models
         public List<string> RemoveProducts { get; set; }
     }
 
+    [ExcludeFromCodeCoverage]
+    public class UnitsOfSalePrices
+    {
+        [JsonProperty("unitName")]
+        public string UnitName { get; set; }
+
+        [JsonProperty("price")]
+        public List<Price> Price { get; set; }
+    }
+
+    [ExcludeFromCodeCoverage]
+    public class Price
+    {
+        [JsonProperty("effectiveDate")]
+        public DateTimeOffset EffectiveDate { get; set; }
+
+        [JsonProperty("currency")]
+        public string Currency { get; set; }
+
+        [JsonProperty("standard")]
+        public Standard Standard { get; set; }
+    }
+
+    [ExcludeFromCodeCoverage]
+    public class Standard
+    {
+        [JsonProperty("priceDurations")]
+        public List<PriceDurations> PriceDurations { get; set; }
+    }
+
+    [ExcludeFromCodeCoverage]
+    public class PriceDurations
+    {
+        [JsonProperty("numberOfMonths")]
+        public int NumberOfMonths { get; set; }
+
+        [JsonProperty("rrp")]
+        public string Rrp { get; set; }
+    }
+
     public enum Provider
     {
         ICE = 1,
