@@ -53,7 +53,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.ConfigurationTests
         [TestCase(HttpStatusCode.ServiceUnavailable)]
         [TestCase(HttpStatusCode.RequestTimeout)]
         [TestCase(HttpStatusCode.GatewayTimeout)]
-        public async Task Test_EnterpriseEventServiceEventPublisherClient_Retries3TimesAfterInitialRequest_ForErrorStatuses(HttpStatusCode statusCode)
+        public async Task WhenEesEventPublisherClientRetries3TimesAfterInitialRequestForErrorStatuses_ThenReturnsRequestTimeout(HttpStatusCode statusCode)
         {
             var sut = _serviceProvider.GetRequiredService<IHttpClientFactory>().CreateClient(EnterpriseEventServiceEventPublisher.EventServiceClientName);
 
@@ -70,7 +70,8 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.ConfigurationTests
         [TestCase(HttpStatusCode.NotAcceptable)]
         [TestCase(HttpStatusCode.BadRequest)]
         [TestCase(HttpStatusCode.Forbidden)]
-        public async Task Test_EnterpriseEventServiceEventPublisherClient_DoesNotRetry_ForNonTransientErrors(HttpStatusCode statusCode)
+
+        public async Task WhenEesEventPublisherClientDoesNotRetryForNonTransientErrors_ThenReturnUnauthorizedWithLogEntries(HttpStatusCode statusCode)
         {
             var sut = _serviceProvider.GetRequiredService<IHttpClientFactory>().CreateClient(EnterpriseEventServiceEventPublisher.EventServiceClientName);
 
@@ -84,7 +85,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.ConfigurationTests
         }
 
         [Test]
-        public async Task Test_EnterpriseEventServiceEventPublisherClient_AddsBearerAuthToken()
+        public async Task WhenEesEventPublisherClientIscalled_ThenReturnsBearerAuthToken()
         {
             var testToken = "TOKEN";
             var expectedBearerHeader = $"Bearer {testToken}";
