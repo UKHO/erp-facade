@@ -2,15 +2,7 @@ data "azurerm_subnet" "main_subnet" {
     name                 = var.spoke_subnet_name
     virtual_network_name = var.spoke_vnet_name
     resource_group_name  = var.spoke_rg
-  }
-
-data "azurerm_subnet" "agent_subnet" {
-  provider             = azurerm.build_agent
-  name                 = var.agent_subnet_name
-  virtual_network_name = var.agent_vnet_name
-  resource_group_name  = var.agent_rg
-}
-  
+  }  
   module "app_insights" {
     source              = "./Modules/AppInsights"
     name                = "${local.service_name}-${local.env_name}-insights"
@@ -38,7 +30,6 @@ data "azurerm_subnet" "agent_subnet" {
     location                  = azurerm_resource_group.rg.location
     sku_name                  = var.sku_name[local.env_name]
     subnet_id                 = data.azurerm_subnet.main_subnet.id
-    agent_id                  = data.azurerm_subnet.agent_subnet.id
     app_settings = {
       "KeyVaultSettings:ServiceUri"                              = "https://${local.key_vault_name}.vault.azure.net/"
       "EventHubLoggingConfiguration:Environment"                 = local.env_name
