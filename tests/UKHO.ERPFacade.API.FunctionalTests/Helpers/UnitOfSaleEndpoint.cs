@@ -1,4 +1,5 @@
 ﻿
+using FluentAssertions;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using RestSharp;
@@ -12,6 +13,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         private readonly RestClient client;
 
         private AzureTableHelper azureTableHelper { get; set; }
+        private JSONHelper jsonHelper { get; set; }
 
 
         public UnitOfSaleEndpoint(string url)
@@ -19,6 +21,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             var options = new RestClientOptions(url);
             client = new RestClient(options);
             azureTableHelper = new AzureTableHelper();
+            jsonHelper = new();
         }
         public void  PostUnitOfSaleResponse()
         {
@@ -44,15 +47,18 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
 
             RestResponse response = await client.ExecuteAsync(request);
-            List<UoSInputJSONHelper> jsonPayload = JsonConvert.DeserializeObject<List<UoSInputJSONHelper>>(requestBody);
-            string traceID = jsonPayload[0].Corrid;
+            List<UoSInputJSONHelper> jsonUoSInputPayload = JsonConvert.DeserializeObject<List<UoSInputJSONHelper>>(requestBody);
+            string traceID = jsonUoSInputPayload[0].Corrid;
 
 
-            if (response.StatusCode == System.Net.HttpStatusCode.OK)
-            {
+            //if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            //{
                 Assert.That(azureTableHelper.CheckResponseDateTime(traceID), Is.True, "ResponseDateTime Not updated in Azure table");
-            }
-            
+                //var generatedJSONFilePath =
+                var generatedJSONFilePath = "C:\\Users\\Sadha1501493\\GitHubRepo\\erp-facade\\tests\\UKHO.ERPFacade.API.FunctionalTests\\ERPFacadeGeneratedJSONFiles\\367ce4a4-1d62-4f56-b359-230601new001.JSON";
+                Assert.That(jsonHelper.verifyUniqueProducts(jsonUoSInputPayload, generatedJSONFilePath), Is.True, "Final UoS JSON has duplicate UnitsOfSalesPrices");
+            // }
+
             return response;
         }
     }

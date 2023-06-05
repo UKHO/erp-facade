@@ -14,16 +14,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
     
     public class AzureTableHelper
     {
-        public static Config config;
         private const string ErpFacadeTableName = "eesevents";
-        public AzureTableHelper()
-        {
-            config = new();
-        }
+
         //Private Methods
         private TableClient GetTableClient(string tableName)
         {
-            TableServiceClient serviceClient = new(config.TestConfig.AzureStorageConfiguration.ConnectionString);
+            TableServiceClient serviceClient = new(Config.TestConfig.AzureStorageConfiguration.ConnectionString);
             Pageable<TableItem> queryTableResults = serviceClient.Query(filter: $"TableName eq '{tableName}'");
             var tableExists = queryTableResults.FirstOrDefault(t => t.Name == tableName);
 
