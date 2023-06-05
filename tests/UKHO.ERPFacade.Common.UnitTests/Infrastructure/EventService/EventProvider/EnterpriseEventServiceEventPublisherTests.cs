@@ -1,30 +1,31 @@
-﻿using System;
-using System.Net;
-using System.Net.Http;
-using System.Text.Json;
-using System.Threading.Tasks;
-using FakeItEasy;
+﻿using FakeItEasy;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NUnit.Framework;
 using RichardSzalay.MockHttp;
+using System.Net.Http;
+using System.Net;
+using System.Text.Json;
+using System.Threading.Tasks;
+using System;
 using UKHO.ERPFacade.Common.Converters;
-using UKHO.ERPFacade.Common.Infrastructure;
 using UKHO.ERPFacade.Common.Infrastructure.Config;
 using UKHO.ERPFacade.Common.Infrastructure.EventService.EventProvider;
+using UKHO.ERPFacade.Common.Infrastructure.EventService;
+using UKHO.ERPFacade.Common.Infrastructure;
 
 namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvider
 {
     public class EnterpriseEventServiceEventPublisherTests
     {
-        private readonly string _serviceUrl = "https://testservice.com";
-        private EnterpriseEventServiceEventPublisher _sut;
+        private readonly string _fakeServiceUrl = "https://testservice.com";
+        private EnterpriseEventServiceEventPublisher _fakeEnterpriseEventServiceEventPublisher;
         private ICloudEventFactory _fakeCloudEventFactory;
         private IHttpClientFactory _fakeHttpClientFactory;
         private MockHttpMessageHandler _fakeHttpClientMessageHandler;
         private OptionsWrapper<EnterpriseEventServiceConfiguration> _optionsWrapper;
         private HttpClient _fakeHttpClient;
-        private EnterpriseEventServiceConfiguration _testConfiguration;
+        private EnterpriseEventServiceConfiguration _fakeEnterpriseEventServiceConfiguration;
         private ILogger<EnterpriseEventServiceEventPublisher> _fakeLogger;
 
         [SetUp]
@@ -34,21 +35,21 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
             _fakeCloudEventFactory = A.Fake<ICloudEventFactory>();
             _fakeHttpClientFactory = A.Fake<IHttpClientFactory>();
             _fakeHttpClientMessageHandler = new MockHttpMessageHandler();
-            _testConfiguration = new EnterpriseEventServiceConfiguration
+            _fakeEnterpriseEventServiceConfiguration = new EnterpriseEventServiceConfiguration
             {
                 ClientId = "testClientId",
                 PublishEndpoint = "testPublishEndpoint",
                 PublisherScope = "testScope",
-                ServiceUrl = _serviceUrl,
+                ServiceUrl = _fakeServiceUrl,
             };
 
-            _optionsWrapper = new OptionsWrapper<EnterpriseEventServiceConfiguration>(_testConfiguration);
+            _optionsWrapper = new OptionsWrapper<EnterpriseEventServiceConfiguration>(_fakeEnterpriseEventServiceConfiguration);
 
             _fakeHttpClient = _fakeHttpClientMessageHandler.ToHttpClient();
-            _fakeHttpClient.BaseAddress = new Uri(_serviceUrl);
+            _fakeHttpClient.BaseAddress = new Uri(_fakeServiceUrl);
             A.CallTo(() => _fakeHttpClientFactory.CreateClient(EnterpriseEventServiceEventPublisher.EventServiceClientName)).Returns(_fakeHttpClient);
 
-            _sut = new EnterpriseEventServiceEventPublisher(_fakeLogger, _fakeCloudEventFactory, _fakeHttpClientFactory, _optionsWrapper);
+            _fakeEnterpriseEventServiceEventPublisher = new EnterpriseEventServiceEventPublisher(_fakeLogger, _fakeCloudEventFactory, _fakeHttpClientFactory, _optionsWrapper);
         }
 
         [Test]
@@ -62,10 +63,10 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
 
             A.CallTo(() => _fakeCloudEventFactory.Create(eventData)).Returns(cloudEvent);
             _fakeHttpClientMessageHandler
-                .Expect(HttpMethod.Post, $"{_serviceUrl}/{_testConfiguration.PublishEndpoint}")
+                .Expect(HttpMethod.Post, $"{_fakeServiceUrl}/{_fakeEnterpriseEventServiceConfiguration.PublishEndpoint}")
                 .Respond(req => new HttpResponseMessage());
 
-            await _sut.Publish(eventData);
+            await _fakeEnterpriseEventServiceEventPublisher.Publish(eventData);
 
             A.CallTo(() => _fakeHttpClientFactory.CreateClient(EnterpriseEventServiceEventPublisher.EventServiceClientName)).MustHaveHappened();
             _fakeHttpClientMessageHandler.VerifyNoOutstandingExpectation();
@@ -86,11 +87,11 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
 
             _fakeHttpClientMessageHandler
                 .Expect("*")
-                .With(req => string.Equals(req.Content.Headers.ContentType.MediaType, "application/cloudevents+json", StringComparison.CurrentCultureIgnoreCase))
-                //.With(req => req.Content.ReadAsByteArrayAsync().WaitForResult().AreEquivalent(JsonSerializer.SerializeToUtf8Bytes(cloudEvent, jsonOptions)))
+                .With(req => string.Equals(req.Content!.Headers.ContentType!.MediaType, "application/cloudevents+json", StringComparison.CurrentCultureIgnoreCase))
+                .With(req => req.Content!.ReadAsByteArrayAsync().WaitForResult().AreEquivalent(JsonSerializer.SerializeToUtf8Bytes(cloudEvent, jsonOptions)))
                 .Respond(req => new HttpResponseMessage());
 
-            var result = await _sut.Publish(eventData);
+            var result = await _fakeEnterpriseEventServiceEventPublisher.Publish(eventData);
 
             A.CallTo(() => _fakeHttpClientFactory.CreateClient(EnterpriseEventServiceEventPublisher.EventServiceClientName)).MustHaveHappened();
             _fakeHttpClientMessageHandler.VerifyNoOutstandingExpectation();
@@ -111,7 +112,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
                 .Expect("*")
                 .Throw(new Exception());
 
-            var result = await _sut.Publish(eventData);
+            var result = await _fakeEnterpriseEventServiceEventPublisher.Publish(eventData);
 
             _fakeHttpClientMessageHandler.VerifyNoOutstandingExpectation();
             Assert.That(result.Status, Is.EqualTo(Result.Statuses.Failure));
@@ -131,18 +132,10 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
                 .Expect("*")
                 .Respond(req => new HttpResponseMessage(HttpStatusCode.InternalServerError));
 
-            var result = await _sut.Publish(eventData);
+            var result = await _fakeEnterpriseEventServiceEventPublisher.Publish(eventData);
 
             _fakeHttpClientMessageHandler.VerifyNoOutstandingExpectation();
             Assert.That(result.Status, Is.EqualTo(Result.Statuses.Failure));
-        }
-    }
-
-    public static class TaskSynchronousExtensions
-    {
-        public static T WaitForResult<T>(this Task<T> task)
-        {
-            return task.ConfigureAwait(false).GetAwaiter().GetResult();
         }
     }
 }

@@ -5,10 +5,7 @@ using Azure.Identity;
 namespace UKHO.ERPFacade.Common.Infrastructure.Authentication
 {
     
-    public interface ITokenProvider
-    {
-        public Task<AccessToken> GetTokenAsync(string scope);
-    }
+    
 
     [ExcludeFromCodeCoverage]
     public class ManagedIdentityTokenProvider : ITokenProvider

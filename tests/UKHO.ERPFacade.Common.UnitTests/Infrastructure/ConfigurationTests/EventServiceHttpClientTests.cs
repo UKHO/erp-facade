@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 using System;
 using UKHO.ERPFacade.Common.Infrastructure.Authentication;
 using UKHO.ERPFacade.Common.Infrastructure.Config;
-using UKHO.ERPFacade.Common.Infrastructure.EventService.EventProvider;
+using UKHO.ERPFacade.Common.Infrastructure.EventService;
 using UKHO.ERPFacade.Common.Infrastructure;
 using WireMock.ResponseBuilders;
 using WireMock.Server;
@@ -21,32 +21,32 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.ConfigurationTests
 {
     public class EventServiceHttpClientTests
     {
-        private WireMockServer _wireMockServer;
-        private ITokenProvider _mockTokenProvider;
-        private EnterpriseEventServiceConfiguration _config;
+        private WireMockServer _fakeWireMockServer;
+        private ITokenProvider _fakeTokenProvider;
+        private EnterpriseEventServiceConfiguration _fakeEnterpriseEventServiceConfiguration;
         private ServiceProvider _serviceProvider;
 
         [SetUp]
         public void Setup()
         {
-            _wireMockServer = WireMockServer.Start();
-            _mockTokenProvider = A.Fake<ITokenProvider>();
-            _config = new EnterpriseEventServiceConfiguration
+            _fakeWireMockServer = WireMockServer.Start();
+            _fakeTokenProvider = A.Fake<ITokenProvider>();
+            _fakeEnterpriseEventServiceConfiguration = new EnterpriseEventServiceConfiguration
             {
-                ServiceUrl = _wireMockServer.Urls.First(),
+                ServiceUrl = _fakeWireMockServer.Urls.First(),
             };
 
             IServiceCollection services = new ServiceCollection();
             services.AddInfrastructure();
-            services.Replace(ServiceDescriptor.Singleton(typeof(ITokenProvider), _mockTokenProvider));
-            services.Replace(ServiceDescriptor.Singleton(typeof(IOptions<EnterpriseEventServiceConfiguration>), new OptionsWrapper<EnterpriseEventServiceConfiguration>(_config)));
+            services.Replace(ServiceDescriptor.Singleton(typeof(ITokenProvider), _fakeTokenProvider));
+            services.Replace(ServiceDescriptor.Singleton(typeof(IOptions<EnterpriseEventServiceConfiguration>), new OptionsWrapper<EnterpriseEventServiceConfiguration>(_fakeEnterpriseEventServiceConfiguration)));
             _serviceProvider = services.BuildServiceProvider();
         }
 
         [TearDown]
         public void Teardown()
         {
-            _wireMockServer.Stop();
+            _fakeWireMockServer.Stop();
         }
 
         [TestCase(HttpStatusCode.InternalServerError)]
@@ -58,12 +58,12 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.ConfigurationTests
             var sut = _serviceProvider.GetRequiredService<IHttpClientFactory>().CreateClient(EnterpriseEventServiceEventPublisher.EventServiceClientName);
 
             var testEndpoint = "/test-endpoint";
-            _wireMockServer
+            _fakeWireMockServer
                 .Given(Request.Create().WithPath(testEndpoint).UsingGet())
                 .RespondWith(Response.Create().WithStatusCode(statusCode));
 
             await sut.GetAsync(testEndpoint);
-            Assert.That(_wireMockServer.FindLogEntries(Request.Create().WithPath(testEndpoint).UsingGet()).Count(), Is.EqualTo(4));
+            Assert.That(_fakeWireMockServer.FindLogEntries(Request.Create().WithPath(testEndpoint).UsingGet()).Count(), Is.EqualTo(4));
         }
 
         [TestCase(HttpStatusCode.Unauthorized)]
@@ -75,12 +75,12 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.ConfigurationTests
             var sut = _serviceProvider.GetRequiredService<IHttpClientFactory>().CreateClient(EnterpriseEventServiceEventPublisher.EventServiceClientName);
 
             var testEndpoint = "/test-endpoint";
-            _wireMockServer
+            _fakeWireMockServer
                 .Given(Request.Create().WithPath(testEndpoint).UsingGet())
                 .RespondWith(Response.Create().WithStatusCode(statusCode));
 
             await sut.GetAsync(testEndpoint);
-            Assert.That(_wireMockServer.FindLogEntries(Request.Create().WithPath(testEndpoint).UsingGet()).Count(), Is.EqualTo(1));
+            Assert.That(_fakeWireMockServer.FindLogEntries(Request.Create().WithPath(testEndpoint).UsingGet()).Count(), Is.EqualTo(1));
         }
 
         [Test]
@@ -91,20 +91,20 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.ConfigurationTests
             var testClientId = "CLIENT_ID";
             var testScope = "SCOPE";
 
-            _config.PublisherScope = testScope;
-            _config.ClientId = testClientId;
+            _fakeEnterpriseEventServiceConfiguration.PublisherScope = testScope;
+            _fakeEnterpriseEventServiceConfiguration.ClientId = testClientId;
 
-            A.CallTo(() => _mockTokenProvider.GetTokenAsync($"{testClientId}/{testScope}")).Returns(new AccessToken(testToken, DateTimeOffset.MaxValue));
+            A.CallTo(() => _fakeTokenProvider.GetTokenAsync($"{testClientId}/{testScope}")).Returns(new AccessToken(testToken, DateTimeOffset.MaxValue));
 
             var sut = _serviceProvider.GetRequiredService<IHttpClientFactory>().CreateClient(EnterpriseEventServiceEventPublisher.EventServiceClientName);
 
             var testEndpoint = "/test-endpoint";
-            _wireMockServer
+            _fakeWireMockServer
                 .Given(Request.Create().WithPath(testEndpoint).WithHeader("authorization", expectedBearerHeader).UsingGet())
                 .RespondWith(Response.Create().WithSuccess());
 
             await sut.GetAsync(testEndpoint);
-            Assert.That(_wireMockServer.FindLogEntries(Request.Create()
+            Assert.That(_fakeWireMockServer.FindLogEntries(Request.Create()
                                                               .WithPath(testEndpoint)
                                                               .WithHeader("authorization", expectedBearerHeader)
                                                               .UsingGet()

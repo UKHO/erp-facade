@@ -4,8 +4,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Converters;
 using UKHO.ERPFacade.Common.Infrastructure.Config;
+using UKHO.ERPFacade.Common.Infrastructure.EventService.EventProvider;
 
-namespace UKHO.ERPFacade.Common.Infrastructure.EventService.EventProvider
+namespace UKHO.ERPFacade.Common.Infrastructure.EventService
 {
     public class EnterpriseEventServiceEventPublisher : IEventPublisher
     {
