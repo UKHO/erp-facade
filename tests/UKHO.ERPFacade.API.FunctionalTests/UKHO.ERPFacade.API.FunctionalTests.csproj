@@ -48,6 +48,9 @@
     <None Update="ERPFacadeGeneratedXmlFiles\we123s-sds3-df333-d3d.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ERPFacadePayloadTestData\testData.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ERPFacadePayloadTestData\ID10_UpdateSimple.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

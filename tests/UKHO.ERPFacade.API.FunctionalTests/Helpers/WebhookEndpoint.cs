@@ -45,9 +45,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             {
                 requestBody = streamReader.ReadToEnd();
             }
-            
-            genratedTraceId = SAPXmlHelper.generateRandomTraceId();
-            requestBody = SAPXmlHelper.updateTimeField(requestBody, genratedTraceId);
+
+            genratedTraceId1.Add("traceId", SAPXmlHelper.generateRandomTraceId());
+            requestBody = SAPXmlHelper.updateTimeField(requestBody, genratedTraceId1["traceId"]);
 
             var request = new RestRequest("/webhook/newenccontentpublishedeventreceived", Method.Post);
             var now1 = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.fffffff'z'");
