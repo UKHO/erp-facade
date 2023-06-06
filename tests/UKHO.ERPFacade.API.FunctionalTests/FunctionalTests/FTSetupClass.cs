@@ -17,8 +17,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         public void Setup()
         {
             Config.ConfigSetup();
-            Console.WriteLine("Inside FTSetupClass");
-
         }
     }
 }
