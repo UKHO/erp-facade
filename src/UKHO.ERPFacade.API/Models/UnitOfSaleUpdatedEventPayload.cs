@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
+using Newtonsoft.Json;
 using UKHO.ERPFacade.Common.Infrastructure;
 
 namespace UKHO.ERPFacade.API.Models
@@ -50,8 +50,8 @@ namespace UKHO.ERPFacade.API.Models
     [ExcludeFromCodeCoverage]
     public class UnitOfSaleUpdatedEventData
     {
-        [JsonProperty("traceId")]
-        public string TraceId { get; set; }
+        [JsonProperty("correlationId")]
+        public string CorrelationId { get; set; }
 
         [JsonProperty("products")]
         public List<Product> Products { get; set; }
