@@ -1,14 +1,14 @@
-﻿using Azure.Data.Tables.Models;
+﻿using Azure;
 using Azure.Data.Tables;
-using Azure;
+using Azure.Data.Tables.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics.CodeAnalysis;
 using UKHO.ERPFacade.Common.Configuration;
+using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models.TableEntities;
-using UKHO.ERPFacade.Common.Exceptions;
 
 namespace UKHO.ERPFacade.Common.IO.Azure
 {
@@ -119,10 +119,10 @@ namespace UKHO.ERPFacade.Common.IO.Azure
                     {
                         _logger.LogWarning(EventIds.WebjobCallbackTimeoutEventFromSAP.ToEventId(), $"Request is timed out for the correlationid : {tableitem.CorrelationId}.");
 
-                        TableEntity tableEntity = new TableEntity(tableitem.PartitionKey, tableitem.RowKey)
-                            {
-                                 {"IsNotified", true }
-                            };
+                        TableEntity tableEntity = new(tableitem.PartitionKey, tableitem.RowKey)
+                        {
+                            { "IsNotified", true }
+                        };
 
                         tableClient.UpdateEntity(tableEntity, tableitem.ETag);
                     }
