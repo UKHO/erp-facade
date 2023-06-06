@@ -893,6 +893,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                                  + calculateChangeUoSActionCount(jsonPayload)
                                  + calculateRemoveCellFromUoSActionCount(jsonPayload)
                                  + calculateUpdateEncCellEditionUpdateNumber(jsonPayload)
+                                 + calculateUpdateEncCellEditionUpdateNumberForSuspendedStatus(jsonPayload)
                                  + calculateCancelledCellCount(jsonPayload)
                                  + calculateCancelUnitOfSalesActionCount(jsonPayload);
 
@@ -1039,6 +1040,27 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             {
                 if (product.ContentChanged == true && product.Status.IsNewCell == false
                     && (product.Status.StatusName == "Update" || product.Status.StatusName == "New Edition" || product.Status.StatusName == "Re-issue"))
+                {
+                    count++;
+                }
+            }
+
+            if (count > 0)
+            {
+                updateActionList(count, "7.  UPDATE ENC CELL EDITION UPDATE NUMBER");
+                Console.WriteLine("Total no. of ENC Cell Edition Update Number: " + count);
+            }
+
+            return count;
+        }
+
+        public static int calculateUpdateEncCellEditionUpdateNumberForSuspendedStatus(JsonPayloadHelper jsonPayload)
+        {
+            var obj = jsonPayload;
+            int count = 0;
+            foreach (Product product in obj.Data.Products)
+            {
+                if (product.Status.StatusName == "Suspended")
                 {
                     count++;
                 }

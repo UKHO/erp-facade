@@ -1,30 +1,29 @@
 {
-  "_COMMENT": "Updated 05/04/23 MK - new attributes added: isNewUnitOfSale; contentChanged; unitOfSaleType, unitSize",
   "specversion": "1.0",
   "type": "uk.gov.ukho.encpublishing.enccontentpublished.v2",
   "source": "https://encpublishing.ukho.gov.uk",
   "id": "2f03a25f-28b3-46ea-b009-5943250a9a41",
-  "time": "2023-05-18T12:08:03.4880776Z",
+  "time": "2020-10-13T12:08:03.4880776Z",
   "_COMMENT": "A comma separated list of products",
-  "subject": "US4FL1YE",
+  "subject": "MX545010",
   "datacontenttype": "application/json",
   "data": {
-    "traceId": "3674e4a4-1d62-4f56-b359-testdatasuspended",
+    "traceId": "367ce4a4-1d62-4f56-b359-59e1v3004",
     "products": [
       {
         "productType": "ENC S57",
-        "dataSetName": "DE416080.001",
-        "productName": "DE416080",
-        "title": "Greifswalder Bodden",
-        "scale": 100000,
-        "usageBand": 4,
-        "editionNumber": 11,
+        "dataSetName": "MX545010.001",
+        "productName": "MX545010",
+        "title": "Isla Clarion",
+        "scale": 90000,
+        "usageBand": 5,
+        "editionNumber": 1,
         "updateNumber": 0,
-        "mayAffectHoldings": true,
-        "contentChanged": true,
+        "mayAffectHoldings": false,
+        "contentChanged": false,
         "permit": "permitString",
-        "providerCode": 1,
-        "providerDesc": "ICE",
+        "providerCode": 2,
+        "providerDesc": "PRIMAR",
         "_COMMENT": "provider code and descrption are a n-1 mapping",
         "_ENUM": [
           "ICE",
@@ -42,7 +41,7 @@
           "medium",
           "small"
         ],
-        "agency": "DE",
+        "agency": "MX",
         "bundle": [
           {
             "bundleType": "DVD",
@@ -68,7 +67,7 @@
         },
         "replaces": [],
         "replacedBy": [],
-        "additionalCoverage": [ "DK4LIMFW" ],
+        "additionalCoverage": [],
         "geographicLimit": {
           "boundingBox": {
             "northLimit": 24.0,
@@ -120,7 +119,7 @@
           ]
         },
         "_COMMENT": "The units in which product is included, including any 1-1 unit",
-        "inUnitsOfSale": [ "DE416080", "AVCSO", "PAYSF" ],
+        "inUnitsOfSale": [ "MX545010", "AVCSO", "PAYSF" ],
         "s63": {
           "name": "XXXXXXXX.001",
           "hash": "5160204288db0a543850da177ec637b71ed55946e7f3843e6180b1906ee4f4ea",
@@ -160,8 +159,9 @@
     "_COMMENT": "Prices for all units in event will be included, including Cancelled Cell",
     "unitsOfSale": [
       {
-        "unitName": "DE416080",
-        "title": "Greifswalder Bodden Unit",
+        "unitName": "MX545010",
+        "title": "Isla Clarion",
+        "unitOfSaleType": "unit",
         "unitType": "AVCS Units Coastal",
         "unitSize": "large",
         "status": "ForSale",
@@ -170,7 +170,6 @@
           "NotForSale"
         ],
         "isNewUnitOfSale": false,
-        "unitOfSaleType": "unit",
         "_COMMENT": "BoundingBox or polygon or both or neither",
         "geographicLimit": {
           "boundingBox": {
@@ -189,6 +188,7 @@
       {
         "unitName": "AVCSO",
         "title": "AVCS Online Folio Some Title",
+        "unitOfSaleType": "folio",
         "unitSize": "large",
         "unitType": "AVCS Online Folio",
         "status": "ForSale",
@@ -220,12 +220,14 @@
         },
         "compositionChanges": {
           "addProducts": [],
-          "removeProducts": [ "DE416080" ]
+          "removeProducts": [
+          ]
         }
       },
       {
         "unitName": "PAYSF",
         "title": "World Folio",
+        "unitOfSaleType": "folio",
         "unitType": "AVCS Folio Transit",
         "unitSize": "large",
         "status": "ForSale",
@@ -268,8 +270,12 @@
           ]
         },
         "compositionChanges": {
-          "addProducts": [],
-          "removeProducts": [ "DE416080" ]
+          "addProducts": [
+
+          ],
+          "removeProducts": [
+
+          ]
         }
       }
     ]

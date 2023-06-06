@@ -57,6 +57,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
 
             RestResponse response = await client.ExecuteAsync(request);
+            genratedTraceId1.Clear();
             return response;
         }
 
@@ -84,6 +85,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             //Logic to download XML from container using TraceID from JSON
             string generatedXMLFilePath = SapXmlHelper.downloadGeneratedXML(generatedXMLFolder, traceID);
 
+            genratedTraceId1.Clear();
+
             //Logic to verifyxml
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
@@ -91,7 +94,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 Assert.That(SAPXmlHelper.verifyOrderOfActions(jsonPayload, generatedXMLFilePath), Is.True);
                 Assert.That(SAPXmlHelper.CheckXMLAttributes(jsonPayload, generatedXMLFilePath).Result, Is.True);
             }
-
+           
             return response;
         }
         public async Task<RestResponse> PostWebhookResponseAsyncForXML(string filePath, string token)

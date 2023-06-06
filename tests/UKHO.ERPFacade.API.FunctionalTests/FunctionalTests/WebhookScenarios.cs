@@ -102,8 +102,21 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [TestCase("ID17_newCell_and_CancelReplace.JSON", TestName = "WhenICallTheWebhookWithMixScenarioHavingOneNewCellAndOneCancel&ReplaceCell_ThenWebhookReturns200Response")]
         [TestCase("ID18_CancelReplace_UpdateCell.JSON", TestName = "WhenICallTheWebhookWithMixScenarioHavingCancel&Replace_UpdateCell_ThenWebhookReturns200Response")]
         [TestCase("ID19_CR_metadata_move.JSON", TestName = "WhenICallTheWebhookWithMixScenarioHavingCancel&ReplaceAndMetadataChangeAndMoveCell_ThenWebhookReturns200Response")]
-        [TestCase("testData.JSON", TestName = "A1_New_edition_additional_coverage")]
+        
+        //Suspended
         [TestCase("suspendedScenario.JSON", TestName = "A2_Scenario_for_Suspended")]
+
+        //v0.3
+        [TestCase("v3-1_cancel_Replace.JSON", TestName = "sc1")]
+        [TestCase("v3-2_Cell_Moves_Unit_and_New Cell.JSON", TestName = "sc2")]
+        [TestCase("v3-3_Cell_Move.JSON", TestName = "sc3")]
+        [TestCase("v3-4_Metadata_Change.JSON", TestName = "sc4")]
+        [TestCase("v3-5_Mixed_scenario1.JSON", TestName = "sc5")]
+        [TestCase("v3-6_New_Cell.JSON", TestName = "sc6")]
+        [TestCase("v3-7_New_Edition_Coverage.JSON", TestName = "sc7")]
+        [TestCase("v3-8_Supplier_Defined_Releasability.JSON", TestName = "sc8")]
+        [TestCase("v3-9_Suspend and Withdraw.JSON", TestName = "sc9")]
+
 
         public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponse1(string payloadJsonFileName)
         {
