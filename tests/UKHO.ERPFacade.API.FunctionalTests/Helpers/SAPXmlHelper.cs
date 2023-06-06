@@ -810,7 +810,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         public static bool verifyCORRIDHeader(JsonPayloadHelper jsonPayload, string generatedXMLFilePath)
         {
 
-            string traceID = jsonPayload.Data.TraceId;
+            string traceID = jsonPayload.Data.correlationId;
             string corrID = getRequiredXMLText(generatedXMLFilePath, "CORRID");
 
             if (traceID == corrID)
