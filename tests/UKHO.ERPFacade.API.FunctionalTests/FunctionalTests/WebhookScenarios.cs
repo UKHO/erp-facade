@@ -1,5 +1,7 @@
-﻿using FluentAssertions;
+﻿using Azure;
+using FluentAssertions;
 using NUnit.Framework;
+using RestSharp;
 using UKHO.ERPFacade.API.FunctionalTests.Helpers;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
@@ -11,9 +13,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         private SAPXmlHelper SapXmlHelper { get; set; }
         private readonly ADAuthTokenProvider _authToken = new();
         public static bool noRole = false;
-        private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
+        //private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
         //for local
-        //private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
+        private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
 
         [SetUp]
         public void Setup()
@@ -102,9 +104,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [TestCase("ID17_newCell_and_CancelReplace.JSON", TestName = "WhenICallTheWebhookWithMixScenarioHavingOneNewCellAndOneCancel&ReplaceCell_ThenWebhookReturns200Response")]
         [TestCase("ID18_CancelReplace_UpdateCell.JSON", TestName = "WhenICallTheWebhookWithMixScenarioHavingCancel&Replace_UpdateCell_ThenWebhookReturns200Response")]
         [TestCase("ID19_CR_metadata_move.JSON", TestName = "WhenICallTheWebhookWithMixScenarioHavingCancel&ReplaceAndMetadataChangeAndMoveCell_ThenWebhookReturns200Response")]
-        
+
         //Suspended
         [TestCase("suspendedScenario.JSON", TestName = "A2_Scenario_for_Suspended")]
+
+        //New Edition
+        [TestCase("newEditionFile.JSON", TestName = "A3_new_edition_scenario")]
 
         //v0.3
         [TestCase("v3-1_cancel_Replace.JSON", TestName = "sc1")]
@@ -122,8 +127,17 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         {
             string filePath = Path.Combine(_projectDir, WebhookEndpoint.config.TestConfig.PayloadFolder, payloadJsonFileName);
             string generatedXMLFolder = Path.Combine(_projectDir, WebhookEndpoint.config.TestConfig.GeneratedXMLFolder);
+            RestResponse response;
 
-            var response = await _webhook.PostWebhookResponseAsyncForXML(filePath, generatedXMLFolder, await _authToken.GetAzureADToken(false));
+            if (WebhookEndpoint.config.TestConfig.currentEnvironment == "dev")
+            {
+                response = await _webhook.PostWebhookResponseAsyncForXML(filePath, generatedXMLFolder, await _authToken.GetAzureADToken(false));
+            }
+            else
+            {
+                response = await _webhook.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(false));
+            }
+
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
     }

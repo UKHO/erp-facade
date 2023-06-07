@@ -136,6 +136,9 @@
     <None Update="ERPFacadePayloadTestData\v3-8_Supplier_Defined_Releasability.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ERPFacadePayloadTestData\newEditionFile.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ERPFacadePayloadTestData\v3-9_Suspend and Withdraw.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
