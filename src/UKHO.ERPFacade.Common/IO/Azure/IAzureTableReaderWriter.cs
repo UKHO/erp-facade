@@ -10,5 +10,6 @@ namespace UKHO.ERPFacade.Common.IO.Azure
         Task UpdateRequestTimeEntity(string correlationId);
         Task UpdateResponseTimeEntity(string correlationId);
         void ValidateAndUpdateIsNotifiedEntity();
+        Task AddPriceChangeEntity(string correlationId);
     }
 }

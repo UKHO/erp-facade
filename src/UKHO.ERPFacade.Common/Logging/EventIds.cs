@@ -190,6 +190,31 @@
         /// <summary>
         /// 940038 - Price Event exceeds the size limit of 1 MB
         /// </summary>
-        PriceEventExceedSizeLimit = 940038
+        PriceEventExceedSizeLimit = 940038,
+
+        /// <summary>
+        /// 940039 - Bulk price information payload received from SAP
+        /// </summary>
+        SapBulkPriceInformationPayloadReceived = 940039,
+
+        /// <summary>
+        /// 940040 - Storing the received Bulk price information event in azure table.
+        /// </summary>
+        StoreBulkPriceInformationEventInAzureTable = 940040,
+
+        /// <summary>
+        /// 940041 - Uploading the received Bulk price information event in blob storage.
+        /// </summary>
+        UploadBulkPriceInformationEventInAzureBlob = 940041,
+
+        /// <summary>
+        /// 940042 - Bulk price information event is uploaded in blob storage successfully.
+        /// </summary>
+        UploadedBulkPriceInformationEventInAzureBlob = 940042,
+
+        /// <summary>
+        /// 940043 - Bulk price information event in added in azure table successfully.
+        /// </summary>
+        AddedBulkPriceInformationEventInAzureTable = 940043
     }
 }

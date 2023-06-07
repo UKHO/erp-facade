@@ -1,10 +1,10 @@
-﻿using Azure;
+﻿using System.Diagnostics.CodeAnalysis;
+using Azure;
 using Azure.Data.Tables;
 using Azure.Data.Tables.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
-using System.Diagnostics.CodeAnalysis;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Logging;
@@ -19,6 +19,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
         private readonly IOptions<AzureStorageConfiguration> _azureStorageConfig;
         private readonly IOptions<ErpFacadeWebJobConfiguration> _erpFacadeWebjobConfig;
         private const string ErpFacadeTableName = "eesevents";
+        private const string PriceChangeTableName = "pricechangemaster";
         private const int DefaultCallbackDuration = 5;
 
         public AzureTableReaderWriter(ILogger<AzureTableReaderWriter> logger,
@@ -132,6 +133,24 @@ namespace UKHO.ERPFacade.Common.IO.Azure
                     _logger.LogError(EventIds.EmptyRequestDateTime.ToEventId(), $"Empty RequestDateTime column for correlationid : {tableitem.CorrelationId}");
                 }
             }
+        }
+
+        public async Task AddPriceChangeEntity(string correlationId)
+        {
+            TableClient tableClient = GetTableClient(PriceChangeTableName);
+
+            PriceChangeEventEntity priceChangeEventEntity = new()
+            {
+                RowKey = correlationId,
+                PartitionKey = correlationId,
+                Timestamp = DateTime.UtcNow,
+                CorrelationId = correlationId,
+                Status = "Incomplete"
+            };
+
+            await tableClient.AddEntityAsync(priceChangeEventEntity, CancellationToken.None);
+
+            _logger.LogInformation(EventIds.AddedBulkPriceInformationEventInAzureTable.ToEventId(), "Bulk price information event in added in azure table successfully.");
         }
 
         //Private Methods
