@@ -23,7 +23,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         public static List<string> listFromJson = new();
         public static List<string> actionsListFromXml = new();
 
-        public static Config config = new();
         private static JsonPayloadHelper jsonPayload { get; set; }
         private static Z_ADDS_MAT_INFO xmlPayload { get; set; }
 
@@ -665,7 +664,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         {
             //List<string> ActionAttributesSeq = formActionAtrributes();
             List<string> ActionAttributesSeq = new List<string>();
-            ActionAttributesSeq = config.TestConfig.XMLActionList.ToList<string>();
+            ActionAttributesSeq = Config.TestConfig.XMLActionList.ToList<string>();
 
             foreach (XmlNode node in nodeList)
             {
@@ -710,7 +709,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         }
         public string downloadGeneratedXML(string expectedXMLfilePath, string containerAndBlobName)
         {
-            BlobServiceClient blobServiceClient = new BlobServiceClient(config.TestConfig.AzureStorageConfiguration.ConnectionString);
+            BlobServiceClient blobServiceClient = new BlobServiceClient(Config.TestConfig.AzureStorageConfiguration.ConnectionString);
             BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerAndBlobName);
             BlobClient blobClient = containerClient.GetBlobClient(containerAndBlobName + ".xml");
 

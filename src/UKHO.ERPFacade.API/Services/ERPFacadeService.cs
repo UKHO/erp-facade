@@ -149,7 +149,7 @@ namespace UKHO.ERPFacade.API.Services
 
         private static DateTimeOffset GetDate(string date, string time)
         {
-            DateTime dateTime = Convert.ToDateTime(DateTime.ParseExact(date + "" + time, "yyyyMMddhhmmss", CultureInfo.InvariantCulture));
+            DateTime dateTime = DateTime.ParseExact(date + "" + time, "yyyyMMddHHmmss", CultureInfo.InvariantCulture);
             DateTimeOffset dateTimeOffset = new(dateTime);
 
             return dateTimeOffset;
