@@ -43,8 +43,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
                     RowKey = Guid.NewGuid().ToString(),
                     PartitionKey = Guid.NewGuid().ToString(),
                     Timestamp = DateTime.UtcNow,
-                    CorrelationId = correlationId,
-                    EventData = eesEvent.ToString(),
+                    CorrelationId = correlationId,                    
                     RequestDateTime = null,
                     ResponseDateTime = null,
                     IsNotified = false
@@ -58,8 +57,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             {
                 _logger.LogWarning(EventIds.ReceivedDuplicateEncContentPublishedEvent.ToEventId(), "Duplicate ENC content published event received.");
 
-                existingEntity.Timestamp = DateTime.UtcNow;
-                existingEntity.EventData = eesEvent.ToString();
+                existingEntity.Timestamp = DateTime.UtcNow;                
 
                 await tableClient.UpdateEntityAsync(existingEntity, ETag.All, TableUpdateMode.Replace);
 
