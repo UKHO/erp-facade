@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Xml;
 using UKHO.ERPFacade.Common.Configuration;
-using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.HttpClients;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
@@ -50,17 +49,18 @@ namespace UKHO.ERPFacade.Common.HealthCheck
 
                 HttpResponseMessage response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapServiceOperation);
 
+                _logger.LogInformation(EventIds.SapHealthCheckRequestSentToSap.ToEventId(), "SAP Health Check request has been sent to SAP successfully. | {StatusCode}", response.StatusCode);
+
                 if (!response.IsSuccessStatusCode)
                 {
-                    _logger.LogError(EventIds.ErrorOccuredInSap.ToEventId(), "An error occured while processing your request in SAP. | {StatusCode}", response.StatusCode);
-                    throw new ERPFacadeException(EventIds.ErrorOccuredInSap.ToEventId());
+                    return HealthCheckResult.Unhealthy("SAP is Unhealthy");
                 }
-                _logger.LogInformation(EventIds.SapHealthCheckRequestSentToSap.ToEventId(), "SAP Health Check request has been sent to SAP successfully. | {StatusCode}", response.StatusCode);
 
                 return HealthCheckResult.Healthy("SAP is Healthy !!!");
             }
             catch (Exception ex)
             {
+                _logger.LogInformation(EventIds.ErrorOccuredInSap.ToEventId(), "An error occured while processing your request in SAP. | {Message}", ex.Message);
                 return HealthCheckResult.Unhealthy("SAP is Unhealthy" + ex.Message);
             }
         }
