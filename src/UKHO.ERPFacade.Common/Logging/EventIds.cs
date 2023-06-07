@@ -189,6 +189,16 @@
         /// <summary>
         /// 940038 - Price Event exceeds the size limit of 1 MB
         /// </summary>
-        PriceEventExceedSizeLimit = 940038
+        PriceEventExceedSizeLimit = 940038,
+
+        /// <summary>
+        /// 940039 - Sap Health Check Xml Template Not Found
+        /// </summary>
+        SapHealthCheckXmlTemplateNotFound = 940039,
+
+        /// <summary>
+        /// 940040 - SAP Health Check Request Sent To SAP
+        /// </summary>
+        SapHealthCheckRequestSentToSap = 940040
     }
 }
