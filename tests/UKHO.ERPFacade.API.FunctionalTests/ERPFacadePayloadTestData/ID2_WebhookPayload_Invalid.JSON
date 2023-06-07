@@ -8,7 +8,7 @@
   "subject": "MX545010",
   "datacontenttype": "application/json",
   "data": {
-    "traceId": "ab",
+    "correlationId": "ab",
     "products": [
       {
         "productType": "ENC S57",

@@ -36,8 +36,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
 
     public class Data
     {
-        [JsonProperty("traceId")]
-        public string TraceId { get; set; }
+        [JsonProperty("correlationId")]
+        public string correlationId { get; set; }
 
         [JsonProperty("products")]
         public Product[] Products { get; set; }
