@@ -2,17 +2,17 @@
 using System.Diagnostics.CodeAnalysis;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Logging;
-using UKHO.ERPFacade.WebJob.Services;
+using UKHO.ERPFacade.Monitoring.WebJob.Services;
 
-namespace UKHO.ERPFacade.WebJob
+namespace UKHO.ERPFacade.Monitoring.WebJob
 {
     [ExcludeFromCodeCoverage]
-    public class ErpFacadeWebJob
+    public class MonitoringWebJob
     {
-        private readonly ILogger<ErpFacadeWebJob> _logger;
+        private readonly ILogger<MonitoringWebJob> _logger;
         private readonly IMonitoringService _monitoringService;
 
-        public ErpFacadeWebJob(ILogger<ErpFacadeWebJob> logger,
+        public MonitoringWebJob(ILogger<MonitoringWebJob> logger,
                                IMonitoringService monitoringService)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));

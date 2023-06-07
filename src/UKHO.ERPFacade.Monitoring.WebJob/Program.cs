@@ -11,10 +11,10 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.IO.Azure;
-using UKHO.ERPFacade.WebJob.Services;
+using UKHO.ERPFacade.Monitoring.WebJob.Services;
 using UKHO.Logging.EventHubLogProvider;
 
-namespace UKHO.ERPFacade.WebJob
+namespace UKHO.ERPFacade.Monitoring.WebJob
 {
     [ExcludeFromCodeCoverage]
     public static class Program
@@ -41,7 +41,7 @@ namespace UKHO.ERPFacade.WebJob
 
                 try
                 {
-                    serviceProvider.GetService<ErpFacadeWebJob>().Start();
+                    serviceProvider.GetService<MonitoringWebJob>().Start();
                 }
                 finally
                 {
@@ -97,7 +97,7 @@ namespace UKHO.ERPFacade.WebJob
             //create the logger and setup of sinks, filters and properties	
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Information()
-                .WriteTo.File("Logs/UKHO.ERPFacade.WebJob-.txt", rollingInterval: RollingInterval.Day, outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level}] [{SourceContext}] {Message}{NewLine}{Exception}")
+                .WriteTo.File("Logs/UKHO.ERPFacade.Monitoring.WebJob-.txt", rollingInterval: RollingInterval.Day, outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level}] [{SourceContext}] {Message}{NewLine}{Exception}")
                 .CreateLogger();
 #endif
             serviceCollection.AddLogging(loggingBuilder =>
@@ -141,13 +141,11 @@ namespace UKHO.ERPFacade.WebJob
 
             if (configuration != null)
             {
-                serviceCollection.Configure<ErpFacadeWebJobConfiguration>(configuration.GetSection("ErpFacadeWebJobConfiguration"));
                 serviceCollection.Configure<AzureStorageConfiguration>(configuration.GetSection("AzureStorageConfiguration"));
-
                 serviceCollection.AddSingleton(configuration);
             }
 
-            serviceCollection.AddSingleton<ErpFacadeWebJob>();
+            serviceCollection.AddSingleton<MonitoringWebJob>();
             serviceCollection.AddSingleton<IAzureTableReaderWriter, AzureTableReaderWriter>();
             serviceCollection.AddSingleton<IMonitoringService, MonitoringService>();
         }
