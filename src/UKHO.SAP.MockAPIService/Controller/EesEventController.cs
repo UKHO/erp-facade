@@ -14,8 +14,9 @@ namespace UKHO.SAP.MockAPIService.Controller
         private readonly IConfiguration _configuration;
         private readonly MockService _mockService;
 
-        private const string TraceIdKey = "data.traceId";
+        private const string CorrelationIdKey = "data.correlationId";
         private const string RequestFormat = "json";
+
         public EesEventController(IAzureBlobEventWriter azureBlobEventWriter, IConfiguration configuration, MockService mockService)
         {
             _azureBlobEventWriter = azureBlobEventWriter;           
@@ -27,9 +28,9 @@ namespace UKHO.SAP.MockAPIService.Controller
         [Route("/api/events")]
         public virtual async Task<IActionResult> Post([FromBody] JObject eventJson)
         {
-            var traceId = eventJson.SelectToken(TraceIdKey)?.Value<string>();
+            var correlationId = eventJson.SelectToken(CorrelationIdKey)?.Value<string>();
             
-            await _azureBlobEventWriter.UploadEvent(eventJson.ToString(), traceId!, traceId + "_ees." + RequestFormat);
+            await _azureBlobEventWriter.UploadEvent(eventJson.ToString(), correlationId!, correlationId + "_ees." + RequestFormat);
 
             if (bool.Parse(_configuration["IsFTRunning"]))
             {

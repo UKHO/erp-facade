@@ -81,7 +81,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         public void WhenBuildSapMessageXmlIsCalledWithCancelReplacecellScenario_ThenReturnXMLDocument()
         {
             var scenarios = JsonConvert.DeserializeObject<EncEventPayload>(scenariosDataCancelReplaceCell);
-            var traceId = "367ce4a4-1d62-4f56-b359-59e178d77100";
+            var correlationId = "367ce4a4-1d62-4f56-b359-59e178d77100";
 
             XmlDocument soapXml = new();
             soapXml.LoadXml(sapXmlFile);
@@ -89,7 +89,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
 
-            var result = _fakeSapMessageBuilder.BuildSapMessageXml(scenarios!, traceId);
+            var result = _fakeSapMessageBuilder.BuildSapMessageXml(scenarios!, correlationId);
 
             result.Should().BeOfType<XmlDocument>();
 
@@ -108,7 +108,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         public void WhenBuildSapMessageXmlIsCalledWithChangeMoveCellScenario_ThenReturnXMLDocument()
         {
             var scenarios = JsonConvert.DeserializeObject<EncEventPayload>(scenariosDataChangeMoveCell);
-            var traceId = "367ce4a4-1d62-4f56-b359-59e178d77100";
+            var correlationId = "367ce4a4-1d62-4f56-b359-59e178d77100";
 
             XmlDocument soapXml = new();
             soapXml.LoadXml(sapXmlFile);
@@ -116,7 +116,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
 
-            var result = _fakeSapMessageBuilder.BuildSapMessageXml(scenarios!, traceId);
+            var result = _fakeSapMessageBuilder.BuildSapMessageXml(scenarios!, correlationId);
 
             result.Should().BeOfType<XmlDocument>();
 
@@ -135,11 +135,11 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         public void WhenSapXmlTemplateFileNotExist_ThenThrowFileNotFoundException()
         {
             var scenarios = JsonConvert.DeserializeObject<EncEventPayload>(scenariosDataCancelReplaceCell);
-            var traceId = "367ce4a4-1d62-4f56-b359-59e178d77100";
+            var correlationId = "367ce4a4-1d62-4f56-b359-59e178d77100";
 
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(false);
 
-            Assert.Throws<FileNotFoundException>(() => _fakeSapMessageBuilder.BuildSapMessageXml(scenarios!, traceId));
+            Assert.Throws<FileNotFoundException>(() => _fakeSapMessageBuilder.BuildSapMessageXml(scenarios!, correlationId));
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Error
@@ -151,7 +151,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         public void WhenBuildSapMessageXmlIsCalledWithSimpleUpdateCellScenario_ThenReturnXMLDocument()
         {
             var scenarios = JsonConvert.DeserializeObject<EncEventPayload>(scenariosDataSimpleUpdate);
-            var traceId = "367ce4a4-1d62-4f56-b359-59e178d77100";
+            var correlationId = "367ce4a4-1d62-4f56-b359-59e178d77100";
 
             XmlDocument soapXml = new XmlDocument();
             soapXml.LoadXml(sapXmlFile);
@@ -159,7 +159,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
 
-            var result = _fakeSapMessageBuilder.BuildSapMessageXml(scenarios!, traceId);
+            var result = _fakeSapMessageBuilder.BuildSapMessageXml(scenarios!, correlationId);
 
             result.Should().BeOfType<XmlDocument>();
 
