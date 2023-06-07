@@ -97,7 +97,7 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob
             //create the logger and setup of sinks, filters and properties	
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Information()
-                .WriteTo.File("Logs/UKHO.BulkPrice.WebJob-.txt", rollingInterval: RollingInterval.Day, outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level}] [{SourceContext}] {Message}{NewLine}{Exception}")
+                .WriteTo.File("Logs/UKHO.PublishPriceChange.WebJob-.txt", rollingInterval: RollingInterval.Day, outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level}] [{SourceContext}] {Message}{NewLine}{Exception}")
                 .CreateLogger();
 #endif
             serviceCollection.AddLogging(loggingBuilder =>
