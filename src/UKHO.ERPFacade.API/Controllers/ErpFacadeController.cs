@@ -105,10 +105,24 @@ namespace UKHO.ERPFacade.API.Controllers
         [HttpPost]
         [Route("/erpfacade/bulkpriceinformation")]
         [Authorize(Policy = "PriceInformationApiCaller")]
-        public virtual async Task<IActionResult> PostBulkPriceInformation([FromBody] JArray requestJson)
+        public virtual async Task<IActionResult> PostBulkPriceInformation([FromBody] JArray bulkPriceInformationJson)
         {
-            await Task.CompletedTask;
+            _logger.LogInformation(EventIds.SapBulkPriceInformationPayloadReceived.ToEventId(), "Bulk price information payload received from SAP.");
+
+            string correlationId = GetCurrentCorrelationId();
+
+            _logger.LogInformation(EventIds.StoreBulkPriceInformationEventInAzureTable.ToEventId(), "Storing the received Bulk price information event in azure table.");
+
+            await _azureTableReaderWriter.AddPriceChangeEntity(correlationId);
+
+            _logger.LogInformation(EventIds.UploadBulkPriceInformationEventInAzureBlob.ToEventId(), "Uploading the received Bulk price information event in blob storage.");
+
+            await _azureBlobEventWriter.UploadEvent(bulkPriceInformationJson.ToString(), "pricechangeblobs", correlationId + '/' + correlationId + '.' + RequestFormat);
+
+            _logger.LogInformation(EventIds.UploadedBulkPriceInformationEventInAzureBlob.ToEventId(), "Bulk price information event is uploaded in blob storage successfully.");
+
             return new OkObjectResult(StatusCodes.Status200OK);
         }
+
     }
 }
