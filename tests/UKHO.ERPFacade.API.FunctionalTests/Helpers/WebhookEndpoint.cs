@@ -9,7 +9,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
     public class WebhookEndpoint
     {
-        public static Config config;
         private readonly RestClient client;
         private readonly RestClient client2;
         private readonly ADAuthTokenProvider _authToken;
@@ -17,12 +16,11 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
         public WebhookEndpoint()
         {
-            config = new();
             _authToken = new();
             SapXmlHelper = new SAPXmlHelper();
-            var options = new RestClientOptions(config.TestConfig.ErpFacadeConfiguration.BaseUrl);
+            var options = new RestClientOptions(Config.TestConfig.ErpFacadeConfiguration.BaseUrl);
             client = new RestClient(options);
-            var options2 = new RestClientOptions(config.TestConfig.SapMockConfiguration.BaseUrl);
+            var options2 = new RestClientOptions(Config.TestConfig.SapMockConfiguration.BaseUrl);
             client2 = new RestClient(options2);
 
         }
@@ -76,10 +74,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             RestResponse response = await client.ExecuteAsync(request);
 
             JsonPayloadHelper jsonPayload = JsonConvert.DeserializeObject<JsonPayloadHelper>(requestBody);
-            string traceID = jsonPayload.Data.TraceId;
+            string correlationId = jsonPayload.Data.correlationId;
 
             //Logic to download XML from container using TraceID from JSON
-            string generatedXMLFilePath = SapXmlHelper.downloadGeneratedXML(generatedXMLFolder, traceID);
+            string generatedXMLFilePath = SapXmlHelper.downloadGeneratedXML(generatedXMLFolder, correlationId);
 
             //Logic to verifyxml
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
@@ -111,14 +109,14 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
         public async Task PostMockSapResponseAsync()
         {
-            var cred = $"{config.TestConfig.SapMockConfiguration.Username}:{config.TestConfig.SapMockConfiguration.Password}";
+            var cred = $"{Config.TestConfig.SapMockConfiguration.Username}:{Config.TestConfig.SapMockConfiguration.Password}";
 
             var request = new RestRequest("/api/ConfigureTestCase/SAPInternalServerError500", Method.Post);
             request.AddHeader("Content-Type", "application/xml");
             request.AddHeader("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(cred)));
 
             await client2.ExecuteAsync(request);
-            
+
         }
 
     }

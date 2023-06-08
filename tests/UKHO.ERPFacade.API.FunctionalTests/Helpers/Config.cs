@@ -1,20 +1,29 @@
 ﻿using Microsoft.Extensions.Configuration;
 
+
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
-    public class Config
+    public static class Config
     {
-        public TestConfig TestConfig { get; set; }
+        public static TestConfig TestConfig { get; set; }
 
-        public Config()
+        public static void ConfigSetup()
         {
             IConfiguration ConfigurationRoot = new ConfigurationBuilder()
                                .AddJsonFile("appsettings.json", false)
+#if DEBUG
+                //Add development overrides configuration
+                .AddJsonFile("appsettings.local.overrides.json", true, true)
+#endif
                                .AddEnvironmentVariables()
                                .Build();
 
+            
             TestConfig = new();
             ConfigurationRoot.Bind(TestConfig);
+         
+
+
         }
     }
 }

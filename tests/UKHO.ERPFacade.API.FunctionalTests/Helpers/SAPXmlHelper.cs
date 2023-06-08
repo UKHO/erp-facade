@@ -4,10 +4,8 @@ using Azure.Storage.Blobs.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
-using System.Runtime.Intrinsics.X86;
 using System.Text;
 using System.Xml;
-using System.Xml.Linq;
 using System.Xml.Serialization;
 using UKHO.ERPFacade.API.FunctionalTests.Model;
 
@@ -19,13 +17,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
         static int actionCounter;
 
-        static List<string> AttrNotMatched = new List<string>();
-        static List<string> ChangeAVCSUoS = new List<string>();
-        static Dictionary<string, List<string>> ChangeENCCell = new Dictionary<string, List<string>>();
-        public static List<string> listFromJson = new List<string>();
-        public static List<string> actionsListFromXml = new List<string>();
+        static readonly List<string> AttrNotMatched = new();
+        static List<string> ChangeAVCSUoS = new();
+        static readonly Dictionary<string, List<string>> ChangeENCCell = new();
+        public static List<string> listFromJson = new();
+        public static List<string> actionsListFromXml = new();
 
-        public static Config config = new Config();
         private static JsonPayloadHelper jsonPayload { get; set; }
         private static Z_ADDS_MAT_INFO xmlPayload { get; set; }
 
@@ -36,14 +33,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             XmlDocument xDoc = new XmlDocument();
             //load up the xml from the location 
             xDoc.LoadXml(File.ReadAllText(XMLFilePath));
-            
+
             var ns = new XmlNamespaceManager(xDoc.NameTable);
-            ns.AddNamespace("xmlnamsp", "urn:sap-com:document:sap:rfc:functions");
             ns.AddNamespace("xsisp", "http://www.w3.org/2001/XMLSchema-instance");
             ns.AddNamespace("xsdsp", "http://www.w3.org/2001/XMLSchema");
-            XmlNodeList nodeList1 = xDoc.DocumentElement.SelectNodes("//xmlnamsp:item", ns);
 
-            XmlNodeList nodeList = xDoc.SelectNodes("//*[local-name()='IM_MATINFO']/xmlnamsp:ACTIONITEMS/item", ns);
+            XmlNodeList nodeList = xDoc.SelectNodes("//*[local-name()='IM_MATINFO']/ACTIONITEMS/item", ns);
 
             XmlSerializer xsw = new XmlSerializer(typeof(Z_ADDS_MAT_INFO));
             FileStream fs = new FileStream(XMLFilePath, FileMode.Open);
@@ -116,7 +111,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         AttrNotMatched.Add(nameof(item.PROVIDER));
                     if (!item.ENCSIZE.Equals(getUoSInfo(productName).UnitSize))
                         AttrNotMatched.Add(nameof(item.ENCSIZE));
-                    if (!item.TITLE.Equals((getProductInfo(ele2.Key)).Title))
+                    if (!item.TITLE.Equals((getUoSInfo(productName)).Title))
                         AttrNotMatched.Add(nameof(item.TITLE));
                     if (!item.UNITTYPE.Equals(getUoSInfo(productName).UnitType))
                         AttrNotMatched.Add(nameof(item.UNITTYPE));
@@ -577,7 +572,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         AttrNotMatched.Add(nameof(item.PRODUCT));
                     if (!item.PRODTYPE.Equals(product.ProductType[4..]))
                         AttrNotMatched.Add(nameof(item.PRODTYPE));
-                    if (!item.PRODUCTNAME.Equals(product.ProductName))
+                    //if (!item.PRODUCTNAME.Equals(product.ProductName))(!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!getUoSInfo(item.PRODUCTNAME).UnitType.Contains("Unit"))
+                    if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!getUoSInfo(item.PRODUCTNAME).UnitType.Contains("Unit")))
                         AttrNotMatched.Add(nameof(item.PRODUCTNAME));
                     if (!item.AGENCY.Equals(product.Agency))
                         AttrNotMatched.Add(nameof(item.AGENCY));
@@ -668,7 +664,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         {
             //List<string> ActionAttributesSeq = formActionAtrributes();
             List<string> ActionAttributesSeq = new List<string>();
-            ActionAttributesSeq = config.TestConfig.XMLActionList.ToList<string>();
+            ActionAttributesSeq = Config.TestConfig.XMLActionList.ToList<string>();
 
             foreach (XmlNode node in nodeList)
             {
@@ -713,7 +709,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         }
         public string downloadGeneratedXML(string expectedXMLfilePath, string containerAndBlobName)
         {
-            BlobServiceClient blobServiceClient = new BlobServiceClient(config.TestConfig.AzureStorageConfiguration.ConnectionString);
+            BlobServiceClient blobServiceClient = new BlobServiceClient(Config.TestConfig.AzureStorageConfiguration.ConnectionString);
             BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerAndBlobName);
             BlobClient blobClient = containerClient.GetBlobClient(containerAndBlobName + ".xml");
 
@@ -810,7 +806,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         public static bool verifyCORRIDHeader(JsonPayloadHelper jsonPayload, string generatedXMLFilePath)
         {
 
-            string traceID = jsonPayload.Data.TraceId;
+            string traceID = jsonPayload.Data.correlationId;
             string corrID = getRequiredXMLText(generatedXMLFilePath, "CORRID");
 
             if (traceID == corrID)
@@ -898,7 +894,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                                  + calculateUpdateEncCellEditionUpdateNumber(jsonPayload)
                                  + calculateCancelledCellCount(jsonPayload)
                                  + calculateCancelUnitOfSalesActionCount(jsonPayload);
-            
+
             Console.WriteLine("Total No. of Actions = " + totalNumberOfActions);
             return totalNumberOfActions;
         }
@@ -1144,7 +1140,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
         public static string updateTimeField(string requestBody)
         {
-            var currentTimeStamp = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.sssssss'z'");
+            var currentTimeStamp = DateTime.Now.ToString("yyyy-MM-dd");
             //string newTraceId = SAPXmlHelper.generateRandomTraceId();
 
             JObject jsonObj = JObject.Parse(requestBody);

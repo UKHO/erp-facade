@@ -5,10 +5,10 @@ namespace UKHO.ERPFacade.Common.IO.Azure
 {
     public interface IAzureTableReaderWriter
     {
-        Task UpsertEntity(JObject eesEvent, string traceId);
-        Task<EESEventEntity> GetEntity(string traceId);
-        Task UpdateRequestTimeEntity(string traceId);
-        Task UpdateResponseTimeEntity(string traceId);
+        Task UpsertEntity(JObject eesEvent, string correlationId);
+        Task<EESEventEntity> GetEntity(string correlationId);
+        Task UpdateRequestTimeEntity(string correlationId);
+        Task UpdateResponseTimeEntity(string correlationId);
         void ValidateAndUpdateIsNotifiedEntity();
     }
 }

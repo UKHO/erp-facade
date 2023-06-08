@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UKHO.ERPFacade.API.Models;
@@ -12,6 +13,7 @@ namespace UKHO.ERPFacade.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ErpFacadeController : BaseController<ErpFacadeController>
     {
         private readonly ILogger<ErpFacadeController> _logger;
@@ -20,7 +22,7 @@ namespace UKHO.ERPFacade.API.Controllers
         private readonly IErpFacadeService _erpFacadeService;
         private readonly IJsonHelper _jsonHelper;
 
-        private const string CorrIdKey = "corrid";
+        private const string CorrelationIdKey = "corrid";
         private const string RequestFormat = "json";
         private const int EventSizeLimit = 1000000;
 
@@ -41,23 +43,24 @@ namespace UKHO.ERPFacade.API.Controllers
 
         [HttpPost]
         [Route("/erpfacade/priceinformation")]
+        [Authorize(Policy = "PriceInformationApiCaller")]
         public virtual async Task<IActionResult> PostPriceInformation([FromBody] JArray priceInformationJson)
         {
             JObject unitsOfSaleUpdatedEventPayloadJson;
 
             _logger.LogInformation(EventIds.SapUnitsOfSalePriceInformationPayloadReceived.ToEventId(), "UnitsOfSale price information payload received from SAP.");
 
-            var corrId = priceInformationJson.First.SelectToken(CorrIdKey)?.Value<string>();
+            string? correlationId = priceInformationJson.First.SelectToken(CorrelationIdKey)?.Value<string>();
 
-            if (string.IsNullOrEmpty(corrId))
+            if (string.IsNullOrEmpty(correlationId))
             {
-                _logger.LogWarning(EventIds.CorrIdMissingInSAPPriceInformationPayload.ToEventId(), "CorrId is missing in price information payload recieved from SAP.");
+                _logger.LogWarning(EventIds.CorrelationIdMissingInSAPPriceInformationPayload.ToEventId(), "CorrelationId is missing in price information payload recieved from SAP.");
                 return new BadRequestObjectResult(StatusCodes.Status400BadRequest);
             }
 
-            await _azureTableReaderWriter.UpdateResponseTimeEntity(corrId);
+            await _azureTableReaderWriter.UpdateResponseTimeEntity(correlationId);
 
-            var isBlobExists = _azureBlobEventWriter.CheckIfContainerExists(corrId);
+            bool isBlobExists = _azureBlobEventWriter.CheckIfContainerExists(correlationId);
 
             if (!isBlobExists)
             {
@@ -71,25 +74,22 @@ namespace UKHO.ERPFacade.API.Controllers
 
             if (priceInformationList.Count > 0 && priceInformationList.Any(x => x.ProductName != string.Empty))
             {
-
                 _logger.LogInformation(EventIds.DownloadEncEventPayloadStarted.ToEventId(), "Downloading the ENC event payload from azure blob storage.");
-                var encEventPayloadJson = _azureBlobEventWriter.DownloadEvent(corrId + '.' + RequestFormat, corrId);
 
-                var encEventPayloadData = JsonConvert.DeserializeObject<EncEventPayload>(encEventPayloadJson.ToString());
+                string encEventPayloadJson = _azureBlobEventWriter.DownloadEvent(correlationId + '.' + RequestFormat, correlationId);
+
+                EncEventPayload encEventPayloadData = JsonConvert.DeserializeObject<EncEventPayload>(encEventPayloadJson.ToString());
 
                 _logger.LogInformation(EventIds.DownloadEncEventPayloadCompleted.ToEventId(), "ENC event payload is downloaded from azure blob storage successfully.");
 
-
-
                 List<UnitsOfSalePrices> unitsOfSalePriceList = _erpFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList, encEventPayloadData.Data.UnitsOfSales);
 
-                
-
-                var unitsOfSaleUpdatedEventPayload = _erpFacadeService.BuildUnitsOfSaleUpdatedEventPayload(unitsOfSalePriceList, encEventPayloadJson);
+                UnitOfSaleUpdatedEventPayload unitsOfSaleUpdatedEventPayload = _erpFacadeService.BuildUnitsOfSaleUpdatedEventPayload(unitsOfSalePriceList, encEventPayloadJson);
 
                 unitsOfSaleUpdatedEventPayloadJson = JObject.Parse(JsonConvert.SerializeObject(unitsOfSaleUpdatedEventPayload));
 
-                var eventSize = _jsonHelper.GetPayloadJsonSize(unitsOfSaleUpdatedEventPayloadJson.ToString());
+                int eventSize = _jsonHelper.GetPayloadJsonSize(unitsOfSaleUpdatedEventPayloadJson.ToString());
+
                 if (eventSize > EventSizeLimit)
                 {
                     _logger.LogError(EventIds.PriceEventExceedSizeLimit.ToEventId(), "UnitsOfSale price event exceeds the size limit of 1 MB.");
@@ -105,6 +105,15 @@ namespace UKHO.ERPFacade.API.Controllers
             }
 
             return new OkObjectResult(unitsOfSaleUpdatedEventPayloadJson);
+        }
+
+        [HttpPost]
+        [Route("/erpfacade/bulkpriceinformation")]
+        [Authorize(Policy = "PriceInformationApiCaller")]
+        public virtual async Task<IActionResult> PostBulkPriceInformation([FromBody] JArray requestJson)
+        {
+            await Task.CompletedTask;
+            return new OkObjectResult(StatusCodes.Status200OK);
         }
     }
 }

@@ -16,8 +16,8 @@ using UKHO.ERPFacade.API.Models;
 using UKHO.ERPFacade.API.Services;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.HttpClients;
-using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.IO;
+using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.Logging.EventHubLogProvider;
 
 namespace UKHO.ERPFacade
@@ -28,9 +28,7 @@ namespace UKHO.ERPFacade
         [ExcludeFromCodeCoverage]
         internal static void Main(string[] args)
         {
-            EventHubLoggingConfiguration eventHubLoggingConfiguration;
-            ScenarioRuleConfiguration mappingConfiguration;
-            ActionNumberConfiguration actionNumberConfiguration;
+            EventHubLoggingConfiguration eventHubLoggingConfiguration;            
             SapActionConfiguration sapActionConfiguration;
 
             IHttpContextAccessor httpContextAccessor = new HttpContextAccessor();
@@ -141,6 +139,7 @@ namespace UKHO.ERPFacade
             builder.Services.AddAuthorization(options =>
             {
                 options.AddPolicy("WebhookCaller", policy => policy.RequireRole("WebhookCaller"));
+                options.AddPolicy("PriceInformationApiCaller", policy => policy.RequireRole("PriceInformationApiCaller"));
             });
 
             // The following line enables Application Insights telemetry collection.
@@ -162,14 +161,9 @@ namespace UKHO.ERPFacade
             });
 
             builder.Services.Configure<AzureStorageConfiguration>(configuration.GetSection("AzureStorageConfiguration"));
-            builder.Services.Configure<SapConfiguration>(configuration.GetSection("SapConfiguration"));
-
-            builder.Services.Configure<ScenarioRuleConfiguration>(configuration.GetSection("ScenarioRuleConfiguration"));
-            builder.Services.Configure<ActionNumberConfiguration>(configuration.GetSection("ActionNumberConfiguration"));
+            builder.Services.Configure<SapConfiguration>(configuration.GetSection("SapConfiguration"));            
             builder.Services.Configure<SapActionConfiguration>(configuration.GetSection("SapActionConfiguration"));
 
-            mappingConfiguration = configuration.GetSection("ScenarioRuleConfiguration").Get<ScenarioRuleConfiguration>()!;
-            actionNumberConfiguration = configuration.GetSection("ActionNumberConfiguration").Get<ActionNumberConfiguration>()!;
             sapActionConfiguration = configuration.GetSection("SapActionConfiguration").Get<SapActionConfiguration>()!;
 
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -177,8 +171,7 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<IAzureTableReaderWriter, AzureTableReaderWriter>();
             builder.Services.AddScoped<IAzureBlobEventWriter, AzureBlobEventWriter>();
             builder.Services.AddScoped<ISapConfiguration, SapConfiguration>();
-            builder.Services.AddScoped<ISapMessageBuilder, SapMessageBuilder>();
-            builder.Services.AddScoped<IScenarioBuilder, ScenarioBuilder>();
+            builder.Services.AddScoped<ISapMessageBuilder, SapMessageBuilder>();            
             builder.Services.AddScoped<IXmlHelper, XmlHelper>();
             builder.Services.AddScoped<IFileSystemHelper, FileSystemHelper>();
             builder.Services.AddScoped<IFileSystem, FileSystem>();
