@@ -41,6 +41,15 @@ namespace UKHO.ERPFacade.API.Controllers
             _jsonHelper = jsonHelper;
         }
 
+        [HttpGet]
+        [Route("/erpfacade/priceinformation")]
+        [Authorize(Policy = "PriceInformationApiCaller")]
+        public virtual async Task<IActionResult> PostPriceInformation()
+        {
+            await Task.CompletedTask;
+            return new OkObjectResult(StatusCodes.Status200OK);
+        }
+
         [HttpPost]
         [Route("/erpfacade/priceinformation")]
         [Authorize(Policy = "PriceInformationApiCaller")]
