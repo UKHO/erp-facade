@@ -209,6 +209,16 @@ stages:
               zipAfterPublish: false
               modifyOutputPath: false
 
+          - task: DotNetCoreCLI@2
+            displayName: "Publish   Code"
+            inputs:
+              command: "publish"
+              publishWebProjects: false
+              projects: "**/UKHO.ERPFacade.Monitoring.WebJob.csproj"
+              arguments: "--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/UKHO.ERPFacade.API/App_Data/jobs/continuous/ERPFacadeMonitoringWebjob"
+              zipAfterPublish: false
+              modifyOutputPath: false
+
           - task: ArchiveFiles@2
             displayName: "Zip ERP Service binaries for Webjob"
             inputs:
@@ -217,6 +227,7 @@ stages:
               archiveType: "zip"
               archiveFile: '$(Build.ArtifactStagingDirectory)/UKHO.ERPFacade.API/UKHOERPFacadeAPI.zip'
               replaceExistingArchive: true
+
 
           - task: PublishBuildArtifacts@1
             displayName: "Publish Web Artifact"
