@@ -48,7 +48,7 @@ steps:
   #    scriptPath: "$(Pipeline.Workspace)/terraformartifact/set_network_policy_env.ps1"
 
   - task: Bash@3
-    name: Azure App rule to whitelist build agent IP
+    displayName: "Azure App rule to whitelist build agent IP"
     inputs:
       targetType: 'inline'
       script: |
