@@ -210,12 +210,12 @@ stages:
               modifyOutputPath: false
 
           - task: DotNetCoreCLI@2
-            displayName: "Publish   Code"
+            displayName: "Publish PriceChangeEventWebJob"
             inputs:
               command: "publish"
               publishWebProjects: false
               projects: "**/UKHO.ERPFacade.Monitoring.WebJob.csproj"
-              arguments: "--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/UKHO.ERPFacade.API/App_Data/jobs/continuous/ERPFacadeMonitoringWebjob"
+              arguments: "--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/UKHO.ERPFacade.API/App_Data/jobs/continuous/PriceChangeEventWebJob"
               zipAfterPublish: false
               modifyOutputPath: false
 
