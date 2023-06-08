@@ -50,10 +50,10 @@ steps:
   - task: AzureCLI@2
     displayName: "Azure App rule to whitelist build agent IP"
     inputs:
-      targetType: 'inline'
       azureSubscription: "${{ parameters.AzureSubscription }}"
       scriptType: 'bash'
-      script: |
+      scriptLocation: 'inlineScript'
+      inlineScript: |
         ipaddress=$(curl -s http://ipinfo.io/ip)
         echo "##vso[task.setvariable variable=address;isOutput=true;]$ipaddress"
         az resource update --resource-group erpfacade-qa-rg --name erpfacade-qa-api --resource-type "Microsoft.Web/sites" --set properties.publicNetworkAccess=Enabled
