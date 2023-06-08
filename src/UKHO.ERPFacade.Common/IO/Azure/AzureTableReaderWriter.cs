@@ -30,7 +30,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             _erpFacadeWebjobConfig = erpFacadeWebjobConfig ?? throw new ArgumentNullException(nameof(erpFacadeWebjobConfig));
         }
 
-        public async Task UpsertEntity(JObject eesEvent, string correlationId)
+        public async Task UpsertEntity(string correlationId)
         {
             TableClient tableClient = GetTableClient(ErpFacadeTableName);
 

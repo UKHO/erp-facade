@@ -80,7 +80,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
             _logger.LogInformation(EventIds.StoreEncContentPublishedEventInAzureTable.ToEventId(), "Storing the received ENC content published event in azure table.");
 
-            await _azureTableReaderWriter.UpsertEntity(encEventJson, correlationId);
+            await _azureTableReaderWriter.UpsertEntity(correlationId);
 
             _logger.LogInformation(EventIds.UploadEncContentPublishedEventInAzureBlob.ToEventId(), "Uploading the received ENC content published event in blob storage.");
 
