@@ -51,6 +51,7 @@ steps:
     displayName: "Azure App rule to whitelist build agent IP"
     inputs:
       targetType: 'inline'
+      azureSubscription: "${{ parameters.AzureSubscription }}"
       script: |
         ipaddress=$(curl -s http://ipinfo.io/ip)
         echo "##vso[task.setvariable variable=address;isOutput=true;]$ipaddress"
