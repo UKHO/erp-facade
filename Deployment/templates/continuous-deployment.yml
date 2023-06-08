@@ -47,11 +47,12 @@ steps:
   #    scriptLocation: 'scriptPath'
   #    scriptPath: "$(Pipeline.Workspace)/terraformartifact/set_network_policy_env.ps1"
 
-  - task: Bash@3
+  - task: AzureCLI@2
     displayName: "Azure App rule to whitelist build agent IP"
     inputs:
       targetType: 'inline'
       azureSubscription: "${{ parameters.AzureSubscription }}"
+      scriptType: 'bash'
       script: |
         ipaddress=$(curl -s http://ipinfo.io/ip)
         echo "##vso[task.setvariable variable=address;isOutput=true;]$ipaddress"
