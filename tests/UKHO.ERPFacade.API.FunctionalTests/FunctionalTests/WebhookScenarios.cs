@@ -13,9 +13,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         private SAPXmlHelper SapXmlHelper { get; set; }
         private readonly ADAuthTokenProvider _authToken = new();
         public static bool noRole = false;
-        //private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
+        private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
         //for local
-        private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
+        //private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
 
         [SetUp]
         public void Setup()
@@ -106,10 +106,13 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [TestCase("ID19_CR_metadata_move.JSON", TestName = "WhenICallTheWebhookWithMixScenarioHavingCancel&ReplaceAndMetadataChangeAndMoveCell_ThenWebhookReturns200Response")]
 
         //Suspended
-        [TestCase("suspendedScenario.JSON", TestName = "A2_Scenario_for_Suspended")]
+        [TestCase("suspendedScenario.JSON", TestName = "A1_Scenario_for_SimpleSuspended")]
+        [TestCase("Suspend_and Withdraw 0.1.JSON", TestName = "A2_Scenario_for_SuspendedAndWithdrawn")]
+        [TestCase("metadataAndSuspended.JSON", TestName = "A3_Scenario_for_metadataAndSuspended")]
+        [TestCase("moveAndSuspended.JSON", TestName = "A4_Scenario_for_movedataAndSuspended")]
 
         //New Edition
-        [TestCase("newEditionFile.JSON", TestName = "A3_new_edition_scenario")]
+        [TestCase("newEditionFile.JSON", TestName = "A5_new_edition_scenario")]
 
         //v0.3
         [TestCase("v3-1_cancel_Replace.JSON", TestName = "sc1")]

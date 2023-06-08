@@ -60,6 +60,12 @@
     <None Update="ERPFacadePayloadTestData\ID13_updateTwoCellsWithDifferentStatusName.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ERPFacadePayloadTestData\metadataAndSuspended.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\moveAndSuspended.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ERPFacadePayloadTestData\ID14_moveOneCell.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -137,6 +143,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPFacadePayloadTestData\newEditionFile.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\Suspend_and Withdraw 0.1.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPFacadePayloadTestData\v3-9_Suspend and Withdraw.JSON">
