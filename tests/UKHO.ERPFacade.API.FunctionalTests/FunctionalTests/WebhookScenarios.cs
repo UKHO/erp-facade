@@ -11,9 +11,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         private SAPXmlHelper SapXmlHelper { get; set; }
         private readonly ADAuthTokenProvider _authToken = new();
         public static bool noRole = false;
-        private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
+        //private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
         //for local
-        //private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
+        private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
 
         [SetUp]
         public void Setup()
@@ -102,6 +102,28 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [TestCase("ID17_newCell_and_CancelReplace.JSON", TestName = "WhenICallTheWebhookWithMixScenarioHavingOneNewCellAndOneCancel&ReplaceCell_ThenWebhookReturns200Response")]
         [TestCase("ID18_CancelReplace_UpdateCell.JSON", TestName = "WhenICallTheWebhookWithMixScenarioHavingCancel&Replace_UpdateCell_ThenWebhookReturns200Response")]
         [TestCase("ID19_CR_metadata_move.JSON", TestName = "WhenICallTheWebhookWithMixScenarioHavingCancel&ReplaceAndMetadataChangeAndMoveCell_ThenWebhookReturns200Response")]
+
+        //New Edition
+        [TestCase("ID20_newEditionAdditionalCoverageV01.JSON", TestName = "WhenICallTheWebhookWithNewEditionAdditionalCoverageV0.1PayloadFile_ThenWebhookReturns200Response")]
+
+        //V0.3S
+        [TestCase("ID21_cancelAndReplaceV03.JSON", TestName = "sc1")]
+        [TestCase("ID22_Cell_Moves_Unit_and_New_CellV03.JSON", TestName = "sc2")]
+        [TestCase("ID23_Cell_MoveV03.JSON", TestName = "sc3")]
+        [TestCase("ID24_Metadata_ChangeV03.JSON", TestName = "sc4")]
+        [TestCase("ID25_Mixed_scenario1V03.JSON", TestName = "sc5")]
+        [TestCase("ID26_New_CellV03.JSON", TestName = "sc6")]
+
+        //Supplier Defined Releasability Set v0.1
+        [TestCase("ID27_supplier_Defined_ReleasabilitySet_V01.JSON", TestName = "sc7_supplier_supplier_Defined_ReleasabilitySet_V01")]
+
+        //Suspended & Withdrawn
+        [TestCase("ID28_simpleSuspendedScenario.JSON", TestName = "A1_Scenario_for_SimpleSuspended")]
+        [TestCase("ID29_simpleWithdrawnScenario.JSON", TestName = "A2_Scenario_for_SimpleWithdrawn")]
+        [TestCase("ID30_Suspend_and_WithdrawV01.JSON", TestName = "A3_Scenario_for_SuspendedAndWithdrawn")]
+        [TestCase("ID31_metadataAndSuspended.JSON", TestName = "A4_Scenario_for_metadataAndSuspended")]
+        [TestCase("ID32_moveAndSuspended.JSON", TestName = "A5_Scenario_for_movedataAndSuspended")]
+
 
         public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponse1(string payloadJsonFileName)
         {

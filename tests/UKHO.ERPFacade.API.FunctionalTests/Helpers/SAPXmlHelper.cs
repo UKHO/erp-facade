@@ -892,6 +892,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                                  + calculateChangeUoSActionCount(jsonPayload)
                                  + calculateRemoveCellFromUoSActionCount(jsonPayload)
                                  + calculateUpdateEncCellEditionUpdateNumber(jsonPayload)
+                                 + calculateUpdateEncCellEditionUpdateNumberForSuspendedStatus(jsonPayload)
                                  + calculateCancelledCellCount(jsonPayload)
                                  + calculateCancelUnitOfSalesActionCount(jsonPayload);
 
@@ -1052,6 +1053,27 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return count;
         }
 
+        public static int calculateUpdateEncCellEditionUpdateNumberForSuspendedStatus(JsonPayloadHelper jsonPayload)
+        {
+            var obj = jsonPayload;
+            int count = 0;
+            foreach (Product product in obj.Data.Products)
+            {
+                if (product.Status.StatusName == "Suspended")
+                {
+                    count++;
+                }
+            }
+
+            if (count > 0)
+            {
+                updateActionList(count, "7.  UPDATE ENC CELL EDITION UPDATE NUMBER");
+                Console.WriteLine("Total no. of ENC Cell Edition Update Number: " + count);
+            }
+
+            return count;
+        }
+
         public static int calculateRemoveCellFromUoSActionCount(JsonPayloadHelper jsonPayload)
         {
             var obj = jsonPayload;
@@ -1123,28 +1145,27 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return cancelledUoSCount;
         }
 
-        public static string generateRandomTraceId()
+        public static string generateRandomCorrelationId()
         {
             Guid guid = Guid.NewGuid();
 
-            string randomtraceID = guid.ToString("N");
+            string randomCorrID = guid.ToString("N");
 
-            randomtraceID = randomtraceID.Insert(8, "-");
-            randomtraceID = randomtraceID.Insert(13, "-");
-            randomtraceID = randomtraceID.Insert(18, "-");
-            randomtraceID = randomtraceID.Insert(23, "-");
+            randomCorrID = randomCorrID.Insert(8, "-");
+            randomCorrID = randomCorrID.Insert(13, "-");
+            randomCorrID = randomCorrID.Insert(18, "-");
+            randomCorrID = randomCorrID.Insert(23, "-");
 
-            Console.WriteLine("Generated TraceId = " + randomtraceID);
-            return randomtraceID;
+            Console.WriteLine("Generated TraceId = " + randomCorrID);
+            return randomCorrID;
         }
 
-        public static string updateTimeField(string requestBody)
+        public static string updateTimeField(string requestBody, string genratedTraceId)
         {
             var currentTimeStamp = DateTime.Now.ToString("yyyy-MM-dd");
-            //string newTraceId = SAPXmlHelper.generateRandomTraceId();
-
             JObject jsonObj = JObject.Parse(requestBody);
             jsonObj["time"] = currentTimeStamp;
+            jsonObj["data"]["correlationId"] = genratedTraceId;
             string updatedRequestBody = jsonObj.ToString();
             return updatedRequestBody;
         }
