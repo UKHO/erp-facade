@@ -1,0 +1,58 @@
+parameters:
+  - name: AzureSubscription
+    type: string
+
+steps:
+
+  - task: AzureCLI@2
+    displayName: "Set FT Configuration Application Settings for Mock Webapp"
+    condition: and(succeeded(), eq(variables['Environment.Name'], 'ERP-QA'))
+    inputs:
+      azureSubscription: "ERP-Facade-Dev-A.011.05.12"
+      scriptType: 'pscore'
+      scriptLocation: 'scriptPath'
+      scriptPath: "$(Pipeline.Workspace)/terraformartifact/set_mock_configuration.ps1"
+      arguments: '-ftrunning "true" -mockresourcegroup $(mockWebAppResourceGroup) -mockwebappname $(mockWebAppName)'
+
+  - task: DownloadBuildArtifacts@0
+    displayName: "Download Functional test Artifact"
+    inputs:
+      buildType: 'current'
+      downloadType: 'single'
+      artifactName: 'functionaltests'
+      downloadPath: '$(Build.SourcesDirectory)'
+
+  - task: FileTransform@2
+     displayName: "File Transform: functionaltests"
+     inputs:
+       folderPath: '$(Build.SourcesDirectory)/functionaltests/'
+       xmlTransformationRules:
+       jsonTargetFiles: '**/appsettings.json'
+
+  - task: UseDotNet@2
+    displayName: 'Use .NET 6.0.x sdk'
+    inputs:
+      packageType: sdk
+      version: 6.0.x
+
+  - task: DotNetCoreCLI@2
+    displayName: "Run Functional tests"
+    inputs:
+      command: "test"
+      arguments: "--filter TestCategory=QAEnvFT"
+      projects: |
+          **/*FunctionalTest*.dll
+          !**/*TestAdapter.dll
+          !**/obj/**
+      testRunTitle: "QA-AutomationTests"
+      workingDirectory: '$(Build.SourcesDirectory)/functionaltests'
+
+  - task: AzureCLI@2
+    displayName: "Set FT Configuration Application Settings for Mock Webapp"
+    condition: always()
+    inputs:
+      azureSubscription: "ERP-Facade-Dev-A.011.05.12"
+      scriptType: 'pscore'
+      scriptLocation: 'scriptPath'
+      scriptPath: "$(Pipeline.Workspace)/terraformartifact/set_mock_configuration.ps1"
+      arguments: '-ftrunning "false" -mockresourcegroup $(mockWebAppResourceGroup) -mockwebappname $(mockWebAppName)'
