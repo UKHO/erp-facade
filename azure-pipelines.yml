@@ -389,7 +389,7 @@ stages:
         dependsOn:
         - DevDeployTerraform
         - DevDeployApp
-        pool: $(DeploymentPoolFT)
+        pool: $(WindowsPool)
         displayName: "Dev Functional Automated Tests"
         workspace:
          clean: all
@@ -469,7 +469,7 @@ stages:
         dependsOn:
         - QADeployTerraform
         - QADeployApp
-        pool: $(DeploymentPool)
+        pool: $(WindowsPool)
         displayName: "Qa Functional Automated Tests"
         workspace:
          clean: all
