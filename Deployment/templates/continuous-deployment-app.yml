@@ -6,10 +6,10 @@ steps:
   - task: PowerShell@2
     displayName: "Setting KeyVault Secrets as Pipeline Variables "
     inputs:
-        targetType: 'inline'
-        script: |
-        echo "##vso[task.setvariable variable=SapConfiguration.Password]$(SapConfiguration--Password)"
-        echo "##vso[task.setvariable variable=SapConfiguration.Username]$(SapConfiguration--Username)"
+      targetType: 'inline'
+      script: |
+      echo "##vso[task.setvariable variable=SapConfiguration.Password]$(SapConfiguration--Password)"
+      echo "##vso[task.setvariable variable=SapConfiguration.Username]$(SapConfiguration--Username)"
 
   - task: FileTransform@1
     displayName: "File Transform: WebAppSettings"
