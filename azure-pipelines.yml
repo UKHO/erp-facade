@@ -214,7 +214,7 @@ stages:
             inputs:
               command: "publish"
               publishWebProjects: false
-              projects: "**/UKHO.ERPFacade.Monitoring.WebJob.csproj"
+              projects: "**/UKHO.ERPFacade.PublishPriceChange.WebJob.csproj"
               arguments: "--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/UKHO.ERPFacade.API/App_Data/jobs/continuous/PriceChangeEventWebJob"
               zipAfterPublish: false
               modifyOutputPath: false
