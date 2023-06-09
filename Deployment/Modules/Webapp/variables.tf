@@ -42,3 +42,7 @@ variable "mock_app_settings" {
 variable "subnet_id" {
   type = string
 }
+
+variable "allowed_ips" {
+
+}
