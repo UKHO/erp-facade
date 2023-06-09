@@ -16,8 +16,11 @@ using System.Xml;
 using UKHO.ERPFacade.Common.Logging;
 using System.Threading;
 using FluentAssertions;
+using System.IO;
+using System;
+using System.Text;
 
-namespace UKHO.ERPFacade.API.UnitTests.HealthCheck
+namespace UKHO.ERPFacade.Common.UnitTests.HealthCheck
 {
     [TestFixture]
     public class SapServiceHealthCheckTests
@@ -44,8 +47,7 @@ namespace UKHO.ERPFacade.API.UnitTests.HealthCheck
                                                       </IM_MATINFO>
                                                     </Z_ADDS_MAT_INFO>
                                                   </soap:Body>
-                                                </soap:Envelope>
-                                                ";
+                                                </soap:Envelope>";
 
         private readonly string fakeUnHealthySapXmlFile = @"<?xml version=""1.0"" encoding=""utf-8""?>
                                                 <soap:Envelope xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:soap=""http://schemas.xmlsoap.org/soap/envelope/"">
@@ -62,8 +64,7 @@ namespace UKHO.ERPFacade.API.UnitTests.HealthCheck
                                                       </IM_MATINFO>
                                                     </Z_ADDS_MAT_INFO>
                                                   </soap:Body>
-                                                </soap:Envelope>
-                                                ";
+                                                </soap:Envelope>";
 
 
         [SetUp]
@@ -77,7 +78,7 @@ namespace UKHO.ERPFacade.API.UnitTests.HealthCheck
             {
                 SapServiceOperation = "Z_ADDS_MAT_INFO"
             });
-            
+
             _fakeSapServiceHealthCheck = new SapServiceHealthCheck(_fakeSapClient,
                                                                    _fakeSapConfig,
                                                                    _fakeXmlHelper,
@@ -87,28 +88,21 @@ namespace UKHO.ERPFacade.API.UnitTests.HealthCheck
 
         [Test]
         public async Task WhenSapReturnsResponseHealthy_ThenSapServiceHealthIsHealthy()
-        {         
+        {
             CancellationToken fakeCancellationToken = default;
-         
-            //fake xml Document
+
             XmlDocument fakeSapXmlPayload = new();
             fakeSapXmlPayload.LoadXml(fakeHealthySapXmlFile);
 
-            //file exist returns true
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
 
-            //returns fake xml Document
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(fakeSapXmlPayload);
 
-            //post event data to sap which returns response OK
             A.CallTo(() => _fakeSapClient.PostEventData(fakeSapXmlPayload, "Z_ADDS_MAT_INFO"))
-               .Returns(new HttpResponseMessage()
-               {
-                   StatusCode = HttpStatusCode.OK
-               });
+               .Returns(new HttpResponseMessage() { StatusCode = HttpStatusCode.OK, RequestMessage = new HttpRequestMessage() { RequestUri = new Uri("http://abc.com") }, Content = new StreamContent(new MemoryStream(Encoding.UTF8.GetBytes("ServiceUnavailable"))) });
 
-            //Assert
             HealthCheckResult result = await _fakeSapServiceHealthCheck.CheckHealthAsync(new HealthCheckContext(), fakeCancellationToken);
+
             result.Status.Should().Be(HealthStatus.Healthy);
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
@@ -122,31 +116,42 @@ namespace UKHO.ERPFacade.API.UnitTests.HealthCheck
         {
             CancellationToken fakeCancellationToken = default;
 
-            //fake xml Document
             XmlDocument fakeSapXmlPayload = new();
             fakeSapXmlPayload.LoadXml(fakeUnHealthySapXmlFile);
 
-            //file exist returns true
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
 
-            //returns fake xml Document
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(fakeSapXmlPayload);
 
-            //post event data to sap which returns response OK
             A.CallTo(() => _fakeSapClient.PostEventData(fakeSapXmlPayload, "Z_ADDS_MAT_INFO"))
-               .Returns(new HttpResponseMessage()
-               {
-                   StatusCode = HttpStatusCode.BadRequest
-               }) ;
+              .Returns(new HttpResponseMessage() { StatusCode = HttpStatusCode.ServiceUnavailable, RequestMessage = new HttpRequestMessage() { RequestUri = new Uri("http://abc.com") }, Content = new StreamContent(new MemoryStream(Encoding.UTF8.GetBytes("ServiceUnavailable"))) });
 
-            //Assert
             HealthCheckResult result = await _fakeSapServiceHealthCheck.CheckHealthAsync(new HealthCheckContext(), fakeCancellationToken);
+
             result.Status.Should().Be(HealthStatus.Unhealthy);
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
             && call.GetArgument<EventId>(1) == EventIds.SapHealthCheckRequestSentToSap.ToEventId()
             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "SAP Health Check request has been sent to SAP successfully. | {StatusCode}").MustHaveHappenedOnceExactly();
-        }     
+        }
+
+        [Test]
+        public async Task WhenSapXmlTemplateFileNotExist_ThenThrowFileNotFoundException()
+        {
+            CancellationToken fakeCancellationToken = default;
+
+            A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(false);
+            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored)).Throws<FileNotFoundException>();
+
+            HealthCheckResult result = await _fakeSapServiceHealthCheck.CheckHealthAsync(new HealthCheckContext(), fakeCancellationToken);
+
+            result.Status.Should().Be(HealthStatus.Unhealthy);
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+                                    && call.GetArgument<LogLevel>(0) == LogLevel.Error
+                                    && call.GetArgument<EventId>(1) == EventIds.SapHealthCheckXmlTemplateNotFound.ToEventId()
+                                    && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "The SAP Healt Check xml template does not exist.").MustHaveHappenedOnceExactly();
+        }
     }
 }
