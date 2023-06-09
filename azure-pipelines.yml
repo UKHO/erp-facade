@@ -25,6 +25,8 @@ variables:
     value: "ukhydrographicoffice/terraform-azure-powershell-unzip:1.4.4"
   - name: DeploymentPool
     value: "UKHO Ubuntu 1804"
+  - name: DeploymentPoolPE
+    value: "Private Link Deployments (ENG)"
 
 stages:
   - stage: Stryker_Mutator
@@ -361,6 +363,26 @@ stages:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
                     AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
 
+      - deployment: DevDeployApp
+        dependsOn: DevDeployTerraform
+        displayName: "Dev - Deploy Dotnet App"
+        environment: "ERP-Dev"
+        pool: $(DeploymentPoolPE)
+        variables:
+          - name : WEB_APP_NAME
+            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_APP'] ]
+          - name : MOCK_WEB_APP_NAME
+            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp'] ]
+        workspace:
+          clean: all
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - template: Deployment/templates/continuous-deployment-app.yml
+                  parameters:
+                    AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
+
                 - task: DownloadBuildArtifacts@0
                   displayName: "Download Functional test Artifact"
                   inputs:
@@ -431,7 +453,7 @@ stages:
       - name: mockWebAppResourceGroup
         value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
       - name: SapMockConfiguration.BaseUrl
-        value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.SapMockConfiguration.BaseUrlQA']  ]
+        value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
     
     jobs:
@@ -449,6 +471,26 @@ stages:
                 - template: Deployment/templates/continuous-deployment.yml
                   parameters:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
+                    AzureSubscription: "ERP-Facade-QA-A.011.05.12"
+
+      - deployment: QADeployApp
+        dependsOn: QADeployTerraform
+        displayName: "Qa - Deploy Dotnet App"
+        environment: "ERP-QA"
+        pool: $(DeploymentPoolPE)
+        variables:
+          - name : WEB_APP_NAME
+            value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.WEB_APP'] ]
+          - name : MOCK_WEB_APP_NAME
+            value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.mockWebApp'] ]
+        workspace:
+          clean: all
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - template: Deployment/templates/continuous-deployment-app.yml
+                  parameters:
                     AzureSubscription: "ERP-Facade-QA-A.011.05.12"
 
                 - task: AzureCLI@2

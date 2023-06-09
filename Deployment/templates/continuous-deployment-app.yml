@@ -1,0 +1,51 @@
+parameters:
+  - name: AzureSubscription
+    type: string
+
+steps:
+  - task: PowerShell@2
+    displayName: "Setting KeyVault Secrets as Pipeline Variables "
+    inputs:
+      targetType: 'inline'
+      script: |
+          echo "##vso[task.setvariable variable=SapConfiguration.Password]$(SapConfiguration--Password)"
+          echo "##vso[task.setvariable variable=SapConfiguration.Username]$(SapConfiguration--Username)"
+
+  - task: PowerShell@2
+    displayName: "Setting KeyVault Secrets as Pipeline Variables "
+    inputs:
+      targetType: 'inline'
+      script: |
+          echo "##vso[task.setvariable variable=SapConfiguration.Password]$(SapConfiguration--Password)"
+          echo "##vso[task.setvariable variable=SapConfiguration.Username]$(SapConfiguration--Username)"
+
+  - task: FileTransform@1
+    displayName: "File Transform: WebAppSettings"
+    inputs:
+      folderPath: '$(Pipeline.Workspace)/UKHOERPFacadeAPI/*.zip'
+      fileType: 'json'
+      targetFiles: '**/appsettings.json'
+
+  - task: AzureWebApp@1
+    displayName: "Azure App Deploy: ERPFacade-$(Environment)-API"
+    inputs:
+      azureSubscription: "${{ parameters.AzureSubscription }}"
+      appType: webApp
+      appName: "$(WEB_APP_NAME)"
+      package: "$(Pipeline.Workspace)/UKHOERPFacadeAPI/UKHOERPFacadeAPI.zip"
+
+  - task: FileTransform@1
+    displayName: "File Transform: Mock Service Application Settings"
+    inputs:
+      folderPath: '$(Pipeline.Workspace)/UKHOMockSAPService/*.zip'
+      fileType: 'json'
+      targetFiles: '**/appsettings.json'
+
+  - task: AzureWebApp@1
+    displayName: "Azure App Deploy: ERPFacade-SAP-MockService"
+    condition: and(succeeded(), eq(variables['Environment.Name'], 'ERP-Dev'))
+    inputs:
+      azureSubscription: "${{ parameters.AzureSubscription }}"
+      appType: webApp
+      appName: "$(MOCK_WEB_APP_NAME)"
+      package: "$(Pipeline.Workspace)/UKHOMockSAPService/UKHO.SAP.MockAPIService.zip"
