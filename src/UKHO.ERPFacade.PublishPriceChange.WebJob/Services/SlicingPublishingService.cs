@@ -77,7 +77,7 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
                             _azureTableReaderWriter.AddUnitPriceChangeEntity(entity.CorrId, eventId, unitName);
                             List<UnitsOfSalePrices> unitsOfSalePriceList = MapAndBuildUnitsOfSalePrices(prices);
                             UnitOfSaleUpdatedEventPayload unitsOfSaleUpdatedEventPayload = BuildUnitsOfSaleUpdatedEventPayload(unitsOfSalePriceList, eventId, unitName, entity.CorrId);
-                            unitsOfSaleUpdatedEventPayloadJson = JObject.Parse(JsonConvert.SerializeObject(unitsOfSaleUpdatedEventPayload));
+                            unitsOfSaleUpdatedEventPayloadJson = JObject.Parse(JsonConvert.SerializeObject(unitsOfSaleUpdatedEventPayload.EventData));
                             _azureBlobEventWriter.UploadEvent(unitsOfSaleUpdatedEventPayloadJson.ToString(), ContainerName, entity.CorrId + '/' + unitName + '/' + unitName + '.' + RequestFormat);
                             //publish event 
 
