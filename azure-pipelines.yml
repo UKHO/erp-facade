@@ -442,9 +442,10 @@ stages:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
                     AzureSubscription: "ERP-Facade-QA-A.011.05.12"
 
-      - deployment: DevDeployApp
-        displayName: "Dev - Deploy Dotnet App"
-        environment: "ERP-Dev"
+      - deployment: QADeployApp
+        dependsOn: QADeployTerraform
+        displayName: "Qa - Deploy Dotnet App"
+        environment: "ERP-QA"
         pool: $(DeploymentPoolPE)
         workspace:
           clean: all
