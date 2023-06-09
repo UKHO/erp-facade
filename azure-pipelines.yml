@@ -430,7 +430,7 @@ stages:
     
     jobs:
       - deployment: QADeployTerraform
-        displayName: "QA - Deploy Terraform and Dotnet App"
+        displayName: "Qa - Deploy Terraform and Dotnet App"
         environment: "ERP-QA"
         pool: $(DeploymentPool)
         container: ${{variables.Container}}
@@ -470,7 +470,7 @@ stages:
         - QADeployTerraform
         - QADeployApp
         pool: $(DeploymentPool)
-        displayName: "QA Functional Automated Tests"
+        displayName: "Qa Functional Automated Tests"
         workspace:
          clean: all
         steps:
