@@ -1,4 +1,9 @@
-  - task: PowerShell@2
+parameters:
+  - name: AzureSubscription
+    type: string
+
+steps:
+ - task: PowerShell@2
     displayName: "Setting KeyVault Secrets as Pipeline Variables "
     inputs:
       targetType: 'inline'
