@@ -47,7 +47,7 @@ namespace UKHO.ERPFacade.API.Controllers
         }
 
         [HttpOptions]
-        [Route("/webhook/newenccontentpublishedeventoptions")]
+        [Route("/webhook/newenccontentpublishedeventreceived")]
         [Authorize(Policy = "WebhookCaller")]
         public IActionResult NewEncContentPublishedEventOptions()
         {
