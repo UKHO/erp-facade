@@ -393,6 +393,8 @@ stages:
         variables:
           - name : ErpFacadeConfiguration.BaseUrl
             value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
+          - name : SapMockConfiguration.BaseUrl
+            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl'] ]
           - name : AzureStorageConfiguration.ConnectionString
             value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
           - name : mockWebAppName
@@ -482,8 +484,6 @@ stages:
         variables:
           - name : ErpFacadeConfiguration.BaseUrl
             value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
-          - name : SapMockConfiguration.BaseUrl
-            value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.mockwebappurl'] ]
           - name : AzureStorageConfiguration.ConnectionString
             value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
           - name : mockWebAppName
