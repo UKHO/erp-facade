@@ -464,8 +464,6 @@ stages:
         variables:
           - name : WEB_APP_NAME
             value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.WEB_APP'] ]
-          - name : MOCK_WEB_APP_NAME
-            value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.mockWebApp'] ]
         workspace:
           clean: all
         strategy:
@@ -483,7 +481,7 @@ stages:
         pool: $(WindowsPool)
         variables:
           - name : ErpFacadeConfiguration.BaseUrl
-            value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]"
+            value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
           - name : AzureStorageConfiguration.ConnectionString
             value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
           #- name : mockWebAppName
