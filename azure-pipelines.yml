@@ -397,6 +397,10 @@ stages:
             value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl'] ]
           - name : AzureStorageConfiguration.ConnectionString
             value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
+          - name : mockWebAppName
+            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp'] ]
+          - name : mockWebAppResourceGroup
+            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName'] ]
         displayName: "Dev Functional Automated Tests"
         workspace:
          clean: all
@@ -484,6 +488,10 @@ stages:
             value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.mockwebappurl'] ]
           - name : AzureStorageConfiguration.ConnectionString
             value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
+          - name : mockWebAppName
+            value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.mockWebApp'] ]
+          - name : mockWebAppResourceGroup
+            value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.mockWebAppResourceGroupName'] ]
         displayName: "Qa Functional Automated Tests"
         workspace:
          clean: all
