@@ -486,10 +486,10 @@ stages:
             value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]"
           - name : AzureStorageConfiguration.ConnectionString
             value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
-          - name : mockWebAppName
-            value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.mockWebApp'] ]
-          - name : mockWebAppResourceGroup
-            value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.mockWebAppResourceGroupName'] ]
+          #- name : mockWebAppName
+          #  value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.mockWebApp'] ]
+          #- name : mockWebAppResourceGroup
+          #  value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.mockWebAppResourceGroupName'] ]
         displayName: "Qa Functional Automated Tests"
         workspace:
          clean: all
