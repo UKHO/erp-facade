@@ -70,5 +70,5 @@ steps:
       azureSubscription: "ERP-Facade-Dev-A.011.05.12"
       scriptType: 'pscore'
       scriptLocation: 'scriptPath'
-      scriptPath: "$(Pipeline.Workspace)/terraformartifact/set_mock_configuration.ps1"
+      scriptPath: "$(Build.SourcesDirectory)/terraformartifact/set_mock_configuration.ps1"
       arguments: '-ftrunning "false" -mockresourcegroup $(mockWebAppResourceGroup) -mockwebappname $(mockWebAppName)'
