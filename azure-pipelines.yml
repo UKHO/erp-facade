@@ -435,7 +435,7 @@ stages:
         value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup
         value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
-      - name: SapMockConfiguration.BaseUrl
+      - name: "SapMockConfiguration.BaseUrl"
         value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
   #  condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
     
@@ -483,7 +483,7 @@ stages:
         pool: $(WindowsPool)
         variables:
           - name : ErpFacadeConfiguration.BaseUrl
-            value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
+            value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]"
           - name : AzureStorageConfiguration.ConnectionString
             value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
           - name : mockWebAppName
