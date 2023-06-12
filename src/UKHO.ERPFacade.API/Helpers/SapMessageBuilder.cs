@@ -162,8 +162,7 @@ namespace UKHO.ERPFacade.API.Helpers
 
                         XmlElement actionNode;
                         switch (action.ActionNumber)
-                        {
-                            case 2:
+                        {                            
                             case 10:
                                 foreach (var rules in action.Rules)
                                 {
@@ -222,7 +221,7 @@ namespace UKHO.ERPFacade.API.Helpers
                 }
             }
 
-            //Avcs Unit actions for Add and Remove products
+            //Avcs Unit actions for Create AVCS Unit, Add and Remove products
             foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == AvcsUnit))
             {
                 foreach (var unitOfSale in eventData.Data.UnitsOfSales)
@@ -230,6 +229,32 @@ namespace UKHO.ERPFacade.API.Helpers
                     XmlElement actionNode;
                     switch (action.ActionNumber)
                     {
+                        case 2:
+                            foreach (var rules in action.Rules)
+                            {
+                                foreach (var conditions in rules.Conditions)
+                                {
+                                    object jsonFieldValue = CommonHelper.ParseXmlNode(conditions.AttributeName, unitOfSale, unitOfSale.GetType());
+                                    if (jsonFieldValue != null && IsValidValue(jsonFieldValue.ToString(), conditions.AttributeValue))
+                                    {
+                                        IsConditionSatisfied = true;
+                                    }
+                                    else
+                                    {
+                                        IsConditionSatisfied = false;
+                                        break;
+                                    }
+                                }
+                            }
+                            if (IsConditionSatisfied)
+                            {
+                                var product = eventData.Data.Products.Where(x => x.ProductName == unitOfSale.UnitName).FirstOrDefault();
+                                actionNode = BuildAction(soapXml, product, unitOfSale, action);
+                                actionItemNode.AppendChild(actionNode);
+
+                                IsConditionSatisfied = false;
+                            }
+                            break;
                         case 3:
                             foreach (var addProduct in unitOfSale.CompositionChanges.AddProducts)
                             {
