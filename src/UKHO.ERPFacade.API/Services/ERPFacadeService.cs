@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using System.Globalization;
+﻿using System.Globalization;
+using Newtonsoft.Json;
 using UKHO.ERPFacade.API.Models;
 using UKHO.ERPFacade.Common.Logging;
 
@@ -116,7 +116,7 @@ namespace UKHO.ERPFacade.API.Services
                 DataContentType = encEventPayload.DataContentType,
                 Data = new UnitOfSaleUpdatedEventData
                 {
-                    TraceId = encEventPayload.Data.TraceId,
+                    CorrelationId = encEventPayload.Data.CorrelationId,
                     Products = encEventPayload.Data.Products,
                     _COMMENT = "Prices for all units in event will be included, including Cancelled Cell",
                     UnitsOfSales = encEventPayload.Data.UnitsOfSales,
@@ -149,7 +149,7 @@ namespace UKHO.ERPFacade.API.Services
 
         private static DateTimeOffset GetDate(string date, string time)
         {
-            DateTime dateTime = Convert.ToDateTime(DateTime.ParseExact(date + "" + time, "yyyyMMddhhmmss", CultureInfo.InvariantCulture));
+            DateTime dateTime = DateTime.ParseExact(date + "" + time, "yyyyMMddHHmmss", CultureInfo.InvariantCulture);
             DateTimeOffset dateTimeOffset = new(dateTime);
 
             return dateTimeOffset;

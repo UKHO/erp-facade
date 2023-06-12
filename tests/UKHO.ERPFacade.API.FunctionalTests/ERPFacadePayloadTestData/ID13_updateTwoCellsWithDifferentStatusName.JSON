@@ -9,7 +9,7 @@
   "subject": "UK45TRI, SD3401P",
   "datacontenttype": "application/json",
   "data": {
-    "traceId": "367ce4a4-1fff-4f56-b359-230518multiupdate002",
+    "correlationId": "367ce4a4-1fff-4f56-b359-230518multiupdate002",
     "products": [
       {
         "productType": "ENC S57",

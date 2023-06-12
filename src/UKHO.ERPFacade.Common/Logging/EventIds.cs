@@ -23,9 +23,9 @@
         NewEncContentPublishedEventReceived = 940004,
 
         /// <summary>
-        /// 940005 - TraceId is missing in ENC content published event.
+        /// 940005 - CorrelationId is missing in ENC content published event.
         /// </summary>
-        TraceIdMissingInEvent = 940005,
+        CorrelationIdMissingInEvent = 940005,
 
         /// <summary>
         /// 940006 - Storing the received ENC content published event in azure table.
@@ -103,16 +103,17 @@
         UpdateEntitySuccessful = 940020,
 
         /// <summary>
-        /// 940021 - CorrId is missing in price information payload recieved from SAP.
+        /// 940021 - CorrelationId is missing in price information payload recieved from SAP.
         /// </summary>
-        CorrIdMissingInSAPPriceInformationPayload = 940021,
+        CorrelationIdMissingInSAPPriceInformationPayload = 940021,
+
         /// <summary>
-        /// 940022 - Invalid SAP callback. Request from ERP Facade to SAP not found for CorrId.
+        /// 940022 - Invalid SAP callback. Request from ERP Facade to SAP not found for CorrelationId.
         /// </summary>
         ERPFacadeToSAPRequestNotFound = 940022,
 
         /// <summary>
-        /// 940023 - Valid SAP callback for CorrId.
+        /// 940023 - Valid SAP callback for CorrelationId.
         /// </summary>
         ERPFacadeToSAPRequestFound = 940023,
 

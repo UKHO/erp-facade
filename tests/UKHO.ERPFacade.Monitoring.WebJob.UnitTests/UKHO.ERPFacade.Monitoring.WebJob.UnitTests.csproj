@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -28,7 +28,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\UKHO.ERPFacade.Common\UKHO.ERPFacade.Common.csproj" />
-    <ProjectReference Include="..\..\src\UKHO.ERPFacade.WebJob\UKHO.ERPFacade.WebJob.csproj" />
+    <ProjectReference Include="..\..\src\UKHO.ERPFacade.Monitoring.WebJob\UKHO.ERPFacade.Monitoring.WebJob.csproj" />
   </ItemGroup>
 
 </Project>
