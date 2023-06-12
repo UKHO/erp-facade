@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using UKHO.ERPFacade.API.Controllers;
 using UKHO.ERPFacade.API.Helpers;
-using UKHO.ERPFacade.API.Models;
+using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.HttpClients;

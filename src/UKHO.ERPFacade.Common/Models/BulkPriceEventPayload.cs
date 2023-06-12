@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using UKHO.ERPFacade.Common.Infrastructure;
 
-namespace UKHO.ERPFacade.API.Models
+namespace UKHO.ERPFacade.Common.Models
 {
     [ExcludeFromCodeCoverage]
     public class BulkPriceEventPayload : EventBase<BulkPriceEvent>

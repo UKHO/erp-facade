@@ -1,5 +1,5 @@
 ﻿using System.Xml;
-using UKHO.ERPFacade.API.Models;
+using UKHO.ERPFacade.Common.Models;
 
 namespace UKHO.ERPFacade.API.Helpers
 {

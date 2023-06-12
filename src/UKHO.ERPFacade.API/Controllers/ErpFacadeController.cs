@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using UKHO.ERPFacade.API.Models;
-using UKHO.ERPFacade.API.Services;
+using UKHO.ERPFacade.Common.Models;
+using UKHO.ERPFacade.Common.Services;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.IO.Azure;
@@ -82,7 +82,9 @@ namespace UKHO.ERPFacade.API.Controllers
 
                 _logger.LogInformation(EventIds.DownloadEncEventPayloadCompleted.ToEventId(), "ENC event payload is downloaded from azure blob storage successfully.");
 
-                List<UnitsOfSalePrices> unitsOfSalePriceList = _erpFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList, encEventPayloadData.Data.UnitsOfSales);
+                List<string> encEventUnitOfSalesList = encEventPayloadData.Data.UnitsOfSales.Select(x => x.UnitName).ToList();
+
+                List<UnitsOfSalePrices> unitsOfSalePriceList = _erpFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList, encEventUnitOfSalesList);
 
                 UnitOfSaleUpdatedEventPayload unitsOfSaleUpdatedEventPayload = _erpFacadeService.BuildUnitsOfSaleUpdatedEventPayload(unitsOfSalePriceList, encEventPayloadJson);
 
