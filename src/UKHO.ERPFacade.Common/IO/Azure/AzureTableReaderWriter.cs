@@ -1,10 +1,10 @@
-﻿using Azure;
+﻿using System.Diagnostics.CodeAnalysis;
+using Azure;
 using Azure.Data.Tables;
 using Azure.Data.Tables.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
-using System.Diagnostics.CodeAnalysis;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Logging;
@@ -46,7 +46,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
                     RowKey = Guid.NewGuid().ToString(),
                     PartitionKey = Guid.NewGuid().ToString(),
                     Timestamp = DateTime.UtcNow,
-                    CorrelationId = correlationId,                    
+                    CorrelationId = correlationId,
                     RequestDateTime = null,
                     ResponseDateTime = null,
                     IsNotified = false
@@ -60,7 +60,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             {
                 _logger.LogWarning(EventIds.ReceivedDuplicateEncContentPublishedEvent.ToEventId(), "Duplicate ENC content published event received.");
 
-                existingEntity.Timestamp = DateTime.UtcNow;                
+                existingEntity.Timestamp = DateTime.UtcNow;
 
                 await tableClient.UpdateEntityAsync(existingEntity, ETag.All, TableUpdateMode.Replace);
 
@@ -135,15 +135,13 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             }
         }
 
-        public IList<PriceChangeMasterEntity> GetMasterEntities(string status,string correlationId="")
+        public IList<PriceChangeMasterEntity> GetMasterEntities(string status, string correlationId = "")
         {
             IList<PriceChangeMasterEntity> records = new List<PriceChangeMasterEntity>();
             TableClient tableClient = GetTableClient(PriceChangeMasterTableName);
-            Pageable<PriceChangeMasterEntity> entities;
-            if(string.IsNullOrEmpty(correlationId))
-                entities = tableClient.Query<PriceChangeMasterEntity>(filter: TableClient.CreateQueryFilter($"Status eq {status}"), maxPerPage: 1);
-            else
-                entities = tableClient.Query<PriceChangeMasterEntity>(filter: TableClient.CreateQueryFilter($"Status eq {status} and CorrId eq {correlationId}"), maxPerPage: 1);
+            Pageable<PriceChangeMasterEntity> entities = string.IsNullOrEmpty(correlationId)
+                ? tableClient.Query<PriceChangeMasterEntity>(filter: TableClient.CreateQueryFilter($"Status eq {status}"), maxPerPage: 1)
+                : tableClient.Query<PriceChangeMasterEntity>(filter: TableClient.CreateQueryFilter($"Status eq {status} and CorrId eq {correlationId}"), maxPerPage: 1);
             foreach (var entity in entities)
             {
                 records.Add(entity);
@@ -151,18 +149,15 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             return records;
         }
 
-        public IList<UnitPriceChangeEntity> GetUnitPriceChangeEventsEntities(string masterCorrId,string status="",string unitName = "",string eventId= "")
+        public IList<UnitPriceChangeEntity> GetUnitPriceChangeEventsEntities(string masterCorrId, string status = "", string unitName = "", string eventId = "")
         {
             IList<UnitPriceChangeEntity> records = new List<UnitPriceChangeEntity>();
             TableClient tableClient = GetTableClient(UnitPriceChangeTableName);
-            Pageable<UnitPriceChangeEntity> entities;
-            if(string.IsNullOrEmpty(status))
-                entities = tableClient.Query<UnitPriceChangeEntity>(filter: TableClient.CreateQueryFilter($"MasterCorrid eq {masterCorrId}"), maxPerPage: 1);
-            else if (string.IsNullOrEmpty(unitName) && string.IsNullOrEmpty(eventId))
-                entities = tableClient.Query<UnitPriceChangeEntity>(filter: TableClient.CreateQueryFilter($"Status eq {status} and MasterCorrid eq {masterCorrId}"), maxPerPage: 1);
-            else
-                entities = tableClient.Query<UnitPriceChangeEntity>(filter: TableClient.CreateQueryFilter($"Status eq {status} and MasterCorrid eq {masterCorrId} and UnitName eq {unitName} and Eventid eq {eventId}"), maxPerPage: 1);
-
+            Pageable<UnitPriceChangeEntity> entities = string.IsNullOrEmpty(status)
+                ? tableClient.Query<UnitPriceChangeEntity>(filter: TableClient.CreateQueryFilter($"MasterCorrid eq {masterCorrId}"), maxPerPage: 1)
+                : string.IsNullOrEmpty(unitName) && string.IsNullOrEmpty(eventId)
+                ? tableClient.Query<UnitPriceChangeEntity>(filter: TableClient.CreateQueryFilter($"Status eq {status} and MasterCorrid eq {masterCorrId}"), maxPerPage: 1)
+                : tableClient.Query<UnitPriceChangeEntity>(filter: TableClient.CreateQueryFilter($"Status eq {status} and MasterCorrid eq {masterCorrId} and UnitName eq {unitName} and Eventid eq {eventId}"), maxPerPage: 1);
             foreach (var entity in entities)
             {
                 records.Add(entity);
@@ -188,7 +183,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             _logger.LogInformation(EventIds.AddedBulkPriceInformationEventInAzureTable.ToEventId(), "Bulk price information event in added in azure table successfully.");
         }
 
-        public void AddUnitPriceChangeEntity(string correlationId,string eventId,string unitName)
+        public void AddUnitPriceChangeEntity(string correlationId, string eventId, string unitName)
         {
             TableClient tableClient = GetTableClient(UnitPriceChangeTableName);
 
@@ -208,7 +203,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             _logger.LogInformation(EventIds.AddedUnitPriceChangeEventInAzureTable.ToEventId(), "Unit price change event in added in azure table successfully.");
         }
 
-        public void UpdateUnitPriceChangeStatusEntity(string correlationId,string unitName,string eventId)
+        public void UpdateUnitPriceChangeStatusEntity(string correlationId, string unitName, string eventId)
         {
             TableClient tableClient = GetTableClient(UnitPriceChangeTableName);
             UnitPriceChangeEntity? existingEntity = GetUnitPriceChangeEventsEntities(correlationId, IncompleteStatus, unitName, eventId).ToList().FirstOrDefault();
@@ -223,7 +218,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
         public void UpdatePriceMasterStatusEntity(string correlationId)
         {
             TableClient tableClient = GetTableClient(PriceChangeMasterTableName);
-            PriceChangeMasterEntity? existingEntity = GetMasterEntities(IncompleteStatus,correlationId).ToList().FirstOrDefault();
+            PriceChangeMasterEntity? existingEntity = GetMasterEntities(IncompleteStatus, correlationId).ToList().FirstOrDefault();
             if (existingEntity != null)
             {
                 existingEntity.Status = "Complete";
@@ -241,6 +236,8 @@ namespace UKHO.ERPFacade.Common.IO.Azure
 
             if (tableExists == null)
             {
+                serviceClient.GetTableClient(tableName).CreateIfNotExistsAsync();
+
                 throw new ERPFacadeException(EventIds.AzureTableNotFound.ToEventId());
             }
 
