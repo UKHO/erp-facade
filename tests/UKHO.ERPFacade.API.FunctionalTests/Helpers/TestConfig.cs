@@ -4,9 +4,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
     public class TestConfig
     {
         public string PayloadFolder { get; set; }
-        public string WebhookPayloadFileName { get; set; } 
+        public string WebhookPayloadFileName { get; set; }
         public string SapMockApiPayloadFileName { get; set; }
-        public string ExpectedXMLFolder { get; set; }        
+        public string ExpectedXMLFolder { get; set; }
         public string WebhookInvalidPayloadFileName { get; set; }
         public string GeneratedXMLFolder { get; set; }
         public SapMockConfiguration SapMockConfiguration { get; set; }
@@ -16,6 +16,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         public string[] XMLActionList { get; set; }
         public string UoSPayloadFileName { get; set; }
         public string BPUpdatePayloadFileName { get; set; }
+        public string GeneratedJSONFolder { get; set; }
+
     }
 
 
@@ -52,7 +54,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
     public class SapMockConfiguration
     {
         public string BaseUrl { get; set; }
-        public string Username { get; set;}
+        public string Username { get; set; }
         public string Password { get; set; }
     }
 

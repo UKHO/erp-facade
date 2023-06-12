@@ -27,9 +27,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [Test(Description = "WhenValidEventReceivedWithValidToken_ThenUoSReturns200OkResponse"), Order(0)]
         public async Task WhenValidEventReceivedWithValidToken_ThenUoSReturns200OkResponse()
         {
-            string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.UoSPayloadFileName);            
+            string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.UoSPayloadFileName);
             var response = await _unitOfSale.PostUoSResponseAsync(filePath, await _authToken.GetAzureADToken(false, "UnitOfSale"));
-           response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         }
         [Category("DevEnvFT")]
@@ -52,6 +52,23 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
             var response = await _unitOfSale.PostUoSResponseAsync(filePath, await _authToken.GetAzureADToken(true));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.Forbidden);
+
+        }
+
+        [Category("DevEnvFT")]
+        [Test, Order(1)]
+        //UoS scenario based testing
+        [TestCase("UoS1_Pricing.JSON", TestName = "WhenValidEventReceivedWithValidToken_ThenUoSReturn200OkResponse")]
+
+        public async Task WhenValidEventReceivedWithValidToken_ThenUoSReturn200OkResponse(string payloadJsonFileName)
+        {
+            //string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.UoSPayloadFileName);
+            Console.WriteLine("Scenario:" + payloadJsonFileName + "\n");
+            string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, payloadJsonFileName);
+            string generatedJSONFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedJSONFolder);
+
+            var response = await _unitOfSale.PostUoSResponseAsyncWithJSON(filePath, generatedJSONFolder, await _authToken.GetAzureADToken(false, "UnitOfSale"));
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         }
 
