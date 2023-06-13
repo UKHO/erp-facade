@@ -11,16 +11,14 @@ using UKHO.ERPFacade.Common.Models;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
-
-
     public class JSONHelper
     {
-        private UnitOfSalePrice UnitOfSaleFinalJSONHelper { get; set; }
+        private UnitOfSaleUpdatedEvent UnitOfSaleFinalJSONHelper { get; set; }
         public bool verifyUniqueProducts(List<UoSInputJSONHelper> jsonUoSInputPayload, string generatedJSONFilePath)
         {
             var jsonString = getDeserializedString(generatedJSONFilePath);
-            UnitOfSaleFinalJSONHelper = JsonConvert.DeserializeObject<UnitOfSalePrice>(jsonString);
-            var dupes = UnitOfSaleFinalJSONHelper.EventData.Data.UnitsOfSalesPrices.GroupBy(x => new { x.unitName })
+            UnitOfSaleFinalJSONHelper = JsonConvert.DeserializeObject<UnitOfSaleUpdatedEvent>(jsonString);
+            var dupes = UnitOfSaleFinalJSONHelper.Data.UnitsOfSalePrices.GroupBy(x => new { x.UnitName })
                         .Where(x => x.Skip(1).Any());
             if (dupes.Count() > 0)
             { return false; }
@@ -28,8 +26,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             {
                 return true;
             }
-
-
         }
 
         public string getDeserializedString(String filePath)
