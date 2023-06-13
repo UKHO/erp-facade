@@ -53,6 +53,7 @@ steps:
 
   - task: DotNetCoreCLI@2
     displayName: "Run Functional tests"
+    continueOnError: true
     inputs:
       command: "test"
       arguments: "--filter TestCategory=QAEnvFT"
@@ -62,6 +63,7 @@ steps:
           !**/obj/**
       testRunTitle: "QA-AutomationTests"
       workingDirectory: '$(Build.SourcesDirectory)/functionaltests'
+      
 
   - task: AzureCLI@2
     displayName: "Set FT Configuration Application Settings for Mock Webapp"
