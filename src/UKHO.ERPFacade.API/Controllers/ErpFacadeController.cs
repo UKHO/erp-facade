@@ -50,7 +50,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
             _logger.LogInformation(EventIds.SapUnitsOfSalePriceInformationPayloadReceived.ToEventId(), "UnitsOfSale price information payload received from SAP.");
 
-            string? correlationId = priceInformationJson.First.SelectToken(CorrelationIdKey)?.Value<string>();
+            string correlationId = priceInformationJson.First.SelectToken(CorrelationIdKey)?.Value<string>();
 
             if (string.IsNullOrEmpty(correlationId))
             {
@@ -106,7 +106,7 @@ namespace UKHO.ERPFacade.API.Controllers
                 throw new ERPFacadeException(EventIds.NoDataFoundInSAPPriceInformationPayload.ToEventId());
             }
 
-            return new OkObjectResult(unitsOfSaleUpdatedEventPayloadJson);
+            return new OkObjectResult(StatusCodes.Status200OK);
         }
 
         [HttpPost]

@@ -66,37 +66,36 @@ namespace UKHO.ERPFacade.Common.Services
                             var futureUnitOfSalePriceDurations = existingUnitOfSalePrice.Price.Where(x => x.EffectiveDate.ToString("yyyyMMdd") == priceInformation.FutureDate).ToList();
                             var futureStandard = futureUnitOfSalePriceDurations.Select(x => x.Standard).FirstOrDefault();
 
-                            if (effectiveStandard != null &&
-                                !string.IsNullOrEmpty(priceInformation.EffectiveDate) &&
-                                !effectiveStandard.PriceDurations.Any(x => x.NumberOfMonths == Convert.ToInt32(priceInformation.Duration) && x.Rrp == priceInformation.Price))
+                            if (effectiveStandard != null && !string.IsNullOrEmpty(priceInformation.EffectiveDate))
                             {
-
-                                priceDuration.NumberOfMonths = Convert.ToInt32(priceInformation.Duration);
-                                priceDuration.Rrp = priceInformation.Price;
-                                effectiveStandard.PriceDurations.Add(priceDuration);
+                                if (!effectiveStandard.PriceDurations.Any(x => x.NumberOfMonths == Convert.ToInt32(priceInformation.Duration) && x.Rrp == priceInformation.Price))
+                                {
+                                    priceDuration.NumberOfMonths = Convert.ToInt32(priceInformation.Duration);
+                                    priceDuration.Rrp = priceInformation.Price;
+                                    effectiveStandard.PriceDurations.Add(priceDuration);
+                                }
                             }
                             else
                             {
-                                if (!string.IsNullOrEmpty(priceInformation.EffectiveDate) &&
-                                    !effectiveStandard.PriceDurations.Any(x => x.NumberOfMonths == Convert.ToInt32(priceInformation.Duration) && x.Rrp == priceInformation.Price))
+                                if (!string.IsNullOrEmpty(priceInformation.EffectiveDate))
                                 {
                                     DateTimeOffset effectiveDate = GetDate(priceInformation.EffectiveDate, priceInformation.EffectiveTime);
                                     Price effectivePrice = BuildPricePayload(priceInformation.Duration, priceInformation.Price, effectiveDate, priceInformation.Currency);
                                     existingUnitOfSalePrice.Price.Add(effectivePrice);
                                 }
                             }
-                            if (futureStandard != null &&
-                                !string.IsNullOrEmpty(priceInformation.FutureDate) &&
-                                !futureStandard.PriceDurations.Any(x => x.NumberOfMonths == Convert.ToInt32(priceInformation.Duration) && x.Rrp == priceInformation.FuturePrice))
+                            if (futureStandard != null && !string.IsNullOrEmpty(priceInformation.FutureDate))
                             {
-                                priceDuration.NumberOfMonths = Convert.ToInt32(priceInformation.Duration);
-                                priceDuration.Rrp = priceInformation.FuturePrice;
-                                futureStandard.PriceDurations.Add(priceDuration);
+                                if (!futureStandard.PriceDurations.Any(x => x.NumberOfMonths == Convert.ToInt32(priceInformation.Duration) && x.Rrp == priceInformation.FuturePrice))
+                                {
+                                    priceDuration.NumberOfMonths = Convert.ToInt32(priceInformation.Duration);
+                                    priceDuration.Rrp = priceInformation.FuturePrice;
+                                    futureStandard.PriceDurations.Add(priceDuration);
+                                }
                             }
                             else
                             {
-                                if (!string.IsNullOrEmpty(priceInformation.FutureDate) &&
-                                    !futureStandard.PriceDurations.Any(x => x.NumberOfMonths == Convert.ToInt32(priceInformation.Duration) && x.Rrp == priceInformation.FuturePrice))
+                                if (!string.IsNullOrEmpty(priceInformation.FutureDate))
                                 {
                                     DateTimeOffset futureDate = GetDate(priceInformation.FutureDate, priceInformation.FutureTime);
                                     Price futurePrice = BuildPricePayload(priceInformation.Duration, priceInformation.FuturePrice, futureDate, priceInformation.FutureCurr);
@@ -156,7 +155,7 @@ namespace UKHO.ERPFacade.Common.Services
             PriceDurations priceDurations = new();
 
             List<PriceDurations> priceDurationsList = new();
-
+             
             priceDurations.NumberOfMonths = Convert.ToInt32(duration);
             priceDurations.Rrp = rrp;
             priceDurationsList.Add(priceDurations);
@@ -166,7 +165,7 @@ namespace UKHO.ERPFacade.Common.Services
             price.EffectiveDate = date;
             price.Currency = currency;
             price.Standard = standard;
-
+            
             return price;
         }
 
