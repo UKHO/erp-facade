@@ -164,7 +164,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         AttrNotMatched.Add(nameof(item.PRODUCT));
                     if (!item.PRODTYPE.Equals(product.ProductType[4..]))
                         AttrNotMatched.Add(nameof(item.PRODTYPE));
-                    if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!getUoSInfo(item.PRODUCTNAME).UnitOfSaleType.Contains("Unit")))
+                    if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!getUoSInfo(item.PRODUCTNAME).UnitOfSaleType.Contains("unit")))
                         AttrNotMatched.Add(nameof(item.PRODUCTNAME));
                     if (!item.AGENCY.Equals(product.Agency))
                         AttrNotMatched.Add(nameof(item.AGENCY));
@@ -208,7 +208,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         AttrNotMatched.Add(nameof(item.PRODUCT));
                     if (!item.PRODTYPE.Equals(product.ProductType[4..]))
                         AttrNotMatched.Add(nameof(item.PRODTYPE));
-                    if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!getUoSInfo(item.PRODUCTNAME).UnitOfSaleType.Contains("Unit")))
+                    if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!getUoSInfo(item.PRODUCTNAME).UnitOfSaleType.Contains("unit")))
                         AttrNotMatched.Add(nameof(item.PRODUCTNAME));
                     if (!item.AGENCY.Equals(product.Agency))
                         AttrNotMatched.Add(nameof(item.AGENCY));
@@ -271,8 +271,16 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         AttrNotMatched.Add(nameof(item.PRODUCT));
                     if (!item.PRODTYPE.Equals(product.ProductType[4..]))
                         AttrNotMatched.Add(nameof(item.PRODTYPE));
-                    if (!item.PRODUCTNAME.Equals(product.ProductName))
-                        AttrNotMatched.Add(nameof(item.PRODUCTNAME));
+
+                    //if (!item.PRODUCTNAME.Equals(product.ProductName))
+                    //   AttrNotMatched.Add(nameof(item.PRODUCTNAME));
+
+                    if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!getUoSInfo(item.PRODUCTNAME).UnitOfSaleType.Contains("unit")))
+                       AttrNotMatched.Add(nameof(item.PRODUCTNAME));
+
+                    //if (!item.PRODUCTNAME.Equals(getUnitOfSalesWithTypeEqualsUnit(product.ProductName).UnitName))
+                    //  AttrNotMatched.Add(nameof(item.PRODUCTNAME));
+
                     if (!item.AGENCY.Equals(product.Agency))
                         AttrNotMatched.Add(nameof(item.AGENCY));
                     if (!item.PROVIDER.Equals(product.ProviderCode))
@@ -704,6 +712,62 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             }
             return UoSInfo;
         }
+
+        private static List<string> getinUnitOfSaleList(string productName)
+        {
+            var obj = jsonPayload;
+            List<string> uos123 = new List<string>();
+
+            foreach (Product prod in obj.Data.Products)
+            {
+                if (prod.ProductName == productName)
+                {
+                    uos123 = prod.InUnitsOfSale;
+                    
+                }
+            }
+            Console.WriteLine("inUnitOfSales for "+productName+" are below: ");
+            foreach (string s in uos123)
+            {
+                Console.WriteLine(s);
+            }
+            return uos123;
+         }
+
+        private static ProductUoSInfo getUnitOfSalesWithTypeEqualsUnit(string productName)
+        {
+            var obj = jsonPayload;
+            ProductUoSInfo UoSInfo = new ProductUoSInfo();
+            List<string> receivedInUoS = new List<string>();
+            receivedInUoS = getinUnitOfSaleList(productName);
+
+            for (int i = 0; i < receivedInUoS.Count; i++)
+            {
+                foreach (UnitOfSale uos in jsonPayload.Data.UnitsOfSales)
+                {
+                    if (uos.UnitName.Equals(receivedInUoS[i]) && uos.UnitOfSaleType.Equals("unit"))
+                    {
+                        UoSInfo.UnitType = uos.UnitType;
+                        UoSInfo.UnitSize = uos.UnitSize;
+                        UoSInfo.Title = uos.Title;
+                        UoSInfo.UnitOfSaleType = uos.UnitOfSaleType;
+                        UoSInfo.UnitName = uos.UnitName;
+                    }
+                    Console.WriteLine("index while searching getinUnitOfSaleList " + i);
+                    break;
+                }
+                
+            }
+            Console.WriteLine("UoSInfo for matched UOS is:");
+            Console.WriteLine(UoSInfo.UnitName);
+            return UoSInfo;
+        }
+
+
+
+
+
+
         public static async Task<bool> VerifyPresenseOfMandatoryXMLAtrributes(XmlNodeList nodeList)
         {
             //List<string> ActionAttributesSeq = formActionAtrributes();

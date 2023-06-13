@@ -22,6 +22,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
         [JsonProperty("unitOfSaleType")]
         public string UnitOfSaleType;
 
+        [JsonProperty("unitName")]
+        public string UnitName;
+
 
     }
 }

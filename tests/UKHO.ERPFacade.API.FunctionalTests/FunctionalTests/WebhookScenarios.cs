@@ -118,11 +118,11 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [TestCase("ID27_supplier_Defined_ReleasabilitySet_V01.JSON", TestName = "WhenICallTheWebhookWithSupplierDefinedReleasabilitySetV01_ThenWebhookReturns200Response")]
 
         //Suspended & Withdrawn
-        [TestCase("ID28_simpleSuspendedScenario.JSON", TestName = "A1_Scenario_for_SimpleSuspended")]
-        [TestCase("ID29_simpleWithdrawnScenario.JSON", TestName = "A2_Scenario_for_SimpleWithdrawn")]
-        [TestCase("ID30_Suspend_and_WithdrawV01.JSON", TestName = "A3_Scenario_for_SuspendedAndWithdrawn")]
-        [TestCase("ID31_metadataAndSuspended.JSON", TestName = "A4_Scenario_for_metadataAndSuspended")]
-        [TestCase("ID32_moveAndSuspended.JSON", TestName = "A5_Scenario_for_movedataAndSuspended")]
+        [TestCase("ID28_simpleSuspendedScenario.JSON", TestName = "A28_Scenario_for_SimpleSuspended")]
+        [TestCase("ID29_simpleWithdrawnScenario.JSON", TestName = "A29_Scenario_for_SimpleWithdrawn")]
+        [TestCase("ID30_Suspend_and_WithdrawV01.JSON", TestName = "A30_Scenario_for_SuspendedAndWithdrawn")]
+        [TestCase("ID31_metadataAndSuspended.JSON", TestName = "A31_Scenario_for_metadataAndSuspended")]
+        [TestCase("ID32_moveAndSuspended.JSON", TestName = "A32_Scenario_for_movedataAndSuspended")]
 
 
         public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponse1(string payloadJsonFileName)
