@@ -66,11 +66,11 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
                     }
                     else
                     {
-                        var splicedPrices = priceInformationList.Select(p => p.ProductName).Distinct().ToList();
+                        var slicedPrices = priceInformationList.Select(p => p.ProductName).Distinct().ToList();
                         var eventId = string.Empty;
 
 
-                        foreach (var unitName in splicedPrices)
+                        foreach (var unitName in slicedPrices)
                         {
                             eventId = Guid.NewGuid().ToString();
                             var prices = priceInformationList.Where(p => p.ProductName == unitName).ToList();
