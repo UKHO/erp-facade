@@ -8,20 +8,26 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
     {
         public string DownloadJSONFromAzureBlob(string expectedfilePath, string containerAndBlobName, string fileType)
         {
-
-            //BlobServiceClient blobServiceClient = new BlobServiceClient(_azureStorageConfig.Value.ConnectionString);
-            var ConnectionString = "DefaultEndpointsProtocol=https;AccountName=storageerptest;AccountKey=UX0ZtBf6bM7CSE0/xG0RXKybWAozRbLMftEji3fMNrBuWWF9Xgq7Kki5qAwLzFYhtTdiH5+GKun8+ASt4tF/zQ==;EndpointSuffix=core.windows.net";
-            BlobServiceClient blobServiceClient = new BlobServiceClient(ConnectionString);
-            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerAndBlobName);
-            BlobClient blobClient = containerClient.GetBlobClient(containerAndBlobName + "."+fileType);
-
-            BlobDownloadInfo blobDownload = blobClient.Download();
-            using (FileStream downloadFileStream = new FileStream((expectedfilePath + "\\" + containerAndBlobName + "." + fileType), FileMode.Create))
+            try
             {
-                blobDownload.Content.CopyTo(downloadFileStream);
+                //BlobServiceClient blobServiceClient = new BlobServiceClient(_azureStorageConfig.Value.ConnectionString);
+                var ConnectionString = "DefaultEndpointsProtocol=https;AccountName=storageerptest;AccountKey=UX0ZtBf6bM7CSE0/xG0RXKybWAozRbLMftEji3fMNrBuWWF9Xgq7Kki5qAwLzFYhtTdiH5+GKun8+ASt4tF/zQ==;EndpointSuffix=core.windows.net";
+                BlobServiceClient blobServiceClient = new BlobServiceClient(ConnectionString);
+                BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerAndBlobName);
+                BlobClient blobClient = containerClient.GetBlobClient(containerAndBlobName + "." + fileType);
+
+                BlobDownloadInfo blobDownload = blobClient.Download();
+                using (FileStream downloadFileStream = new FileStream((expectedfilePath + "\\" + containerAndBlobName + "." + fileType), FileMode.Create))
+                {
+                    blobDownload.Content.CopyTo(downloadFileStream);
+                }
+
+                return (expectedfilePath + "\\" + containerAndBlobName + "." + fileType);
             }
-            
-            return (expectedfilePath + "\\" + containerAndBlobName + "." + fileType);
+            catch (Exception)
+            {
+                throw;
+            }
         }   
     }
 }
