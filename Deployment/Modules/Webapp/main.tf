@@ -24,8 +24,8 @@ resource "azurerm_windows_web_app" "webapp_service" {
     ftps_state = "Disabled"
 
 
-  access_control {
-    default_action = "Allow"
+  access_control
+    default_action = var.env_name == "dev" ? "" : "Allow"
     dynamic "ip_restriction" {
       for_each = var.allowed_ips
       content {
