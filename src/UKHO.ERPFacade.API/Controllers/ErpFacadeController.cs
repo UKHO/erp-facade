@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using UKHO.ERPFacade.API.Middleware;
 using UKHO.ERPFacade.API.Models;
 using UKHO.ERPFacade.API.Services;
 using UKHO.ERPFacade.Common.Exceptions;
@@ -40,7 +41,8 @@ namespace UKHO.ERPFacade.API.Controllers
         }
 
         [HttpPost]
-        [Route("/erpfacade/priceinformation")]        
+        [Route("/erpfacade/priceinformation")]
+        [ServiceFilter(typeof(ApiKeyAuthFilter))]
         public virtual async Task<IActionResult> PostPriceInformation([FromBody] JArray priceInformationJson)
         {
             JObject unitsOfSaleUpdatedEventPayloadJson;
@@ -99,8 +101,9 @@ namespace UKHO.ERPFacade.API.Controllers
             return new OkObjectResult(unitsOfSaleUpdatedEventPayloadJson);
         }
 
-        [HttpGet]
-        [Route("/erpfacade/bulkpriceinformation")]        
+        [HttpPost]
+        [Route("/erpfacade/bulkpriceinformation")]
+        [ServiceFilter(typeof(ApiKeyAuthFilter))]
         public virtual async Task<IActionResult> PostBulkPriceInformation([FromBody] JArray requestJson)
         {
             await Task.CompletedTask;

@@ -12,6 +12,7 @@ using System.IO.Abstractions;
 using System.Reflection;
 using UKHO.ERPFacade.API.Filters;
 using UKHO.ERPFacade.API.Helpers;
+using UKHO.ERPFacade.API.Middleware;
 using UKHO.ERPFacade.API.Models;
 using UKHO.ERPFacade.API.Services;
 using UKHO.ERPFacade.Common.Configuration;
@@ -177,6 +178,7 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<IFileSystem, FileSystem>();
             builder.Services.AddScoped<IErpFacadeService, ErpFacadeService>();
             builder.Services.AddScoped<IJsonHelper, JsonHelper>();
+            builder.Services.AddScoped<ApiKeyAuthFilter>();
 
             builder.Services.AddHttpClient<ISapClient, SapClient>(c =>
             {
