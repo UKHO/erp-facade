@@ -24,7 +24,7 @@ namespace UKHO.ERPFacade.API.Controllers
         private readonly IJsonHelper _jsonHelper;
         private readonly IEventPublisher _eventPublisher;
 
-        private const string CorrIdKey = "corrid";
+        private const string CorrelationIdKey = "corrid";
         private const string RequestFormat = "json";
         private const int EventSizeLimit = 1000000;
 
@@ -54,17 +54,17 @@ namespace UKHO.ERPFacade.API.Controllers
 
             _logger.LogInformation(EventIds.SapUnitsOfSalePriceInformationPayloadReceived.ToEventId(), "UnitsOfSale price information payload received from SAP.");
 
-            var corrId = priceInformationJson.First.SelectToken(CorrIdKey)?.Value<string>();
+            string? correlationId = priceInformationJson.First.SelectToken(CorrelationIdKey)?.Value<string>();
 
-            if (string.IsNullOrEmpty(corrId))
+            if (string.IsNullOrEmpty(correlationId))
             {
-                _logger.LogWarning(EventIds.CorrIdMissingInSAPPriceInformationPayload.ToEventId(), "CorrId is missing in price information payload recieved from SAP.");
+                _logger.LogWarning(EventIds.CorrelationIdMissingInSAPPriceInformationPayload.ToEventId(), "CorrelationId is missing in price information payload recieved from SAP.");
                 return new BadRequestObjectResult(StatusCodes.Status400BadRequest);
             }
 
-            await _azureTableReaderWriter.UpdateResponseTimeEntity(corrId);
+            await _azureTableReaderWriter.UpdateResponseTimeEntity(correlationId);
 
-            var isBlobExists = _azureBlobEventWriter.CheckIfContainerExists(corrId);
+            bool isBlobExists = _azureBlobEventWriter.CheckIfContainerExists(correlationId);
 
             if (!isBlobExists)
             {
@@ -81,14 +81,14 @@ namespace UKHO.ERPFacade.API.Controllers
                 List<UnitsOfSalePrices> unitsOfSalePriceList = _erpFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList);
 
                 _logger.LogInformation(EventIds.DownloadEncEventPayloadStarted.ToEventId(), "Downloading the ENC event payload from azure blob storage.");
-                var encEventPayloadJson = _azureBlobEventWriter.DownloadEvent(corrId + '.' + RequestFormat, corrId);
+                string encEventPayloadJson = _azureBlobEventWriter.DownloadEvent(correlationId + '.' + RequestFormat, correlationId);
                 _logger.LogInformation(EventIds.DownloadEncEventPayloadCompleted.ToEventId(), "ENC event payload is downloaded from azure blob storage successfully.");
 
-                var unitsOfSaleUpdatedEventPayload = _erpFacadeService.BuildUnitsOfSaleUpdatedEventPayload(unitsOfSalePriceList, encEventPayloadJson);
+                UnitOfSaleUpdatedEventPayload unitsOfSaleUpdatedEventPayload = _erpFacadeService.BuildUnitsOfSaleUpdatedEventPayload(unitsOfSalePriceList, encEventPayloadJson);
 
                 unitsOfSaleUpdatedEventPayloadJson = JObject.Parse(JsonConvert.SerializeObject(unitsOfSaleUpdatedEventPayload));
 
-                var eventSize = _jsonHelper.GetPayloadJsonSize(unitsOfSaleUpdatedEventPayloadJson.ToString());
+                int eventSize = _jsonHelper.GetPayloadJsonSize(unitsOfSaleUpdatedEventPayloadJson.ToString());
                 if (eventSize > EventSizeLimit)
                 {
                     _logger.LogError(EventIds.PriceEventExceedSizeLimit.ToEventId(), "UnitsOfSale price event exceeds the size limit of 1 MB.");

@@ -8,7 +8,7 @@
   "subject": "MX545010, MX545012",
   "datacontenttype": "application/json",
   "data": {
-    "traceId": "367ce4a4-1drr-4f56-b359-59e165699231",
+    "correlationId": "367ce4a4-1drr-4f56-b359-59e165699231",
     "products": [
       {
         "productType": "ENC S57",

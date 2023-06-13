@@ -1,14 +1,14 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NUnit.Framework;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using UKHO.ERPFacade.API.Controllers;
 using UKHO.ERPFacade.API.Models;
 using UKHO.ERPFacade.API.Services;
@@ -16,8 +16,6 @@ using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Infrastructure.EventService;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using UKHO.ERPFacade.Common.IO;
 using IJsonHelper = UKHO.ERPFacade.Common.IO.IJsonHelper;
 
 namespace UKHO.ERPFacade.API.UnitTests.Controllers
@@ -82,7 +80,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         }
 
         [Test]
-        public async Task WhenCorrIdIsMissingInRequest_ThenErpFacadeReturns400BadRequestResponse()
+        public async Task WhenCorrelationIdIsMissingInRequest_ThenErpFacadeReturns400BadRequestResponse()
         {
             var fakePriceInformationJson = JArray.Parse(@"[{""corrid"":""""}]");
 
@@ -95,12 +93,12 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
              && call.GetArgument<LogLevel>(0) == LogLevel.Warning
-             && call.GetArgument<EventId>(1) == EventIds.CorrIdMissingInSAPPriceInformationPayload.ToEventId()
-             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "CorrId is missing in price information payload recieved from SAP.").MustHaveHappenedOnceExactly();
+             && call.GetArgument<EventId>(1) == EventIds.CorrelationIdMissingInSAPPriceInformationPayload.ToEventId()
+             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "CorrelationId is missing in price information payload recieved from SAP.").MustHaveHappenedOnceExactly();
         }
 
         [Test]
-        public async Task WhenInvalidCorrIdInRequest_ThenErpFacadeReturns404NotFoundResponse()
+        public async Task WhenInvalidCorrelationIdInRequest_ThenErpFacadeReturns404NotFoundResponse()
         {
             var fakePriceInformationJson = JArray.Parse(@"[{""corrid"":""123""}]");
 

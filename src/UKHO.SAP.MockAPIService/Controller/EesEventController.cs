@@ -18,7 +18,7 @@ namespace UKHO.SAP.MockAPIService.Controller
         private readonly IConfiguration _configuration;
         private readonly MockService _mockService;
 
-        private const string TraceIdKey = "data.traceId";
+        private const string CorrelationIdKey = "data.correlationId";
         private const string RequestFormat = "json";
 
         public EesEventController(IAzureBlobEventWriter azureBlobEventWriter, IConfiguration configuration, MockService mockService)
@@ -41,9 +41,9 @@ namespace UKHO.SAP.MockAPIService.Controller
             JObject unitsOfSaleUpdatedEventPayloadJson = JObject.Parse(JsonConvert.SerializeObject(unitOfSalePriceEvent));
             JObject encEventPayloadJson = JObject.Parse(JsonConvert.SerializeObject(unitOfSalePriceEvent.Data));
 
-            var traceId = encEventPayloadJson.SelectToken(TraceIdKey)?.Value<string>();
+            var correlationId = encEventPayloadJson.SelectToken(CorrelationIdKey)?.Value<string>();
 
-            await _azureBlobEventWriter.UploadEvent(unitsOfSaleUpdatedEventPayloadJson.ToString(), traceId!, traceId + "_ees." + RequestFormat);
+            await _azureBlobEventWriter.UploadEvent(unitsOfSaleUpdatedEventPayloadJson.ToString(), correlationId!, correlationId + "_ees." + RequestFormat);
 
             if (bool.Parse(_configuration["IsFTRunning"]))
             {
