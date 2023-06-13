@@ -41,7 +41,7 @@ namespace UKHO.ERPFacade.Common.HealthCheck
                 //Check whether template file exists or not
                 if (!_fileSystemHelper.IsFileExists(sapXmlTemplatePath))
                 {
-                    _logger.LogError(EventIds.SapHealthCheckXmlTemplateNotFound.ToEventId(), "The SAP Healt Check xml template does not exist.");
+                    _logger.LogError(EventIds.SapHealthCheckXmlTemplateNotFound.ToEventId(), "The SAP Health Check xml template does not exist.");
                     throw new FileNotFoundException();
                 }
 
