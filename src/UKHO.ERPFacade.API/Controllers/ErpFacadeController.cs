@@ -99,7 +99,7 @@ namespace UKHO.ERPFacade.API.Controllers
             return new OkObjectResult(unitsOfSaleUpdatedEventPayloadJson);
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("/erpfacade/bulkpriceinformation")]        
         public virtual async Task<IActionResult> PostBulkPriceInformation([FromBody] JArray requestJson)
         {
