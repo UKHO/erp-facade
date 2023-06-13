@@ -29,7 +29,6 @@ resource "azurerm_windows_web_app" "webapp_service" {
       content {
           ip_address  = length(split("/",ip_restriction.value)) > 1 ? ip_restriction.value : "${ip_restriction.value}/32"
       }
-      action = var.env_name == "dev" ? "" : allow
     }
   }
 
