@@ -164,7 +164,51 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         AttrNotMatched.Add(nameof(item.PRODUCT));
                     if (!item.PRODTYPE.Equals(product.ProductType[4..]))
                         AttrNotMatched.Add(nameof(item.PRODTYPE));
-                    if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!getUoSInfo(item.PRODUCTNAME).UnitType.Contains("Unit")))
+                    if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!getUoSInfo(item.PRODUCTNAME).UnitOfSaleType.Contains("Unit")))
+                        AttrNotMatched.Add(nameof(item.PRODUCTNAME));
+                    if (!item.AGENCY.Equals(product.Agency))
+                        AttrNotMatched.Add(nameof(item.AGENCY));
+                    if (!item.PROVIDER.Equals(product.ProviderCode))
+                        AttrNotMatched.Add(nameof(item.PROVIDER));
+                    if (!item.ENCSIZE.Equals(product.Size))
+                        AttrNotMatched.Add(nameof(item.ENCSIZE));
+                    if (!item.TITLE.Equals(product.Title))
+                        AttrNotMatched.Add(nameof(item.TITLE));
+                    if (!item.EDITIONNO.Equals(product.EditionNumber))
+                        AttrNotMatched.Add(nameof(item.EDITIONNO));
+                    if (!item.UPDATENO.Equals(product.UpdateNumber))
+                        AttrNotMatched.Add(nameof(item.UPDATENO));
+                    //Checking blanks
+                    string[] fieldNames = { "CANCELLED", "REPLACEDBY", "UNITTYPE" };
+                    var v = VerifyBlankFields(item, fieldNames);
+
+
+                    if (AttrNotMatched.Count == 0)
+                    {
+                        Console.WriteLine("UPDATE ENC CELL EDITION UPDATE NUMBER Action's Data is correct");
+                        return true;
+                    }
+
+                    else
+                    {
+                        Console.WriteLine("UPDATE ENC CELL EDITION UPDATE NUMBER Action's Data is incorrect");
+                        Console.WriteLine("Not matching attributes are:");
+                        foreach (string attribute in AttrNotMatched)
+                        { Console.WriteLine(attribute); }
+                        return false;
+                    }
+                }
+                else if ((childCell == product.ProductName) && (product.Status.StatusName.Contains("Suspended")))
+                {
+
+                    AttrNotMatched.Clear();
+                    if (!item.ACTIONNUMBER.Equals(actionCounter.ToString()))
+                        AttrNotMatched.Add(nameof(item.ACTIONNUMBER));
+                    if (!item.PRODUCT.Equals("ENC CELL"))
+                        AttrNotMatched.Add(nameof(item.PRODUCT));
+                    if (!item.PRODTYPE.Equals(product.ProductType[4..]))
+                        AttrNotMatched.Add(nameof(item.PRODTYPE));
+                    if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!getUoSInfo(item.PRODUCTNAME).UnitOfSaleType.Contains("Unit")))
                         AttrNotMatched.Add(nameof(item.PRODUCTNAME));
                     if (!item.AGENCY.Equals(product.Agency))
                         AttrNotMatched.Add(nameof(item.AGENCY));
@@ -573,7 +617,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     if (!item.PRODTYPE.Equals(product.ProductType[4..]))
                         AttrNotMatched.Add(nameof(item.PRODTYPE));
                     //if (!item.PRODUCTNAME.Equals(product.ProductName))(!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!getUoSInfo(item.PRODUCTNAME).UnitType.Contains("Unit"))
-                    if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!getUoSInfo(item.PRODUCTNAME).UnitType.Contains("Unit")))
+                    if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!getUoSInfo(item.PRODUCTNAME).UnitOfSaleType.Contains("Unit")))
                         AttrNotMatched.Add(nameof(item.PRODUCTNAME));
                     if (!item.AGENCY.Equals(product.Agency))
                         AttrNotMatched.Add(nameof(item.AGENCY));

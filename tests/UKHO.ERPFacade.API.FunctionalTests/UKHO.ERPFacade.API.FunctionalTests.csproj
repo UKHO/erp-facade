@@ -66,13 +66,13 @@
     <None Update="ERPFacadePayloadTestData\ID15_oneNewCellAndOneMoveOneCell.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPFacadePayloadTestData\ID20_newEditionAdditionalCoverageV01.json">
+    <None Update="ERPFacadePayloadTestData\ID20_newEditionAdditionalCoverageV01.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPFacadePayloadTestData\ID21_cancelAndReplaceV03.json">
+    <None Update="ERPFacadePayloadTestData\ID21_cancelAndReplaceV03.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPFacadePayloadTestData\ID22_Cell_Moves_Unit_and_New_CellV03.json">
+    <None Update="ERPFacadePayloadTestData\ID22_Cell_Moves_Unit_and_New_CellV03.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPFacadePayloadTestData\ID23_Cell_MoveV03.json">
@@ -88,6 +88,21 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPFacadePayloadTestData\ID27_supplier_Defined_ReleasabilitySet_V01.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\ID28_simpleSuspendedScenario.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\ID29_simpleWithdrawnScenario.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\ID30_Suspend_and_WithdrawV01.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\ID31_metadataAndSuspended.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\ID32_moveAndSuspended.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPFacadePayloadTestData\UoS1_Pricing.JSON">
