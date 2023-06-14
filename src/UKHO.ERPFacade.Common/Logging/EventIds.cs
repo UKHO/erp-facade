@@ -193,8 +193,13 @@
         PriceEventExceedSizeLimit = 940038,
 
         /// <summary>
-        /// 940039 - UnitsOfSale NotFound In SAP PriceInformation Payload
+        /// 940039 - Sap Health Check Xml Template Not Found
         /// </summary>
-        UnitsOfSaleNotFoundInSAPPriceInformationPayload = 940039
+        SapHealthCheckXmlTemplateNotFound = 940039,
+
+        /// <summary>
+        /// 940040 - SAP Health Check Request Sent To SAP
+        /// </summary>
+        SapHealthCheckRequestSentToSap = 940040
     }
 }
