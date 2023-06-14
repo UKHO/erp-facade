@@ -75,19 +75,19 @@
     <None Update="ERPFacadePayloadTestData\ID22_Cell_Moves_Unit_and_New_CellV03.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPFacadePayloadTestData\ID23_Cell_MoveV03.json">
+    <None Update="ERPFacadePayloadTestData\ID23_Cell_MoveV03.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPFacadePayloadTestData\ID24_Metadata_ChangeV03.json">
+    <None Update="ERPFacadePayloadTestData\ID24_Metadata_ChangeV03.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPFacadePayloadTestData\ID25_Mixed_scenario1V03.json">
+    <None Update="ERPFacadePayloadTestData\ID25_Mixed_scenario1V03.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPFacadePayloadTestData\ID26_New_CellV03.json">
+    <None Update="ERPFacadePayloadTestData\ID26_New_CellV03.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPFacadePayloadTestData\ID27_supplier_Defined_ReleasabilitySet_V01.json">
+    <None Update="ERPFacadePayloadTestData\ID27_supplier_Defined_ReleasabilitySet_V01.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPFacadePayloadTestData\ID28_simpleSuspendedScenario.JSON">

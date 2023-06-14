@@ -8,8 +8,7 @@
     "subject": "US5HPWEC,US5HPWED,US5VA32M,US5VA51M",
     "datacontenttype": "application/json",
     "data": {
-        "correlationId": "cesc-v03-mixed-3e901",
-
+        "correlationId": "cbdhg-27gd-328djdb8-sdss",
         "products": [
             {
                 "productType": "ENC S57",

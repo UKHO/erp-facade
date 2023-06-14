@@ -8,8 +8,7 @@
     "subject": "MX545010",
     "datacontenttype": "application/json",
     "data": {
-        "correlationId": "ewfs-v03-metadatachange-vsd001",
-        "traceId": "367ce4a4-1d62-4f56-b359-59e178d77100",
+        "correlationId": "abcd-a2510-eew8362-sw8jn",
         "products": [
             {
                 "productType": "ENC S57",

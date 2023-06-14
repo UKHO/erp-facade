@@ -136,14 +136,14 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             string envName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             Console.WriteLine($"Current Environment => {envName}");
 
-            if (envName == "dev" || envName == "Development")
-            {
+            /*if (envName == "dev" || envName == "Development")
+            {*/
                 response = await _webhook.PostWebhookResponseAsyncForXML(filePath, generatedXMLFolder, await _authToken.GetAzureADToken(false));
-            }
+            /*}
             else
             {
                 response = await _webhook.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(false));
-            }
+            }*/
 
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
