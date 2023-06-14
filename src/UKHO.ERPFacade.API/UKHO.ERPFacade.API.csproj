@@ -22,6 +22,14 @@
     <Compile Remove="Filters\LogCorrelationIdMiddlewareExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="SapXmlTemplates\SAPHealthCheckRequest.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="SapXmlTemplates\SAPHealthCheckRequest.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.2.2" />
     <PackageReference Include="Azure.Identity" Version="1.8.2" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
@@ -42,9 +50,6 @@
     <ProjectReference Include="..\UKHO.ERPFacade.Common\UKHO.ERPFacade.Common.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Update="SapXmlTemplates\SAPHealthCheckRequest.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="SapXmlTemplates\SAPRequest.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
