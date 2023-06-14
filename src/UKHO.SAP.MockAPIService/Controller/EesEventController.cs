@@ -34,16 +34,17 @@ namespace UKHO.SAP.MockAPIService.Controller
         {
             using var stream = new MemoryStream();
             await Request.Body.CopyToAsync(stream);
-            var byteArray = stream.ToArray();
+            byte[]? byteArray = stream.ToArray();
 
             var unitOfSalePriceEvent = JsonConvert.DeserializeObject<CloudEvent<UnitOfSalePriceEvent>>(Encoding.UTF8.GetString(byteArray));
 
             JObject unitsOfSaleUpdatedEventPayloadJson = JObject.Parse(JsonConvert.SerializeObject(unitOfSalePriceEvent));
             JObject encEventPayloadJson = JObject.Parse(JsonConvert.SerializeObject(unitOfSalePriceEvent.Data));
 
-            var correlationId = encEventPayloadJson.SelectToken(CorrelationIdKey)?.Value<string>();
+            string? correlationId = encEventPayloadJson.SelectToken(CorrelationIdKey)?.Value<string>();
 
             await _azureBlobEventWriter.UploadEvent(unitsOfSaleUpdatedEventPayloadJson.ToString(), correlationId!, correlationId + "_ees." + RequestFormat);
+          
 
             if (bool.Parse(_configuration["IsFTRunning"]))
             {
