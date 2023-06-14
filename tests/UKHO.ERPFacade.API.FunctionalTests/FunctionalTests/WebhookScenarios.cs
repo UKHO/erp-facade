@@ -106,7 +106,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
         //New Edition
         [TestCase("ID20_newEditionAdditionalCoverageV01.JSON", TestName = "WhenICallTheWebhookWithNewEditionAdditionalCoverageV01PayloadFile_ThenWebhookReturns200Response")]
-
+        //
         //V0.3S
         [TestCase("ID21_cancelAndReplaceV03.JSON", TestName = "WhenICallTheWebhookWithCancelAndReplaceV03PayloadFile_ThenWebhookReturns200Response")]
         [TestCase("ID22_Cell_Moves_Unit_and_New_CellV03.JSON", TestName = "WhenICallTheWebhookWithCellMoveAndNewCellV03PayloadFile_ThenWebhookReturns200Response")]
@@ -133,10 +133,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             string generatedXMLFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXMLFolder);
             RestResponse response;
 
-            string envName = Environment.GetEnvironmentVariable("Environment");
+            string envName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             Console.WriteLine($"Current Environment => {envName}");
 
-            if (envName == "Dev")
+            if (envName == "dev" || envName == "Development")
             {
                 response = await _webhook.PostWebhookResponseAsyncForXML(filePath, generatedXMLFolder, await _authToken.GetAzureADToken(false));
             }
