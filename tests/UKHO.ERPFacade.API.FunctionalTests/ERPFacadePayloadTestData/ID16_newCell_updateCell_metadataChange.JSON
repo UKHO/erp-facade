@@ -8,7 +8,7 @@
   "subject": "NCR3042,UK45TRI,MX545010",
   "datacontenttype": "application/json",
   "data": {
-    "traceId": "367ce4a4-1d62-4f56-b359-4301mix",
+    "correlationId": "367ce4a4-1d62-4f56-b359-4301mix",
     "products": [
       {
         "productType": "ENC S57",

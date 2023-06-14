@@ -2,9 +2,9 @@
 using FluentAssertions;
 using NUnit.Framework;
 using UKHO.ERPFacade.Common.IO.Azure;
-using UKHO.ERPFacade.WebJob.Services;
+using UKHO.ERPFacade.Monitoring.WebJob.Services;
 
-namespace UKHO.ERPFacade.WebJob.UnitTests.Services
+namespace UKHO.ERPFacade.Monitoring.WebJob.UnitTests.Services
 {
     [TestFixture]
     public class MonitoringServiceTests

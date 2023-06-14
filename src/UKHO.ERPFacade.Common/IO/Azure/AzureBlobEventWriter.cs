@@ -40,7 +40,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
         //Private Methods
         private BlobClient GetBlobClient(string containerName, string blobName)
         {
-            BlobContainerClient blobContainerClient = new(_azureStorageConfig.Value.ConnectionString, containerName);
+            BlobContainerClient blobContainerClient = new(_azureStorageConfig.Value.ConnectionString, containerName.ToLower());
             blobContainerClient.CreateIfNotExists();
 
             BlobClient blobClient = blobContainerClient.GetBlobClient(blobName);
@@ -51,7 +51,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
         {
             BlobServiceClient serviceClient = new(_azureStorageConfig.Value.ConnectionString);
 
-            var container = serviceClient.GetBlobContainerClient(containerName);
+            var container = serviceClient.GetBlobContainerClient(containerName.ToLower());
             var isExists = container.Exists();
 
             return isExists;
