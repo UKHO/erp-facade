@@ -200,6 +200,11 @@
         /// <summary>
         /// 940040 - SAP Health Check Request Sent To SAP
         /// </summary>
-        SapHealthCheckRequestSentToSap = 940040
+        SapHealthCheckRequestSentToSap = 940040,
+
+        /// <summary>
+        /// 940041 - UnitsOfSale NotFound In SAP PriceInformation Payload
+        /// </summary>
+        UnitsOfSaleNotFoundInSAPPriceInformationPayload = 940041
     }
 }
