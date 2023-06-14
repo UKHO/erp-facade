@@ -193,33 +193,43 @@
         PriceEventExceedSizeLimit = 940038,
 
         /// <summary>
-        /// 940039 - Uploading the UnitsOfSale updated event payload json in blob storage.
+        /// 940039 - Sap Health Check Xml Template Not Found
         /// </summary>
-        UploadUnitsOfSaleUpdatedEventPayloadInAzureBlob = 940039,
+        SapHealthCheckXmlTemplateNotFound = 940039,
 
         /// <summary>
-        /// 940040 - UnitsOfSale updated event payload json is uploaded in blob storage successfully.
+        /// 940040 - SAP Health Check Request Sent To SAP
         /// </summary>
-        UploadedUnitsOfSaleUpdatedEventPayloadInAzureBlob = 940040,
+        SapHealthCheckRequestSentToSap = 940040,
 
         /// <summary>
-        /// 940041 - UnitsOfSale updated event Pushed To EES
+        /// 940041 - Uploading the UnitsOfSale updated event payload json in blob storage.
         /// </summary>
-        UnitsOfSaleUpdatedEventPushedToEES = 940041,
+        UploadUnitsOfSaleUpdatedEventPayloadInAzureBlob = 940041,
 
         /// <summary>
-        /// 940042 - Attempting to send cloudEvent to Enterprise Event Service
+        /// 940042 - UnitsOfSale updated event payload json is uploaded in blob storage successfully.
         /// </summary>
-        StartingEnterpriseEventServiceEventPublisher = 940042,
+        UploadedUnitsOfSaleUpdatedEventPayloadInAzureBlob = 940042,
 
         /// <summary>
-        /// 940043 - Successfully sent cloudEvent to Enterprise Event Service
+        /// 940043 - UnitsOfSale updated event Pushed To EES
         /// </summary>
-        EnterpriseEventServiceEventPublisherSuccess = 940043,
+        UnitsOfSaleUpdatedEventPushedToEES = 940043,
 
         /// <summary>
-        /// 940044 - Failed to send event cloudEvent to the enterprise event service
+        /// 940044 - Attempting to send cloudEvent to Enterprise Event Service
         /// </summary>
-        EnterpriseEventServiceEventPublisherFailure = 940044
+        StartingEnterpriseEventServiceEventPublisher = 940044,
+
+        /// <summary>
+        /// 940045 - Successfully sent cloudEvent to Enterprise Event Service
+        /// </summary>
+        EnterpriseEventServiceEventPublisherSuccess = 940045,
+
+        /// <summary>
+        /// 940046 - Failed to send event cloudEvent to the enterprise event service
+        /// </summary>
+        EnterpriseEventServiceEventPublisherFailure = 940046
     }
 }

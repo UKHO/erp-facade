@@ -5,6 +5,7 @@ using Azure.Security.KeyVault.Secrets;
 using Newtonsoft.Json.Serialization;
 using SoapCore;
 using UKHO.ERPFacade.Common.Configuration;
+using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.SAP.MockAPIService.Filters;
 using UKHO.SAP.MockAPIService.Services;
 
@@ -49,6 +50,7 @@ namespace UKHO.SAP.MockAPIService
 
             builder.Services.AddSingleton<Iz_adds_mat_info, z_adds_mat_info>();
             builder.Services.AddSingleton<ISapConfiguration, SapConfiguration>();
+            builder.Services.AddSingleton<IAzureBlobEventWriter, AzureBlobEventWriter>();
             builder.Services.AddSingleton<MockService>();
             builder.Services.AddControllers(o =>
             {
