@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using UKHO.ERPFacade.Common.IO.Azure;
@@ -32,7 +27,7 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
         public void SliceAndPublishIncompeleteEvents()
         {
             var entities = _azureTableReaderWriter.GetMasterEntities(IncompleteStatus);
-            string priceChangeJson = string.Empty;
+            string priceChangeJson;
             JObject unitsOfSaleUpdatedEventPayloadJson;
 
             foreach (var entity in entities)
@@ -69,8 +64,7 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
                     else
                     {
                         var slicedPrices = priceInformationList.Select(p => p.ProductName).Distinct().ToList();
-                        var eventId = string.Empty;
-
+                        string eventId;
 
                         foreach (var unitName in slicedPrices)
                         {

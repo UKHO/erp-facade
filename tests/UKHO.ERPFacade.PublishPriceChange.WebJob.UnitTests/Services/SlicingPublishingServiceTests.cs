@@ -94,6 +94,7 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.UnitTests.Services
             A.CallTo(() => _fakeAzureTableReaderWriter.GetUnitPriceChangeEventsEntities(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureBlobEventWriter.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureTableReaderWriter.UpdateUnitPriceChangeStatusEntity(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeAzureTableReaderWriter.AddUnitPriceChangeEntity(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
@@ -137,6 +138,17 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.UnitTests.Services
                 Timestamp = new DateTimeOffset(),
                 UnitName = "FakeUnitName"
             });
+            unitPriceChangeEntities.Add(new UnitPriceChangeEntity()
+            {
+                Eventid = "FakeEventID2",
+                MasterCorrid = "FakeCorrID",
+                RowKey = "FakeEventID2",
+                ETag = new(),
+                PartitionKey = "FakeEventID2",
+                Status = "Complete",
+                Timestamp = new DateTimeOffset(),
+                UnitName = "FakeUnitName"
+            });
 
             A.CallTo(() => _fakeAzureTableReaderWriter.GetMasterEntities(A<string>.Ignored, A<string>.Ignored)).Returns(priceChangeMasterEntities);
             A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).Returns(downloadPayload);
@@ -149,6 +161,7 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.UnitTests.Services
             A.CallTo(() => _fakeAzureBlobEventWriter.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureTableReaderWriter.UpdateUnitPriceChangeStatusEntity(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureTableReaderWriter.UpdatePriceMasterStatusEntity(A<string>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeAzureTableReaderWriter.AddUnitPriceChangeEntity(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
