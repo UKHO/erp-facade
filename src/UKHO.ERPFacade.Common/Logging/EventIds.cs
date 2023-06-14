@@ -245,6 +245,18 @@
         /// <summary>
         /// 940049 - Updated Price master status entity successfully in Azure Table
         /// </summary>
-        UpdatedPriceChangeMasterStatusEntitySuccessful = 940049
+        UpdatedPriceChangeMasterStatusEntitySuccessful = 940049,
+        /// <summary>
+        /// 940050 - Downloading the price change information event from blob storage.
+        /// </summary>
+        DownloadBulkPriceInformationEventFromAzureBlob = 940050,
+        /// <summary>
+        /// 940051 - Sliced event is uploaded in blob storage successfully.
+        /// </summary>
+        UploadedSlicedEventInAzureBlob = 940051,
+        /// <summary>
+        /// 940052 - Sliced event is uploaded in blob storage successfully for incomplete unit prices.
+        /// </summary>
+        UploadedSlicedEventInAzureBlobForUnitPrices = 940052
     }
 }

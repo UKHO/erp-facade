@@ -223,7 +223,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             {
                 existingEntity.Status = "Complete";
                 tableClient.UpdateEntity(existingEntity, ETag.All, TableUpdateMode.Replace);
-                _logger.LogInformation(EventIds.UpdatedPriceChangeMasterStatusEntitySuccessful.ToEventId(), "Unit price change status is updated in azure table successfully.");
+                _logger.LogInformation(EventIds.UpdatedPriceChangeMasterStatusEntitySuccessful.ToEventId(), "Price change master status is updated in azure table successfully.");
             }
         }
 

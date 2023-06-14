@@ -37,6 +37,7 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
 
             foreach (var entity in entities)
             {
+                _logger.LogInformation(EventIds.DownloadBulkPriceInformationEventFromAzureBlob.ToEventId(), "Downloading Price Change information from blob");
                 priceChangeJson = _azureBlobEventWriter.DownloadEvent(entity.CorrId + '/' + entity.CorrId + '.' + RequestFormat, ContainerName);
                 if (!string.IsNullOrEmpty(priceChangeJson))
                 {
@@ -53,6 +54,7 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
                                 UnitOfSaleUpdatedEventPayload unitsOfSaleUpdatedEventPayload = BuildUnitsOfSaleUpdatedEventPayload(unitsOfSalePriceList, unitPriceChange.Eventid, unitPriceChange.UnitName, entity.CorrId);
                                 unitsOfSaleUpdatedEventPayloadJson = JObject.Parse(JsonConvert.SerializeObject(unitsOfSaleUpdatedEventPayload.EventData));
                                 _azureBlobEventWriter.UploadEvent(unitsOfSaleUpdatedEventPayloadJson.ToString(), ContainerName, entity.CorrId + '/' + unitPriceChange.UnitName + '/' + unitPriceChange.UnitName + '.' + RequestFormat);
+                                _logger.LogInformation(EventIds.UploadedSlicedEventInAzureBlobForUnitPrices.ToEventId(), "Sliced event is uploaded in blob storage successfully for incomplete unit prices.");
                                 //publish event 
 
                                 if (true) //check publish status
@@ -79,6 +81,7 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
                             UnitOfSaleUpdatedEventPayload unitsOfSaleUpdatedEventPayload = BuildUnitsOfSaleUpdatedEventPayload(unitsOfSalePriceList, eventId, unitName, entity.CorrId);
                             unitsOfSaleUpdatedEventPayloadJson = JObject.Parse(JsonConvert.SerializeObject(unitsOfSaleUpdatedEventPayload.EventData));
                             _azureBlobEventWriter.UploadEvent(unitsOfSaleUpdatedEventPayloadJson.ToString(), ContainerName, entity.CorrId + '/' + unitName + '/' + unitName + '.' + RequestFormat);
+                            _logger.LogInformation(EventIds.UploadedSlicedEventInAzureBlob.ToEventId(), "Sliced event is uploaded in blob storage successfully.");
                             //publish event 
 
                             if (true) //check publish status

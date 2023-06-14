@@ -25,6 +25,7 @@ namespace UKHO.ERPFacade.API.Controllers
         private const string CorrelationIdKey = "corrid";
         private const string RequestFormat = "json";
         private const int EventSizeLimit = 1000000;
+        private const string ContainerName = "pricechangeblobs";
 
         public ErpFacadeController(IHttpContextAccessor contextAccessor,
                                    ILogger<ErpFacadeController> logger,
@@ -117,7 +118,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
             _logger.LogInformation(EventIds.UploadBulkPriceInformationEventInAzureBlob.ToEventId(), "Uploading the received Bulk price information event in blob storage.");
 
-            await _azureBlobEventWriter.UploadEvent(bulkPriceInformationJson.ToString(), "pricechangeblobs", correlationId + '/' + correlationId + '.' + RequestFormat);
+            await _azureBlobEventWriter.UploadEvent(bulkPriceInformationJson.ToString(), ContainerName, correlationId + '/' + correlationId + '.' + RequestFormat);
 
             _logger.LogInformation(EventIds.UploadedBulkPriceInformationEventInAzureBlob.ToEventId(), "Bulk price information event is uploaded in blob storage successfully.");
 
