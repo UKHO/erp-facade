@@ -106,6 +106,7 @@
         /// 940021 - CorrId is missing in price information payload recieved from SAP.
         /// </summary>
         CorrIdMissingInSAPPriceInformationPayload = 940021,
+
         /// <summary>
         /// 940022 - Invalid SAP callback. Request from ERP Facade to SAP not found for CorrId.
         /// </summary>
@@ -189,6 +190,36 @@
         /// <summary>
         /// 940038 - Price Event exceeds the size limit of 1 MB
         /// </summary>
-        PriceEventExceedSizeLimit = 940038
+        PriceEventExceedSizeLimit = 940038,
+
+        /// <summary>
+        /// 940039 - Uploading the UnitsOfSale updated event payload json in blob storage.
+        /// </summary>
+        UploadUnitsOfSaleUpdatedEventPayloadInAzureBlob = 940039,
+
+        /// <summary>
+        /// 940040 - UnitsOfSale updated event payload json is uploaded in blob storage successfully.
+        /// </summary>
+        UploadedUnitsOfSaleUpdatedEventPayloadInAzureBlob = 940040,
+
+        /// <summary>
+        /// 940041 - UnitsOfSale updated event Pushed To EES
+        /// </summary>
+        UnitsOfSaleUpdatedEventPushedToEES = 940041,
+
+        /// <summary>
+        /// 940042 - Attempting to send cloudEvent to Enterprise Event Service
+        /// </summary>
+        StartingEnterpriseEventServiceEventPublisher = 940042,
+
+        /// <summary>
+        /// 940043 - Successfully sent cloudEvent to Enterprise Event Service
+        /// </summary>
+        EnterpriseEventServiceEventPublisherSuccess = 940043,
+
+        /// <summary>
+        /// 940044 - Failed to send event cloudEvent to the enterprise event service
+        /// </summary>
+        EnterpriseEventServiceEventPublisherFailure = 940044
     }
 }

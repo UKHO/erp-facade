@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Converters;
 using UKHO.ERPFacade.Common.Infrastructure.Config;
 using UKHO.ERPFacade.Common.Infrastructure.EventService.EventProvider;
+using UKHO.ERPFacade.Common.Logging;
 
 namespace UKHO.ERPFacade.Common.Infrastructure.EventService
 {
@@ -40,15 +41,15 @@ namespace UKHO.ERPFacade.Common.Infrastructure.EventService
 
             try
             {
-                //_logger.LogTrace(EventIds.StartingEnterpriseEventServiceEventPublisher.ToEventId(), "Attempting to send {cloudEventType} for {cloudEventSubject} to Enterprise Event Service", cloudEventData.Type, cloudEventData.Subject);
+                _logger.LogTrace(EventIds.StartingEnterpriseEventServiceEventPublisher.ToEventId(), "Attempting to send {cloudEventType} for {cloudEventSubject} to Enterprise Event Service", cloudEventData.Type, cloudEventData.Subject);
                 var response = await client.PostAsync(_eventServiceEndpoint, content);
                 response.EnsureSuccessStatusCode();
-                //_logger.LogTrace(EventIds.EnterpriseEventServiceEventPublisherSuccess.ToEventId(), "Successfully sent {cloudEventType} for {cloudEventSubject} to Enterprise Event Service", cloudEventData.Type, cloudEventData.Subject);
+                _logger.LogTrace(EventIds.EnterpriseEventServiceEventPublisherSuccess.ToEventId(), "Successfully sent {cloudEventType} for {cloudEventSubject} to Enterprise Event Service", cloudEventData.Type, cloudEventData.Subject);
                 return Result.Success("Successfully sent event");
             }
             catch (Exception ex)
             {
-                //_logger.LogError(EventIds.EnterpriseEventServiceEventPublisherFailure.ToEventId(), ex, "Failed to send event type: {cloudEventType} to the enterprise event service for product: {cloudEventSubject}", cloudEventData.Type, cloudEventData.Subject);
+                _logger.LogError(EventIds.EnterpriseEventServiceEventPublisherFailure.ToEventId(), ex, "Failed to send event type: {cloudEventType} to the enterprise event service for product: {cloudEventSubject}", cloudEventData.Type, cloudEventData.Subject);
                 return Result.Failure(ex.Message);
             }
         }
