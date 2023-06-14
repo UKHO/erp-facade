@@ -8,7 +8,7 @@
     "subject": "DE416080",
     "datacontenttype": "application/json",
     "data": {
-        "correlationId": "abcs-cor001-newedition-2001",
+        "correlationId": "abcs-cor0012-newedition-2001",
         "products": [
             {
                 "productType": "ENC S57",
