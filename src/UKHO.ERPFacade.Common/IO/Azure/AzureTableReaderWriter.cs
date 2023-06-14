@@ -237,8 +237,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             if (tableExists == null)
             {
                 serviceClient.GetTableClient(tableName).CreateIfNotExistsAsync();
-
-                throw new ERPFacadeException(EventIds.AzureTableNotFound.ToEventId());
+                _logger.LogWarning(EventIds.AzureTableNotFound.ToEventId(), "Azure table not found");
             }
 
             TableClient tableClient = serviceClient.GetTableClient(tableName);
