@@ -105,18 +105,18 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [TestCase("ID19_CR_metadata_move.JSON", TestName = "WhenICallTheWebhookWithMixScenarioHavingCancel&ReplaceAndMetadataChangeAndMoveCell_ThenWebhookReturns200Response")]
 
         //New Edition
-        [TestCase("ID20_newEditionAdditionalCoverageV01.JSON", TestName = "WhenICallTheWebhookWithNewEditionAdditionalCoverageV01PayloadFile_ThenWebhookReturns200Response")]
+        [TestCase("ID20_newEditionAdditionalCoverageV_01.JSON", TestName = "WhenICallTheWebhookWithNewEditionAdditionalCoverageV01PayloadFile_ThenWebhookReturns200Response")]
         //
         //V0.3S
-        [TestCase("ID21_cancelAndReplaceV03.JSON", TestName = "WhenICallTheWebhookWithCancelAndReplaceV03PayloadFile_ThenWebhookReturns200Response")]
-        [TestCase("ID22_Cell_Moves_Unit_and_New_CellV03.JSON", TestName = "WhenICallTheWebhookWithCellMoveAndNewCellV03PayloadFile_ThenWebhookReturns200Response")]
-        [TestCase("ID23_Cell_MoveV03.JSON", TestName = "WhenICallTheWebhookWithCellMoveV03PayloadFile_ThenWebhookReturns200Response")]
-        [TestCase("ID24_Metadata_ChangeV03.JSON", TestName = "WhenICallTheWebhookWithCellMoveV03PayloadFile_ThenWebhookReturns200Response")]
-        [TestCase("ID25_Mixed_scenario1V03.JSON", TestName = "WhenICallTheWebhookWithMixedScenario1V03PayloadFile_ThenWebhookReturns200Response")]
-        [TestCase("ID26_New_CellV03.JSON", TestName = "WhenICallTheWebhookWithNewCellV03PayloadFile_ThenWebhookReturns200Response")]
+        [TestCase("ID21_cancelAndReplaceV_03.JSON", TestName = "WhenICallTheWebhookWithCancelAndReplaceV03PayloadFile_ThenWebhookReturns200Response")]
+        [TestCase("ID22_Cell_Moves_Unit_and_New_CellV_03.JSON", TestName = "WhenICallTheWebhookWithCellMoveAndNewCellV03PayloadFile_ThenWebhookReturns200Response")]
+        [TestCase("ID23_Cell_MoveV_03.JSON", TestName = "WhenICallTheWebhookWithCellMoveV03PayloadFile_ThenWebhookReturns200Response")]
+        [TestCase("ID24_Metadata_ChangeV_03.JSON", TestName = "WhenICallTheWebhookWithCellMoveV03PayloadFile_ThenWebhookReturns200Response")]
+        [TestCase("ID25_Mixed_scenario1V_03.JSON", TestName = "WhenICallTheWebhookWithMixedScenario1V03PayloadFile_ThenWebhookReturns200Response")]
+        [TestCase("ID26_New_CellV_03.JSON", TestName = "WhenICallTheWebhookWithNewCellV03PayloadFile_ThenWebhookReturns200Response")]
 
         //Supplier Defined Releasability Set v0.1
-        [TestCase("ID27_supplier_Defined_ReleasabilitySet_V01.JSON", TestName = "WhenICallTheWebhookWithSupplierDefinedReleasabilitySetV01_ThenWebhookReturns200Response")]
+        [TestCase("ID27_supplier_Defined_ReleasabilitySet_V_01.JSON", TestName = "WhenICallTheWebhookWithSupplierDefinedReleasabilitySetV01_ThenWebhookReturns200Response")]
 
         //Suspended & Withdrawn
         [TestCase("ID28_simpleSuspendedScenario.JSON", TestName = "A28_Scenario_for_SimpleSuspended")]

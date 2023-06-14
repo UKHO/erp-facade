@@ -5,33 +5,43 @@
     "id": "2f03a25f-28b3-46ea-b009-5943250a9a41",
     "time": "2020-10-13T12:08:03.4880776Z",
     "_COMMENT": "A comma separated list of products",
-    "subject": "DE416080",
+    "subject": "MX545010",
     "datacontenttype": "application/json",
     "data": {
-        "correlationId": "abcs-cor0012-newedition-2001",
+        "correlationId": "dhegtq-1321131-213114f",
         "products": [
             {
                 "productType": "ENC S57",
-                "dataSetName": "DE416080.001",
-                "productName": "DE416080",
-                "title": "Greifswalder Bodden",
-                "scale": 100000,
-                "usageBand": 4,
-                "editionNumber": 11,
+                "dataSetName": "MX545010.001",
+                "productName": "MX545010",
+                "title": "Isla Clarion",
+                "scale": 90000,
+                "usageBand": 5,
+                "editionNumber": 1,
                 "updateNumber": 0,
                 "mayAffectHoldings": true,
                 "contentChanged": true,
                 "permit": "permitString",
                 "providerCode": 1,
                 "providerDesc": "ICE",
-                "_COMMENT": "The units in which product is included, including any 1-1 unit",
+                "_COMMENT": "provider code and descrption are a n-1 mapping",
+                "_ENUM": [
+                    "ICE",
+                    "ICE_GB",
+                    "ICE_UK",
+                    "PRIMAR",
+                    "VAR Unique",
+                    "VAR"
+                ],
+
+                "size": "medium",
+                "_COMMENT": " size code not included as will be in ERP Facade",
                 "_ENUM": [
                     "large",
                     "medium",
                     "small"
                 ],
-                "size": "medium",
-                "agency": "DE",
+                "agency": "MX",
                 "bundle": [
                     {
                         "bundleType": "DVD",
@@ -52,20 +62,18 @@
                         "Suspended"
                     ],
                     "statusDate": "2023-03-03T00:00:00.00+01:00",
-                    "isNewCell": false,
+                    "isNewCell": true,
                     "_COMMENT": "A cell new to the service"
                 },
                 "replaces": [],
                 "replacedBy": [],
-                "additionalCoverage": [
-                    "DK4LIMFW"
-                ],
+                "additionalCoverage": [],
                 "geographicLimit": {
                     "boundingBox": {
-                        "northLimit": 24,
-                        "southLimit": 22,
-                        "eastLimit": 120,
-                        "westLimit": 119
+                        "northLimit": 24.0,
+                        "southLimit": 22.0,
+                        "eastLimit": 120.0,
+                        "westLimit": 119.0
                     },
                     "polygons": [
                         {
@@ -110,11 +118,8 @@
                         }
                     ]
                 },
-                "inUnitsOfSale": [
-                    "DE416080",
-                    "AVCSO",
-                    "PAYSF"
-                ],
+                "_COMMENT": "The units in which product is included, including any 1-1 unit",
+                "inUnitsOfSale": [ "MX545010", "AVCSO", "PAYSF" ],
                 "s63": {
                     "name": "XXXXXXXX.001",
                     "hash": "5160204288db0a543850da177ec637b71ed55946e7f3843e6180b1906ee4f4ea",
@@ -154,8 +159,8 @@
         "_COMMENT": "Prices for all units in event will be included, including Cancelled Cell",
         "unitsOfSale": [
             {
-                "unitName": "DE416080",
-                "title": "Greifswalder Bodden Unit",
+                "unitName": "MX545010",
+                "title": "Isla Clarion",
                 "unitType": "AVCS Units Coastal",
                 "unitSize": "large",
                 "status": "ForSale",
@@ -163,8 +168,9 @@
                     "ForSale",
                     "NotForSale"
                 ],
-                "isNewUnitOfSale": false,
+                "isNewUnitOfSale": true,
                 "unitOfSaleType": "unit",
+
                 "_COMMENT": "BoundingBox or polygon or both or neither",
                 "geographicLimit": {
                     "boundingBox": {
@@ -176,7 +182,7 @@
                     "polygons": []
                 },
                 "compositionChanges": {
-                    "addProducts": [],
+                    "addProducts": [ "MX545010" ],
                     "removeProducts": []
                 }
             },
@@ -187,36 +193,39 @@
                 "unitType": "AVCS Online Folio",
                 "status": "ForSale",
                 "isNewUnitOfSale": false,
-                "unitOfSaleType": "unit",
+                "unitOfSaleType": "folio",
+
                 "geographicLimit": {
                     "boundingBox": {},
                     "polygons": [
                         {
                             "polygon": [
                                 {
-                                    "latitude": 22,
+                                    "latitude": 22.0,
+                                    "longitude": 120.0
+                                },
+                                {
+                                    "latitude": 22.0,
                                     "longitude": 120
                                 },
                                 {
-                                    "latitude": 22,
+                                    "latitude": 22.0,
                                     "longitude": 120
                                 },
                                 {
-                                    "latitude": 22,
-                                    "longitude": 120
-                                },
-                                {
-                                    "latitude": 22,
-                                    "longitude": 121
+                                    "latitude": 22.0,
+                                    "longitude": 121.0
                                 }
                             ]
                         }
                     ]
                 },
                 "compositionChanges": {
-                    "addProducts": [],
+                    "addProducts": [
+                        "MX545010"
+                    ],
                     "removeProducts": [
-                        "DE416080"
+
                     ]
                 }
             },
@@ -226,8 +235,8 @@
                 "unitType": "AVCS Folio Transit",
                 "unitSize": "large",
                 "status": "ForSale",
+                "unitOfSaleType": "folio",
                 "isNewUnitOfSale": false,
-                "unitOfSaleType": "unit",
                 "geographicLimit": {
                     "boundingBox": {},
                     "polygons": [
@@ -266,9 +275,11 @@
                     ]
                 },
                 "compositionChanges": {
-                    "addProducts": [],
+                    "addProducts": [
+                        "MX545010"
+                    ],
                     "removeProducts": [
-                        "DE416080"
+
                     ]
                 }
             }

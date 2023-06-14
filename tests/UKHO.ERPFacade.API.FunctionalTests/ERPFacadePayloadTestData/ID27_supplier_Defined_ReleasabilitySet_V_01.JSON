@@ -9,7 +9,7 @@
     "subject": "DE416075,DE5NOBRB",
     "datacontenttype": "application/json",
     "data": {
-        "correlationId": "bgde1-37abc-su34-3001",
+        "correlationId": "bgde1-37abc-su34-30001",
         "products": [
             {
                 "productType": "ENC S57",
