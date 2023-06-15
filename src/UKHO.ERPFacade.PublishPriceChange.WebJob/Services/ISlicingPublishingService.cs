@@ -8,6 +8,6 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
 {
     public interface ISlicingPublishingService
     {
-        void SliceAndPublishIncompeleteEvents();
+        void SliceAndPublishPriceChangeEvents();
     }
 }

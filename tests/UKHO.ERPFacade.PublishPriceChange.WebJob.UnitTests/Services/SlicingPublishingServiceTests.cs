@@ -61,7 +61,7 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.UnitTests.Services
             IList<PriceChangeMasterEntity> priceChangeMasterEntities = new List<PriceChangeMasterEntity>();
             A.CallTo(() => _fakeAzureTableReaderWriter.GetMasterEntities(A<string>.Ignored, A<string>.Ignored)).Returns(priceChangeMasterEntities);
 
-            _fakeMonitoringService.SliceAndPublishIncompeleteEvents();
+            _fakeMonitoringService.SliceAndPublishPriceChangeEvents();
 
             A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
             A.CallTo(() => _fakeAzureTableReaderWriter.GetUnitPriceChangeEventsEntities(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
@@ -88,7 +88,7 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.UnitTests.Services
             A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).Returns(downloadPayload);
             A.CallTo(() => _fakeAzureTableReaderWriter.GetUnitPriceChangeEventsEntities(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(unitPriceChangeEntities);
 
-            _fakeMonitoringService.SliceAndPublishIncompeleteEvents();
+            _fakeMonitoringService.SliceAndPublishPriceChangeEvents();
 
             A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureTableReaderWriter.GetUnitPriceChangeEventsEntities(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
@@ -154,7 +154,7 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.UnitTests.Services
             A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).Returns(downloadPayload);
             A.CallTo(() => _fakeAzureTableReaderWriter.GetUnitPriceChangeEventsEntities(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(unitPriceChangeEntities);
 
-            _fakeMonitoringService.SliceAndPublishIncompeleteEvents();
+            _fakeMonitoringService.SliceAndPublishPriceChangeEvents();
 
             A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureTableReaderWriter.GetUnitPriceChangeEventsEntities(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
@@ -210,7 +210,7 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.UnitTests.Services
             A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).Returns(downloadPayload);
             A.CallTo(() => _fakeAzureTableReaderWriter.GetUnitPriceChangeEventsEntities(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(unitPriceChangeEntities);
 
-            _fakeMonitoringService.SliceAndPublishIncompeleteEvents();
+            _fakeMonitoringService.SliceAndPublishPriceChangeEvents();
 
             A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureTableReaderWriter.GetUnitPriceChangeEventsEntities(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
