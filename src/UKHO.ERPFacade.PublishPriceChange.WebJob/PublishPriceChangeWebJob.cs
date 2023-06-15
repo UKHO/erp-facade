@@ -22,7 +22,7 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob
         public void Start()
         {
             _logger.LogInformation(EventIds.WebjobPublishingPriceChangesEventStarted.ToEventId(), "Webjob started for publishing price changes");
-            _slicingPublishingService.SliceAndPublishIncompeleteEvents();
+            _slicingPublishingService.SliceAndPublishPriceChangeEvents();
             _logger.LogInformation(EventIds.WebjobPublishingPriceChangesEventCompleted.ToEventId(), "Webjob completed publishing price changes");
         }
 

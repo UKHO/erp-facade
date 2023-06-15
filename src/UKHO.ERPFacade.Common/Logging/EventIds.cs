@@ -193,14 +193,14 @@
         PriceEventExceedSizeLimit = 940038,
 
         /// <summary>
-        /// 940039 - Bulk price information payload received from SAP
+        /// 940039 - Sap Health Check Xml Template Not Found
         /// </summary>
-        SapBulkPriceInformationPayloadReceived = 940039,
+        SapHealthCheckXmlTemplateNotFound = 940039,
 
         /// <summary>
-        /// 940040 - Storing the received Bulk price information event in azure table.
+        /// 940040 - SAP Health Check Request Sent To SAP
         /// </summary>
-        StoreBulkPriceInformationEventInAzureTable = 940040,
+        SapHealthCheckRequestSentToSap = 940040,
 
         /// <summary>
         /// 940041 - Uploading the received Bulk price information event in blob storage.
@@ -257,6 +257,16 @@
         /// <summary>
         /// 940052 - Sliced event is uploaded in blob storage successfully for incomplete unit prices.
         /// </summary>
-        UploadedSlicedEventInAzureBlobForUnitPrices = 940052
+        UploadedSlicedEventInAzureBlobForUnitPrices = 940052,
+
+        /// <summary>
+        /// 940053 - Bulk price information payload received from SAP
+        /// </summary>
+        SapBulkPriceInformationPayloadReceived = 940053,
+
+        /// <summary>
+        /// 940054 - Storing the received Bulk price information event in azure table.
+        /// </summary>
+        StoreBulkPriceInformationEventInAzureTable = 940054,
     }
 }

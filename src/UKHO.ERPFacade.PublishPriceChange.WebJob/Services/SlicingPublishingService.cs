@@ -24,7 +24,7 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
             _azureBlobEventWriter = azureBlobEventWriter ?? throw new ArgumentNullException(nameof(azureBlobEventWriter));
         }
 
-        public void SliceAndPublishIncompeleteEvents()
+        public void SliceAndPublishPriceChangeEvents()
         {
             var entities = _azureTableReaderWriter.GetMasterEntities(IncompleteStatus);
             string priceChangeJson;
