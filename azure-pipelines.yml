@@ -407,6 +407,7 @@ stages:
                     arguments: '-ftrunning "true" -mockresourcegroup $(ResourceGroup) -mockwebappname $(MOCK_WEB_APP_NAME)'
 
   - stage: QAdeploy
+    dependsOn: Devdeploy
     displayName: "QAdeploy (inc terraform, webapp deploy)"
     variables:
       - group: "ERP-Facade-QA"
@@ -436,6 +437,7 @@ stages:
         value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
       - name: "SapMockConfiguration.BaseUrl"
         value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.sapmockwebappurl']  ]
+
 #    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))  
     jobs:
       - deployment: QADeployTerraform
@@ -504,7 +506,7 @@ stages:
                     azureSubscription: "ERP-Facade-Dev-A.011.05.12"
                     scriptType: 'pscore'
                     scriptLocation: 'scriptPath'
-                    scriptPath: "$(Pipeline.Workspace)/terraformartifact/set_mock_configuration.ps1"
+                    scriptPath: "$(Pipeline.Workspace)/terraformartifact/set_mock_configuration.ps1"               mockWebAppName
                     arguments: '-ftrunning "false" -mockresourcegroup $(mockWebAppResourceGroup) -mockwebappname $(mockWebAppName)'
 
   - stage: Livedeploy
