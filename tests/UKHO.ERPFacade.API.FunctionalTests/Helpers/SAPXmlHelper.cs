@@ -1213,12 +1213,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return randomCorrID;
         }
 
-        public static string updateTimeField(string requestBody, string genratedTraceId)
+        public static string updateTimeAndCorrIdField(string requestBody, string generatedCorrelationId)
         {
             var currentTimeStamp = DateTime.Now.ToString("yyyy-MM-dd");
             JObject jsonObj = JObject.Parse(requestBody);
             jsonObj["time"] = currentTimeStamp;
-            jsonObj["data"]["correlationId"] = genratedTraceId;
+            jsonObj["data"]["correlationId"] = generatedCorrelationId;
             string updatedRequestBody = jsonObj.ToString();
             return updatedRequestBody;
         }

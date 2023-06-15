@@ -13,7 +13,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         private readonly RestClient client2;
         private readonly ADAuthTokenProvider _authToken;
         private SAPXmlHelper SapXmlHelper { get; set; }
-        public static string generateCorrelationId = "";
+        public static string generatedCorrelationId = "";
 
         public WebhookEndpoint()
         {
@@ -44,8 +44,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 requestBody = streamReader.ReadToEnd();
             }
 
-            generateCorrelationId = SAPXmlHelper.generateRandomCorrelationId();
-            requestBody = SAPXmlHelper.updateTimeField(requestBody, generateCorrelationId);
+            generatedCorrelationId = SAPXmlHelper.generateRandomCorrelationId();
+            requestBody = SAPXmlHelper.updateTimeAndCorrIdField(requestBody, generatedCorrelationId);
 
             var request = new RestRequest("/webhook/newenccontentpublishedeventreceived", Method.Post);
             request.AddHeader("Content-Type", "application/json");
@@ -65,8 +65,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 requestBody = streamReader.ReadToEnd();
             }
 
-            generateCorrelationId = SAPXmlHelper.generateRandomCorrelationId();
-            requestBody = SAPXmlHelper.updateTimeField(requestBody, generateCorrelationId);
+            generatedCorrelationId = SAPXmlHelper.generateRandomCorrelationId();
+            requestBody = SAPXmlHelper.updateTimeAndCorrIdField(requestBody, generatedCorrelationId);
 
             var request = new RestRequest("/webhook/newenccontentpublishedeventreceived", Method.Post);
             request.AddHeader("Content-Type", "application/json");
