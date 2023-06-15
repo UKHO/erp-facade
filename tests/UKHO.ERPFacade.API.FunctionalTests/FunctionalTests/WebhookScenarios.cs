@@ -15,7 +15,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
         //for local
         //private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
-
+        
         [SetUp]
         public void Setup()
         {
@@ -131,19 +131,23 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             Console.WriteLine("Scenario:" + payloadJsonFileName + "\n");
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, payloadJsonFileName);
             string generatedXMLFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXMLFolder);
+            string envName = Config.TestConfig.ErpFacadeConfiguration.CurrentEnvironment;
+            Console.WriteLine("Environment => " +envName);
             RestResponse response;
 
-            string envName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            Console.WriteLine($"Current Environment => {envName}");
-
-            /*if (envName == "dev" || envName == "Development")
-            {*/
+            if (envName == "Dev" || envName == "local")
+            {
                 response = await _webhook.PostWebhookResponseAsyncForXML(filePath, generatedXMLFolder, await _authToken.GetAzureADToken(false));
-            /*}
-            else
+            }
+            else if (envName == "QA")
             {
                 response = await _webhook.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(false));
-            }*/
+            }
+            else 
+            {
+                Console.WriteLine("ErpFacade Environment Configuration Not Found!");
+                response = await _webhook.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(false));
+            }
 
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
