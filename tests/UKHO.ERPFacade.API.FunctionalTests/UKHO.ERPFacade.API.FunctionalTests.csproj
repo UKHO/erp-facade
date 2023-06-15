@@ -66,6 +66,9 @@
     <None Update="ERPFacadePayloadTestData\ID15_oneNewCellAndOneMoveOneCell.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ERPFacadePayloadTestData\PriceChangeInputJSON\PC1_Payload.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ERPFacadePayloadTestData\UoS1_Pricing.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -115,6 +118,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="ERPFacadeGeneratedProductJSON\" />
     <Folder Include="ERPFacadeGeneratedProductJSON\" />
   </ItemGroup>
 

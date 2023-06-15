@@ -16,6 +16,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         public string[] XMLActionList { get; set; }
         public string UoSPayloadFileName { get; set; }
         public string BPUpdatePayloadFileName { get; set; }
+
+        public string GeneratedProductJsonFolder { get; set; }
     }
 
 
