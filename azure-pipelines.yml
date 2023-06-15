@@ -436,8 +436,7 @@ stages:
       - name: mockWebAppResourceGroup
         value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
       - name: "SapMockConfiguration.BaseUrl"
-        value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['TerraformDeploy.sapmockwebappurl']  ]
-
+        value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.sapmockwebappurl']  ]
 #    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))  
     jobs:
       - deployment: QADeployTerraform
@@ -451,6 +450,10 @@ stages:
           runOnce:
             deploy:
               steps:
+                - task: Bash@3
+                  inputs:
+                    targetType: 'inline'
+                    script: 'env | sort'
                 - template: Deployment/templates/continuous-deployment.yml
                   parameters:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
