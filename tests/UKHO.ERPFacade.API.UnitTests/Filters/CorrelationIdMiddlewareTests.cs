@@ -1,14 +1,14 @@
-﻿using FakeItEasy;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
+using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using System.Threading.Tasks;
-using System;
 using UKHO.ERPFacade.API.Filters;
 
 namespace UKHO.ERPFacade.API.UnitTests.Filters
@@ -71,7 +71,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
 
         [Test]
         public async Task WhenInvokeAsyncIsCalled_ThenNextMiddlewareShouldBeInvoked()
-        {           
+        {
             var bodyAsJson = new JObject { { "data", new JObject { } } };
             var bodyAsText = bodyAsJson.ToString();
 
@@ -82,6 +82,26 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
             await _middleware.InvokeAsync(_fakeHttpContext);
 
             A.CallTo(() => _fakeNextMiddleware(_fakeHttpContext)).MustHaveHappenedOnceExactly();
+        }
+
+        [Test]
+        public async Task WhenCorrIdKeyExistsInRequestBody_ThenXCorrelationIdHeaderKeyAddedToRequestAndResponseHeaders()
+        {
+            var correlationId = Guid.NewGuid().ToString();
+            var bodyAsJson = new JArray { { new JObject { { "corrid", correlationId } } } };
+            var bodyAsText = bodyAsJson.ToString();
+
+            _fakeHttpContext.Request.Body = new MemoryStream(Encoding.UTF8.GetBytes(bodyAsText));
+            _fakeHttpContext.Request.ContentLength = bodyAsText.Length;
+            _fakeHttpContext.Response.Body = new MemoryStream();
+
+            await _middleware.InvokeAsync(_fakeHttpContext);
+
+            A.CallTo(() => _fakeHttpContext.Request.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey]).Returns(correlationId);
+            A.CallTo(() => _fakeHttpContext.Response.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey]).Returns(correlationId);
+            A.CallTo(() => _fakeHttpContext.Request.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey, correlationId)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _fakeHttpContext.Response.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey, correlationId)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _fakeLogger.BeginScope(A<Dictionary<string, object>>._)).MustHaveHappenedOnceExactly();
         }
     }
 }
