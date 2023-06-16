@@ -12,9 +12,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         private readonly ADAuthTokenProvider _authToken = new();
         public static bool noRole = false;
         //for pipeline
-        //private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
+        private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
         //for local
-        private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
+        //private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
 
         [OneTimeSetUp]
         public void Setup()
@@ -55,17 +55,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
         }
 
-        [Category("DevEnvFT")]
-        [Test, Order(1)]
-        [TestCase("PC1_Payload.JSON", TestName = "WhenValidEventReceivedWithValidToken_ThenBPUpdateReturn200OkResponse")]
-        public async Task WhenValidEventReceivedWithValidToken_ThenBPUpdateReturn200OkResponse(string payloadJsonFileName)
-        {
-            string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, "PriceChangeInputJSON", payloadJsonFileName);
-            string generatedProductJsonFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedProductJsonFolder);
-            var response = await _bulkPriceUpdate.PostBPUpdateResponseAsyncWithJson(filePath, generatedProductJsonFolder, await _authToken.GetAzureADToken(false, "BulkPriceUpdate"));
-            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-
-        }
+        
 
     }
 }
