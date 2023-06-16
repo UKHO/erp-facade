@@ -8,7 +8,7 @@
   "subject": "MX545010,PH5CATIC",
   "datacontenttype": "application/json",
   "data": {
-    "traceId": "367ce4a4-1d62-4f56-cmovenew-003",
+    "correlationId": "367ce4a4-1d62-4f56-cmovenew-003",
     "products": [
       {
         "productType": "ENC S57",

@@ -32,10 +32,10 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
         }
 
         [Test]
-        public async Task WhenTraceIdKeyExistsInRequestBody_ThenXCorrelationIdHeaderKeyAddedToRequestAndResponseHeaders()
+        public async Task WhenCorrelationIdKeyExistsInRequestBody_ThenXCorrelationIdHeaderKeyAddedToRequestAndResponseHeaders()
         {
-            var traceId = Guid.NewGuid().ToString();
-            var bodyAsJson = new JObject { { "data", new JObject { { "traceId", traceId } } } };
+            var correlationId = Guid.NewGuid().ToString();
+            var bodyAsJson = new JObject { { "data", new JObject { { "correlationId", correlationId } } } };
             var bodyAsText = bodyAsJson.ToString();
 
             _fakeHttpContext.Request.Body = new MemoryStream(Encoding.UTF8.GetBytes(bodyAsText));
@@ -44,18 +44,18 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
 
             await _middleware.InvokeAsync(_fakeHttpContext);
 
-            A.CallTo(() => _fakeHttpContext.Request.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey]).Returns(traceId);
-            A.CallTo(() => _fakeHttpContext.Response.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey]).Returns(traceId);
-            A.CallTo(() => _fakeHttpContext.Request.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey, traceId)).MustHaveHappenedOnceExactly();
-            A.CallTo(() => _fakeHttpContext.Response.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey, traceId)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _fakeHttpContext.Request.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey]).Returns(correlationId);
+            A.CallTo(() => _fakeHttpContext.Response.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey]).Returns(correlationId);
+            A.CallTo(() => _fakeHttpContext.Request.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey, correlationId)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _fakeHttpContext.Response.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey, correlationId)).MustHaveHappenedOnceExactly();
             A.CallTo(() => _fakeLogger.BeginScope(A<Dictionary<string, object>>._)).MustHaveHappenedOnceExactly();
         }
 
         [Test]
-        public async Task WhenTraceIdKeyDoesNotExistInRequestBody_ThenGenerateNewCorrelationId()
+        public async Task WhenCorrelationIdKeyDoesNotExistInRequestBody_ThenGenerateNewCorrelationId()
         {
-            var traceId = Guid.NewGuid().ToString();
-            var bodyAsJson = new JObject { { "data", new JObject { { "corId", traceId } } } };
+            var correlationId = Guid.NewGuid().ToString();
+            var bodyAsJson = new JObject { { "data", new JObject { { "corId", correlationId } } } };
             var bodyAsText = bodyAsJson.ToString();
 
             _fakeHttpContext.Request.Body = new MemoryStream(Encoding.UTF8.GetBytes(bodyAsText));

@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using UKHO.ERPFacade.Common.IO.Azure;
 
-namespace UKHO.ERPFacade.WebJob.Services
+namespace UKHO.ERPFacade.Monitoring.WebJob.Services
 {
     [ExcludeFromCodeCoverage]
     public class MonitoringService : IMonitoringService

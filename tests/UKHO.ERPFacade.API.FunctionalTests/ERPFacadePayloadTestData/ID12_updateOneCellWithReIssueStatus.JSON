@@ -9,7 +9,7 @@
   "subject": "UK45TRI",
   "datacontenttype": "application/json",
   "data": {
-    "traceId": "367999a4-1d92-4f56-b449-230518reissue002",
+    "correlationId": "367999a4-1d92-4f56-b449-230518reissue002",
     "products": [
       {
         "productType": "ENC S57",

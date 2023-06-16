@@ -51,9 +51,9 @@ namespace UKHO.ERPFacade.API.Helpers
         /// Generate SAP message xml file.
         /// </summary>
         /// <param name="eventData"></param>
-        /// <param name="traceId"></param>
+        /// <param name="correlationId"></param>
         /// <returns>XmlDocument</returns>
-        public XmlDocument BuildSapMessageXml(EncEventPayload eventData, string traceId)
+        public XmlDocument BuildSapMessageXml(EncEventPayload eventData, string correlationId)
         {
             string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, SapXmlPath);
 
@@ -262,7 +262,7 @@ namespace UKHO.ERPFacade.API.Helpers
             XmlNode recDate = soapXml.SelectSingleNode(XpathRecDate);
             XmlNode recTime = soapXml.SelectSingleNode(XpathRecTime);
 
-            corrId.InnerText = traceId;
+            corrId.InnerText = correlationId;
             noOfActions.InnerText = xmlNode.ChildNodes.Count.ToString();
             recDate.InnerText = DateTime.UtcNow.ToString("yyyyMMdd");
             recTime.InnerText = DateTime.UtcNow.ToString("hhmmss");

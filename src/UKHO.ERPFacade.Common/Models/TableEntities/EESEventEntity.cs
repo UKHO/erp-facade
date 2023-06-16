@@ -13,9 +13,7 @@ namespace UKHO.ERPFacade.Common.Models.TableEntities
 
         public DateTimeOffset? Timestamp { get; set; } = default!;
 
-        public string TraceID { get; set; } = default!;
-
-        public string EventData { get; set; } = default!;
+        public string CorrelationId { get; set; } = default!;     
 
         public DateTime? RequestDateTime { get; set; } = default!;
 

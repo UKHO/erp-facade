@@ -15,6 +15,7 @@ using UKHO.ERPFacade.API.Helpers;
 using UKHO.ERPFacade.API.Models;
 using UKHO.ERPFacade.API.Services;
 using UKHO.ERPFacade.Common.Configuration;
+using UKHO.ERPFacade.Common.HealthCheck;
 using UKHO.ERPFacade.Common.HttpClients;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.IO.Azure;
@@ -178,6 +179,9 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<IErpFacadeService, ErpFacadeService>();
             builder.Services.AddScoped<IJsonHelper, JsonHelper>();
 
+            builder.Services.AddHealthChecks()
+                .AddCheck<SapServiceHealthCheck>("SapServiceHealthCheck");
+
             builder.Services.AddHttpClient<ISapClient, SapClient>(c =>
             {
                 c.BaseAddress = new Uri(configuration.GetValue<string>("SapConfiguration:BaseAddress"));
@@ -194,6 +198,8 @@ namespace UKHO.ERPFacade
             app.MapControllers();
 
             app.UseAuthorization();
+
+            app.MapHealthChecks("/health");
 
             app.UseAuthentication();
 

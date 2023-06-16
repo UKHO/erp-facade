@@ -8,7 +8,7 @@
   "subject": "US5AK83M,US4AK6NT,MX545010",
   "datacontenttype": "application/json",
   "data": {
-    "traceId": "54321-1d62-4f56-b359-mixx2002",
+    "correlationId": "54321-1d62-4f56-b359-mixx2002",
     "products": [
       {
         "productType": "ENC S57",

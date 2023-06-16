@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UKHO.ERPFacade.WebJob.Services
+namespace UKHO.ERPFacade.Monitoring.WebJob.Services
 {
     public interface IMonitoringService
     {
