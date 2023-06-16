@@ -271,16 +271,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         AttrNotMatched.Add(nameof(item.PRODUCT));
                     if (!item.PRODTYPE.Equals(product.ProductType[4..]))
                         AttrNotMatched.Add(nameof(item.PRODTYPE));
-
-                    //if (!item.PRODUCTNAME.Equals(product.ProductName))
-                    //   AttrNotMatched.Add(nameof(item.PRODUCTNAME));
-
                     if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!getUoSInfo(item.PRODUCTNAME).UnitOfSaleType.Contains("unit")))
                        AttrNotMatched.Add(nameof(item.PRODUCTNAME));
-
-                    //if (!item.PRODUCTNAME.Equals(getUnitOfSalesWithTypeEqualsUnit(product.ProductName).UnitName))
-                    //  AttrNotMatched.Add(nameof(item.PRODUCTNAME));
-
                     if (!item.AGENCY.Equals(product.Agency))
                         AttrNotMatched.Add(nameof(item.AGENCY));
                     if (!item.PROVIDER.Equals(product.ProviderCode))
@@ -301,8 +293,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     if (AttrNotMatched.Count == 0)
                     {
                         Console.WriteLine("CHANGE ENC CELL Action's Data is correct");
-                        //ChangeAVCSUoS = product.InUnitsOfSale;
-                        //ChangeENCCell.Add(childCell);
                         ChangeENCCell.Add(childCell, product.InUnitsOfSale);
                         return true;
                     }
@@ -510,7 +500,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             Console.WriteLine("Action#:" + actionCounter + ".AVCSUnitOfSale:" + productName);
             foreach (UnitOfSale unitOfSale in jsonPayload.Data.UnitsOfSales)
             {
-                //bool flagMatchProduct = false;
                 List<string> pdts = unitOfSale.CompositionChanges.AddProducts;
                 foreach (string pdt in pdts)
                 {
@@ -624,7 +613,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         AttrNotMatched.Add(nameof(item.PRODUCT));
                     if (!item.PRODTYPE.Equals(product.ProductType[4..]))
                         AttrNotMatched.Add(nameof(item.PRODTYPE));
-                    //if (!item.PRODUCTNAME.Equals(product.ProductName))(!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!getUoSInfo(item.PRODUCTNAME).UnitType.Contains("Unit"))
                     if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!getUoSInfo(item.PRODUCTNAME).UnitOfSaleType.Contains("Unit")))
                         AttrNotMatched.Add(nameof(item.PRODUCTNAME));
                     if (!item.AGENCY.Equals(product.Agency))
@@ -670,8 +658,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         private static bool VerifyBlankFields(Item item, string[] fieldNames)
         {
             bool allBlanks = true;
-            //string[] fieldNames = { "ACTIONNUMBER", "ACTION" };
-
+            
             foreach (string field in fieldNames)
             {
                 if (!typeof(Item).GetProperty(field).GetValue(item, null).Equals(""))
@@ -715,7 +702,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
         public static async Task<bool> VerifyPresenseOfMandatoryXMLAtrributes(XmlNodeList nodeList)
         {
-            //List<string> ActionAttributesSeq = formActionAtrributes();
             List<string> ActionAttributesSeq = new List<string>();
             ActionAttributesSeq = Config.TestConfig.XMLActionList.ToList<string>();
 
