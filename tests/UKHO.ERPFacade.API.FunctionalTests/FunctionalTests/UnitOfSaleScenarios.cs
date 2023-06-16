@@ -23,7 +23,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         }
 
         [Category("DevEnvFT")]
-        [Category("QAEnvFT")]
+        
         [Test(Description = "WhenValidEventReceivedWithValidToken_ThenUoSReturns200OkResponse"), Order(0)]
         public async Task WhenValidEventReceivedWithValidToken_ThenUoSReturns200OkResponse()
         {
