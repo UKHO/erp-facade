@@ -72,16 +72,18 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.UnitTests.Services
         [Test]
         public void WhenPriceEntitiesAreIncompleted_ThenShouldSliceAndPublish()
         {
-            IList<PriceChangeMasterEntity> priceChangeMasterEntities = new List<PriceChangeMasterEntity>();
-            priceChangeMasterEntities.Add(new()
+            IList<PriceChangeMasterEntity> priceChangeMasterEntities = new List<PriceChangeMasterEntity>
             {
-                CorrId = "FakeCorrID",
-                ETag = new(),
-                PartitionKey = "FakeCorrID",
-                RowKey = "FakeCorrID",
-                Status = "Incomplete",
-                Timestamp = new DateTimeOffset()
-            });
+                new()
+                {
+                    CorrId = "FakeCorrID",
+                    ETag = new(),
+                    PartitionKey = "FakeCorrID",
+                    RowKey = "FakeCorrID",
+                    Status = "Incomplete",
+                    Timestamp = new DateTimeOffset()
+                }
+            };
             IList<UnitPriceChangeEntity> unitPriceChangeEntities = new List<UnitPriceChangeEntity>();
 
             A.CallTo(() => _fakeAzureTableReaderWriter.GetMasterEntities(A<string>.Ignored, A<string>.Ignored)).Returns(priceChangeMasterEntities);
@@ -116,39 +118,43 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.UnitTests.Services
         [Test]
         public void WhenUnitPriceEntitiesAreIncompleted_ThenShouldSliceAndPublish()
         {
-            IList<PriceChangeMasterEntity> priceChangeMasterEntities = new List<PriceChangeMasterEntity>();
-            priceChangeMasterEntities.Add(new()
+            IList<PriceChangeMasterEntity> priceChangeMasterEntities = new List<PriceChangeMasterEntity>
             {
-                CorrId = "FakeCorrID",
-                ETag = new(),
-                PartitionKey = "FakeCorrID",
-                RowKey = "FakeCorrID",
-                Status = "Incomplete",
-                Timestamp = new DateTimeOffset()
-            });
-            IList<UnitPriceChangeEntity> unitPriceChangeEntities = new List<UnitPriceChangeEntity>();
-            unitPriceChangeEntities.Add(new UnitPriceChangeEntity()
+                new()
+                {
+                    CorrId = "FakeCorrID",
+                    ETag = new(),
+                    PartitionKey = "FakeCorrID",
+                    RowKey = "FakeCorrID",
+                    Status = "Incomplete",
+                    Timestamp = new DateTimeOffset()
+                }
+            };
+            IList<UnitPriceChangeEntity> unitPriceChangeEntities = new List<UnitPriceChangeEntity>
             {
-                Eventid = "FakeEventID",
-                MasterCorrid = "FakeCorrID",
-                RowKey = "FakeEventID",
-                ETag = new(),
-                PartitionKey = "FakeEventID",
-                Status = "Incomplete",
-                Timestamp = new DateTimeOffset(),
-                UnitName = "FakeUnitName"
-            });
-            unitPriceChangeEntities.Add(new UnitPriceChangeEntity()
-            {
-                Eventid = "FakeEventID2",
-                MasterCorrid = "FakeCorrID",
-                RowKey = "FakeEventID2",
-                ETag = new(),
-                PartitionKey = "FakeEventID2",
-                Status = "Complete",
-                Timestamp = new DateTimeOffset(),
-                UnitName = "FakeUnitName"
-            });
+                new()
+                {
+                    Eventid = "FakeEventID",
+                    MasterCorrid = "FakeCorrID",
+                    RowKey = "FakeEventID",
+                    ETag = new(),
+                    PartitionKey = "FakeEventID",
+                    Status = "Incomplete",
+                    Timestamp = new DateTimeOffset(),
+                    UnitName = "FakeUnitName"
+                },
+                new()
+                {
+                    Eventid = "FakeEventID2",
+                    MasterCorrid = "FakeCorrID",
+                    RowKey = "FakeEventID2",
+                    ETag = new(),
+                    PartitionKey = "FakeEventID2",
+                    Status = "Complete",
+                    Timestamp = new DateTimeOffset(),
+                    UnitName = "FakeUnitName"
+                }
+            };
 
             A.CallTo(() => _fakeAzureTableReaderWriter.GetMasterEntities(A<string>.Ignored, A<string>.Ignored)).Returns(priceChangeMasterEntities);
             A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).Returns(downloadPayload);
@@ -183,28 +189,32 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.UnitTests.Services
         [Test]
         public void WhenUnitPriceEntitiesAreCompleted_ThenShouldUpdatePriceMasterStatusToComplete()
         {
-            IList<PriceChangeMasterEntity> priceChangeMasterEntities = new List<PriceChangeMasterEntity>();
-            priceChangeMasterEntities.Add(new()
+            IList<PriceChangeMasterEntity> priceChangeMasterEntities = new List<PriceChangeMasterEntity>
             {
-                CorrId = "FakeCorrID",
-                ETag = new(),
-                PartitionKey = "FakeCorrID",
-                RowKey = "FakeCorrID",
-                Status = "Incomplete",
-                Timestamp = new DateTimeOffset()
-            });
-            IList<UnitPriceChangeEntity> unitPriceChangeEntities = new List<UnitPriceChangeEntity>();
-            unitPriceChangeEntities.Add(new UnitPriceChangeEntity()
+                new()
+                {
+                    CorrId = "FakeCorrID",
+                    ETag = new(),
+                    PartitionKey = "FakeCorrID",
+                    RowKey = "FakeCorrID",
+                    Status = "Incomplete",
+                    Timestamp = new DateTimeOffset()
+                }
+            };
+            IList<UnitPriceChangeEntity> unitPriceChangeEntities = new List<UnitPriceChangeEntity>
             {
-                Eventid = "FakeEventID",
-                MasterCorrid = "FakeCorrID",
-                RowKey = "FakeEventID",
-                ETag = new(),
-                PartitionKey = "FakeEventID",
-                Status = "Complete",
-                Timestamp = new DateTimeOffset(),
-                UnitName = "FakeUnitName"
-            });
+                new UnitPriceChangeEntity()
+                {
+                    Eventid = "FakeEventID",
+                    MasterCorrid = "FakeCorrID",
+                    RowKey = "FakeEventID",
+                    ETag = new(),
+                    PartitionKey = "FakeEventID",
+                    Status = "Complete",
+                    Timestamp = new DateTimeOffset(),
+                    UnitName = "FakeUnitName"
+                }
+            };
 
             A.CallTo(() => _fakeAzureTableReaderWriter.GetMasterEntities(A<string>.Ignored, A<string>.Ignored)).Returns(priceChangeMasterEntities);
             A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).Returns(downloadPayload);

@@ -267,6 +267,6 @@
         /// <summary>
         /// 940054 - Storing the received Bulk price information event in azure table.
         /// </summary>
-        StoreBulkPriceInformationEventInAzureTable = 940054,
+        StoreBulkPriceInformationEventInAzureTable = 940054
     }
 }

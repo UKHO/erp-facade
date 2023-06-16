@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics.CodeAnalysis;
 using Newtonsoft.Json;
 
 namespace UKHO.ERPFacade.Common.Models
 {
+    [ExcludeFromCodeCoverage]
     public class PriceChange
     {
         [JsonProperty("corrid")]
