@@ -1,11 +1,6 @@
-﻿using System.ComponentModel;
-using System.IO.Abstractions;
-using Azure;
-using Azure.Storage.Blobs;
+﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-using Microsoft.Extensions.Options;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Blob;
+
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
