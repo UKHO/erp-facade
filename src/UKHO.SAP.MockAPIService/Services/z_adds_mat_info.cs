@@ -13,6 +13,7 @@ namespace UKHO.SAP.MockAPIService.Services
         private readonly MockService _mockService;
 
         public const string RequestFormat = "xml";
+        public const string HealthCheckKey = "HEALTHCHECK";
 
         public z_adds_mat_info(IAzureBlobEventWriter azureBlobEventWriter, MockService mockService)
         {
@@ -27,13 +28,15 @@ namespace UKHO.SAP.MockAPIService.Services
             {
                 IM_MATINFO = iM_MATINFO
             };
+            if (iM_MATINFO.CORRID != HealthCheckKey)
+            {
+                string requestXML = ObjectXMLSerializer<Z_ADDS_MAT_INFO>.SerializeObject(z_ADDS_MAT_INFO).WriteXmlClosingTags();
 
-            string requestXML = ObjectXMLSerializer<Z_ADDS_MAT_INFO>.SerializeObject(z_ADDS_MAT_INFO).WriteXmlClosingTags();
+                Task.Run(async () => await _azureBlobEventWriter.UploadEvent(requestXML, iM_MATINFO.CORRID, iM_MATINFO.CORRID + '.' + RequestFormat));
 
-            Task.Run(async () => await _azureBlobEventWriter.UploadEvent(requestXML, iM_MATINFO.CORRID, iM_MATINFO.CORRID + '.' + RequestFormat));
-
-            _mockService.CleanUp();
-
+                _mockService.CleanUp();
+            }
+           
             return new Z_ADDS_MAT_INFOResponse()
             {
                 EX_MESSAGE = "Record successfully received for CorrelationId :" + iM_MATINFO.CORRID,
