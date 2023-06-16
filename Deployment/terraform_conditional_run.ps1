@@ -49,7 +49,7 @@ terraform apply  "terraform.deployment.tfplan"
 if ( !$? ) { echo "Something went wrong during terraform apply" ; throw "Error" }
 
 Write-output "Terraform output as json"
-$terraformOutput = terraform output -json | ConvertFrom-Json AzureStorageConnectionString
+$terraformOutput = terraform output -json | ConvertFrom-Json
 
 write-output "Set JSON output into pipeline variables"
 Write-Host "##vso[task.setvariable variable=WEB_APP_NAME]$($terraformOutput.webapp_name.value)"
