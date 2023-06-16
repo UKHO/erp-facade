@@ -3,7 +3,7 @@
 namespace UKHO.ERPFacade.Common.Infrastructure
 {
     [ExcludeFromCodeCoverage]
-    public static class IEnumerableComparerExtension
+    public static class EnumerableComparerExtension
     {
         public static bool AreEquivalent<T>(this IEnumerable<T> left, IEnumerable<T> right)
         {
