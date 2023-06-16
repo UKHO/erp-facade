@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace UKHO.ERPFacade.Common.Infrastructure
 {
@@ -12,12 +10,12 @@ namespace UKHO.ERPFacade.Common.Infrastructure
             return left.AreEquivalent(right, EqualityComparer<T>.Default);
         }
 
-        public static bool AreEquivalent<T>(this IEnumerable<T> left, IEnumerable<T> right, IEqualityComparer<T> comparer) 
+        public static bool AreEquivalent<T>(this IEnumerable<T> left, IEnumerable<T> right, IEqualityComparer<T> comparer)
         {
-            
+
             var itemList = left.ToList();
             var otherItemList = right.ToList();
-            if(itemList.Count == otherItemList.Count)
+            if (itemList.Count == otherItemList.Count)
             {
                 var except = itemList.Except(otherItemList, comparer);
 

@@ -31,5 +31,4 @@ namespace UKHO.ERPFacade.Common.Infrastructure.EventService.EventProvider
         [JsonPropertyName("data")]
         public T Data { get; set; }
     }
-
 }

@@ -1,8 +1,9 @@
-﻿using Newtonsoft.Json;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
+using Newtonsoft.Json;
 
 namespace UKHO.ERPFacade.Common.Infrastructure
 {
+    [ExcludeFromCodeCoverage]
     public class Result
     {
         public enum Statuses
@@ -51,6 +52,7 @@ namespace UKHO.ERPFacade.Common.Infrastructure
         }
     }
 
+    [ExcludeFromCodeCoverage]
     public class Result<T> : Result
     {
         [JsonConstructor]

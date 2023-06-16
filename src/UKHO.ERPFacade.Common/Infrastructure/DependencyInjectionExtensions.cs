@@ -1,15 +1,15 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Net.Http.Headers;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Polly.Extensions.Http;
 using Polly;
-using System.Net.Http.Headers;
+using Polly.Extensions.Http;
 using UKHO.ERPFacade.Common.Infrastructure.Authentication;
 using UKHO.ERPFacade.Common.Infrastructure.Config;
-using UKHO.ERPFacade.Common.Infrastructure.EventService.EventProvider;
 using UKHO.ERPFacade.Common.Infrastructure.EventService;
+using UKHO.ERPFacade.Common.Infrastructure.EventService.EventProvider;
 using UKHO.ERPFacade.Common.Providers;
-using System.Diagnostics.CodeAnalysis;
 
 namespace UKHO.ERPFacade.Common.Infrastructure
 {
@@ -42,12 +42,7 @@ namespace UKHO.ERPFacade.Common.Infrastructure
             services.AddSingleton<ITokenProvider>((sp) =>
             {
                 var useLocal = sp.GetRequiredService<IConfiguration>().GetValue<bool>("UseLocalResources");
-                if (useLocal)
-                {
-                    return sp.GetRequiredService<InteractiveTokenProvider>();
-                }
-
-                return sp.GetRequiredService<ManagedIdentityTokenProvider>();
+                return useLocal ? sp.GetRequiredService<InteractiveTokenProvider>() : sp.GetRequiredService<ManagedIdentityTokenProvider>();
             });
 
             var retryPolicy = HttpPolicyExtensions.HandleTransientHttpError().RetryAsync(3);

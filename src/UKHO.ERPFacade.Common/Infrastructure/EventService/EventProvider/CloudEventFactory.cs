@@ -4,8 +4,6 @@ using UKHO.ERPFacade.Common.Providers;
 
 namespace UKHO.ERPFacade.Common.Infrastructure.EventService.EventProvider
 {
-    
-
     public class CloudEventFactory : ICloudEventFactory
     {
         private readonly IDateTimeProvider _dateTimeProvider;
