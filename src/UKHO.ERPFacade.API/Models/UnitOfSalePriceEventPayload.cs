@@ -1,9 +1,10 @@
-﻿using Newtonsoft.Json;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
+using Newtonsoft.Json;
 using UKHO.ERPFacade.Common.Infrastructure;
 
 namespace UKHO.ERPFacade.API.Models
 {
+    [ExcludeFromCodeCoverage]
     public class UnitOfSalePriceEventPayload : EventBase<UnitOfSalePriceEvent>
     {
         public UnitOfSalePriceEventPayload(UnitOfSalePriceEvent unitOfSalePriceEvent)

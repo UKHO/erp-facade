@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 
 namespace UKHO.ERPFacade.API.Models
 {
+    [ExcludeFromCodeCoverage]
     public class EncEventPayload
     {
         [JsonProperty("specversion")]
@@ -30,7 +31,7 @@ namespace UKHO.ERPFacade.API.Models
         public EesEventData Data { get; set; }
     }
 
-    
+    [ExcludeFromCodeCoverage]
     public class EesEventData
     {
         [JsonProperty("correlationId")]
