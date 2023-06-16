@@ -1,10 +1,10 @@
-﻿using Azure;
+﻿using System.Diagnostics.CodeAnalysis;
+using Azure;
 using Azure.Data.Tables;
 using Azure.Data.Tables.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
-using System.Diagnostics.CodeAnalysis;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Logging;
@@ -43,7 +43,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
                     RowKey = Guid.NewGuid().ToString(),
                     PartitionKey = Guid.NewGuid().ToString(),
                     Timestamp = DateTime.UtcNow,
-                    CorrelationId = correlationId,                    
+                    CorrelationId = correlationId,
                     RequestDateTime = null,
                     ResponseDateTime = null,
                     IsNotified = false
@@ -57,7 +57,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             {
                 _logger.LogWarning(EventIds.ReceivedDuplicateEncContentPublishedEvent.ToEventId(), "Duplicate ENC content published event received.");
 
-                existingEntity.Timestamp = DateTime.UtcNow;                
+                existingEntity.Timestamp = DateTime.UtcNow;
 
                 await tableClient.UpdateEntityAsync(existingEntity, ETag.All, TableUpdateMode.Replace);
 
@@ -69,7 +69,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
         {
             IList<EESEventEntity> records = new List<EESEventEntity>();
             TableClient tableClient = GetTableClient(ErpFacadeTableName);
-            var entities = tableClient.QueryAsync<EESEventEntity>(filter: TableClient.CreateQueryFilter($"CorrelationID eq {correlationId}"), maxPerPage: 1);
+            var entities = tableClient.QueryAsync<EESEventEntity>(filter: TableClient.CreateQueryFilter($"CorrelationId eq {correlationId}"), maxPerPage: 1);
             await foreach (var entity in entities)
             {
                 records.Add(entity);

@@ -4,9 +4,6 @@ using Azure.Identity;
 
 namespace UKHO.ERPFacade.Common.Infrastructure.Authentication
 {
-    
-    
-
     [ExcludeFromCodeCoverage]
     public class ManagedIdentityTokenProvider : ITokenProvider
     {
