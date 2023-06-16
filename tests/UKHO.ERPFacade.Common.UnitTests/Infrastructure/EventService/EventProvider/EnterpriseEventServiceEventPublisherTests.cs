@@ -1,18 +1,18 @@
-﻿using FakeItEasy;
+﻿using System;
+using System.Net;
+using System.Net.Http;
+using System.Text.Json;
+using System.Threading.Tasks;
+using FakeItEasy;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NUnit.Framework;
 using RichardSzalay.MockHttp;
-using System.Net.Http;
-using System.Net;
-using System.Text.Json;
-using System.Threading.Tasks;
-using System;
 using UKHO.ERPFacade.Common.Converters;
-using UKHO.ERPFacade.Common.Infrastructure.Config;
-using UKHO.ERPFacade.Common.Infrastructure.EventService.EventProvider;
-using UKHO.ERPFacade.Common.Infrastructure.EventService;
 using UKHO.ERPFacade.Common.Infrastructure;
+using UKHO.ERPFacade.Common.Infrastructure.Config;
+using UKHO.ERPFacade.Common.Infrastructure.EventService;
+using UKHO.ERPFacade.Common.Infrastructure.EventService.EventProvider;
 
 namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvider
 {
