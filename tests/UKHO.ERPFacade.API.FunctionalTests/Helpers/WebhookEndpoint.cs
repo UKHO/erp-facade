@@ -13,6 +13,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         private readonly RestClient client2;
         private readonly ADAuthTokenProvider _authToken;
         private SAPXmlHelper SapXmlHelper { get; set; }
+        public static string generatedCorrelationId = "";
 
         public WebhookEndpoint()
         {
@@ -117,6 +118,13 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
             await client2.ExecuteAsync(request);
 
+        }
+
+
+        public string getCorrelationId()
+        {
+            generatedCorrelationId = "367ce4a4-1d62-4f56-b359-59e178dsk24";
+            return generatedCorrelationId;
         }
 
     }
