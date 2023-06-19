@@ -9,22 +9,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
     public class JSONHelper
     {
-        private UnitOfSaleUpdatedEvent UnitOfSaleFinalJSONHelper { get; set; }
-        public bool verifyUniqueProducts(List<UoSInputJSONHelper> jsonUoSInputPayload, string generatedJSONFilePath)
-        {
-            var jsonString = getDeserializedString(generatedJSONFilePath);
-            UnitOfSaleFinalJSONHelper = JsonConvert.DeserializeObject<UnitOfSaleUpdatedEvent>(jsonString);
-            var dupes = UnitOfSaleFinalJSONHelper.Data.UnitsOfSalePrices.GroupBy(x => new { x.UnitName })
-                        .Where(x => x.Skip(1).Any());
-            if (dupes.Count() > 0)
-            { return false; }
-            else
-            {
-                return true;
-            }
-        }
-
-        public string getDeserializedString(String filePath)
+              public string getDeserializedString(String filePath)
         {
             string requestBody;
 

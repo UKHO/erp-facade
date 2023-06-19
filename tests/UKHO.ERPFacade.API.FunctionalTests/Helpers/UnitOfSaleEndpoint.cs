@@ -87,11 +87,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         public async Task<RestResponse> PostWebHookAndUoSResponseAsyncWithJSON(string webHookfilePath, string uosFilePath, string generatedXMLFolder, string generatedJSONFolder, string webhookToken, string uostoken)
         {
             await _webhook.PostWebhookResponseAsyncForXML(webHookfilePath, generatedXMLFolder, webhookToken);
-            string requestBody;
-            using (StreamReader streamReader = new StreamReader(uosFilePath))
-            {
-                requestBody = streamReader.ReadToEnd();
-            }
+            string requestBody = _jsonHelper.getDeserializedString(uosFilePath);
             var request = new RestRequest("/erpfacade/priceinformation", Method.Post);
             request.AddHeader("Content-Type", "application/json");
             request.AddHeader("Authorization", "Bearer " + uostoken);
@@ -150,11 +146,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         public async Task<RestResponse> PostWebHookAndUoSResponseAsyncWithNullProduct(string webHookfilePath, string uosFilePath, string generatedXMLFolder, string generatedJSONFolder, string webhookToken, string uostoken)
         {
             await _webhook.PostWebhookResponseAsyncForXML(webHookfilePath, generatedXMLFolder, webhookToken);
-            string requestBody;
-            using (StreamReader streamReader = new StreamReader(uosFilePath))
-            {
-                requestBody = streamReader.ReadToEnd();
-            }
+            string requestBody= _jsonHelper.getDeserializedString(uosFilePath);
             var request = new RestRequest("/erpfacade/priceinformation", Method.Post);
             request.AddHeader("Content-Type", "application/json");
             request.AddHeader("Authorization", "Bearer " + uostoken);
