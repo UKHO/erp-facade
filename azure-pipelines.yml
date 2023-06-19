@@ -345,7 +345,7 @@ stages:
       - name: "AzureADConfiguration.ClientSecretPricingInformationCaller"
         value: $(ERP-API-TEST-AUTOTEST-PRICEINFORMATIONAPICALLER-SECRET)
       - name: "EnterpriseEventServiceConfiguration.ClientId"
-        value: $(EnterpriseEventServiceConfigurationClientId)
+        value: $(AzureADConfigurationClientId)
     jobs:
       - deployment: DevDeployTerraform
         displayName: "Dev - Deploy Terraform and Dotnet App"
