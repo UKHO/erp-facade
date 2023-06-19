@@ -1,11 +1,4 @@
-﻿using FluentAssertions;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using NUnit.Framework;
-using UKHO.ERPFacade.API.FunctionalTests.Model;
-using UKHO.ERPFacade.Common.Models;
-
-namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
+﻿namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
     public class JSONHelper
     {
