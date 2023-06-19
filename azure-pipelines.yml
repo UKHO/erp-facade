@@ -101,7 +101,6 @@ stages:
               ArtifactName: "OWASP Dependency Checker Report"
 
           - task: PowerShell@1
-            continueOnError: true
             displayName: "Fail Build if Dependency Check Finds Any Vulnerabilities"
             inputs:
               scriptType: inlineScript
