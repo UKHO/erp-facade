@@ -353,6 +353,8 @@ stages:
         value: $(ERP-API-TEST-AUTOTEST-PRICEINFORMATIONAPICALLER-APPLICATION-ID)
       - name: "AzureADConfiguration.ClientSecretPricingInformationCaller"
         value: $(ERP-API-TEST-AUTOTEST-PRICEINFORMATIONAPICALLER-SECRET)
+      - name: "ErpFacadeConfiguration.CurrentEnvironment"
+        value: $(Environment)
     jobs:
       - deployment: DevDeployTerraform
         displayName: "Dev - Deploy Terraform and Dotnet App"
@@ -435,6 +437,8 @@ stages:
         value: $(ERP-API-TEST-AUTOTEST-PRICEINFORMATIONAPICALLER-APPLICATION-ID)
       - name: "AzureADConfiguration.ClientSecretPricingInformationCaller"
         value: $(ERP-API-TEST-AUTOTEST-PRICEINFORMATIONAPICALLER-SECRET)
+      - name: "ErpFacadeConfiguration.CurrentEnvironment"
+        value: $(Environment)
       - name: mockWebAppName
         value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup
