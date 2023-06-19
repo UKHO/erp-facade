@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using UKHO.ERPFacade.API.FunctionalTests.Helpers;
 
@@ -14,9 +13,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         private readonly ADAuthTokenProvider _authToken = new();
         public static bool noRole = false;
         //for pipeline
-        //private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
+        private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
         //for local
-        private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
+        //private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
 
         [OneTimeSetUp]
         public void Setup()
@@ -65,8 +64,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
         public async Task WhenValidEventReceivedWithValidToken_ThenUoSReturn200OkResponse(string payloadJsonFileName)
         {
-            //string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.UoSPayloadFileName);
-            Console.WriteLine("Scenario:" + payloadJsonFileName + "\n");
+                        Console.WriteLine("Scenario:" + payloadJsonFileName + "\n");
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, payloadJsonFileName);
             string generatedJSONFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedJSONFolder);
 
@@ -78,10 +76,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [Category("QAEnvFT")]
         [Test, Order(1)]
         //UoS scenario based testing
-        [TestCase("ID1_WebhookPayload.JSON", "UoS1_Pricing.JSON", TestName = "CompareCorrIdUnitName_UoSReturn200OkResponse")]
-        public async Task CompareCorrIdUnitName_UoSReturn200OkResponse(string webhookPayloadJsonFileName, string UoSPayloadFileName)
+        [TestCase("ID1_WebhookPayload.JSON", "UoS1_Pricing.JSON", TestName = "WhenReceivePriceInfoForAllUoSSentToSAP_UoSReturn200OkResponse")]
+        public async Task WhenReceivePriceInfoForAllUoSSentToSAP_UoSReturn200OkResponse(string webhookPayloadJsonFileName, string UoSPayloadFileName)
         {
-
             string filePathWebhook = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.WebhookPayloadFileName);
             string generatedXMLFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXMLFolder);
             Console.WriteLine("Scenario:" + webhookPayloadJsonFileName + "\n");
@@ -98,10 +95,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [Category("QAEnvFT")]
         [Test, Order(1)]
         //UoS scenario based testing
-        [TestCase("ID1_WebhookPayload.JSON", "UoS3_ProductMissingUOS.JSON", TestName = "VerifyProductIsblankUOS_UoSReturn200OkResponse")]
-        public async Task VerifyProductIsblankUOS_UoSReturn200OkResponse(string webhookPayloadJsonFileName, string UoSPayloadProductBlankFileName)
+        [TestCase("ID1_WebhookPayload.JSON", "UoS3_ProductMissingUOS.JSON", TestName = "WhenPriceInfoIsBlankFromSAP_ThenPriceSectionIsEmptyInFinalUoS_UoSReturn200OkResponse")]
+        public async Task WhenPriceInfoIsBlankFromSAP_ThenPriceSectionIsEmptyInFinalUoS_UoSReturn200OkResponse(string webhookPayloadJsonFileName, string UoSPayloadProductBlankFileName)
         {
-
             string filePathWebhook = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.WebhookPayloadFileName);
             string generatedXMLFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXMLFolder);
             Console.WriteLine("Scenario:" + webhookPayloadJsonFileName + "\n");
@@ -118,10 +114,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [Category("QAEnvFT")]
         [Test, Order(1)]
         //UoS scenario based testing
-        [TestCase("ID1_WebhookPayload.JSON", "UoS2_ProductISNullUOS.JSON", TestName = "VerifyProductIsNullUOS_UoSReturn200OkResponse")]
-        public async Task VerifyProductIsNullUOS_UoSReturn200OkResponse(string webhookPayloadJsonFileName, string UoSPayloadProductNullFileName)
+        [TestCase("ID1_WebhookPayload.JSON", "UoS2_ProductISNullUOS.JSON", TestName = "WhenPriceInfoIsNullFromSAP_ThenPriceSectionIsEmptyInFinalUoS_UoSReturn200OkResponse")]
+        public async Task WhenPriceInfoIsNullFromSAP_ThenPriceSectionIsEmptyInFinalUoS_UoSReturn200OkResponse(string webhookPayloadJsonFileName, string UoSPayloadProductNullFileName)
         {
-
             string filePathWebhook = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.WebhookPayloadFileName);
             string generatedXMLFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXMLFolder);
             Console.WriteLine("Scenario:" + webhookPayloadJsonFileName + "\n");

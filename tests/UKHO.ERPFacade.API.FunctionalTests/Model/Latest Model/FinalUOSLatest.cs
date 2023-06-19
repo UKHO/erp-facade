@@ -1,21 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace UKHO.ERPFacade.API.FunctionalTests.Model.Latest_Model
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-
-    namespace FinalUOS.Model
+﻿    namespace UKHO.ERPFacade.API.FunctionalTests.Model.Latest_Model
     {
 
-        public class Rootobject
+        public class FinalUoSOutput
         {
             public string EventName { get; set; }
             public string Subject { get; set; }
@@ -218,4 +204,4 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model.Latest_Model
 
     }
 
-}
+
