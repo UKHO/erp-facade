@@ -297,6 +297,6 @@
      This is applicable for .net framework.
    ]]>
 		</notes>
-		<cve>CVE-2022-34716</cve>
+		<cve>CVE-2023-29326</cve>
 	 </suppress>
 </suppressions>
