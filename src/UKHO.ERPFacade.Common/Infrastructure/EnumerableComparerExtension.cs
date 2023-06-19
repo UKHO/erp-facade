@@ -1,8 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace UKHO.ERPFacade.Common.Infrastructure
+﻿namespace UKHO.ERPFacade.Common.Infrastructure
 {
-    [ExcludeFromCodeCoverage]
     public static class EnumerableComparerExtension
     {
         public static bool AreEquivalent<T>(this IEnumerable<T> left, IEnumerable<T> right)
