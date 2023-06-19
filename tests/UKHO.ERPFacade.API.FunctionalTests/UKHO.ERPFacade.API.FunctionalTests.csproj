@@ -69,6 +69,9 @@
     <None Update="ERPFacadePayloadTestData\PriceChangeInputJSON\PC1_Payload.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ERPFacadePayloadTestData\PriceChangeInput.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ERPFacadePayloadTestData\UoS1_Pricing.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

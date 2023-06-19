@@ -24,8 +24,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
         [Category("DevEnvFT")]
         [Category("QAEnvFT")]
-        [Test(Description = "WhenValidPriceChnageEventReceivedWithValidToken_ThenPriceChangeReturns200OkResponse"), Order(0)]
-        public async Task WhenValidPriceChnageEventReceivedWithValidToken_ThenPriceChangeReturns200OkResponse()
+        [Test(Description = "WhenValidPriceChangeEventReceivedWithValidToken_ThenPriceChangeReturns200OkResponse"), Order(0)]
+        public async Task WhenValidPriceChangeEventReceivedWithValidToken_ThenPriceChangeReturns200OkResponse()
         {
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.BPUpdatePayloadFileName);
             var response = await _bulkPriceUpdate.PostBPUpdateResponseAsync(filePath, await _authToken.GetAzureADToken(false, "BulkPriceUpdate"));
@@ -52,10 +52,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
             var response = await _bulkPriceUpdate.PostBPUpdateResponseAsync(filePath, await _authToken.GetAzureADToken(true));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.Forbidden);
-
         }
-
-        
 
     }
 }
