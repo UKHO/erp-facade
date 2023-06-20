@@ -164,7 +164,51 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         AttrNotMatched.Add(nameof(item.PRODUCT));
                     if (!item.PRODTYPE.Equals(product.ProductType[4..]))
                         AttrNotMatched.Add(nameof(item.PRODTYPE));
-                    if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!getUoSInfo(item.PRODUCTNAME).UnitType.Contains("Unit")))
+                    if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!getUoSInfo(item.PRODUCTNAME).UnitOfSaleType.Contains("unit")))
+                        AttrNotMatched.Add(nameof(item.PRODUCTNAME));
+                    if (!item.AGENCY.Equals(product.Agency))
+                        AttrNotMatched.Add(nameof(item.AGENCY));
+                    if (!item.PROVIDER.Equals(product.ProviderCode))
+                        AttrNotMatched.Add(nameof(item.PROVIDER));
+                    if (!item.ENCSIZE.Equals(product.Size))
+                        AttrNotMatched.Add(nameof(item.ENCSIZE));
+                    if (!item.TITLE.Equals(product.Title))
+                        AttrNotMatched.Add(nameof(item.TITLE));
+                    if (!item.EDITIONNO.Equals(product.EditionNumber))
+                        AttrNotMatched.Add(nameof(item.EDITIONNO));
+                    if (!item.UPDATENO.Equals(product.UpdateNumber))
+                        AttrNotMatched.Add(nameof(item.UPDATENO));
+                    //Checking blanks
+                    string[] fieldNames = { "CANCELLED", "REPLACEDBY", "UNITTYPE" };
+                    var v = VerifyBlankFields(item, fieldNames);
+
+
+                    if (AttrNotMatched.Count == 0)
+                    {
+                        Console.WriteLine("UPDATE ENC CELL EDITION UPDATE NUMBER Action's Data is correct");
+                        return true;
+                    }
+
+                    else
+                    {
+                        Console.WriteLine("UPDATE ENC CELL EDITION UPDATE NUMBER Action's Data is incorrect");
+                        Console.WriteLine("Not matching attributes are:");
+                        foreach (string attribute in AttrNotMatched)
+                        { Console.WriteLine(attribute); }
+                        return false;
+                    }
+                }
+                else if ((childCell == product.ProductName) && (product.Status.StatusName.Contains("Suspended")))
+                {
+
+                    AttrNotMatched.Clear();
+                    if (!item.ACTIONNUMBER.Equals(actionCounter.ToString()))
+                        AttrNotMatched.Add(nameof(item.ACTIONNUMBER));
+                    if (!item.PRODUCT.Equals("ENC CELL"))
+                        AttrNotMatched.Add(nameof(item.PRODUCT));
+                    if (!item.PRODTYPE.Equals(product.ProductType[4..]))
+                        AttrNotMatched.Add(nameof(item.PRODTYPE));
+                    if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!getUoSInfo(item.PRODUCTNAME).UnitOfSaleType.Contains("unit")))
                         AttrNotMatched.Add(nameof(item.PRODUCTNAME));
                     if (!item.AGENCY.Equals(product.Agency))
                         AttrNotMatched.Add(nameof(item.AGENCY));
@@ -227,8 +271,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         AttrNotMatched.Add(nameof(item.PRODUCT));
                     if (!item.PRODTYPE.Equals(product.ProductType[4..]))
                         AttrNotMatched.Add(nameof(item.PRODTYPE));
-                    if (!item.PRODUCTNAME.Equals(product.ProductName))
-                        AttrNotMatched.Add(nameof(item.PRODUCTNAME));
+                    if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!getUoSInfo(item.PRODUCTNAME).UnitOfSaleType.Contains("unit")))
+                       AttrNotMatched.Add(nameof(item.PRODUCTNAME));
                     if (!item.AGENCY.Equals(product.Agency))
                         AttrNotMatched.Add(nameof(item.AGENCY));
                     if (!item.PROVIDER.Equals(product.ProviderCode))
@@ -249,8 +293,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     if (AttrNotMatched.Count == 0)
                     {
                         Console.WriteLine("CHANGE ENC CELL Action's Data is correct");
-                        //ChangeAVCSUoS = product.InUnitsOfSale;
-                        //ChangeENCCell.Add(childCell);
                         ChangeENCCell.Add(childCell, product.InUnitsOfSale);
                         return true;
                     }
@@ -458,7 +500,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             Console.WriteLine("Action#:" + actionCounter + ".AVCSUnitOfSale:" + productName);
             foreach (UnitOfSale unitOfSale in jsonPayload.Data.UnitsOfSales)
             {
-                //bool flagMatchProduct = false;
                 List<string> pdts = unitOfSale.CompositionChanges.AddProducts;
                 foreach (string pdt in pdts)
                 {
@@ -572,8 +613,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         AttrNotMatched.Add(nameof(item.PRODUCT));
                     if (!item.PRODTYPE.Equals(product.ProductType[4..]))
                         AttrNotMatched.Add(nameof(item.PRODTYPE));
-                    //if (!item.PRODUCTNAME.Equals(product.ProductName))(!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!getUoSInfo(item.PRODUCTNAME).UnitType.Contains("Unit"))
-                    if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!getUoSInfo(item.PRODUCTNAME).UnitType.Contains("Unit")))
+                    if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!getUoSInfo(item.PRODUCTNAME).UnitOfSaleType.Contains("Unit")))
                         AttrNotMatched.Add(nameof(item.PRODUCTNAME));
                     if (!item.AGENCY.Equals(product.Agency))
                         AttrNotMatched.Add(nameof(item.AGENCY));
@@ -618,8 +658,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         private static bool VerifyBlankFields(Item item, string[] fieldNames)
         {
             bool allBlanks = true;
-            //string[] fieldNames = { "ACTIONNUMBER", "ACTION" };
-
+            
             foreach (string field in fieldNames)
             {
                 if (!typeof(Item).GetProperty(field).GetValue(item, null).Equals(""))
@@ -660,9 +699,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             }
             return UoSInfo;
         }
+
         public static async Task<bool> VerifyPresenseOfMandatoryXMLAtrributes(XmlNodeList nodeList)
         {
-            //List<string> ActionAttributesSeq = formActionAtrributes();
             List<string> ActionAttributesSeq = new List<string>();
             ActionAttributesSeq = Config.TestConfig.XMLActionList.ToList<string>();
 
@@ -892,6 +931,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                                  + calculateChangeUoSActionCount(jsonPayload)
                                  + calculateRemoveCellFromUoSActionCount(jsonPayload)
                                  + calculateUpdateEncCellEditionUpdateNumber(jsonPayload)
+                                 + calculateUpdateEncCellEditionUpdateNumberForSuspendedStatus(jsonPayload)
                                  + calculateCancelledCellCount(jsonPayload)
                                  + calculateCancelUnitOfSalesActionCount(jsonPayload);
 
@@ -1052,6 +1092,27 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return count;
         }
 
+        public static int calculateUpdateEncCellEditionUpdateNumberForSuspendedStatus(JsonPayloadHelper jsonPayload)
+        {
+            var obj = jsonPayload;
+            int count = 0;
+            foreach (Product product in obj.Data.Products)
+            {
+                if (product.Status.StatusName == "Suspended")
+                {
+                    count++;
+                }
+            }
+
+            if (count > 0)
+            {
+                updateActionList(count, "7.  UPDATE ENC CELL EDITION UPDATE NUMBER");
+                Console.WriteLine("Total no. of ENC Cell Edition Update Number: " + count);
+            }
+
+            return count;
+        }
+
         public static int calculateRemoveCellFromUoSActionCount(JsonPayloadHelper jsonPayload)
         {
             var obj = jsonPayload;
@@ -1123,28 +1184,27 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return cancelledUoSCount;
         }
 
-        public static string generateRandomTraceId()
+        public static string generateRandomCorrelationId()
         {
             Guid guid = Guid.NewGuid();
 
-            string randomtraceID = guid.ToString("N");
+            string randomCorrID = guid.ToString("N");
 
-            randomtraceID = randomtraceID.Insert(8, "-");
-            randomtraceID = randomtraceID.Insert(13, "-");
-            randomtraceID = randomtraceID.Insert(18, "-");
-            randomtraceID = randomtraceID.Insert(23, "-");
+            randomCorrID = randomCorrID.Insert(8, "-");
+            randomCorrID = randomCorrID.Insert(13, "-");
+            randomCorrID = randomCorrID.Insert(18, "-");
+            randomCorrID = randomCorrID.Insert(23, "-");
 
-            Console.WriteLine("Generated TraceId = " + randomtraceID);
-            return randomtraceID;
+            Console.WriteLine("Generated TraceId = " + randomCorrID);
+            return randomCorrID;
         }
 
-        public static string updateTimeField(string requestBody)
+        public static string updateTimeAndCorrIdField(string requestBody, string generatedCorrelationId)
         {
             var currentTimeStamp = DateTime.Now.ToString("yyyy-MM-dd");
-            //string newTraceId = SAPXmlHelper.generateRandomTraceId();
-
             JObject jsonObj = JObject.Parse(requestBody);
             jsonObj["time"] = currentTimeStamp;
+            jsonObj["data"]["correlationId"] = generatedCorrelationId;
             string updatedRequestBody = jsonObj.ToString();
             return updatedRequestBody;
         }
