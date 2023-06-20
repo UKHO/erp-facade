@@ -34,6 +34,9 @@ namespace UKHO.ERPFacade.API.Models
         [JsonProperty("time")]
         public string Time { get; set; }
 
+        [JsonProperty("subject")]
+        public string Subject { get; set; }
+
         [JsonProperty("data")]
         public BulkPriceEventData Data { get; set; }
     }

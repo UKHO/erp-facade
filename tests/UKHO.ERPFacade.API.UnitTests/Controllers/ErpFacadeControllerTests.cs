@@ -13,6 +13,7 @@ using UKHO.ERPFacade.API.Controllers;
 using UKHO.ERPFacade.API.Models;
 using UKHO.ERPFacade.API.Services;
 using UKHO.ERPFacade.Common.Exceptions;
+using UKHO.ERPFacade.Common.Infrastructure.EventService;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
 using IJsonHelper = UKHO.ERPFacade.Common.IO.IJsonHelper;
@@ -27,6 +28,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         private IAzureBlobEventWriter _fakeAzureBlobEventWriter;
         private IErpFacadeService _fakeErpFacadeService;
         private IJsonHelper _fakeJsonHelper;
+        private IEventPublisher _fakeEventPublisher;
 
         private ErpFacadeController _fakeErpFacadeController;
 
@@ -39,13 +41,15 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             _fakeAzureBlobEventWriter = A.Fake<IAzureBlobEventWriter>();
             _fakeErpFacadeService = A.Fake<IErpFacadeService>();
             _fakeJsonHelper = A.Fake<IJsonHelper>();
+            _fakeEventPublisher = A.Fake<IEventPublisher>();
 
             _fakeErpFacadeController = new ErpFacadeController(_fakeHttpContextAccessor,
                                                            _fakeLogger,
                                                            _fakeAzureTableReaderWriter,
                                                            _fakeAzureBlobEventWriter,
                                                            _fakeErpFacadeService,
-                                                           _fakeJsonHelper);
+                                                           _fakeJsonHelper,
+                                                           _fakeEventPublisher);
         }
 
         #region Data

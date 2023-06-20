@@ -200,6 +200,36 @@
         /// <summary>
         /// 940040 - SAP Health Check Request Sent To SAP
         /// </summary>
-        SapHealthCheckRequestSentToSap = 940040
+        SapHealthCheckRequestSentToSap = 940040,
+
+        /// <summary>
+        /// 940041 - Uploading the UnitsOfSale updated event payload json in blob storage.
+        /// </summary>
+        UploadUnitsOfSaleUpdatedEventPayloadInAzureBlob = 940041,
+
+        /// <summary>
+        /// 940042 - UnitsOfSale updated event payload json is uploaded in blob storage successfully.
+        /// </summary>
+        UploadedUnitsOfSaleUpdatedEventPayloadInAzureBlob = 940042,
+
+        /// <summary>
+        /// 940043 - UnitsOfSale updated event Pushed To EES
+        /// </summary>
+        UnitsOfSaleUpdatedEventPushedToEES = 940043,
+
+        /// <summary>
+        /// 940044 - Attempting to send cloudEvent to Enterprise Event Service
+        /// </summary>
+        StartingEnterpriseEventServiceEventPublisher = 940044,
+
+        /// <summary>
+        /// 940045 - Successfully sent cloudEvent to Enterprise Event Service
+        /// </summary>
+        EnterpriseEventServiceEventPublisherSuccess = 940045,
+
+        /// <summary>
+        /// 940046 - Failed to send event cloudEvent to the enterprise event service
+        /// </summary>
+        EnterpriseEventServiceEventPublisherFailure = 940046
     }
 }
