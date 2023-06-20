@@ -24,8 +24,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
         [Category("DevEnvFT")]
         [Category("QAEnvFT")]
-        [Test(Description = "WhenValidEventReceivedWithValidToken_ThenBPUpdateReturns200OkResponse"), Order(0)]
-        public async Task WhenValidEventReceivedWithValidToken_ThenBPUpdateReturns200OkResponse()
+        [Test(Description = "WhenValidPriceChangeEventReceivedWithValidToken_ThenPriceChangeReturns200OkResponse"), Order(0)]
+        public async Task WhenValidPriceChangeEventReceivedWithValidToken_ThenPriceChangeReturns200OkResponse()
         {
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.BPUpdatePayloadFileName);
             var response = await _bulkPriceUpdate.PostBPUpdateResponseAsync(filePath, await _authToken.GetAzureADToken(false, "BulkPriceUpdate"));
@@ -34,8 +34,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         }
         [Category("DevEnvFT")]
         [Category("QAEnvFT")]
-        [Test(Description = "WhenValidEventReceivedWithInvalidToken_ThenBPUpdateReturns401UnAuthorizedResponse"), Order(1)]
-        public async Task WhenValidEventReceivedWithInvalidToken_ThenBPUpdateReturns401UnAuthorizedResponse()
+        [Test(Description = "WhenValidPriceChangeEventReceivedWithInvalidToken_ThenPriceChangeReturns401UnAuthorizedResponse"), Order(1)]
+        public async Task WhenValidPriceChangeEventReceivedWithInvalidToken_ThenPriceChangeReturns401UnAuthorizedResponse()
         {
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.BPUpdatePayloadFileName);
 
@@ -45,14 +45,13 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         }
         [Category("DevEnvFT")]
         [Category("QAEnvFT")]
-        [Test(Description = "WhenValidEventReceivedWithTokenHavingNoRole_ThenBPUpdateReturns403ForbiddenResponse"), Order(2)]
-        public async Task WhenValidEventReceivedWithInvalidToken_ThenBPUpdateReturns403UnAuthorizedResponse()
+        [Test(Description = "WhenValidPriceChangeEventReceivedWithTokenHavingNoRole_ThenPriceChangeReturns403ForbiddenResponse"), Order(2)]
+        public async Task WhenValidPriceChangeEventReceivedWithTokenHavingNoRole_ThenPriceChangeReturns403ForbiddenResponse()
         {
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.BPUpdatePayloadFileName);
 
             var response = await _bulkPriceUpdate.PostBPUpdateResponseAsync(filePath, await _authToken.GetAzureADToken(true));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.Forbidden);
-
         }
 
     }

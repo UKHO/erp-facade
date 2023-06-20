@@ -36,10 +36,7 @@ namespace UKHO.ERPFacade.Common.Models
     {
         [JsonProperty("correlationId")]
         public string CorrelationId { get; set; }
-
-        [JsonProperty("traceId")]
-        public string TraceId { get; set; }
-
+         
         [JsonProperty("products")]
         public List<Product> Products { get; set; }
 
