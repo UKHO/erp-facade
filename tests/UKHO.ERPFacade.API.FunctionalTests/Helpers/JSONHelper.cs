@@ -1,4 +1,6 @@
-﻿using UKHO.ERPFacade.API.FunctionalTests.Model;
+﻿using Newtonsoft.Json.Linq;
+
+using UKHO.ERPFacade.API.FunctionalTests.Model;
 
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
@@ -15,12 +17,25 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             }
             return requestBody;
         }
+
+        public static string replaceCorrID(string requestBody, string corrIdGeneratedInWebhookEndpoint)
+        {
+            JArray jsonArray = JArray.Parse(requestBody);
+            foreach (JObject jObj in jsonArray)
+            {
+                jObj["corrid"] = corrIdGeneratedInWebhookEndpoint;
+            }
+            string updatedUoSRequestBody = jsonArray.ToString();
+            return updatedUoSRequestBody;
+        }
+
         public List<string> GetProductListProductListFromSAPPayload(List<UoSInputJSONHelper> InputJSONHelper)
         {
             List<string> result = new List<string>();
             //code to get Unique list from inout payload
             return result;
         }
+
     }
 }
 

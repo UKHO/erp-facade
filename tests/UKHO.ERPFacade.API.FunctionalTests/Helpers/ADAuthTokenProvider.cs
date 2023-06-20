@@ -26,6 +26,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             }
             else
             {
+                AzureADToken = null;
                 AzureADToken = await GenerateAzureADToken(Config.TestConfig.AzureADConfiguration.AutoTestClientId, Config.TestConfig.AzureADConfiguration.ClientSecret, AzureADToken);
             }
             return AzureADToken;
