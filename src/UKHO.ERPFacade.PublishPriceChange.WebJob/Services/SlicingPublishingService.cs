@@ -96,7 +96,7 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
             return new UnitOfSalePriceEventPayload(new UnitOfSalePriceEvent
             {
                 SpecVersion = "1.0",
-                Type = "uk.gov.ukho.erp.bulkpricechange.v1",
+                Type = "uk.gov.ukho.erp.pricechange.v1",
                 Source = "https://erp.ukho.gov.uk",
                 Id = eventId,
                 Time = new DateTimeOffset(DateTime.UtcNow).ToString(),
