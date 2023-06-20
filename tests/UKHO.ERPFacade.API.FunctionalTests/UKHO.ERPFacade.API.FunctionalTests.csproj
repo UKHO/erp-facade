@@ -154,6 +154,12 @@
     <None Update="ERPFacadePayloadTestData\SapMockApiConfigure.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ERPFacadePayloadTestData\UoS2_ProductISNullUOS.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\UoS3_ProductMissingUOS.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
