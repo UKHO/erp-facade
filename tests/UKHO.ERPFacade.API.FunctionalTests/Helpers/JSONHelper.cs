@@ -1,4 +1,6 @@
-﻿namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
+﻿using Newtonsoft.Json.Linq;
+
+namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
     public class JSONHelper
     {
@@ -12,6 +14,18 @@
             }
             return requestBody;
         }
+
+        public static string replaceCorrID(string requestBody, string corrIdGeneratedInWebhookEndpoint)
+        {
+            JArray jsonArray = JArray.Parse(requestBody);
+            foreach (JObject jObj in jsonArray)
+            {
+                jObj["corrid"] = corrIdGeneratedInWebhookEndpoint;
+            }
+            string updatedUoSRequestBody = jsonArray.ToString();
+            return updatedUoSRequestBody;
+        }
+
     }
 }
 
