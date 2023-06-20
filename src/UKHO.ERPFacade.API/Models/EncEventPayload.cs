@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 
 namespace UKHO.ERPFacade.API.Models
 {
+    [ExcludeFromCodeCoverage]
     public class EncEventPayload
     {
         [JsonProperty("specversion")]

@@ -203,34 +203,34 @@
         SapHealthCheckRequestSentToSap = 940040,
 
         /// <summary>
-        /// 940041 - Uploading the received Bulk price information event in blob storage.
+        /// 940041 - Uploading the UnitsOfSale updated event payload json in blob storage.
         /// </summary>
-        UploadBulkPriceInformationEventInAzureBlob = 940041,
+        UploadUnitsOfSaleUpdatedEventPayloadInAzureBlob = 940041,
 
         /// <summary>
-        /// 940042 - Bulk price information event is uploaded in blob storage successfully.
+        /// 940042 - UnitsOfSale updated event payload json is uploaded in blob storage successfully.
         /// </summary>
-        UploadedBulkPriceInformationEventInAzureBlob = 940042,
+        UploadedUnitsOfSaleUpdatedEventPayloadInAzureBlob = 940042,
 
         /// <summary>
-        /// 940043 - Bulk price information event in added in azure table successfully.
+        /// 940043 - UnitsOfSale updated event Pushed To EES
         /// </summary>
-        AddedBulkPriceInformationEventInAzureTable = 940043,
+        UnitsOfSaleUpdatedEventPushedToEES = 940043,
 
         /// <summary>
-        /// 940044- Webjob started to process the publishing price changes.
+        /// 940044 - Attempting to send cloudEvent to Enterprise Event Service
         /// </summary>
-        WebjobPublishingPriceChangesEventStarted = 940044,
+        StartingEnterpriseEventServiceEventPublisher = 940044,
 
         /// <summary>
-        /// 940055- Webjob completed processing the publishing price changes.
+        /// 940045 - Successfully sent cloudEvent to Enterprise Event Service
         /// </summary>
-        WebjobPublishingPriceChangesEventCompleted = 940045,
+        EnterpriseEventServiceEventPublisherSuccess = 940045,
 
         /// <summary>
-        /// 940046 - Unit Price Change event in added in azure table successfully.
+        /// 940046 - Failed to send event cloudEvent to the enterprise event service
         /// </summary>
-        AddedUnitPriceChangeEventInAzureTable = 940046,
+        EnterpriseEventServiceEventPublisherFailure = 940046,
 
         /// <summary>
         /// 940047 - Building unit of sale price event started in webjob
@@ -267,6 +267,37 @@
         /// <summary>
         /// 940054 - Storing the received Bulk price information event in azure table.
         /// </summary>
-        StoreBulkPriceInformationEventInAzureTable = 940054
+        StoreBulkPriceInformationEventInAzureTable = 940054,
+
+        /// <summary>
+        /// 940055 - Uploading the received Bulk price information event in blob storage.
+        /// </summary>
+        UploadBulkPriceInformationEventInAzureBlob = 940055,
+
+        /// <summary>
+        /// 940056 - Bulk price information event is uploaded in blob storage successfully.
+        /// </summary>
+        UploadedBulkPriceInformationEventInAzureBlob = 940056,
+
+        /// <summary>
+        /// 940057 - Bulk price information event in added in azure table successfully.
+        /// </summary>
+        AddedBulkPriceInformationEventInAzureTable = 940057,
+
+        /// <summary>
+        /// 940058- Webjob started to process the publishing price changes.
+        /// </summary>
+        WebjobPublishingPriceChangesEventStarted = 940058,
+
+        /// <summary>
+        /// 940059- Webjob completed processing the publishing price changes.
+        /// </summary>
+        WebjobPublishingPriceChangesEventCompleted = 940059,
+
+        /// <summary>
+        /// 940060 - Unit Price Change event in added in azure table successfully.
+        /// </summary>
+        AddedUnitPriceChangeEventInAzureTable = 940060,
+
     }
 }
