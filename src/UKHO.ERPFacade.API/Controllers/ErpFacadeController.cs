@@ -2,13 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using UKHO.ERPFacade.Common.Models;
-using UKHO.ERPFacade.Common.Services;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Infrastructure.EventService;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
+using UKHO.ERPFacade.Common.Models;
+using UKHO.ERPFacade.Common.Services;
 
 namespace UKHO.ERPFacade.API.Controllers
 {
@@ -95,7 +95,11 @@ namespace UKHO.ERPFacade.API.Controllers
 
                 unitsOfSaleUpdatedEventPayloadJson = JObject.Parse(JsonConvert.SerializeObject(unitsOfSaleUpdatedEventPayload));
 
-                await _azureBlobEventWriter.UploadEvent(unitsOfSaleUpdatedEventPayloadJson.ToString(), correlationId, correlationId + "_unitofsalesupdatedevent" + '.' + RequestFormat);
+                _logger.LogInformation(EventIds.UploadUnitsOfSaleUpdatedEventPayloadInAzureBlob.ToEventId(), "Uploading the UnitsOfSale updated event payload json in blob storage.");
+
+                await _azureBlobEventWriter.UploadEvent(unitsOfSaleUpdatedEventPayloadJson.ToString(), correlationId!, correlationId + "_ees." + RequestFormat);
+
+                _logger.LogInformation(EventIds.UploadedUnitsOfSaleUpdatedEventPayloadInAzureBlob.ToEventId(), "UnitsOfSale updated event payload json is uploaded in blob storage successfully.");
 
                 int eventSize = _jsonHelper.GetPayloadJsonSize(unitsOfSaleUpdatedEventPayloadJson.ToString());
 
@@ -104,12 +108,6 @@ namespace UKHO.ERPFacade.API.Controllers
                     _logger.LogError(EventIds.PriceEventExceedSizeLimit.ToEventId(), "UnitsOfSale price event exceeds the size limit of 1 MB.");
                     throw new ERPFacadeException(EventIds.PriceEventExceedSizeLimit.ToEventId());
                 }
-
-                _logger.LogInformation(EventIds.UploadUnitsOfSaleUpdatedEventPayloadInAzureBlob.ToEventId(), "Uploading the UnitsOfSale updated event payload json in blob storage.");
-
-                await _azureBlobEventWriter.UploadEvent(unitsOfSaleUpdatedEventPayloadJson.ToString(), correlationId!, correlationId + "_ees." + RequestFormat);
-
-                _logger.LogInformation(EventIds.UploadedUnitsOfSaleUpdatedEventPayloadInAzureBlob.ToEventId(), "UnitsOfSale updated event payload json is uploaded in blob storage successfully.");
 
                 await _eventPublisher.Publish(unitsOfSaleUpdatedEventPayload);
 
@@ -121,7 +119,7 @@ namespace UKHO.ERPFacade.API.Controllers
                 throw new ERPFacadeException(EventIds.NoDataFoundInSAPPriceInformationPayload.ToEventId());
             }
 
-            return new OkObjectResult(StatusCodes.Status200OK);
+            return new OkObjectResult(unitsOfSaleUpdatedEventPayloadJson);
         }
 
         [HttpPost]
@@ -145,6 +143,5 @@ namespace UKHO.ERPFacade.API.Controllers
 
             return new OkObjectResult(StatusCodes.Status200OK);
         }
-
     }
 }
