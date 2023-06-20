@@ -2,12 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using UKHO.ERPFacade.Common.Models;
-using UKHO.ERPFacade.Common.Services;
 using UKHO.ERPFacade.Common.Exceptions;
+using UKHO.ERPFacade.Common.Infrastructure.EventService;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
+using UKHO.ERPFacade.Common.Models;
+using UKHO.ERPFacade.Common.Services;
 
 namespace UKHO.ERPFacade.API.Controllers
 {
@@ -21,17 +22,20 @@ namespace UKHO.ERPFacade.API.Controllers
         private readonly IAzureBlobEventWriter _azureBlobEventWriter;
         private readonly IErpFacadeService _erpFacadeService;
         private readonly IJsonHelper _jsonHelper;
+        private readonly IEventPublisher _eventPublisher;
 
         private const string CorrelationIdKey = "corrid";
         private const string RequestFormat = "json";
         private const int EventSizeLimit = 1000000;
+        private const string ContainerName = "pricechangeblobs";
 
         public ErpFacadeController(IHttpContextAccessor contextAccessor,
                                    ILogger<ErpFacadeController> logger,
                                    IAzureTableReaderWriter azureTableReaderWriter,
                                    IAzureBlobEventWriter azureBlobEventWriter,
                                    IErpFacadeService erpFacadeService,
-                                   IJsonHelper jsonHelper)
+                                   IJsonHelper jsonHelper,
+                                   IEventPublisher eventPublisher)
         : base(contextAccessor)
         {
             _logger = logger;
@@ -39,6 +43,7 @@ namespace UKHO.ERPFacade.API.Controllers
             _azureBlobEventWriter = azureBlobEventWriter;
             _erpFacadeService = erpFacadeService;
             _jsonHelper = jsonHelper;
+            _eventPublisher = eventPublisher;
         }
 
         [HttpPost]
@@ -90,7 +95,11 @@ namespace UKHO.ERPFacade.API.Controllers
 
                 unitsOfSaleUpdatedEventPayloadJson = JObject.Parse(JsonConvert.SerializeObject(unitsOfSaleUpdatedEventPayload));
 
-                await _azureBlobEventWriter.UploadEvent(unitsOfSaleUpdatedEventPayloadJson.ToString(), correlationId, correlationId + "_unitofsalesupdatedevent" + '.' + RequestFormat);
+                _logger.LogInformation(EventIds.UploadUnitsOfSaleUpdatedEventPayloadInAzureBlob.ToEventId(), "Uploading the UnitsOfSale updated event payload json in blob storage.");
+
+                await _azureBlobEventWriter.UploadEvent(unitsOfSaleUpdatedEventPayloadJson.ToString(), correlationId!, correlationId + "_ees." + RequestFormat);
+
+                _logger.LogInformation(EventIds.UploadedUnitsOfSaleUpdatedEventPayloadInAzureBlob.ToEventId(), "UnitsOfSale updated event payload json is uploaded in blob storage successfully.");
 
                 int eventSize = _jsonHelper.GetPayloadJsonSize(unitsOfSaleUpdatedEventPayloadJson.ToString());
 
@@ -100,7 +109,9 @@ namespace UKHO.ERPFacade.API.Controllers
                     throw new ERPFacadeException(EventIds.PriceEventExceedSizeLimit.ToEventId());
                 }
 
-                // Add code to publish the event in EES
+                await _eventPublisher.Publish(unitsOfSaleUpdatedEventPayload);
+
+                _logger.LogInformation(EventIds.UnitsOfSaleUpdatedEventPushedToEES.ToEventId(), "UnitsOfSale updated event has been sent to EES successfully.");
             }
             else
             {
@@ -108,15 +119,28 @@ namespace UKHO.ERPFacade.API.Controllers
                 throw new ERPFacadeException(EventIds.NoDataFoundInSAPPriceInformationPayload.ToEventId());
             }
 
-            return new OkObjectResult(StatusCodes.Status200OK);
+            return new OkObjectResult(unitsOfSaleUpdatedEventPayloadJson);
         }
 
         [HttpPost]
         [Route("/erpfacade/bulkpriceinformation")]
         [Authorize(Policy = "PriceInformationApiCaller")]
-        public virtual async Task<IActionResult> PostBulkPriceInformation([FromBody] JArray requestJson)
+        public virtual async Task<IActionResult> PostBulkPriceInformation([FromBody] JArray bulkPriceInformationJson)
         {
-            await Task.CompletedTask;
+            _logger.LogInformation(EventIds.SapBulkPriceInformationPayloadReceived.ToEventId(), "Bulk price information payload received from SAP.");
+
+            string correlationId = GetCurrentCorrelationId();
+
+            _logger.LogInformation(EventIds.StoreBulkPriceInformationEventInAzureTable.ToEventId(), "Storing the received Bulk price information event in azure table.");
+
+            await _azureTableReaderWriter.AddPriceChangeEntity(correlationId);
+
+            _logger.LogInformation(EventIds.UploadBulkPriceInformationEventInAzureBlob.ToEventId(), "Uploading the received Bulk price information event in blob storage.");
+
+            await _azureBlobEventWriter.UploadEvent(bulkPriceInformationJson.ToString(), ContainerName, correlationId + '/' + correlationId + '.' + RequestFormat);
+
+            _logger.LogInformation(EventIds.UploadedBulkPriceInformationEventInAzureBlob.ToEventId(), "Bulk price information event is uploaded in blob storage successfully.");
+
             return new OkObjectResult(StatusCodes.Status200OK);
         }
     }

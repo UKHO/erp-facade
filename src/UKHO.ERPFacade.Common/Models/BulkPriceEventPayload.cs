@@ -34,6 +34,9 @@ namespace UKHO.ERPFacade.Common.Models
         [JsonProperty("time")]
         public string Time { get; set; }
 
+        [JsonProperty("subject")]
+        public string Subject { get; set; }
+
         [JsonProperty("data")]
         public BulkPriceEventData Data { get; set; }
     }
@@ -41,8 +44,8 @@ namespace UKHO.ERPFacade.Common.Models
     [ExcludeFromCodeCoverage]
     public class BulkPriceEventData
     {
-        [JsonProperty("traceId")]
-        public string TraceId { get; set; }
+        [JsonProperty("correlationId")]
+        public string CorrelationId { get; set; }
 
         [JsonProperty("unitsOfSalePrices")]
         public UnitsOfSalePrices UnitsOfSalePrices { get; set; }

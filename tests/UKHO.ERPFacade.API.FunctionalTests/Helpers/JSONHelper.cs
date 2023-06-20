@@ -1,10 +1,13 @@
 ﻿using Newtonsoft.Json.Linq;
 
+using UKHO.ERPFacade.API.FunctionalTests.Model;
+
+
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
     public class JSONHelper
     {
-              public string getDeserializedString(String filePath)
+        public string getDeserializedString(String filePath)
         {
             string requestBody;
 
