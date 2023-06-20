@@ -97,7 +97,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
                 _logger.LogInformation(EventIds.UploadUnitsOfSaleUpdatedEventPayloadInAzureBlob.ToEventId(), "Uploading the UnitsOfSale updated event payload json in blob storage.");
 
-                await _azureBlobEventWriter.UploadEvent(unitsOfSaleUpdatedEventPayloadJson.ToString(), correlationId!, correlationId + "_ees." + RequestFormat);
+                await _azureBlobEventWriter.UploadEvent(unitsOfSaleUpdatedEventPayloadJson.ToString(), correlationId!, correlationId + "_unitofsalesupdatedevent." + RequestFormat);
 
                 _logger.LogInformation(EventIds.UploadedUnitsOfSaleUpdatedEventPayloadInAzureBlob.ToEventId(), "UnitsOfSale updated event payload json is uploaded in blob storage successfully.");
 
@@ -109,7 +109,8 @@ namespace UKHO.ERPFacade.API.Controllers
                     throw new ERPFacadeException(EventIds.PriceEventExceedSizeLimit.ToEventId());
                 }
 
-                await _eventPublisher.Publish(unitsOfSaleUpdatedEventPayload);
+                //Commented temporary
+                //await _eventPublisher.Publish(unitsOfSaleUpdatedEventPayload);
 
                 _logger.LogInformation(EventIds.UnitsOfSaleUpdatedEventPushedToEES.ToEventId(), "UnitsOfSale updated event has been sent to EES successfully.");
             }
