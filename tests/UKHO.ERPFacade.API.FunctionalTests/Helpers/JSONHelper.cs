@@ -29,6 +29,13 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return updatedUoSRequestBody;
         }
 
+        public List<string> GetProductListProductListFromSAPPayload(List<UoSInputJSONHelper> InputJSONHelper)
+        {
+            List<string> result = new List<string>();
+            //code to get Unique list from inout payload
+            return result;
+        }
+
     }
 }
 
