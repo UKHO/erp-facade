@@ -29,8 +29,11 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [Test(Description = "WhenValidEventReceivedWithValidToken_ThenUoSReturns200OkResponse"), Order(0)]
         public async Task WhenValidEventReceivedWithValidToken_ThenUoSReturns200OkResponse()
         {
+            string filePathWebhook = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.WebhookPayloadFileName);
+            string generatedXMLFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXMLFolder);
+            string webhookToken = await _authToken.GetAzureADToken(false);
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.UoSPayloadFileName);
-            var response = await _unitOfSale.PostUoSResponseAsync(filePath, await _authToken.GetAzureADToken(false, "UnitOfSale"));
+            var response = await _unitOfSale.PostUoSResponseAsync(filePathWebhook, generatedXMLFolder, webhookToken, filePath, await _authToken.GetAzureADToken(false, "UnitOfSale"));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         }
@@ -40,8 +43,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         public async Task WhenValidEventReceivedWithInvalidToken_ThenUoSReturns401UnAuthorizedResponse()
         {
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.UoSPayloadFileName);
-
-            var response = await _unitOfSale.PostUoSResponseAsync(filePath, "invalidToken_abcd");
+            string filePathWebhook = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.WebhookPayloadFileName);
+            string generatedXMLFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXMLFolder);
+            string webhookToken = await _authToken.GetAzureADToken(false);
+            var response = await _unitOfSale.PostUoSResponseAsync(filePathWebhook, generatedXMLFolder, webhookToken, filePath, "invalidToken_abcd");
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
 
         }
@@ -51,8 +56,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         public async Task WhenValidEventReceivedWithInvalidToken_ThenUoSReturns403UnAuthorizedResponse()
         {
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.UoSPayloadFileName);
-
-            var response = await _unitOfSale.PostUoSResponseAsync(filePath, await _authToken.GetAzureADToken(true));
+            string filePathWebhook = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.WebhookPayloadFileName);
+            string generatedXMLFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXMLFolder);
+            string webhookToken = await _authToken.GetAzureADToken(false);
+            var response = await _unitOfSale.PostUoSResponseAsync(filePathWebhook, generatedXMLFolder, webhookToken, filePath, await _authToken.GetAzureADToken(true));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.Forbidden);
 
         }

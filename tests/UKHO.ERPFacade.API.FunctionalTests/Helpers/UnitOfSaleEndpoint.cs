@@ -27,15 +27,20 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             azureBlobStorageHelper = new();
         }
 
-        public async Task<RestResponse> PostUoSResponseAsync(string filePath, string token)
+        public async Task<RestResponse> PostUoSResponseAsync(string filePathWebhook, string generatedXMLFolder,string webhookToken, string filePath, string token)
         {
+
+
+            await _webhook.PostWebhookResponseAsyncForXML(filePathWebhook, generatedXMLFolder, webhookToken);
+            //string requestBody = _jsonHelper.getDeserializedString(filePath);
+
             string requestBody;
 
             using (StreamReader streamReader = new StreamReader(filePath))
             {
                 requestBody = streamReader.ReadToEnd();
             }
-
+            requestBody = JSONHelper.replaceCorrID(requestBody, WebhookEndpoint.generatedCorrelationId);
 
             var request = new RestRequest("/erpfacade/priceinformation", Method.Post);
 
@@ -46,12 +51,11 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
             RestResponse response = await client.ExecuteAsync(request);
             List<UoSInputJSONHelper> jsonPayload = JsonConvert.DeserializeObject<List<UoSInputJSONHelper>>(requestBody);
-            string traceID = jsonPayload[0].Corrid;
-
+            string corrId = jsonPayload[0].Corrid;
 
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                Assert.That(azureTableHelper.CheckResponseDateTime(traceID), Is.True, "ResponseDateTime Not updated in Azure table");
+                Assert.That(azureTableHelper.CheckResponseDateTime(corrId), Is.True, "ResponseDateTime Not updated in Azure table");
             }
 
             return response;
@@ -87,10 +91,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         public async Task<RestResponse> PostWebHookAndUoSResponseAsyncWithJSON(string webHookfilePath, string uosFilePath, string generatedXMLFolder, string generatedJSONFolder, string webhookToken, string uostoken)
         {
             await _webhook.PostWebhookResponseAsyncForXML(webHookfilePath, generatedXMLFolder, webhookToken);
-            
-
-
-             string requestBody = _jsonHelper.getDeserializedString(uosFilePath);
+            string requestBody = _jsonHelper.getDeserializedString(uosFilePath);
             requestBody=JSONHelper.replaceCorrID(requestBody, WebhookEndpoint.generatedCorrelationId);
             var request = new RestRequest("/erpfacade/priceinformation", Method.Post);
             request.AddHeader("Content-Type", "application/json");
