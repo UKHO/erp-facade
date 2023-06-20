@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Newtonsoft.Json;
+using UKHO.ERPFacade.Common.Infrastructure;
 
 namespace UKHO.ERPFacade.Common.Models
 {
