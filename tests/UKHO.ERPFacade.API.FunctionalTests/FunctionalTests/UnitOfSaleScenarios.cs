@@ -58,21 +58,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         }
 
         [Category("DevEnvFT")]
-        [Test, Order(1)]
-        //UoS scenario based testing
-        [TestCase("UoS1_Pricing.JSON", TestName = "WhenValidEventReceivedWithValidToken_ThenUoSReturn200OkResponse")]
-
-        public async Task WhenValidEventReceivedWithValidToken_ThenUoSReturn200OkResponse(string payloadJsonFileName)
-        {
-                        Console.WriteLine("Scenario:" + payloadJsonFileName + "\n");
-            string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, payloadJsonFileName);
-            string generatedJSONFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedJSONFolder);
-
-            var response = await _unitOfSale.PostUoSResponseAsyncWithJSON(filePath, generatedJSONFolder, await _authToken.GetAzureADToken(false, "UnitOfSale"));
-            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-        }
-
-        [Category("DevEnvFT")]
         [Category("QAEnvFT")]
         [Test, Order(1)]
         //UoS scenario based testing
