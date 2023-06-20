@@ -33,7 +33,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             _erpFacadeWebjobConfig = erpFacadeWebjobConfig ?? throw new ArgumentNullException(nameof(erpFacadeWebjobConfig));
         }
 
-        public async Task UpsertEntity(JObject eesEvent, string correlationId)
+        public async Task UpsertEntity(string correlationId)
         {
             TableClient tableClient = GetTableClient(ErpFacadeTableName);
 
@@ -72,7 +72,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
         {
             IList<EESEventEntity> records = new List<EESEventEntity>();
             TableClient tableClient = GetTableClient(ErpFacadeTableName);
-            var entities = tableClient.QueryAsync<EESEventEntity>(filter: TableClient.CreateQueryFilter($"CorrelationID eq {correlationId}"), maxPerPage: 1);
+            var entities = tableClient.QueryAsync<EESEventEntity>(filter: TableClient.CreateQueryFilter($"CorrelationId eq {correlationId}"), maxPerPage: 1);
             await foreach (var entity in entities)
             {
                 records.Add(entity);

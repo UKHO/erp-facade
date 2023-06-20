@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
+using RestSharp;
 using UKHO.ERPFacade.API.FunctionalTests.Helpers;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
@@ -14,7 +15,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
         //for local
         //private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
-
+        
         [SetUp]
         public void Setup()
         {
@@ -103,14 +104,52 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [TestCase("ID18_CancelReplace_UpdateCell.JSON", TestName = "WhenICallTheWebhookWithMixScenarioHavingCancel&Replace_UpdateCell_ThenWebhookReturns200Response")]
         [TestCase("ID19_CR_metadata_move.JSON", TestName = "WhenICallTheWebhookWithMixScenarioHavingCancel&ReplaceAndMetadataChangeAndMoveCell_ThenWebhookReturns200Response")]
 
+        //New Edition
+        [TestCase("ID20_newEditionAdditionalCoverageV_01.JSON", TestName = "WhenICallTheWebhookWithNewEditionAdditionalCoverageV01PayloadFile_ThenWebhookReturns200Response")]
+        //
+        //V0.3S
+        [TestCase("ID21_cancelAndReplaceV_03.JSON", TestName = "WhenICallTheWebhookWithCancelAndReplaceV03PayloadFile_ThenWebhookReturns200Response")]
+        [TestCase("ID22_Cell_Moves_Unit_and_New_CellV_03.JSON", TestName = "WhenICallTheWebhookWithCellMoveAndNewCellV03PayloadFile_ThenWebhookReturns200Response")]
+        [TestCase("ID23_Cell_MoveV_03.JSON", TestName = "WhenICallTheWebhookWithCellMoveV03PayloadFile_ThenWebhookReturns200Response")]
+        [TestCase("ID24_Metadata_ChangeV_03.JSON", TestName = "WhenICallTheWebhookWithCellMoveV03PayloadFile_ThenWebhookReturns200Response")]
+        [TestCase("ID25_Mixed_scenario1V_03.JSON", TestName = "WhenICallTheWebhookWithMixedScenario1V03PayloadFile_ThenWebhookReturns200Response")]
+        [TestCase("ID26_New_CellV_03.JSON", TestName = "WhenICallTheWebhookWithNewCellV03PayloadFile_ThenWebhookReturns200Response")]
+
+        //Supplier Defined Releasability Set v0.1
+        [TestCase("ID27_supplier_Defined_ReleasabilitySet_V_01.JSON", TestName = "WhenICallTheWebhookWithSupplierDefinedReleasabilitySetV01_ThenWebhookReturns200Response")]
+
+        //Suspended & Withdrawn
+        [TestCase("ID28_simpleSuspendedScenario.JSON", TestName = "WhenICallTheWebhookWithSimpleSuspendedScenario_ThenWebhookReturns200Response")]
+        [TestCase("ID29_simpleWithdrawnScenario.JSON", TestName = "WhenICallTheWebhookWithSimpleWithdrawnScenario_ThenWebhookReturns200Response")]
+        [TestCase("ID30_Suspend_and_WithdrawV01.JSON", TestName = "WhenICallTheWebhookWithSuspendedAndWithdrawnScenario_ThenWebhookReturns200Response")]
+        [TestCase("ID31_metadataAndSuspended.JSON", TestName = "WhenICallTheWebhookWithMetadataAndSuspendedMixScenario_ThenWebhookReturns200Response")]
+        [TestCase("ID32_moveAndSuspended.JSON", TestName = "WhenICallTheWebhookWithMovedataAndSuspendedMixScenario_ThenWebhookReturns200Response")]
+
+
         public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponse1(string payloadJsonFileName)
         {
-            Console.WriteLine("Scenario:"+payloadJsonFileName+"\n");
+            Console.WriteLine("Scenario:" + payloadJsonFileName + "\n");
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, payloadJsonFileName);
             string generatedXMLFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXMLFolder);
+            string envName = Config.TestConfig.ErpFacadeConfiguration.CurrentEnvironment;
+            Console.WriteLine("Environment => " +envName);
+            RestResponse response;
 
-            var response = await _webhook.PostWebhookResponseAsyncForXML(filePath, generatedXMLFolder, await _authToken.GetAzureADToken(false));
-            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);            
+            if (envName == "Dev" || envName == "local")
+            {
+                response = await _webhook.PostWebhookResponseAsyncForXML(filePath, generatedXMLFolder, await _authToken.GetAzureADToken(false));
+            }
+            else if (envName == "QA")
+            {
+                response = await _webhook.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(false));
+            }
+            else 
+            {
+                Console.WriteLine("ErpFacade Environment Configuration Not Found!");
+                response = await _webhook.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(false));
+            }
+
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
     }
 }
