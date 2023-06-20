@@ -53,15 +53,6 @@ namespace UKHO.ERPFacade.Common.Models
         [JsonProperty("correlationId")]
         public string CorrelationId { get; set; }
 
-        [JsonProperty("products")]
-        public List<Product> Products { get; set; }
-
-        [JsonProperty("_COMMENT")]
-        public string _COMMENT { get; set; }
-
-        [JsonProperty("unitsOfSale")]
-        public List<UnitOfSale> UnitsOfSales { get; set; }
-
         [JsonProperty("unitsOfSalePrices")]
         public List<UnitsOfSalePrices> UnitsOfSalePrices { get; set; }
     }
