@@ -13,6 +13,7 @@ using UKHO.ERPFacade.PublishPriceChange.WebJob;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.Logging.EventHubLogProvider;
+using UKHO.ERPFacade.PublishPriceChange.WebJob.Services;
 
 namespace UKHO.ERPFacade.PublishPriceChange.WebJob
 {
@@ -149,6 +150,8 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob
 
             serviceCollection.AddSingleton<PublishPriceChangeWebJob>();
             serviceCollection.AddSingleton<IAzureTableReaderWriter, AzureTableReaderWriter>();
+            serviceCollection.AddSingleton<IAzureBlobEventWriter, AzureBlobEventWriter>();
+            serviceCollection.AddSingleton<ISlicingPublishingService, SlicingPublishingService>();
         }
     }
 }
