@@ -13,6 +13,7 @@ using UKHO.ERPFacade.API.Controllers;
 using UKHO.ERPFacade.API.Models;
 using UKHO.ERPFacade.API.Services;
 using UKHO.ERPFacade.Common.Exceptions;
+using UKHO.ERPFacade.Common.Infrastructure.EventService;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
 using IJsonHelper = UKHO.ERPFacade.Common.IO.IJsonHelper;
@@ -27,6 +28,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         private IAzureBlobEventWriter _fakeAzureBlobEventWriter;
         private IErpFacadeService _fakeErpFacadeService;
         private IJsonHelper _fakeJsonHelper;
+        private IEventPublisher _fakeEventPublisher;
 
         private ErpFacadeController _fakeErpFacadeController;
 
@@ -39,13 +41,15 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             _fakeAzureBlobEventWriter = A.Fake<IAzureBlobEventWriter>();
             _fakeErpFacadeService = A.Fake<IErpFacadeService>();
             _fakeJsonHelper = A.Fake<IJsonHelper>();
+            _fakeEventPublisher = A.Fake<IEventPublisher>();
 
             _fakeErpFacadeController = new ErpFacadeController(_fakeHttpContextAccessor,
                                                            _fakeLogger,
                                                            _fakeAzureTableReaderWriter,
                                                            _fakeAzureBlobEventWriter,
                                                            _fakeErpFacadeService,
-                                                           _fakeJsonHelper);
+                                                           _fakeJsonHelper,
+                                                           _fakeEventPublisher);
         }
 
         #region Data
@@ -265,6 +269,33 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
 
             var result = (OkObjectResult)await _fakeErpFacadeController.PostBulkPriceInformation(fakeSapEventJson);
             result.StatusCode.Should().Be(200);
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+            && call.GetArgument<LogLevel>(0) == LogLevel.Information
+             && call.GetArgument<EventId>(1) == EventIds.SapBulkPriceInformationPayloadReceived.ToEventId()
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Bulk price information payload received from SAP.").MustHaveHappenedOnceExactly();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+            && call.GetArgument<LogLevel>(0) == LogLevel.Information
+             && call.GetArgument<EventId>(1) == EventIds.StoreBulkPriceInformationEventInAzureTable.ToEventId()
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Storing the received Bulk price information event in azure table.").MustHaveHappenedOnceExactly();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+            && call.GetArgument<LogLevel>(0) == LogLevel.Information
+             && call.GetArgument<EventId>(1) == EventIds.StoreBulkPriceInformationEventInAzureTable.ToEventId()
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Storing the received Bulk price information event in azure table.").MustHaveHappenedOnceExactly();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+            && call.GetArgument<LogLevel>(0) == LogLevel.Information
+             && call.GetArgument<EventId>(1) == EventIds.UploadBulkPriceInformationEventInAzureBlob.ToEventId()
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Uploading the received Bulk price information event in blob storage.").MustHaveHappenedOnceExactly();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+           && call.GetArgument<LogLevel>(0) == LogLevel.Information
+            && call.GetArgument<EventId>(1) == EventIds.UploadedBulkPriceInformationEventInAzureBlob.ToEventId()
+           && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Bulk price information event is uploaded in blob storage successfully.").MustHaveHappenedOnceExactly();
+
+
         }
     }
 }
