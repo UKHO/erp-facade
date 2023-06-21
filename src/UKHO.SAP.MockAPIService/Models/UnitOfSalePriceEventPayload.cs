@@ -49,8 +49,8 @@ namespace UKHO.ERPFacade.MockAPIService.Models
     [ExcludeFromCodeCoverage]
     public class UnitOfSalePriceEventData
     {
-        [JsonProperty("traceId")]
-        public string TraceId { get; set; }
+        [JsonProperty("correlationId")]
+        public string CorrelationId { get; set; }
 
         [JsonProperty("products")]
         public List<Product> Products { get; set; }

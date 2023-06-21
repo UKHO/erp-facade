@@ -16,6 +16,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         public string UoSPayloadFileName { get; set; }
         public string BPUpdatePayloadFileName { get; set; }
         public string GeneratedProductJsonFolder { get; set; }
+        public string GeneratedJSONFolder { get; set; }
+
     }
 
 
@@ -53,7 +55,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
     public class SapMockConfiguration
     {
         public string BaseUrl { get; set; }
-        public string Username { get; set;}
+        public string Username { get; set; }
         public string Password { get; set; }
     }
 

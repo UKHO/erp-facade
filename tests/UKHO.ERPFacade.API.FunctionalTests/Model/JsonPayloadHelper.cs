@@ -1,9 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Model
 {
@@ -44,6 +39,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
 
         [JsonProperty("unitsOfSale")]
         public UnitOfSale[] UnitsOfSales { get; set; }
+        
     }
 
     public class Product
@@ -274,4 +270,15 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
         [JsonProperty("removeProducts")]
         public List<string> RemoveProducts { get; set; }
     }
+    public class Standard
+    {
+        public Priceduration[] priceDurations { get; set; }
+    }
+
+    public class Priceduration
+    {
+        public int numberOfMonths { get; set; }
+        public string rrp { get; set; }
+    }
+
 }

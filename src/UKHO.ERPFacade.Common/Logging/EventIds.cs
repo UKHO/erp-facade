@@ -299,5 +299,9 @@
         /// </summary>
         AddedUnitPriceChangeEventInAzureTable = 940060,
 
+        /// <summary>
+        /// 940061 - UnitsOfSale NotFound In SAP PriceInformation Payload
+        /// </summary>
+        UnitsOfSaleNotFoundInSAPPriceInformationPayload = 940061
     }
 }

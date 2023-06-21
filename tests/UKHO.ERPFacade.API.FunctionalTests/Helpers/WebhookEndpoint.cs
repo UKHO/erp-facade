@@ -120,5 +120,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
         }
 
+
+        public string getCorrelationId()
+        {
+            generatedCorrelationId = "367ce4a4-1d62-4f56-b359-59e178dsk24";
+            return generatedCorrelationId;
+        }
+
     }
 }

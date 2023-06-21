@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using System.Xml;
-using UKHO.ERPFacade.API.Models;
+using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
 
@@ -33,7 +33,7 @@ namespace UKHO.ERPFacade.API.Helpers
         private const string UnitSaleType = "unit";
         private const string EncCell = "ENC CELL";
         private const string AvcsUnit = "AVCS UNIT";
-     
+
 
         public SapMessageBuilder(ILogger<SapMessageBuilder> logger,
                                  IXmlHelper xmlHelper,

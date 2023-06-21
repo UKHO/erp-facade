@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Diagnostics.CodeAnalysis;
 
-namespace UKHO.ERPFacade.API.Models
+namespace UKHO.ERPFacade.Common.Models
 {
     [ExcludeFromCodeCoverage]
     public class EESEvent
@@ -36,10 +36,7 @@ namespace UKHO.ERPFacade.API.Models
     {
         [JsonProperty("correlationId")]
         public string CorrelationId { get; set; }
-
-        [JsonProperty("traceId")]
-        public string TraceId { get; set; }
-
+         
         [JsonProperty("products")]
         public List<Product> Products { get; set; }
 
