@@ -80,10 +80,11 @@ namespace UKHO.ERPFacade.API.Helpers
                     XmlElement actionNode;
                     switch (action.ActionNumber)
                     {
-                        case 1:                        
+                        case 1:
+                        case 5:
                         case 7:
                         case 9:
-                            var unitOfSale = eventData.Data.UnitsOfSales.Where(x => x.UnitOfSaleType == UnitSaleType && product.InUnitsOfSale.Contains(x.UnitName)).FirstOrDefault();
+                            var unitOfSale = GetUnitOfSaleForEncCell(eventData.Data.UnitsOfSales, product);
                             foreach (var rules in action.Rules)
                             {
                                 foreach (var conditions in rules.Conditions)
@@ -112,42 +113,14 @@ namespace UKHO.ERPFacade.API.Helpers
                             break;
 
                         case 4:
-                            var unitOfSaleReplace = eventData.Data.UnitsOfSales.Where(x => x.UnitOfSaleType == UnitSaleType && product.InUnitsOfSale.Contains(x.UnitName)).FirstOrDefault();
+                            var unitOfSaleReplace = GetUnitOfSaleForEncCell(eventData.Data.UnitsOfSales, product);
 
                             foreach (var replacedProduct in product.ReplacedBy)
                             {
                                 actionNode = BuildAction(soapXml, product, unitOfSaleReplace, action, null, replacedProduct);
                                 actionItemNode.AppendChild(actionNode);
                             }
-                            break;
-                            
-                        case 5:
-                            var unitOfSaleChange = GetUnitOfSaleForChangeEncCell(eventData.Data.UnitsOfSales, product);
-                            foreach (var rules in action.Rules)
-                            {
-                                foreach (var conditions in rules.Conditions)
-                                {
-                                    object jsonFieldValue = CommonHelper.ParseXmlNode(conditions.AttributeName, product, product.GetType());
-                                    if (jsonFieldValue != null && IsValidValue(jsonFieldValue.ToString(), conditions.AttributeValue))
-                                    {
-                                        IsConditionSatisfied = true;
-                                    }
-                                    else
-                                    {
-                                        IsConditionSatisfied = false;
-                                        break;
-                                    }
-                                }
-                            }
-
-                            if (IsConditionSatisfied)
-                            {
-                                actionNode = BuildAction(soapXml, product, unitOfSaleChange, action);
-                                actionItemNode.AppendChild(actionNode);
-
-                                IsConditionSatisfied = false;
-                            }
-                            break;
+                            break;                       
 
                     }
                     _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
@@ -441,7 +414,7 @@ namespace UKHO.ERPFacade.API.Helpers
             }
         }
 
-        private UnitOfSale GetUnitOfSaleForChangeEncCell(List<UnitOfSale> listOfUnitOfSales, Product product)
+        private UnitOfSale GetUnitOfSaleForEncCell(List<UnitOfSale> listOfUnitOfSales, Product product)
         {
             UnitOfSale unitOfSale = new();
             var unitOfSales = listOfUnitOfSales.Where(x => x.UnitOfSaleType == UnitSaleType && product.InUnitsOfSale.Contains(x.UnitName)).ToList();
