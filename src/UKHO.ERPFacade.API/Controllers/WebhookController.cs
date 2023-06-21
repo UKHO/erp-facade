@@ -35,7 +35,7 @@ namespace UKHO.ERPFacade.API.Controllers
                                  IAzureBlobEventWriter azureBlobEventWriter,
                                  ISapClient sapClient,
                                  ISapMessageBuilder sapMessageBuilder,
-                                    IOptions<SapConfiguration> sapConfig)
+                                 IOptions<SapConfiguration> sapConfig)
         : base(contextAccessor)
         {
             _logger = logger;
@@ -92,12 +92,12 @@ namespace UKHO.ERPFacade.API.Controllers
 
             HttpResponseMessage response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapServiceOperation);
 
-                if (!response.IsSuccessStatusCode)
-                {
-                    _logger.LogError(EventIds.ErrorOccuredInSap.ToEventId(), "An error occured while processing your request in SAP. | {StatusCode}", response.StatusCode);
-                    throw new ERPFacadeException(EventIds.ErrorOccuredInSap.ToEventId());
-                }
-                _logger.LogInformation(EventIds.EncUpdatePushedToSap.ToEventId(), "ENC update has been sent to SAP successfully. | {StatusCode}", response.StatusCode);
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogError(EventIds.ErrorOccuredInSap.ToEventId(), "An error occured while processing your request in SAP. | {StatusCode}", response.StatusCode);
+                throw new ERPFacadeException(EventIds.ErrorOccuredInSap.ToEventId());
+            }
+            _logger.LogInformation(EventIds.EncUpdatePushedToSap.ToEventId(), "ENC update has been sent to SAP successfully. | {StatusCode}", response.StatusCode);
 
             await _azureTableReaderWriter.UpdateRequestTimeEntity(correlationId);
 
