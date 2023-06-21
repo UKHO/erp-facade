@@ -302,6 +302,16 @@
         /// <summary>
         /// 940061 - UnitsOfSale NotFound In SAP PriceInformation Payload
         /// </summary>
-        UnitsOfSaleNotFoundInSAPPriceInformationPayload = 940061
+        UnitsOfSaleNotFoundInSAPPriceInformationPayload = 940061,
+
+        /// <summary>
+        /// 940062- Webjob started cleanup process.
+        /// </summary>
+        WebjobCleanUpEventStarted = 940062,
+
+        /// <summary>
+        /// 940063- Webjob completed cleanup process.
+        /// </summary>
+        WebjobCleanUpEventCompleted = 940063,
     }
 }

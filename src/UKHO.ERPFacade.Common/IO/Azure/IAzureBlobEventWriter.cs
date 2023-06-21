@@ -1,4 +1,6 @@
-﻿namespace UKHO.ERPFacade.Common.IO.Azure
+﻿using Azure.Storage.Blobs.Models;
+
+namespace UKHO.ERPFacade.Common.IO.Azure
 {
     public interface IAzureBlobEventWriter
     {
@@ -7,5 +9,13 @@
         bool CheckIfContainerExists(string containerName);
 
         string DownloadEvent(string blobName, string blobContainerName);
+
+        BlobProperties GetBlobMetadata(string blobName, string blobContainerName);
+
+        IEnumerable<string> GetBlobsInContainer(string blobContainerName);
+
+        bool DeleteBlob(string blobName, string blobContainerName);
+
+        bool DeleteContainer(string blobContainerName);
     }
 }
