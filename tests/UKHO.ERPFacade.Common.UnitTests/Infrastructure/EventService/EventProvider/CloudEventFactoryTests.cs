@@ -1,12 +1,12 @@
-﻿using FakeItEasy;
+﻿using System;
+using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Options;
 using NUnit.Framework;
-using System;
 using UKHO.ERPFacade.Common.Infrastructure.Config;
 using UKHO.ERPFacade.Common.Infrastructure.EventService.EventProvider;
+using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Providers;
-using UKHO.ERPFacade.MockAPIService.Models;
 
 namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvider
 {
