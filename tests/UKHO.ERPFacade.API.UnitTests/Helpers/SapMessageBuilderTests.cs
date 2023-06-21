@@ -10,7 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 using UKHO.ERPFacade.API.Helpers;
-using UKHO.ERPFacade.API.Models;
+using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
 

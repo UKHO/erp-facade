@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace UKHO.ERPFacade.API.Models
-{   
+namespace UKHO.ERPFacade.Common.Models
+{
     [ExcludeFromCodeCoverage]
     public class Rule
     {

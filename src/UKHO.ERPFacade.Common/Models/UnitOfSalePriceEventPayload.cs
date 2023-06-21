@@ -2,22 +2,22 @@
 using Newtonsoft.Json;
 using UKHO.ERPFacade.Common.Infrastructure;
 
-namespace UKHO.ERPFacade.API.Models
+namespace UKHO.ERPFacade.Common.Models
 {
     [ExcludeFromCodeCoverage]
-    public class UnitOfSaleUpdatedEventPayload : EventBase<UnitOfSaleUpdatedEvent>
+    public class UnitOfSalePriceEventPayload : EventBase<UnitOfSalePriceEvent>
     {
-        public UnitOfSaleUpdatedEventPayload(UnitOfSaleUpdatedEvent unitOfSalePriceEvent)
+        public UnitOfSalePriceEventPayload(UnitOfSalePriceEvent unitOfSalePriceEvent)
         {
             EventData = unitOfSalePriceEvent;
         }
 
-        public override string EventName => "uk.gov.ukho.erpFacade.unitOfSaleUpdated.v1";
+        public override string EventName => "uk.gov.ukho.encpublishing.enccontentpublished.v2";
         public override string Subject => EventData.Subject;
     }
 
     [ExcludeFromCodeCoverage]
-    public class UnitOfSaleUpdatedEvent
+    public class UnitOfSalePriceEvent
     {
         [JsonProperty("specversion")]
         public string SpecVersion { get; set; }
@@ -44,23 +44,14 @@ namespace UKHO.ERPFacade.API.Models
         public string DataContentType { get; set; }
 
         [JsonProperty("data")]
-        public UnitOfSaleUpdatedEventData Data { get; set; }
+        public UnitOfSalePriceEventData Data { get; set; }
     }
 
     [ExcludeFromCodeCoverage]
-    public class UnitOfSaleUpdatedEventData
+    public class UnitOfSalePriceEventData
     {
         [JsonProperty("correlationId")]
         public string CorrelationId { get; set; }
-
-        [JsonProperty("products")]
-        public List<Product> Products { get; set; }
-
-        [JsonProperty("_COMMENT")]
-        public string _COMMENT { get; set; }
-
-        [JsonProperty("unitsOfSale")]
-        public List<UnitOfSale> UnitsOfSales { get; set; }
 
         [JsonProperty("unitsOfSalePrices")]
         public List<UnitsOfSalePrices> UnitsOfSalePrices { get; set; }

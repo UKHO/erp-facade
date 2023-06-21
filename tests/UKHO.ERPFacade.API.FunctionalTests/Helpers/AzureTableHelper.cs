@@ -32,10 +32,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return tableClient;
         }
        
-        public bool CheckResponseDateTime( string traceId)
+        public bool CheckResponseDateTime( string correlationId)
         {
             TableClient tableClient = GetTableClient(ErpFacadeTableName);
-            var existingEntity = tableClient.Query<EESEventEntity>(filter: TableClient.CreateQueryFilter($"TraceID eq {traceId}"));
+            var existingEntity = tableClient.Query<EESEventEntity>(filter: TableClient.CreateQueryFilter($"CorrelationId eq {correlationId}"));
             if (existingEntity != null)
             {
                 foreach (var tableitem in existingEntity)

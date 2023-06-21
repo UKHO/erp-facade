@@ -1,10 +1,10 @@
-﻿using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Linq;
+﻿using System.Globalization;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UKHO.ERPFacade.Common.IO.Azure;
-using UKHO.ERPFacade.Common.Models;
-using System.Globalization;
 using UKHO.ERPFacade.Common.Logging;
+using UKHO.ERPFacade.Common.Models;
 
 namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
 {
@@ -46,7 +46,7 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
                             {
                                 var prices = priceInformationList.Where(p => p.ProductName == unitPriceChange.UnitName).ToList();
                                 List<UnitsOfSalePrices> unitsOfSalePriceList = MapAndBuildUnitsOfSalePrices(prices);
-                                UnitOfSaleUpdatedEventPayload unitsOfSaleUpdatedEventPayload = BuildUnitsOfSaleUpdatedEventPayload(unitsOfSalePriceList, unitPriceChange.Eventid, unitPriceChange.UnitName, entity.CorrId);
+                                UnitOfSalePriceEventPayload unitsOfSaleUpdatedEventPayload = BuildUnitsOfSaleUpdatedEventPayload(unitsOfSalePriceList, unitPriceChange.Eventid, unitPriceChange.UnitName, entity.CorrId);
                                 unitsOfSaleUpdatedEventPayloadJson = JObject.Parse(JsonConvert.SerializeObject(unitsOfSaleUpdatedEventPayload.EventData));
                                 _azureBlobEventWriter.UploadEvent(unitsOfSaleUpdatedEventPayloadJson.ToString(), ContainerName, entity.CorrId + '/' + unitPriceChange.UnitName + '/' + unitPriceChange.UnitName + '.' + RequestFormat);
                                 _logger.LogInformation(EventIds.UploadedSlicedEventInAzureBlobForUnitPrices.ToEventId(), "Sliced event is uploaded in blob storage successfully for incomplete unit prices.");
@@ -72,7 +72,7 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
                             var prices = priceInformationList.Where(p => p.ProductName == unitName).ToList();
                             _azureTableReaderWriter.AddUnitPriceChangeEntity(entity.CorrId, eventId, unitName);
                             List<UnitsOfSalePrices> unitsOfSalePriceList = MapAndBuildUnitsOfSalePrices(prices);
-                            UnitOfSaleUpdatedEventPayload unitsOfSaleUpdatedEventPayload = BuildUnitsOfSaleUpdatedEventPayload(unitsOfSalePriceList, eventId, unitName, entity.CorrId);
+                            UnitOfSalePriceEventPayload unitsOfSaleUpdatedEventPayload = BuildUnitsOfSaleUpdatedEventPayload(unitsOfSalePriceList, eventId, unitName, entity.CorrId);
                             unitsOfSaleUpdatedEventPayloadJson = JObject.Parse(JsonConvert.SerializeObject(unitsOfSaleUpdatedEventPayload.EventData));
                             _azureBlobEventWriter.UploadEvent(unitsOfSaleUpdatedEventPayloadJson.ToString(), ContainerName, entity.CorrId + '/' + unitName + '/' + unitName + '.' + RequestFormat);
                             _logger.LogInformation(EventIds.UploadedSlicedEventInAzureBlob.ToEventId(), "Sliced event is uploaded in blob storage successfully.");
@@ -89,21 +89,21 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
 
 
         //private methods
-        private UnitOfSaleUpdatedEventPayload BuildUnitsOfSaleUpdatedEventPayload(List<UnitsOfSalePrices> unitsOfSalePriceList, string eventId, string unitName, string corrID)
+        private UnitOfSalePriceEventPayload BuildUnitsOfSaleUpdatedEventPayload(List<UnitsOfSalePrices> unitsOfSalePriceList, string eventId, string unitName, string corrID)
         {
             _logger.LogInformation(EventIds.AppendingUnitofSalePricesToEncEventInWebJob.ToEventId(), "Appending UnitofSale prices to ENC event in webjob.");
 
-            return new UnitOfSaleUpdatedEventPayload(new UnitOfSaleUpdatedEvent
+            return new UnitOfSalePriceEventPayload(new UnitOfSalePriceEvent
             {
                 SpecVersion = "1.0",
-                Type = "uk.gov.ukho.erp.bulkpricechange.v1",
+                Type = "uk.gov.ukho.erp.pricechange.v1",
                 Source = "https://erp.ukho.gov.uk",
                 Id = eventId,
                 Time = new DateTimeOffset(DateTime.UtcNow).ToString(),
                 _COMMENT = "A comma separated list of products",
                 Subject = unitName,
                 DataContentType = "application/json",
-                Data = new UnitOfSaleUpdatedEventData
+                Data = new UnitOfSalePriceEventData
                 {
                     CorrelationId = corrID,
                     UnitsOfSalePrices = unitsOfSalePriceList,

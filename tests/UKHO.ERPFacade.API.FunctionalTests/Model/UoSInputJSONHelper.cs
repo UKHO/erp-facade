@@ -34,16 +34,16 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
 
         [JsonProperty("futuredate")]
         //[JsonConverter(typeof(ParseStringConverter))]
-        public long Futuredate { get; set; }
+        public long? Futuredate { get; set; }
 
         [JsonProperty("futuretime")]
-        public string Futuretime { get; set; }
+        public string? Futuretime { get; set; }
 
         [JsonProperty("futureprice")]
         public string Futureprice { get; set; }
 
         [JsonProperty("futurecurr")]
-        public string Futurecurr { get; set; }
+        public string? Futurecurr { get; set; }
 
         [JsonProperty("reqdate")]
         //[JsonConverter(typeof(ParseStringConverter))]
