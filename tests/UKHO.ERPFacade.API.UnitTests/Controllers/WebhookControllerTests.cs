@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using UKHO.ERPFacade.API.Controllers;
 using UKHO.ERPFacade.API.Helpers;
-using UKHO.ERPFacade.API.Models;
+using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.HttpClients;
@@ -106,7 +106,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
 
             var result = (OkObjectResult)await _fakeWebHookController.NewEncContentPublishedEventReceived(fakeEncEventJson);
 
-            A.CallTo(() => _fakeAzureTableReaderWriter.UpsertEntity(A<JObject>.Ignored, A<string>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpsertEntity(A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureTableReaderWriter.UpdateRequestTimeEntity(A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureBlobEventWriter.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, "Z_ADDS_MAT_INFO")).MustHaveHappened();
@@ -148,7 +148,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
 
             result.StatusCode.Should().Be(400);
 
-            A.CallTo(() => _fakeAzureTableReaderWriter.UpsertEntity(A<JObject>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpsertEntity(A<string>.Ignored)).MustNotHaveHappened();
             A.CallTo(() => _fakeAzureTableReaderWriter.UpdateRequestTimeEntity(A<string>.Ignored)).MustNotHaveHappened();
             A.CallTo(() => _fakeAzureBlobEventWriter.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
 
@@ -174,7 +174,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
 
             Assert.ThrowsAsync<ERPFacadeException>(() => _fakeWebHookController.NewEncContentPublishedEventReceived(fakeEncEventJson));
 
-            A.CallTo(() => _fakeAzureTableReaderWriter.UpsertEntity(A<JObject>.Ignored, A<string>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpsertEntity(A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureTableReaderWriter.UpdateRequestTimeEntity(A<string>.Ignored)).MustNotHaveHappened();
             A.CallTo(() => _fakeAzureBlobEventWriter.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
 

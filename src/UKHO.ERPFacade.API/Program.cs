@@ -15,9 +15,13 @@ using UKHO.ERPFacade.API.Helpers;
 using UKHO.ERPFacade.API.Middleware;
 using UKHO.ERPFacade.API.Models;
 using UKHO.ERPFacade.API.Services;
+using UKHO.ERPFacade.Common.Models;
+using UKHO.ERPFacade.Common.Services;
 using UKHO.ERPFacade.Common.Configuration;
+using UKHO.ERPFacade.Common.HealthCheck;
 using UKHO.ERPFacade.Common.HttpClients;
 using UKHO.ERPFacade.Common.IO;
+using UKHO.ERPFacade.Common.Infrastructure;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.Logging.EventHubLogProvider;
 
@@ -29,7 +33,7 @@ namespace UKHO.ERPFacade
         [ExcludeFromCodeCoverage]
         internal static void Main(string[] args)
         {
-            EventHubLoggingConfiguration eventHubLoggingConfiguration;            
+            EventHubLoggingConfiguration eventHubLoggingConfiguration;
             SapActionConfiguration sapActionConfiguration;
 
             IHttpContextAccessor httpContextAccessor = new HttpContextAccessor();
@@ -162,23 +166,28 @@ namespace UKHO.ERPFacade
             });
 
             builder.Services.Configure<AzureStorageConfiguration>(configuration.GetSection("AzureStorageConfiguration"));
-            builder.Services.Configure<SapConfiguration>(configuration.GetSection("SapConfiguration"));            
+            builder.Services.Configure<SapConfiguration>(configuration.GetSection("SapConfiguration"));
             builder.Services.Configure<SapActionConfiguration>(configuration.GetSection("SapActionConfiguration"));
 
             sapActionConfiguration = configuration.GetSection("SapActionConfiguration").Get<SapActionConfiguration>()!;
+
+            builder.Services.AddInfrastructure();
 
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             builder.Services.AddScoped<IAzureTableReaderWriter, AzureTableReaderWriter>();
             builder.Services.AddScoped<IAzureBlobEventWriter, AzureBlobEventWriter>();
             builder.Services.AddScoped<ISapConfiguration, SapConfiguration>();
-            builder.Services.AddScoped<ISapMessageBuilder, SapMessageBuilder>();            
+            builder.Services.AddScoped<ISapMessageBuilder, SapMessageBuilder>();
             builder.Services.AddScoped<IXmlHelper, XmlHelper>();
             builder.Services.AddScoped<IFileSystemHelper, FileSystemHelper>();
             builder.Services.AddScoped<IFileSystem, FileSystem>();
             builder.Services.AddScoped<IErpFacadeService, ErpFacadeService>();
             builder.Services.AddScoped<IJsonHelper, JsonHelper>();
             builder.Services.AddScoped<ApiKeyAuthFilter>();
+
+            builder.Services.AddHealthChecks()
+                .AddCheck<SapServiceHealthCheck>("SapServiceHealthCheck");
 
             builder.Services.AddHttpClient<ISapClient, SapClient>(c =>
             {
@@ -196,6 +205,8 @@ namespace UKHO.ERPFacade
             app.MapControllers();
 
             app.UseAuthorization();
+
+            app.MapHealthChecks("/health");
 
             app.UseAuthentication();
 

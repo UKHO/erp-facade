@@ -13,6 +13,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         private readonly RestClient client2;
         private readonly ADAuthTokenProvider _authToken;
         private SAPXmlHelper SapXmlHelper { get; set; }
+        public static string generatedCorrelationId = "";
 
         public WebhookEndpoint()
         {
@@ -43,11 +44,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 requestBody = streamReader.ReadToEnd();
             }
 
-            requestBody = SAPXmlHelper.updateTimeField(requestBody);
+            generatedCorrelationId = SAPXmlHelper.generateRandomCorrelationId();
+            requestBody = SAPXmlHelper.updateTimeAndCorrIdField(requestBody, generatedCorrelationId);
 
             var request = new RestRequest("/webhook/newenccontentpublishedeventreceived", Method.Post);
-            var now1 = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.fffffff'z'");
-
             request.AddHeader("Content-Type", "application/json");
             request.AddHeader("Authorization", "Bearer " + token);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
@@ -65,7 +65,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 requestBody = streamReader.ReadToEnd();
             }
 
-            requestBody = SAPXmlHelper.updateTimeField(requestBody);
+            generatedCorrelationId = SAPXmlHelper.generateRandomCorrelationId();
+            requestBody = SAPXmlHelper.updateTimeAndCorrIdField(requestBody, generatedCorrelationId);
 
             var request = new RestRequest("/webhook/newenccontentpublishedeventreceived", Method.Post);
             request.AddHeader("Content-Type", "application/json");
@@ -117,6 +118,13 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
             await client2.ExecuteAsync(request);
 
+        }
+
+
+        public string getCorrelationId()
+        {
+            generatedCorrelationId = "367ce4a4-1d62-4f56-b359-59e178dsk24";
+            return generatedCorrelationId;
         }
 
     }

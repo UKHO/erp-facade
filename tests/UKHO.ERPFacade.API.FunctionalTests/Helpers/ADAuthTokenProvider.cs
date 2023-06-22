@@ -26,6 +26,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             }
             else
             {
+                AzureADToken = null;
                 AzureADToken = await GenerateAzureADToken(Config.TestConfig.AzureADConfiguration.AutoTestClientId, Config.TestConfig.AzureADConfiguration.ClientSecret, AzureADToken);
             }
             return AzureADToken;
@@ -39,7 +40,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             }
             else if (endPointName == "UnitOfSale"|| endPointName == "BulkPriceUpdate") 
             {
-                
+                AzureADToken = null;
                 AzureADToken = await GenerateAzureADToken(Config.TestConfig.AzureADConfiguration.AutoTestClientIdPricingInformationCaller, Config.TestConfig.AzureADConfiguration.ClientSecretPricingInformationCaller, AzureADToken);
             }
 

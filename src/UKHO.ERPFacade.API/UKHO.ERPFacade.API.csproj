@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -12,8 +12,22 @@
     <NoWarn>8600;8602;8604;8618;8625</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Service\**" />
+    <Content Remove="Service\**" />
+    <EmbeddedResource Remove="Service\**" />
+    <None Remove="Service\**" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Remove="Filters\LogCorrelationIdMiddleware.cs" />
     <Compile Remove="Filters\LogCorrelationIdMiddlewareExtensions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="SapXmlTemplates\SAPHealthCheckRequest.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="SapXmlTemplates\SAPHealthCheckRequest.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.2.2" />
@@ -30,7 +44,7 @@
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
-    <PackageReference Include="UKHO.Logging.EventHubLogProvider" Version="1.22047.3" />
+    <PackageReference Include="UKHO.Logging.EventHubLogProvider" Version="1.23073.7" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\UKHO.ERPFacade.Common\UKHO.ERPFacade.Common.csproj" />

@@ -212,6 +212,15 @@ stages:
               arguments: "--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/UKHO.ERPFacade.API/App_Data/jobs/continuous/ERPFacadeMonitoringWebjob"
               zipAfterPublish: false
               modifyOutputPath: false
+          - task: DotNetCoreCLI@2
+            displayName: "Publish PriceChangeEventWebJob"
+            inputs:
+              command: "publish"
+              publishWebProjects: false
+              projects: "**/UKHO.ERPFacade.PublishPriceChange.WebJob.csproj"
+              arguments: "--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/UKHO.ERPFacade.API/App_Data/jobs/continuous/PriceChangeEventWebJob"
+              zipAfterPublish: false
+              modifyOutputPath: false
 
           - task: ArchiveFiles@2
             displayName: "Zip ERP Service binaries for Webjob"
@@ -348,6 +357,8 @@ stages:
         value: $(ERP-API-TEST-AUTOTEST-PRICEINFORMATIONAPICALLER-APPLICATION-ID)
       - name: "AzureADConfiguration.ClientSecretPricingInformationCaller"
         value: $(ERP-API-TEST-AUTOTEST-PRICEINFORMATIONAPICALLER-SECRET)
+      - name: "EnterpriseEventServiceConfiguration.ClientId"
+        value: $(AzureADConfigurationClientId)
     jobs:
       - deployment: DevDeployTerraform
         displayName: "Dev - Deploy Terraform and Dotnet App"
@@ -410,6 +421,7 @@ stages:
               AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
 
   - stage: QAdeploy
+    dependsOn: Devdeploy
     displayName: "QAdeploy (inc terraform, webapp deploy)"
     variables:
       - group: "ERP-Facade-QA"
@@ -431,6 +443,8 @@ stages:
         value: $(ERP-API-TEST-AUTOTEST-PRICEINFORMATIONAPICALLER-APPLICATION-ID)
       - name: "AzureADConfiguration.ClientSecretPricingInformationCaller"
         value: $(ERP-API-TEST-AUTOTEST-PRICEINFORMATIONAPICALLER-SECRET)
+      - name: "EnterpriseEventServiceConfiguration.ClientId"
+        value: $(EnterpriseEventServiceConfigurationClientId)
       - name: mockWebAppName
         value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup

@@ -190,6 +190,118 @@
         /// <summary>
         /// 940038 - Price Event exceeds the size limit of 1 MB
         /// </summary>
-        PriceEventExceedSizeLimit = 940038
+        PriceEventExceedSizeLimit = 940038,
+
+        /// <summary>
+        /// 940039 - Sap Health Check Xml Template Not Found
+        /// </summary>
+        SapHealthCheckXmlTemplateNotFound = 940039,
+
+        /// <summary>
+        /// 940040 - SAP Health Check Request Sent To SAP
+        /// </summary>
+        SapHealthCheckRequestSentToSap = 940040,
+
+        /// <summary>
+        /// 940041 - Uploading the UnitsOfSale updated event payload json in blob storage.
+        /// </summary>
+        UploadUnitsOfSaleUpdatedEventPayloadInAzureBlob = 940041,
+
+        /// <summary>
+        /// 940042 - UnitsOfSale updated event payload json is uploaded in blob storage successfully.
+        /// </summary>
+        UploadedUnitsOfSaleUpdatedEventPayloadInAzureBlob = 940042,
+
+        /// <summary>
+        /// 940043 - UnitsOfSale updated event Pushed To EES
+        /// </summary>
+        UnitsOfSaleUpdatedEventPushedToEES = 940043,
+
+        /// <summary>
+        /// 940044 - Attempting to send cloudEvent to Enterprise Event Service
+        /// </summary>
+        StartingEnterpriseEventServiceEventPublisher = 940044,
+
+        /// <summary>
+        /// 940045 - Successfully sent cloudEvent to Enterprise Event Service
+        /// </summary>
+        EnterpriseEventServiceEventPublisherSuccess = 940045,
+
+        /// <summary>
+        /// 940046 - Failed to send event cloudEvent to the enterprise event service
+        /// </summary>
+        EnterpriseEventServiceEventPublisherFailure = 940046,
+
+        /// <summary>
+        /// 940047 - Building unit of sale price event started in webjob
+        /// </summary>
+        AppendingUnitofSalePricesToEncEventInWebJob = 940047,
+
+        /// <summary>
+        /// 940048 - Updated Price change status entity successfully in Azure Table
+        /// </summary>
+        UpdatedPriceChangeStatusEntitySuccessful = 940048,
+
+        /// <summary>
+        /// 940049 - Updated Price master status entity successfully in Azure Table
+        /// </summary>
+        UpdatedPriceChangeMasterStatusEntitySuccessful = 940049,
+        /// <summary>
+        /// 940050 - Downloading the price change information event from blob storage.
+        /// </summary>
+        DownloadBulkPriceInformationEventFromAzureBlob = 940050,
+        /// <summary>
+        /// 940051 - Sliced event is uploaded in blob storage successfully.
+        /// </summary>
+        UploadedSlicedEventInAzureBlob = 940051,
+        /// <summary>
+        /// 940052 - Sliced event is uploaded in blob storage successfully for incomplete unit prices.
+        /// </summary>
+        UploadedSlicedEventInAzureBlobForUnitPrices = 940052,
+
+        /// <summary>
+        /// 940053 - Bulk price information payload received from SAP
+        /// </summary>
+        SapBulkPriceInformationPayloadReceived = 940053,
+
+        /// <summary>
+        /// 940054 - Storing the received Bulk price information event in azure table.
+        /// </summary>
+        StoreBulkPriceInformationEventInAzureTable = 940054,
+
+        /// <summary>
+        /// 940055 - Uploading the received Bulk price information event in blob storage.
+        /// </summary>
+        UploadBulkPriceInformationEventInAzureBlob = 940055,
+
+        /// <summary>
+        /// 940056 - Bulk price information event is uploaded in blob storage successfully.
+        /// </summary>
+        UploadedBulkPriceInformationEventInAzureBlob = 940056,
+
+        /// <summary>
+        /// 940057 - Bulk price information event in added in azure table successfully.
+        /// </summary>
+        AddedBulkPriceInformationEventInAzureTable = 940057,
+
+        /// <summary>
+        /// 940058- Webjob started to process the publishing price changes.
+        /// </summary>
+        WebjobPublishingPriceChangesEventStarted = 940058,
+
+        /// <summary>
+        /// 940059- Webjob completed processing the publishing price changes.
+        /// </summary>
+        WebjobPublishingPriceChangesEventCompleted = 940059,
+
+        /// <summary>
+        /// 940060 - Unit Price Change event in added in azure table successfully.
+        /// </summary>
+        AddedUnitPriceChangeEventInAzureTable = 940060,
+
+        /// <summary>
+        /// 940061 - UnitsOfSale NotFound In SAP PriceInformation Payload
+        /// </summary>
+        UnitsOfSaleNotFoundInSAPPriceInformationPayload = 940061
     }
 }
