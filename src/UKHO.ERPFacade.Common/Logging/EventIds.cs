@@ -302,6 +302,16 @@
         /// <summary>
         /// 940061 - UnitsOfSale NotFound In SAP PriceInformation Payload
         /// </summary>
-        UnitsOfSaleNotFoundInSAPPriceInformationPayload = 940061
+        UnitsOfSaleNotFoundInSAPPriceInformationPayload = 940061,
+
+        /// <summary>
+        /// 940062 - Uploading the received Price information event in blob storage.
+        /// </summary>
+        UploadPriceInformationEventInAzureBlob = 940062,
+
+        /// <summary>
+        /// 940063 - Price information event is uploaded in blob storage successfully.
+        /// </summary>
+        UploadedPriceInformationEventInAzureBlob = 940063,
     }
 }

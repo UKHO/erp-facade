@@ -75,6 +75,12 @@ namespace UKHO.ERPFacade.API.Controllers
 
             _logger.LogInformation(EventIds.ERPFacadeToSAPRequestFound.ToEventId(), "Valid SAP callback.");
 
+            _logger.LogInformation(EventIds.UploadPriceInformationEventInAzureBlob.ToEventId(), "Uploading the received Price information event in blob storage.");
+
+            await _azureBlobEventWriter.UploadEvent(priceInformationJson.ToString(), correlationId, correlationId + "_priceinformation." + RequestFormat);
+
+            _logger.LogInformation(EventIds.UploadedPriceInformationEventInAzureBlob.ToEventId(), "Price information event is uploaded in blob storage successfully.");
+
             List<PriceInformation> priceInformationList = JsonConvert.DeserializeObject<List<PriceInformation>>(priceInformationJson.ToString());
 
             if (priceInformationList.Count > 0 && priceInformationList.Any(x => x.ProductName != string.Empty))
