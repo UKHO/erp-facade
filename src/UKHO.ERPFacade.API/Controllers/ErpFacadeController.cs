@@ -2,8 +2,6 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UKHO.ERPFacade.API.Middleware;
-using UKHO.ERPFacade.API.Models;
-using UKHO.ERPFacade.API.Services;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Infrastructure.EventService;
 using UKHO.ERPFacade.Common.IO;
@@ -110,8 +108,8 @@ namespace UKHO.ERPFacade.API.Controllers
                     throw new ERPFacadeException(EventIds.PriceEventExceedSizeLimit.ToEventId());
                 }
 
-                //Commented temporary
-                //await _eventPublisher.Publish(unitsOfSaleUpdatedEventPayload);
+                ///////Commented temporary
+                ///////await _eventPublisher.Publish(unitsOfSaleUpdatedEventPayload);
 
                 _logger.LogInformation(EventIds.UnitsOfSaleUpdatedEventPushedToEES.ToEventId(), "UnitsOfSale updated event has been sent to EES successfully.");
             }
@@ -127,7 +125,7 @@ namespace UKHO.ERPFacade.API.Controllers
         [HttpPost]
         [Route("/erpfacade/bulkpriceinformation")]
         [ServiceFilter(typeof(ApiKeyAuthFilter))]
-        public virtual async Task<IActionResult> PostBulkPriceInformation([FromBody] JArray requestJson)
+        public virtual async Task<IActionResult> PostBulkPriceInformation([FromBody] JArray bulkPriceInformationJson)
         {
             _logger.LogInformation(EventIds.SapBulkPriceInformationPayloadReceived.ToEventId(), "Bulk price information payload received from SAP.");
 

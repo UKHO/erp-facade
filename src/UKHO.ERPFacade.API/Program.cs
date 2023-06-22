@@ -13,8 +13,6 @@ using System.Reflection;
 using UKHO.ERPFacade.API.Filters;
 using UKHO.ERPFacade.API.Helpers;
 using UKHO.ERPFacade.API.Middleware;
-using UKHO.ERPFacade.API.Models;
-using UKHO.ERPFacade.API.Services;
 using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Services;
 using UKHO.ERPFacade.Common.Configuration;
