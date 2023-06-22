@@ -71,6 +71,7 @@ namespace UKHO.ERPFacade.Common.Services
 
                                     priceDuration.NumberOfMonths = Convert.ToInt32(priceInformation.Duration);
                                     priceDuration.Rrp = priceInformation.Price;
+
                                     effectiveStandard.PriceDurations.Add(priceDuration);
                                 }
                             }
@@ -91,6 +92,7 @@ namespace UKHO.ERPFacade.Common.Services
 
                                     priceDuration.NumberOfMonths = Convert.ToInt32(priceInformation.Duration);
                                     priceDuration.Rrp = priceInformation.FuturePrice;
+
                                     futureStandard.PriceDurations.Add(priceDuration);
                                 }
                             }
