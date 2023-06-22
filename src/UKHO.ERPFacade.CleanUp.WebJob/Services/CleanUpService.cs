@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.IO.Azure;
+using UKHO.ERPFacade.Common.Logging;
 
 namespace UKHO.ERPFacade.CleanUp.WebJob.Services
 {
@@ -36,18 +37,22 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.Services
         //Private methods
         private void CleanUpBlobsAndTablesRelatedToSlicing()
         {
+            _logger.LogInformation(EventIds.FetchMasterEntities.ToEventId(), "Fetching master entities from azure table");
             var masterEntities = _azureTableReaderWriter.GetMasterEntities(CompleteStatus);
             foreach (var masterEntity in masterEntities)
             {
+                _logger.LogInformation(EventIds.FetchBlobMetadata.ToEventId(), $"Fetching metadata of blob : {masterEntity.CorrId}");
                 var blobMetadata = _azureBlobEventWriter.GetBlobMetadata(masterEntity.CorrId + '/' + masterEntity.CorrId + '.' + RequestFormat, PriceChangeContainerName);
                 TimeSpan timediff = DateTime.Now - blobMetadata.CreatedOn.DateTime;
                 if (timediff.TotalDays > int.Parse(_erpFacadeWebjobConfig.Value.CleanUpDurationInDays))
                 {
                     _azureTableReaderWriter.DeleteUnitPriceChangeEntityForMasterCorrId(masterEntity.CorrId);
                     _azureTableReaderWriter.DeletePriceMasterEntity(masterEntity.CorrId);
+                    _logger.LogInformation(EventIds.FetchBlobsFromContainer.ToEventId(), "Fetching all blobs present in container");
                     foreach (var blob in _azureBlobEventWriter.GetBlobsInContainer(PriceChangeContainerName))
                     {
                         _azureBlobEventWriter.DeleteBlob(blob, PriceChangeContainerName);
+                        _logger.LogInformation(EventIds.DeletedBlobSuccessful.ToEventId(), $"Deleted blob : {blob}  from container");
                     }
                 }
             }
@@ -55,6 +60,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.Services
 
         private void CleanUpBlobsAndTablesRelatedToEESEvent()
         {
+            _logger.LogInformation(EventIds.FetchEESEntities.ToEventId(), "Fetching all EES entities from azure table");
             var entities = _azureTableReaderWriter.GetAllEntityForEESTable();
             foreach (var entity in entities)
             {
@@ -64,6 +70,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.Services
                 if (timediff.TotalDays > int.Parse(_erpFacadeWebjobConfig.Value.CleanUpDurationInDays))
                 {
                     Task.FromResult(_azureTableReaderWriter.DeleteEESEntity(entity.CorrelationId));
+                    _logger.LogInformation(EventIds.FetchEESEntities.ToEventId(), $"Deleting container : {entity.CorrelationId}");
                     _azureBlobEventWriter.DeleteContainer(entity.CorrelationId);
                 }
             }

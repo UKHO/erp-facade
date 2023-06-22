@@ -313,5 +313,45 @@
         /// 940063- Webjob completed cleanup process.
         /// </summary>
         WebjobCleanUpEventCompleted = 940063,
+
+        /// <summary>
+        /// 940064- Fetching master entities from azure table.
+        /// </summary>
+        FetchMasterEntities = 940064,
+
+        /// <summary>
+        /// 940065 Fetching metadata of blob. 
+        /// </summary>
+        FetchBlobMetadata = 940065,
+
+        /// <summary>
+        /// 940066 - Deleted Price master entity successfully from Azure Table
+        /// </summary>
+        DeletedPriceChangeMasterEntitySuccessful = 940066,
+
+        /// <summary>
+        /// 940067 - Deleted unit price change entity successfully from Azure Table
+        /// </summary>
+        DeletedUnitPriceChangeEntitySuccessful = 940067,
+
+        /// <summary>
+        /// 940068 - Deleted EES entity successfully from Azure Table
+        /// </summary>
+        DeletedEESEntitySuccessful = 940068,
+
+        /// <summary>
+        /// 940069 Fetching all blob present inside the container. 
+        /// </summary>
+        FetchBlobsFromContainer = 940069,
+
+        /// <summary>
+        /// 940070 - Deleted blob from storage container successfully.
+        /// </summary>
+        DeletedBlobSuccessful = 940070,
+
+        /// <summary>
+        /// 940071 Fetching all EES entities from Azure Table. 
+        /// </summary>
+        FetchEESEntities = 940071
     }
 }

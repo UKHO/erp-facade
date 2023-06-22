@@ -235,7 +235,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             if (existingEntity != null)
             {
                 tableClient.DeleteEntity(existingEntity.PartitionKey,existingEntity.RowKey);
-                _logger.LogInformation(EventIds.UpdatedPriceChangeMasterStatusEntitySuccessful.ToEventId(), "Price change master status is updated in azure table successfully.");
+                _logger.LogInformation(EventIds.DeletedPriceChangeMasterEntitySuccessful.ToEventId(), "Price change master entity is deleted from azure table successfully.");
             }
         }
 
@@ -249,7 +249,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
                 {
                     tableClient.DeleteEntity(entity.PartitionKey,entity.RowKey); 
                 }
-                _logger.LogInformation(EventIds.UpdatedPriceChangeStatusEntitySuccessful.ToEventId(), "Unit price change status is updated in azure table successfully.");
+                _logger.LogInformation(EventIds.DeletedUnitPriceChangeEntitySuccessful.ToEventId(), "Unit price change status is deleted from azure table successfully.");
             }
         }
 
@@ -272,7 +272,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             if (existingEntity != null)
             {
                  tableClient.DeleteEntity(existingEntity.PartitionKey,existingEntity.RowKey);
-                _logger.LogInformation(EventIds.UpdateRequestTimeEntitySuccessful.ToEventId(), "RequestDateTime is updated in azure table successfully.");
+                _logger.LogInformation(EventIds.DeletedEESEntitySuccessful.ToEventId(), "EES entity is deleted from azure table successfully.");
             }
         }
 
