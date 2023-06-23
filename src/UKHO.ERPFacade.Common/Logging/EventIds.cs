@@ -203,14 +203,14 @@
         SapHealthCheckRequestSentToSap = 940040,
 
         /// <summary>
-        /// 940041 - Uploading the UnitsOfSale updated event payload json in blob storage.
+        /// 940041 - Uploading the SAP xml payload in blob storage.
         /// </summary>
-        UploadUnitsOfSaleUpdatedEventPayloadInAzureBlob = 940041,
+        UploadSapXmlPayloadInAzureBlobStarted = 940041,
 
         /// <summary>
-        /// 940042 - UnitsOfSale updated event payload json is uploaded in blob storage successfully.
+        /// 940042 - SAP xml payload is uploaded in blob storage successfully.
         /// </summary>
-        UploadedUnitsOfSaleUpdatedEventPayloadInAzureBlob = 940042,
+        UploadSapXmlPayloadInAzureBlobCompleted = 940042,
 
         /// <summary>
         /// 940043 - UnitsOfSale updated event Pushed To EES
@@ -312,16 +312,6 @@
         /// <summary>
         /// 940063 - Price information event is uploaded in blob storage successfully.
         /// </summary>
-        UploadedPriceInformationEventInAzureBlob = 940063,
-
-        /// <summary>
-        /// 940064 - Uploading the SAP xml payload in blob storage.
-        /// </summary>
-        UploadSapXmlPayloadInAzureBlobStarted = 940064,
-
-        /// <summary>
-        /// 940065 - SAP xml payload is uploaded in blob storage successfully.
-        /// </summary>
-        UploadSapXmlPayloadInAzureBlobCompleted = 940065,
+        UploadedPriceInformationEventInAzureBlob = 940063
     }
 }
