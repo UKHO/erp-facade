@@ -102,6 +102,8 @@ namespace UKHO.ERPFacade.API.Controllers
 
                 unitsOfSaleUpdatedEventPayloadJson = JObject.Parse(JsonConvert.SerializeObject(unitsOfSaleUpdatedEventPayload));
 
+                await _azureBlobEventWriter.UploadEvent(unitsOfSaleUpdatedEventPayloadJson.ToString(), correlationId!, correlationId + "_unitofsalesupdatedevent.json");
+
                 int eventSize = _jsonHelper.GetPayloadJsonSize(unitsOfSaleUpdatedEventPayloadJson.ToString());
 
                 if (eventSize > EventSizeLimit)

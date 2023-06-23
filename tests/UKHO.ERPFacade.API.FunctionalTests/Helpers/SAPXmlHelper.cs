@@ -272,7 +272,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     if (!item.PRODTYPE.Equals(product.ProductType[4..]))
                         AttrNotMatched.Add(nameof(item.PRODTYPE));
                     if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!getUoSInfo(item.PRODUCTNAME).UnitOfSaleType.Contains("unit")))
-                       AttrNotMatched.Add(nameof(item.PRODUCTNAME));
+                        AttrNotMatched.Add(nameof(item.PRODUCTNAME));
                     if (!item.AGENCY.Equals(product.Agency))
                         AttrNotMatched.Add(nameof(item.AGENCY));
                     if (!item.PROVIDER.Equals(product.ProviderCode))
@@ -658,7 +658,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         private static bool VerifyBlankFields(Item item, string[] fieldNames)
         {
             bool allBlanks = true;
-            
+
             foreach (string field in fieldNames)
             {
                 if (!typeof(Item).GetProperty(field).GetValue(item, null).Equals(""))
@@ -750,7 +750,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         {
             BlobServiceClient blobServiceClient = new BlobServiceClient(Config.TestConfig.AzureStorageConfiguration.ConnectionString);
             BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerAndBlobName);
-            BlobClient blobClient = containerClient.GetBlobClient(containerAndBlobName + ".xml");
+            BlobClient blobClient = containerClient.GetBlobClient("SapXmlPayload.xml");
 
             BlobDownloadInfo blobDownload = blobClient.Download();
             using (FileStream downloadFileStream = new FileStream((expectedXMLfilePath + "\\" + containerAndBlobName + ".xml"), FileMode.Create))
