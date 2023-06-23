@@ -21,7 +21,6 @@ using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Infrastructure;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.Logging.EventHubLogProvider;
-using UKHO.ERPFacade.API.Middleware;
 
 namespace UKHO.ERPFacade
 {

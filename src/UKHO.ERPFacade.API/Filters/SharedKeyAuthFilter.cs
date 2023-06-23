@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Configuration;
 
-namespace UKHO.ERPFacade.API.Middleware
+namespace UKHO.ERPFacade.API.Filters
 {
     public class SharedKeyAuthFilter : IAuthorizationFilter
     {

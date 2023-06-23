@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using UKHO.ERPFacade.API.Middleware;
+using UKHO.ERPFacade.API.Filters;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Infrastructure.EventService;
 using UKHO.ERPFacade.Common.IO;
