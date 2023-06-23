@@ -30,7 +30,6 @@ namespace UKHO.ERPFacade.API.Filters
             if (!configSharedKey.Equals(extractedSharedKey))
             {
                 context.Result = new UnauthorizedObjectResult("Invalid Shared Key.");
-                return;
             }
         }
     }
