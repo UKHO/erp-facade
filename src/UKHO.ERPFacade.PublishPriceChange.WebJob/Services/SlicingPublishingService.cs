@@ -1,10 +1,15 @@
-﻿using System.Globalization;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using UKHO.ERPFacade.Common.Exceptions;
+using UKHO.ERPFacade.Common.Infrastructure;
+using UKHO.ERPFacade.Common.Infrastructure.EventService;
+using UKHO.ERPFacade.Common.Infrastructure.EventService.EventProvider;
+using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
+using UKHO.ERPFacade.Common.Services;
 
 namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
 {
@@ -13,47 +18,60 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
         private readonly ILogger<SlicingPublishingService> _logger;
         private readonly IAzureTableReaderWriter _azureTableReaderWriter;
         private readonly IAzureBlobEventWriter _azureBlobEventWriter;
+        private readonly IErpFacadeService _erpFacadeService;
+        private readonly IEventPublisher _eventPublisher;
+        private readonly ICloudEventFactory _cloudEventFactory;
+        private readonly IJsonHelper _jsonHelper;
+
         private const string IncompleteStatus = "Incomplete";
         private const string RequestFormat = "json";
         private const string ContainerName = "pricechangeblobs";
+        private const string PriceChangeEventFileName = "PriceChangeEvent.json";
+        private const int EventSizeLimit = 1000000;
 
-        public SlicingPublishingService(ILogger<SlicingPublishingService> logger, IAzureTableReaderWriter azureTableReaderWriter, IAzureBlobEventWriter azureBlobEventWriter)
+        public SlicingPublishingService(ILogger<SlicingPublishingService> logger, IAzureTableReaderWriter azureTableReaderWriter, IAzureBlobEventWriter azureBlobEventWriter, IErpFacadeService erpFacadeService, IEventPublisher eventPublisher, ICloudEventFactory cloudEventFactory, IJsonHelper jsonHelper)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _azureTableReaderWriter = azureTableReaderWriter ?? throw new ArgumentNullException(nameof(azureTableReaderWriter));
             _azureBlobEventWriter = azureBlobEventWriter ?? throw new ArgumentNullException(nameof(azureBlobEventWriter));
+            _erpFacadeService = erpFacadeService ?? throw new ArgumentNullException(nameof(erpFacadeService));
+            _eventPublisher = eventPublisher ?? throw new ArgumentNullException(nameof(eventPublisher));
+            _cloudEventFactory = cloudEventFactory ?? throw new ArgumentNullException(nameof(cloudEventFactory));
+            _jsonHelper = jsonHelper ?? throw new ArgumentNullException(nameof(jsonHelper));
         }
 
         public void SliceAndPublishPriceChangeEvents()
         {
             var entities = _azureTableReaderWriter.GetMasterEntities(IncompleteStatus);
-            string priceChangeJson;
-            JObject unitsOfSaleUpdatedEventPayloadJson;
+            string priceChangeInformationJson;
 
             foreach (var entity in entities)
             {
-                _logger.LogInformation(EventIds.DownloadBulkPriceInformationEventFromAzureBlob.ToEventId(), "Downloading Price Change information from blob");
-                priceChangeJson = _azureBlobEventWriter.DownloadEvent(entity.CorrId + '/' + entity.CorrId + '.' + RequestFormat, ContainerName);
-                if (!string.IsNullOrEmpty(priceChangeJson))
-                {
-                    List<PriceChange> priceInformationList = JsonConvert.DeserializeObject<List<PriceChange>>(priceChangeJson);
-                    var unitPriceChangeEntities = _azureTableReaderWriter.GetUnitPriceChangeEventsEntities(entity.CorrId);
-                    if (unitPriceChangeEntities.Count() > 0)
-                    {
-                        if (unitPriceChangeEntities.Any(i => i.Status == IncompleteStatus))
-                        {
-                            foreach (var unitPriceChange in unitPriceChangeEntities.Where(i => i.Status == IncompleteStatus).ToList())
-                            {
-                                var prices = priceInformationList.Where(p => p.ProductName == unitPriceChange.UnitName).ToList();
-                                List<UnitsOfSalePrices> unitsOfSalePriceList = MapAndBuildUnitsOfSalePrices(prices);
-                                UnitOfSalePriceEventPayload unitsOfSaleUpdatedEventPayload = BuildUnitsOfSaleUpdatedEventPayload(unitsOfSalePriceList, unitPriceChange.Eventid, unitPriceChange.UnitName, entity.CorrId);
-                                unitsOfSaleUpdatedEventPayloadJson = JObject.Parse(JsonConvert.SerializeObject(unitsOfSaleUpdatedEventPayload.EventData));
-                                _azureBlobEventWriter.UploadEvent(unitsOfSaleUpdatedEventPayloadJson.ToString(), ContainerName, entity.CorrId + '/' + unitPriceChange.UnitName + '/' + unitPriceChange.UnitName + '.' + RequestFormat);
-                                _logger.LogInformation(EventIds.UploadedSlicedEventInAzureBlobForUnitPrices.ToEventId(), "Sliced event is uploaded in blob storage successfully for incomplete unit prices.");
-                                //publish event 
+                _logger.LogInformation(EventIds.DownloadBulkPriceInformationEventFromAzureBlob.ToEventId(), "Webjob started downloading pricechange information from blob");
 
-                                if (true) //check publish status
-                                    _azureTableReaderWriter.UpdateUnitPriceChangeStatusEntity(entity.CorrId, unitPriceChange.UnitName, unitPriceChange.Eventid);
+                priceChangeInformationJson = _azureBlobEventWriter.DownloadEvent(entity.CorrId + '/' + PriceChangeEventFileName, ContainerName);
+                if (!string.IsNullOrEmpty(priceChangeInformationJson))
+                {
+                    List<PriceInformation> priceInformationList = JsonConvert.DeserializeObject<List<PriceInformation>>(priceChangeInformationJson);
+
+                    var unitPriceInformationEntities = _azureTableReaderWriter.GetUnitPriceChangeEventsEntities(entity.CorrId);
+                    if (unitPriceInformationEntities.Count > 0)
+                    {
+                        if (unitPriceInformationEntities.Any(i => i.Status == IncompleteStatus))
+                        {
+                            foreach (var unitPriceInformation in unitPriceInformationEntities.Where(i => i.Status == IncompleteStatus).ToList())
+                            {
+                                PriceChangeEventPayload priceChangeEventPayload = MapAndBuildPriceChangeEventPayload(priceInformationList, entity.CorrId, unitPriceInformation.UnitName, unitPriceInformation.EventId);
+
+                                var priceChangeCloudEventData = _cloudEventFactory.Create(priceChangeEventPayload);
+
+                                var priceChangeCloudEventDataJson = JObject.Parse(JsonConvert.SerializeObject(priceChangeCloudEventData));
+
+                                SavePriceChangeEventPayloadInAzureBlob(priceChangeCloudEventDataJson, entity.CorrId, unitPriceInformation.UnitName, unitPriceInformation.EventId);
+
+                                ValidatePriceChangeEventPayloadSize(priceChangeCloudEventDataJson, unitPriceInformation.EventId);
+
+                                PublishEvent(priceChangeCloudEventData, entity.CorrId, unitPriceInformation.UnitName, unitPriceInformation.EventId);
                             }
                         }
                         else
@@ -69,156 +87,70 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
                         foreach (var unitName in slicedPrices)
                         {
                             eventId = Guid.NewGuid().ToString();
-                            var prices = priceInformationList.Where(p => p.ProductName == unitName).ToList();
+
                             _azureTableReaderWriter.AddUnitPriceChangeEntity(entity.CorrId, eventId, unitName);
-                            List<UnitsOfSalePrices> unitsOfSalePriceList = MapAndBuildUnitsOfSalePrices(prices);
-                            UnitOfSalePriceEventPayload unitsOfSaleUpdatedEventPayload = BuildUnitsOfSaleUpdatedEventPayload(unitsOfSalePriceList, eventId, unitName, entity.CorrId);
-                            unitsOfSaleUpdatedEventPayloadJson = JObject.Parse(JsonConvert.SerializeObject(unitsOfSaleUpdatedEventPayload.EventData));
-                            _azureBlobEventWriter.UploadEvent(unitsOfSaleUpdatedEventPayloadJson.ToString(), ContainerName, entity.CorrId + '/' + unitName + '/' + unitName + '.' + RequestFormat);
-                            _logger.LogInformation(EventIds.UploadedSlicedEventInAzureBlob.ToEventId(), "Sliced event is uploaded in blob storage successfully.");
-                            //publish event 
 
-                            if (true) //check publish status
-                                _azureTableReaderWriter.UpdateUnitPriceChangeStatusEntity(entity.CorrId, unitName, eventId);
+                            PriceChangeEventPayload priceChangeEventPayload = MapAndBuildPriceChangeEventPayload(priceInformationList, entity.CorrId, unitName, eventId);
 
+                            var priceChangeCloudEventData = _cloudEventFactory.Create(priceChangeEventPayload);
+
+                            var priceChangeCloudEventDataJson = JObject.Parse(JsonConvert.SerializeObject(priceChangeCloudEventData));
+
+                            SavePriceChangeEventPayloadInAzureBlob(priceChangeCloudEventDataJson, entity.CorrId, unitName, eventId);
+
+                            ValidatePriceChangeEventPayloadSize(priceChangeCloudEventDataJson, eventId);
+
+                            PublishEvent(priceChangeCloudEventData, entity.CorrId, unitName, eventId);
                         }
                     }
                 }
             }
         }
 
-
-        //private methods
-        private UnitOfSalePriceEventPayload BuildUnitsOfSaleUpdatedEventPayload(List<UnitsOfSalePrices> unitsOfSalePriceList, string eventId, string unitName, string corrID)
+        private PriceChangeEventPayload MapAndBuildPriceChangeEventPayload(List<PriceInformation> priceInformationList, string masterCorrId, string unitName, string eventId)
         {
-            _logger.LogInformation(EventIds.AppendingUnitofSalePricesToEncEventInWebJob.ToEventId(), "Appending UnitofSale prices to ENC event in webjob.");
+            var prices = priceInformationList.Where(p => p.ProductName == unitName).ToList();
 
-            return new UnitOfSalePriceEventPayload(new UnitOfSalePriceEvent
-            {
-                SpecVersion = "1.0",
-                Type = "uk.gov.ukho.erp.pricechange.v1",
-                Source = "https://erp.ukho.gov.uk",
-                Id = eventId,
-                Time = new DateTimeOffset(DateTime.UtcNow).ToString(),
-                _COMMENT = "A comma separated list of products",
-                Subject = unitName,
-                DataContentType = "application/json",
-                Data = new UnitOfSalePriceEventData
-                {
-                    CorrelationId = corrID,
-                    UnitsOfSalePrices = unitsOfSalePriceList,
-                }
-            });
+            List<UnitsOfSalePrices> unitsOfSalePriceList = _erpFacadeService.MapAndBuildUnitsOfSalePrices(prices, prices.Select(u => u.ProductName).Distinct().ToList());
+
+            PriceChangeEventPayload priceChangeEventPayload = _erpFacadeService.BuildPriceChangeEventPayload(unitsOfSalePriceList, eventId, unitName, masterCorrId);
+            return priceChangeEventPayload;
         }
 
-        private List<UnitsOfSalePrices> MapAndBuildUnitsOfSalePrices(List<PriceChange> priceInformationList)
+        private void PublishEvent(CloudEvent<PriceChangeEventData> priceChangeCloudEventData, string masterCorrId, string unitName, string eventId)
         {
-            List<UnitsOfSalePrices> unitsOfSalePriceList = new();
-
-            foreach (var priceInformation in priceInformationList)
+            var result = _eventPublisher.Publish(priceChangeCloudEventData);
+            if (result.Result.Status == Result.Statuses.Success)
             {
-                UnitsOfSalePrices unitsOfSalePrice = new();
-                List<Price> priceList = new();
+                _azureTableReaderWriter.UpdateUnitPriceChangeStatusEntity(masterCorrId, unitName, eventId);
 
-                var isUnitOfSalePriceExists = unitsOfSalePriceList.Any(x => x.UnitName.Contains(priceInformation.ProductName));
-
-                if (!isUnitOfSalePriceExists)
-                {
-                    if (!string.IsNullOrEmpty(priceInformation.EffectiveDate))
-                    {
-                        DateTimeOffset effectiveDate = GetDate(priceInformation.EffectiveDate, priceInformation.EffectiveTime);
-                        Price effectivePrice = BuildPricePayload(priceInformation.Duration, priceInformation.Price, effectiveDate, priceInformation.Currency);
-                        priceList.Add(effectivePrice);
-                    }
-
-                    if (!string.IsNullOrEmpty(priceInformation.FutureDate))
-                    {
-                        DateTimeOffset futureDate = GetDate(priceInformation.FutureDate, priceInformation.FutureTime);
-                        Price futurePrice = BuildPricePayload(priceInformation.Duration, priceInformation.FuturePrice, futureDate, priceInformation.FutureCurr);
-                        priceList.Add(futurePrice);
-                    }
-
-                    unitsOfSalePrice.UnitName = priceInformation.ProductName;
-                    unitsOfSalePrice.Price = priceList;
-
-                    unitsOfSalePriceList.Add(unitsOfSalePrice);
-                }
-                else
-                {
-                    PriceDurations priceDuration = new();
-
-                    var existingUnitOfSalePrice = unitsOfSalePriceList.Where(x => x.UnitName.Contains(priceInformation.ProductName)).FirstOrDefault();
-
-                    var effectiveUnitOfSalePriceDurations = existingUnitOfSalePrice.Price.Where(x => x.EffectiveDate.ToString("yyyyMMdd") == priceInformation.EffectiveDate).ToList();
-                    var effectiveStandard = effectiveUnitOfSalePriceDurations.Select(x => x.Standard).FirstOrDefault();
-
-                    var futureUnitOfSalePriceDurations = existingUnitOfSalePrice.Price.Where(x => x.EffectiveDate.ToString("yyyyMMdd") == priceInformation.FutureDate).ToList();
-                    var futureStandard = futureUnitOfSalePriceDurations.Select(x => x.Standard).FirstOrDefault();
-
-                    if (effectiveStandard != null && !string.IsNullOrEmpty(priceInformation.EffectiveDate))
-                    {
-                        priceDuration.NumberOfMonths = Convert.ToInt32(priceInformation.Duration);
-                        priceDuration.Rrp = priceInformation.Price;
-
-                        effectiveStandard.PriceDurations.Add(priceDuration);
-                    }
-                    else
-                    {
-                        if (!string.IsNullOrEmpty(priceInformation.EffectiveDate))
-                        {
-                            DateTimeOffset effectiveDate = GetDate(priceInformation.EffectiveDate, priceInformation.EffectiveTime);
-                            Price effectivePrice = BuildPricePayload(priceInformation.Duration, priceInformation.Price, effectiveDate, priceInformation.Currency);
-                            existingUnitOfSalePrice.Price.Add(effectivePrice);
-                        }
-                    }
-                    if (futureStandard != null && !string.IsNullOrEmpty(priceInformation.FutureDate))
-                    {
-                        priceDuration.NumberOfMonths = Convert.ToInt32(priceInformation.Duration);
-                        priceDuration.Rrp = priceInformation.FuturePrice;
-
-                        futureStandard.PriceDurations.Add(priceDuration);
-                    }
-                    else
-                    {
-                        if (!string.IsNullOrEmpty(priceInformation.FutureDate))
-                        {
-                            DateTimeOffset futureDate = GetDate(priceInformation.FutureDate, priceInformation.FutureTime);
-                            Price futurePrice = BuildPricePayload(priceInformation.Duration, priceInformation.FuturePrice, futureDate, priceInformation.FutureCurr);
-                            existingUnitOfSalePrice.Price.Add(futurePrice);
-                        }
-                    }
-                }
+                _logger.LogInformation(EventIds.PriceChangeEventPushedToEES.ToEventId(), "pricechange event has been sent to EES successfully. | _X-Correlation-ID : {_X-Correlation-ID}", eventId);
             }
-            return unitsOfSalePriceList;
+            else
+            {
+                _logger.LogError(EventIds.ErrorOccuredInEES.ToEventId(), "An error occured for pricechange event while processing your request in EES. | _X-Correlation-ID : {_X-Correlation-ID} | {Status}", eventId, result.Status);
+                throw new ERPFacadeException(EventIds.ErrorOccuredInEES.ToEventId());
+            }
         }
 
-        private static Price BuildPricePayload(string duration, string rrp, DateTimeOffset date, string currency)
+        private void SavePriceChangeEventPayloadInAzureBlob(JObject priceChangeCloudEventDataJson, string masterCorrId, string unitName, string correlationId)
         {
-            Price price = new();
-            Standard standard = new();
-            PriceDurations priceDurations = new();
+            _logger.LogInformation(EventIds.UploadPriceChangeEventPayloadInAzureBlob.ToEventId(), "Uploading the pricechange event payload json in blob storage. | _X-Correlation-ID : {_X-Correlation-ID}", correlationId);
 
-            List<PriceDurations> priceDurationsList = new();
+            _azureBlobEventWriter.UploadEvent(priceChangeCloudEventDataJson.ToString(), ContainerName, masterCorrId + '/' + unitName + '/' + PriceChangeEventFileName);
 
-            priceDurations.NumberOfMonths = Convert.ToInt32(duration);
-            priceDurations.Rrp = rrp;
-            priceDurationsList.Add(priceDurations);
-
-            standard.PriceDurations = priceDurationsList;
-
-            price.EffectiveDate = date;
-            price.Currency = currency;
-            price.Standard = standard;
-
-            return price;
+            _logger.LogInformation(EventIds.UploadedPriceChangeEventPayloadInAzureBlob.ToEventId(), "pricechange event payload json is uploaded in blob storage successfully. | _X-Correlation-ID : {_X-Correlation-ID}", correlationId);
         }
 
-        private static DateTimeOffset GetDate(string date, string time)
+        private void ValidatePriceChangeEventPayloadSize(JObject priceChangeCloudEventDataJson, string correlationId)
         {
-            DateTime dateTime = DateTime.ParseExact(date + "" + time, "yyyyMMddHHmmss", CultureInfo.InvariantCulture);
-            DateTimeOffset dateTimeOffset = new(dateTime);
+            int eventSize = _jsonHelper.GetPayloadJsonSize(priceChangeCloudEventDataJson.ToString());
 
-            return dateTimeOffset;
+            if (eventSize > EventSizeLimit)
+            {
+                _logger.LogError(EventIds.PriceChangeEventSizeLimit.ToEventId(), "pricechange event exceeds the size limit of 1 MB. | _X-Correlation-ID : {_X-Correlation-ID}", correlationId);
+                throw new ERPFacadeException(EventIds.PriceChangeEventSizeLimit.ToEventId());
+            }
         }
     }
 }

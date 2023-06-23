@@ -10,12 +10,13 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using UKHO.ERPFacade.API.Controllers;
-using UKHO.ERPFacade.Common.Models;
-using UKHO.ERPFacade.Common.Services;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Infrastructure.EventService;
+using UKHO.ERPFacade.Common.Infrastructure.EventService.EventProvider;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
+using UKHO.ERPFacade.Common.Models;
+using UKHO.ERPFacade.Common.Services;
 using IJsonHelper = UKHO.ERPFacade.Common.IO.IJsonHelper;
 
 namespace UKHO.ERPFacade.API.UnitTests.Controllers
@@ -29,6 +30,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         private IErpFacadeService _fakeErpFacadeService;
         private IJsonHelper _fakeJsonHelper;
         private IEventPublisher _fakeEventPublisher;
+        private ICloudEventFactory _fakeCloudEventFactory;
 
         private ErpFacadeController _fakeErpFacadeController;
 
@@ -42,6 +44,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             _fakeErpFacadeService = A.Fake<IErpFacadeService>();
             _fakeJsonHelper = A.Fake<IJsonHelper>();
             _fakeEventPublisher = A.Fake<IEventPublisher>();
+            _fakeCloudEventFactory = A.Fake<ICloudEventFactory>();
+
 
             _fakeErpFacadeController = new ErpFacadeController(_fakeHttpContextAccessor,
                                                            _fakeLogger,
@@ -49,7 +53,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
                                                            _fakeAzureBlobEventWriter,
                                                            _fakeErpFacadeService,
                                                            _fakeJsonHelper,
-                                                           _fakeEventPublisher);
+                                                           _fakeEventPublisher,
+                                                           _fakeCloudEventFactory);
         }
 
         #region Data
@@ -238,7 +243,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Error
-            && call.GetArgument<EventId>(1) == EventIds.PriceEventExceedSizeLimit.ToEventId()
+            && call.GetArgument<EventId>(1) == EventIds.UnitsOfSaleUpdatedEventSizeLimit.ToEventId()
             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "UnitsOfSale price event exceeds the size limit of 1 MB.").MustHaveHappenedOnceExactly();
         }
 

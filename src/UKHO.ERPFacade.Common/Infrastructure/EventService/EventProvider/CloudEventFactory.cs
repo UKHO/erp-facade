@@ -21,11 +21,11 @@ namespace UKHO.ERPFacade.Common.Infrastructure.EventService.EventProvider
         {
             var cloudEventData = new CloudEvent<TData>
             {
-                Data = domainEvent.EventData,
+                Data = domainEvent.Data,
                 Type = domainEvent.EventName,
                 Subject = domainEvent.Subject,
                 Time = _dateTimeProvider.UtcNow,
-                Id = _uuidProvider.Create(),
+                Id = domainEvent.Id,
                 Source = _notificationOptions.ApplicationUri,
                 SpecVersion = "1.0",
                 DataContentType = "application/json",

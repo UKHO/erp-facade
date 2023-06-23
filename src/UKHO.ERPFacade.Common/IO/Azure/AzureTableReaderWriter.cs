@@ -4,9 +4,7 @@ using Azure.Data.Tables;
 using Azure.Data.Tables.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json.Linq;
 using UKHO.ERPFacade.Common.Configuration;
-using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models.TableEntities;
 
@@ -154,10 +152,10 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             IList<UnitPriceChangeEntity> records = new List<UnitPriceChangeEntity>();
             TableClient tableClient = GetTableClient(UnitPriceChangeTableName);
             Pageable<UnitPriceChangeEntity> entities = string.IsNullOrEmpty(status)
-                ? tableClient.Query<UnitPriceChangeEntity>(filter: TableClient.CreateQueryFilter($"MasterCorrid eq {masterCorrId}"), maxPerPage: 1)
+                ? tableClient.Query<UnitPriceChangeEntity>(filter: TableClient.CreateQueryFilter($"MasterCorrId eq {masterCorrId}"), maxPerPage: 1)
                 : string.IsNullOrEmpty(unitName) && string.IsNullOrEmpty(eventId)
-                ? tableClient.Query<UnitPriceChangeEntity>(filter: TableClient.CreateQueryFilter($"Status eq {status} and MasterCorrid eq {masterCorrId}"), maxPerPage: 1)
-                : tableClient.Query<UnitPriceChangeEntity>(filter: TableClient.CreateQueryFilter($"Status eq {status} and MasterCorrid eq {masterCorrId} and UnitName eq {unitName} and Eventid eq {eventId}"), maxPerPage: 1);
+                ? tableClient.Query<UnitPriceChangeEntity>(filter: TableClient.CreateQueryFilter($"Status eq {status} and MasterCorrId eq {masterCorrId}"), maxPerPage: 1)
+                : tableClient.Query<UnitPriceChangeEntity>(filter: TableClient.CreateQueryFilter($"Status eq {status} and MasterCorrId eq {masterCorrId} and UnitName eq {unitName} and EventId eq {eventId}"), maxPerPage: 1);
             foreach (var entity in entities)
             {
                 records.Add(entity);
@@ -180,7 +178,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
 
             await tableClient.AddEntityAsync(priceChangeEventEntity, CancellationToken.None);
 
-            _logger.LogInformation(EventIds.AddedBulkPriceInformationEventInAzureTable.ToEventId(), "Bulk price information event in added in azure table successfully.");
+            _logger.LogInformation(EventIds.AddedBulkPriceInformationEventInAzureTable.ToEventId(), "Bulk price information event in added in azure table successfully. | _X-Correlation-ID : {_X-Correlation-ID}", correlationId);
         }
 
         public void AddUnitPriceChangeEntity(string correlationId, string eventId, string unitName)
@@ -192,15 +190,15 @@ namespace UKHO.ERPFacade.Common.IO.Azure
                 RowKey = eventId,
                 PartitionKey = eventId,
                 Timestamp = DateTime.UtcNow,
-                MasterCorrid = correlationId,
-                Eventid = eventId,
+                MasterCorrId = correlationId,
+                EventId = eventId,
                 UnitName = unitName,
                 Status = "Incomplete"
             };
 
             tableClient.AddEntity(unitPriceChangeEventEntity, CancellationToken.None);
 
-            _logger.LogInformation(EventIds.AddedUnitPriceChangeEventInAzureTable.ToEventId(), "Unit price change event in added in azure table successfully.");
+            _logger.LogInformation(EventIds.AddedUnitPriceChangeEventInAzureTable.ToEventId(), "Unit price change event in added in azure table successfully. | _X-Correlation-ID : {_X-Correlation-ID}", correlationId);
         }
 
         public void UpdateUnitPriceChangeStatusEntity(string correlationId, string unitName, string eventId)
@@ -211,7 +209,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             {
                 existingEntity.Status = "Complete";
                 tableClient.UpdateEntity(existingEntity, ETag.All, TableUpdateMode.Replace);
-                _logger.LogInformation(EventIds.UpdatedPriceChangeStatusEntitySuccessful.ToEventId(), "Unit price change status is updated in azure table successfully.");
+                _logger.LogInformation(EventIds.UpdatedPriceChangeStatusEntitySuccessful.ToEventId(), "Unit price change status is updated in azure table successfully. | _X-Correlation-ID : {_X-Correlation-ID}", correlationId);
             }
         }
 
@@ -223,7 +221,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             {
                 existingEntity.Status = "Complete";
                 tableClient.UpdateEntity(existingEntity, ETag.All, TableUpdateMode.Replace);
-                _logger.LogInformation(EventIds.UpdatedPriceChangeMasterStatusEntitySuccessful.ToEventId(), "Price change master status is updated in azure table successfully.");
+                _logger.LogInformation(EventIds.UpdatedPriceChangeMasterStatusEntitySuccessful.ToEventId(), "Price change master status is updated in azure table successfully. | _X-Correlation-ID : {_X-Correlation-ID}", correlationId);
             }
         }
 

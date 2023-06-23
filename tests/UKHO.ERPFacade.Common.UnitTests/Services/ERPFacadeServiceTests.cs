@@ -63,7 +63,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Services
             List<UnitsOfSalePrices>? unitsOfSalePricesList = GetUnitsOfSalePriceList();
 
             object? existingEESJson = JsonConvert.DeserializeObject(encContentPublishedJson);
-            UnitOfSaleUpdatedEventPayload? result = _fakeERPFacadeService.BuildUnitsOfSaleUpdatedEventPayload(unitsOfSalePricesList, existingEESJson.ToString()!);
+            UnitOfSaleUpdatedEventPayload? result = _fakeERPFacadeService.BuildUnitsOfSaleUpdatedEventPayload(unitsOfSalePricesList, existingEESJson!.ToString()!);
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
          && call.GetArgument<LogLevel>(0) == LogLevel.Information

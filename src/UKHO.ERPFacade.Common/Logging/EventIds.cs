@@ -188,9 +188,9 @@
         UnitsOfSaleUpdatedEventPayloadCreated = 940037,
 
         /// <summary>
-        /// 940038 - Price Event exceeds the size limit of 1 MB
+        /// 940038 - UnitsOfSale updated event exceeds the size limit of 1 MB
         /// </summary>
-        PriceEventExceedSizeLimit = 940038,
+        UnitsOfSaleUpdatedEventSizeLimit = 940038,
 
         /// <summary>
         /// 940039 - Sap Health Check Xml Template Not Found
@@ -302,6 +302,31 @@
         /// <summary>
         /// 940061 - UnitsOfSale NotFound In SAP PriceInformation Payload
         /// </summary>
-        UnitsOfSaleNotFoundInSAPPriceInformationPayload = 940061
+        UnitsOfSaleNotFoundInSAPPriceInformationPayload = 940061,
+
+        /// <summary>
+        /// 940062 - Error occured while connecting EES
+        /// </summary>
+        ErrorOccuredInEES = 940062,
+
+        /// <summary>
+        /// 940063 - Uploading the pricechange event payload json in blob storage.
+        /// </summary>
+        UploadPriceChangeEventPayloadInAzureBlob = 940063,
+
+        /// <summary>
+        /// 940064 - pricechange event payload json is uploaded in blob storage successfully.
+        /// </summary>
+        UploadedPriceChangeEventPayloadInAzureBlob = 940064,
+
+        /// <summary>
+        /// 940065 - pricechange event Pushed To EES
+        /// </summary>
+        PriceChangeEventPushedToEES = 940065,
+
+        /// <summary>
+        /// 940066 - pricechange event exceeds the size limit of 1 MB
+        /// </summary>
+        PriceChangeEventSizeLimit = 940066
     }
 }

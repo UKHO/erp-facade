@@ -1,8 +1,8 @@
 ﻿using System.Globalization;
-using Newtonsoft.Json;
-using UKHO.ERPFacade.Common.Models;
-using UKHO.ERPFacade.Common.Logging;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using UKHO.ERPFacade.Common.Logging;
+using UKHO.ERPFacade.Common.Models;
 
 namespace UKHO.ERPFacade.Common.Services
 {
@@ -37,14 +37,14 @@ namespace UKHO.ERPFacade.Common.Services
                             if (!string.IsNullOrEmpty(priceInformation.EffectiveDate))
                             {
                                 DateTimeOffset effectiveDate = GetDate(priceInformation.EffectiveDate, priceInformation.EffectiveTime);
-                                Price effectivePrice = BuildPricePayload(priceInformation.Duration, priceInformation.Price, effectiveDate, priceInformation.Currency);
+                                Price effectivePrice = BuildPriceInformation(priceInformation.Duration, priceInformation.Price, effectiveDate, priceInformation.Currency);
                                 priceList.Add(effectivePrice);
                             }
 
                             if (!string.IsNullOrEmpty(priceInformation.FutureDate))
                             {
                                 DateTimeOffset futureDate = GetDate(priceInformation.FutureDate, priceInformation.FutureTime);
-                                Price futurePrice = BuildPricePayload(priceInformation.Duration, priceInformation.FuturePrice, futureDate, priceInformation.FutureCurr);
+                                Price futurePrice = BuildPriceInformation(priceInformation.Duration, priceInformation.FuturePrice, futureDate, priceInformation.FutureCurr);
                                 priceList.Add(futurePrice);
                             }
 
@@ -59,7 +59,7 @@ namespace UKHO.ERPFacade.Common.Services
 
                             var existingUnitOfSalePrice = unitsOfSalePriceList.Where(x => x.UnitName.Contains(priceInformation.ProductName)).FirstOrDefault();
 
-                            var effectiveUnitOfSalePriceDurations = existingUnitOfSalePrice.Price.Where(x => x.EffectiveDate.ToString("yyyyMMdd") == priceInformation.EffectiveDate).ToList();
+                            var effectiveUnitOfSalePriceDurations = existingUnitOfSalePrice!.Price.Where(x => x.EffectiveDate.ToString("yyyyMMdd") == priceInformation.EffectiveDate).ToList();
 
                             var effectiveStandard = effectiveUnitOfSalePriceDurations.Select(x => x.Standard).FirstOrDefault();
 
@@ -80,7 +80,7 @@ namespace UKHO.ERPFacade.Common.Services
                                 if (!string.IsNullOrEmpty(priceInformation.EffectiveDate))
                                 {
                                     DateTimeOffset effectiveDate = GetDate(priceInformation.EffectiveDate, priceInformation.EffectiveTime);
-                                    Price effectivePrice = BuildPricePayload(priceInformation.Duration, priceInformation.Price, effectiveDate, priceInformation.Currency);
+                                    Price effectivePrice = BuildPriceInformation(priceInformation.Duration, priceInformation.Price, effectiveDate, priceInformation.Currency);
                                     existingUnitOfSalePrice.Price.Add(effectivePrice);
                                 }
                             }
@@ -98,7 +98,7 @@ namespace UKHO.ERPFacade.Common.Services
                                 if (!string.IsNullOrEmpty(priceInformation.FutureDate))
                                 {
                                     DateTimeOffset futureDate = GetDate(priceInformation.FutureDate, priceInformation.FutureTime);
-                                    Price futurePrice = BuildPricePayload(priceInformation.Duration, priceInformation.FuturePrice, futureDate, priceInformation.FutureCurr);
+                                    Price futurePrice = BuildPriceInformation(priceInformation.Duration, priceInformation.FuturePrice, futureDate, priceInformation.FutureCurr);
                                     existingUnitOfSalePrice.Price.Add(futurePrice);
                                 }
                             }
@@ -122,40 +122,40 @@ namespace UKHO.ERPFacade.Common.Services
         {
             _logger.LogInformation(EventIds.AppendingUnitofSalePricesToEncEvent.ToEventId(), "Appending UnitofSale prices to ENC event.");
 
-            EncEventPayload encEventPayload = JsonConvert.DeserializeObject<EncEventPayload>(encEventPayloadJson);
+            EncEventPayload encEventPayload = JsonConvert.DeserializeObject<EncEventPayload>(encEventPayloadJson)!;
 
             _logger.LogInformation(EventIds.UnitsOfSaleUpdatedEventPayloadCreated.ToEventId(), "UnitofSale updated event payload created.");
 
-            return new UnitOfSaleUpdatedEventPayload(new UnitOfSaleUpdatedEvent
+            return new UnitOfSaleUpdatedEventPayload(new UnitOfSaleUpdatedEventData
             {
-                SpecVersion = encEventPayload.SpecVersion,
-                Type = encEventPayload.Type,
-                Source = encEventPayload.Source,
-                Id = encEventPayload.Id,
-                Time = encEventPayload.Time,
-                _COMMENT = "A comma separated list of products",
-                Subject = encEventPayload.Subject,
-                DataContentType = encEventPayload.DataContentType,
-                Data = new UnitOfSaleUpdatedEventData
-                {
-                    CorrelationId = encEventPayload.Data.CorrelationId,
-                    Products = encEventPayload.Data.Products,
-                    _COMMENT = "Prices for all units in event will be included, including Cancelled Cell",
-                    UnitsOfSales = encEventPayload.Data.UnitsOfSales,
-                    UnitsOfSalePrices = unitsOfSalePriceList,
-                }
-            });
+                CorrelationId = encEventPayload!.Data.CorrelationId,
+                Products = encEventPayload.Data.Products,
+                UnitsOfSales = encEventPayload.Data.UnitsOfSales,
+                UnitsOfSalePrices = unitsOfSalePriceList,
+            }, encEventPayload.Subject
+            );
+        }
+
+        public PriceChangeEventPayload BuildPriceChangeEventPayload(List<UnitsOfSalePrices> unitsOfSalePriceList, string eventId, string unitName, string corrID)
+        {
+            _logger.LogInformation(EventIds.AppendingUnitofSalePricesToEncEventInWebJob.ToEventId(), "Appending UnitofSale prices to ENC event in webjob.");
+
+            return new PriceChangeEventPayload(new PriceChangeEventData
+            {
+                CorrelationId = corrID,
+                UnitsOfSalePrices = unitsOfSalePriceList,
+            }, unitName, eventId);
         }
 
         //private methods
-        private static Price BuildPricePayload(string duration, string rrp, DateTimeOffset date, string currency)
+        private static Price BuildPriceInformation(string duration, string rrp, DateTimeOffset date, string currency)
         {
             Price price = new();
             Standard standard = new();
             PriceDurations priceDurations = new();
 
             List<PriceDurations> priceDurationsList = new();
-             
+
             priceDurations.NumberOfMonths = Convert.ToInt32(duration);
             priceDurations.Rrp = rrp;
             priceDurationsList.Add(priceDurations);
@@ -165,7 +165,7 @@ namespace UKHO.ERPFacade.Common.Services
             price.EffectiveDate = date;
             price.Currency = currency;
             price.Standard = standard;
-            
+
             return price;
         }
 

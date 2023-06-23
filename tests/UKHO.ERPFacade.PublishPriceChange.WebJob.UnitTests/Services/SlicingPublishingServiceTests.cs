@@ -1,11 +1,15 @@
 ﻿using FakeItEasy;
+using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
+using UKHO.ERPFacade.Common.Infrastructure.EventService;
+using UKHO.ERPFacade.Common.Infrastructure.EventService.EventProvider;
+using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.IO.Azure;
-using UKHO.ERPFacade.PublishPriceChange.WebJob.Services;
-using FluentAssertions;
-using UKHO.ERPFacade.Common.Models.TableEntities;
 using UKHO.ERPFacade.Common.Logging;
+using UKHO.ERPFacade.Common.Models.TableEntities;
+using UKHO.ERPFacade.Common.Services;
+using UKHO.ERPFacade.PublishPriceChange.WebJob.Services;
 
 namespace UKHO.ERPFacade.PublishPriceChange.WebJob.UnitTests.Services
 {
@@ -15,7 +19,11 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.UnitTests.Services
         private IAzureTableReaderWriter _fakeAzureTableReaderWriter;
         private ILogger<SlicingPublishingService> _fakeLogger;
         private IAzureBlobEventWriter _fakeAzureBlobEventWriter;
-        private SlicingPublishingService _fakeMonitoringService;
+        private IErpFacadeService _fakeErpFacadeService;
+        private IEventPublisher _fakeEventPublisher;
+        private ICloudEventFactory _fakeCloudEventFactory;
+        private IJsonHelper _fakeJsonHelper;
+        private SlicingPublishingService _fakeSlicingPublishingService;
 
         [SetUp]
         public void Setup()
@@ -23,16 +31,20 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.UnitTests.Services
             _fakeAzureTableReaderWriter = A.Fake<IAzureTableReaderWriter>();
             _fakeLogger = A.Fake<ILogger<SlicingPublishingService>>();
             _fakeAzureBlobEventWriter = A.Fake<IAzureBlobEventWriter>();
-            _fakeMonitoringService = new SlicingPublishingService(_fakeLogger, _fakeAzureTableReaderWriter, _fakeAzureBlobEventWriter);
+            _fakeErpFacadeService = A.Fake<IErpFacadeService>();
+            _fakeEventPublisher = A.Fake<IEventPublisher>();
+            _fakeCloudEventFactory = A.Fake<ICloudEventFactory>();
+            _fakeJsonHelper = A.Fake<IJsonHelper>();
+            _fakeSlicingPublishingService = new SlicingPublishingService(_fakeLogger, _fakeAzureTableReaderWriter, _fakeAzureBlobEventWriter, _fakeErpFacadeService, _fakeEventPublisher, _fakeCloudEventFactory, _fakeJsonHelper);
         }
 
-        private string downloadPayload = "[\r\n  {\r\n    \"corrid\": \"\",\r\n    \"org\": \"UKHO\",\r\n    \"productname\": \"PAYSF\",\r\n    \"duration\": \"12\",\r\n    \"effectivedate\": \"20230427\",\r\n    \"effectivetime\": \"101454\",\r\n    \"price\": \"156.00 \",\r\n    \"currency\": \"USD\",\r\n    \"futuredate\": \"20230527\",\r\n    \"futuretime\": \"000001\",\r\n    \"futureprice\": \"180.00\",\r\n    \"futurecurr\": \"USD\",\r\n    \"reqdate\": \"20230328\",\r\n    \"reqtime\": \"160000\"\r\n  }\r\n]";
+        private readonly string downloadPayload = "[\r\n  {\r\n    \"corrid\": \"\",\r\n    \"org\": \"UKHO\",\r\n    \"productname\": \"PAYSF\",\r\n    \"duration\": \"12\",\r\n    \"effectivedate\": \"20230427\",\r\n    \"effectivetime\": \"101454\",\r\n    \"price\": \"156.00 \",\r\n    \"currency\": \"USD\",\r\n    \"futuredate\": \"20230527\",\r\n    \"futuretime\": \"000001\",\r\n    \"futureprice\": \"180.00\",\r\n    \"futurecurr\": \"USD\",\r\n    \"reqdate\": \"20230328\",\r\n    \"reqtime\": \"160000\"\r\n  }\r\n]";
 
         [Test]
         public void Does_Constructor_Throws_ArgumentNullException_When_AzureTableReaderWriter_Paramter_Is_Null()
         {
             Assert.Throws<ArgumentNullException>(
-             () => new SlicingPublishingService(_fakeLogger, null, _fakeAzureBlobEventWriter))
+             () => new SlicingPublishingService(_fakeLogger, null, _fakeAzureBlobEventWriter, _fakeErpFacadeService, _fakeEventPublisher, _fakeCloudEventFactory, _fakeJsonHelper))
              .ParamName
              .Should().Be("azureTableReaderWriter");
         }
@@ -41,7 +53,7 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.UnitTests.Services
         public void Does_Constructor_Throws_ArgumentNullException_When_Logger_Paramter_Is_Null()
         {
             Assert.Throws<ArgumentNullException>(
-             () => new SlicingPublishingService(null, _fakeAzureTableReaderWriter, _fakeAzureBlobEventWriter))
+             () => new SlicingPublishingService(null, _fakeAzureTableReaderWriter, _fakeAzureBlobEventWriter, _fakeErpFacadeService, _fakeEventPublisher, _fakeCloudEventFactory, _fakeJsonHelper))
              .ParamName
              .Should().Be("logger");
         }
@@ -50,7 +62,7 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.UnitTests.Services
         public void Does_Constructor_Throws_ArgumentNullException_When_AzureBlobEventWriter_Paramter_Is_Null()
         {
             Assert.Throws<ArgumentNullException>(
-             () => new SlicingPublishingService(_fakeLogger, _fakeAzureTableReaderWriter, null))
+             () => new SlicingPublishingService(_fakeLogger, _fakeAzureTableReaderWriter, null, _fakeErpFacadeService, _fakeEventPublisher, _fakeCloudEventFactory, _fakeJsonHelper))
              .ParamName
              .Should().Be("azureBlobEventWriter");
         }
@@ -61,7 +73,7 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.UnitTests.Services
             IList<PriceChangeMasterEntity> priceChangeMasterEntities = new List<PriceChangeMasterEntity>();
             A.CallTo(() => _fakeAzureTableReaderWriter.GetMasterEntities(A<string>.Ignored, A<string>.Ignored)).Returns(priceChangeMasterEntities);
 
-            _fakeMonitoringService.SliceAndPublishPriceChangeEvents();
+            _fakeSlicingPublishingService.SliceAndPublishPriceChangeEvents();
 
             A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
             A.CallTo(() => _fakeAzureTableReaderWriter.GetUnitPriceChangeEventsEntities(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
@@ -90,7 +102,7 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.UnitTests.Services
             A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).Returns(downloadPayload);
             A.CallTo(() => _fakeAzureTableReaderWriter.GetUnitPriceChangeEventsEntities(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(unitPriceChangeEntities);
 
-            _fakeMonitoringService.SliceAndPublishPriceChangeEvents();
+            _fakeSlicingPublishingService.SliceAndPublishPriceChangeEvents();
 
             A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureTableReaderWriter.GetUnitPriceChangeEventsEntities(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
@@ -134,8 +146,8 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.UnitTests.Services
             {
                 new()
                 {
-                    Eventid = "FakeEventID",
-                    MasterCorrid = "FakeCorrID",
+                    EventId = "FakeEventID",
+                    MasterCorrId = "FakeCorrID",
                     RowKey = "FakeEventID",
                     ETag = new(),
                     PartitionKey = "FakeEventID",
@@ -145,8 +157,8 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.UnitTests.Services
                 },
                 new()
                 {
-                    Eventid = "FakeEventID2",
-                    MasterCorrid = "FakeCorrID",
+                    EventId = "FakeEventID2",
+                    MasterCorrId = "FakeCorrID",
                     RowKey = "FakeEventID2",
                     ETag = new(),
                     PartitionKey = "FakeEventID2",
@@ -160,7 +172,7 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.UnitTests.Services
             A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).Returns(downloadPayload);
             A.CallTo(() => _fakeAzureTableReaderWriter.GetUnitPriceChangeEventsEntities(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(unitPriceChangeEntities);
 
-            _fakeMonitoringService.SliceAndPublishPriceChangeEvents();
+            _fakeSlicingPublishingService.SliceAndPublishPriceChangeEvents();
 
             A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureTableReaderWriter.GetUnitPriceChangeEventsEntities(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
@@ -205,8 +217,8 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.UnitTests.Services
             {
                 new UnitPriceChangeEntity()
                 {
-                    Eventid = "FakeEventID",
-                    MasterCorrid = "FakeCorrID",
+                    EventId = "FakeEventID",
+                    MasterCorrId = "FakeCorrID",
                     RowKey = "FakeEventID",
                     ETag = new(),
                     PartitionKey = "FakeEventID",
@@ -220,7 +232,7 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.UnitTests.Services
             A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).Returns(downloadPayload);
             A.CallTo(() => _fakeAzureTableReaderWriter.GetUnitPriceChangeEventsEntities(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(unitPriceChangeEntities);
 
-            _fakeMonitoringService.SliceAndPublishPriceChangeEvents();
+            _fakeSlicingPublishingService.SliceAndPublishPriceChangeEvents();
 
             A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureTableReaderWriter.GetUnitPriceChangeEventsEntities(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();

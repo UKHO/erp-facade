@@ -1,4 +1,6 @@
-﻿using Azure.Extensions.AspNetCore.Configuration.Secrets;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
+using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using Microsoft.ApplicationInsights.Channel;
@@ -7,13 +9,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
-using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
-using UKHO.ERPFacade.PublishPriceChange.WebJob;
 using UKHO.ERPFacade.Common.Configuration;
+using UKHO.ERPFacade.Common.Infrastructure;
+using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.IO.Azure;
-using UKHO.Logging.EventHubLogProvider;
+using UKHO.ERPFacade.Common.Services;
 using UKHO.ERPFacade.PublishPriceChange.WebJob.Services;
+using UKHO.Logging.EventHubLogProvider;
 
 namespace UKHO.ERPFacade.PublishPriceChange.WebJob
 {
@@ -95,7 +97,7 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob
             serviceCollection.AddApplicationInsightsTelemetryWorkerService();
 
 #if DEBUG
-            //create the logger and setup of sinks, filters and properties	
+            //create the logger and setup of sinks, filters and properties
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Information()
                 .WriteTo.File("Logs/UKHO.PublishPriceChange.WebJob-.txt", rollingInterval: RollingInterval.Day, outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level}] [{SourceContext}] {Message}{NewLine}{Exception}")
@@ -148,10 +150,14 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob
                 serviceCollection.AddSingleton(configuration);
             }
 
+            serviceCollection.AddInfrastructure();
+
             serviceCollection.AddSingleton<PublishPriceChangeWebJob>();
             serviceCollection.AddSingleton<IAzureTableReaderWriter, AzureTableReaderWriter>();
             serviceCollection.AddSingleton<IAzureBlobEventWriter, AzureBlobEventWriter>();
             serviceCollection.AddSingleton<ISlicingPublishingService, SlicingPublishingService>();
+            serviceCollection.AddSingleton<IErpFacadeService, ErpFacadeService>();
+            serviceCollection.AddSingleton<IJsonHelper, JsonHelper>();
         }
     }
 }

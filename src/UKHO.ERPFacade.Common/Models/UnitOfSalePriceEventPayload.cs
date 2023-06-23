@@ -9,11 +9,9 @@ namespace UKHO.ERPFacade.Common.Models
     {
         public UnitOfSalePriceEventPayload(UnitOfSalePriceEvent unitOfSalePriceEvent)
         {
-            EventData = unitOfSalePriceEvent;
+            Data = unitOfSalePriceEvent;
         }
 
-        public override string EventName => "uk.gov.ukho.encpublishing.enccontentpublished.v2";
-        public override string Subject => EventData.Subject;
     }
 
     [ExcludeFromCodeCoverage]

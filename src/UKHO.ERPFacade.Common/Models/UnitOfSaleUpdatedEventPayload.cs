@@ -5,46 +5,16 @@ using UKHO.ERPFacade.Common.Infrastructure;
 namespace UKHO.ERPFacade.Common.Models
 {
     [ExcludeFromCodeCoverage]
-    public class UnitOfSaleUpdatedEventPayload : EventBase<UnitOfSaleUpdatedEvent>
+    public class UnitOfSaleUpdatedEventPayload : EventBase<UnitOfSaleUpdatedEventData>
     {
-        public UnitOfSaleUpdatedEventPayload(UnitOfSaleUpdatedEvent unitOfSalePriceEvent)
+        public UnitOfSaleUpdatedEventPayload(UnitOfSaleUpdatedEventData unitOfSaleUpdatedEventData, string subject)
         {
-            EventData = unitOfSalePriceEvent;
+            Data = unitOfSaleUpdatedEventData;
+            Subject = subject;
+            Id = Guid.NewGuid().ToString();
+            EventName = "uk.gov.ukho.erp.unitOfSaleUpdated.v1";
         }
 
-        public override string EventName => "uk.gov.ukho.erpFacade.unitOfSaleUpdated.v1";
-        public override string Subject => EventData.Subject;
-    }
-
-    [ExcludeFromCodeCoverage]
-    public class UnitOfSaleUpdatedEvent
-    {
-        [JsonProperty("specversion")]
-        public string SpecVersion { get; set; }
-
-        [JsonProperty("type")]
-        public string Type { get; set; }
-
-        [JsonProperty("source")]
-        public string Source { get; set; }
-
-        [JsonProperty("id")]
-        public string Id { get; set; }
-
-        [JsonProperty("time")]
-        public string Time { get; set; }
-
-        [JsonProperty("_COMMENT")]
-        public string _COMMENT { get; set; }
-
-        [JsonProperty("subject")]
-        public string Subject { get; set; }
-
-        [JsonProperty("datacontenttype")]
-        public string DataContentType { get; set; }
-
-        [JsonProperty("data")]
-        public UnitOfSaleUpdatedEventData Data { get; set; }
     }
 
     [ExcludeFromCodeCoverage]
@@ -55,9 +25,6 @@ namespace UKHO.ERPFacade.Common.Models
 
         [JsonProperty("products")]
         public List<Product> Products { get; set; }
-
-        [JsonProperty("_COMMENT")]
-        public string _COMMENT { get; set; }
 
         [JsonProperty("unitsOfSale")]
         public List<UnitOfSale> UnitsOfSales { get; set; }

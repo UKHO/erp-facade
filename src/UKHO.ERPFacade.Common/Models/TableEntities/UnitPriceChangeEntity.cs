@@ -1,6 +1,6 @@
-﻿using Azure;
+﻿using System.Diagnostics.CodeAnalysis;
+using Azure;
 using Azure.Data.Tables;
-using System.Diagnostics.CodeAnalysis;
 
 namespace UKHO.ERPFacade.Common.Models.TableEntities
 {
@@ -13,9 +13,9 @@ namespace UKHO.ERPFacade.Common.Models.TableEntities
 
         public DateTimeOffset? Timestamp { get; set; } = default!;
 
-        public string MasterCorrid { get; set; } = default!;
+        public string MasterCorrId { get; set; } = default!;
 
-        public string Eventid { get; set; } = default!;
+        public string EventId { get; set; } = default!;
 
         public string Status { get; set; } = default!;
 

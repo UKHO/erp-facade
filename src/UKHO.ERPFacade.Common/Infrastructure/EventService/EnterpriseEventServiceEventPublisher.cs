@@ -25,13 +25,11 @@ namespace UKHO.ERPFacade.Common.Infrastructure.EventService
             _eventServiceEndpoint = options.Value.PublishEndpoint;
         }
 
-        public async Task<Result> Publish<TData>(EventBase<TData> eventData)
+        public async Task<Result> Publish<TData>(CloudEvent<TData> eventData)
         {
-            var cloudEventData = _cloudEventFactory.Create(eventData);
-
             var serializerOptions = new JsonSerializerOptions();
             serializerOptions.Converters.Add(new RoundTripDateTimeConverter());
-            var cloudEventPayload = JsonSerializer.SerializeToUtf8Bytes(cloudEventData, serializerOptions);
+            var cloudEventPayload = JsonSerializer.SerializeToUtf8Bytes(eventData, serializerOptions);
 
             var content = new ByteArrayContent(cloudEventPayload);
 
@@ -41,15 +39,15 @@ namespace UKHO.ERPFacade.Common.Infrastructure.EventService
 
             try
             {
-                _logger.LogTrace(EventIds.StartingEnterpriseEventServiceEventPublisher.ToEventId(), "Attempting to send {cloudEventType} for {cloudEventSubject} to Enterprise Event Service", cloudEventData.Type, cloudEventData.Subject);
+                _logger.LogInformation(EventIds.StartingEnterpriseEventServiceEventPublisher.ToEventId(), "Attempting to send {cloudEventType} for {cloudEventSubject} to Enterprise Event Service", eventData.Type, eventData.Subject);
                 var response = await client.PostAsync(_eventServiceEndpoint, content);
                 response.EnsureSuccessStatusCode();
-                _logger.LogTrace(EventIds.EnterpriseEventServiceEventPublisherSuccess.ToEventId(), "Successfully sent {cloudEventType} for {cloudEventSubject} to Enterprise Event Service", cloudEventData.Type, cloudEventData.Subject);
+                _logger.LogInformation(EventIds.EnterpriseEventServiceEventPublisherSuccess.ToEventId(), "Successfully sent {cloudEventType} for {cloudEventSubject} to Enterprise Event Service", eventData.Type, eventData.Subject);
                 return Result.Success("Successfully sent event");
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.EnterpriseEventServiceEventPublisherFailure.ToEventId(), ex, "Failed to send event type: {cloudEventType} to the enterprise event service for product: {cloudEventSubject}", cloudEventData.Type, cloudEventData.Subject);
+                _logger.LogError(EventIds.EnterpriseEventServiceEventPublisherFailure.ToEventId(), ex, "Failed to send event type: {cloudEventType} to the enterprise event service for product: {cloudEventSubject}", eventData.Type, eventData.Subject);
                 return Result.Failure(ex.Message);
             }
         }

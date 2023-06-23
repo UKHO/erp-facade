@@ -66,7 +66,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
                 .Expect(HttpMethod.Post, $"{_fakeServiceUrl}/{_fakeEnterpriseEventServiceConfiguration.PublishEndpoint}")
                 .Respond(req => new HttpResponseMessage());
 
-            await _fakeEnterpriseEventServiceEventPublisher.Publish(eventData);
+            await _fakeEnterpriseEventServiceEventPublisher.Publish(cloudEvent);
 
             A.CallTo(() => _fakeHttpClientFactory.CreateClient(EnterpriseEventServiceEventPublisher.EventServiceClientName)).MustHaveHappened();
             _fakeHttpClientMessageHandler.VerifyNoOutstandingExpectation();
@@ -91,7 +91,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
                 .With(req => req.Content!.ReadAsByteArrayAsync().WaitForResult().AreEquivalent(JsonSerializer.SerializeToUtf8Bytes(cloudEvent, jsonOptions)))
                 .Respond(req => new HttpResponseMessage());
 
-            var result = await _fakeEnterpriseEventServiceEventPublisher.Publish(eventData);
+            var result = await _fakeEnterpriseEventServiceEventPublisher.Publish(cloudEvent);
 
             A.CallTo(() => _fakeHttpClientFactory.CreateClient(EnterpriseEventServiceEventPublisher.EventServiceClientName)).MustHaveHappened();
             _fakeHttpClientMessageHandler.VerifyNoOutstandingExpectation();
@@ -112,7 +112,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
                 .Expect("*")
                 .Throw(new Exception());
 
-            var result = await _fakeEnterpriseEventServiceEventPublisher.Publish(eventData);
+            var result = await _fakeEnterpriseEventServiceEventPublisher.Publish(cloudEvent);
 
             _fakeHttpClientMessageHandler.VerifyNoOutstandingExpectation();
             Assert.That(result.Status, Is.EqualTo(Result.Statuses.Failure));
@@ -132,7 +132,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
                 .Expect("*")
                 .Respond(req => new HttpResponseMessage(HttpStatusCode.InternalServerError));
 
-            var result = await _fakeEnterpriseEventServiceEventPublisher.Publish(eventData);
+            var result = await _fakeEnterpriseEventServiceEventPublisher.Publish(cloudEvent);
 
             _fakeHttpClientMessageHandler.VerifyNoOutstandingExpectation();
             Assert.That(result.Status, Is.EqualTo(Result.Statuses.Failure));
