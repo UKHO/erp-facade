@@ -52,6 +52,19 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
             var response = await _bulkPriceUpdate.PostBPUpdateResponseAsync(filePath, await _authToken.GetAzureADToken(true));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.Forbidden);
+
+        }
+
+        [Category("DevEnvFT")]
+        [Test, Order(1)]
+        [TestCase("PC1_Payload.JSON", TestName = "WhenValidEventReceivedWithValidToken_ThenBPUpdateReturn200OkResponse")]
+        public async Task WhenValidEventReceivedWithValidToken_ThenBPUpdateReturn200OkResponse(string payloadJsonFileName)
+        {
+            string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, "PriceChangeInputJSON", payloadJsonFileName);
+            string generatedProductJsonFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedProductJsonFolder);
+            var response = await _bulkPriceUpdate.PostBPUpdateResponseAsyncWithJson(filePath, generatedProductJsonFolder, await _authToken.GetAzureADToken(false, "BulkPriceUpdate"));
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
         }
 
     }

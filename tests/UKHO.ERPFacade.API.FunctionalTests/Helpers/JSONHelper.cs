@@ -17,25 +17,25 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             }
             return requestBody;
         }
-
-        public static string replaceCorrID(string requestBody, string corrIdGeneratedInWebhookEndpoint)
+        public List<string> GetProductListProductListFromSAPPayload(List<JsonInputPriceChangeHelper> _jsonInputPriceUpdatehelperString)
         {
-            JArray jsonArray = JArray.Parse(requestBody);
-            foreach (JObject jObj in jsonArray)
-            {
-                jObj["corrid"] = corrIdGeneratedInWebhookEndpoint;
-            }
-            string updatedUoSRequestBody = jsonArray.ToString();
-            return updatedUoSRequestBody;
-        }
-
-        public List<string> GetProductListProductListFromSAPPayload(List<UoSInputJSONHelper> InputJSONHelper)
-        {
+          
             List<string> result = new List<string>();
             //code to get Unique list from inout payload
-            return result;
+            // List<string> data = new() { _jsonInputPriceUpdatehelperString.productname };
+            //  List<string> finalProducts = data.Select(x => x.data).ToList();
+            //  List<string> finalProducts = new HashSet<string>(data).ToList();
+            // return finalProducts;
+            int count = _jsonInputPriceUpdatehelperString.Count;
+            for (int i=0; i<count; i++)
+            {
+                result.Add(_jsonInputPriceUpdatehelperString[i].productname);
+               
+            }
+            List<string> finalProducts = new HashSet<string>(result).ToList();
+            return finalProducts;
+            
         }
-
     }
 }
 
