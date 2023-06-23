@@ -162,8 +162,4 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ERPFacadeGeneratedProductJSON\" />
-  </ItemGroup>
-
 </Project>
