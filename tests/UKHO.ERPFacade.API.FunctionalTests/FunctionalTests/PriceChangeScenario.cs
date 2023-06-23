@@ -8,7 +8,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
     public class PriceChangeScenarios
     {
 
-        private PriceChangeEndpoint _PriceChange { get; set; }
+        private PriceChangeEndpoint _priceChange { get; set; }
         private readonly ADAuthTokenProvider _authToken = new();
         public static bool noRole = false;
         //for pipeline
@@ -19,7 +19,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [OneTimeSetUp]
         public void Setup()
         {
-            _PriceChange = new PriceChangeEndpoint(Config.TestConfig.ErpFacadeConfiguration.BaseUrl);
+            _priceChange = new PriceChangeEndpoint(Config.TestConfig.ErpFacadeConfiguration.BaseUrl);
         }
 
         [Category("DevEnvFT")]
@@ -28,7 +28,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         public async Task WhenValidPriceChangeEventReceivedWithValidToken_ThenPriceChangeReturns200OkResponse()
         {
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.PriceChangePayloadFileName);
-            var response = await _PriceChange.PostPriceChangeResponseAsync(filePath,Config.TestConfig.SharedKeyConfiguration.Key);
+            var response = await _priceChange.PostPriceChangeResponseAsync(filePath, Config.TestConfig.SharedKeyConfiguration.Key);
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         }
@@ -39,11 +39,11 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         {
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.PriceChangePayloadFileName);
 
-            var response = await _PriceChange.PostPriceChangeResponseAsync(filePath, "invalidToken_abcd");
+            var response = await _priceChange.PostPriceChangeResponseAsync(filePath, "invalidToken_abcd");
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
 
         }
-        
+
 
     }
 }
