@@ -158,7 +158,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     //1.3.3 Check for unique duration for every effective date
                     //1.3.4 Check RRP field values for all unitofsale prices
 
-            RestResponse response = await client.ExecuteAsync(request);
             return response;
         }
 
