@@ -313,5 +313,15 @@
         /// 940063 - Price information event is uploaded in blob storage successfully.
         /// </summary>
         UploadedPriceInformationEventInAzureBlob = 940063,
+
+        /// <summary>
+        /// 940064 - Uploading the SAP xml payload in blob storage.
+        /// </summary>
+        UploadSapXmlPayloadInAzureBlobStarted = 940064,
+
+        /// <summary>
+        /// 940065 - SAP xml payload is uploaded in blob storage successfully.
+        /// </summary>
+        UploadSapXmlPayloadInAzureBlobCompleted = 940065,
     }
 }
