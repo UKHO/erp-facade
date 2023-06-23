@@ -107,8 +107,44 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 List<string> UniquePdtFromInputPayload = _jSONHelper.GetProductListProductListFromSAPPayload(_jsonInputPriceChangeHelper);
                 string correlation_ID = desiailzedoutput.data.correlationId;
                 List<string> UniquePdtFromAzureStorage = azureBlobStorageHelper.GetProductListFromBlobContainerAsync(correlation_ID).Result;
+            RestResponse response = await client.ExecuteAsync(request);
+            
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                JsonOutputPriceChangeHelper desiailzedoutput= productOutputDeserialize();
+                responseHeadercorrelationID = responseHeaderCorrelationID(response);
+
+                /*1.2 Check list of folders created for the unique products.
+                    pt#1: unique product list from input JSON */
+                string inputJSONFilePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.BPUpdatePayloadFileName);
+                string jsonPayload = _jSONHelper.getDeserializedString(inputJSONFilePath);
+
+                _jsonInputPriceChangeHelper = JsonConvert.DeserializeObject<List<JsonInputPriceChangeHelper>>(jsonPayload);
+                List<string> UniquePdtFromInputPayload = _jSONHelper.GetProductListProductListFromSAPPayload(_jsonInputPriceChangeHelper);
+                string correlation_ID = desiailzedoutput.data.correlationId;
+                List<string> UniquePdtFromAzureStorage = azureBlobStorageHelper.GetProductListFromBlobContainerAsync(correlation_ID).Result;
 
                 // for loop for iteration for each product json
+
+                Assert.That(UniquePdtFromInputPayload.Count.Equals(UniquePdtFromAzureStorage.Count), Is.True, "Slicing is correct");
+                foreach (string pdt in UniquePdtFromAzureStorage)
+                {
+                    string generatedProductJsonFile = azureBlobStorageHelper.DownloadJSONFromAzureBlob(generatedProductJsonFolder, correlation_ID, pdt, "ProductChange");
+                    Console.WriteLine(generatedProductJsonFile);
+                    Assert.That(correlation_ID.Equals(responseHeadercorrelationID), Is.True, "response header corerelationId is same as generated product correlation id");
+                    if (correlation_ID.Equals(responseHeadercorrelationID))
+                    {
+
+
+                    }
+                }
+
+
+            }
+
+
+
+            // RestResponse response = await client.ExecuteAsync(request);
 
                 Assert.That(UniquePdtFromInputPayload.Count.Equals(UniquePdtFromAzureStorage.Count), Is.True, "Slicing is correct");
                 foreach (string pdt in UniquePdtFromAzureStorage)
@@ -168,6 +204,21 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     //1.3.4 Check RRP field values for all unitofsale prices
 
             return response;
+        }
+
+        private JsonOutputPriceChangeHelper productOutputDeserialize()
+        {
+            string filePathProductJSON = "D:\\UpdatedERP\\tests\\UKHO.ERPFacade.API.FunctionalTests\\ERPFacadeGeneratedProductJSON\\ERPFacadeGeneratedProductJSON.JSON";
+            var jsonString = _jSONHelper.getDeserializedString(filePathProductJSON);
+            JsonPayloadProductHelper = JsonConvert.DeserializeObject<JsonOutputPriceChangeHelper>(jsonString);
+            return JsonPayloadProductHelper;
+        }
+
+        private static String responseHeaderCorrelationID(RestResponse response)
+        {
+            string correlationID = response.Headers.ToList().Find(x => x.Name == "_X-Correlation-ID").Value.ToString();
+            Console.WriteLine(correlationID);
+            return correlationID;
         }
 
         private JsonOutputPriceChangeHelper productOutputDeserialize()
