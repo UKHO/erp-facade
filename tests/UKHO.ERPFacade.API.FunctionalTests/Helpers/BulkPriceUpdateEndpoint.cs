@@ -147,6 +147,15 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 List<string> UniquePdtFromAzureStorage = azureBlobStorageHelper.GetProductListFromBlobContainerAsync(correlationID).Result;
                 //pt#3: compare listed from pt#1 and pt#2   
                // Assert.That(UniquePdtFromInputPayload.SequenceEqual(UniquePdtFromAzureStorage), Is.True, "Slicing is correct");
+            RestResponse response = await client.ExecuteAsync(request);
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                 responseHeadercorrelationID = responseHeaderCorrelationID(response);
+                
+            }
+            JsonPayloadProductHelper jsonPayloadProduct = JsonConvert.DeserializeObject<JsonPayloadProductHelper>();
+             string correlationIdproduct = jsonPayloadProduct.Data.correlationId;
+
 
                 foreach (string pdt in UniquePdtFromAzureStorage)
                 {
