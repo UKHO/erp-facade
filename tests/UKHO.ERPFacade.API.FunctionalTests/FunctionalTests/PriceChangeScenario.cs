@@ -14,7 +14,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         //for pipeline
         private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
         //for local
-        //private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
+       // private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
 
         [OneTimeSetUp]
         public void Setup()
@@ -28,7 +28,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         public async Task WhenValidPriceChangeEventReceivedWithValidToken_ThenPriceChangeReturns200OkResponse()
         {
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.PriceChangePayloadFileName);
-            var response = await _priceChange.PostPriceChangeResponseAsync(filePath, Config.TestConfig.SharedKeyConfiguration.Key);
+            var response = await _priceChange.PostPriceChangeResponseAsync(filePath,Config.TestConfig.SharedKeyConfiguration.Key);
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         }
