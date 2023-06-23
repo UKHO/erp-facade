@@ -1,0 +1,68 @@
+{
+  "specversion": "1.0",
+  "type": "uk.gov.ukho.erp.bulkpricechange.v1",
+  "source": "https://erp.ukho.gov.uk",
+  "id": "06290785-4e11-4ff5-b3c7-2d91472efd7a",
+  "time": "15-06-2023 11:30:44 +00:00",
+  "_COMMENT": "A comma separated list of products",
+  "subject": "AR420020",
+  "datacontenttype": "application/json",
+  "data": {
+    "correlationId": "150624a4-1d62-4f56-b359-59e178d78200",
+    "unitsOfSalePrices": [
+      {
+        "unitName": "AR420020",
+        "price": [
+          {
+            "effectiveDate": "2023-05-04T11:34:23+05:30",
+            "currency": "USD",
+            "standard": {
+              "priceDurations": [
+                {
+                  "numberOfMonths": 12,
+                  "rrp": "76.92 "
+                },
+                {
+                  "numberOfMonths": 9,
+                  "rrp": "69.23 "
+                },
+                {
+                  "numberOfMonths": 6,
+                  "rrp": "46.15 "
+                },
+                {
+                  "numberOfMonths": 3,
+                  "rrp": "23.08 "
+                }
+              ]
+            }
+          },
+          {
+            "effectiveDate": "2024-01-01T00:00:01+05:30",
+            "currency": "USD",
+            "standard": {
+              "priceDurations": [
+                {
+                  "numberOfMonths": 12,
+                  "rrp": "76.92 "
+                },
+                {
+                  "numberOfMonths": 9,
+                  "rrp": "69.23 "
+                },
+                {
+                  "numberOfMonths": 6,
+                  "rrp": "46.15 "
+                },
+                {
+                  "numberOfMonths": 3,
+                  "rrp": "23.08 "
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
