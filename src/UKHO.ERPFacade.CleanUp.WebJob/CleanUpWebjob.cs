@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ using UKHO.ERPFacade.Common.Logging;
 
 namespace UKHO.ERPFacade.CleanUp.WebJob
 {
+    [ExcludeFromCodeCoverage]
     public class CleanUpWebjob
     {
         private readonly ILogger<CleanUpWebjob> _logger;

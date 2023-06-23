@@ -320,9 +320,9 @@
         FetchMasterEntities = 940064,
 
         /// <summary>
-        /// 940065 Fetching metadata of blob. 
+        /// 940065 Fetching create date of blob. 
         /// </summary>
-        FetchBlobMetadata = 940065,
+        FetchBlobCreateDate = 940065,
 
         /// <summary>
         /// 940066 - Deleted Price master entity successfully from Azure Table
@@ -352,6 +352,11 @@
         /// <summary>
         /// 940071 Fetching all EES entities from Azure Table. 
         /// </summary>
-        FetchEESEntities = 940071
+        FetchEESEntities = 940071,
+
+        /// <summary>
+        /// 940072 - Deleted container successfully.
+        /// </summary>
+        DeletedContainerSuccessful = 940072,
     }
 }

@@ -10,7 +10,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
 
         string DownloadEvent(string blobName, string blobContainerName);
 
-        BlobProperties GetBlobMetadata(string blobName, string blobContainerName);
+        DateTime GetBlobCreateDate(string blobName, string blobContainerName);
 
         IEnumerable<string> GetBlobsInContainer(string blobContainerName);
 

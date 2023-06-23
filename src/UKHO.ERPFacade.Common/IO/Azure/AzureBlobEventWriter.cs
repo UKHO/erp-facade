@@ -37,11 +37,11 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             return existingEesEvent;
         }
 
-        public BlobProperties GetBlobMetadata(string blobName, string blobContainerName)
+        public DateTime GetBlobCreateDate(string blobName, string blobContainerName)
         {
             BlobContainerClient blobContainerClient = new(_azureStorageConfig.Value.ConnectionString, blobContainerName);
             BlobClient blobClient = blobContainerClient.GetBlobClient(blobName);
-            return blobClient.GetProperties();
+            return blobClient.GetProperties().Value.CreatedOn.DateTime;
         }
 
         public IEnumerable<string> GetBlobsInContainer(string blobContainerName)

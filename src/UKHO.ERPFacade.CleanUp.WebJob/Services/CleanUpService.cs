@@ -41,10 +41,10 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.Services
             var masterEntities = _azureTableReaderWriter.GetMasterEntities(CompleteStatus);
             foreach (var masterEntity in masterEntities)
             {
-                _logger.LogInformation(EventIds.FetchBlobMetadata.ToEventId(), $"Fetching metadata of blob : {masterEntity.CorrId}");
-                var blobMetadata = _azureBlobEventWriter.GetBlobMetadata(masterEntity.CorrId + '/' + masterEntity.CorrId + '.' + RequestFormat, PriceChangeContainerName);
-                TimeSpan timediff = DateTime.Now - blobMetadata.CreatedOn.DateTime;
-                if (timediff.TotalDays > int.Parse(_erpFacadeWebjobConfig.Value.CleanUpDurationInDays))
+                _logger.LogInformation(EventIds.FetchBlobCreateDate.ToEventId(), "Fetching create date of blob : {0}", masterEntity.CorrId);
+                var blobCreateDate = _azureBlobEventWriter.GetBlobCreateDate(masterEntity.CorrId + '/' + masterEntity.CorrId + '.' + RequestFormat, PriceChangeContainerName);
+                TimeSpan timediff = DateTime.Now - blobCreateDate;
+                if (timediff.Days > int.Parse(_erpFacadeWebjobConfig.Value.CleanUpDurationInDays))
                 {
                     _azureTableReaderWriter.DeleteUnitPriceChangeEntityForMasterCorrId(masterEntity.CorrId);
                     _azureTableReaderWriter.DeletePriceMasterEntity(masterEntity.CorrId);
@@ -52,7 +52,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.Services
                     foreach (var blob in _azureBlobEventWriter.GetBlobsInContainer(PriceChangeContainerName))
                     {
                         _azureBlobEventWriter.DeleteBlob(blob, PriceChangeContainerName);
-                        _logger.LogInformation(EventIds.DeletedBlobSuccessful.ToEventId(), $"Deleted blob : {blob}  from container");
+                        _logger.LogInformation(EventIds.DeletedBlobSuccessful.ToEventId(), "Deleted blob : {0}  from container", blob);
                     }
                 }
             }
@@ -67,10 +67,10 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.Services
                 if (!entity.RequestDateTime.HasValue)
                     continue;
                 TimeSpan timediff = DateTime.Now - entity.RequestDateTime.Value;
-                if (timediff.TotalDays > int.Parse(_erpFacadeWebjobConfig.Value.CleanUpDurationInDays))
+                if (timediff.Days > int.Parse(_erpFacadeWebjobConfig.Value.CleanUpDurationInDays) && entity.ResponseDateTime.HasValue)
                 {
                     Task.FromResult(_azureTableReaderWriter.DeleteEESEntity(entity.CorrelationId));
-                    _logger.LogInformation(EventIds.FetchEESEntities.ToEventId(), $"Deleting container : {entity.CorrelationId}");
+                    _logger.LogInformation(EventIds.DeletedContainerSuccessful.ToEventId(), "Deleting container : {0}", entity.CorrelationId);
                     _azureBlobEventWriter.DeleteContainer(entity.CorrelationId);
                 }
             }
