@@ -357,6 +357,6 @@
         /// <summary>
         /// 940072 - Deleted container successfully.
         /// </summary>
-        DeletedContainerSuccessful = 940072,
+        DeletedContainerSuccessful = 940072
     }
 }
