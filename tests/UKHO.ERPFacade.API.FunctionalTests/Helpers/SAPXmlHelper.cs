@@ -1,16 +1,13 @@
 ﻿
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions.Interfaces;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
-using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 using UKHO.ERPFacade.API.FunctionalTests.Model;
-using UKHO.ERPFacade.Common.IO;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
