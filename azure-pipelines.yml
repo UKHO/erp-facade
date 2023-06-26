@@ -25,6 +25,10 @@ variables:
     value: "ukhydrographicoffice/terraform-azure-powershell-unzip:1.4.4"
   - name: DeploymentPool
     value: "UKHO Ubuntu 1804"
+  - name: DeploymentPoolFT
+    value: "Tiberius"
+  - name: DeploymentPoolPE
+    value: "Private Link Deployments (ENG)"
 
 stages:
   - stage: Stryker_Mutator
@@ -489,14 +493,8 @@ stages:
         - QADeployApp
         pool: $(WindowsPool)
         variables:
-          - name : ErpFacadeConfiguration.BaseUrl
-            value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
           - name : AzureStorageConfiguration.ConnectionString
             value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
-          #- name : mockWebAppName
-          #  value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.mockWebApp'] ]
-          #- name : mockWebAppResourceGroup
-          #  value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.mockWebAppResourceGroupName'] ]
         displayName: "Qa Functional Automated Tests"
         workspace:
          clean: all
