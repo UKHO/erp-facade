@@ -47,7 +47,7 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
 
             foreach (var entity in entities)
             {
-                _logger.LogInformation(EventIds.DownloadBulkPriceInformationEventFromAzureBlob.ToEventId(), "Webjob started downloading pricechange information from blob");
+                _logger.LogInformation(EventIds.DownloadBulkPriceInformationEventFromAzureBlob.ToEventId(), "Webjob started downloading pricechange information from blob.");
 
                 priceChangeInformationJson = _azureBlobEventWriter.DownloadEvent(entity.CorrId + '/' + PriceChangeEventFileName, ContainerName);
                 if (!string.IsNullOrEmpty(priceChangeInformationJson))
