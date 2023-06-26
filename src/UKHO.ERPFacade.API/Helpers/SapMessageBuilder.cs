@@ -425,7 +425,7 @@ namespace UKHO.ERPFacade.API.Helpers
             var unitOfSales = listOfUnitOfSales.Where(x => x.UnitOfSaleType == UnitSaleType && product.InUnitsOfSale.Contains(x.UnitName)).ToList();
             if (unitOfSales.Any())
             {
-                if (unitOfSales.Count() > 1)
+                if (unitOfSales.Count > 1)
                 {
                     unitOfSale = unitOfSales.Where(x => x.CompositionChanges.AddProducts.Contains(product.ProductName)).FirstOrDefault();
                 }

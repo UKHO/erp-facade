@@ -13,6 +13,7 @@ using UKHO.ERPFacade.API.Helpers;
 using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
+using System.Reflection;
 
 namespace UKHO.ERPFacade.API.UnitTests.Helpers
 {
@@ -69,7 +70,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         private IConfiguration InitConfiguration()
         {
             var config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory() + @"/ConfigurationFiles")                
+                .SetBasePath(Directory.GetCurrentDirectory() + @"/ConfigurationFiles")
                 .AddJsonFile("SapActions.json")
                 .AddEnvironmentVariables()
                 .Build();
@@ -101,7 +102,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
             && call.GetArgument<EventId>(1) == EventIds.SapActionCreated.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "SAP action {ActionName} created.").MustHaveHappened(17,Times.Exactly);
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "SAP action {ActionName} created.").MustHaveHappened(17, Times.Exactly);
         }
 
         [Test]
@@ -128,7 +129,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
             && call.GetArgument<EventId>(1) == EventIds.SapActionCreated.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "SAP action {ActionName} created.").MustHaveHappened(7,Times.Exactly);
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "SAP action {ActionName} created.").MustHaveHappened(7, Times.Exactly);
         }
 
         [Test]
@@ -172,6 +173,49 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
             && call.GetArgument<EventId>(1) == EventIds.SapActionCreated.ToEventId()
             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "SAP action {ActionName} created.").MustHaveHappened(1, Times.Exactly);
+        }
+
+        [Test]
+        public void WhenMoreThanOneUnitOfSaleHavingUnitOfSaleTypeUnitIsPassedToGetUnitOfSaleForEncCell_ThenReturnsFirstUnitOfSaleHavingAddProduct()
+        {
+            var listOfUnitOfSales = new List<UnitOfSale>()
+            {
+                 new UnitOfSale() { UnitName = "MX545010", Title = "Title1", UnitOfSaleType = "unit",
+                    CompositionChanges = new CompositionChanges { AddProducts = new List<string>(){  } } },
+                new UnitOfSale() { UnitName = "MX509226", Title = "Title2", UnitOfSaleType = "unit",
+                    CompositionChanges = new CompositionChanges { AddProducts = new List<string>(){ "MX545010" } } }
+            };
+
+            var product = new Product()
+            {
+                ProductName = "MX545010",
+                InUnitsOfSale = new List<string>() { "MX545010", "MX509226" }
+            };
+
+            MethodInfo methodInfo = typeof(SapMessageBuilder).GetMethod("GetUnitOfSaleForEncCell", BindingFlags.NonPublic | BindingFlags.Instance)!;
+            var result = (UnitOfSale)methodInfo.Invoke(_fakeSapMessageBuilder, new object[] { listOfUnitOfSales, product })!;
+
+            result.UnitName.Should().BeSameAs("MX509226");
+        }
+
+        [Test]
+        public void WhenOneUnitOfSaleHavingUnitOfSaleTypeUnitIsPassedToGetUnitOfSaleForEncCell_ThenReturnsFirstOrDefaultUnitOfSale()
+        {
+            var listOfUnitOfSales = new List<UnitOfSale>()
+            {
+                 new UnitOfSale() { UnitName = "MX509226", Title = "Title1", UnitOfSaleType = "unit" },
+            };
+
+            var product = new Product()
+            {
+                ProductName = "MX545010",
+                InUnitsOfSale = new List<string>() { "MX509226" }
+            };
+
+            MethodInfo methodInfo = typeof(SapMessageBuilder).GetMethod("GetUnitOfSaleForEncCell", BindingFlags.NonPublic | BindingFlags.Instance)!;
+            var result = (UnitOfSale)methodInfo.Invoke(_fakeSapMessageBuilder, new object[] { listOfUnitOfSales, product })!;
+
+            result.UnitName.Should().BeSameAs("MX509226");
         }
     }
 }
