@@ -1,7 +1,7 @@
-﻿using Azure.Core;
+﻿using System.Diagnostics.CodeAnalysis;
+using Azure.Core;
 using Microsoft.Extensions.Options;
 using Microsoft.Identity.Client;
-using System.Diagnostics.CodeAnalysis;
 using UKHO.ERPFacade.Common.Infrastructure.Config;
 
 namespace UKHO.ERPFacade.Common.Infrastructure.Authentication
@@ -18,6 +18,7 @@ namespace UKHO.ERPFacade.Common.Infrastructure.Authentication
             _loginOptions = loginOptions.Value;
             _eesOptions = eesOptions.Value;
         }
+
 
         public async Task<AccessToken> GetTokenAsync(string scope)
         {

@@ -7,13 +7,11 @@ namespace UKHO.ERPFacade.Common.Infrastructure.EventService.EventProvider
     public class CloudEventFactory : ICloudEventFactory
     {
         private readonly IDateTimeProvider _dateTimeProvider;
-        private readonly IUniqueIdentifierFactory _uuidProvider;
         private readonly NotificationsConfiguration _notificationOptions;
 
-        public CloudEventFactory(IDateTimeProvider dateTimeProvider, IUniqueIdentifierFactory uuidProvider, IOptions<NotificationsConfiguration> notificationOptions)
+        public CloudEventFactory(IDateTimeProvider dateTimeProvider, IOptions<NotificationsConfiguration> notificationOptions)
         {
             _dateTimeProvider = dateTimeProvider;
-            _uuidProvider = uuidProvider;
             _notificationOptions = notificationOptions.Value;
         }
 

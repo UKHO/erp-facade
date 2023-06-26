@@ -327,6 +327,11 @@
         /// <summary>
         /// 940066 - pricechange event exceeds the size limit of 1 MB
         /// </summary>
-        PriceChangeEventSizeLimit = 940066
+        PriceChangeEventSizeLimit = 940066,
+
+        /// <summary>
+        /// 940067 - pricechange event created
+        /// </summary>
+        PriceChangeEventPayloadCreated = 940067,
     }
 }

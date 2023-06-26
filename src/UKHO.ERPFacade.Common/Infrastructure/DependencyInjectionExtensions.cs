@@ -28,8 +28,7 @@ namespace UKHO.ERPFacade.Common.Infrastructure
                 configuration.GetSection("InteractiveLoginConfiguration").Bind(settings);
             });
 
-            services.AddSingleton<IDateTimeProvider, DateTimeProvider>()
-                    .AddSingleton<IUniqueIdentifierFactory, UniqueIdentifierFactory>();
+            services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
             services.AddSingleton<ICloudEventFactory, CloudEventFactory>()
                     .AddSingleton<IEventPublisher, EnterpriseEventServiceEventPublisher>()

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using FakeItEasy;
 using FluentAssertions;
@@ -58,7 +59,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Services
         }
 
         [Test]
-        public void WhenValidInformationIsPassed_ThenReturnsPriceEventPayload()
+        public void WhenValidInformationIsPassed_ThenReturnsUnitOfSaleUpdatedEventPayload()
         {
             List<UnitsOfSalePrices>? unitsOfSalePricesList = GetUnitsOfSalePriceList();
 
@@ -76,6 +77,26 @@ namespace UKHO.ERPFacade.Common.UnitTests.Services
          && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "UnitofSale updated event payload created.").MustHaveHappenedOnceExactly();
 
             result.Should().BeOfType<UnitOfSaleUpdatedEventPayload>();
+        }
+
+        [Test]
+        public void WhenValidInformationIsPassed_ThenReturnsPriceChangeEventPayload()
+        {
+            List<UnitsOfSalePrices>? unitsOfSalePricesList = GetUnitsOfSalePriceList();
+
+            PriceChangeEventPayload? result = _fakeERPFacadeService.BuildPriceChangeEventPayload(unitsOfSalePricesList, Guid.NewGuid().ToString(), "PAYSF", "FakeCorrID");
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+         && call.GetArgument<LogLevel>(0) == LogLevel.Information
+         && call.GetArgument<EventId>(1) == EventIds.AppendingUnitofSalePricesToEncEventInWebJob.ToEventId()
+         && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Appending UnitofSale prices to ENC event in webjob.").MustHaveHappenedOnceExactly();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+         && call.GetArgument<LogLevel>(0) == LogLevel.Information
+         && call.GetArgument<EventId>(1) == EventIds.PriceChangeEventPayloadCreated.ToEventId()
+         && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "pricechange event payload created.").MustHaveHappenedOnceExactly();
+
+            result.Should().BeOfType<PriceChangeEventPayload>();
         }
 
         private List<PriceInformation> GetPriceInformationData()

@@ -124,27 +124,36 @@ namespace UKHO.ERPFacade.Common.Services
 
             EncEventPayload encEventPayload = JsonConvert.DeserializeObject<EncEventPayload>(encEventPayloadJson)!;
 
-            _logger.LogInformation(EventIds.UnitsOfSaleUpdatedEventPayloadCreated.ToEventId(), "UnitofSale updated event payload created.");
-
-            return new UnitOfSaleUpdatedEventPayload(new UnitOfSaleUpdatedEventData
+            UnitOfSaleUpdatedEventData unitOfSaleUpdatedEventData = new()
             {
                 CorrelationId = encEventPayload!.Data.CorrelationId,
                 Products = encEventPayload.Data.Products,
                 UnitsOfSales = encEventPayload.Data.UnitsOfSales,
-                UnitsOfSalePrices = unitsOfSalePriceList,
-            }, encEventPayload.Subject
-            );
+                UnitsOfSalePrices = unitsOfSalePriceList
+            };
+
+            UnitOfSaleUpdatedEventPayload unitOfSaleUpdatedEventPayload = new(unitOfSaleUpdatedEventData, encEventPayload.Subject);
+
+            _logger.LogInformation(EventIds.UnitsOfSaleUpdatedEventPayloadCreated.ToEventId(), "UnitofSale updated event payload created.");
+
+            return unitOfSaleUpdatedEventPayload;
         }
 
         public PriceChangeEventPayload BuildPriceChangeEventPayload(List<UnitsOfSalePrices> unitsOfSalePriceList, string eventId, string unitName, string corrID)
         {
             _logger.LogInformation(EventIds.AppendingUnitofSalePricesToEncEventInWebJob.ToEventId(), "Appending UnitofSale prices to ENC event in webjob.");
 
-            return new PriceChangeEventPayload(new PriceChangeEventData
+            PriceChangeEventData priceChangeEventData = new()
             {
                 CorrelationId = corrID,
                 UnitsOfSalePrices = unitsOfSalePriceList,
-            }, unitName, eventId);
+            };
+
+            PriceChangeEventPayload priceChangeEventPayload = new(priceChangeEventData, unitName, eventId);
+
+            _logger.LogInformation(EventIds.PriceChangeEventPayloadCreated.ToEventId(), "pricechange event payload created.");
+
+            return priceChangeEventPayload;
         }
 
         //private methods

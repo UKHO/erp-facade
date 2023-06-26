@@ -1,21 +1,21 @@
-﻿using Azure.Core;
+﻿using System;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Azure.Core;
 using FakeItEasy;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using NUnit.Framework;
-using Request = WireMock.RequestBuilders.Request;
-using System.Linq;
-using System.Net.Http;
-using System.Net;
-using System.Threading.Tasks;
-using System;
+using UKHO.ERPFacade.Common.Infrastructure;
 using UKHO.ERPFacade.Common.Infrastructure.Authentication;
 using UKHO.ERPFacade.Common.Infrastructure.Config;
 using UKHO.ERPFacade.Common.Infrastructure.EventService;
-using UKHO.ERPFacade.Common.Infrastructure;
 using WireMock.ResponseBuilders;
 using WireMock.Server;
+using Request = WireMock.RequestBuilders.Request;
 
 namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.ConfigurationTests
 {
@@ -84,6 +84,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.ConfigurationTests
             Assert.That(_fakeWireMockServer.FindLogEntries(Request.Create().WithPath(testEndpoint).UsingGet()).Count(), Is.EqualTo(1));
         }
 
+
         [Test]
         public async Task WhenEesEventPublisherClientIscalled_ThenReturnsBearerAuthToken()
         {
@@ -95,7 +96,9 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.ConfigurationTests
             _fakeEnterpriseEventServiceConfiguration.PublisherScope = testScope;
             _fakeEnterpriseEventServiceConfiguration.ClientId = testClientId;
 
+
             A.CallTo(() => _fakeTokenProvider.GetTokenAsync($"{testClientId}/{testScope}")).Returns(new AccessToken(testToken, DateTimeOffset.MaxValue));
+
 
             var sut = _serviceProvider.GetRequiredService<IHttpClientFactory>().CreateClient(EnterpriseEventServiceEventPublisher.EventServiceClientName);
 
