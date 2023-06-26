@@ -32,9 +32,6 @@ namespace UKHO.ERPFacade.Common.Models
         [JsonProperty("time")]
         public string Time { get; set; }
 
-        [JsonProperty("_COMMENT")]
-        public string _COMMENT { get; set; }
-
         [JsonProperty("subject")]
         public string Subject { get; set; }
 
