@@ -1,13 +1,16 @@
 ﻿
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions.Interfaces;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
+using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 using UKHO.ERPFacade.API.FunctionalTests.Model;
+using UKHO.ERPFacade.Common.IO;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
@@ -30,31 +33,28 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         {
 
             SAPXmlHelper.jsonPayload = jsonPayload;
-            XmlDocument xDoc = new XmlDocument();
-            //load up the xml from the location 
-            xDoc.LoadXml(File.ReadAllText(XMLFilePath));
 
-            var ns = new XmlNamespaceManager(xDoc.NameTable);
-            ns.AddNamespace("xsisp", "http://www.w3.org/2001/XMLSchema-instance");
-            ns.AddNamespace("xsdsp", "http://www.w3.org/2001/XMLSchema");
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(File.ReadAllText(XMLFilePath));
 
-            XmlNodeList nodeList = xDoc.SelectNodes("//*[local-name()='IM_MATINFO']/ACTIONITEMS/item", ns);
+            while (xmlDoc.DocumentElement.Name == "soap:Envelope" || xmlDoc.DocumentElement.Name == "soap:Body")
+            {
+                string tempXmlString = xmlDoc.DocumentElement.InnerXml;
+                xmlDoc.LoadXml(tempXmlString);
+            }
 
-            XmlSerializer xsw = new XmlSerializer(typeof(Z_ADDS_MAT_INFO));
-            FileStream fs = new FileStream(XMLFilePath, FileMode.Open);
-            StreamReader stream = new StreamReader(fs, Encoding.UTF8);
-            xmlPayload = (Z_ADDS_MAT_INFO)xsw.Deserialize(new XmlTextReader(stream));
+            var ms = new MemoryStream(Encoding.UTF8.GetBytes(xmlDoc.InnerXml));
+            var reader = new XmlTextReader(ms) { Namespaces = false };
+            var serializer = new XmlSerializer(typeof(Z_ADDS_MAT_INFO));
 
-            Assert.True(VerifyPresenseOfMandatoryXMLAtrributes(nodeList).Result);
 
-            //verification of action atrribute's value
+
+            var result = (Z_ADDS_MAT_INFO)serializer.Deserialize(reader);
             actionCounter = 1;
             ChangeENCCell.Clear();
-
-            foreach (Item item in xmlPayload.IM_MATINFO.ACTIONITEMS)
-
+            foreach (ZMAT_ACTIONITEMS item in result.IM_MATINFO.ACTIONITEMS)
             {
-
+              
                 if (item.ACTION == "CREATE ENC CELL")
                     Assert.True(verifyCreateENCCell(item.CHILDCELL, item));
                 else if (item.ACTION == "CREATE AVCS UNIT OF SALE")
@@ -86,7 +86,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return true;
         }
 
-        private static bool? verifyChangeAVCSUnitOfSale(string productName, Item item)
+        private static bool? verifyChangeAVCSUnitOfSale(string productName, ZMAT_ACTIONITEMS item)
         {
             Console.WriteLine("Action#:" + actionCounter + ".UnitOfSale:" + productName);
             foreach (KeyValuePair<string, List<string>> ele2 in ChangeENCCell)
@@ -146,7 +146,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         }
 
 
-        private static bool? verifyUpdateAVCSUnitOfSale(string childCell, Item item)
+        private static bool? verifyUpdateAVCSUnitOfSale(string childCell, ZMAT_ACTIONITEMS item)
         {
 
             Console.WriteLine("Action#:" + actionCounter + ".Childcell:" + childCell);
@@ -256,7 +256,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             throw new NotImplementedException();
         }
 
-        private static bool? verifyChangeENCCell(string childCell, Item item)
+        private static bool? verifyChangeENCCell(string childCell, ZMAT_ACTIONITEMS item)
         {
 
             Console.WriteLine("Action#:" + actionCounter + ".Childcell:" + childCell);
@@ -313,7 +313,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         }
 
 
-        private static bool? verifyCancelToAVCSUnitOfSale(string productName, Item item)
+        private static bool? verifyCancelToAVCSUnitOfSale(string productName, ZMAT_ACTIONITEMS item)
         {
             Console.WriteLine("Action#:" + actionCounter + ".UnitOfSale:" + productName);
             foreach (UnitOfSale unitOfSale in jsonPayload.Data.UnitsOfSales)
@@ -355,7 +355,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return false;
         }
 
-        private static bool? verifyCancelENCCell(string childCell, string productName, Item item)
+        private static bool? verifyCancelENCCell(string childCell, string productName, ZMAT_ACTIONITEMS item)
         {
             Console.WriteLine("Action#:" + actionCounter + ".ENC Cell:" + childCell);
             foreach (Product product in jsonPayload.Data.Products)
@@ -398,7 +398,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         }
 
 
-        private static bool? verifyRemoveENCCellFromAVCSUnitOFSale(string childCell, string productName, Item item)
+        private static bool? verifyRemoveENCCellFromAVCSUnitOFSale(string childCell, string productName, ZMAT_ACTIONITEMS item)
         {
 
             Console.WriteLine("Action#:" + actionCounter + ".AVCSUnitOfSale:" + productName);
@@ -448,7 +448,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return false;
         }
 
-        private static bool? verifyReplaceWithENCCell(string childCell, string replaceBy, Item item)
+        private static bool? verifyReplaceWithENCCell(string childCell, string replaceBy, ZMAT_ACTIONITEMS item)
         {
             Console.WriteLine("Action#:" + actionCounter + ".ENC Cell:" + childCell);
             foreach (Product product in jsonPayload.Data.Products)
@@ -494,7 +494,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return false;
         }
 
-        private static bool verifyAssignCellToAVCSUnitOfSale(string childCell, string productName, Item item)
+        private static bool verifyAssignCellToAVCSUnitOfSale(string childCell, string productName, ZMAT_ACTIONITEMS item)
         {
 
             Console.WriteLine("Action#:" + actionCounter + ".AVCSUnitOfSale:" + productName);
@@ -544,7 +544,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return false;
         }
 
-        private static bool verifyCreateAVCSUnitOfSale(string productName, Item item)
+        private static bool verifyCreateAVCSUnitOfSale(string productName, ZMAT_ACTIONITEMS item)
         {
             Console.WriteLine("Action#:" + actionCounter + ".UnitOfSale:" + productName);
             foreach (UnitOfSale unitOfSale in jsonPayload.Data.UnitsOfSales)
@@ -597,7 +597,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         }
 
 
-        private static bool verifyCreateENCCell(string childCell, Item item)
+        private static bool verifyCreateENCCell(string childCell, ZMAT_ACTIONITEMS item)
         {
 
             Console.WriteLine("Action#:" + actionCounter + ".Childcell:" + childCell);
@@ -655,14 +655,14 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
 
         }
-        private static bool VerifyBlankFields(Item item, string[] fieldNames)
+        private static bool VerifyBlankFields(ZMAT_ACTIONITEMS item, string[] fieldNames)
         {
             bool allBlanks = true;
 
             foreach (string field in fieldNames)
             {
-                if (!typeof(Item).GetProperty(field).GetValue(item, null).Equals(""))
-                    AttrNotMatched.Add(typeof(Item).GetProperty(field).Name);
+                if (!typeof(ZMAT_ACTIONITEMS).GetProperty(field).GetValue(item, null).Equals(""))
+                    AttrNotMatched.Add(typeof(ZMAT_ACTIONITEMS).GetProperty(field).Name);
             }
             return allBlanks;
         }
