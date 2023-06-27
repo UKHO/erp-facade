@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text;
+using System.Xml;
 
 namespace UKHO.ERPFacade.Common.IO
 {
@@ -43,6 +44,14 @@ namespace UKHO.ERPFacade.Common.IO
                 }
             }
             return sb.ToString();
+        }
+
+        public static string ToIndentedString(this XmlDocument doc)
+        {
+            var stringWriter = new StringWriter(new StringBuilder());
+            var xmlTextWriter = new XmlTextWriter(stringWriter) { Formatting = Formatting.Indented };
+            doc.Save(xmlTextWriter);
+            return stringWriter.ToString();
         }
     }
 }

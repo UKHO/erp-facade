@@ -1,19 +1,23 @@
-﻿namespace UKHO.ERPFacade.API.FunctionalTests.Model
+﻿using System.Diagnostics.CodeAnalysis;
+using UKHO.ERPFacade.API.FunctionalTests.Model.EntityPropertyConverter;
+
+namespace UKHO.ERPFacade.API.FunctionalTests.Model
 {
 
-    // NOTE: Generated code may require at least .NET Framework 4.5 or .NET Core/Standard 2.0.
-    /// <remarks/>
+    [ExcludeFromCodeCoverage]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.1.0")]
     [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "", IsNullable = false)]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:sap-com:document:sap:rfc:functions")]
     public partial class Z_ADDS_MAT_INFO
     {
 
-        private Z_ADDS_MAT_INFOIM_MATINFO iM_MATINFOField;
+        private IM_MATINFO iM_MATINFOField;
 
         /// <remarks/>
-        public Z_ADDS_MAT_INFOIM_MATINFO IM_MATINFO
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 0)]
+        public IM_MATINFO IM_MATINFO
         {
             get
             {
@@ -26,26 +30,28 @@
         }
     }
 
-    /// <remarks/>
+    [ExcludeFromCodeCoverage]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.1.0")]
     [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    public partial class Z_ADDS_MAT_INFOIM_MATINFO
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "")]
+    public partial class IM_MATINFO
     {
 
         private string cORRIDField;
 
-        private byte nOOFACTIONSField;
+        private string nOOFACTIONSField;
 
-        private uint rECDATEField;
+        private string rECDATEField;
 
-        private uint rECTIMEField;
+        private string rECTIMEField;
 
         private string oRGField;
 
-        private Item[] aCTIONITEMSField;
+        private ZMAT_ACTIONITEMS[] aCTIONITEMSField;
 
         /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable = false)]
         public string CORRID
         {
             get
@@ -59,7 +65,8 @@
         }
 
         /// <remarks/>
-        public byte NOOFACTIONS
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable = false)]
+        public string NOOFACTIONS
         {
             get
             {
@@ -72,7 +79,8 @@
         }
 
         /// <remarks/>
-        public uint RECDATE
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string RECDATE
         {
             get
             {
@@ -85,7 +93,8 @@
         }
 
         /// <remarks/>
-        public uint RECTIME
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string RECTIME
         {
             get
             {
@@ -98,6 +107,7 @@
         }
 
         /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string ORG
         {
             get
@@ -111,9 +121,10 @@
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Namespace = "")]
-        [System.Xml.Serialization.XmlArrayItemAttribute("item", Namespace = "", IsNullable = false)]
-        public Item[] ACTIONITEMS
+        //[System.Xml.Serialization.XmlArrayAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 5)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("item", Form = System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable = false)]
+        [EntityPropertyConverter(typeof(ZMAT_ACTIONITEMS[]))]
+        public ZMAT_ACTIONITEMS[] ACTIONITEMS
         {
             get
             {
@@ -126,12 +137,13 @@
         }
     }
 
-    /// <remarks/>
+    [ExcludeFromCodeCoverage]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.1.0")]
     [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    //[System.Xml.Serialization.XmlRootAttribute(Namespace = "", IsNullable = false)]
-    public partial class Item
+    public partial class ZMAT_ACTIONITEMS
     {
 
         private string aCTIONNUMBERField;
@@ -164,7 +176,9 @@
 
         private string uNITTYPEField;
 
+
         /// <remarks/>
+        [System.Xml.Serialization.XmlElement("ACTIONNUMBER", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string ACTIONNUMBER
         {
             get
@@ -178,6 +192,7 @@
         }
 
         /// <remarks/>
+        [System.Xml.Serialization.XmlElement("ACTION", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string ACTION
         {
             get
@@ -191,6 +206,7 @@
         }
 
         /// <remarks/>
+        [System.Xml.Serialization.XmlElement("PRODUCT", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string PRODUCT
         {
             get
@@ -204,6 +220,7 @@
         }
 
         /// <remarks/>
+        [System.Xml.Serialization.XmlElement("PRODTYPE", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string PRODTYPE
         {
             get
@@ -217,6 +234,7 @@
         }
 
         /// <remarks/>
+        [System.Xml.Serialization.XmlElement("CHILDCELL", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string CHILDCELL
         {
             get
@@ -230,6 +248,7 @@
         }
 
         /// <remarks/>
+        [System.Xml.Serialization.XmlElement("PRODUCTNAME", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string PRODUCTNAME
         {
             get
@@ -243,6 +262,7 @@
         }
 
         /// <remarks/>
+        [System.Xml.Serialization.XmlElement("CANCELLED", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string CANCELLED
         {
             get
@@ -256,6 +276,7 @@
         }
 
         /// <remarks/>
+        [System.Xml.Serialization.XmlElement("REPLACEDBY", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string REPLACEDBY
         {
             get
@@ -269,6 +290,7 @@
         }
 
         /// <remarks/>
+        [System.Xml.Serialization.XmlElement("AGENCY", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string AGENCY
         {
             get
@@ -282,6 +304,7 @@
         }
 
         /// <remarks/>
+        [System.Xml.Serialization.XmlElement("PROVIDER", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string PROVIDER
         {
             get
@@ -295,6 +318,7 @@
         }
 
         /// <remarks/>
+        [System.Xml.Serialization.XmlElement("ENCSIZE", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string ENCSIZE
         {
             get
@@ -308,6 +332,7 @@
         }
 
         /// <remarks/>
+        [System.Xml.Serialization.XmlElement("TITLE", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string TITLE
         {
             get
@@ -321,6 +346,7 @@
         }
 
         /// <remarks/>
+        [System.Xml.Serialization.XmlElement("EDITIONNO", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string EDITIONNO
         {
             get
@@ -334,6 +360,7 @@
         }
 
         /// <remarks/>
+        [System.Xml.Serialization.XmlElement("UPDATENO", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string UPDATENO
         {
             get
@@ -347,6 +374,7 @@
         }
 
         /// <remarks/>
+        [System.Xml.Serialization.XmlElement("UNITTYPE", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string UNITTYPE
         {
             get
@@ -360,30 +388,45 @@
         }
     }
 
-    /// <remarks/>
+    [ExcludeFromCodeCoverage]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.1.0")]
     [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:sap-com:document:sap:rfc:functions")]
-    //[System.Xml.Serialization.XmlRootAttribute(Namespace = "urn:sap-com:document:sap:rfc:functions", IsNullable = false)]
-    public partial class ACTIONITEMS
+    public partial class Z_ADDS_MAT_INFOResponse
     {
 
-        private Item[] itemField;
+        private string eX_MESSAGEField;
+
+        private string eX_STATUSField;
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("item", Namespace = "")]
-        public Item[] item
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 0)]
+        public string EX_MESSAGE
         {
             get
             {
-                return this.itemField;
+                return this.eX_MESSAGEField;
             }
             set
             {
-                this.itemField = value;
+                this.eX_MESSAGEField = value;
             }
         }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 1)]
+        public string EX_STATUS
+        {
+            get
+            {
+                return this.eX_STATUSField;
+            }
+            set
+            {
+                this.eX_STATUSField = value;
+            }
+        }
+
     }
-
-
 }
