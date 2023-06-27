@@ -5,12 +5,13 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UKHO.ERPFacade.API.Helpers;
-using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.HttpClients;
+using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
+using UKHO.ERPFacade.Common.Models;
 
 namespace UKHO.ERPFacade.API.Controllers
 {
@@ -27,7 +28,8 @@ namespace UKHO.ERPFacade.API.Controllers
         private readonly IOptions<SapConfiguration> _sapConfig;
 
         private const string CorrelationIdKey = "data.correlationId";
-        private const string RequestFormat = "json";
+        private const string EncEventFileName = "EncPublishingEvent.json";
+        private const string SapXmlPayloadFileName = "SapXmlPayload.xml";
 
         public WebhookController(IHttpContextAccessor contextAccessor,
                                  ILogger<WebhookController> logger,
@@ -84,11 +86,17 @@ namespace UKHO.ERPFacade.API.Controllers
 
             _logger.LogInformation(EventIds.UploadEncContentPublishedEventInAzureBlob.ToEventId(), "Uploading the received ENC content published event in blob storage.");
 
-            await _azureBlobEventWriter.UploadEvent(encEventJson.ToString(), correlationId, correlationId + '.' + RequestFormat);
+            await _azureBlobEventWriter.UploadEvent(encEventJson.ToString(), correlationId, EncEventFileName);
 
             _logger.LogInformation(EventIds.UploadedEncContentPublishedEventInAzureBlob.ToEventId(), "ENC content published event is uploaded in blob storage successfully.");
 
             XmlDocument sapPayload = _sapMessageBuilder.BuildSapMessageXml(JsonConvert.DeserializeObject<EncEventPayload>(encEventJson.ToString()), correlationId);
+
+            _logger.LogInformation(EventIds.UploadSapXmlPayloadInAzureBlobStarted.ToEventId(), "Uploading the SAP xml payload in blob storage.");
+
+            await _azureBlobEventWriter.UploadEvent(sapPayload.ToIndentedString(), correlationId, SapXmlPayloadFileName);
+
+            _logger.LogInformation(EventIds.UploadSapXmlPayloadInAzureBlobCompleted.ToEventId(), "SAP xml payload is uploaded in blob storage successfully.");
 
             HttpResponseMessage response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapServiceOperation);
 
