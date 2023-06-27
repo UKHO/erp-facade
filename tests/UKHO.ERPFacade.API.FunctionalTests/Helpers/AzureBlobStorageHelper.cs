@@ -8,12 +8,11 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
     {
         public string DownloadJSONFromAzureBlob(string expectedfilePath, string containerAndBlobName, string fileType)
         {
-
             try
             {
                 BlobServiceClient blobServiceClient = new BlobServiceClient(Config.TestConfig.AzureStorageConfiguration.ConnectionString);
                 BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerAndBlobName);
-                BlobClient blobClient = containerClient.GetBlobClient(containerAndBlobName+"_unitofsalesupdatedevent" + "." + fileType);
+                BlobClient blobClient = containerClient.GetBlobClient(containerAndBlobName + "_unitofsalesupdatedevent" + "." + fileType);
 
                 BlobDownloadInfo blobDownload = blobClient.Download();
                 using (FileStream downloadFileStream = new FileStream((expectedfilePath + "\\" + containerAndBlobName + "_unitofsalesupdatedevent" + "." + fileType), FileMode.Create))
@@ -70,12 +69,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 await foreach (BlobHierarchyItem blobHierarchyItem in containerClient.GetBlobsByHierarchyAsync(prefix: containerAndBlobName + "/", delimiter: "/"))
                 {
                     if (blobHierarchyItem.IsPrefix)
-                    {                        
+                    {
                         string str = blobHierarchyItem.Prefix;
                         var start = str.IndexOf("/");
                         var end = str.LastIndexOf("/");
                         var length = end - start;
-                        var productName=str.Substring(start+1, length-1);
+                        var productName = str.Substring(start + 1, length - 1);
                         directoryNames.Add(productName);
                     }
                 }
