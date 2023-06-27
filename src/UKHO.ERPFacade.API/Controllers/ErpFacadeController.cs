@@ -2,13 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using UKHO.ERPFacade.API.Models;
-using UKHO.ERPFacade.API.Services;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Infrastructure.EventService;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
+using UKHO.ERPFacade.Common.Models;
+using UKHO.ERPFacade.Common.Services;
 
 namespace UKHO.ERPFacade.API.Controllers
 {
@@ -25,7 +25,8 @@ namespace UKHO.ERPFacade.API.Controllers
         private readonly IEventPublisher _eventPublisher;
 
         private const string CorrelationIdKey = "corrid";
-        private const string RequestFormat = "json";
+        private const string PriceInformationFileName = "PriceInformation.json";
+        private const string EncEventFileName = "EncPublishingEvent.json";
         private const int EventSizeLimit = 1000000;
         private const string ContainerName = "pricechangeblobs";
 
@@ -55,7 +56,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
             _logger.LogInformation(EventIds.SapUnitsOfSalePriceInformationPayloadReceived.ToEventId(), "UnitsOfSale price information payload received from SAP.");
 
-            string? correlationId = priceInformationJson.First.SelectToken(CorrelationIdKey)?.Value<string>();
+            string correlationId = priceInformationJson.First.SelectToken(CorrelationIdKey)?.Value<string>();
 
             if (string.IsNullOrEmpty(correlationId))
             {
@@ -75,35 +76,41 @@ namespace UKHO.ERPFacade.API.Controllers
 
             _logger.LogInformation(EventIds.ERPFacadeToSAPRequestFound.ToEventId(), "Valid SAP callback.");
 
+            _logger.LogInformation(EventIds.UploadPriceInformationEventInAzureBlob.ToEventId(), "Uploading the price information received from SAP in blob storage.");
+
+            await _azureBlobEventWriter.UploadEvent(priceInformationJson.ToString(), correlationId, PriceInformationFileName);
+
+            _logger.LogInformation(EventIds.UploadedPriceInformationEventInAzureBlob.ToEventId(), "Price information is uploaded in blob storage successfully.");
+
             List<PriceInformation> priceInformationList = JsonConvert.DeserializeObject<List<PriceInformation>>(priceInformationJson.ToString());
 
             if (priceInformationList.Count > 0 && priceInformationList.Any(x => x.ProductName != string.Empty))
             {
-                List<UnitsOfSalePrices> unitsOfSalePriceList = _erpFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList);
-
                 _logger.LogInformation(EventIds.DownloadEncEventPayloadStarted.ToEventId(), "Downloading the ENC event payload from azure blob storage.");
-                string encEventPayloadJson = _azureBlobEventWriter.DownloadEvent(correlationId + '.' + RequestFormat, correlationId);
+
+                string encEventPayloadJson = _azureBlobEventWriter.DownloadEvent(EncEventFileName, correlationId);
+
+                EncEventPayload encEventPayloadData = JsonConvert.DeserializeObject<EncEventPayload>(encEventPayloadJson.ToString());
+
                 _logger.LogInformation(EventIds.DownloadEncEventPayloadCompleted.ToEventId(), "ENC event payload is downloaded from azure blob storage successfully.");
+
+                List<string> encEventUnitOfSalesList = encEventPayloadData.Data.UnitsOfSales.Select(x => x.UnitName).ToList();
+
+                List<UnitsOfSalePrices> unitsOfSalePriceList = _erpFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList, encEventUnitOfSalesList);
 
                 UnitOfSaleUpdatedEventPayload unitsOfSaleUpdatedEventPayload = _erpFacadeService.BuildUnitsOfSaleUpdatedEventPayload(unitsOfSalePriceList, encEventPayloadJson);
 
                 unitsOfSaleUpdatedEventPayloadJson = JObject.Parse(JsonConvert.SerializeObject(unitsOfSaleUpdatedEventPayload));
 
+                await _azureBlobEventWriter.UploadEvent(unitsOfSaleUpdatedEventPayloadJson.ToString(), correlationId!, correlationId + "_unitofsalesupdatedevent.json");
+
                 int eventSize = _jsonHelper.GetPayloadJsonSize(unitsOfSaleUpdatedEventPayloadJson.ToString());
+
                 if (eventSize > EventSizeLimit)
                 {
                     _logger.LogError(EventIds.PriceEventExceedSizeLimit.ToEventId(), "UnitsOfSale price event exceeds the size limit of 1 MB.");
                     throw new ERPFacadeException(EventIds.PriceEventExceedSizeLimit.ToEventId());
                 }
-
-                _logger.LogInformation(EventIds.UploadUnitsOfSaleUpdatedEventPayloadInAzureBlob.ToEventId(), "Uploading the UnitsOfSale updated event payload json in blob storage.");
-
-                await _azureBlobEventWriter.UploadEvent(unitsOfSaleUpdatedEventPayloadJson.ToString(), correlationId!, correlationId + "_ees." + RequestFormat);
-
-                _logger.LogInformation(EventIds.UploadedUnitsOfSaleUpdatedEventPayloadInAzureBlob.ToEventId(), "UnitsOfSale updated event payload json is uploaded in blob storage successfully.");
-
-                await _eventPublisher.Publish(unitsOfSaleUpdatedEventPayload);
-
                 _logger.LogInformation(EventIds.UnitsOfSaleUpdatedEventPushedToEES.ToEventId(), "UnitsOfSale updated event has been sent to EES successfully.");
             }
             else
@@ -130,12 +137,11 @@ namespace UKHO.ERPFacade.API.Controllers
 
             _logger.LogInformation(EventIds.UploadBulkPriceInformationEventInAzureBlob.ToEventId(), "Uploading the received Bulk price information event in blob storage.");
 
-            await _azureBlobEventWriter.UploadEvent(bulkPriceInformationJson.ToString(), ContainerName, correlationId + '/' + correlationId + '.' + RequestFormat);
+            await _azureBlobEventWriter.UploadEvent(bulkPriceInformationJson.ToString(), ContainerName, correlationId + '/' + PriceInformationFileName);
 
             _logger.LogInformation(EventIds.UploadedBulkPriceInformationEventInAzureBlob.ToEventId(), "Bulk price information event is uploaded in blob storage successfully.");
 
             return new OkObjectResult(StatusCodes.Status200OK);
         }
-
     }
 }

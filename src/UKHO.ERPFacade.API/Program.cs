@@ -12,8 +12,8 @@ using System.IO.Abstractions;
 using System.Reflection;
 using UKHO.ERPFacade.API.Filters;
 using UKHO.ERPFacade.API.Helpers;
-using UKHO.ERPFacade.API.Models;
-using UKHO.ERPFacade.API.Services;
+using UKHO.ERPFacade.Common.Models;
+using UKHO.ERPFacade.Common.Services;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.HealthCheck;
 using UKHO.ERPFacade.Common.HttpClients;
@@ -30,7 +30,7 @@ namespace UKHO.ERPFacade
         [ExcludeFromCodeCoverage]
         internal static void Main(string[] args)
         {
-            EventHubLoggingConfiguration eventHubLoggingConfiguration;            
+            EventHubLoggingConfiguration eventHubLoggingConfiguration;
             SapActionConfiguration sapActionConfiguration;
 
             IHttpContextAccessor httpContextAccessor = new HttpContextAccessor();
@@ -163,7 +163,7 @@ namespace UKHO.ERPFacade
             });
 
             builder.Services.Configure<AzureStorageConfiguration>(configuration.GetSection("AzureStorageConfiguration"));
-            builder.Services.Configure<SapConfiguration>(configuration.GetSection("SapConfiguration"));            
+            builder.Services.Configure<SapConfiguration>(configuration.GetSection("SapConfiguration"));
             builder.Services.Configure<SapActionConfiguration>(configuration.GetSection("SapActionConfiguration"));
 
             sapActionConfiguration = configuration.GetSection("SapActionConfiguration").Get<SapActionConfiguration>()!;
@@ -175,7 +175,7 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<IAzureTableReaderWriter, AzureTableReaderWriter>();
             builder.Services.AddScoped<IAzureBlobEventWriter, AzureBlobEventWriter>();
             builder.Services.AddScoped<ISapConfiguration, SapConfiguration>();
-            builder.Services.AddScoped<ISapMessageBuilder, SapMessageBuilder>();            
+            builder.Services.AddScoped<ISapMessageBuilder, SapMessageBuilder>();
             builder.Services.AddScoped<IXmlHelper, XmlHelper>();
             builder.Services.AddScoped<IFileSystemHelper, FileSystemHelper>();
             builder.Services.AddScoped<IFileSystem, FileSystem>();

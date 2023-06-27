@@ -6,28 +6,27 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
     public class AzureBlobStorageHelper
     {
-
-        public string DownloadJSONFromAzureBlob(string expectedJSONfilePath, string containerAndBlobName)
+        public string DownloadJSONFromAzureBlob(string expectedfilePath, string containerAndBlobName, string fileType)
         {
-
             try
             {
                 BlobServiceClient blobServiceClient = new BlobServiceClient(Config.TestConfig.AzureStorageConfiguration.ConnectionString);
                 BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerAndBlobName);
-                BlobClient blobClient = containerClient.GetBlobClient(containerAndBlobName + ".JSON");
+                BlobClient blobClient = containerClient.GetBlobClient(containerAndBlobName + "_unitofsalesupdatedevent" + "." + fileType);
 
                 BlobDownloadInfo blobDownload = blobClient.Download();
-                using (FileStream downloadFileStream = new FileStream((expectedJSONfilePath + "\\" + containerAndBlobName + ".JSON"), FileMode.Create))
+                using (FileStream downloadFileStream = new FileStream((expectedfilePath + "\\" + containerAndBlobName + "_unitofsalesupdatedevent" + "." + fileType), FileMode.Create))
                 {
                     blobDownload.Content.CopyTo(downloadFileStream);
                 }
 
+                return (expectedfilePath + "\\" + containerAndBlobName + "_unitofsalesupdatedevent" + "." + fileType);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(containerAndBlobName + " " + ex.Message);
             }
-            return (expectedJSONfilePath + "\\" + containerAndBlobName + ".JSON");
+            return (expectedfilePath + "\\" + containerAndBlobName + ".JSON");
         }
         public string DownloadJSONFromAzureBlob(string expectedJSONfilePath, string containerAndBlobName, string productName, string endPoint)
         {
@@ -70,12 +69,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 await foreach (BlobHierarchyItem blobHierarchyItem in containerClient.GetBlobsByHierarchyAsync(prefix: containerAndBlobName + "/", delimiter: "/"))
                 {
                     if (blobHierarchyItem.IsPrefix)
-                    {                        
+                    {
                         string str = blobHierarchyItem.Prefix;
                         var start = str.IndexOf("/");
                         var end = str.LastIndexOf("/");
                         var length = end - start;
-                        var productName=str.Substring(start+1, length-1);
+                        var productName = str.Substring(start + 1, length - 1);
                         directoryNames.Add(productName);
                     }
                 }

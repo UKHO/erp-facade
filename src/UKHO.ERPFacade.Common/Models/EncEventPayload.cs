@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Newtonsoft.Json;
 
-namespace UKHO.ERPFacade.API.Models
+namespace UKHO.ERPFacade.Common.Models
 {
     [ExcludeFromCodeCoverage]
     public class EncEventPayload

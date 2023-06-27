@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using UKHO.ERPFacade.Common.Infrastructure;
 
-namespace UKHO.ERPFacade.API.Models
+namespace UKHO.ERPFacade.Common.Models
 {
     [ExcludeFromCodeCoverage]
     public class BulkPriceEventPayload : EventBase<BulkPriceEvent>
@@ -44,8 +44,8 @@ namespace UKHO.ERPFacade.API.Models
     [ExcludeFromCodeCoverage]
     public class BulkPriceEventData
     {
-        [JsonProperty("traceId")]
-        public string TraceId { get; set; }
+        [JsonProperty("correlationId")]
+        public string CorrelationId { get; set; }
 
         [JsonProperty("unitsOfSalePrices")]
         public UnitsOfSalePrices UnitsOfSalePrices { get; set; }
