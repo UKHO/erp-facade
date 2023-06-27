@@ -370,7 +370,7 @@
         "title": "AVCS Online Folio Some Title",
         "unitSize": "large",
         "unitType": "AVCS Online Folio",
-        "unitOfSaleType": "unit",
+        "unitOfSaleType": "folio",
         "_ENUM": [
           "unit",
           "folio"
@@ -413,7 +413,7 @@
         "unitName": "PAYSF",
         "title": "World Folio",
         "unitType": "AVCS Folio Transit",
-        "unitOfSaleType": "unit",
+        "unitOfSaleType": "folio",
         "_ENUM": [
           "unit",
           "folio"

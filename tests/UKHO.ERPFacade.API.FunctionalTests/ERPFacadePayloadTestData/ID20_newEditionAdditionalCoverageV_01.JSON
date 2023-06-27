@@ -187,7 +187,7 @@
                 "unitType": "AVCS Online Folio",
                 "status": "ForSale",
                 "isNewUnitOfSale": false,
-                "unitOfSaleType": "unit",
+                "unitOfSaleType": "folio",
                 "geographicLimit": {
                     "boundingBox": {},
                     "polygons": [
@@ -227,7 +227,7 @@
                 "unitSize": "large",
                 "status": "ForSale",
                 "isNewUnitOfSale": false,
-                "unitOfSaleType": "unit",
+                "unitOfSaleType": "folio",
                 "geographicLimit": {
                     "boundingBox": {},
                     "polygons": [

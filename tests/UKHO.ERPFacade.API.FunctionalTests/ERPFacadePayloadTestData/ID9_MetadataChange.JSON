@@ -166,7 +166,7 @@
           "unit",
           "folio"
         ],
-        "unitType": "",
+        "unitType": "AVCS Units Coastal",
         "unitSize": "medium",
         "status": "ForSale",
         "_ENUM": [
@@ -192,13 +192,13 @@
       {
         "unitName": "AVCSO",
         "title": "Isla Clarion",
-        "unitOfSaleType": "unit",
+        "unitOfSaleType": "folio",
         "_ENUM": [
           "unit",
           "folio"
         ],
         "unitSize": "medium",
-        "unitType": "",
+        "unitType": "AVCS Folio Transit",
         "status": "ForSale",
         "isNewUnitOfSale": false,
         "geographicLimit": {
@@ -235,12 +235,12 @@
       {
         "unitName": "PAYSF",
         "title": "Isla Clarion",
-        "unitOfSaleType": "unit",
+        "unitOfSaleType": "folio",
         "_ENUM": [
           "unit",
           "folio"
         ],
-        "unitType": "",
+        "unitType": "AVCS Folio Transit",
         "unitSize": "medium",
         "status": "ForSale",
         "isNewUnitOfSale": false,

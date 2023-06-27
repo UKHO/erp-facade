@@ -567,6 +567,7 @@
         "unitSize": "large",
         "unitType": "AVCS Online Folio",
         "status": "ForSale",
+        "unitOfSaleType": "folio",
         "isNewUnitOfSale": false,
         "geographicLimit": {
           "boundingBox": {},
@@ -608,6 +609,7 @@
         "unitType": "AVCS Folio Transit",
         "unitSize": "large",
         "status": "ForSale",
+        "unitOfSaleType": "folio",
         "isNewUnitOfSale": false,
         "geographicLimit": {
           "boundingBox": {},

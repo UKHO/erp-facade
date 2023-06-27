@@ -111,7 +111,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [TestCase("ID21_cancelAndReplaceV_03.JSON", TestName = "WhenICallTheWebhookWithCancelAndReplaceV03PayloadFile_ThenWebhookReturns200Response")]
         [TestCase("ID22_Cell_Moves_Unit_and_New_CellV_03.JSON", TestName = "WhenICallTheWebhookWithCellMoveAndNewCellV03PayloadFile_ThenWebhookReturns200Response")]
         [TestCase("ID23_Cell_MoveV_03.JSON", TestName = "WhenICallTheWebhookWithCellMoveV03PayloadFile_ThenWebhookReturns200Response")]
-        [TestCase("ID24_Metadata_ChangeV_03.JSON", TestName = "WhenICallTheWebhookWithCellMoveV03PayloadFile_ThenWebhookReturns200Response")]
+        [TestCase("ID24_Metadata_ChangeV_03.JSON", TestName = "WhenICallTheWebhookWithMetadataChangeV03PayloadFile_ThenWebhookReturns200Response")]
         [TestCase("ID25_Mixed_scenario1V_03.JSON", TestName = "WhenICallTheWebhookWithMixedScenario1V03PayloadFile_ThenWebhookReturns200Response")]
         [TestCase("ID26_New_CellV_03.JSON", TestName = "WhenICallTheWebhookWithNewCellV03PayloadFile_ThenWebhookReturns200Response")]
 
@@ -125,6 +125,11 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [TestCase("ID31_metadataAndSuspended.JSON", TestName = "WhenICallTheWebhookWithMetadataAndSuspendedMixScenario_ThenWebhookReturns200Response")]
         [TestCase("ID32_moveAndSuspended.JSON", TestName = "WhenICallTheWebhookWithMovedataAndSuspendedMixScenario_ThenWebhookReturns200Response")]
 
+        //Rule change unitType & addProducts
+        [TestCase("ID33_NewCell_With2UoS_But_only1_having_addProduct.JSON", TestName = "WhenICallTheWebhookWithNewCellScenarioWithMultipleUoSHavingUnitOfSalesTypeUnitButOnly1HavingValueInAddProducts_ThenWebhookReturns200Response")]
+        [TestCase("ID34_Cancel&Replace_With_NewCells_Having_2UoS_With_addProductsValue.JSON", TestName = "WhenICallTheWebhookWithCancel&ReplaceScenarioHavingMultipleUnitOfSalesTypeUnitAndValueInAddProducts_ThenWebhookReturns200Response")]
+        [TestCase("ID35_Cancel&Replace_With_CancelCell_having_2UoS_but_onlyOneAsTypeUnit.JSON", TestName = "WhenICallTheWebhookWithCancel&ReplaceWithCancelledCellHaving2UoSButOnly1IsOfTypeUnit_ThenWebhookReturns200Response")]
+        [TestCase("ID36_MoveAndSuspended_With_2UoS_But1_having_addProductValue.JSON", TestName = "WhenICallTheWebhookWithMoveAndSuspendedWith2UoSButOnly1HavingValueInAddProduct_ThenWebhookReturns200Response")]
 
         public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponse1(string payloadJsonFileName)
         {
@@ -132,7 +137,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, payloadJsonFileName);
             string generatedXMLFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXMLFolder);
             string envName = Config.TestConfig.ErpFacadeConfiguration.CurrentEnvironment;
-            Console.WriteLine("Environment => " +envName);
             RestResponse response;
 
             if (envName == "Dev" || envName == "local")

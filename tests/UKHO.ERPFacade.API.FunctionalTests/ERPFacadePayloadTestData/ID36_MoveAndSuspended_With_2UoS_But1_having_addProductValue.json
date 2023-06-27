@@ -181,8 +181,8 @@
                     "polygons": []
                 },
                 "compositionChanges": {
-                    "addProducts": [],
-                    "removeProducts": [ "MX545010" ]
+                    "addProducts": ["MX545010"],
+                    "removeProducts": [ ]
                 }
             },
             {
@@ -208,7 +208,7 @@
                     "polygons": []
                 },
                 "compositionChanges": {
-                    "addProducts": [ "MX545010" ],
+                    "addProducts": [],
                     "removeProducts": []
                 }
             },

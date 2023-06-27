@@ -1,5 +1,4 @@
-﻿
-using Azure.Storage.Blobs;
+﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -9,31 +8,35 @@ using System.Xml;
 using System.Xml.Serialization;
 using UKHO.ERPFacade.API.FunctionalTests.Model;
 
+
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
     public class SAPXmlHelper
     {
-        private static JsonPayloadHelper jsonPayloadHelper { get; set; }
-
         static int actionCounter;
-
         static readonly List<string> AttrNotMatched = new();
         static List<string> ChangeAVCSUoS = new();
         static readonly Dictionary<string, List<string>> ChangeENCCell = new();
         public static List<string> listFromJson = new();
         public static List<string> actionsListFromXml = new();
-
         private static JsonPayloadHelper jsonPayload { get; set; }
+        private static JsonPayloadHelper jsonPayload2 { get; set; }
         private static Z_ADDS_MAT_INFO xmlPayload { get; set; }
 
-        public static async Task<bool> CheckXMLAttributes(JsonPayloadHelper jsonPayload, string XMLFilePath)
+        public static async Task<bool> CheckXMLAttributes(JsonPayloadHelper jsonPayload, string XMLFilePath, string updatedRequestBody)
         {
 
             SAPXmlHelper.jsonPayload = jsonPayload;
+            SAPXmlHelper.jsonPayload2 = JsonConvert.DeserializeObject<JsonPayloadHelper>(updatedRequestBody);
             XmlDocument xDoc = new XmlDocument();
-            //load up the xml from the location 
-            xDoc.LoadXml(File.ReadAllText(XMLFilePath));
-
+            try
+            {
+                xDoc.LoadXml(File.ReadAllText(XMLFilePath));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+            }
             var ns = new XmlNamespaceManager(xDoc.NameTable);
             ns.AddNamespace("xsisp", "http://www.w3.org/2001/XMLSchema-instance");
             ns.AddNamespace("xsdsp", "http://www.w3.org/2001/XMLSchema");
@@ -69,8 +72,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     Assert.True(verifyCancelENCCell(item.CHILDCELL, item.PRODUCTNAME, item));
                 else if (item.ACTION == "CANCEL AVCS UNIT OF SALE")
                     Assert.True(verifyCancelToAVCSUnitOfSale(item.PRODUCTNAME, item));
-                else if (item.ACTION == "CANCEL AVCS UNIT OF SALE")
-                    Assert.True(verifyCancelToAVCSUnitOfSale(item.PRODUCTNAME, item));
+               // else if (item.ACTION == "CANCEL AVCS UNIT OF SALE")
+               //     Assert.True(verifyCancelToAVCSUnitOfSale(item.PRODUCTNAME, item));
                 else if (item.ACTION == "CHANGE ENC CELL")
                     Assert.True(verifyChangeENCCell(item.CHILDCELL, item));
                 else if (item.ACTION == "CHANGE AVCS UNIT OF SALE")
@@ -164,7 +167,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         AttrNotMatched.Add(nameof(item.PRODUCT));
                     if (!item.PRODTYPE.Equals(product.ProductType[4..]))
                         AttrNotMatched.Add(nameof(item.PRODTYPE));
-                    if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!getUoSInfo(item.PRODUCTNAME).UnitOfSaleType.Contains("unit")))
+                    if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!item.PRODUCTNAME.Equals(getUoSName(childCell))))
                         AttrNotMatched.Add(nameof(item.PRODUCTNAME));
                     if (!item.AGENCY.Equals(product.Agency))
                         AttrNotMatched.Add(nameof(item.AGENCY));
@@ -200,15 +203,15 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 }
                 else if ((childCell == product.ProductName) && (product.Status.StatusName.Contains("Suspended")))
                 {
-
                     AttrNotMatched.Clear();
+                    Console.WriteLine("The UoS name for "+childCell+" calculated is: " +getUoSName(childCell));
                     if (!item.ACTIONNUMBER.Equals(actionCounter.ToString()))
                         AttrNotMatched.Add(nameof(item.ACTIONNUMBER));
                     if (!item.PRODUCT.Equals("ENC CELL"))
                         AttrNotMatched.Add(nameof(item.PRODUCT));
                     if (!item.PRODTYPE.Equals(product.ProductType[4..]))
                         AttrNotMatched.Add(nameof(item.PRODTYPE));
-                    if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!getUoSInfo(item.PRODUCTNAME).UnitOfSaleType.Contains("unit")))
+                    if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!item.PRODUCTNAME.Equals(getUoSName(childCell))))
                         AttrNotMatched.Add(nameof(item.PRODUCTNAME));
                     if (!item.AGENCY.Equals(product.Agency))
                         AttrNotMatched.Add(nameof(item.AGENCY));
@@ -271,8 +274,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         AttrNotMatched.Add(nameof(item.PRODUCT));
                     if (!item.PRODTYPE.Equals(product.ProductType[4..]))
                         AttrNotMatched.Add(nameof(item.PRODTYPE));
-                    if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!getUoSInfo(item.PRODUCTNAME).UnitOfSaleType.Contains("unit")))
-                       AttrNotMatched.Add(nameof(item.PRODUCTNAME));
+                    if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!item.PRODUCTNAME.Equals(getUoSName(childCell))))
+                        AttrNotMatched.Add(nameof(item.PRODUCTNAME));
                     if (!item.AGENCY.Equals(product.Agency))
                         AttrNotMatched.Add(nameof(item.AGENCY));
                     if (!item.PROVIDER.Equals(product.ProviderCode))
@@ -368,8 +371,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     //xmlAttributes[1] is skipped as already checked
                     if (!item.PRODUCT.Equals("ENC CELL"))
                         AttrNotMatched.Add(nameof(item.PRODUCT));
-                    if (!item.PRODTYPE.Equals(product.ProductType[4..]))
+                   if (!item.PRODTYPE.Equals(product.ProductType[4..]))
                         AttrNotMatched.Add(nameof(item.PRODTYPE));
+                    if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!item.PRODUCTNAME.Equals(getUoSName(childCell))))
+                        AttrNotMatched.Add(nameof(item.PRODUCTNAME));
 
                     //Checking blanks
                     string[] fieldNames = { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE" };
@@ -464,7 +469,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         AttrNotMatched.Add(nameof(item.PRODUCT));
                     if (!item.PRODTYPE.Equals(product.ProductType[4..]))
                         AttrNotMatched.Add(nameof(item.PRODTYPE));
-                    if (!product.InUnitsOfSale.Contains(item.PRODUCTNAME))
+                    //if (!product.InUnitsOfSale.Contains(item.PRODUCTNAME))
+                    if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!item.PRODUCTNAME.Equals(getUoSName(childCell))))
                         AttrNotMatched.Add(nameof(item.PRODUCTNAME));
                     //Checking blanks
                     string[] fieldNames = { "CANCELLED", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE" };
@@ -613,7 +619,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         AttrNotMatched.Add(nameof(item.PRODUCT));
                     if (!item.PRODTYPE.Equals(product.ProductType[4..]))
                         AttrNotMatched.Add(nameof(item.PRODTYPE));
-                    if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!getUoSInfo(item.PRODUCTNAME).UnitOfSaleType.Contains("Unit")))
+                    // if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!getUoSInfo(item.PRODUCTNAME).UnitOfSaleType.Contains("Unit")))
+                    if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!item.PRODUCTNAME.Equals(getUoSName(childCell))))
                         AttrNotMatched.Add(nameof(item.PRODUCTNAME));
                     if (!item.AGENCY.Equals(product.Agency))
                         AttrNotMatched.Add(nameof(item.AGENCY));
@@ -765,7 +772,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             XmlDocument xDoc = new XmlDocument();
             xDoc.LoadXml(File.ReadAllText(generatedXMLFilePath));
             XmlNode node = xDoc.SelectSingleNode("//" + tagName);
-
             return node.InnerText;
         }
 
@@ -845,10 +851,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         public static bool verifyCORRIDHeader(JsonPayloadHelper jsonPayload, string generatedXMLFilePath)
         {
 
-            string traceID = jsonPayload.Data.correlationId;
+            string correlationID = jsonPayload.Data.correlationId;
             string corrID = getRequiredXMLText(generatedXMLFilePath, "CORRID");
 
-            if (traceID == corrID)
+            if (correlationID == corrID)
             {
                 return true;
             }
@@ -886,17 +892,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             }
 
             return actionsListFromXml;
-        }
-
-        public static JsonPayloadHelper getPayloadDeserealized(string jsonPayloadFilePath)
-        {
-            using (StreamReader r = new StreamReader(jsonPayloadFilePath))
-            {
-                string jsonOutput = r.ReadToEnd();
-                JsonPayloadHelper jsonPayloadHelper = JsonConvert.DeserializeObject<JsonPayloadHelper>(jsonOutput);
-
-                return jsonPayloadHelper;
-            }
         }
 
         public static void updateActionList(int n, string actionMessage)
@@ -1142,11 +1137,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
             foreach (Product product in obj.Data.Products)
             {
-                /*if (product.Status.IsNewCell == false && ((product.ReplacedBy.Count)>0))
-                {
-                    cancelledCellCount++;
-                }*/
-
                 if (product.Status.StatusName == "Cancellation Update")
                 {
                     cancelledCellCount++;
@@ -1187,15 +1177,11 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         public static string generateRandomCorrelationId()
         {
             Guid guid = Guid.NewGuid();
-
-            string randomCorrID = guid.ToString("N");
-
-            randomCorrID = randomCorrID.Insert(8, "-");
-            randomCorrID = randomCorrID.Insert(13, "-");
-            randomCorrID = randomCorrID.Insert(18, "-");
-            randomCorrID = randomCorrID.Insert(23, "-");
-
-            Console.WriteLine("Generated TraceId = " + randomCorrID);
+            string randomCorrID = guid.ToString("N").Substring(0,10);
+            randomCorrID = randomCorrID.Insert(4, "-");
+            string currentTimeStamp = DateTime.Now.ToString("yyyyMMdd");
+            randomCorrID = "ft-" + currentTimeStamp + "-" + randomCorrID;
+            Console.WriteLine("Generated CorrelationId = " + randomCorrID);
             return randomCorrID;
         }
 
@@ -1209,5 +1195,43 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return updatedRequestBody;
         }
 
-    }
+        private static string getUoSName(string productName)
+        {
+            Product prod = jsonPayload2.Data.Products.FirstOrDefault(p => p.ProductName == productName);
+            if (prod != null)
+            {
+                List<string> inUoS = prod.InUnitsOfSale;
+                //this will return object of 
+                var matchingUosItems = jsonPayload2.Data.UnitsOfSales
+                                        .Where(uos => uos.UnitOfSaleType == "unit" && inUoS.Contains(uos.UnitName))
+                                        .ToList();
+
+                if (matchingUosItems.Count > 1)
+                {
+                    UnitOfSale uosObj = matchingUosItems
+                                        .FirstOrDefault(x => x.CompositionChanges.AddProducts.Contains(productName));
+
+                    if (uosObj != null)
+                    {
+                        string name = uosObj.UnitName;
+                        return name;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Item not found");
+                        return "";
+                    }
+                }
+                else
+                {
+                    return matchingUosItems.FirstOrDefault().UnitName;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Product object is null");
+                return null;
+            }
+        }
+        }
 }
