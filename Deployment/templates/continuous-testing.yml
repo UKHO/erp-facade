@@ -3,7 +3,6 @@ parameters:
     type: string
 
 steps:
-
   - task: DownloadBuildArtifacts@0
     displayName: "Download Terraform Artifact"
     inputs:
