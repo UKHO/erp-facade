@@ -7,8 +7,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
     public class WebhookEndpoint
     {
-        private readonly RestClient client;
-        private readonly RestClient client2;
+        private readonly RestClient _client;
         private readonly ADAuthTokenProvider _authToken;
         private SAPXmlHelper SapXmlHelper { get; set; }
         public static string generatedCorrelationId = "";
@@ -18,17 +17,15 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             _authToken = new();
             SapXmlHelper = new SAPXmlHelper();
             var options = new RestClientOptions(Config.TestConfig.ErpFacadeConfiguration.BaseUrl);
-            client = new RestClient(options);
-            var options2 = new RestClientOptions(Config.TestConfig.SapMockConfiguration.BaseUrl);
-            client2 = new RestClient(options2);
-
+            _client = new RestClient(options);
+            
         }
 
         public async Task<RestResponse> OptionWebhookResponseAsync(string token)
         {
             var request = new RestRequest("/webhook/newenccontentpublishedeventreceived");
             request.AddHeader("Authorization", "Bearer " + token);
-            var response = await client.OptionsAsync(request);
+            var response = await _client.OptionsAsync(request);
             return response;
         }
 
@@ -50,7 +47,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             request.AddHeader("Authorization", "Bearer " + token);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
 
-            RestResponse response = await client.ExecuteAsync(request);
+            RestResponse response = await _client.ExecuteAsync(request);
             return response;
         }
 
@@ -70,7 +67,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             request.AddHeader("Content-Type", "application/json");
             request.AddHeader("Authorization", "Bearer " + token);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
-            RestResponse response = await client.ExecuteAsync(request);
+            RestResponse response = await _client.ExecuteAsync(request);
 
             JsonPayloadHelper jsonPayload = JsonConvert.DeserializeObject<JsonPayloadHelper>(requestBody);
             string correlationId = jsonPayload.Data.correlationId;
@@ -101,7 +98,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             request.AddHeader("Content-Type", "application/json");
             request.AddHeader("Authorization", "Bearer " + token);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
-            RestResponse response = await client.ExecuteAsync(request);
+            RestResponse response = await _client.ExecuteAsync(request);
 
             return response;
         }
