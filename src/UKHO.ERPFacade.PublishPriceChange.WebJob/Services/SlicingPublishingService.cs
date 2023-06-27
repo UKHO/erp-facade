@@ -16,6 +16,7 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
         private const string IncompleteStatus = "Incomplete";
         private const string RequestFormat = "json";
         private const string ContainerName = "pricechangeblobs";
+        private const string PriceInformationFileName = "PriceInformation.json";
 
         public SlicingPublishingService(ILogger<SlicingPublishingService> logger, IAzureTableReaderWriter azureTableReaderWriter, IAzureBlobEventWriter azureBlobEventWriter)
         {
@@ -33,7 +34,7 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
             foreach (var entity in entities)
             {
                 _logger.LogInformation(EventIds.DownloadBulkPriceInformationEventFromAzureBlob.ToEventId(), "Downloading Price Change information from blob");
-                priceChangeJson = _azureBlobEventWriter.DownloadEvent(entity.CorrId + '/' + entity.CorrId + '.' + RequestFormat, ContainerName);
+                priceChangeJson = _azureBlobEventWriter.DownloadEvent(entity.CorrId + '/' + PriceInformationFileName, ContainerName);
                 if (!string.IsNullOrEmpty(priceChangeJson))
                 {
                     List<PriceChange> priceInformationList = JsonConvert.DeserializeObject<List<PriceChange>>(priceChangeJson);

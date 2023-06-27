@@ -16,5 +16,9 @@ namespace UKHO.ERPFacade.Common.IO.Azure
         void AddUnitPriceChangeEntity(string correlationId, string eventId, string unitName);
         void UpdateUnitPriceChangeStatusEntity(string correlationId, string unitName, string eventId);
         void UpdatePriceMasterStatusEntity(string correlationId);
+        void DeletePriceMasterEntity(string correlationId);
+        void DeleteUnitPriceChangeEntityForMasterCorrId(string correlationId);
+        IList<EESEventEntity> GetAllEntityForEESTable();
+        Task DeleteEESEntity(string correlationId);
     }
 }

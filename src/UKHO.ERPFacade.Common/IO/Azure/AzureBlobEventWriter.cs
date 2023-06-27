@@ -37,6 +37,36 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             return existingEesEvent;
         }
 
+        public DateTime GetBlobCreateDate(string blobName, string blobContainerName)
+        {
+            BlobContainerClient blobContainerClient = new(_azureStorageConfig.Value.ConnectionString, blobContainerName);
+            BlobClient blobClient = blobContainerClient.GetBlobClient(blobName);
+            return blobClient.GetProperties().Value.CreatedOn.DateTime;
+        }
+
+        public IEnumerable<string> GetBlobsInContainer(string blobContainerName,string corrId)
+        {
+            BlobContainerClient blobContainerClient = new(_azureStorageConfig.Value.ConnectionString, blobContainerName);
+            var blobs=blobContainerClient.GetBlobs(BlobTraits.None,BlobStates.None, corrId);
+            foreach (BlobItem blob in blobs)
+            {
+                yield return blob.Name;
+            }
+        }
+
+        public bool DeleteBlob(string blobName, string blobContainerName)
+        {
+            BlobContainerClient blobContainerClient = new(_azureStorageConfig.Value.ConnectionString, blobContainerName);
+            BlobClient blobClient = blobContainerClient.GetBlobClient(blobName);
+            return blobClient.DeleteIfExists();
+        }
+
+        public bool DeleteContainer(string blobContainerName)
+        {
+            BlobContainerClient blobContainerClient = new(_azureStorageConfig.Value.ConnectionString, blobContainerName);
+            return blobContainerClient.DeleteIfExists();
+        }
+
         //Private Methods
         private BlobClient GetBlobClient(string containerName, string blobName)
         {
