@@ -13,6 +13,9 @@ using UKHO.ERPFacade.API.Helpers;
 using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
+using Polly.Utilities;
+using System.Reflection;
+using UKHO.ERPFacade.API.UnitTests.Common;
 
 namespace UKHO.ERPFacade.API.UnitTests.Helpers
 {
@@ -192,6 +195,49 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
             && call.GetArgument<EventId>(1) == EventIds.SapActionCreated.ToEventId()
             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "SAP action {ActionName} created.").MustHaveHappened();
+        }
+        [Test]
+        [TestCase("ENC S57", "S57")]
+        [TestCase("ENC", "ENC")]
+        [TestCase("", "")]
+        [TestCase(null, "")]
+        public void GetProdTypeTest(string prodType, string actual)
+        {
+            MethodInfo sumPrivate = typeof(SapMessageBuilder).GetMethod("GetProdType", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
+            string result = (string)sumPrivate.Invoke(_fakeSapMessageBuilder, new object[] { prodType })!;
+
+            Assert.AreEqual(result, actual);
+        }
+
+        [Test]
+        [TestCase("ENC S57", "PRODTYPE", "S57")]
+        [TestCase("ENC S57", "PRODTYPE1", "ENC S57")]
+        [TestCase("", "PRODTYPE1", "")]
+        [TestCase(null, "PRODTYPE1", "")]
+        public void GetXmlNodeValueTest(string prodType, string prod, string actual)
+        {
+            MethodInfo XmlNodeValue = typeof(SapMessageBuilder).GetMethod("GetXmlNodeValue", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
+            string result = (string)XmlNodeValue.Invoke(_fakeSapMessageBuilder, new object[] { prodType, prod })!;
+
+            Assert.AreEqual(result, actual);
+        }
+
+        [Test]
+        public void SortXmlPayloadTest()
+        {
+            string expectedResult = "1CREATE ENC CELLENC CELLS57US4AK6NTUS4AK6NTUS1mediumNorton Sound - Alaska82";
+            string XpathActionItems = $"//*[local-name()='ACTIONITEMS']";
+            var sapReqXml = TestHelper.ReadFileData("ERPTestData\\ActionItemNodeTest.xml");
+
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(sapReqXml);
+            XmlNode actionItemNode = xmlDoc.SelectSingleNode(XpathActionItems)!;
+
+            MethodInfo xmlPayLoad = typeof(SapMessageBuilder).GetMethod("SortXmlPayload", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
+            var result = (XmlNode)xmlPayLoad.Invoke(_fakeSapMessageBuilder, new object[] { actionItemNode })!;
+
+            var firstNode = result.Cast<XmlNode>().FirstOrDefault().InnerText;
+            Assert.AreEqual(firstNode, expectedResult);
         }
     }
 }

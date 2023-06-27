@@ -120,7 +120,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                 actionNode = BuildAction(soapXml, product, unitOfSaleReplace, action, null, replacedProduct);
                                 actionItemNode.AppendChild(actionNode);
                             }
-                            break;                        
+                            break;
 
                     }
                     _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
@@ -135,7 +135,7 @@ namespace UKHO.ERPFacade.API.Helpers
 
                         XmlElement actionNode;
                         switch (action.ActionNumber)
-                        {                            
+                        {
                             case 10:
                                 foreach (var rules in action.Rules)
                                 {
@@ -374,24 +374,27 @@ namespace UKHO.ERPFacade.API.Helpers
 
         private static string GetXmlNodeValue(string fieldValue, string xmlNodeName = null)
         {
-            if (string.IsNullOrWhiteSpace(fieldValue))
-                return string.Empty;
-
-            if (xmlNodeName == ProdType)
+            if (!string.IsNullOrWhiteSpace(fieldValue))
             {
-                return GetProdType(fieldValue);
+                if (xmlNodeName == ProdType)
+                {
+                    return GetProdType(fieldValue);
+                }
+
+                return fieldValue.Substring(0, Math.Min(250, fieldValue.Length));
             }
 
-            return fieldValue.Substring(0, Math.Min(250, fieldValue.Length));
+            return string.Empty;
         }
 
         private static string GetProdType(string prodType)
         {
-            var parts = prodType.Split(' ').ToList();
-            if (parts != null)
+            if (!string.IsNullOrEmpty(prodType))
+            {
+                var parts = prodType.Split(' ').ToList();
                 return parts.Count > 1 ? parts[1] : parts[0];
-            else
-                return string.Empty;
+            }
+            return string.Empty;
         }
 
         private bool IsValidValue(string jsonFieldValue, string attributeValue)
