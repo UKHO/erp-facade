@@ -384,6 +384,8 @@ stages:
         variables:
           - name : WEB_APP_NAME
             value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_APP'] ]
+          - name : "ErpFacadeConfiguration.BaseUrl"
+            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
           - name : MOCK_WEB_APP_NAME
             value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp'] ]
         workspace:
@@ -445,6 +447,8 @@ stages:
         value: $(ERP-API-TEST-AUTOTEST-PRICEINFORMATIONAPICALLER-SECRET)
       - name: "EnterpriseEventServiceConfiguration.ClientId"
         value: $(EnterpriseEventServiceConfigurationClientId)
+      - name: "ErpFacadeConfiguration.BaseUrl"
+        value: $(ErpFacadeConfiguration.BaseUrl)
       - name: mockWebAppName
         value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup
