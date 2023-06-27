@@ -359,6 +359,9 @@ stages:
         value: $(ERP-API-TEST-AUTOTEST-PRICEINFORMATIONAPICALLER-SECRET)
       - name: "EnterpriseEventServiceConfiguration.ClientId"
         value: $(AzureADConfigurationClientId)
+      - name: "SharedKeyConfiguration.Key"
+        value: $(SharedKeyConfigurationKey)
+
     jobs:
       - deployment: DevDeployTerraform
         displayName: "Dev - Deploy Terraform and Dotnet App"
@@ -447,6 +450,8 @@ stages:
         value: $(ERP-API-TEST-AUTOTEST-PRICEINFORMATIONAPICALLER-SECRET)
       - name: "EnterpriseEventServiceConfiguration.ClientId"
         value: $(EnterpriseEventServiceConfigurationClientId)
+      - name: "SharedKeyConfiguration.Key"
+        value: $(SharedKeyConfigurationKey)
       - name: mockWebAppName
         value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup

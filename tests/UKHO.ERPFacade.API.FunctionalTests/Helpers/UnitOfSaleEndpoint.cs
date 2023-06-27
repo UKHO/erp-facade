@@ -27,7 +27,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             azureBlobStorageHelper = new();
         }
 
-        public async Task<RestResponse> PostUoSResponseAsync(string filePathWebhook, string generatedXMLFolder,string webhookToken, string filePath, string token)
+        public async Task<RestResponse> PostUoSResponseAsync(string filePathWebhook, string generatedXMLFolder,string webhookToken, string filePath, string sharedKey)
         {
 
 
@@ -46,7 +46,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
 
             request.AddHeader("Content-Type", "application/json");
-            request.AddHeader("Authorization", "Bearer " + token);
+            request.AddQueryParameter("Key", sharedKey);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
 
             RestResponse response = await client.ExecuteAsync(request);
@@ -61,7 +61,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return response;
         }
 
-        public async Task<RestResponse> PostUoSResponseAsyncWithJSON(string filePath, string generatedJSONFolder, string token)
+        public async Task<RestResponse> PostUoSResponseAsyncWithJSON(string filePath, string generatedJSONFolder, string sharedKey)
         {
             string requestBody;
 
@@ -72,7 +72,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             var request = new RestRequest("/erpfacade/priceinformation", Method.Post);
 
             request.AddHeader("Content-Type", "application/json");
-            request.AddHeader("Authorization", "Bearer " + token);
+            request.AddQueryParameter("Key", sharedKey);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
 
             RestResponse response = await client.ExecuteAsync(request);
@@ -95,7 +95,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             requestBody=JSONHelper.replaceCorrID(requestBody, WebhookEndpoint.generatedCorrelationId);
             var request = new RestRequest("/erpfacade/priceinformation", Method.Post);
             request.AddHeader("Content-Type", "application/json");
-            request.AddHeader("Authorization", "Bearer " + uostoken);
+            request.AddQueryParameter("Key", uostoken);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
             RestResponse response = await client.ExecuteAsync(request);
             List<UoSInputJSONHelper> jsonPayload = JsonConvert.DeserializeObject<List<UoSInputJSONHelper>>(requestBody);
@@ -155,7 +155,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             requestBody = JSONHelper.replaceCorrID(requestBody, WebhookEndpoint.generatedCorrelationId);
             var request = new RestRequest("/erpfacade/priceinformation", Method.Post);
             request.AddHeader("Content-Type", "application/json");
-            request.AddHeader("Authorization", "Bearer " + uostoken);
+            request.AddQueryParameter("Key", uostoken);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
             RestResponse response = await client.ExecuteAsync(request);
             List<UoSInputJSONHelper> jsonPayload = JsonConvert.DeserializeObject<List<UoSInputJSONHelper>>(requestBody);
