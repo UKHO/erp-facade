@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.CleanUp.WebJob.Services;
-using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Logging;
 
 namespace UKHO.ERPFacade.CleanUp.WebJob
