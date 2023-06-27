@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using UKHO.ERPFacade.API.Filters;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Infrastructure.EventService;
 using UKHO.ERPFacade.Common.IO;
@@ -14,7 +14,6 @@ namespace UKHO.ERPFacade.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class ErpFacadeController : BaseController<ErpFacadeController>
     {
         private readonly ILogger<ErpFacadeController> _logger;
@@ -49,7 +48,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
         [HttpPost]
         [Route("/erpfacade/priceinformation")]
-        [Authorize(Policy = "PriceInformationApiCaller")]
+        [ServiceFilter(typeof(SharedKeyAuthFilter))]
         public virtual async Task<IActionResult> PostPriceInformation([FromBody] JArray priceInformationJson)
         {
             JObject unitsOfSaleUpdatedEventPayloadJson;
@@ -124,7 +123,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
         [HttpPost]
         [Route("/erpfacade/bulkpriceinformation")]
-        [Authorize(Policy = "PriceInformationApiCaller")]
+        [ServiceFilter(typeof(SharedKeyAuthFilter))]
         public virtual async Task<IActionResult> PostBulkPriceInformation([FromBody] JArray bulkPriceInformationJson)
         {
             _logger.LogInformation(EventIds.SapBulkPriceInformationPayloadReceived.ToEventId(), "Bulk price information payload received from SAP.");
