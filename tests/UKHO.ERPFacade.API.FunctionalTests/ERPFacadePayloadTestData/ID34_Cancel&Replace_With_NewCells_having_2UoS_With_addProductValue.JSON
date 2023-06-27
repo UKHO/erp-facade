@@ -395,7 +395,7 @@
                     "removeProducts": []
                 }
             },
-			{
+            {
                 "unitName": "US5AK83M",
                 "title": "St. Michael Bay",
                 "unitOfSaleType": "unit",
@@ -457,7 +457,7 @@
                     "removeProducts": []
                 }
             },
-			
+
             {
                 "unitName": "US4AK6NU",
                 "title": "Norton Sound - Alaska",
@@ -489,7 +489,7 @@
                     "removeProducts": []
                 }
             },
-			{
+            {
                 "unitName": "ZARR101",
                 "title": "ZARR101 - 6NUs UOS",
                 "unitOfSaleType": "unit",

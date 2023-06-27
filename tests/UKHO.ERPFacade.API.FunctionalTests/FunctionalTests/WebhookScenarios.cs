@@ -127,9 +127,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
         //Rule change unitType & addProducts
         [TestCase("ID33_NewCell_With2UoS_But_only1_having_addProduct.JSON", TestName = "WhenICallTheWebhookWithNewCellScenarioWithMultipleUoSHavingUnitOfSalesTypeUnitButOnly1HavingValueInAddProducts_ThenWebhookReturns200Response")]
-        [TestCase("ID34_Cancel&Replace_With_NewCells_Having_2UoS_With_addProductsValue.JSON", TestName = "WhenICallTheWebhookWithCancel&ReplaceScenarioHavingMultipleUnitOfSalesTypeUnitAndValueInAddProducts_ThenWebhookReturns200Response")]
+        [TestCase("ID34_Cancel&Replace_With_NewCells_having_2UoS_With_addProductValue.JSON", TestName = "WhenICallTheWebhookWithCancel&ReplaceScenarioHavingMultipleUnitOfSalesTypeUnitAndValueInAddProducts_ThenWebhookReturns200Response")]
         [TestCase("ID35_Cancel&Replace_With_CancelCell_having_2UoS_but_onlyOneAsTypeUnit.JSON", TestName = "WhenICallTheWebhookWithCancel&ReplaceWithCancelledCellHaving2UoSButOnly1IsOfTypeUnit_ThenWebhookReturns200Response")]
-        [TestCase("ID36_MoveAndSuspended_With_2UoS_But1_having_addProductValue.JSON", TestName = "WhenICallTheWebhookWithMoveAndSuspendedWith2UoSButOnly1HavingValueInAddProduct_ThenWebhookReturns200Response")]
+        [TestCase("ID36_MoveAndSuspended_With_2UoS_But1_Having_addProductsValue.JSON", TestName = "WhenICallTheWebhookWithMoveAndSuspendedWith2UoSButOnly1HavingValueInAddProduct_ThenWebhookReturns200Response")]
 
         public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponse1(string payloadJsonFileName)
         {
