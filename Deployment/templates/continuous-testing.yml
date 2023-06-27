@@ -52,7 +52,6 @@ steps:
 
   - task: DotNetCoreCLI@2
     displayName: "Run Functional tests"
-    continueOnError: true
     inputs:
       command: "test"
       arguments: "--filter TestCategory=QAEnvFT"
