@@ -1,8 +1,6 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using RestSharp;
-using System.Text;
 using UKHO.ERPFacade.API.FunctionalTests.Model;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
@@ -106,25 +104,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             RestResponse response = await client.ExecuteAsync(request);
 
             return response;
-        }
-
-        public async Task PostMockSapResponseAsync()
-        {
-            var cred = $"{Config.TestConfig.SapMockConfiguration.Username}:{Config.TestConfig.SapMockConfiguration.Password}";
-
-            var request = new RestRequest("/api/ConfigureTestCase/SAPInternalServerError500", Method.Post);
-            request.AddHeader("Content-Type", "application/xml");
-            request.AddHeader("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(cred)));
-
-            await client2.ExecuteAsync(request);
-
-        }
-
-
-        public string getCorrelationId()
-        {
-            generatedCorrelationId = "367ce4a4-1d62-4f56-b359-59e178dsk24";
-            return generatedCorrelationId;
         }
 
     }
