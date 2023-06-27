@@ -397,7 +397,6 @@ stages:
                   displayName: "Run Functional tests"
                   inputs:
                     command: "test"
-                    arguments: "--filter TestCategory=DevEnvFT"
                     projects: |
                       **/*FunctionalTest*.dll
                       !**/*TestAdapter.dll
@@ -498,7 +497,6 @@ stages:
                   displayName: "Run Functional tests"
                   inputs:
                     command: "test"
-                    arguments: "--filter TestCategory=QAEnvFT"
                     projects: |
                       **/*FunctionalTest*.dll
                       !**/*TestAdapter.dll
