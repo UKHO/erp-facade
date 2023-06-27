@@ -64,7 +64,6 @@ steps:
       testRunTitle: "QA-AutomationTests"
       workingDirectory: '$(Build.SourcesDirectory)/functionaltests'
       
-
   - task: AzureCLI@2
     displayName: "Set FT Configuration Application Settings for Mock Webapp"
     condition: always()
