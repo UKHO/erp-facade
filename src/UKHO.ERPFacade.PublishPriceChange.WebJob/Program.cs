@@ -11,7 +11,6 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Infrastructure;
-using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Services;
 using UKHO.ERPFacade.PublishPriceChange.WebJob.Services;
@@ -157,7 +156,6 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob
             serviceCollection.AddSingleton<IAzureBlobEventWriter, AzureBlobEventWriter>();
             serviceCollection.AddSingleton<ISlicingPublishingService, SlicingPublishingService>();
             serviceCollection.AddSingleton<IErpFacadeService, ErpFacadeService>();
-            serviceCollection.AddSingleton<IJsonHelper, JsonHelper>();
         }
     }
 }

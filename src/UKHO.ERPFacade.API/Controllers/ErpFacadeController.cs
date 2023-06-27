@@ -32,7 +32,7 @@ namespace UKHO.ERPFacade.API.Controllers
         private const int EventSizeLimit = 1000000;
         private const string ContainerName = "pricechangeblobs";
         private const string UnitOfSaleUpdatedEventFileName = "UnitOfSaleUpdatedEvent.json";
-        private const string PriceChangeEventFileName = "PriceChangeEvent.json";
+        private const string BulkPriceInformationFileName = "BulkPriceInformation.json";
 
         public ErpFacadeController(IHttpContextAccessor contextAccessor,
                                    ILogger<ErpFacadeController> logger,
@@ -152,7 +152,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
             _logger.LogInformation(EventIds.UploadBulkPriceInformationEventInAzureBlob.ToEventId(), "Uploading the received Bulk price information event in blob storage.");
 
-            await _azureBlobEventWriter.UploadEvent(bulkPriceInformationJson.ToString(), ContainerName, correlationId + '/' + PriceChangeEventFileName);
+            await _azureBlobEventWriter.UploadEvent(bulkPriceInformationJson.ToString(), ContainerName, correlationId + '/' + BulkPriceInformationFileName);
 
             _logger.LogInformation(EventIds.UploadedBulkPriceInformationEventInAzureBlob.ToEventId(), "Bulk price information event is uploaded in blob storage successfully.");
 

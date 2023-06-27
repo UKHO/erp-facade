@@ -5,7 +5,6 @@ using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Infrastructure;
 using UKHO.ERPFacade.Common.Infrastructure.EventService;
 using UKHO.ERPFacade.Common.Infrastructure.EventService.EventProvider;
-using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
@@ -21,15 +20,14 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
         private readonly IErpFacadeService _erpFacadeService;
         private readonly IEventPublisher _eventPublisher;
         private readonly ICloudEventFactory _cloudEventFactory;
-        private readonly IJsonHelper _jsonHelper;
 
         private const string IncompleteStatus = "Incomplete";
-        private const string RequestFormat = "json";
         private const string ContainerName = "pricechangeblobs";
+        private const string BulkPriceInformationFileName = "BulkPriceInformation.json";
+        private const string PriceInformationFileName = "PriceInformation.json";
         private const string PriceChangeEventFileName = "PriceChangeEvent.json";
-        private const int EventSizeLimit = 1000000;
 
-        public SlicingPublishingService(ILogger<SlicingPublishingService> logger, IAzureTableReaderWriter azureTableReaderWriter, IAzureBlobEventWriter azureBlobEventWriter, IErpFacadeService erpFacadeService, IEventPublisher eventPublisher, ICloudEventFactory cloudEventFactory, IJsonHelper jsonHelper)
+        public SlicingPublishingService(ILogger<SlicingPublishingService> logger, IAzureTableReaderWriter azureTableReaderWriter, IAzureBlobEventWriter azureBlobEventWriter, IErpFacadeService erpFacadeService, IEventPublisher eventPublisher, ICloudEventFactory cloudEventFactory)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _azureTableReaderWriter = azureTableReaderWriter ?? throw new ArgumentNullException(nameof(azureTableReaderWriter));
@@ -37,7 +35,6 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
             _erpFacadeService = erpFacadeService ?? throw new ArgumentNullException(nameof(erpFacadeService));
             _eventPublisher = eventPublisher ?? throw new ArgumentNullException(nameof(eventPublisher));
             _cloudEventFactory = cloudEventFactory ?? throw new ArgumentNullException(nameof(cloudEventFactory));
-            _jsonHelper = jsonHelper ?? throw new ArgumentNullException(nameof(jsonHelper));
         }
 
         public void SliceAndPublishPriceChangeEvents()
@@ -49,7 +46,7 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
             {
                 _logger.LogInformation(EventIds.DownloadBulkPriceInformationEventFromAzureBlob.ToEventId(), "Webjob started downloading pricechange information from blob.");
 
-                priceChangeInformationJson = _azureBlobEventWriter.DownloadEvent(entity.CorrId + '/' + PriceChangeEventFileName, ContainerName);
+                priceChangeInformationJson = _azureBlobEventWriter.DownloadEvent(entity.CorrId + '/' + BulkPriceInformationFileName, ContainerName);
                 if (!string.IsNullOrEmpty(priceChangeInformationJson))
                 {
                     List<PriceInformation> priceInformationList = JsonConvert.DeserializeObject<List<PriceInformation>>(priceChangeInformationJson);
@@ -61,15 +58,15 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
                         {
                             foreach (var unitPriceInformation in unitPriceInformationEntities.Where(i => i.Status == IncompleteStatus).ToList())
                             {
-                                PriceChangeEventPayload priceChangeEventPayload = MapAndBuildPriceChangeEventPayload(priceInformationList, entity.CorrId, unitPriceInformation.UnitName, unitPriceInformation.EventId);
+                                var prices = priceInformationList.Where(p => p.ProductName == unitPriceInformation.UnitName).ToList();
+
+                                PriceChangeEventPayload priceChangeEventPayload = MapAndBuildPriceChangeEventPayload(prices, entity.CorrId, unitPriceInformation.UnitName, unitPriceInformation.EventId);
 
                                 var priceChangeCloudEventData = _cloudEventFactory.Create(priceChangeEventPayload);
 
                                 var priceChangeCloudEventDataJson = JObject.Parse(JsonConvert.SerializeObject(priceChangeCloudEventData));
 
                                 SavePriceChangeEventPayloadInAzureBlob(priceChangeCloudEventDataJson, entity.CorrId, unitPriceInformation.UnitName, unitPriceInformation.EventId);
-
-                                ValidatePriceChangeEventPayloadSize(priceChangeCloudEventDataJson, unitPriceInformation.EventId);
 
                                 PublishEvent(priceChangeCloudEventData, entity.CorrId, unitPriceInformation.UnitName, unitPriceInformation.EventId);
                             }
@@ -87,18 +84,20 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
                         foreach (var unitName in slicedPrices)
                         {
                             eventId = Guid.NewGuid().ToString();
+                            var prices = priceInformationList.Where(p => p.ProductName == unitName).ToList();
+                            var pricesJson = JArray.Parse(JsonConvert.SerializeObject(prices));
 
                             _azureTableReaderWriter.AddUnitPriceChangeEntity(entity.CorrId, eventId, unitName);
 
-                            PriceChangeEventPayload priceChangeEventPayload = MapAndBuildPriceChangeEventPayload(priceInformationList, entity.CorrId, unitName, eventId);
+                            _azureBlobEventWriter.UploadEvent(pricesJson.ToString(), ContainerName, entity.CorrId + '/' + unitName + '/' + PriceInformationFileName);
+
+                            PriceChangeEventPayload priceChangeEventPayload = MapAndBuildPriceChangeEventPayload(prices, entity.CorrId, unitName, eventId);
 
                             var priceChangeCloudEventData = _cloudEventFactory.Create(priceChangeEventPayload);
 
                             var priceChangeCloudEventDataJson = JObject.Parse(JsonConvert.SerializeObject(priceChangeCloudEventData));
 
                             SavePriceChangeEventPayloadInAzureBlob(priceChangeCloudEventDataJson, entity.CorrId, unitName, eventId);
-
-                            ValidatePriceChangeEventPayloadSize(priceChangeCloudEventDataJson, eventId);
 
                             PublishEvent(priceChangeCloudEventData, entity.CorrId, unitName, eventId);
                         }
@@ -140,17 +139,6 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
             _azureBlobEventWriter.UploadEvent(priceChangeCloudEventDataJson.ToString(), ContainerName, masterCorrId + '/' + unitName + '/' + PriceChangeEventFileName);
 
             _logger.LogInformation(EventIds.UploadedPriceChangeEventPayloadInAzureBlob.ToEventId(), "pricechange event payload json is uploaded in blob storage successfully. | _X-Correlation-ID : {_X-Correlation-ID}", correlationId);
-        }
-
-        private void ValidatePriceChangeEventPayloadSize(JObject priceChangeCloudEventDataJson, string correlationId)
-        {
-            int eventSize = _jsonHelper.GetPayloadJsonSize(priceChangeCloudEventDataJson.ToString());
-
-            if (eventSize > EventSizeLimit)
-            {
-                _logger.LogError(EventIds.PriceChangeEventSizeLimit.ToEventId(), "pricechange event exceeds the size limit of 1 MB. | _X-Correlation-ID : {_X-Correlation-ID}", correlationId);
-                throw new ERPFacadeException(EventIds.PriceChangeEventSizeLimit.ToEventId());
-            }
         }
     }
 }

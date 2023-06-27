@@ -325,13 +325,8 @@
         PriceChangeEventPushedToEES = 940065,
 
         /// <summary>
-        /// 940066 - pricechange event exceeds the size limit of 1 MB
+        /// 940066 - pricechange event created
         /// </summary>
-        PriceChangeEventSizeLimit = 940066,
-
-        /// <summary>
-        /// 940067 - pricechange event created
-        /// </summary>
-        PriceChangeEventPayloadCreated = 940067,
+        PriceChangeEventPayloadCreated = 940066
     }
 }
