@@ -25,7 +25,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         }
 
         [Category("DevEnvFT")]
-        [Category("QAEnvFT")]
+        
         [Test(Description = "WhenValidEventReceivedWithValidToken_ThenUoSReturns200OkResponse"), Order(0)]
         public async Task WhenValidEventReceivedWithValidToken_ThenUoSReturns200OkResponse()
         {
@@ -38,7 +38,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
         }
         [Category("DevEnvFT")]
-        [Category("QAEnvFT")]
+        
         [Test(Description = "WhenValidEventReceivedWithInvalidToken_ThenUoSReturns401UnAuthorizedResponse"), Order(2)]
         public async Task WhenValidEventReceivedWithInvalidToken_ThenUoSReturns401UnAuthorizedResponse()
         {
@@ -51,7 +51,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
         }
         [Category("DevEnvFT")]
-        [Category("QAEnvFT")]
+       
         [Test(Description = "WhenValidEventReceivedWithTokenHavingNoRole_ThenUoSReturns403ForbiddenResponse"), Order(3)]
         public async Task WhenValidEventReceivedWithInvalidToken_ThenUoSReturns403UnAuthorizedResponse()
         {
@@ -65,7 +65,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         }
 
         [Category("DevEnvFT")]
-        [Category("QAEnvFT")]
+        
         [Test, Order(0)]
         //UoS scenario based testing
         [TestCase("ID1_WebhookPayload.JSON", "UoS1_Pricing.JSON", TestName = "WhenReceivePriceInfoForAllUoSSentToSAP_UoSReturn200OkResponse")]
@@ -84,7 +84,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         }
 
         [Category("DevEnvFT")]
-        [Category("QAEnvFT")]
+        
         [Test, Order(0)]
         //UoS scenario based testing
         [TestCase("ID1_WebhookPayload.JSON", "UoS3_ProductMissingUOS.JSON", TestName = "WhenPriceInfoIsBlankFromSAP_ThenPriceSectionIsEmptyInFinalUoS_UoSReturn200OkResponse")]
@@ -103,7 +103,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         }
 
         [Category("DevEnvFT")]
-        [Category("QAEnvFT")]
+       
         [Test, Order(0)]
         //UoS scenario based testing
         [TestCase("ID1_WebhookPayload.JSON", "UoS2_ProductISNullUOS.JSON", TestName = "WhenPriceInfoIsNullFromSAP_ThenPriceSectionIsEmptyInFinalUoS_UoSReturn200OkResponse")]
