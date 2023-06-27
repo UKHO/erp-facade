@@ -69,13 +69,13 @@
     <None Update="ERPFacadePayloadTestData\ID33_NewCell_With2UoS_But_only1_having_addProduct.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPFacadePayloadTestData\ID34_Cancel&amp;Replace_With_NewCells_Having_2UoS_With_addProductsValue.json">
+    <None Update="ERPFacadePayloadTestData\ID34_Cancel&amp;Replace_With_NewCells_Having_2UoS_With_addProductsValue.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPFacadePayloadTestData\ID35_Cancel&amp;Replace_With_CancelCell_having_2UoS_but_onlyOneAsTypeUnit.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPFacadePayloadTestData\ID36_MoveAndSuspended_With_2UoS_But1_having_addProductValue.json">
+    <None Update="ERPFacadePayloadTestData\ID36_MoveAndSuspended_With_2UoS_But1_having_addProductValue.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPFacadePayloadTestData\PriceChangeInput.JSON">
