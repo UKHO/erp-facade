@@ -21,13 +21,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         public static List<string> actionsListFromXml = new();
         private static JsonPayloadHelper jsonPayload { get; set; }
         private static JsonPayloadHelper jsonPayload2 { get; set; }
-        private static Z_ADDS_MAT_INFO xmlPayload { get; set; }
-
+        
         public static async Task<bool> CheckXMLAttributes(JsonPayloadHelper jsonPayload, string XMLFilePath, string updatedRequestBody)
         {
 
             SAPXmlHelper.jsonPayload = jsonPayload;
-            SAPXmlHelper.jsonPayload2 = JsonConvert.DeserializeObject<JsonPayloadHelper>(updatedRequestBody);
+            jsonPayload2 = JsonConvert.DeserializeObject<JsonPayloadHelper>(updatedRequestBody);
 
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.LoadXml(File.ReadAllText(XMLFilePath));
@@ -41,10 +40,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             var ms = new MemoryStream(Encoding.UTF8.GetBytes(xmlDoc.InnerXml));
             var reader = new XmlTextReader(ms) { Namespaces = false };
             var serializer = new XmlSerializer(typeof(Z_ADDS_MAT_INFO));
-
-
-
             var result = (Z_ADDS_MAT_INFO)serializer.Deserialize(reader);
+
             actionCounter = 1;
             ChangeENCCell.Clear();
             foreach (ZMAT_ACTIONITEMS item in result.IM_MATINFO.ACTIONITEMS)
@@ -120,9 +117,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         Console.WriteLine("CHANGE AVCS UNIT OF SALE Action's Data is correct");
                         var valueindex = ele2.Value.IndexOf(productName);
                         ChangeAVCSUoS[valueindex] = ChangeAVCSUoS[valueindex].Replace(productName, "skip");
-
                         return true;
-
                     }
 
                     else
@@ -1169,8 +1164,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         public static string generateRandomCorrelationId()
         {
             Guid guid = Guid.NewGuid();
-            string randomCorrID = guid.ToString("N").Substring(0,10);
-            randomCorrID = randomCorrID.Insert(4, "-");
+            string randomCorrID = guid.ToString("N").Substring(0,18);
+            randomCorrID = randomCorrID.Insert(5, "-");
+            randomCorrID = randomCorrID.Insert(11, "-");
             string currentTimeStamp = DateTime.Now.ToString("yyyyMMdd");
             randomCorrID = "ft-" + currentTimeStamp + "-" + randomCorrID;
             Console.WriteLine("Generated CorrelationId = " + randomCorrID);
