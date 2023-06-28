@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Net.Http.Headers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -50,10 +51,10 @@ namespace UKHO.ERPFacade.Common.Infrastructure
                 EnterpriseEventServiceConfiguration config = sp.GetRequiredService<IOptions<EnterpriseEventServiceConfiguration>>().Value;
                 var accessTokenCache = sp.GetRequiredService<IAccessTokenCache>();
                 client.BaseAddress = new Uri(config.ServiceUrl);
-#if !DEBUG
+
                 string token = accessTokenCache.GetTokenAsync($"{config.ClientId}/{config.PublisherScope}").Result;
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-#endif
+
             }).AddPolicyHandler(retryPolicy);
 
             return services;

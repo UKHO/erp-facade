@@ -56,20 +56,40 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
                     {
                         if (unitPriceInformationEntities.Any(i => i.Status == IncompleteStatus))
                         {
-                            foreach (var unitPriceInformation in unitPriceInformationEntities.Where(i => i.Status == IncompleteStatus).ToList())
+                            Parallel.ForEach(unitPriceInformationEntities.Where(i => i.Status == IncompleteStatus).ToList(), unitPriceInformation =>
                             {
-                                var prices = priceInformationList.Where(p => p.ProductName == unitPriceInformation.UnitName).ToList();
+                                lock (this)
+                                {
+                                    var prices = priceInformationList.Where(p => p.ProductName == unitPriceInformation.UnitName).ToList();
 
-                                PriceChangeEventPayload priceChangeEventPayload = MapAndBuildPriceChangeEventPayload(prices, entity.CorrId, unitPriceInformation.UnitName, unitPriceInformation.EventId);
+                                    PriceChangeEventPayload priceChangeEventPayload = MapAndBuildPriceChangeEventPayload(prices, entity.CorrId, unitPriceInformation.UnitName, unitPriceInformation.EventId);
 
-                                var priceChangeCloudEventData = _cloudEventFactory.Create(priceChangeEventPayload);
+                                    var priceChangeCloudEventData = _cloudEventFactory.Create(priceChangeEventPayload);
 
-                                var priceChangeCloudEventDataJson = JObject.Parse(JsonConvert.SerializeObject(priceChangeCloudEventData));
+                                    var priceChangeCloudEventDataJson = JObject.Parse(JsonConvert.SerializeObject(priceChangeCloudEventData));
 
-                                SavePriceChangeEventPayloadInAzureBlob(priceChangeCloudEventDataJson, entity.CorrId, unitPriceInformation.UnitName, unitPriceInformation.EventId);
+                                    SavePriceChangeEventPayloadInAzureBlob(priceChangeCloudEventDataJson, entity.CorrId, unitPriceInformation.UnitName, unitPriceInformation.EventId);
 
-                                PublishEvent(priceChangeCloudEventData, entity.CorrId, unitPriceInformation.UnitName, unitPriceInformation.EventId);
-                            }
+                                    PublishEvent(priceChangeCloudEventData, entity.CorrId, unitPriceInformation.UnitName, unitPriceInformation.EventId);
+
+
+                                }
+                            });
+
+                            //foreach (var unitPriceInformation in unitPriceInformationEntities.Where(i => i.Status == IncompleteStatus).ToList())
+                            //{
+                            //    var prices = priceInformationList.Where(p => p.ProductName == unitPriceInformation.UnitName).ToList();
+
+                            //    PriceChangeEventPayload priceChangeEventPayload = MapAndBuildPriceChangeEventPayload(prices, entity.CorrId, unitPriceInformation.UnitName, unitPriceInformation.EventId);
+
+                            //    var priceChangeCloudEventData = _cloudEventFactory.Create(priceChangeEventPayload);
+
+                            //    var priceChangeCloudEventDataJson = JObject.Parse(JsonConvert.SerializeObject(priceChangeCloudEventData));
+
+                            //    SavePriceChangeEventPayloadInAzureBlob(priceChangeCloudEventDataJson, entity.CorrId, unitPriceInformation.UnitName, unitPriceInformation.EventId);
+
+                            //    PublishEvent(priceChangeCloudEventData, entity.CorrId, unitPriceInformation.UnitName, unitPriceInformation.EventId);
+                            //}
                         }
                         else
                         {
@@ -81,26 +101,54 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
                         var slicedPrices = priceInformationList.Select(p => p.ProductName).Distinct().ToList();
                         string eventId;
 
-                        foreach (var unitName in slicedPrices)
+
+                        Parallel.ForEach(slicedPrices, unitName =>
                         {
-                            eventId = Guid.NewGuid().ToString();
-                            var prices = priceInformationList.Where(p => p.ProductName == unitName).ToList();
-                            var pricesJson = JArray.Parse(JsonConvert.SerializeObject(prices));
+                            lock (this)
+                            {
+                                eventId = Guid.NewGuid().ToString();
+                                var prices = priceInformationList.Where(p => p.ProductName == unitName).ToList();
+                                var pricesJson = JArray.Parse(JsonConvert.SerializeObject(prices));
 
-                            _azureTableReaderWriter.AddUnitPriceChangeEntity(entity.CorrId, eventId, unitName);
+                                _azureTableReaderWriter.AddUnitPriceChangeEntity(entity.CorrId, eventId, unitName);
 
-                            _azureBlobEventWriter.UploadEvent(pricesJson.ToString(), ContainerName, entity.CorrId + '/' + unitName + '/' + PriceInformationFileName);
+                                _azureBlobEventWriter.UploadEvent(pricesJson.ToString(), ContainerName, entity.CorrId + '/' + unitName + '/' + PriceInformationFileName);
 
-                            PriceChangeEventPayload priceChangeEventPayload = MapAndBuildPriceChangeEventPayload(prices, entity.CorrId, unitName, eventId);
+                                PriceChangeEventPayload priceChangeEventPayload = MapAndBuildPriceChangeEventPayload(prices, entity.CorrId, unitName, eventId);
 
-                            var priceChangeCloudEventData = _cloudEventFactory.Create(priceChangeEventPayload);
+                                var priceChangeCloudEventData = _cloudEventFactory.Create(priceChangeEventPayload);
 
-                            var priceChangeCloudEventDataJson = JObject.Parse(JsonConvert.SerializeObject(priceChangeCloudEventData));
+                                var priceChangeCloudEventDataJson = JObject.Parse(JsonConvert.SerializeObject(priceChangeCloudEventData));
 
-                            SavePriceChangeEventPayloadInAzureBlob(priceChangeCloudEventDataJson, entity.CorrId, unitName, eventId);
+                                SavePriceChangeEventPayloadInAzureBlob(priceChangeCloudEventDataJson, entity.CorrId, unitName, eventId);
 
-                            PublishEvent(priceChangeCloudEventData, entity.CorrId, unitName, eventId);
-                        }
+                                PublishEvent(priceChangeCloudEventData, entity.CorrId, unitName, eventId);
+
+
+
+                            }
+                        });
+
+                        //foreach (var unitName in slicedPrices)
+                        //{
+                        //    eventId = Guid.NewGuid().ToString();
+                        //    var prices = priceInformationList.Where(p => p.ProductName == unitName).ToList();
+                        //    var pricesJson = JArray.Parse(JsonConvert.SerializeObject(prices));
+
+                        //    _azureTableReaderWriter.AddUnitPriceChangeEntity(entity.CorrId, eventId, unitName);
+
+                        //    _azureBlobEventWriter.UploadEvent(pricesJson.ToString(), ContainerName, entity.CorrId + '/' + unitName + '/' + PriceInformationFileName);
+
+                        //    PriceChangeEventPayload priceChangeEventPayload = MapAndBuildPriceChangeEventPayload(prices, entity.CorrId, unitName, eventId);
+
+                        //    var priceChangeCloudEventData = _cloudEventFactory.Create(priceChangeEventPayload);
+
+                        //    var priceChangeCloudEventDataJson = JObject.Parse(JsonConvert.SerializeObject(priceChangeCloudEventData));
+
+                        //    SavePriceChangeEventPayloadInAzureBlob(priceChangeCloudEventDataJson, entity.CorrId, unitName, eventId);
+
+                        //    PublishEvent(priceChangeCloudEventData, entity.CorrId, unitName, eventId);
+                        //}
                     }
                 }
             }
