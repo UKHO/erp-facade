@@ -6,5 +6,7 @@ namespace UKHO.ERPFacade.Common.Configuration
     public class ErpFacadeWebJobConfiguration
     {
         public string SapCallbackDurationInMins { get; set; } = string.Empty;
+        public string CleanUpDurationInDays { get; set; } = string.Empty;
+
     }
 }

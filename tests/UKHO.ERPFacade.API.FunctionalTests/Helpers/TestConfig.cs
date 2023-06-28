@@ -14,6 +14,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         public AzureStorageConfiguration AzureStorageConfiguration { get; set; }
         public string[] XMLActionList { get; set; }
         public string UoSPayloadFileName { get; set; }
+        public string PriceChangePayloadFileName { get; set; }
+        public string GeneratedProductJsonFolder { get; set; }
+        public string GeneratedJSONFolder { get; set; }
+        public SharedKeyConfiguration SharedKeyConfiguration { get; set; }
         public string BPUpdatePayloadFileName { get; set; }
         public string ERPFacadeGeneratedProductJSON { get; set; }
         public string GeneratedProductJSON { get; set; }
@@ -67,4 +71,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         public string ConnectionString { get; set; }
     }
 
+    public class SharedKeyConfiguration
+    {
+        public string Key { get; set; }
+    }
 }

@@ -164,8 +164,9 @@ namespace UKHO.ERPFacade
 
             builder.Services.Configure<AzureStorageConfiguration>(configuration.GetSection("AzureStorageConfiguration"));
             builder.Services.Configure<SapConfiguration>(configuration.GetSection("SapConfiguration"));
-            builder.Services.Configure<SapActionConfiguration>(configuration.GetSection("SapActionConfiguration"));
+            builder.Services.Configure<SharedKeyConfiguration>(configuration.GetSection("SharedKeyConfiguration"));
 
+            builder.Services.Configure<SapActionConfiguration>(configuration.GetSection("SapActionConfiguration"));
             sapActionConfiguration = configuration.GetSection("SapActionConfiguration").Get<SapActionConfiguration>()!;
 
             builder.Services.AddInfrastructure();
@@ -181,6 +182,7 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<IFileSystem, FileSystem>();
             builder.Services.AddScoped<IErpFacadeService, ErpFacadeService>();
             builder.Services.AddScoped<IJsonHelper, JsonHelper>();
+            builder.Services.AddScoped<SharedKeyAuthFilter>();
 
             builder.Services.AddHealthChecks()
                 .AddCheck<SapServiceHealthCheck>("SapServiceHealthCheck");

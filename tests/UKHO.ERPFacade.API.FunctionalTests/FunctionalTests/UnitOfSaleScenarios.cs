@@ -25,7 +25,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         }
 
         [Category("DevEnvFT")]
-        [Category("QAEnvFT")]
+        
         [Test(Description = "WhenValidEventReceivedWithValidToken_ThenUoSReturns200OkResponse"), Order(0)]
         public async Task WhenValidEventReceivedWithValidToken_ThenUoSReturns200OkResponse()
         {
@@ -33,12 +33,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             string generatedXMLFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXMLFolder);
             string webhookToken = await _authToken.GetAzureADToken(false);
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.UoSPayloadFileName);
-            var response = await _unitOfSale.PostUoSResponseAsync(filePathWebhook, generatedXMLFolder, webhookToken, filePath, await _authToken.GetAzureADToken(false, "UnitOfSale"));
+            var response = await _unitOfSale.PostUoSResponseAsync(filePathWebhook, generatedXMLFolder, webhookToken, filePath, Config.TestConfig.SharedKeyConfiguration.Key);
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         }
         [Category("DevEnvFT")]
-        [Category("QAEnvFT")]
+        
         [Test(Description = "WhenValidEventReceivedWithInvalidToken_ThenUoSReturns401UnAuthorizedResponse"), Order(2)]
         public async Task WhenValidEventReceivedWithInvalidToken_ThenUoSReturns401UnAuthorizedResponse()
         {
@@ -51,7 +51,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
         }
         [Category("DevEnvFT")]
-        [Category("QAEnvFT")]
+       
         [Test(Description = "WhenValidEventReceivedWithTokenHavingNoRole_ThenUoSReturns403ForbiddenResponse"), Order(3)]
         public async Task WhenValidEventReceivedWithInvalidToken_ThenUoSReturns403UnAuthorizedResponse()
         {
@@ -65,7 +65,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         }
 
         [Category("DevEnvFT")]
-        [Category("QAEnvFT")]
+        
         [Test, Order(0)]
         //UoS scenario based testing
         [TestCase("ID1_WebhookPayload.JSON", "UoS1_Pricing.JSON", TestName = "WhenReceivePriceInfoForAllUoSSentToSAP_UoSReturn200OkResponse")]
@@ -77,14 +77,14 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             string filePathUOS = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, UoSPayloadFileName);
             string generatedJSONFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedJSONFolder);
             string webhookToken = await _authToken.GetAzureADToken(false);
-            string uOSToken = await _authToken.GetAzureADToken(false, "UnitOfSale");
+            string uOSToken = Config.TestConfig.SharedKeyConfiguration.Key;
             var response = await _unitOfSale.PostWebHookAndUoSResponseAsyncWithJSON(filePathWebhook, filePathUOS, generatedXMLFolder, generatedJSONFolder, webhookToken, uOSToken);
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         }
 
         [Category("DevEnvFT")]
-        [Category("QAEnvFT")]
+        
         [Test, Order(0)]
         //UoS scenario based testing
         [TestCase("ID1_WebhookPayload.JSON", "UoS3_ProductMissingUOS.JSON", TestName = "WhenPriceInfoIsBlankFromSAP_ThenPriceSectionIsEmptyInFinalUoS_UoSReturn200OkResponse")]
@@ -96,14 +96,14 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             string filePathUOS = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, UoSPayloadProductBlankFileName);
             string generatedJSONFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedJSONFolder);
             string webhookToken = await _authToken.GetAzureADToken(false);
-            string uOSToken = await _authToken.GetAzureADToken(false, "UnitOfSale");
+            string uOSToken = Config.TestConfig.SharedKeyConfiguration.Key;
             var response = await _unitOfSale.PostWebHookAndUoSResponseAsyncWithNullProduct(filePathWebhook, filePathUOS, generatedXMLFolder, generatedJSONFolder, webhookToken, uOSToken);
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         }
 
         [Category("DevEnvFT")]
-        [Category("QAEnvFT")]
+       
         [Test, Order(0)]
         //UoS scenario based testing
         [TestCase("ID1_WebhookPayload.JSON", "UoS2_ProductISNullUOS.JSON", TestName = "WhenPriceInfoIsNullFromSAP_ThenPriceSectionIsEmptyInFinalUoS_UoSReturn200OkResponse")]
@@ -115,7 +115,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             string filePathUOS = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, UoSPayloadProductNullFileName);
             string generatedJSONFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedJSONFolder);
             string webhookToken = await _authToken.GetAzureADToken(false);
-            string uOSToken = await _authToken.GetAzureADToken(false, "UnitOfSale");
+            string uOSToken = Config.TestConfig.SharedKeyConfiguration.Key;
             var response = await _unitOfSale.PostWebHookAndUoSResponseAsyncWithNullProduct(filePathWebhook, filePathUOS, generatedXMLFolder, generatedJSONFolder, webhookToken, uOSToken);
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
