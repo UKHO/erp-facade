@@ -9,9 +9,10 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using UKHO.ERPFacade.CleanUp.WebJob;
+using UKHO.ERPFacade.CleanUp.WebJob.Services;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.IO.Azure;
-using UKHO.ERPFacade.Monitoring.WebJob.Services;
 using UKHO.Logging.EventHubLogProvider;
 
 namespace UKHO.ERPFacade.Monitoring.WebJob
@@ -41,7 +42,7 @@ namespace UKHO.ERPFacade.Monitoring.WebJob
 
                 try
                 {
-                    serviceProvider.GetService<MonitoringWebJob>().Start();
+                    serviceProvider.GetService<CleanUpWebjob>().Start();
                 }
                 finally
                 {
@@ -97,7 +98,7 @@ namespace UKHO.ERPFacade.Monitoring.WebJob
             //create the logger and setup of sinks, filters and properties	
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Information()
-                .WriteTo.File("Logs/UKHO.ERPFacade.Monitoring.WebJob-.txt", rollingInterval: RollingInterval.Day, outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level}] [{SourceContext}] {Message}{NewLine}{Exception}")
+                .WriteTo.File("Logs/UKHO.ERPFacade.CleanUp.WebJob-.txt", rollingInterval: RollingInterval.Day, outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level}] [{SourceContext}] {Message}{NewLine}{Exception}")
                 .CreateLogger();
 #endif
             serviceCollection.AddLogging(loggingBuilder =>
@@ -146,9 +147,10 @@ namespace UKHO.ERPFacade.Monitoring.WebJob
                 serviceCollection.AddSingleton(configuration);
             }
 
-            serviceCollection.AddSingleton<MonitoringWebJob>();
+            serviceCollection.AddSingleton<CleanUpWebjob>();
             serviceCollection.AddSingleton<IAzureTableReaderWriter, AzureTableReaderWriter>();
-            serviceCollection.AddSingleton<IMonitoringService, MonitoringService>();
+            serviceCollection.AddSingleton<IAzureBlobEventWriter, AzureBlobEventWriter>();
+            serviceCollection.AddSingleton<ICleanUpService, CleanUpService>();
         }
     }
 }

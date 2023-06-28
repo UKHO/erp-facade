@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using UKHO.ERPFacade.API.Filters;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Infrastructure;
 using UKHO.ERPFacade.Common.Infrastructure.EventService;
@@ -16,7 +16,6 @@ namespace UKHO.ERPFacade.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class ErpFacadeController : BaseController<ErpFacadeController>
     {
         private readonly ILogger<ErpFacadeController> _logger;
@@ -28,7 +27,8 @@ namespace UKHO.ERPFacade.API.Controllers
         private readonly ICloudEventFactory _cloudEventFactory;
 
         private const string CorrelationIdKey = "corrid";
-        private const string RequestFormat = "json";
+        private const string PriceInformationFileName = "PriceInformation.json";
+        private const string EncEventFileName = "EncPublishingEvent.json";
         private const int EventSizeLimit = 1000000;
         private const string ContainerName = "pricechangeblobs";
         private const string UnitOfSaleUpdatedEventFileName = "UnitOfSaleUpdatedEvent.json";
@@ -55,7 +55,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
         [HttpPost]
         [Route("/erpfacade/priceinformation")]
-        [Authorize(Policy = "PriceInformationApiCaller")]
+        [ServiceFilter(typeof(SharedKeyAuthFilter))]
         public virtual async Task<IActionResult> PostPriceInformation([FromBody] JArray priceInformationJson)
         {
             _logger.LogInformation(EventIds.SapUnitsOfSalePriceInformationPayloadReceived.ToEventId(), "UnitsOfSale price information payload received from SAP.");
@@ -80,13 +80,19 @@ namespace UKHO.ERPFacade.API.Controllers
 
             _logger.LogInformation(EventIds.ERPFacadeToSAPRequestFound.ToEventId(), "Valid SAP callback.");
 
+            _logger.LogInformation(EventIds.UploadPriceInformationEventInAzureBlob.ToEventId(), "Uploading the price information received from SAP in blob storage.");
+
+            await _azureBlobEventWriter.UploadEvent(priceInformationJson.ToString(), correlationId, PriceInformationFileName);
+
+            _logger.LogInformation(EventIds.UploadedPriceInformationEventInAzureBlob.ToEventId(), "Price information is uploaded in blob storage successfully.");
+
             List<PriceInformation> priceInformationList = JsonConvert.DeserializeObject<List<PriceInformation>>(priceInformationJson.ToString());
 
             if (priceInformationList.Count > 0 && priceInformationList.Any(x => x.ProductName != string.Empty))
             {
                 _logger.LogInformation(EventIds.DownloadEncEventPayloadStarted.ToEventId(), "Downloading the ENC event payload from azure blob storage.");
 
-                string encEventPayloadJson = _azureBlobEventWriter.DownloadEvent(correlationId + '.' + RequestFormat, correlationId);
+                string encEventPayloadJson = _azureBlobEventWriter.DownloadEvent(EncEventFileName, correlationId);
 
                 EncEventPayload encEventPayloadData = JsonConvert.DeserializeObject<EncEventPayload>(encEventPayloadJson.ToString());
 
@@ -139,7 +145,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
         [HttpPost]
         [Route("/erpfacade/bulkpriceinformation")]
-        [Authorize(Policy = "PriceInformationApiCaller")]
+        [ServiceFilter(typeof(SharedKeyAuthFilter))]
         public virtual async Task<IActionResult> PostBulkPriceInformation([FromBody] JArray bulkPriceInformationJson)
         {
             _logger.LogInformation(EventIds.SapBulkPriceInformationPayloadReceived.ToEventId(), "Bulk price information payload received from SAP.");

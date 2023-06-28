@@ -55,8 +55,6 @@ namespace UKHO.ERPFacade.Common.Services
                         }
                         else
                         {
-                            PriceDurations priceDuration = new();
-
                             var existingUnitOfSalePrice = unitsOfSalePriceList.Where(x => x.UnitName.Contains(priceInformation.ProductName)).FirstOrDefault();
 
                             var effectiveUnitOfSalePriceDurations = existingUnitOfSalePrice!.Price.Where(x => x.EffectiveDate.ToString("yyyyMMdd") == priceInformation.EffectiveDate).ToList();
@@ -70,8 +68,11 @@ namespace UKHO.ERPFacade.Common.Services
                             {
                                 if (!effectiveStandard.PriceDurations.Any(x => x.NumberOfMonths == Convert.ToInt32(priceInformation.Duration) && x.Rrp == priceInformation.Price))
                                 {
+                                    PriceDurations priceDuration = new();
+
                                     priceDuration.NumberOfMonths = Convert.ToInt32(priceInformation.Duration);
                                     priceDuration.Rrp = priceInformation.Price;
+
                                     effectiveStandard.PriceDurations.Add(priceDuration);
                                 }
                             }
@@ -88,8 +89,11 @@ namespace UKHO.ERPFacade.Common.Services
                             {
                                 if (!futureStandard.PriceDurations.Any(x => x.NumberOfMonths == Convert.ToInt32(priceInformation.Duration) && x.Rrp == priceInformation.FuturePrice))
                                 {
+                                    PriceDurations priceDuration = new();
+
                                     priceDuration.NumberOfMonths = Convert.ToInt32(priceInformation.Duration);
                                     priceDuration.Rrp = priceInformation.FuturePrice;
+
                                     futureStandard.PriceDurations.Add(priceDuration);
                                 }
                             }
