@@ -152,6 +152,11 @@ namespace UKHO.ERPFacade.Common.UnitTests.HealthCheck
                                     && call.GetArgument<LogLevel>(0) == LogLevel.Error
                                     && call.GetArgument<EventId>(1) == EventIds.SapHealthCheckXmlTemplateNotFound.ToEventId()
                                     && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "The SAP Health Check xml template does not exist.").MustHaveHappenedOnceExactly();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+                                    && call.GetArgument<LogLevel>(0) == LogLevel.Information
+                                    && call.GetArgument<EventId>(1) == EventIds.ErrorOccuredInSap.ToEventId()
+                                    && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "An error occured while processing your request in SAP. | {Message}").MustHaveHappened();
         }
     }
 }
