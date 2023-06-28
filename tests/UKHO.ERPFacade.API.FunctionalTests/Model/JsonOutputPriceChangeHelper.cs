@@ -28,40 +28,53 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
         public class DataPriceChange
     {
             public string correlationId { get; set; }
-            public List<UnitsOfSalePrice> unitsOfSalePrices { get; set; }
+            public List<UnitsOfSalePricePriceChangeOutput> unitsOfSalePrices { get; set; }
         }
 
-        public class Price
+        public class PricePriceChangeOutput
         {
             public DateTime effectiveDate { get; set; }
             public string currency { get; set; }
-            public Standard standard { get; set; }
+            public StandardPriceChangeOutput standard { get; set; }
         }
 
-        public class PriceDuration
+        public class PriceDurationsPriceChangeOutput
         {
-            public int numberOfMonths { get; set; }
+            public string numberOfMonths { get; set; }
             public string rrp { get; set; }
         }
 
-        public class Root
+        
+
+        public class StandardPriceChangeOutput
         {
-            
+            public List<PriceDurationsPriceChangeOutput> priceDurations { get; set; }
         }
 
-        public class Standard
-        {
-            public List<PriceDuration> priceDurations { get; set; }
-        }
-
-        public class UnitsOfSalePrice
+        public class UnitsOfSalePricePriceChangeOutput
         {
             public string unitName { get; set; }
-            public List<Price> price { get; set; }
+            public List<PricePriceChangeOutput> price { get; set; }
         }
+        public class EffectiveDatesPerProductPC
+    {
+        public string ProductName { get; set; }
+        public DateTime EffectiveDates { get; set; }
 
+        public string Duration { get; set; }
+
+        public string rrp { get; set; }
 
     }
+    public class PriceDurations
+    {
+        public string  Duration { get; set; }
+
+        public string rrp { get; set; }
+    }
+
+
+}
 
 
     
