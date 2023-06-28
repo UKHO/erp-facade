@@ -117,6 +117,9 @@
     <None Update="ERPFacadePayloadTestData\ID32_moveAndSuspended.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ERPFacadePayloadTestData\SapMockApiConfigure.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ERPFacadePayloadTestData\UoS1_Pricing.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -169,9 +172,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ERPFacadeGeneratedProductJSON\" />
-    <Folder Include="ERPFacadeGeneratedXmlFiles\" />
+    <Content Include="ERPFacadeGeneratedJSONFiles\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="ERPFacadeGeneratedProductJSON\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  
   <ItemGroup>
     <Content Include="ERPFacadeGeneratedXmlFiles\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
