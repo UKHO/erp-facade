@@ -45,9 +45,6 @@
     <None Update="appsettings.local.overrides.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="ERPFacadeGeneratedXmlFiles\we123s-sds3-df333-d3d.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="ERPFacadePayloadTestData\ID10_UpdateSimple.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -176,9 +173,10 @@
 
   <ItemGroup>
     <Folder Include="ERPFacadeGeneratedProductJSON\" />
+    <Folder Include="ERPFacadeGeneratedXmlFiles\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ERPFacadePayloadTestData\**">
+    <Content Include="ERPFacadeGeneratedXmlFiles\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
