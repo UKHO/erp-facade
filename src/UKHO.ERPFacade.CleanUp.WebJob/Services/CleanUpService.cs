@@ -15,7 +15,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.Services
 
         private const string CompleteStatus = "Complete";
         private const string PriceChangeContainerName = "pricechangeblobs";
-        private const string PriceInformationFileName = "PriceInformation.json";
+        private const string BulkPriceInformationFileName = "BulkPriceInformation.json";
 
         public CleanUpService(ILogger<CleanUpService> logger,
                                IOptions<ErpFacadeWebJobConfiguration> erpFacadeWebjobConfig,
@@ -42,7 +42,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.Services
             foreach (var masterEntity in masterEntities)
             {
                 _logger.LogInformation(EventIds.FetchBlobCreateDate.ToEventId(), "Fetching create date of blob : {0}", masterEntity.CorrId);
-                var blobCreateDate = _azureBlobEventWriter.GetBlobCreateDate(masterEntity.CorrId + '/' + PriceInformationFileName, PriceChangeContainerName);
+                var blobCreateDate = _azureBlobEventWriter.GetBlobCreateDate(masterEntity.CorrId + '/' + BulkPriceInformationFileName, PriceChangeContainerName);
                 TimeSpan timediff = DateTime.Now - blobCreateDate;
                 if (timediff.Days > int.Parse(_erpFacadeWebjobConfig.Value.CleanUpDurationInDays))
                 {
