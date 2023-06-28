@@ -37,7 +37,7 @@ namespace UKHO.ERPFacade.API.Controllers
                                  IAzureBlobEventWriter azureBlobEventWriter,
                                  ISapClient sapClient,
                                  ISapMessageBuilder sapMessageBuilder,
-                                    IOptions<SapConfiguration> sapConfig)
+                                 IOptions<SapConfiguration> sapConfig)
         : base(contextAccessor)
         {
             _logger = logger;

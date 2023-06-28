@@ -5,14 +5,14 @@ using UKHO.ERPFacade.API.FunctionalTests.Model;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
-    public class BulkPriceUpdateEndpoint
+    public class PriceChangeEndpoint
     {
 
         private readonly RestClient client;
         private AzureBlobStorageHelper azureBlobStorageHelper;
         private JSONHelper jsonHelper;
 
-        public BulkPriceUpdateEndpoint(string url)
+        public PriceChangeEndpoint(string url)
         {
             var options = new RestClientOptions(url);
             client = new RestClient(options);
@@ -20,7 +20,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             jsonHelper = new JSONHelper();
         }
 
-        public async Task<RestResponse> PostBPUpdateResponseAsync(string filePath, string token)
+        public async Task<RestResponse> PostPriceChangeResponseAsync(string filePath, string sharedKey)
         {
             string requestBody;
 
@@ -31,14 +31,13 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             var request = new RestRequest("/erpfacade/bulkpriceinformation", Method.Post);
 
             request.AddHeader("Content-Type", "application/json");
-            request.AddHeader("Authorization", "Bearer " + token);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
-
-            RestResponse response = await client.ExecuteAsync(request);
+            request.AddQueryParameter("Key", sharedKey);
+           RestResponse response = await client.ExecuteAsync(request);
             return response;
         }
 
-        public async Task<RestResponse> PostBPUpdateResponseAsyncWithJson(string filePath, string generatedProductJsonFolder, string token)
+        public async Task<RestResponse> PostPriceChangeResponseAsyncWithJson(string filePath, string generatedProductJsonFolder, string sharedKey)
         {
             string requestBody;
 
@@ -49,7 +48,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             var request = new RestRequest("/erpfacade/bulkpriceinformation", Method.Post);
 
             request.AddHeader("Content-Type", "application/json");
-            request.AddHeader("Authorization", "Bearer " + token);
+            request.AddQueryParameter("Key", sharedKey);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
 
             RestResponse response = await client.ExecuteAsync(request);

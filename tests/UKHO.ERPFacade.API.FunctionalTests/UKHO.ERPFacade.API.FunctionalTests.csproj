@@ -159,11 +159,16 @@
     </None>
     <None Update="ERPFacadePayloadTestData\UoS3_ProductMissingUOS.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </None>    
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ERPFacadeGeneratedProductJSON\" />
+    <Folder Include="ERPFacadeGeneratedProductJSON\" />    
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ERPFacadeGeneratedJSONFiles\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
