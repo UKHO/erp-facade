@@ -4,9 +4,7 @@ using Azure.Data.Tables;
 using Azure.Data.Tables.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json.Linq;
 using UKHO.ERPFacade.Common.Configuration;
-using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models.TableEntities;
 
@@ -21,9 +19,12 @@ namespace UKHO.ERPFacade.Common.IO.Azure
         private const string ErpFacadeTableName = "eesevents";
         private const string PriceChangeMasterTableName = "pricechangemaster";
         private const string UnitPriceChangeTableName = "unitpricechangeevents";
-        private const string IncompleteStatus = "Incomplete";
-        private const string CompleteStatus = "Complete";
         private const int DefaultCallbackDuration = 5;
+        enum Statuses
+        {
+            Incomplete,
+            Complete
+        }
 
         public AzureTableReaderWriter(ILogger<AzureTableReaderWriter> logger,
                                         IOptions<AzureStorageConfiguration> azureStorageConfig,
@@ -207,7 +208,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
         public void UpdateUnitPriceChangeStatusEntity(string correlationId, string unitName, string eventId)
         {
             TableClient tableClient = GetTableClient(UnitPriceChangeTableName);
-            UnitPriceChangeEntity? existingEntity = GetUnitPriceChangeEventsEntities(correlationId, IncompleteStatus, unitName, eventId).ToList().FirstOrDefault();
+            UnitPriceChangeEntity? existingEntity = GetUnitPriceChangeEventsEntities(correlationId, Statuses.Incomplete.ToString(), unitName, eventId).ToList().FirstOrDefault();
             if (existingEntity != null)
             {
                 existingEntity.Status = "Complete";
@@ -219,7 +220,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
         public void UpdatePriceMasterStatusEntity(string correlationId)
         {
             TableClient tableClient = GetTableClient(PriceChangeMasterTableName);
-            PriceChangeMasterEntity? existingEntity = GetMasterEntities(IncompleteStatus, correlationId).ToList().FirstOrDefault();
+            PriceChangeMasterEntity? existingEntity = GetMasterEntities(Statuses.Incomplete.ToString(), correlationId).ToList().FirstOrDefault();
             if (existingEntity != null)
             {
                 existingEntity.Status = "Complete";
@@ -231,7 +232,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
         public void DeletePriceMasterEntity(string correlationId)
         {
             TableClient tableClient = GetTableClient(PriceChangeMasterTableName);
-            PriceChangeMasterEntity? existingEntity = GetMasterEntities(CompleteStatus, correlationId).ToList().FirstOrDefault();
+            PriceChangeMasterEntity? existingEntity = GetMasterEntities(Statuses.Complete.ToString(), correlationId).ToList().FirstOrDefault();
             if (existingEntity != null)
             {
                 tableClient.DeleteEntity(existingEntity.PartitionKey,existingEntity.RowKey);

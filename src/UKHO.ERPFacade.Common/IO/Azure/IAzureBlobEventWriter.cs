@@ -12,7 +12,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
 
         DateTime GetBlobCreateDate(string blobName, string blobContainerName);
 
-        IEnumerable<string> GetBlobsInContainer(string blobContainerName);
+        IEnumerable<string> GetBlobsInContainer(string blobContainerName, string corrId);
 
         bool DeleteBlob(string blobName, string blobContainerName);
 

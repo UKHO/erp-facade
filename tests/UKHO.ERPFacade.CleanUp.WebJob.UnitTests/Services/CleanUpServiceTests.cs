@@ -92,7 +92,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
 
             A.CallTo(() => _fakeAzureTableReaderWriter.GetMasterEntities(A<string>.Ignored, A<string>.Ignored)).Returns(priceChangeMasters);
             A.CallTo(() => _fakeAzureBlobEventWriter.GetBlobCreateDate(A<string>.Ignored, A<string>.Ignored)).Returns(createDate);
-            A.CallTo(() => _fakeAzureBlobEventWriter.GetBlobsInContainer(A<string>.Ignored)).Returns(blobs);
+            A.CallTo(() => _fakeAzureBlobEventWriter.GetBlobsInContainer(A<string>.Ignored, A<string>.Ignored)).Returns(blobs);
             A.CallTo(() => _fakeAzureBlobEventWriter.DeleteBlob(A<string>.Ignored, A<string>.Ignored)).Returns(true);
             A.CallTo(() => _fakeAzureTableReaderWriter.GetAllEntityForEESTable()).Returns(new List<EESEventEntity>());
 
@@ -102,7 +102,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
             A.CallTo(() => _fakeAzureTableReaderWriter.DeleteUnitPriceChangeEntityForMasterCorrId(A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureTableReaderWriter.DeletePriceMasterEntity(A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureBlobEventWriter.GetBlobCreateDate(A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
-            A.CallTo(() => _fakeAzureBlobEventWriter.GetBlobsInContainer(A<string>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeAzureBlobEventWriter.GetBlobsInContainer(A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureBlobEventWriter.DeleteBlob(A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
 
 
@@ -158,7 +158,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
             A.CallTo(() => _fakeAzureTableReaderWriter.DeleteUnitPriceChangeEntityForMasterCorrId(A<string>.Ignored)).MustNotHaveHappened();
             A.CallTo(() => _fakeAzureTableReaderWriter.DeletePriceMasterEntity(A<string>.Ignored)).MustNotHaveHappened();
             A.CallTo(() => _fakeAzureBlobEventWriter.GetBlobCreateDate(A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
-            A.CallTo(() => _fakeAzureBlobEventWriter.GetBlobsInContainer(A<string>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeAzureBlobEventWriter.GetBlobsInContainer(A<string>.Ignored,A<string>.Ignored)).MustNotHaveHappened();
             A.CallTo(() => _fakeAzureBlobEventWriter.DeleteBlob(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
 
 
@@ -214,7 +214,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
             A.CallTo(() => _fakeAzureTableReaderWriter.DeleteUnitPriceChangeEntityForMasterCorrId(A<string>.Ignored)).MustNotHaveHappened();
             A.CallTo(() => _fakeAzureTableReaderWriter.DeletePriceMasterEntity(A<string>.Ignored)).MustNotHaveHappened();
             A.CallTo(() => _fakeAzureBlobEventWriter.GetBlobCreateDate(A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
-            A.CallTo(() => _fakeAzureBlobEventWriter.GetBlobsInContainer(A<string>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeAzureBlobEventWriter.GetBlobsInContainer(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
             A.CallTo(() => _fakeAzureBlobEventWriter.DeleteBlob(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
 
 

@@ -15,7 +15,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.Services
 
         private const string CompleteStatus = "Complete";
         private const string PriceChangeContainerName = "pricechangeblobs";
-        private const string RequestFormat = "json";
+        private const string PriceInformationFileName = "PriceInformation.json";
 
         public CleanUpService(ILogger<CleanUpService> logger,
                                IOptions<ErpFacadeWebJobConfiguration> erpFacadeWebjobConfig,
@@ -42,14 +42,14 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.Services
             foreach (var masterEntity in masterEntities)
             {
                 _logger.LogInformation(EventIds.FetchBlobCreateDate.ToEventId(), "Fetching create date of blob : {0}", masterEntity.CorrId);
-                var blobCreateDate = _azureBlobEventWriter.GetBlobCreateDate(masterEntity.CorrId + '/' + masterEntity.CorrId + '.' + RequestFormat, PriceChangeContainerName);
+                var blobCreateDate = _azureBlobEventWriter.GetBlobCreateDate(masterEntity.CorrId + '/' + PriceInformationFileName, PriceChangeContainerName);
                 TimeSpan timediff = DateTime.Now - blobCreateDate;
                 if (timediff.Days > int.Parse(_erpFacadeWebjobConfig.Value.CleanUpDurationInDays))
                 {
                     _azureTableReaderWriter.DeleteUnitPriceChangeEntityForMasterCorrId(masterEntity.CorrId);
                     _azureTableReaderWriter.DeletePriceMasterEntity(masterEntity.CorrId);
                     _logger.LogInformation(EventIds.FetchBlobsFromContainer.ToEventId(), "Fetching all blobs present in container");
-                    foreach (var blob in _azureBlobEventWriter.GetBlobsInContainer(PriceChangeContainerName))
+                    foreach (var blob in _azureBlobEventWriter.GetBlobsInContainer(PriceChangeContainerName, masterEntity.CorrId))
                     {
                         _azureBlobEventWriter.DeleteBlob(blob, PriceChangeContainerName);
                         _logger.LogInformation(EventIds.DeletedBlobSuccessful.ToEventId(), "Deleted blob : {0}  from container", blob);

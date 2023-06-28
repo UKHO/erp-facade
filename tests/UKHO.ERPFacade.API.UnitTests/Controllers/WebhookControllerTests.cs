@@ -135,6 +135,16 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
              && call.GetArgument<LogLevel>(0) == LogLevel.Information
+             && call.GetArgument<EventId>(1) == EventIds.UploadSapXmlPayloadInAzureBlobStarted.ToEventId()
+             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Uploading the SAP xml payload in blob storage.").MustHaveHappenedOnceExactly();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+             && call.GetArgument<LogLevel>(0) == LogLevel.Information
+             && call.GetArgument<EventId>(1) == EventIds.UploadSapXmlPayloadInAzureBlobCompleted.ToEventId()
+             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "SAP xml payload is uploaded in blob storage successfully.").MustHaveHappenedOnceExactly();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+             && call.GetArgument<LogLevel>(0) == LogLevel.Information
              && call.GetArgument<EventId>(1) == EventIds.EncUpdatePushedToSap.ToEventId()
              && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "ENC update has been sent to SAP successfully. | {StatusCode}").MustHaveHappenedOnceExactly();
         }
@@ -151,6 +161,11 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             A.CallTo(() => _fakeAzureTableReaderWriter.UpsertEntity(A<string>.Ignored)).MustNotHaveHappened();
             A.CallTo(() => _fakeAzureTableReaderWriter.UpdateRequestTimeEntity(A<string>.Ignored)).MustNotHaveHappened();
             A.CallTo(() => _fakeAzureBlobEventWriter.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+             && call.GetArgument<LogLevel>(0) == LogLevel.Information
+             && call.GetArgument<EventId>(1) == EventIds.NewEncContentPublishedEventReceived.ToEventId()
+             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "ERP Facade webhook has received new enccontentpublished event from EES.").MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
              && call.GetArgument<LogLevel>(0) == LogLevel.Warning
@@ -197,6 +212,16 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
              && call.GetArgument<LogLevel>(0) == LogLevel.Information
              && call.GetArgument<EventId>(1) == EventIds.UploadedEncContentPublishedEventInAzureBlob.ToEventId()
              && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "ENC content published event is uploaded in blob storage successfully.").MustHaveHappenedOnceExactly();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+             && call.GetArgument<LogLevel>(0) == LogLevel.Information
+             && call.GetArgument<EventId>(1) == EventIds.UploadSapXmlPayloadInAzureBlobStarted.ToEventId()
+             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Uploading the SAP xml payload in blob storage.").MustHaveHappenedOnceExactly();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+             && call.GetArgument<LogLevel>(0) == LogLevel.Information
+             && call.GetArgument<EventId>(1) == EventIds.UploadSapXmlPayloadInAzureBlobCompleted.ToEventId()
+             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "SAP xml payload is uploaded in blob storage successfully.").MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
              && call.GetArgument<LogLevel>(0) == LogLevel.Error

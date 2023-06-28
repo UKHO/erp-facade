@@ -53,13 +53,17 @@ $terraformOutput = terraform output -json | ConvertFrom-Json
 
 write-output "Set JSON output into pipeline variables"
 Write-Host "##vso[task.setvariable variable=WEB_APP_NAME]$($terraformOutput.webapp_name.value)"
+Write-Host "##vso[task.setvariable variable=WEB_APP;isOutput=true]$($terraformOutput.webapp_name.value)"
 Write-Host "##vso[task.setvariable variable=MOCK_WEB_APP_NAME]$($terraformOutput.mock_webapp_name.value)"
 Write-Host "##vso[task.setvariable variable=ResourceGroup]$($terraformOutput.resource_group.value)"
 Write-Host "##vso[task.setvariable variable=mockWebApp;isOutput=true]$($terraformOutput.mock_webapp_name.value)"
 Write-Host "##vso[task.setvariable variable=mockWebAppResourceGroupName;isOutput=true]$($terraformOutput.resource_group.value)"
 Write-Host "##vso[task.setvariable variable=ErpFacadeConfiguration.BaseUrl]$($terraformOutput.erp_facade_web_app_url.value)"
+Write-Host "##vso[task.setvariable variable=ErpFacadeBaseUrl;isOutput=true]$($terraformOutput.erp_facade_web_app_url.value)"
+Write-Host "##vso[task.setvariable variable=AzureStorageConnectionString;issecret=true;isOutput=true]$($terraformOutput.storage_connection_string.value)"
 Write-Host "##vso[task.setvariable variable=AzureStorageConfiguration.ConnectionString;issecret=true]$($terraformOutput.storage_connection_string.value)"
 Write-Host "##vso[task.setvariable variable=SapMockConfiguration.BaseUrl]$($terraformOutput.erp_facade_mock_service_url.value)"
+Write-Host "##vso[task.setvariable variable=mockwebappurl;isOutput=true]$($terraformOutput.erp_facade_mock_service_url.value)"
 
 $terraformOutput | ConvertTo-Json -Depth 5 > $terraformJsonOutputFile
 

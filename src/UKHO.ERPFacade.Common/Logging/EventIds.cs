@@ -203,14 +203,14 @@
         SapHealthCheckRequestSentToSap = 940040,
 
         /// <summary>
-        /// 940041 - Uploading the UnitsOfSale updated event payload json in blob storage.
+        /// 940041 - Uploading the SAP xml payload in blob storage.
         /// </summary>
-        UploadUnitsOfSaleUpdatedEventPayloadInAzureBlob = 940041,
+        UploadSapXmlPayloadInAzureBlobStarted = 940041,
 
         /// <summary>
-        /// 940042 - UnitsOfSale updated event payload json is uploaded in blob storage successfully.
+        /// 940042 - SAP xml payload is uploaded in blob storage successfully.
         /// </summary>
-        UploadedUnitsOfSaleUpdatedEventPayloadInAzureBlob = 940042,
+        UploadSapXmlPayloadInAzureBlobCompleted = 940042,
 
         /// <summary>
         /// 940043 - UnitsOfSale updated event Pushed To EES
@@ -305,14 +305,14 @@
         UnitsOfSaleNotFoundInSAPPriceInformationPayload = 940061,
 
         /// <summary>
-        /// 940062- Webjob started cleanup process.
+        /// 940062 - Uploading the received Price information event in blob storage.
         /// </summary>
-        WebjobCleanUpEventStarted = 940062,
+        UploadPriceInformationEventInAzureBlob = 940062,
 
         /// <summary>
-        /// 940063- Webjob completed cleanup process.
+        /// 940063 - Price information event is uploaded in blob storage successfully.
         /// </summary>
-        WebjobCleanUpEventCompleted = 940063,
+        UploadedPriceInformationEventInAzureBlob = 940063,
 
         /// <summary>
         /// 940064- Fetching master entities from azure table.
@@ -357,6 +357,16 @@
         /// <summary>
         /// 940072 - Deleted container successfully.
         /// </summary>
-        DeletedContainerSuccessful = 940072
+        DeletedContainerSuccessful = 940072,
+
+        /// <summary>
+        /// 940073- Webjob started cleanup process.
+        /// </summary>
+        WebjobCleanUpEventStarted = 940073,
+
+        /// <summary>
+        /// 940074- Webjob completed cleanup process.
+        /// </summary>
+        WebjobCleanUpEventCompleted = 940074
     }
 }
