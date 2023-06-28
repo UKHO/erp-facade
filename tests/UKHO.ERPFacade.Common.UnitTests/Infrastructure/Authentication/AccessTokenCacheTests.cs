@@ -15,14 +15,12 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.Authentication
         private const string Scope = "MyScope";
         private const string TokenValue = "MyToken";
         private ITokenProvider _fakeTokenProvider;
-        private AccessTokenCache _fakeAccessTokenCache;
-        private ILogger<AccessTokenCache> _fakeLogger;
+        private AccessTokenCache _fakeAccessTokenCache;        
 
         [SetUp]
         public void Setup()
         {
-            _fakeTokenProvider = A.Fake<ITokenProvider>();
-            _fakeLogger = A.Fake<ILogger<AccessTokenCache>>();
+            _fakeTokenProvider = A.Fake<ITokenProvider>();            
 
             A.CallTo(() => _fakeTokenProvider.GetTokenAsync(Scope)).Returns(new AccessToken(TokenValue, DateTimeOffset.MaxValue));
 
@@ -31,7 +29,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.Authentication
             // we're fairly sure the cache has a shared/static cache between all instances
             // removing this causes the GetTokenAsync_UpdatesIfExpired test to fail when churned
             cachingService.Remove(Scope);
-            _fakeAccessTokenCache = new AccessTokenCache(cachingService, _fakeTokenProvider, _fakeLogger);
+            _fakeAccessTokenCache = new AccessTokenCache(cachingService, _fakeTokenProvider);
         }
 
         [Test]
