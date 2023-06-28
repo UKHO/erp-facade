@@ -1,4 +1,6 @@
-﻿using Azure.Extensions.AspNetCore.Configuration.Secrets;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
+using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using Microsoft.ApplicationInsights.Channel;
@@ -7,8 +9,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
-using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Monitoring.WebJob.Services;
@@ -71,6 +71,7 @@ namespace UKHO.ERPFacade.Monitoring.WebJob
             using (var config = (ConfigurationRoot)configBuilder.Build())
             {
                 string kvServiceUri = config["KeyVaultSettings:ServiceUri"];
+                Console.WriteLine($"kvServiceUri: {kvServiceUri}");
                 if (!string.IsNullOrWhiteSpace(kvServiceUri))
                 {
                     var secretClient = new SecretClient(new Uri(kvServiceUri), new DefaultAzureCredential(
@@ -112,6 +113,7 @@ namespace UKHO.ERPFacade.Monitoring.WebJob
 
                 if (eventHubConfig != null && !string.IsNullOrWhiteSpace(eventHubConfig.ConnectionString))
                 {
+                    Console.WriteLine($"eventHubConfig: {eventHubConfig.ConnectionString}");
                     loggingBuilder.AddEventHub(config =>
                     {
                         config.Environment = eventHubConfig.Environment;
@@ -139,12 +141,16 @@ namespace UKHO.ERPFacade.Monitoring.WebJob
                 }
             );
 
-            if (configuration != null)
-            {
-                serviceCollection.Configure<ErpFacadeWebJobConfiguration>(configuration.GetSection("ErpFacadeWebJobConfiguration"));
-                serviceCollection.Configure<AzureStorageConfiguration>(configuration.GetSection("AzureStorageConfiguration"));
-                serviceCollection.AddSingleton(configuration);
-            }
+            AzureStorageConfiguration azureStorageConfiguration = configuration.GetSection("AzureStorageConfiguration").Get<AzureStorageConfiguration>();
+
+            Console.WriteLine($"azureStorageConfiguration: {azureStorageConfiguration.ConnectionString}");
+
+            //if (configuration != null)
+            //{
+            serviceCollection.Configure<ErpFacadeWebJobConfiguration>(configuration.GetSection("ErpFacadeWebJobConfiguration"));
+            serviceCollection.Configure<AzureStorageConfiguration>(configuration.GetSection("AzureStorageConfiguration"));
+            serviceCollection.AddSingleton(configuration);
+            //}
 
             serviceCollection.AddSingleton<MonitoringWebJob>();
             serviceCollection.AddSingleton<IAzureTableReaderWriter, AzureTableReaderWriter>();
