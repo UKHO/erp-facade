@@ -11,12 +11,14 @@ using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using UKHO.ERPFacade.API.Controllers;
 using UKHO.ERPFacade.Common.Exceptions;
+using UKHO.ERPFacade.Common.Infrastructure;
 using UKHO.ERPFacade.Common.Infrastructure.EventService;
 using UKHO.ERPFacade.Common.Infrastructure.EventService.EventProvider;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Services;
+using static UKHO.ERPFacade.Common.Infrastructure.Result;
 using IJsonHelper = UKHO.ERPFacade.Common.IO.IJsonHelper;
 
 namespace UKHO.ERPFacade.API.UnitTests.Controllers
@@ -69,15 +71,18 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         public async Task WhenValidRequestReceived_ThenPostPriceInformationReturns200OkResponse()
         {
             var fakePriceInformationJson = JArray.Parse(@"[{""corrid"":""123""}]");
-
+            CloudEvent<UnitOfSaleUpdatedEventData> unitOfSaleUpdatedCloudEventData = GetUnitOfSaleUpdatedEventData();
             A.CallTo(() => _fakeAzureBlobEventWriter.CheckIfContainerExists(A<string>.Ignored)).Returns(true);
             A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).Returns(encContentPublishedJson);
+            A.CallTo(() => _fakeCloudEventFactory.Create(A<UnitOfSaleUpdatedEventPayload>.Ignored)).Returns(unitOfSaleUpdatedCloudEventData);
+            A.CallTo(() => _fakeEventPublisher.Publish(A<CloudEvent<UnitOfSaleUpdatedEventData>>.Ignored)).Returns(new Result(Statuses.Success, "Successfully sent event"));
 
             var result = (OkObjectResult)await _fakeErpFacadeController.PostPriceInformation(fakePriceInformationJson);
             result.StatusCode.Should().Be(200);
 
             A.CallTo(() => _fakeAzureTableReaderWriter.UpdateResponseTimeEntity(A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureBlobEventWriter.CheckIfContainerExists(A<string>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeEventPublisher.Publish(A<CloudEvent<UnitOfSaleUpdatedEventData>>.Ignored)).MustHaveHappened();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
@@ -128,7 +133,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         {
             var requestJson = JArray.Parse(JsonConvert.DeserializeObject(jsonString).ToString()!);
             var unitsOfSalePricesList = GetUnitsOfSalePriceList();
-            var eesPriceEventPayload = GetUnitsOfSaleUpdatedEventPayloadData();
+            UnitOfSaleUpdatedEventPayload? eesPriceEventPayload = GetUnitsOfSaleUpdatedEventPayloadData();
+            CloudEvent<UnitOfSaleUpdatedEventData> unitOfSaleUpdatedCloudEventData = GetUnitOfSaleUpdatedEventData();
 
             A.CallTo(() => _fakeAzureBlobEventWriter.CheckIfContainerExists(A<string>.Ignored)).Returns(true);
             A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).Returns(encContentPublishedJson);
@@ -136,13 +142,15 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             A.CallTo(() => _fakeErpFacadeService.MapAndBuildUnitsOfSalePrices(A<List<PriceInformation>>.Ignored, A<List<string>>.Ignored)).Returns(unitsOfSalePricesList);
 
             A.CallTo(() => _fakeErpFacadeService.BuildUnitsOfSaleUpdatedEventPayload(A<List<UnitsOfSalePrices>>.Ignored, A<string>.Ignored)).Returns(eesPriceEventPayload);
-
+            A.CallTo(() => _fakeCloudEventFactory.Create(A<UnitOfSaleUpdatedEventPayload>.Ignored)).Returns(unitOfSaleUpdatedCloudEventData);
+            A.CallTo(() => _fakeEventPublisher.Publish(A<CloudEvent<UnitOfSaleUpdatedEventData>>.Ignored)).Returns(new Result(Statuses.Success, "Successfully sent event"));
             var result = (OkObjectResult)await _fakeErpFacadeController.PostPriceInformation(requestJson);
             result.StatusCode.Should().Be(200);
 
             A.CallTo(() => _fakeAzureTableReaderWriter.UpdateResponseTimeEntity(A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureBlobEventWriter.CheckIfContainerExists(A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeEventPublisher.Publish(A<CloudEvent<UnitOfSaleUpdatedEventData>>.Ignored)).MustHaveHappened();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
@@ -205,11 +213,14 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             var requestJson = JArray.Parse(JsonConvert.DeserializeObject(jsonString).ToString()!);
             var unitsOfSalePricesList = GetUnitsOfSalePriceList();
             var eesPriceEventPayload = GetUnitsOfSaleUpdatedEventPayloadData();
+            CloudEvent<UnitOfSaleUpdatedEventData> unitOfSaleUpdatedCloudEventData = GetUnitOfSaleUpdatedEventData();
 
             A.CallTo(() => _fakeAzureBlobEventWriter.CheckIfContainerExists(A<string>.Ignored)).Returns(true);
             A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).Returns(encContentPublishedJson);
+            A.CallTo(() => _fakeCloudEventFactory.Create(A<UnitOfSaleUpdatedEventPayload>.Ignored)).Returns(unitOfSaleUpdatedCloudEventData);
+            A.CallTo(() => _fakeEventPublisher.Publish(A<CloudEvent<UnitOfSaleUpdatedEventData>>.Ignored)).Returns(new Result(Statuses.Success, "Successfully sent event"));
 
-            A.CallTo(() => _fakeJsonHelper.GetPayloadJsonSize(A<string>.Ignored)).Returns(2000000);
+            A.CallTo(() => _fakeJsonHelper.GetPayloadJsonSize(A<string>.Ignored)).Returns(3000000);
 
             A.CallTo(() => _fakeErpFacadeService.MapAndBuildUnitsOfSalePrices(A<List<PriceInformation>>.Ignored, A<List<string>>.Ignored)).Returns(unitsOfSalePricesList);
 
@@ -220,6 +231,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             A.CallTo(() => _fakeAzureTableReaderWriter.UpdateResponseTimeEntity(A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureBlobEventWriter.CheckIfContainerExists(A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeCloudEventFactory.Create(A<UnitOfSaleUpdatedEventPayload>.Ignored)).Returns(unitOfSaleUpdatedCloudEventData);
+            A.CallTo(() => _fakeEventPublisher.Publish(A<CloudEvent<UnitOfSaleUpdatedEventData>>.Ignored)).Returns(new Result(Statuses.Failure, "Successfully sent event"));
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
@@ -244,7 +257,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Error
             && call.GetArgument<EventId>(1) == EventIds.UnitsOfSaleUpdatedEventSizeLimit.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "UnitsOfSale price event exceeds the size limit of 1 MB.").MustHaveHappenedOnceExactly();
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "UnitsOfSaleUpdated event exceeds the size limit of 1 MB.").MustHaveHappenedOnceExactly();
         }
 
         private List<PriceInformation> GetPriceInformationData()
@@ -279,6 +292,14 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
 
             return eesPriceEventPayload;
         }
+
+        private CloudEvent<UnitOfSaleUpdatedEventData> GetUnitOfSaleUpdatedEventData()
+        {
+            var eesPriceEventPayload = GetUnitsOfSaleUpdatedEventPayloadData();
+            CloudEvent<UnitOfSaleUpdatedEventData>? unitOfSaleCloudEventData = _fakeCloudEventFactory.Create(eesPriceEventPayload);
+
+            return unitOfSaleCloudEventData;
+        } 
 
         [Test]
         public async Task WhenValidRequestReceived_ThenPostBulkPriceInformationReturns200OkResponse()

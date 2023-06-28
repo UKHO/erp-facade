@@ -4,6 +4,7 @@ using Azure.Core;
 using FakeItEasy;
 using FluentAssertions;
 using LazyCache;
+using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using UKHO.ERPFacade.Common.Infrastructure.Authentication;
 
@@ -15,6 +16,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.Authentication
         private const string TokenValue = "MyToken";
         private ITokenProvider _fakeTokenProvider;
         private AccessTokenCache _fakeAccessTokenCache;
+        private ILogger<AccessTokenCache> _fakeLogger;
 
         [SetUp]
         public void Setup()
@@ -28,7 +30,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.Authentication
             // we're fairly sure the cache has a shared/static cache between all instances
             // removing this causes the GetTokenAsync_UpdatesIfExpired test to fail when churned
             cachingService.Remove(Scope);
-            _fakeAccessTokenCache = new AccessTokenCache(cachingService, _fakeTokenProvider);
+            _fakeAccessTokenCache = new AccessTokenCache(cachingService, _fakeTokenProvider, _fakeLogger);
         }
 
         [Test]
