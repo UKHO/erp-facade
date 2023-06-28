@@ -160,9 +160,6 @@
     <None Update="ERPFacadePayloadTestData\ID9_MetadataChange.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPFacadePayloadTestData\SapMockApiConfigure.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="ERPFacadePayloadTestData\UoS2_ProductISNullUOS.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
