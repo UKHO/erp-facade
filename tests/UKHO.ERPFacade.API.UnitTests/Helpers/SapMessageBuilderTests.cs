@@ -196,6 +196,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             && call.GetArgument<EventId>(1) == EventIds.SapActionCreated.ToEventId()
             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "SAP action {ActionName} created.").MustHaveHappened();
         }
+
         [Test]
         [TestCase("ENC S57", "S57")]
         [TestCase("ENC", "ENC")]
