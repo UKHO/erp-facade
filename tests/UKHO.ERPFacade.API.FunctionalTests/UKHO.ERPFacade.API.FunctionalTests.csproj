@@ -168,8 +168,9 @@
     </None>
     <None Update="ERPFacadePayloadTestData\UoS3_ProductMissingUOS.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </None>    
   </ItemGroup>
+
 
   <ItemGroup>
     <Content Include="ERPFacadeGeneratedJSONFiles\**">
@@ -177,16 +178,16 @@
     </Content>
   </ItemGroup>
 
-  <ItemGroup>
-    <Content Include="ERPFacadeGeneratedProductJSON\**">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  
-  <ItemGroup>
-    <Content Include="ERPFacadeGeneratedXmlFiles\**">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
+	<ItemGroup>
+		<Content Include="ERPFacadeGeneratedProductJSON\**">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="ERPFacadeGeneratedXmlFiles\**">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
 
 </Project>

@@ -25,6 +25,10 @@ variables:
     value: "ukhydrographicoffice/terraform-azure-powershell-unzip:1.4.4"
   - name: DeploymentPool
     value: "UKHO Ubuntu 1804"
+  - name: DeploymentPoolFT
+    value: "Tiberius"
+  - name: DeploymentPoolPE
+    value: "Private Link Deployments (ENG)"
 
 stages:
   - stage: Stryker_Mutator
@@ -375,47 +379,51 @@ stages:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
                     AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
 
-                - task: DownloadBuildArtifacts@0
-                  displayName: "Download Functional test Artifact"
-                  inputs:
-                    buildType: 'current'
-                    downloadType: 'single'
-                    artifactName: 'functionaltests'
-                    downloadPath: '$(Build.SourcesDirectory)'
+      - deployment: DevDeployApp
+        dependsOn: DevDeployTerraform
+        displayName: "Dev - Deploy Dotnet App"
+        environment: "ERP-Dev"
+        pool: $(DeploymentPoolPE)
+        variables:
+          - name : WEB_APP_NAME
+            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_APP'] ]
+          - name : "ErpFacadeConfiguration.BaseUrl"
+            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
+          - name : MOCK_WEB_APP_NAME
+            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp'] ]
+        workspace:
+          clean: all
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - template: Deployment/templates/continuous-deployment-app.yml
+                  parameters:
+                    AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
 
-                - task: FileTransform@2
-                  displayName: "File Transform: functionaltests"
-                  inputs:
-                    folderPath: '$(Build.SourcesDirectory)/functionaltests/'
-                    xmlTransformationRules:
-                    jsonTargetFiles: '**/appsettings.json'
-
-                - task: UseDotNet@2
-                  displayName: 'Use .NET 6.0.x sdk'
-                  inputs:
-                    packageType: sdk
-                    version: 6.0.x
-
-                - task: DotNetCoreCLI@2
-                  displayName: "Run Functional tests"
-                  inputs:
-                    command: "test"
-                    projects: |
-                      **/*FunctionalTest*.dll
-                      !**/*TestAdapter.dll
-                      !**/obj/**
-                    testRunTitle: "Dev-AutomationTests"
-                    workingDirectory: '$(Build.SourcesDirectory)/functionaltests'
-
-                - task: AzureCLI@2
-                  displayName: "Set FT Configuration Application Settings for Mock Webapp"
-                  condition: always()
-                  inputs:
-                    azureSubscription: "ERP-Facade-Dev-A.011.05.12"
-                    scriptType: 'pscore'
-                    scriptLocation: 'scriptPath'
-                    scriptPath: "$(Pipeline.Workspace)/terraformartifact/set_mock_configuration.ps1"
-                    arguments: '-ftrunning "true" -mockresourcegroup $(ResourceGroup) -mockwebappname $(MOCK_WEB_APP_NAME)'
+      - job: FunctionalTests
+        dependsOn:
+        - DevDeployTerraform
+        - DevDeployApp
+        pool: $(WindowsPool)
+        variables:
+          - name : ErpFacadeConfiguration.BaseUrl
+            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
+          - name : SapMockConfiguration.BaseUrl
+            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl'] ]
+          - name : AzureStorageConfiguration.ConnectionString
+            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
+          - name : mockWebAppName
+            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp'] ]
+          - name : mockWebAppResourceGroup
+            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName'] ]
+        displayName: "Dev Functional Automated Tests"
+        workspace:
+         clean: all
+        steps:
+          - template: Deployment/templates/continuous-testing.yml
+            parameters:
+              AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
 
   - stage: QAdeploy
     dependsOn: Devdeploy
@@ -448,10 +456,12 @@ stages:
         value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup
         value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
-    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))  
+      - name: "SapMockConfiguration.BaseUrl"
+        value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
+   # condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
     jobs:
       - deployment: QADeployTerraform
-        displayName: "QA - Deploy Terraform and Dotnet App"
+        displayName: "Qa - Deploy Terraform and Dotnet App"
         environment: "ERP-QA"
         pool: $(DeploymentPool)
         container: ${{variables.Container}}
@@ -466,57 +476,39 @@ stages:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
                     AzureSubscription: "ERP-Facade-QA-A.011.05.12"
 
-                - task: AzureCLI@2
-                  displayName: "Set FT Configuration Application Settings for Mock Webapp"
-                  condition: always()
-                  inputs:
-                    azureSubscription: "ERP-Facade-Dev-A.011.05.12"
-                    scriptType: 'pscore'
-                    scriptLocation: 'scriptPath'
-                    scriptPath: "$(Pipeline.Workspace)/terraformartifact/set_mock_configuration.ps1"
-                    arguments: '-ftrunning "true" -mockresourcegroup $(mockWebAppResourceGroup) -mockwebappname $(mockWebAppName)'
+      - deployment: QADeployApp
+        dependsOn: QADeployTerraform
+        displayName: "Qa - Deploy Dotnet App"
+        environment: "ERP-QA"
+        pool: $(DeploymentPoolPE)
+        variables:
+          - name : WEB_APP_NAME
+            value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.WEB_APP'] ]
+        workspace:
+          clean: all
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - template: Deployment/templates/continuous-deployment-app.yml
+                  parameters:
+                    AzureSubscription: "ERP-Facade-QA-A.011.05.12"
 
-                - task: DownloadBuildArtifacts@0
-                  displayName: "Download Functional test Artifact"
-                  inputs:
-                    buildType: 'current'
-                    downloadType: 'single'
-                    artifactName: 'functionaltests'
-                    downloadPath: '$(Build.SourcesDirectory)'
-
-                - task: FileTransform@2
-                  displayName: "File Transform: functionaltests"
-                  inputs:
-                    folderPath: '$(Build.SourcesDirectory)/functionaltests/'
-                    xmlTransformationRules:
-                    jsonTargetFiles: '**/appsettings.json'
-
-                - task: UseDotNet@2
-                  displayName: 'Use .NET 6.0.x sdk'
-                  inputs:
-                    packageType: sdk
-                    version: 6.0.x
-
-                - task: DotNetCoreCLI@2
-                  displayName: "Run Functional tests"
-                  inputs:
-                    command: "test"
-                    projects: |
-                      **/*FunctionalTest*.dll
-                      !**/*TestAdapter.dll
-                      !**/obj/**
-                    testRunTitle: "QA-AutomationTests"
-                    workingDirectory: '$(Build.SourcesDirectory)/functionaltests'
-
-                - task: AzureCLI@2
-                  displayName: "Set FT Configuration Application Settings for Mock Webapp"
-                  condition: always()
-                  inputs:
-                    azureSubscription: "ERP-Facade-Dev-A.011.05.12"
-                    scriptType: 'pscore'
-                    scriptLocation: 'scriptPath'
-                    scriptPath: "$(Pipeline.Workspace)/terraformartifact/set_mock_configuration.ps1"
-                    arguments: '-ftrunning "false" -mockresourcegroup $(mockWebAppResourceGroup) -mockwebappname $(mockWebAppName)'
+      - job: FunctionalTests
+        dependsOn:
+        - QADeployTerraform
+        - QADeployApp
+        pool: $(WindowsPool)
+        variables:
+          - name : AzureStorageConfiguration.ConnectionString
+            value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
+        displayName: "Qa Functional Automated Tests"
+        workspace:
+         clean: all
+        steps:
+          - template: Deployment/templates/continuous-testing.yml
+            parameters:
+              AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
 
   - stage: Livedeploy
     displayName: "Livedeploy (inc terraform, webapp deploy)"
