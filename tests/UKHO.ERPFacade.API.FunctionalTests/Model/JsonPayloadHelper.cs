@@ -71,8 +71,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
         [JsonProperty("mayAffectHoldings")]
         public bool MayAffectHoldings { get; set; }
 
-        [JsonProperty("contentChanged")]
-        public bool ContentChanged { get; set; }
+        [JsonProperty("contentChange")]
+        public bool ContentChange { get; set; }
 
         [JsonProperty("permit")]
         public string Permit { get; set; }
@@ -80,8 +80,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
         [JsonProperty("providerCode")]
         public string ProviderCode { get; set; }
 
-        [JsonProperty("providerDesc")]
-        public string ProviderDesc { get; set; }
+        [JsonProperty("providerName")]
+        public string ProviderName { get; set; }
 
         [JsonProperty("size")]
         public string Size { get; set; }

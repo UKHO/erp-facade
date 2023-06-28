@@ -145,7 +145,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 if ((childCell == product.ProductName) &&
                     (product.Status.StatusName.Contains("Update") || product.Status.StatusName.Contains("New Edition") || product.Status.StatusName.Contains("Re-issue")) &&
                     (!product.Status.IsNewCell) &&
-                    (product.ContentChanged))
+                    (product.ContentChange))
                 {
                     AttrNotMatched.Clear();
                     if (!item.ACTIONNUMBER.Equals(actionCounter.ToString()))
@@ -252,7 +252,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             Console.WriteLine("Action#:" + actionCounter + ".Childcell:" + childCell);
             foreach (Product product in jsonPayload.Data.Products)
             {
-                if ((childCell == product.ProductName) && (!product.ContentChanged))
+                if ((childCell == product.ProductName) && (!product.ContentChange))
                 {
                     AttrNotMatched.Clear();
                     if (!item.ACTIONNUMBER.Equals(actionCounter.ToString()))
@@ -1014,7 +1014,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
             foreach (Product product in obj.Data.Products)
             {
-                if (product.ContentChanged == false)
+                if (product.ContentChange == false)
                 {
                     count++;
                 }
@@ -1036,7 +1036,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
             foreach (Product product in obj.Data.Products)
             {
-                if (product.ContentChanged == false)
+                if (product.ContentChange == false)
                 {
                     count = count + product.InUnitsOfSale.Count;
                 }
@@ -1058,7 +1058,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             int count = 0;
             foreach (Product product in obj.Data.Products)
             {
-                if (product.ContentChanged == true && product.Status.IsNewCell == false
+                if (product.ContentChange == true && product.Status.IsNewCell == false
                     && (product.Status.StatusName == "Update" || product.Status.StatusName == "New Edition" || product.Status.StatusName == "Re-issue"))
                 {
                     count++;

@@ -190,4 +190,21 @@
 		</Content>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Remove="ERPFacadeGeneratedJSONFiles\default.JSON" />
+	  <None Remove="ERPFacadeGeneratedProductJSON\default.JSON" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Update="ERPFacadeGeneratedJSONFiles\default.JSON">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Update="ERPFacadeGeneratedProductJSON\default.JSON">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Update="ERPFacadeGeneratedXmlFiles\default.xml">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
+
 </Project>
