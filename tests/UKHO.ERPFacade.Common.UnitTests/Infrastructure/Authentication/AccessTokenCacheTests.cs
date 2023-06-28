@@ -22,6 +22,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.Authentication
         public void Setup()
         {
             _fakeTokenProvider = A.Fake<ITokenProvider>();
+            _fakeLogger = A.Fake<ILogger<AccessTokenCache>>();
 
             A.CallTo(() => _fakeTokenProvider.GetTokenAsync(Scope)).Returns(new AccessToken(TokenValue, DateTimeOffset.MaxValue));
 

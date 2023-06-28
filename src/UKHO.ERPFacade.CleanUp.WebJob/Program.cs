@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
-using Azure.Extensions.AspNetCore.Configuration.Secrets;
+﻿using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using Microsoft.ApplicationInsights.Channel;
@@ -9,9 +7,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
+using UKHO.ERPFacade.CleanUp.WebJob;
+using UKHO.ERPFacade.CleanUp.WebJob.Services;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.IO.Azure;
-using UKHO.ERPFacade.Monitoring.WebJob.Services;
 using UKHO.Logging.EventHubLogProvider;
 
 namespace UKHO.ERPFacade.Monitoring.WebJob
@@ -41,7 +42,7 @@ namespace UKHO.ERPFacade.Monitoring.WebJob
 
                 try
                 {
-                    serviceProvider.GetService<MonitoringWebJob>().Start();
+                    serviceProvider.GetService<CleanUpWebjob>().Start();
                 }
                 finally
                 {
@@ -71,7 +72,6 @@ namespace UKHO.ERPFacade.Monitoring.WebJob
             using (var config = (ConfigurationRoot)configBuilder.Build())
             {
                 string kvServiceUri = config["KeyVaultSettings:ServiceUri"];
-                Console.WriteLine($"kvServiceUri: {kvServiceUri}");
                 if (!string.IsNullOrWhiteSpace(kvServiceUri))
                 {
                     var secretClient = new SecretClient(new Uri(kvServiceUri), new DefaultAzureCredential(
@@ -98,7 +98,7 @@ namespace UKHO.ERPFacade.Monitoring.WebJob
             //create the logger and setup of sinks, filters and properties	
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Information()
-                .WriteTo.File("Logs/UKHO.ERPFacade.Monitoring.WebJob-.txt", rollingInterval: RollingInterval.Day, outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level}] [{SourceContext}] {Message}{NewLine}{Exception}")
+                .WriteTo.File("Logs/UKHO.ERPFacade.CleanUp.WebJob-.txt", rollingInterval: RollingInterval.Day, outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level}] [{SourceContext}] {Message}{NewLine}{Exception}")
                 .CreateLogger();
 #endif
             serviceCollection.AddLogging(loggingBuilder =>
@@ -113,7 +113,6 @@ namespace UKHO.ERPFacade.Monitoring.WebJob
 
                 if (eventHubConfig != null && !string.IsNullOrWhiteSpace(eventHubConfig.ConnectionString))
                 {
-                    Console.WriteLine($"eventHubConfig: {eventHubConfig.ConnectionString}");
                     loggingBuilder.AddEventHub(config =>
                     {
                         config.Environment = eventHubConfig.Environment;
@@ -141,20 +140,17 @@ namespace UKHO.ERPFacade.Monitoring.WebJob
                 }
             );
 
-            AzureStorageConfiguration azureStorageConfiguration = configuration.GetSection("AzureStorageConfiguration").Get<AzureStorageConfiguration>();
+            if (configuration != null)
+            {
+                serviceCollection.Configure<ErpFacadeWebJobConfiguration>(configuration.GetSection("ErpFacadeWebJobConfiguration"));
+                serviceCollection.Configure<AzureStorageConfiguration>(configuration.GetSection("AzureStorageConfiguration"));
+                serviceCollection.AddSingleton(configuration);
+            }
 
-            Console.WriteLine($"azureStorageConfiguration: {azureStorageConfiguration.ConnectionString}");
-
-            //if (configuration != null)
-            //{
-            serviceCollection.Configure<ErpFacadeWebJobConfiguration>(configuration.GetSection("ErpFacadeWebJobConfiguration"));
-            serviceCollection.Configure<AzureStorageConfiguration>(configuration.GetSection("AzureStorageConfiguration"));
-            serviceCollection.AddSingleton(configuration);
-            //}
-
-            serviceCollection.AddSingleton<MonitoringWebJob>();
+            serviceCollection.AddSingleton<CleanUpWebjob>();
             serviceCollection.AddSingleton<IAzureTableReaderWriter, AzureTableReaderWriter>();
-            serviceCollection.AddSingleton<IMonitoringService, MonitoringService>();
+            serviceCollection.AddSingleton<IAzureBlobEventWriter, AzureBlobEventWriter>();
+            serviceCollection.AddSingleton<ICleanUpService, CleanUpService>();
         }
     }
 }
