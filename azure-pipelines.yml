@@ -208,16 +208,7 @@ stages:
               arguments: "--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/UKHO.ERPFacade.API/App_Data/jobs/continuous/ERPFacadeMonitoringWebjob"
               zipAfterPublish: false
               modifyOutputPath: false
-          - task: DotNetCoreCLI@2
-            displayName: "Publish Cleanup Webjob"
-            inputs:
-              command: "publish"
-              publishWebProjects: false
-              projects: "**/UKHO.ERPFacade.CleanUp.WebJob.csproj"
-              arguments: "--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/UKHO.ERPFacade.API/App_Data/jobs/Triggered/CleanupWebjob"
-              zipAfterPublish: false
-              modifyOutputPath: false
-
+          
           - task: DotNetCoreCLI@2
             displayName: "Publish PriceChangeEventWebJob"
             inputs:
@@ -225,6 +216,16 @@ stages:
               publishWebProjects: false
               projects: "**/UKHO.ERPFacade.PublishPriceChange.WebJob.csproj"
               arguments: "--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/UKHO.ERPFacade.API/App_Data/jobs/continuous/PriceChangeEventWebJob"
+              zipAfterPublish: false
+              modifyOutputPath: false
+
+          - task: DotNetCoreCLI@2
+            displayName: "Publish Cleanup Webjob"
+            inputs:
+              command: "publish"
+              publishWebProjects: false
+              projects: "**/UKHO.ERPFacade.CleanUp.WebJob.csproj"
+              arguments: "--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/UKHO.ERPFacade.API/App_Data/jobs/Triggered/CleanupWebjob"
               zipAfterPublish: false
               modifyOutputPath: false
 
