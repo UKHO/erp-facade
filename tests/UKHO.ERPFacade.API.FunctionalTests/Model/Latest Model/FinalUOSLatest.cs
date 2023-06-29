@@ -2,14 +2,7 @@
     {
 
         public class FinalUoSOutput
-        {
-            public string EventName { get; set; }
-            public string Subject { get; set; }
-            public Eventdata EventData { get; set; }
-        }
-
-        public class Eventdata
-        {
+    { 
             public string specversion { get; set; }
             public string type { get; set; }
             public string source { get; set; }
@@ -19,7 +12,8 @@
             public string subject { get; set; }
             public string datacontenttype { get; set; }
             public Data data { get; set; }
-        }
+            public string Subject { get; set; }
+    }
 
         public class Data
         {
