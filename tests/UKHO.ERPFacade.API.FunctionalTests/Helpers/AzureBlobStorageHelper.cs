@@ -12,15 +12,15 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             {
                 BlobServiceClient blobServiceClient = new BlobServiceClient(Config.TestConfig.AzureStorageConfiguration.ConnectionString);
                 BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerAndBlobName);
-                BlobClient blobClient = containerClient.GetBlobClient(containerAndBlobName + "_unitofsalesupdatedevent" + "." + fileType);
+                BlobClient blobClient = containerClient.GetBlobClient("UnitOfSaleUpdatedEvent" + "." + fileType);
 
                 BlobDownloadInfo blobDownload = blobClient.Download();
-                using (FileStream downloadFileStream = new FileStream((expectedfilePath + "\\" + containerAndBlobName + "_unitofsalesupdatedevent" + "." + fileType), FileMode.Create))
+                using (FileStream downloadFileStream = new FileStream((expectedfilePath + "\\" + "UnitOfSaleUpdatedEvent" + "." + fileType), FileMode.Create))
                 {
                     blobDownload.Content.CopyTo(downloadFileStream);
                 }
 
-                return (expectedfilePath + "\\" + containerAndBlobName + "_unitofsalesupdatedevent" + "." + fileType);
+                return (expectedfilePath + "\\" + "UnitOfSaleUpdatedEvent" + "." + fileType);
             }
             catch (Exception ex)
             {
