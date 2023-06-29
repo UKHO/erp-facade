@@ -1,0 +1,191 @@
+{
+	"info": {
+		"_postman_id": "0e8192d8-5148-4d25-935e-3f27aea820d2",
+		"name": "EES",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15003240"
+	},
+	"item": [
+		{
+			"name": "Cloud Dev (AAD Token)",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{BearerToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n     \"specversion\": \"1.0\",\r\n     \"type\": \"uk.gov.UKHO.FileShareService.NewFilesPublished.v1\",\r\n     \"source\": \"https://enavigator.ukho.gov.uk\",\r\n     \"id\": \"2f03a25f-28b3-46ea-b009-5943250a9a41\",\r\n     \"time\": \"2020-10-13T12:08:03.4880776Z\",\r\n     \"datacontenttype\": \"application/json\",\r\n     \"data\": {\r\n          \"businessUnit\": \"TEST\",\r\n          \"batchId\": \"265be8c1-883e-489a-a61c-5fc068ccff83\",\r\n          \"files\": [\r\n            {\r\n              \"filename\": \"UserAttributesNeFile10.png\",\r\n              \"fileSize\": 310,\r\n              \"mimeType\": \"image/png\",\r\n              \"attributes\": [\r\n                {\r\n                  \"key\": \"Key1\",\r\n                  \"value\": \"Value1\"\r\n                },\r\n                {\r\n                  \"key\": \"Key2\",\r\n                  \"value\": \"Value2\"\r\n                }\r\n              ],\r\n              \"hash\": null,\r\n              \"links\": {\r\n                \"get\": {\r\n                  \"href\": \"https://filesqa.admiralty.co.uk/batch/265be8c1-883e-489a-a61c-5fc068ccff83/files/UserAttributesNeFile10.png\"\r\n                }\r\n              }\r\n            }\r\n          ],\r\n          \"attributes\": [\r\n            {\r\n              \"key\": \"CellName\",\r\n              \"value\": \"FI6SAI64\"\r\n            },\r\n            {\r\n              \"key\": \"Document\",\r\n              \"value\": \"Combined Test Strategy & Summary\"\r\n            },\r\n            {\r\n              \"key\": \"EditionNumber\",\r\n              \"value\": \"10\"\r\n            },\r\n            {\r\n              \"key\": \"name\",\r\n              \"value\": \"Rob Chrish\"\r\n            },\r\n            {\r\n              \"key\": \"ProductCode\",\r\n              \"value\": \"AVCS\"\r\n            },\r\n            {\r\n              \"key\": \"Smartphone\",\r\n              \"value\": \"GooglePixel\"\r\n            },\r\n            {\r\n              \"key\": \"Smartphone\",\r\n              \"value\": \"SamsungGalaxyS10\"\r\n            },\r\n            {\r\n              \"key\": \"Smartphone\",\r\n              \"value\": \"SamsungGalaxyS21\"\r\n            }\r\n          ],\r\n          \"batchPublishedDate\": \"2021-08-02T15:39:50.1380915Z\",\r\n          \"links\": {\r\n            \"batchStatus\": {\r\n              \"href\": \"https://filesqa.admiralty.co.uk/batch/265be8c1-883e-489a-a61c-5fc068ccff83/status\"\r\n            },\r\n            \"batchDetails\":{\r\n               \"href\":\"https://filesqa.admiralty.co.uk/batch/265be8c1-883e-489a-a61c-5fc068ccff83\"\r\n            }\r\n          }\r\n        }\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{cloudDevUrl}}",
+					"host": [
+						"{{cloudDevUrl}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Access Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = JSON.parse(responseBody)\r",
+							"pm.environment.set(\"BearerToken\", data.access_token)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "{{appRegistrationClientClientId}}",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "{{appRegistrationClientClientSecret}}",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "{{appRegistrationClientId}}/.default",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://login.microsoftonline.com/{{tenantId}}/oauth2/v2.0/token",
+					"protocol": "https",
+					"host": [
+						"login",
+						"microsoftonline",
+						"com"
+					],
+					"path": [
+						"{{tenantId}}",
+						"oauth2",
+						"v2.0",
+						"token"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "oauth2",
+		"oauth2": [
+			{
+				"key": "tokenType",
+				"value": "",
+				"type": "string"
+			},
+			{
+				"key": "accessToken",
+				"value": "{{token}}",
+				"type": "string"
+			},
+			{
+				"key": "tokenName",
+				"value": "EES AAD Token {{environment}}",
+				"type": "string"
+			},
+			{
+				"key": "client_authentication",
+				"value": "body",
+				"type": "string"
+			},
+			{
+				"key": "scope",
+				"value": "{{appRegistrationClientId}}/.default",
+				"type": "string"
+			},
+			{
+				"key": "clientSecret",
+				"value": "{{appRegistrationClientClientSecret}}",
+				"type": "string"
+			},
+			{
+				"key": "clientId",
+				"value": "{{appRegistrationClientClientId}}",
+				"type": "string"
+			},
+			{
+				"key": "accessTokenUrl",
+				"value": "https://login.microsoftonline.com/{{tenantId}}/oauth2/v2.0/token",
+				"type": "string"
+			},
+			{
+				"key": "grant_type",
+				"value": "client_credentials",
+				"type": "string"
+			},
+			{
+				"key": "addTokenTo",
+				"value": "header",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
