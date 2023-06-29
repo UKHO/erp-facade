@@ -92,7 +92,7 @@ namespace UKHO.ERPFacade.API.Controllers
             {
                 _logger.LogInformation(EventIds.DownloadEncEventPayloadStarted.ToEventId(), "Downloading the ENC event payload from azure blob storage.");
 
-                string encEventPayloadJson = _azureBlobEventWriter.DownloadEvent(EncEventFileName, correlationId);
+                string encEventPayloadJson = _azureBlobEventWriter.DownloadEvent(EncEventFileName, correlationId.ToLower());
 
                 EncEventPayload encEventPayloadData = JsonConvert.DeserializeObject<EncEventPayload>(encEventPayloadJson.ToString());
 
@@ -127,7 +127,7 @@ namespace UKHO.ERPFacade.API.Controllers
                 if (result.Status == Result.Statuses.Success)
                 {
                     _logger.LogInformation(EventIds.UnitsOfSaleUpdatedEventPushedToEES.ToEventId(), "UnitsOfSaleUpdated event has been sent to EES successfully.");
-
+                    await _azureTableReaderWriter.UpdatePublishDateTimeEntity(correlationId);
                     return new OkObjectResult(unitsOfSaleUpdatedCloudEventDataJson);
                 }
                 else

@@ -21,6 +21,8 @@ namespace UKHO.ERPFacade.Common.Models.TableEntities
 
         public string UnitName { get; set; } = default!;
 
+        public DateTime? PublishDateTime { get; set; } = default!;
+
         public ETag ETag { get; set; } = default!;
     }
 }

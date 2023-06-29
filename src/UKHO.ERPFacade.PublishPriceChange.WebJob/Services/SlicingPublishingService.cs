@@ -71,29 +71,12 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
                                     SavePriceChangeEventPayloadInAzureBlob(priceChangeCloudEventDataJson, entity.CorrId, unitPriceInformation.UnitName, unitPriceInformation.EventId);
 
                                     PublishEvent(priceChangeCloudEventData, entity.CorrId, unitPriceInformation.UnitName, unitPriceInformation.EventId);
-
-
                                 }
                             });
-
-                            //foreach (var unitPriceInformation in unitPriceInformationEntities.Where(i => i.Status == IncompleteStatus).ToList())
-                            //{
-                            //    var prices = priceInformationList.Where(p => p.ProductName == unitPriceInformation.UnitName).ToList();
-
-                            //    PriceChangeEventPayload priceChangeEventPayload = MapAndBuildPriceChangeEventPayload(prices, entity.CorrId, unitPriceInformation.UnitName, unitPriceInformation.EventId);
-
-                            //    var priceChangeCloudEventData = _cloudEventFactory.Create(priceChangeEventPayload);
-
-                            //    var priceChangeCloudEventDataJson = JObject.Parse(JsonConvert.SerializeObject(priceChangeCloudEventData));
-
-                            //    SavePriceChangeEventPayloadInAzureBlob(priceChangeCloudEventDataJson, entity.CorrId, unitPriceInformation.UnitName, unitPriceInformation.EventId);
-
-                            //    PublishEvent(priceChangeCloudEventData, entity.CorrId, unitPriceInformation.UnitName, unitPriceInformation.EventId);
-                            //}
                         }
                         else
                         {
-                            _azureTableReaderWriter.UpdatePriceMasterStatusEntity(entity.CorrId);
+                            _azureTableReaderWriter.UpdatePriceMasterStatusAndPublishDateTimeEntity(entity.CorrId);
                         }
                     }
                     else
@@ -123,32 +106,8 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
                                 SavePriceChangeEventPayloadInAzureBlob(priceChangeCloudEventDataJson, entity.CorrId, unitName, eventId);
 
                                 PublishEvent(priceChangeCloudEventData, entity.CorrId, unitName, eventId);
-
-
-
                             }
                         });
-
-                        //foreach (var unitName in slicedPrices)
-                        //{
-                        //    eventId = Guid.NewGuid().ToString();
-                        //    var prices = priceInformationList.Where(p => p.ProductName == unitName).ToList();
-                        //    var pricesJson = JArray.Parse(JsonConvert.SerializeObject(prices));
-
-                        //    _azureTableReaderWriter.AddUnitPriceChangeEntity(entity.CorrId, eventId, unitName);
-
-                        //    _azureBlobEventWriter.UploadEvent(pricesJson.ToString(), ContainerName, entity.CorrId + '/' + unitName + '/' + PriceInformationFileName);
-
-                        //    PriceChangeEventPayload priceChangeEventPayload = MapAndBuildPriceChangeEventPayload(prices, entity.CorrId, unitName, eventId);
-
-                        //    var priceChangeCloudEventData = _cloudEventFactory.Create(priceChangeEventPayload);
-
-                        //    var priceChangeCloudEventDataJson = JObject.Parse(JsonConvert.SerializeObject(priceChangeCloudEventData));
-
-                        //    SavePriceChangeEventPayloadInAzureBlob(priceChangeCloudEventDataJson, entity.CorrId, unitName, eventId);
-
-                        //    PublishEvent(priceChangeCloudEventData, entity.CorrId, unitName, eventId);
-                        //}
                     }
                 }
             }
@@ -169,7 +128,7 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
             var result = _eventPublisher.Publish(priceChangeCloudEventData);
             if (result.Result.Status == Result.Statuses.Success)
             {
-                _azureTableReaderWriter.UpdateUnitPriceChangeStatusEntity(masterCorrId, unitName, eventId);
+                _azureTableReaderWriter.UpdateUnitPriceChangeStatusAndPublishDateTimeEntity(masterCorrId, unitName, eventId);
 
                 _logger.LogInformation(EventIds.PriceChangeEventPushedToEES.ToEventId(), "pricechange event has been sent to EES successfully. | _X-Correlation-ID : {_X-Correlation-ID}", eventId);
             }

@@ -71,7 +71,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.Services
                 {
                     Task.FromResult(_azureTableReaderWriter.DeleteEESEntity(entity.CorrelationId));
                     _logger.LogInformation(EventIds.DeletedContainerSuccessful.ToEventId(), "Deleting container : {0}", entity.CorrelationId);
-                    _azureBlobEventWriter.DeleteContainer(entity.CorrelationId);
+                    _azureBlobEventWriter.DeleteContainer(entity.CorrelationId.ToLower());
                 }
             }
         }

@@ -402,6 +402,11 @@
         /// <summary>
         /// 940081 - UnitsOfSale updated event payload json is uploaded in blob storage successfully.
         /// </summary>
-        UploadedUnitsOfSaleUpdatedEventPayloadInAzureBlob = 940081
+        UploadedUnitsOfSaleUpdatedEventPayloadInAzureBlob = 940081,
+
+        /// <summary>
+        /// 940082 - Updated PublishDateTime entity successfully in Azure Table
+        /// </summary>
+        UpdatePublishDateTimeEntitySuccessful = 940082
     }
 }
