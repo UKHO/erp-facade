@@ -129,13 +129,13 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [Test, Order(0)]
         //UoS scenario based testing
         [TestCase("ID1_WebhookPayload.JSON", "UoS1_Pricing.JSON", TestName = "WhenValidCorrIdPassed_UoSReturn200OkResponse")]
-        [TestCase("ID1_WebhookPayload.JSON", "UoS4_FutureDateBlank.JSON", TestName = "WhenValidCorrIdWithFutureDateBlank_UoSReturn200OkResponse")]
-        [TestCase("ID1_WebhookPayload.JSON", "UoS5_MultiProdSameDuration.JSON", TestName = "WhenValidCorrIdMultiProdSameDuration_UoSReturn200OkResponse")]
-        [TestCase("ID1_WebhookPayload.JSON", "UoS6_MultiProdMultiDuration.JSON", TestName = "WhenValidCorrIdMultiProdMultiDuration_UoSReturn200OkResponse")]
-        [TestCase("ID1_WebhookPayload.JSON", "UoS7_SameEffectiveAndFutureDate.JSON", TestName = "WhenSameEffectiveAndFutureDate_UoSReturn200OkResponse")]
-        [TestCase("ID1_WebhookPayload.JSON", "UoS8_DiffEffectiveAndSameFutureDate.JSON", TestName = "WhenDiffEffectiveAndSameFutureDate_UoSReturn200OkResponse")]
-        [TestCase("ID1_WebhookPayload.JSON", "UoS9_SameEffectiveAndDiffFutureDate.JSON", TestName = "WhenSameEffectiveAndDiffFutureDate_UoSReturn200OkResponse")]
-        [TestCase("ID1_WebhookPayload.JSON", "UoS10_DiffEffectiveAndDiffFutureDate.JSON", TestName = "WhenDiffEffectiveAndDiffFutureDate_UoSReturn200OkResponse")]
+        [TestCase("ID1_WebhookPayload.JSON", "UoS_4_FutureDateBlank.JSON", TestName = "WhenValidCorrIdWithFutureDateBlank_UoSReturn200OkResponse")]
+        [TestCase("ID1_WebhookPayload.JSON", "UoS_5_MultiProdSameDuration.JSON", TestName = "WhenValidCorrIdMultiProdSameDuration_UoSReturn200OkResponse")]
+        [TestCase("ID1_WebhookPayload.JSON", "UoS_6_MultiProdMultiDuration.JSON", TestName = "WhenValidCorrIdMultiProdMultiDuration_UoSReturn200OkResponse")]
+        [TestCase("ID1_WebhookPayload.JSON", "UoS_7_SameEffectiveAndFutureDate.JSON", TestName = "WhenSameEffectiveAndFutureDate_UoSReturn200OkResponse")]
+        [TestCase("ID1_WebhookPayload.JSON", "UoS_8_DiffEffectiveAndSameFutureDate.JSON", TestName = "WhenDiffEffectiveAndSameFutureDate_UoSReturn200OkResponse")]
+        [TestCase("ID1_WebhookPayload.JSON", "UoS_9_SameEffectiveAndDiffFutureDate.JSON", TestName = "WhenSameEffectiveAndDiffFutureDate_UoSReturn200OkResponse")]
+        [TestCase("ID1_WebhookPayload.JSON", "UoS_10_DiffEffectiveAndDiffFutureDate.JSON", TestName = "WhenDiffEffectiveAndDiffFutureDate_UoSReturn200OkResponse")]
 
         public async Task WhenValidCorrIdPassed_UoSReturn200OkResponse(string webhookPayloadJsonFileName, string UoSPayloadFileName)
         {
