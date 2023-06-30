@@ -45,9 +45,6 @@
     <None Update="appsettings.local.overrides.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="ERPFacadeGeneratedXmlFiles\we123s-sds3-df333-d3d.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="ERPFacadePayloadTestData\ID10_UpdateSimple.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -64,6 +61,18 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPFacadePayloadTestData\ID15_oneNewCellAndOneMoveOneCell.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\ID33_NewCell_With2UoS_But_only1_having_addProduct.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\ID34_Cancel&amp;Replace_With_NewCells_having_2UoS_With_addProductValue.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\ID35_Cancel&amp;Replace_With_CancelCell_having_2UoS_but_onlyOneAsTypeUnit.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\ID36_MoveAndSuspended_With_2UoS_But1_Having_addProductsValue.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPFacadePayloadTestData\PriceChangeInput.JSON">
@@ -106,6 +115,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPFacadePayloadTestData\ID32_moveAndSuspended.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\SapMockApiConfigure.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPFacadePayloadTestData\UoS1_Pricing.JSON">
@@ -151,9 +163,6 @@
     <None Update="ERPFacadePayloadTestData\ID9_MetadataChange.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPFacadePayloadTestData\SapMockApiConfigure.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="ERPFacadePayloadTestData\UoS2_ProductISNullUOS.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -162,13 +171,40 @@
     </None>    
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ERPFacadeGeneratedProductJSON\" />    
-  </ItemGroup>
+
   <ItemGroup>
     <Content Include="ERPFacadeGeneratedJSONFiles\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+
+	<ItemGroup>
+		<Content Include="ERPFacadeGeneratedProductJSON\**">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="ERPFacadeGeneratedXmlFiles\**">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="ERPFacadeGeneratedJSONFiles\default.JSON" />
+	  <None Remove="ERPFacadeGeneratedProductJSON\default.JSON" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Update="ERPFacadeGeneratedJSONFiles\default.JSON">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Update="ERPFacadeGeneratedProductJSON\default.JSON">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Update="ERPFacadeGeneratedXmlFiles\default.xml">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
 
 </Project>

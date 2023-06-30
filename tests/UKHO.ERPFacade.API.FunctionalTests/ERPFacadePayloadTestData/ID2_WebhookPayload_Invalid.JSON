@@ -20,10 +20,10 @@
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChanged": true,
+        "contentChange": true,
         "permit": "permitString",
         "providerCode": 1,
-        "providerDesc": "ICE",
+        "providerName": "ICE",
         "_COMMENT": "provider code and descrption are a n-1 mapping",
         "_ENUM": [
           "ICE",
@@ -162,6 +162,7 @@
         "unitName": "MX545010",
         "title": "Isla Clarion",
         "unitType": "AVCS Units Coastal",
+        "unitOfSaleType": "unit",
         "unitSize": "large",
         "status": "ForSale",
         "_ENUM": [
@@ -189,6 +190,7 @@
         "title": "AVCS Online Folio Some Title",
         "unitSize": "large",
         "unitType": "AVCS Online Folio",
+        "unitOfSaleType": "folio",
         "status": "ForSale",
         "isNewUnitOfSale": false,
         "geographicLimit": {
@@ -231,6 +233,7 @@
         "unitType": "AVCS Folio Transit",
         "unitSize": "large",
         "status": "ForSale",
+        "unitOfSaleType": "folio",
         "isNewUnitOfSale": false,
         "geographicLimit": {
           "boundingBox": {},

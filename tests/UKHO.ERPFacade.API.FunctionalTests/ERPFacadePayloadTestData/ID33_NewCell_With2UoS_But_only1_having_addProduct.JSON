@@ -3,12 +3,12 @@
     "type": "uk.gov.ukho.encpublishing.enccontentpublished.v2",
     "source": "https://encpublishing.ukho.gov.uk",
     "id": "2f03a25f-28b3-46ea-b009-5943250a9a41",
-    "time": "2023-05-18T12:08:03.4880776Z",
-    "_COMMENT": "move cell with suspended status",
+    "time": "2020-10-13T12:08:03.4880776Z",
+    "_COMMENT": "A comma separated list of products",
     "subject": "MX545010",
     "datacontenttype": "application/json",
     "data": {
-        "correlationId": "367ce4a4-ddd1-4f56-b359-69e178d87810",
+        "correlationId": "dhegtq-1321131-213114f",
         "products": [
             {
                 "productType": "ENC S57",
@@ -20,7 +20,7 @@
                 "editionNumber": 1,
                 "updateNumber": 0,
                 "mayAffectHoldings": true,
-                "contentChange": false,
+                "contentChange": true,
                 "permit": "permitString",
                 "providerCode": 1,
                 "providerName": "ICE",
@@ -52,7 +52,7 @@
                     }
                 ],
                 "status": {
-                    "statusName": "Suspended",
+                    "statusName": "New Edition",
                     "_ENUM": [
                         "New Edition",
                         "Re-issue",
@@ -62,7 +62,7 @@
                         "Suspended"
                     ],
                     "statusDate": "2023-03-03T00:00:00.00+01:00",
-                    "isNewCell": false,
+                    "isNewCell": true,
                     "_COMMENT": "A cell new to the service"
                 },
                 "replaces": [],
@@ -119,7 +119,7 @@
                     ]
                 },
                 "_COMMENT": "The units in which product is included, including any 1-1 unit",
-                "inUnitsOfSale": [ "MX545010", "MX509226", "AVCSO", "PAYSF" ],
+                "inUnitsOfSale": [ "MX545010", "TEMP901", "AVCSO", "PAYSF" ],
                 "s63": {
                     "name": "XXXXXXXX.001",
                     "hash": "5160204288db0a543850da177ec637b71ed55946e7f3843e6180b1906ee4f4ea",
@@ -163,40 +163,14 @@
                 "title": "Isla Clarion",
                 "unitType": "AVCS Units Coastal",
                 "unitSize": "large",
-                "unitOfSaleType": "unit",
                 "status": "ForSale",
                 "_ENUM": [
                     "ForSale",
                     "NotForSale"
                 ],
-                "isNewUnitOfSale": false,
-                "_COMMENT": "BoundingBox or polygon or both or neither",
-                "geographicLimit": {
-                    "boundingBox": {
-                        "northLimit": 24.146815,
-                        "southLimit": 22.581615,
-                        "eastLimit": 120.349635,
-                        "westLimit": 119.39142
-                    },
-                    "polygons": []
-                },
-                "compositionChanges": {
-                    "addProducts": [],
-                    "removeProducts": [ "MX545010" ]
-                }
-            },
-            {
-                "unitName": "MX509226",
-                "title": "Playa del Carmen",
-                "unitType": "AVCS Units Coastal",
+                "isNewUnitOfSale": true,
                 "unitOfSaleType": "unit",
-                "unitSize": "large",
-                "status": "ForSale",
-                "_ENUM": [
-                    "ForSale",
-                    "NotForSale"
-                ],
-                "isNewUnitOfSale": false,
+
                 "_COMMENT": "BoundingBox or polygon or both or neither",
                 "geographicLimit": {
                     "boundingBox": {
@@ -212,18 +186,43 @@
                     "removeProducts": []
                 }
             },
-            {
-                "unitName": "AVCSO",
-                "title": "AVCS Online Folio Some Title",
+			{
+                "unitName": "TEMP901",
+                "title": "TEMP901 UoS With No addProducts",
+                "unitType": "AVCS Units Coastal",
                 "unitSize": "large",
-                "unitType": "AVCS Online Folio",
-                "unitOfSaleType": "folio",
                 "status": "ForSale",
                 "_ENUM": [
                     "ForSale",
                     "NotForSale"
                 ],
                 "isNewUnitOfSale": false,
+                "unitOfSaleType": "unit",
+
+                "_COMMENT": "BoundingBox or polygon or both or neither",
+                "geographicLimit": {
+                    "boundingBox": {
+                        "northLimit": 24.146815,
+                        "southLimit": 22.581615,
+                        "eastLimit": 120.349635,
+                        "westLimit": 119.39142
+                    },
+                    "polygons": []
+                },
+                "compositionChanges": {
+                    "addProducts": [],
+                    "removeProducts": []
+                }
+            },
+            {
+                "unitName": "AVCSO",
+                "title": "AVCS Online Folio Some Title",
+                "unitSize": "large",
+                "unitType": "AVCS Online Folio",
+                "status": "ForSale",
+                "isNewUnitOfSale": false,
+                "unitOfSaleType": "folio",
+
                 "geographicLimit": {
                     "boundingBox": {},
                     "polygons": [
@@ -250,7 +249,9 @@
                     ]
                 },
                 "compositionChanges": {
-                    "addProducts": [],
+                    "addProducts": [
+                        "MX545010"
+                    ],
                     "removeProducts": [
 
                     ]
@@ -260,13 +261,9 @@
                 "unitName": "PAYSF",
                 "title": "World Folio",
                 "unitType": "AVCS Folio Transit",
-                "unitOfSaleType": "folio",
                 "unitSize": "large",
                 "status": "ForSale",
-                "_ENUM": [
-                    "ForSale",
-                    "NotForSale"
-                ],
+                "unitOfSaleType": "folio",
                 "isNewUnitOfSale": false,
                 "geographicLimit": {
                     "boundingBox": {},
@@ -307,8 +304,10 @@
                 },
                 "compositionChanges": {
                     "addProducts": [
+                        "MX545010"
                     ],
                     "removeProducts": [
+
                     ]
                 }
             }

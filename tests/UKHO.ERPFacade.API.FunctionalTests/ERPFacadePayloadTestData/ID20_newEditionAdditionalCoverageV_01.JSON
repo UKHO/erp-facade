@@ -20,10 +20,10 @@
                 "editionNumber": 11,
                 "updateNumber": 0,
                 "mayAffectHoldings": true,
-                "contentChanged": true,
+                "contentChange": true,
                 "permit": "permitString",
                 "providerCode": 1,
-                "providerDesc": "ICE",
+                "providerName": "ICE",
                 "_COMMENT": "The units in which product is included, including any 1-1 unit",
                 "_ENUM": [
                     "large",
@@ -187,7 +187,7 @@
                 "unitType": "AVCS Online Folio",
                 "status": "ForSale",
                 "isNewUnitOfSale": false,
-                "unitOfSaleType": "unit",
+                "unitOfSaleType": "folio",
                 "geographicLimit": {
                     "boundingBox": {},
                     "polygons": [
@@ -227,7 +227,7 @@
                 "unitSize": "large",
                 "status": "ForSale",
                 "isNewUnitOfSale": false,
-                "unitOfSaleType": "unit",
+                "unitOfSaleType": "folio",
                 "geographicLimit": {
                     "boundingBox": {},
                     "polygons": [

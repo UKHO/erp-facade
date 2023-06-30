@@ -119,7 +119,7 @@
                     ]
                 },
                 "_COMMENT": "The units in which product is included, including any 1-1 unit",
-                "inUnitsOfSale": [ "US5AK83M", "AVCSO", "PAYSF" ],
+                "inUnitsOfSale": [ "US5AK83M", "SWOP102", "AVCSO", "PAYSF" ],
                 "s63": {
                     "name": "US5AK83M.001",
                     "hash": "5160204288db0a543850da177ec637b71ed55946e7f3843e6180b1906ee4f4ea",
@@ -367,6 +367,37 @@
             {
                 "unitName": "US5AK83M",
                 "title": "St. Michael Bay",
+                "unitOfSaleType": "",
+                "_ENUM": [
+                    "unit",
+                    "folio"
+                ],
+                "unitSize": "large",
+                "unitType": "AVCS Units Coastal",
+                "status": "NotForSale",
+                "isNewUnitOfSale": false,
+                "_ENUM": [
+                    "ForSale",
+                    "NotForSale"
+                ],
+                "_COMMENT": "BoundingBox or polygon or both or neither",
+                "geographicLimit": {
+                    "boundingBox": {
+                        "northLimit": 24.146815,
+                        "southLimit": 22.581615,
+                        "eastLimit": 120.349635,
+                        "westLimit": 119.39142
+                    },
+                    "polygons": []
+                },
+                "compositionChanges": {
+                    "addProducts": [],
+                    "removeProducts": [ "US5AK83M" ]
+                }
+            },
+			{
+                "unitName": "SWOP102",
+                "title": "SWOP102 UoS With salesType Unit",
                 "unitOfSaleType": "unit",
                 "_ENUM": [
                     "unit",

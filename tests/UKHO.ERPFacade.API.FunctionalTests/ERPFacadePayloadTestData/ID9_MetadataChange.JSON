@@ -20,10 +20,10 @@
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": false,
-        "contentChanged": false,
+        "contentChange": false,
         "permit": "permitString",
         "providerCode": 2,
-        "providerDesc": "PRIMAR",
+        "providerName": "PRIMAR",
         "_COMMENT": "provider code and descrption are a n-1 mapping",
         "_ENUM": [
           "ICE",
@@ -166,7 +166,7 @@
           "unit",
           "folio"
         ],
-        "unitType": "",
+        "unitType": "AVCS Units Coastal",
         "unitSize": "medium",
         "status": "ForSale",
         "_ENUM": [
@@ -192,13 +192,13 @@
       {
         "unitName": "AVCSO",
         "title": "Isla Clarion",
-        "unitOfSaleType": "unit",
+        "unitOfSaleType": "folio",
         "_ENUM": [
           "unit",
           "folio"
         ],
         "unitSize": "medium",
-        "unitType": "",
+        "unitType": "AVCS Folio Transit",
         "status": "ForSale",
         "isNewUnitOfSale": false,
         "geographicLimit": {
@@ -235,12 +235,12 @@
       {
         "unitName": "PAYSF",
         "title": "Isla Clarion",
-        "unitOfSaleType": "unit",
+        "unitOfSaleType": "folio",
         "_ENUM": [
           "unit",
           "folio"
         ],
-        "unitType": "",
+        "unitType": "AVCS Folio Transit",
         "unitSize": "medium",
         "status": "ForSale",
         "isNewUnitOfSale": false,

@@ -22,8 +22,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             _priceChange = new PriceChangeEndpoint(Config.TestConfig.ErpFacadeConfiguration.BaseUrl);
         }
 
-        [Category("DevEnvFT")]
-        [Category("QAEnvFT")]
         [Test(Description = "WhenValidPriceChangeEventReceivedWithValidToken_ThenPriceChangeReturns200OkResponse"), Order(0)]
         public async Task WhenValidPriceChangeEventReceivedWithValidToken_ThenPriceChangeReturns200OkResponse()
         {
@@ -32,8 +30,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         }
-        [Category("DevEnvFT")]
-        [Category("QAEnvFT")]
+
         [Test(Description = "WhenValidPriceChangeEventReceivedWithInvalidToken_ThenPriceChangeReturns401UnAuthorizedResponse"), Order(1)]
         public async Task WhenValidPriceChangeEventReceivedWithInvalidToken_ThenPriceChangeReturns401UnAuthorizedResponse()
         {
