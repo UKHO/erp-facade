@@ -234,7 +234,7 @@
                         }
                     ]
                 },
-                "inUnitsOfSale": [ "US4AK6NT", "AVCSO", "PAYSF" ],
+                "inUnitsOfSale": [ "US4AK6NT", "SART101", "AVCSO", "PAYSF" ],
                 "s63": {
                     "name": "US4AK6NT.001",
                     "hash": "5160204288db0a543850da177ec637b71ed55946e7f3843e6180b1906ee4f4ea",
@@ -337,7 +337,7 @@
                         }
                     ]
                 },
-                "inUnitsOfSale": [ "US4AK6NU", "AVCSO", "PAYSF" ],
+                "inUnitsOfSale": [ "US4AK6NU", "ZARR101", "AVCSO", "PAYSF" ],
                 "s63": {
                     "name": "US4AK6NU.001",
                     "hash": "5160204288db0a543850da177ec637b71ed55946e7f3843e6180b1906ee4f4ea",
@@ -364,6 +364,37 @@
         ],
         "_COMMENT": "Prices for all units in event will be included, including Cancelled Cell",
         "unitsOfSale": [
+            {
+                "unitName": "SART101",
+                "title": "SART 101 6NTs SECOND UOS",
+                "unitOfSaleType": "unit",
+                "_ENUM": [
+                    "unit",
+                    "folio"
+                ],
+                "unitSize": "large",
+                "unitType": "AVCS Units Coastal",
+                "status": "ForSale",
+                "isNewUnitOfSale": false,
+                "_COMMENT": "avcs_cat has either boundingBox or polygon - should both be included?",
+                "geographicLimit": {
+                    "boundingBox": {
+                        "northLimit": 22.643255,
+                        "southLimit": 22.4625767,
+                        "eastLimit": 120.34972,
+                        "westLimit": 120.219475
+                    },
+                    "polygons": [
+                        {
+                            "polygon": []
+                        }
+                    ]
+                },
+                "compositionChanges": {
+                    "addProducts": [ "US4AK6NT" ],
+                    "removeProducts": []
+                }
+            },
             {
                 "unitName": "US5AK83M",
                 "title": "St. Michael Bay",
@@ -426,6 +457,7 @@
                     "removeProducts": []
                 }
             },
+
             {
                 "unitName": "US4AK6NU",
                 "title": "Norton Sound - Alaska",
@@ -438,6 +470,37 @@
                 "unitType": "AVCS Units Coastal",
                 "status": "ForSale",
                 "isNewUnitOfSale": true,
+                "_COMMENT": "avcs_cat has either boundingBox or polygon - should both be included?",
+                "geographicLimit": {
+                    "boundingBox": {
+                        "northLimit": 22.643255,
+                        "southLimit": 22.4625767,
+                        "eastLimit": 120.34972,
+                        "westLimit": 120.219475
+                    },
+                    "polygons": [
+                        {
+                            "polygon": []
+                        }
+                    ]
+                },
+                "compositionChanges": {
+                    "addProducts": [ "US4AK6NU" ],
+                    "removeProducts": []
+                }
+            },
+            {
+                "unitName": "ZARR101",
+                "title": "ZARR101 - 6NUs UOS",
+                "unitOfSaleType": "unit",
+                "_ENUM": [
+                    "unit",
+                    "folio"
+                ],
+                "unitSize": "large",
+                "unitType": "AVCS Units Coastal",
+                "status": "ForSale",
+                "isNewUnitOfSale": false,
                 "_COMMENT": "avcs_cat has either boundingBox or polygon - should both be included?",
                 "geographicLimit": {
                     "boundingBox": {

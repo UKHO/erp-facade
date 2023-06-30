@@ -14,7 +14,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         public static bool noRole = false;
         //for pipeline
         private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
-        //for local
+        //for local Execution
         //private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
 
         [OneTimeSetUp]

@@ -1,5 +1,5 @@
 {
-  "_COMMENT": "Updated 05/04/23 MK - new attributes added: isNewUnitOfSale; contentChanged; unitOfSaleType, unitSize",
+  "_COMMENT": "Updated 05/04/23 MK - new attributes added: isNewUnitOfSale; contentChange; unitOfSaleType, unitSize",
   "specversion": "1.0",
   "type": "uk.gov.ukho.encpublishing.enccontentpublished.v2",
   "source": "https://encpublishing.ukho.gov.uk",
@@ -21,10 +21,10 @@
         "editionNumber": 4,
         "updateNumber": 2,
         "mayAffectHoldings": false,
-        "contentChanged": true,
+        "contentChange": true,
         "permit": "permitString",
         "providerCode": 1,
-        "providerDesc": "ICE",
+        "providerName": "ICE",
         "_COMMENT": "provider code and descrption are n-1 mapping",
         "_ENUM": [
           "ICE",
@@ -171,10 +171,10 @@
         "editionNumber": 4,
         "updateNumber": 2,
         "mayAffectHoldings": false,
-        "contentChanged": true,
+        "contentChange": true,
         "permit": "permitString",
         "providerCode": 1,
-        "providerDesc": "ICE",
+        "providerName": "ICE",
         "_COMMENT": "provider code and descrption are n-1 mapping",
         "_ENUM": [
           "ICE",

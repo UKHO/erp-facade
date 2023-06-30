@@ -20,10 +20,10 @@
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChanged": true,
+        "contentChange": true,
         "permit": "permitString",
         "providerCode": 1,
-        "providerDesc": "ICE",
+        "providerName": "ICE",
         "_COMMENT": "provider code and descrption are a n-1 mapping",
         "_ENUM": [
           "ICE",
@@ -194,6 +194,7 @@
         "unitName": "AVCSO",
         "title": "AVCS Online Folio Some Title",
         "unitSize": "large",
+        "unitOfSaleType": "folio",
         "unitType": "AVCS Online Folio",
         "status": "ForSale",
         "isNewUnitOfSale": false,
@@ -236,6 +237,7 @@
         "title": "World Folio",
         "unitType": "AVCS Folio Transit",
         "unitSize": "large",
+        "unitOfSaleType": "folio",
         "status": "ForSale",
         "isNewUnitOfSale": false,
         "geographicLimit": {

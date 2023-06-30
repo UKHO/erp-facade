@@ -35,10 +35,10 @@
             public int editionNumber { get; set; }
             public int updateNumber { get; set; }
             public bool mayAffectHoldings { get; set; }
-            public bool contentChanged { get; set; }
+            public bool contentChange { get; set; }
             public string permit { get; set; }
             public string providerCode { get; set; }
-            public string providerDesc { get; set; }
+            public string providerName { get; set; }
             public string size { get; set; }
             public string agency { get; set; }
             public Bundle[] bundle { get; set; }
