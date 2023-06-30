@@ -38,7 +38,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     BlobServiceClient blobServiceClient = new BlobServiceClient(Config.TestConfig.AzureStorageConfiguration.ConnectionString);
 
                     BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient("pricechangeblobs" + "\\" + containerAndBlobName + "\\" + productName);
-                    BlobClient blobClient = containerClient.GetBlobClient(containerAndBlobName + "/" + productName + "/" + productName + ".json");
+                    BlobClient blobClient = containerClient.GetBlobClient(containerAndBlobName + "/" + productName + "/" + "PriceChangeEvent" + ".json");
 
 
                     BlobDownloadInfo blobDownload = blobClient.Download();
