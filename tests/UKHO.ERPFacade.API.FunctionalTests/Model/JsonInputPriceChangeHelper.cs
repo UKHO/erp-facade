@@ -3,26 +3,58 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Model
 {
     public class JsonInputPriceChangeHelper
     {
+        [JsonProperty("corrid")]
+        public string Corrid { get; set; }
 
+        [JsonProperty("org")]
+        public string Org { get; set; }
 
-        public string corrid { get; set; }
-        public string org { get; set; }
-        public string productname { get; set; }
-        public string duration { get; set; }
-        public string effectivedate { get; set; }
-        public string effectivetime { get; set; }
-        public string price { get; set; }
-        public string currency { get; set; }
-        public string futuredate { get; set; }
-        public string futuretime { get; set; }
-        public string futureprice { get; set; }
-        public string futurecurr { get; set; }
-        public string reqdate { get; set; }
-        public string reqtime { get; set; }
+        [JsonProperty("productname")]
+        public string Productname { get; set; }
+
+        [JsonProperty("duration")]
+        //[JsonConverter(typeof(ParseStringConverter))]
+        public long Duration { get; set; }
+
+        [JsonProperty("effectivedate")]
+        //[JsonConverter(typeof(ParseStringConverter))]
+        public long Effectivedate { get; set; }
+
+        [JsonProperty("effectivetime")]
+        //[JsonConverter(typeof(ParseStringConverter))]
+        public long Effectivetime { get; set; }
+
+        [JsonProperty("price")]
+        public string Price { get; set; }
+
+        [JsonProperty("currency")]
+        public string Currency { get; set; }
+
+        [JsonProperty("futuredate")]
+        //[JsonConverter(typeof(ParseStringConverter))]
+        public long? Futuredate { get; set; }
+
+        [JsonProperty("futuretime")]
+        public string? Futuretime { get; set; }
+
+        [JsonProperty("futureprice")]
+        public string Futureprice { get; set; }
+
+        [JsonProperty("futurecurr")]
+        public string? Futurecurr { get; set; }
+
+        [JsonProperty("reqdate")]
+        //[JsonConverter(typeof(ParseStringConverter))]
+        public long Reqdate { get; set; }
+
+        [JsonProperty("reqtime")]
+        //[JsonConverter(typeof(ParseStringConverter))]
+        public long Reqtime { get; set; }
     }
 }

@@ -26,9 +26,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
 
         // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
         public class DataPriceChange
-    {
+        {
             public string correlationId { get; set; }
-            public List<UnitsOfSalePricePriceChangeOutput> unitsOfSalePrices { get; set; }
+            public UnitsOfSalePricePriceChangeOutput[] unitsOfSalePrices { get; set; }
         }
 
         public class PricePriceChangeOutput
@@ -40,7 +40,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
 
         public class PriceDurationsPriceChangeOutput
         {
-            public string numberOfMonths { get; set; }
+            public int numberOfMonths { get; set; }
             public string rrp { get; set; }
         }
 
@@ -48,30 +48,28 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
 
         public class StandardPriceChangeOutput
         {
-            public List<PriceDurationsPriceChangeOutput> priceDurations { get; set; }
+            public PriceDurationsPriceChangeOutput[] priceDurations { get; set; }
         }
 
         public class UnitsOfSalePricePriceChangeOutput
         {
             public string unitName { get; set; }
-            public List<PricePriceChangeOutput> price { get; set; }
+            public PricePriceChangeOutput[] price { get; set; }
         }
-        public class EffectiveDatesPerProductPC
+    public class EffectiveDatesPerProductPC
     {
         public string ProductName { get; set; }
         public DateTime EffectiveDates { get; set; }
 
-        public string Duration { get; set; }
+        public long Duration { get; set; }
 
         public string rrp { get; set; }
 
     }
-    public class PriceDurations
-    {
-        public string  Duration { get; set; }
+    
+    
+   
 
-        public string rrp { get; set; }
-    }
 
 
 }

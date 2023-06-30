@@ -16,11 +16,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         public string UoSPayloadFileName { get; set; }
         public string PriceChangePayloadFileName { get; set; }
         public string ERPFacadeGeneratedProductJSON { get; set; }
-        public string GeneratedProductJSON { get; set; }
         public string GeneratedProductJsonFolder { get; set; }
         public string GeneratedJSONFolder { get; set; }
 
-
+        public SharedKeyConfiguration SharedKeyConfiguration { get; set; }
 
     }
 

@@ -1,0 +1,20 @@
+[
+
+    {
+        "corrid": "",
+        "org": "UKHO",
+        "productname": "PAYSF",
+        "duration": "12",
+        "effectivedate": "20230427",
+        "effectivetime": "101454",
+        "price": "156.00 ",
+        "currency": "USD",
+        "futuredate": "",
+        "futuretime": "",
+        "futureprice": "180.00",
+        "futurecurr": "USD",
+        "reqdate": "20230328",
+        "reqtime": "160000"
+    }
+       
+]

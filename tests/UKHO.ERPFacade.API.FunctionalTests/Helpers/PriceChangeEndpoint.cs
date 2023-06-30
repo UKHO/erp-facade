@@ -19,14 +19,14 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
         public JsonOutputPriceChangeHelper _jsonOuputPriceChangeHelper { get; set; }
         public List<JsonInputPriceChangeHelper> _jsonInputPriceChangeHelper { get; set; }
-        
-        
+
+
         private AzureBlobStorageHelper azureBlobStorageHelper;
         private JSONHelper jsonHelper;
         List<string> UniquePdtFromInputPayload;
-        
 
-        public BulkPriceUpdateEndpoint(string url)
+
+
 
         public PriceChangeEndpoint(string url)
         {
@@ -36,11 +36,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             azureBlobStorageHelper = new();
             jsonHelper = new JSONHelper();
         }
-        public void PostBulkPriceUpdateResponse(string url)
-        {
-            Console.WriteLine("In Bulk Price Update");
-            var options = new RestClientOptions(url);
-            return;
+
 
         public async Task<RestResponse> PostPriceChangeResponseAsync(string filePath, string sharedKey)
         {
@@ -55,31 +51,13 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             request.AddHeader("Content-Type", "application/json");
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
             request.AddQueryParameter("Key", sharedKey);
-           RestResponse response = await client.ExecuteAsync(request);
-            return response;
-        }
-
-        public async Task<RestResponse> PostBPUpdateResponseAsyncWithJson(string filePath, string generatedProductJsonFolder, string token)
-        {
-            string requestBody;
-
-            using (StreamReader streamReader = new StreamReader(filePath))
-            {
-                requestBody = streamReader.ReadToEnd();
-            }
-            var request = new RestRequest("/erpfacade/bulkpriceinformation", Method.Post);
-            request.AddHeader("Content-Type", "application/json");
-            request.AddHeader("Authorization", "Bearer " + token);
-            request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
-
             RestResponse response = await client.ExecuteAsync(request);
             return response;
         }
 
-        public async Task<RestResponse> PostBPUResponseAsyncForJSON(string filePath, string generatedProductJsonFolder, string token)
+        public async Task<RestResponse> PostPriceChangeResponseAsyncWithJson(string filePath, string generatedProductJsonFolder, string sharedKey)
         {
             string requestBody;
-            string responseHeadercorrelationID;
 
             using (StreamReader streamReader = new StreamReader(filePath))
             {
@@ -89,102 +67,141 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             request.AddHeader("Content-Type", "application/json");
             request.AddQueryParameter("Key", sharedKey);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
-            RestResponse response = await client.ExecuteAsync(request);
 
+            RestResponse response = await client.ExecuteAsync(request);
+            return response;
+        }
+
+        public async Task<RestResponse> PostPriceChangeResponseAsyncForJSON(string filePath, string generatedProductJsonFolder, string sharedKey)
+        {
+            string requestBody;
+            string responseHeadercorrelationID;
+
+            requestBody=_jSONHelper.getDeserializedString(filePath);
+            var request = new RestRequest("/erpfacade/bulkpriceinformation", Method.Post);
+            request.AddHeader("Content-Type", "application/json");
+            request.AddQueryParameter("Key", sharedKey);
+            request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
+            RestResponse response = await client.ExecuteAsync(request);
+            
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 Thread.Sleep(5000);
-                
+
                 responseHeadercorrelationID = responseHeaderCorrelationID(response);
-                
-                
+                UniquePdtFromInputPayload = inputPayloadProducts(requestBody);
 
-                /*1.2 Check list of folders created for the unique products.
-                    pt#1: unique product list from input JSON */
-                UniquePdtFromInputPayload =inputPayloadProducts();
-
-               // string correlation_ID = desiailzedoutput.data.correlationId;
-                
-                  /*pt#2: Azure container-->pricechangeBlob--><CorrelationID>
-                      get the list from Azure sub containers */
                 List<string> UniquePdtFromAzureStorage = azureBlobStorageHelper.GetProductListFromBlobContainerAsync(responseHeadercorrelationID).Result;
-                //pt#3: compare listed from pt#1 and pt#2
+                
                 Assert.That(UniquePdtFromInputPayload.Count.Equals(UniquePdtFromAzureStorage.Count), Is.True, "Slicing is correct");
-                // for loop for iteration for each product json            
-                foreach (string pdt in UniquePdtFromAzureStorage)
+                       
+                foreach (string products in UniquePdtFromAzureStorage)
                 {
-                    string generatedProductJsonFile = azureBlobStorageHelper.DownloadJSONFromAzureBlob(generatedProductJsonFolder, responseHeadercorrelationID, pdt, "ProductChange");
+                    string generatedProductJsonFile = azureBlobStorageHelper.DownloadJSONFromAzureBlob(generatedProductJsonFolder, responseHeadercorrelationID, products, "ProductChange");
                     Console.WriteLine(generatedProductJsonFile);
 
-                    JsonOutputPriceChangeHelper desiailzedoutput = productOutputDeserialize(generatedProductJsonFile);
-                    string correlation_ID = desiailzedoutput.data.correlationId;
+
+                    JsonOutputPriceChangeHelper desiailzedProductOutput = productOutputDeserialize(generatedProductJsonFile);
+                    string correlation_ID = desiailzedProductOutput.data.correlationId;
 
                     Assert.That(correlation_ID.Equals(responseHeadercorrelationID), Is.True, "response header corerelationId is same as generated product correlation id");
-                    List<UnitsOfSalePricePriceChangeOutput> data = desiailzedoutput.data.unitsOfSalePrices;
+                    UnitsOfSalePricePriceChangeOutput[] data = desiailzedProductOutput.data.unitsOfSalePrices;
+
+
+                    EffectiveDatesPerProductPC effectiveDate = new EffectiveDatesPerProductPC();
                     List<EffectiveDatesPerProductPC> effectiveDates = new List<EffectiveDatesPerProductPC>();
-
-                    if (correlation_ID.Equals(responseHeadercorrelationID))
+                    foreach (UnitsOfSalePricePriceChangeOutput unitOfSalesPrice in data)
                     {
-                        foreach (UnitsOfSalePricePriceChangeOutput unit in data)
+
+                        foreach (var prices in unitOfSalesPrice.price)
                         {
-                            foreach (var prices in unit.price)
+
+                            foreach (PriceDurationsPriceChangeOutput priceDuration in prices.standard.priceDurations)
                             {
-
-                                
-
-                                EffectiveDatesPerProductPC effectiveDate = new EffectiveDatesPerProductPC();
-                                    effectiveDate.ProductName = unit.unitName;
-                                    effectiveDate.EffectiveDates = prices.effectiveDate;
-                                foreach (var durations in prices.standard.priceDurations)
-                                {
-
-
-                                    effectiveDate.Duration = durations.numberOfMonths;
-                                    effectiveDate.rrp = durations.rrp;
-                                   
-                                    effectiveDates.Add(effectiveDate);
-                                    
-                                }
-                                    
-                                
-                            }
-                            foreach (IGrouping<string, EffectiveDatesPerProductPC> date in effectiveDates.GroupBy(x => x.ProductName))
-                            {
-                                var product = date.Key;
-                                var effdates = date.Select(x => x.EffectiveDates).ToList();
-                                var distinctEffDates = effdates.Distinct().ToList();
-                                var duration = date.Select(x => x.Duration).ToList();
-                                var distinctDurations = duration.Distinct().ToList();
-                                var rrp = date.Select(x => x.rrp).ToList();
-                                var distinctrrp = rrp.Distinct().ToList();
-                                Assert.That(effdates.All(distinctEffDates.Contains) && distinctEffDates.All(effdates.Contains), Is.True, "Effective dates for {0} are not distinct.");
-                                Assert.That(duration.All(distinctDurations.Contains) && distinctDurations.All(duration.Contains), Is.True, "Duration for {0} are not distinct.");
-                                Assert.That(rrp.All(distinctrrp.Contains) && distinctrrp.All(rrp.Contains), Is.True, "RRP for {0} are not distinct.");
+                                effectiveDate = new EffectiveDatesPerProductPC();
+                                effectiveDate.ProductName = unitOfSalesPrice.unitName;
+                                effectiveDate.EffectiveDates = prices.effectiveDate;
+                                effectiveDate.Duration = priceDuration.numberOfMonths;
+                                effectiveDate.rrp = priceDuration.rrp;
+                                effectiveDates.Add(effectiveDate);
                             }
                         }
-                        
-
 
                     }
+
+                   
+                    var inputData = _jsonInputPriceChangeHelper.Select(x => new
+                    {
+                        x.Productname,
+                        EffectiveDateTime = new DateTime(Convert.ToInt32(x.Effectivedate.ToString().Substring(0, 4)),
+                        Convert.ToInt32(x.Effectivedate.ToString().Substring(4, 2)), Convert.ToInt32(x.Effectivedate.ToString().Substring(6, 2))),
+                        EffectivePrice = x.Price,
+                        Duration = x.Duration,
+
+                        FutureDateTime = x.Futuredate != null ? new DateTime(Convert.ToInt32(x.Futuredate.ToString().Substring(0, 4)),
+                       Convert.ToInt32(x.Futuredate.ToString().Substring(4, 2)), Convert.ToInt32(x.Futuredate.ToString().Substring(6, 2))) : new DateTime(),
+                        FuturePrice = x.Futureprice
+                    }).ToList();
+
+                    foreach (var SAPProduct in inputData)
+                    {
+                        Console.WriteLine(Environment.NewLine);
+                        Console.WriteLine(string.Format("Comparing product - {0} for Effective dates and prices", SAPProduct.Productname));
+
+                        EffectiveDatesPerProductPC? findProduct = effectiveDates.FirstOrDefault(x => x.ProductName == SAPProduct.Productname
+                                                         && x.EffectiveDates.Date == SAPProduct.EffectiveDateTime.Date
+                                                         && x.rrp == SAPProduct.EffectivePrice && x.Duration == SAPProduct.Duration);
+
+
+                        if (findProduct != null)
+                        {
+                            // Match Found for Product , Date and price combination
+                            Console.WriteLine(string.Format("Product - {0} found in Final UOS for Effective Date - {1}, Duration - {2} and Price - {3}", SAPProduct.Productname, SAPProduct.EffectiveDateTime.Date, SAPProduct.Duration, SAPProduct.EffectivePrice));
+                        }
+                        else
+                        {
+                            // Match not Found for Product , Date and price combination
+                            Console.WriteLine(string.Format("Product - {0} Not found in Final UOS for Effective Date - {1}, Duration - {2} and Price - {3}", SAPProduct.Productname, SAPProduct.EffectiveDateTime.Date, SAPProduct.Duration, SAPProduct.EffectivePrice));
+                        }
+
+                        if (SAPProduct.FutureDateTime != new DateTime())
+                        {
+                            EffectiveDatesPerProductPC? findFutureProduct = effectiveDates.FirstOrDefault(x => x.ProductName == SAPProduct.Productname
+                                                         && x.EffectiveDates.Date == SAPProduct.FutureDateTime.Date
+                                                         && x.rrp == SAPProduct.FuturePrice);
+
+                            if (findFutureProduct != null)
+                            {
+                                // Match Found for Product , Date and price combination
+                                Console.WriteLine(string.Format("Product - {0} found in Final UOS for Future Date - {1}, Duration - {2} and Price - {3}", SAPProduct.Productname, SAPProduct.FutureDateTime.Date, SAPProduct.Duration, SAPProduct.FuturePrice));
+                            }
+                            else
+                            {
+                                // Match not Found for Product , Date and price combination
+                                Console.WriteLine(string.Format("Product - {0} Not found in Final UOS for Future Date - {1}, Duration - {2} and Price - {3}", SAPProduct.Productname, SAPProduct.FutureDateTime.Date, SAPProduct.Duration, SAPProduct.FuturePrice));
+                            }
+                        }
+
+                    }
+
+
+
                 }
 
             }
             return response;
         }
 
-        private List<string> inputPayloadProducts()
+        private List<string> inputPayloadProducts(string jsonPayload)
         {
-            string inputJSONFilePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.PriceChangePayloadFileName);
-            string jsonPayload = _jSONHelper.getDeserializedString(inputJSONFilePath);
-
             _jsonInputPriceChangeHelper = JsonConvert.DeserializeObject<List<JsonInputPriceChangeHelper>>(jsonPayload);
-            UniquePdtFromInputPayload= _jSONHelper.GetProductListProductListFromSAPPayload(_jsonInputPriceChangeHelper);
+            UniquePdtFromInputPayload = _jSONHelper.GetProductListProductListFromSAPPayload(_jsonInputPriceChangeHelper);
             return UniquePdtFromInputPayload;
         }
 
         private JsonOutputPriceChangeHelper productOutputDeserialize(string generatedProductJson)
         {
-            //string filePathProductJSON = Path.Combine(generatedProductJson);
+           
             string jsonString = _jSONHelper.getDeserializedString(generatedProductJson);
             _jsonOuputPriceChangeHelper = JsonConvert.DeserializeObject<JsonOutputPriceChangeHelper>(jsonString);
             return _jsonOuputPriceChangeHelper;
@@ -199,6 +216,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
     }
 
-        
-    }
+
+}
 

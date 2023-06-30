@@ -31,15 +31,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         {
           
             List<string> result = new List<string>();
-            //code to get Unique list from inout payload
-            // List<string> data = new() { _jsonInputPriceUpdatehelperString.productname };
-            //  List<string> finalProducts = data.Select(x => x.data).ToList();
-            //  List<string> finalProducts = new HashSet<string>(data).ToList();
-            // return finalProducts;
             int count = _jsonInputPriceChangehelperString.Count;
             for (int i=0; i<count; i++)
             {
-                result.Add(_jsonInputPriceChangehelperString[i].productname);
+                result.Add(_jsonInputPriceChangehelperString[i].Productname);
                
             }
             List<string> finalProducts = new HashSet<string>(result).ToList();
@@ -47,7 +42,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             
         }
 
-        //internal List<string> GetProductListProductListFromSAPPayload(string jsonPayload) => throw new NotImplementedException();
+        
     }
 }
 
