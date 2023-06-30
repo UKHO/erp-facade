@@ -40,7 +40,35 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
 
         }
+        
+        [Test, Order(0)]
+        [TestCase("PC1_MultipleProduct.JSON", TestName = "WhenValidEventReceivedWithValidTokenandMultipleProduct_ThenPriceChangeReturn200OkResponse")]
+        [TestCase("PC2_FutureDateBlank.JSON", TestName = "WhenValidEventReceivedWithValidTokenandFutureDateBlank_ThenPriceChangeReturn200OkResponse")]
+        [TestCase("PC3_MultipleProductDifferentDuration.JSON", TestName = "WhenValidEventReceivedWithValidTokenandMultipleProductDifferentDuration_ThenPriceChangeReturn200OkResponse")]
+        [TestCase("PC4_MultipleDurationSameEffectiveAndFutureDate.JSON", TestName = "WhenValidEventReceivedWithValidTokenandMultipleDurationSameEffectiveAndFutureDate_ThenPriceChangeReturn200OkResponse")]
+        [TestCase("PC5_MultipleDurationDifferentEffectiveAndFutureDate.JSON", TestName = "WhenValidEventReceivedWithValidTokenandMultipleDurationDifferentEffectiveAndFutureDate_ThenPriceChangeReturn200OkResponse")]
+        [TestCase("PC6_MultipleDurationSameEffectiveDifferentFutureDate.JSON", TestName = "WhenValidEventReceivedWithValidTokenandMultipleDurationSameEffectiveDifferentFutureDate_ThenPriceChangeReturn200OkResponse")]
+        public async Task WhenValidEventReceivedWithValidTokenand_ThenPriceChangeReturn200OkResponse(string payloadJsonFileName)
+        {
+            string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, payloadJsonFileName);
+            string generatedProductJsonFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedProductJsonFolder);
+            var response = await _priceChange.PostPriceChangeResponseAsyncForJSON(filePath, generatedProductJsonFolder, Config.TestConfig.SharedKeyConfiguration.Key);
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
+        }
+        
+        [Test, Order(3)]
+        [TestCase("PC7_ExistingCorrId.JSON", TestName = "WhenValidEventReceivedWithValidTokenandExistingCorelationID_ThenPriceChangeReturn500InternalServerErrorResponse")]
+        public async Task WhenValidEventReceivedWithValidTokenandExistingCorelationID_ThenPriceChangeReturn500InternalServerErrorResponse(string payloadJsonFileName)
+        {
+            string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, payloadJsonFileName);
+            string generatedProductJsonFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedProductJsonFolder);
+            var response = await _priceChange.PostPriceChangeResponseAsyncForJSON(filePath, generatedProductJsonFolder, Config.TestConfig.SharedKeyConfiguration.Key);
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.InternalServerError);
+
+        }
+
+       
 
     }
 }

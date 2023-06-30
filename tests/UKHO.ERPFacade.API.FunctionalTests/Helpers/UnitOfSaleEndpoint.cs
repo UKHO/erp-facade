@@ -50,7 +50,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
 
             RestResponse response = await client.ExecuteAsync(request);
-            List<UoSInputJSONHelper> jsonPayload = JsonConvert.DeserializeObject<List<UoSInputJSONHelper>>(requestBody);
+            List<JsonInputPriceChangeHelper> jsonPayload = JsonConvert.DeserializeObject<List<JsonInputPriceChangeHelper>>(requestBody);
             string corrId = jsonPayload[0].Corrid;
 
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
@@ -76,7 +76,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
 
             RestResponse response = await client.ExecuteAsync(request);
-            List<UoSInputJSONHelper> jsonPayload = JsonConvert.DeserializeObject<List<UoSInputJSONHelper>>(requestBody);
+            List<JsonInputPriceChangeHelper> jsonPayload = JsonConvert.DeserializeObject<List<JsonInputPriceChangeHelper>>(requestBody);
             string correlationId = jsonPayload[0].Corrid;
 
 
@@ -99,7 +99,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             request.AddQueryParameter("Key", uostoken);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
             RestResponse response = await client.ExecuteAsync(request);
-            List<UoSInputJSONHelper> jsonPayload = JsonConvert.DeserializeObject<List<UoSInputJSONHelper>>(requestBody);
+            List<JsonInputPriceChangeHelper> jsonPayload = JsonConvert.DeserializeObject<List<JsonInputPriceChangeHelper>>(requestBody);
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 string correlationId = jsonPayload[0].Corrid;
@@ -159,7 +159,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             request.AddQueryParameter("Key", uostoken);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
             RestResponse response = await client.ExecuteAsync(request);
-            List<UoSInputJSONHelper> jsonPayload = JsonConvert.DeserializeObject<List<UoSInputJSONHelper>>(requestBody);
+            List<JsonInputPriceChangeHelper> jsonPayload = JsonConvert.DeserializeObject<List<JsonInputPriceChangeHelper>>(requestBody);
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 string correlationId = jsonPayload[0].Corrid;
@@ -217,7 +217,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             request.AddQueryParameter("Key", uostoken);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
             RestResponse response = await client.ExecuteAsync(request);
-            List<UoSInputJSONHelper> jsonSAPPriceInfoPayload = JsonConvert.DeserializeObject<List<UoSInputJSONHelper>>(requestBody);
+            List<JsonInputPriceChangeHelper> jsonSAPPriceInfoPayload = JsonConvert.DeserializeObject<List<JsonInputPriceChangeHelper>>(requestBody);
             //Adding new code
            if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
