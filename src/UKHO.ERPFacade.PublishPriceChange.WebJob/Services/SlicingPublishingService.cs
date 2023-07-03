@@ -125,18 +125,18 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
 
         private void PublishEvent(CloudEvent<PriceChangeEventData> priceChangeCloudEventData, string masterCorrId, string unitName, string eventId)
         {
-            //var result = _eventPublisher.Publish(priceChangeCloudEventData);
-            //if (result.Result.Status == Result.Statuses.Success)
+            var result = _eventPublisher.Publish(priceChangeCloudEventData);
+            if (result.Result.Status == Result.Statuses.Success)
             {
                 _azureTableReaderWriter.UpdateUnitPriceChangeStatusAndPublishDateTimeEntity(masterCorrId, unitName, eventId);
 
                 _logger.LogInformation(EventIds.PriceChangeEventPushedToEES.ToEventId(), "pricechange event has been sent to EES successfully. | _X-Correlation-ID : {_X-Correlation-ID}", eventId);
             }
-            //else
-            //{
-            //    _logger.LogError(EventIds.ErrorOccuredInEES.ToEventId(), "An error occured for pricechange event while processing your request in EES. | _X-Correlation-ID : {_X-Correlation-ID} | {Status}", eventId, result.Status);
-           //     throw new ERPFacadeException(EventIds.ErrorOccuredInEES.ToEventId());
-           // }
+            else
+            {
+                _logger.LogError(EventIds.ErrorOccuredInEES.ToEventId(), "An error occured for pricechange event while processing your request in EES. | _X-Correlation-ID : {_X-Correlation-ID} | {Status}", eventId, result.Status);
+                throw new ERPFacadeException(EventIds.ErrorOccuredInEES.ToEventId());
+            }
         }
 
         private void SavePriceChangeEventPayloadInAzureBlob(JObject priceChangeCloudEventDataJson, string masterCorrId, string unitName, string correlationId)
