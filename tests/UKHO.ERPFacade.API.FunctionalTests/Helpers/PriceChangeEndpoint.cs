@@ -83,13 +83,13 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                Thread.Sleep(5000);
+                Thread.Sleep(10000);
 
                 responseHeadercorrelationID = getResponseHeaderCorrelationID(response);
                 UniquePdtFromInputPayload = getProductListFromInputPayload(filePath);
 
                 List<string> UniquePdtFromAzureStorage = azureBlobStorageHelper.GetProductListFromBlobContainerAsync(responseHeadercorrelationID).Result;
-                
+                Thread.Sleep(10000);
                 Assert.That(UniquePdtFromInputPayload.Count.Equals(UniquePdtFromAzureStorage.Count), Is.True, "Slicing is correct");
                        
                 foreach (string products in UniquePdtFromAzureStorage)
