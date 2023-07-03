@@ -16,7 +16,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
         private DateTime _fakeCurrentDateTime;
         private CloudEventFactory _fakeCloudEventFactory;
         private IDateTimeProvider _fakeDateTimeProvider;
-        private NotificationsConfiguration _fakeNotificationsConfiguration;
+        private ErpPublishEventSource _fakeErpPublishEventSource;
 
         [SetUp]
         public void Setup()
@@ -24,27 +24,17 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
             _fakeDateTimeProvider = A.Fake<IDateTimeProvider>();
             _fakeCurrentDateTime = new DateTime(1983, 4, 27);
             A.CallTo(() => _fakeDateTimeProvider.UtcNow).Returns(_fakeCurrentDateTime);
+                 _fakeErpPublishEventSource = new ErpPublishEventSource
+                 {
+                     ApplicationUri = "https://ourdomain.org/"
+                 };
 
-            _fakeNotificationsConfiguration = new NotificationsConfiguration()
-            {
-                ApplicationUri = "https://ourdomain.org/"
-            };
-
-            _fakeCloudEventFactory = new CloudEventFactory(_fakeDateTimeProvider, new OptionsWrapper<NotificationsConfiguration>(_fakeNotificationsConfiguration));
+            _fakeCloudEventFactory = new CloudEventFactory(_fakeDateTimeProvider, new OptionsWrapper<ErpPublishEventSource>(_fakeErpPublishEventSource));
         }
 
         [Test]
         public void WhenCloudEventFactoryCreateIsCalled_ThenObjectWithTheCorrectMappingsIsReturned()
         {
-            //return new UnitOfSaleUpdatedEventPayload(new UnitOfSaleUpdatedEventData
-            //{
-            //    CorrelationId = encEventPayload!.Data.CorrelationId,
-            //    Products = encEventPayload.Data.Products,
-            //    UnitsOfSales = encEventPayload.Data.UnitsOfSales,
-            //    UnitsOfSalePrices = unitsOfSalePriceList,
-            //}, encEventPayload.Subject
-            //);
-
             var unitOfSaleUpdatedEventData = new UnitOfSaleUpdatedEventData()
             {
                 CorrelationId = "CorrelationId",
@@ -59,7 +49,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
             result.Type.Should().Be("uk.gov.ukho.erp.unitOfSaleUpdated.v1");
             result.Subject.Should().Be("fakeSubject");
             result.Time.Should().Be(_fakeCurrentDateTime);
-            result.Source.Should().Be(_fakeNotificationsConfiguration.ApplicationUri);
+            result.Source.Should().Be(_fakeErpPublishEventSource.ApplicationUri);
             result.SpecVersion.Should().Be("1.0");
             result.DataContentType.Should().Be("application/json");
         }

@@ -10,7 +10,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
 
     public class JsonOutputPriceChangeHelper
     {
-       
+
         public string specversion { get; set; }
         public string type { get; set; }
         public string source { get; set; }
@@ -24,38 +24,38 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
 
     }
 
-        // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
-        public class DataPriceChange
-        {
-            public string correlationId { get; set; }
-            public unitsOfSalePricesData[] unitsOfSalePrices { get; set; }
-        }
+    // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
+    public class DataPriceChange
+    {
+        public string correlationId { get; set; }
+        public unitsOfSalePricesData[] unitsOfSalePrices { get; set; }
+    }
 
-        public class PricePriceChangeOutput
-        {
-            public DateTime effectiveDate { get; set; }
-            public string currency { get; set; }
-            public StandardPriceChangeOutput standard { get; set; }
-        }
+    public class PricePriceChangeOutput
+    {
+        public DateTime effectiveDate { get; set; }
+        public string currency { get; set; }
+        public StandardPriceChangeOutput standard { get; set; }
+    }
 
-        public class PriceDurationsPriceChangeOutput
-        {
-            public int numberOfMonths { get; set; }
-            public string rrp { get; set; }
-        }
+    public class PriceDurationsPriceChangeOutput
+    {
+        public int numberOfMonths { get; set; }
+        public string rrp { get; set; }
+    }
 
-        
 
-        public class StandardPriceChangeOutput
-        {
-            public PriceDurationsPriceChangeOutput[] priceDurations { get; set; }
-        }
 
-        public class unitsOfSalePricesData
-        {
-            public string unitName { get; set; }
-            public PricePriceChangeOutput[] price { get; set; }
-        }
+    public class StandardPriceChangeOutput
+    {
+        public PriceDurationsPriceChangeOutput[] priceDurations { get; set; }
+    }
+
+    public class unitsOfSalePricesData
+    {
+        public string unitName { get; set; }
+        public PricePriceChangeOutput[] price { get; set; }
+    }
     public class EffectiveDatesPerProductPC
     {
         public string ProductName { get; set; }
@@ -66,18 +66,4 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
         public string rrp { get; set; }
 
     }
-    
-    
-   
-
-
-
 }
-
-
-    
-
-
-
-    
-

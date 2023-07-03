@@ -23,9 +23,9 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
         private ICloudEventFactory _fakeCloudEventFactory;
         private IHttpClientFactory _fakeHttpClientFactory;
         private MockHttpMessageHandler _fakeHttpClientMessageHandler;
-        private OptionsWrapper<EnterpriseEventServiceConfiguration> _optionsWrapper;
+        private OptionsWrapper<ErpPublishEventSource> _optionsWrapper;
         private HttpClient _fakeHttpClient;
-        private EnterpriseEventServiceConfiguration _fakeEnterpriseEventServiceConfiguration;
+        private ErpPublishEventSource _fakeErpPublishEventSource;
         private ILogger<EnterpriseEventServiceEventPublisher> _fakeLogger;
 
         [SetUp]
@@ -35,7 +35,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
             _fakeCloudEventFactory = A.Fake<ICloudEventFactory>();
             _fakeHttpClientFactory = A.Fake<IHttpClientFactory>();
             _fakeHttpClientMessageHandler = new MockHttpMessageHandler();
-            _fakeEnterpriseEventServiceConfiguration = new EnterpriseEventServiceConfiguration
+            _fakeErpPublishEventSource = new ErpPublishEventSource
             {
                 ClientId = "testClientId",
                 PublishEndpoint = "testPublishEndpoint",
@@ -43,7 +43,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
                 ServiceUrl = _fakeServiceUrl,
             };
 
-            _optionsWrapper = new OptionsWrapper<EnterpriseEventServiceConfiguration>(_fakeEnterpriseEventServiceConfiguration);
+            _optionsWrapper = new OptionsWrapper<ErpPublishEventSource>(_fakeErpPublishEventSource);
 
             _fakeHttpClient = _fakeHttpClientMessageHandler.ToHttpClient();
             _fakeHttpClient.BaseAddress = new Uri(_fakeServiceUrl);
@@ -63,7 +63,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
 
             A.CallTo(() => _fakeCloudEventFactory.Create(eventData)).Returns(cloudEvent);
             _fakeHttpClientMessageHandler
-                .Expect(HttpMethod.Post, $"{_fakeServiceUrl}/{_fakeEnterpriseEventServiceConfiguration.PublishEndpoint}")
+                .Expect(HttpMethod.Post, $"{_fakeServiceUrl}/{_fakeErpPublishEventSource.PublishEndpoint}")
                 .Respond(req => new HttpResponseMessage());
 
             await _fakeEnterpriseEventServiceEventPublisher.Publish(cloudEvent);

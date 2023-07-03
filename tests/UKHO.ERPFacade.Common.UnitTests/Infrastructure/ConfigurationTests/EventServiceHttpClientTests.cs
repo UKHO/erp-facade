@@ -23,7 +23,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.ConfigurationTests
     {
         private WireMockServer _fakeWireMockServer;
         private ITokenProvider _fakeTokenProvider;
-        private EnterpriseEventServiceConfiguration _fakeEnterpriseEventServiceConfiguration;
+        private ErpPublishEventSource _fakeErpPublishEventSource;
         private ServiceProvider _serviceProvider;
 
         [SetUp]
@@ -31,7 +31,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.ConfigurationTests
         {
             _fakeWireMockServer = WireMockServer.Start();
             _fakeTokenProvider = A.Fake<ITokenProvider>();
-            _fakeEnterpriseEventServiceConfiguration = new EnterpriseEventServiceConfiguration
+            _fakeErpPublishEventSource = new ErpPublishEventSource
             {
                 ServiceUrl = _fakeWireMockServer.Urls.First(),
             };
@@ -39,7 +39,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.ConfigurationTests
             IServiceCollection services = new ServiceCollection();
             services.AddInfrastructure();
             services.Replace(ServiceDescriptor.Singleton(typeof(ITokenProvider), _fakeTokenProvider));
-            services.Replace(ServiceDescriptor.Singleton(typeof(IOptions<EnterpriseEventServiceConfiguration>), new OptionsWrapper<EnterpriseEventServiceConfiguration>(_fakeEnterpriseEventServiceConfiguration)));
+            services.Replace(ServiceDescriptor.Singleton(typeof(IOptions<ErpPublishEventSource>), new OptionsWrapper<ErpPublishEventSource>(_fakeErpPublishEventSource)));
             _serviceProvider = services.BuildServiceProvider();
         }
 
@@ -93,8 +93,8 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.ConfigurationTests
             var testClientId = "CLIENT_ID";
             var testScope = "SCOPE";
 
-            _fakeEnterpriseEventServiceConfiguration.PublisherScope = testScope;
-            _fakeEnterpriseEventServiceConfiguration.ClientId = testClientId;
+            _fakeErpPublishEventSource.PublisherScope = testScope;
+            _fakeErpPublishEventSource.ClientId = testClientId;
 
 
             A.CallTo(() => _fakeTokenProvider.GetTokenAsync($"{testClientId}/{testScope}")).Returns(new AccessToken(testToken, DateTimeOffset.MaxValue));

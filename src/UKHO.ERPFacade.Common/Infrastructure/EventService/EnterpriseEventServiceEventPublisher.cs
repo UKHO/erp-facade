@@ -17,7 +17,7 @@ namespace UKHO.ERPFacade.Common.Infrastructure.EventService
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly string _eventServiceEndpoint;
 
-        public EnterpriseEventServiceEventPublisher(ILogger<EnterpriseEventServiceEventPublisher> logger, ICloudEventFactory cloudEventFactory, IHttpClientFactory httpClientFactory, IOptions<EnterpriseEventServiceConfiguration> options)
+        public EnterpriseEventServiceEventPublisher(ILogger<EnterpriseEventServiceEventPublisher> logger, ICloudEventFactory cloudEventFactory, IHttpClientFactory httpClientFactory, IOptions<ErpPublishEventSource> options)
         {
             _logger = logger;
             _cloudEventFactory = cloudEventFactory;
