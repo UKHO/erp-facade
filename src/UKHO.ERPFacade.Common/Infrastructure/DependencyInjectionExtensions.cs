@@ -18,7 +18,6 @@ namespace UKHO.ERPFacade.Common.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
-           ///// services.AddOptions<NotificationsConfiguration>().Configure<IConfiguration>((settings, configuration) => { configuration.Bind(settings); });
             services.AddOptions<ErpPublishEventSource>().Configure<IConfiguration>((settings, configuration) =>
             {
                 configuration.GetSection("ErpPublishEventSource").Bind(settings);
