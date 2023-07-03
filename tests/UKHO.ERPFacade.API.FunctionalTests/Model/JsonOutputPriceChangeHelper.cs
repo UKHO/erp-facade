@@ -28,7 +28,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
         public class DataPriceChange
         {
             public string correlationId { get; set; }
-            public UnitsOfSalePricePriceChangeOutput[] unitsOfSalePrices { get; set; }
+            public unitsOfSalePricesData[] unitsOfSalePrices { get; set; }
         }
 
         public class PricePriceChangeOutput
@@ -51,7 +51,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
             public PriceDurationsPriceChangeOutput[] priceDurations { get; set; }
         }
 
-        public class UnitsOfSalePricePriceChangeOutput
+        public class unitsOfSalePricesData
         {
             public string unitName { get; set; }
             public PricePriceChangeOutput[] price { get; set; }

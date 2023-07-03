@@ -88,7 +88,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return response;
         }
 
-        public async Task<RestResponse> PostWebHookAndUoSResponseAsyncWithJSON(string webHookfilePath, string uosFilePath, string generatedXMLFolder, string generatedJSONFolder, string webhookToken, string uostoken)
+        public async Task<RestResponse> PostWebHookAndUoSResponseAsyncWithJSON(string webHookfilePath, string uosFilePath, string generatedXMLFolder, string generatedJSONFolder, string webhookToken, string uosKey)
         {
             await _webhook.PostWebhookResponseAsyncForXML(webHookfilePath, generatedXMLFolder, webhookToken);
             //await _webhook.PostWebhookResponseAsync(webHookfilePath, webhookToken);
@@ -96,7 +96,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             requestBody=JSONHelper.replaceCorrID(requestBody, WebhookEndpoint.generatedCorrelationId);
             var request = new RestRequest("/erpfacade/priceinformation", Method.Post);
             request.AddHeader("Content-Type", "application/json");
-            request.AddQueryParameter("Key", uostoken);
+            request.AddQueryParameter("Key", uosKey);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
             RestResponse response = await client.ExecuteAsync(request);
             List<JsonInputPriceChangeHelper> jsonPayload = JsonConvert.DeserializeObject<List<JsonInputPriceChangeHelper>>(requestBody);
@@ -149,14 +149,14 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return response;
         }
 
-        public async Task<RestResponse> PostWebHookAndUoSResponseAsyncWithNullProduct(string webHookfilePath, string uosFilePath, string generatedXMLFolder, string generatedJSONFolder, string webhookToken, string uostoken)
+        public async Task<RestResponse> PostWebHookAndUoSResponseAsyncWithNullProduct(string webHookfilePath, string uosFilePath, string generatedXMLFolder, string generatedJSONFolder, string webhookToken, string uosKey)
         {
             await _webhook.PostWebhookResponseAsyncForXML(webHookfilePath, generatedXMLFolder, webhookToken);
             string requestBody = _jsonHelper.getDeserializedString(uosFilePath);
             requestBody = JSONHelper.replaceCorrID(requestBody, WebhookEndpoint.generatedCorrelationId);
             var request = new RestRequest("/erpfacade/priceinformation", Method.Post);
             request.AddHeader("Content-Type", "application/json");
-            request.AddQueryParameter("Key", uostoken);
+            request.AddQueryParameter("Key", uosKey);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
             RestResponse response = await client.ExecuteAsync(request);
             List<JsonInputPriceChangeHelper> jsonPayload = JsonConvert.DeserializeObject<List<JsonInputPriceChangeHelper>>(requestBody);
@@ -181,40 +181,40 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return response;
         }
 
-        public async Task<RestResponse> PostWebHookAndUoSNoCorrIdResponse400BadRequest(string webHookfilePath, string uosFilePath, string generatedXMLFolder, string generatedJSONFolder, string webhookToken, string uostoken)
+        public async Task<RestResponse> PostWebHookAndUoSNoCorrIdResponse400BadRequest(string webHookfilePath, string uosFilePath, string generatedXMLFolder, string generatedJSONFolder, string webhookToken, string uosKey)
         {
             await _webhook.PostWebhookResponseAsyncForXML(webHookfilePath, generatedXMLFolder, webhookToken);
             string requestBody = _jsonHelper.getDeserializedString(uosFilePath);
             requestBody = JSONHelper.replaceCorrID(requestBody, "");
             var request = new RestRequest("/erpfacade/priceinformation", Method.Post);
             request.AddHeader("Content-Type", "application/json");
-            request.AddQueryParameter("Key", uostoken);
+            request.AddQueryParameter("Key", uosKey);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
             RestResponse response = await client.ExecuteAsync(request);
             return response;
         }
 
-        public async Task<RestResponse> PostWebHookAndUoSInvalidCorrIdResponse404NotFound(string webHookfilePath, string uosFilePath, string generatedXMLFolder, string generatedJSONFolder, string webhookToken, string uostoken)
+        public async Task<RestResponse> PostWebHookAndUoSInvalidCorrIdResponse404NotFound(string webHookfilePath, string uosFilePath, string generatedXMLFolder, string generatedJSONFolder, string webhookToken, string uosKey)
         {
             await _webhook.PostWebhookResponseAsyncForXML(webHookfilePath, generatedXMLFolder, webhookToken);
             string requestBody = _jsonHelper.getDeserializedString(uosFilePath);
             requestBody = JSONHelper.replaceCorrID(requestBody, "ssyyttddhhttaaww");
             var request = new RestRequest("/erpfacade/priceinformation", Method.Post);
             request.AddHeader("Content-Type", "application/json");
-            request.AddQueryParameter("Key", uostoken);
+            request.AddQueryParameter("Key", uosKey);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
             RestResponse response = await client.ExecuteAsync(request);
             return response;
         }
 
-        public async Task<RestResponse> PostWebHookAndUoSResponse200OK(string webHookfilePath, string uosFilePath, string generatedXMLFolder, string generatedJSONFolder, string webhookToken, string uostoken)
+        public async Task<RestResponse> PostWebHookAndUoSResponse200OK(string webHookfilePath, string uosFilePath, string generatedXMLFolder, string generatedJSONFolder, string webhookToken, string uosKey)
         {
             await _webhook.PostWebhookResponseAsyncForXML(webHookfilePath, generatedXMLFolder, webhookToken);
             string requestBody = _jsonHelper.getDeserializedString(uosFilePath);
             requestBody = JSONHelper.replaceCorrID(requestBody, WebhookEndpoint.generatedCorrelationId);
             var request = new RestRequest("/erpfacade/priceinformation", Method.Post);
             request.AddHeader("Content-Type", "application/json");
-            request.AddQueryParameter("Key", uostoken);
+            request.AddQueryParameter("Key", uosKey);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
             RestResponse response = await client.ExecuteAsync(request);
             List<JsonInputPriceChangeHelper> jsonSAPPriceInfoPayload = JsonConvert.DeserializeObject<List<JsonInputPriceChangeHelper>>(requestBody);

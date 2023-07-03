@@ -17,7 +17,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         
 
         private AzureBlobStorageHelper azureBlobStorageHelper;
-        //private JSONHelper jsonHelper;
         List<string> UniquePdtFromInputPayload;
 
 
@@ -86,8 +85,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             {
                 Thread.Sleep(5000);
 
-                responseHeadercorrelationID = responseHeaderCorrelationID(response);
-                UniquePdtFromInputPayload = inputPayloadProducts(filePath);
+                responseHeadercorrelationID = getResponseHeaderCorrelationID(response);
+                UniquePdtFromInputPayload = getProductListFromInputPayload(filePath);
 
                 List<string> UniquePdtFromAzureStorage = azureBlobStorageHelper.GetProductListFromBlobContainerAsync(responseHeadercorrelationID).Result;
                 
@@ -99,16 +98,16 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     Console.WriteLine(generatedProductJsonFile);
 
 
-                    JsonOutputPriceChangeHelper desiailzedProductOutput = productOutputDeserialize(generatedProductJsonFile);
+                    JsonOutputPriceChangeHelper desiailzedProductOutput = getDeserializedProductJson(generatedProductJsonFile);
                     string correlation_ID = desiailzedProductOutput.data.correlationId;
 
                     Assert.That(correlation_ID.Equals(responseHeadercorrelationID), Is.True, "response header corerelationId is same as generated product correlation id");
-                    UnitsOfSalePricePriceChangeOutput[] data = desiailzedProductOutput.data.unitsOfSalePrices;
+                    unitsOfSalePricesData[] data = desiailzedProductOutput.data.unitsOfSalePrices;
 
 
                     EffectiveDatesPerProductPC effectiveDate = new EffectiveDatesPerProductPC();
                     List<EffectiveDatesPerProductPC> effectiveDates = new List<EffectiveDatesPerProductPC>();
-                    foreach (UnitsOfSalePricePriceChangeOutput unitOfSalesPrice in data)
+                    foreach (unitsOfSalePricesData unitOfSalesPrice in data)
                     {
 
                         foreach (var prices in unitOfSalesPrice.price)
@@ -190,7 +189,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return response;
         }
 
-        private List<string> inputPayloadProducts(string inputJSONFilePath)
+        private List<string> getProductListFromInputPayload(string inputJSONFilePath)
         {
             string jsonPayload = _jSONHelper.getDeserializedString(inputJSONFilePath);
             _jsonInputPriceChangeHelper = JsonConvert.DeserializeObject<List<JsonInputPriceChangeHelper>>(jsonPayload);
@@ -198,7 +197,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return UniquePdtFromInputPayload;
         }
 
-        private JsonOutputPriceChangeHelper productOutputDeserialize(string generatedProductJson)
+        private JsonOutputPriceChangeHelper getDeserializedProductJson(string generatedProductJson)
         {
            
             string jsonString = _jSONHelper.getDeserializedString(generatedProductJson);
@@ -206,7 +205,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return _jsonOuputPriceChangeHelper;
         }
 
-        private static String responseHeaderCorrelationID(RestResponse response)
+        private static String getResponseHeaderCorrelationID(RestResponse response)
         {
             string correlationID = response.Headers.ToList().Find(x => x.Name == "_X-Correlation-ID").Value.ToString();
             Console.WriteLine(correlationID);
