@@ -83,7 +83,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                Thread.Sleep(50000);
+                Thread.Sleep(60000);
 
                 responseHeadercorrelationID = getResponseHeaderCorrelationID(response);
                 UniquePdtFromInputPayload = getProductListFromInputPayload(filePath);
