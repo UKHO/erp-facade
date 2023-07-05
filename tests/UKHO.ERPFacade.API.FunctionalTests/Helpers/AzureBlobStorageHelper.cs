@@ -87,7 +87,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return directoryNames;
         }
 
-        public string downloadGeneratedXML(string expectedXMLfilePath, string containerAndBlobName)
+        public string DownloadGeneratedXML(string expectedXMLfilePath, string containerAndBlobName)
         {
             
             BlobServiceClient blobServiceClient = new BlobServiceClient(Config.TestConfig.AzureStorageConfiguration.ConnectionString);

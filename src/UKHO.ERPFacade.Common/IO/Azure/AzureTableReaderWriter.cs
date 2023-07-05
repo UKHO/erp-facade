@@ -196,7 +196,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
 
             await tableClient.AddEntityAsync(priceChangeEventEntity, CancellationToken.None);
 
-            _logger.LogInformation(EventIds.AddedBulkPriceInformationEventInAzureTable.ToEventId(), "Bulk price information event in added in azure table successfully. | _X-Correlation-ID : {_X-Correlation-ID}", correlationId);
+            _logger.LogInformation(EventIds.AddedBulkPriceInformationEventInAzureTable.ToEventId(), "Bulk price information event is added in azure table successfully. | _X-Correlation-ID : {_X-Correlation-ID}", correlationId);
         }
 
         public void AddUnitPriceChangeEntity(string correlationId, string eventId, string unitName)

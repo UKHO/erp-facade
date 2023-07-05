@@ -75,7 +75,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             string correlationId = jsonPayload.Data.correlationId;
 
             //Logic to download XML from container using TraceID from JSON
-            string generatedXMLFilePath = _azureBlobStorageHelper.downloadGeneratedXML(generatedXMLFolder, correlationId);
+            string generatedXMLFilePath = _azureBlobStorageHelper.DownloadGeneratedXML(generatedXMLFolder, correlationId);
 
             //Logic to verifyxml
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
