@@ -128,7 +128,7 @@ namespace UKHO.ERPFacade.API.Controllers
                 {
                     _logger.LogInformation(EventIds.UnitsOfSaleUpdatedEventPushedToEES.ToEventId(), "UnitsOfSaleUpdated event has been sent to EES successfully.");
                     await _azureTableReaderWriter.UpdatePublishDateTimeEntity(correlationId);
-                    return new OkObjectResult(unitsOfSaleUpdatedCloudEventDataJson);
+                    return new OkObjectResult(StatusCodes.Status200OK);
                 }
                 else
                 {
