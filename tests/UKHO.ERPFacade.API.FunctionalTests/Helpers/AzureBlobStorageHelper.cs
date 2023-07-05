@@ -86,5 +86,26 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             }
             return directoryNames;
         }
+
+        public string downloadGeneratedXML(string expectedXMLfilePath, string containerAndBlobName)
+        {
+            
+            BlobServiceClient blobServiceClient = new BlobServiceClient(Config.TestConfig.AzureStorageConfiguration.ConnectionString);
+            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerAndBlobName);
+            BlobClient blobClient = containerClient.GetBlobClient("SapXmlPayload.xml");
+            try
+            {
+                BlobDownloadInfo blobDownload = blobClient.Download();
+                using (FileStream downloadFileStream = new FileStream((expectedXMLfilePath + "\\" + containerAndBlobName + ".xml"), FileMode.Create))
+                {
+                    blobDownload.Content.CopyTo(downloadFileStream);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(containerAndBlobName + " " + ex.Message);
+            }
+            return (expectedXMLfilePath + "\\" + containerAndBlobName + ".xml");
+        }
     }
 }

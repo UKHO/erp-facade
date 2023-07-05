@@ -9,13 +9,15 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
     {
         private readonly RestClient _client;
         private readonly ADAuthTokenProvider _authToken;
-        private SAPXmlHelper SapXmlHelper { get; set; }
+        private SAPXmlHelper _sapXmlHelper { get; set; }
+        private AzureBlobStorageHelper _azureBlobStorageHelper { get; set; }
         public static string generatedCorrelationId = "";
 
         public WebhookEndpoint()
         {
             _authToken = new();
-            SapXmlHelper = new SAPXmlHelper();
+            _sapXmlHelper = new SAPXmlHelper();
+            _azureBlobStorageHelper = new AzureBlobStorageHelper();
             var options = new RestClientOptions(Config.TestConfig.ErpFacadeConfiguration.BaseUrl);
             _client = new RestClient(options);
             
@@ -73,7 +75,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             string correlationId = jsonPayload.Data.correlationId;
 
             //Logic to download XML from container using TraceID from JSON
-            string generatedXMLFilePath = SapXmlHelper.downloadGeneratedXML(generatedXMLFolder, correlationId);
+            string generatedXMLFilePath = _azureBlobStorageHelper.downloadGeneratedXML(generatedXMLFolder, correlationId);
 
             //Logic to verifyxml
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
