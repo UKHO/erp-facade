@@ -106,7 +106,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
                 var unitsOfSaleUpdatedCloudEventData = _cloudEventFactory.Create(unitsOfSaleUpdatedEventPayload);
 
-                var unitsOfSaleUpdatedCloudEventDataJson = JObject.Parse(JsonConvert.SerializeObject(unitsOfSaleUpdatedCloudEventData));
+                var unitsOfSaleUpdatedCloudEventDataJson = JsonConvert.SerializeObject(unitsOfSaleUpdatedCloudEventData);
 
                 _logger.LogInformation(EventIds.UploadUnitsOfSaleUpdatedEventPayloadInAzureBlob.ToEventId(), "Uploading the UnitsOfSaleUpdated event payload json in blob storage.");
 

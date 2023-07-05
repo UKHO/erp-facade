@@ -66,12 +66,12 @@ namespace UKHO.ERPFacade.Common.Services
 
                             if (effectiveStandard != null && !string.IsNullOrEmpty(priceInformation.EffectiveDate))
                             {
-                                if (!effectiveStandard.PriceDurations.Any(x => x.NumberOfMonths == Convert.ToInt32(priceInformation.Duration) && x.Rrp == priceInformation.Price))
+                                if (!effectiveStandard.PriceDurations.Any(x => x.NumberOfMonths == Convert.ToInt32(priceInformation.Duration) && x.Rrp == Convert.ToDecimal(priceInformation.Price)))
                                 {
                                     PriceDurations priceDuration = new();
 
                                     priceDuration.NumberOfMonths = Convert.ToInt32(priceInformation.Duration);
-                                    priceDuration.Rrp = priceInformation.Price;
+                                    priceDuration.Rrp = Convert.ToDecimal(priceInformation.Price);
 
                                     effectiveStandard.PriceDurations.Add(priceDuration);
                                 }
@@ -87,12 +87,12 @@ namespace UKHO.ERPFacade.Common.Services
                             }
                             if (futureStandard != null && !string.IsNullOrEmpty(priceInformation.FutureDate))
                             {
-                                if (!futureStandard.PriceDurations.Any(x => x.NumberOfMonths == Convert.ToInt32(priceInformation.Duration) && x.Rrp == priceInformation.FuturePrice))
+                                if (!futureStandard.PriceDurations.Any(x => x.NumberOfMonths == Convert.ToInt32(priceInformation.Duration) && x.Rrp == Convert.ToDecimal(priceInformation.FuturePrice)))
                                 {
                                     PriceDurations priceDuration = new();
 
                                     priceDuration.NumberOfMonths = Convert.ToInt32(priceInformation.Duration);
-                                    priceDuration.Rrp = priceInformation.FuturePrice;
+                                    priceDuration.Rrp = Convert.ToDecimal(priceInformation.FuturePrice);
 
                                     futureStandard.PriceDurations.Add(priceDuration);
                                 }
@@ -170,7 +170,7 @@ namespace UKHO.ERPFacade.Common.Services
             List<PriceDurations> priceDurationsList = new();
 
             priceDurations.NumberOfMonths = Convert.ToInt32(duration);
-            priceDurations.Rrp = rrp;
+            priceDurations.Rrp = Convert.ToDecimal(rrp);
             priceDurationsList.Add(priceDurations);
 
             standard.PriceDurations = priceDurationsList;
