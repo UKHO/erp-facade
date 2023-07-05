@@ -20,7 +20,8 @@ namespace UKHO.ERPFacade.Common.IO.Azure
         private const string PriceChangeMasterTableName = "pricechangemaster";
         private const string UnitPriceChangeTableName = "unitpricechangeevents";
         private const int DefaultCallbackDuration = 5;
-        enum Statuses
+
+        private enum Statuses
         {
             Incomplete,
             Complete
@@ -120,7 +121,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
                         ||
                         tableitem.ResponseDateTime.HasValue && ((tableitem.ResponseDateTime.Value - tableitem.RequestDateTime.Value) > TimeSpan.FromMinutes(callBackDuration)))
                     {
-                        _logger.LogWarning(EventIds.WebjobCallbackTimeoutEventFromSAP.ToEventId(), $"Request is timed out for the correlationid : {tableitem.CorrelationId}.");
+                        _logger.LogWarning(EventIds.WebjobCallbackTimeoutEventFromSAP.ToEventId(), "Request is timed out for the correlationid : {tableitem.CorrelationId}.", tableitem.CorrelationId);
 
                         TableEntity tableEntity = new(tableitem.PartitionKey, tableitem.RowKey)
                         {
@@ -132,7 +133,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
                 }
                 else
                 {
-                    _logger.LogError(EventIds.EmptyRequestDateTime.ToEventId(), $"Empty RequestDateTime column for correlationid : {tableitem.CorrelationId}");
+                    _logger.LogError(EventIds.EmptyRequestDateTime.ToEventId(), "Empty RequestDateTime column for correlationid : {tableitem.CorrelationId}.", tableitem.CorrelationId);
                 }
             }
         }
@@ -235,7 +236,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             PriceChangeMasterEntity? existingEntity = GetMasterEntities(Statuses.Complete.ToString(), correlationId).ToList().FirstOrDefault();
             if (existingEntity != null)
             {
-                tableClient.DeleteEntity(existingEntity.PartitionKey,existingEntity.RowKey);
+                tableClient.DeleteEntity(existingEntity.PartitionKey, existingEntity.RowKey);
                 _logger.LogInformation(EventIds.DeletedPriceChangeMasterEntitySuccessful.ToEventId(), "Price change master entity is deleted from azure table successfully.");
             }
         }
@@ -248,7 +249,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             {
                 foreach (var entity in existingEntities)
                 {
-                    tableClient.DeleteEntity(entity.PartitionKey,entity.RowKey); 
+                    tableClient.DeleteEntity(entity.PartitionKey, entity.RowKey);
                 }
                 _logger.LogInformation(EventIds.DeletedUnitPriceChangeEntitySuccessful.ToEventId(), "Unit price change status is deleted from azure table successfully.");
             }
@@ -272,7 +273,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             EESEventEntity existingEntity = await GetEntity(correlationId);
             if (existingEntity != null)
             {
-                 tableClient.DeleteEntity(existingEntity.PartitionKey,existingEntity.RowKey);
+                tableClient.DeleteEntity(existingEntity.PartitionKey, existingEntity.RowKey);
                 _logger.LogInformation(EventIds.DeletedEESEntitySuccessful.ToEventId(), "EES entity is deleted from azure table successfully.");
             }
         }
