@@ -462,7 +462,7 @@ stages:
       - name: "AzureADConfiguration.ClientSecretPricingInformationCaller"
         value: $(ERP-API-TEST-AUTOTEST-PRICEINFORMATIONAPICALLER-SECRET)
       - name: "ErpPublishEventSource.ClientId"
-        value: $(ErpPublishEventSourceClientId)
+        value: $(EnterpriseEventServiceConfigurationClientId)
       - name: "SharedKeyConfiguration.Key"
         value: $(SharedKeyConfigurationKey)
       - name: mockWebAppName
