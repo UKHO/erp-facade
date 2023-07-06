@@ -367,6 +367,16 @@
         /// <summary>
         /// 940074- Webjob completed cleanup process.
         /// </summary>
-        WebjobCleanUpEventCompleted = 940074
+        WebjobCleanUpEventCompleted = 940074,
+
+        /// <summary>
+        /// 940075 - Error occurred while connecting EES
+        /// </summary>
+        ErrorOccurredInEES = 940075,
+
+        /// <summary>
+        /// 940076 - EES Health Check Request Sent To EES
+        /// </summary>
+        EESHealthCheckRequestSentToEES = 940076
     }
 }

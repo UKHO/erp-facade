@@ -34,5 +34,13 @@ namespace UKHO.SAP.MockAPIService.Controller
             await Task.CompletedTask;
             return new OkObjectResult(StatusCodes.Status200OK);
         }
+
+        [HttpGet]
+        [Route("/api/health")]
+        public virtual async Task<IActionResult> EESHealthCheck()
+        {
+            
+            return new OkObjectResult(StatusCodes.Status200OK);
+        }
     }
 }
