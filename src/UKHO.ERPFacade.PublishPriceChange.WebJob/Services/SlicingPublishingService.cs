@@ -112,7 +112,7 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
             });
         }
 
-        private List<UnitsOfSalePrices> MapAndBuildUnitsOfSalePrices(List<PriceChange> priceInformationList)
+        private static List<UnitsOfSalePrices> MapAndBuildUnitsOfSalePrices(List<PriceChange> priceInformationList)
         {
             List<UnitsOfSalePrices> unitsOfSalePriceList = new();
 
@@ -121,7 +121,7 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
                 UnitsOfSalePrices unitsOfSalePrice = new();
                 List<Price> priceList = new();
 
-                var isUnitOfSalePriceExists = unitsOfSalePriceList.Any(x => x.UnitName.Contains(priceInformation.ProductName));
+                bool isUnitOfSalePriceExists = unitsOfSalePriceList.Any(x => x.UnitName.Contains(priceInformation.ProductName));
                 if (!(priceInformation.ProductName == "PAYSF" && priceInformation.Duration =="12"))
                 {
                     if (!isUnitOfSalePriceExists)

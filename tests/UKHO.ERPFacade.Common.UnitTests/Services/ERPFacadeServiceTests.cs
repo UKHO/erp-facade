@@ -56,7 +56,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Services
 
             result.Should().BeOfType<List<UnitsOfSalePrices>>();
 
-            var dd = result.Where(x => x.UnitName == "PAYSF").FirstOrDefault();
+            result.Count.Should().Be(4);
             result.Where(x => x.UnitName == "PAYSF").FirstOrDefault().Price.Count().Should().Be(1);
         }
 
@@ -79,7 +79,6 @@ namespace UKHO.ERPFacade.Common.UnitTests.Services
          && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "UnitofSale updated event payload created.").MustHaveHappenedOnceExactly();
 
             result.Should().BeOfType<UnitOfSaleUpdatedEventPayload>();
-            //result.EventData.Data.UnitsOfSalePrices.Should.HaveCount(1);
         }
 
         private List<PriceInformation> GetPriceInformationData()

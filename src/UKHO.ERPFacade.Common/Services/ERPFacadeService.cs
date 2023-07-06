@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Logging;
 using Microsoft.Extensions.Logging;
-using System;
 
 namespace UKHO.ERPFacade.Common.Services
 {
@@ -31,7 +30,7 @@ namespace UKHO.ERPFacade.Common.Services
                 {
                     foreach (var priceInformation in unitPriceInformationList)
                     {
-                        var isUnitOfSalePriceExists = unitsOfSalePriceList.Any(x => x.UnitName.Contains(priceInformation.ProductName));
+                        bool isUnitOfSalePriceExists = unitsOfSalePriceList.Any(x => x.UnitName.Contains(priceInformation.ProductName));
                         if (!(priceInformation.ProductName == "PAYSF" && priceInformation.Duration == "12"))
                         {
                             if (!isUnitOfSalePriceExists)
