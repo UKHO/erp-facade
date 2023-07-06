@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UKHO.ERPFacade.Common.Configuration
 {
-    public class EnvironmentConfiguration
+    public class HealthCheckEnvironmentConfiguration
     {
         public string Environment { get; set; }
 

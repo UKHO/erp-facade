@@ -168,7 +168,7 @@ namespace UKHO.ERPFacade
 
             builder.Services.Configure<SapActionConfiguration>(configuration.GetSection("SapActionConfiguration"));
             sapActionConfiguration = configuration.GetSection("SapActionConfiguration").Get<SapActionConfiguration>()!;
-            builder.Services.Configure<EnvironmentConfiguration>(configuration.GetSection("EnvironmentConfiguration"));
+            builder.Services.Configure<HealthCheckEnvironmentConfiguration>(configuration.GetSection("HealthCheckEnvironmentConfiguration"));
             builder.Services.Configure<EESConfiguration>(configuration.GetSection("EESConfiguration"));
 
             builder.Services.AddInfrastructure();

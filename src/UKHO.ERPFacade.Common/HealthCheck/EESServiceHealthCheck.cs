@@ -16,11 +16,11 @@ namespace UKHO.ERPFacade.Common.HealthCheck
     {
         private readonly ILogger<SapServiceHealthCheck> _logger;
         private readonly IEESClient _eesClient;
-        private readonly IOptions<EnvironmentConfiguration> _environmentConfiguration;
+        private readonly IOptions<HealthCheckEnvironmentConfiguration> _environmentConfiguration;
 
         public EESServiceHealthCheck( ILogger<SapServiceHealthCheck> logger,
                                          IEESClient eesClient,
-                                         IOptions<EnvironmentConfiguration> environmentConfiguration)
+                                         IOptions<HealthCheckEnvironmentConfiguration> environmentConfiguration)
         {
             _logger = logger;
             _eesClient = eesClient;
