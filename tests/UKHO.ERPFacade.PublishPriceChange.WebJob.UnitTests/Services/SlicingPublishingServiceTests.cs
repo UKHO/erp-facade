@@ -183,7 +183,6 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.UnitTests.Services
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
             && call.GetArgument<EventId>(1) == EventIds.UploadedSlicedEventInAzureBlobForUnitPrices.ToEventId()
             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Sliced event is uploaded in blob storage successfully for incomplete unit prices.").MustHaveHappened();
-
         }
 
         [Test]

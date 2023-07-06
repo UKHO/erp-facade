@@ -55,6 +55,9 @@ namespace UKHO.ERPFacade.Common.UnitTests.Services
          && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "PriceInformation is missing for {UnitName} in price information payload received from SAP ").MustHaveHappened();
 
             result.Should().BeOfType<List<UnitsOfSalePrices>>();
+
+            var dd = result.Where(x => x.UnitName == "PAYSF").FirstOrDefault();
+            result.Where(x => x.UnitName == "PAYSF").FirstOrDefault().Price.Count().Should().Be(1);
         }
 
         [Test]
@@ -76,6 +79,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Services
          && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "UnitofSale updated event payload created.").MustHaveHappenedOnceExactly();
 
             result.Should().BeOfType<UnitOfSaleUpdatedEventPayload>();
+            //result.EventData.Data.UnitsOfSalePrices.Should.HaveCount(1);
         }
 
         private List<PriceInformation> GetPriceInformationData()
