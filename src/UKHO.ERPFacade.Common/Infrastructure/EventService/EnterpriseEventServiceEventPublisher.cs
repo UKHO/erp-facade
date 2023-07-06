@@ -41,13 +41,19 @@ namespace UKHO.ERPFacade.Common.Infrastructure.EventService
             {
                 _logger.LogInformation(EventIds.StartingEnterpriseEventServiceEventPublisher.ToEventId(), "Attempting to send {cloudEventType} for {cloudEventSubject} to Enterprise Event Service", eventData.Type, eventData.Subject);
                 var response = await client.PostAsync(_eventServiceEndpoint, content);
-                response.EnsureSuccessStatusCode();
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logger.LogError(EventIds.EnterpriseEventServiceEventPublisherFailure.ToEventId(), "Failed to send event type: {cloudEventType} to the enterprise event service for product: {cloudEventSubject} | Status Code : {StatusCode}", eventData.Type, eventData.Subject, response.StatusCode.ToString());
+                    return Result.Failure(response.StatusCode.ToString());
+                }
+
                 _logger.LogInformation(EventIds.EnterpriseEventServiceEventPublisherSuccess.ToEventId(), "Successfully sent {cloudEventType} for {cloudEventSubject} to Enterprise Event Service", eventData.Type, eventData.Subject);
                 return Result.Success("Successfully sent event");
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.EnterpriseEventServiceEventPublisherFailure.ToEventId(), ex, "Failed to send event type: {cloudEventType} to the enterprise event service for product: {cloudEventSubject}", eventData.Type, eventData.Subject);
+                _logger.LogError(EventIds.EnterpriseEventServiceEventPublisherFailure.ToEventId(), "Failed to send event type: {cloudEventType} to the enterprise event service for product: {cloudEventSubject} | Exception Message : {ExceptionMessage}", eventData.Type, eventData.Subject, ex.Message);
                 return Result.Failure(ex.Message);
             }
         }
