@@ -52,7 +52,7 @@ steps:
 
   - task: DotNetCoreCLI@2
     displayName: "Run Functional tests"
-    continueOnError: true
+    continueOnError: false
     inputs:
       command: "test"
       projects: |
