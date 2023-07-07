@@ -3,23 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Azure;
 using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Configuration;
+using UKHO.ERPFacade.Common.Logging;
 
 namespace UKHO.ERPFacade.Common.HttpClients
 {
     public class EESClient : IEESClient
     {
         private readonly HttpClient _httpClient;
-        private readonly IOptions<EESConfiguration> _eesConfiguration;
-        public EESClient(HttpClient httpClient, IOptions<EESConfiguration> eesConfiguration)
+        private readonly IOptions<EESHealthCheckEnvironmentConfiguration> _eesHealthCheckEnvironmentConfiguration;
+        public EESClient(HttpClient httpClient, IOptions<EESHealthCheckEnvironmentConfiguration> eesHealthCheckEnvironmentConfiguration)
         {
             _httpClient = httpClient;
-            _eesConfiguration= eesConfiguration;
+            _eesHealthCheckEnvironmentConfiguration = eesHealthCheckEnvironmentConfiguration;
         }
         public async Task<HttpResponseMessage> EESHealthCheck()
         {
-            return await _httpClient.GetAsync(_eesConfiguration.Value.Url);
+          
+                return  await _httpClient.GetAsync(_eesHealthCheckEnvironmentConfiguration.Value.EESHealthCheckUrl);
         }
     }
 }

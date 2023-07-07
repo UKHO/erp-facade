@@ -16,33 +16,36 @@ namespace UKHO.ERPFacade.Common.HealthCheck
     {
         private readonly ILogger<SapServiceHealthCheck> _logger;
         private readonly IEESClient _eesClient;
-        private readonly IOptions<HealthCheckEnvironmentConfiguration> _environmentConfiguration;
+        private readonly IOptions<EESHealthCheckEnvironmentConfiguration> _eesHealthCheckEnvironmentConfiguration;
 
         public EESServiceHealthCheck( ILogger<SapServiceHealthCheck> logger,
                                          IEESClient eesClient,
-                                         IOptions<HealthCheckEnvironmentConfiguration> environmentConfiguration)
+                                         IOptions<EESHealthCheckEnvironmentConfiguration> eesHealthCheckEnvironmentConfiguration)
         {
             _logger = logger;
             _eesClient = eesClient;
-            _environmentConfiguration= environmentConfiguration;
+            _eesHealthCheckEnvironmentConfiguration = eesHealthCheckEnvironmentConfiguration;
         }
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
-
             try
             {
                 //Environment
-                var environment = _environmentConfiguration.Value.Environment;
-                var excludeEnvironments = (_environmentConfiguration.Value.ExcludeEnvironment).Split(',').ToArray();
+                var environment = _eesHealthCheckEnvironmentConfiguration.Value.Environment;
 
-                if(excludeEnvironments.Contains(environment))
+                if (!string.IsNullOrEmpty(_eesHealthCheckEnvironmentConfiguration.Value.ExcludeEnvironment))
                 {
-                    return HealthCheckResult.Healthy("EES is Healthy !!!");
+                    var excludeEnvironments = (_eesHealthCheckEnvironmentConfiguration.Value.ExcludeEnvironment).Split(',').ToArray();
+
+                    if (excludeEnvironments.Contains(environment))
+                    {
+                        return HealthCheckResult.Healthy("EES is healthy !!!");
+                    }
                 }
 
                 HttpResponseMessage response = await _eesClient.EESHealthCheck();
 
-                _logger.LogInformation(EventIds.EESHealthCheckRequestSentToEES.ToEventId(), "EES Health Check request has been sent to EES successfully. | {StatusCode}", response.StatusCode);
+                _logger.LogInformation(EventIds.EESHealthCheckRequestSentToEES.ToEventId(), "EES health Check request has been sent to EES successfully. | {StatusCode}", response.StatusCode);
 
                 if (!response.IsSuccessStatusCode)
                 {
@@ -56,7 +59,7 @@ namespace UKHO.ERPFacade.Common.HealthCheck
                 return HealthCheckResult.Unhealthy("EES is Unhealthy" + ex.Message);
             }
 
-            return HealthCheckResult.Healthy("EES is Healthy !!!");
+            return HealthCheckResult.Healthy("EES is healthy !!!");
         }
     }
 }
