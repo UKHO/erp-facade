@@ -52,6 +52,8 @@ namespace UKHO.SAP.MockAPIService
             builder.Services.AddSingleton<ISapConfiguration, SapConfiguration>();
             builder.Services.AddSingleton<IAzureBlobEventWriter, AzureBlobEventWriter>();
             builder.Services.AddSingleton<MockService>();
+            builder.Services.AddHealthChecks();
+            
             builder.Services.AddControllers(o =>
             {
                 o.AllowEmptyInputInBodyModelBinding = true;
@@ -76,7 +78,9 @@ namespace UKHO.SAP.MockAPIService
             app.UseEndpoints(endpoints =>
             {
                 endpoints.UseSoapEndpoint<Iz_adds_mat_info>("/z_adds_mat_info.asmx", new SoapEncoderOptions(), SoapSerializer.XmlSerializer);
+                endpoints.MapHealthChecks("/health");
             });
+
             app.Run();
         }
     }

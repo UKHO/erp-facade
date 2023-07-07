@@ -377,6 +377,26 @@
         /// <summary>
         /// 940076 - EES Health Check Request Sent To EES
         /// </summary>
-        EESHealthCheckRequestSentToEES = 940076
+        EESHealthCheckRequestSentToEES = 940076,
+
+        /// <summary>
+        /// 940077 - SAP Is Healthy
+        /// </summary>
+        SAPIsHealthy = 940077,
+
+        /// <summary>
+        /// 940078 - SAP Is Unhealty
+        /// </summary>
+        SAPIsUnhealthy = 940078,
+
+        /// <summary>
+        /// 940079 - EES Is Healthy
+        /// </summary>
+        EESIsHealthy = 940079,
+
+        /// <summary>
+        /// 940080 - EES Is Unhealty
+        /// </summary>
+        EESIsUnhealthy = 940080
     }
 }

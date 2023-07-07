@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using UKHO.SAP.MockAPIService.Enums;
 using UKHO.SAP.MockAPIService.Services;
 
@@ -34,14 +33,6 @@ namespace UKHO.SAP.MockAPIService.Controller
             }
             await Task.CompletedTask;
             return new OkObjectResult(StatusCodes.Status200OK);
-        }
-
-        [HttpGet]
-        [Route("/api/health")]
-        public virtual async Task<HealthCheckResult> EESHealthCheck()
-        {
-            await Task.CompletedTask;
-            return HealthCheckResult.Healthy("EES is healthy");
         }
     }
 }
