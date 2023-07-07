@@ -24,7 +24,7 @@ namespace UKHO.ERPFacade.Common.Infrastructure.Authentication
                 scope
             }));
 
-            _logger.LogInformation(EventIds.ErrorOccuredInEES.ToEventId(), "Token is - {Token}", token.Token.Substring(0, token.Token.LastIndexOf('.')));
+            _logger.LogInformation(EventIds.ErrorOccuredInEES.ToEventId(), "Scope is - {Scope} | Token is - {Token}", scope, token.Token.Substring(0, token.Token.LastIndexOf('.')));
 
             return token;
         }
