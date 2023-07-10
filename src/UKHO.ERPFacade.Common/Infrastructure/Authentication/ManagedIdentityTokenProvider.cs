@@ -2,7 +2,6 @@ using System.Diagnostics.CodeAnalysis;
 using Azure.Core;
 using Azure.Identity;
 using Microsoft.Extensions.Logging;
-using UKHO.ERPFacade.Common.Logging;
 
 namespace UKHO.ERPFacade.Common.Infrastructure.Authentication
 {
@@ -23,8 +22,6 @@ namespace UKHO.ERPFacade.Common.Infrastructure.Authentication
             {
                 scope
             }));
-
-            _logger.LogInformation(EventIds.ErrorOccuredInEES.ToEventId(), "Scope is - {Scope} | Token is - {Token}", scope, token.Token.Substring(0, token.Token.LastIndexOf('.')));
 
             return token;
         }

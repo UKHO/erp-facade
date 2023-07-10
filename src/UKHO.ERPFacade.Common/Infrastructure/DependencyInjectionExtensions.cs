@@ -51,10 +51,8 @@ namespace UKHO.ERPFacade.Common.Infrastructure
                 var accessTokenCache = sp.GetRequiredService<IAccessTokenCache>();
                 client.BaseAddress = new Uri(config.ServiceUrl);
 
-                //string token = accessTokenCache.GetTokenAsync("1640eb84-077b-4795-b2ab-75d8f8bf0942/.default").Result;
                 string token = accessTokenCache.GetTokenAsync($"{config.ClientId}/{config.PublisherScope}").Result;
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
             }).AddPolicyHandler(retryPolicy);
 
             return services;

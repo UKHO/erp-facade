@@ -1,7 +1,5 @@
 ﻿using Azure.Core;
 using LazyCache;
-using Microsoft.Extensions.Logging;
-using UKHO.ERPFacade.Common.Logging;
 
 namespace UKHO.ERPFacade.Common.Infrastructure.Authentication
 {
@@ -11,19 +9,19 @@ namespace UKHO.ERPFacade.Common.Infrastructure.Authentication
         private readonly ITokenProvider _tokenProvider;
 
         public AccessTokenCache(IAppCache memoryCache, ITokenProvider tokenProvider)
-        {           
+        {
             _memoryCache = memoryCache;
             _tokenProvider = tokenProvider;
         }
 
         public Task<string> GetTokenAsync(string scope)
-        {           
+        {
             return _memoryCache.GetOrAddAsync(scope, async entry =>
             {
                 AccessToken token = await _tokenProvider.GetTokenAsync(scope);
 
                 entry.AbsoluteExpiration = token.ExpiresOn;
-              
+
                 return token.Token;
             });
         }
