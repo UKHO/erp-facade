@@ -42,13 +42,15 @@ namespace UKHO.ERPFacade.Common.Infrastructure.EventService
 
             Byte[] byteArray = content.ReadAsByteArrayAsync().Result;
 
-            var unitsOfSaleUpdatedCloudEventData = JsonConvert.DeserializeObject<CloudEvent<UnitOfSalePriceEventData>>(Encoding.UTF8.GetString(byteArray));
+            var unitsOfSaleUpdatedCloudEventData = JsonConvert.DeserializeObject<UnitOfSaleUpdatedEventPayload>(Encoding.UTF8.GetString(byteArray));
 
             JObject eventJson = JObject.Parse(JsonConvert.SerializeObject(unitsOfSaleUpdatedCloudEventData.Data));
 
             var correlationId = eventJson.SelectToken("correlationId")?.Value<string>();
 
-            await _azureBlobEventWriter.UploadEvent(JsonConvert.SerializeObject(unitsOfSaleUpdatedCloudEventData, Formatting.Indented).ToString(), correlationId!, "UnitOfSaleUpdatedEvent_EES.json");
+            var unitsOfSaleUpdatedCloudEventDataJson = JsonConvert.DeserializeObject(Encoding.UTF8.GetString(byteArray));
+
+            await _azureBlobEventWriter.UploadEvent(JsonConvert.SerializeObject(unitsOfSaleUpdatedCloudEventDataJson, Formatting.Indented).ToString(), correlationId!, "UnitOfSaleUpdatedEvent_EES.json");
 
             content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/cloudevents+json; charset=utf-8");
 
