@@ -14,7 +14,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
     
     public class AzureTableHelper
     {
-        private const string ErpFacadeTableName = "eesevents";
+        private const string ErpFacadeTableName = "encevents";
  
         //Private Methods
         private TableClient GetTableClient(string tableName)

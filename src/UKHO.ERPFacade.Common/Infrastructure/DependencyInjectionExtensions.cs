@@ -18,10 +18,9 @@ namespace UKHO.ERPFacade.Common.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
-            services.AddOptions<NotificationsConfiguration>().Configure<IConfiguration>((settings, configuration) => { configuration.Bind(settings); });
-            services.AddOptions<EnterpriseEventServiceConfiguration>().Configure<IConfiguration>((settings, configuration) =>
+            services.AddOptions<ErpPublishEventSource>().Configure<IConfiguration>((settings, configuration) =>
             {
-                configuration.GetSection("EnterpriseEventServiceConfiguration").Bind(settings);
+                configuration.GetSection("ErpPublishEventSource").Bind(settings);
             });
 
             services.AddOptions<InteractiveLoginConfiguration>().Configure<IConfiguration>((settings, configuration) =>
@@ -29,8 +28,7 @@ namespace UKHO.ERPFacade.Common.Infrastructure
                 configuration.GetSection("InteractiveLoginConfiguration").Bind(settings);
             });
 
-            services.AddSingleton<IDateTimeProvider, DateTimeProvider>()
-                    .AddSingleton<IUniqueIdentifierFactory, UniqueIdentifierFactory>();
+            services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
             services.AddSingleton<ICloudEventFactory, CloudEventFactory>()
                     .AddSingleton<IEventPublisher, EnterpriseEventServiceEventPublisher>()
@@ -49,9 +47,10 @@ namespace UKHO.ERPFacade.Common.Infrastructure
 
             services.AddHttpClient(EnterpriseEventServiceEventPublisher.EventServiceClientName, (sp, client) =>
             {
-                EnterpriseEventServiceConfiguration config = sp.GetRequiredService<IOptions<EnterpriseEventServiceConfiguration>>().Value;
+                ErpPublishEventSource config = sp.GetRequiredService<IOptions<ErpPublishEventSource>>().Value;
                 var accessTokenCache = sp.GetRequiredService<IAccessTokenCache>();
                 client.BaseAddress = new Uri(config.ServiceUrl);
+
                 string token = accessTokenCache.GetTokenAsync($"{config.ClientId}/{config.PublisherScope}").Result;
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             }).AddPolicyHandler(retryPolicy);

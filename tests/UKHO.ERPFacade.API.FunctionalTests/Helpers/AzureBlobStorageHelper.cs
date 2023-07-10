@@ -12,15 +12,15 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             {
                 BlobServiceClient blobServiceClient = new BlobServiceClient(Config.TestConfig.AzureStorageConfiguration.ConnectionString);
                 BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerAndBlobName);
-                BlobClient blobClient = containerClient.GetBlobClient(containerAndBlobName + "_unitofsalesupdatedevent" + "." + fileType);
+                BlobClient blobClient = containerClient.GetBlobClient("UnitOfSaleUpdatedEvent" + "." + fileType);
 
                 BlobDownloadInfo blobDownload = blobClient.Download();
-                using (FileStream downloadFileStream = new FileStream((expectedfilePath + "\\" + containerAndBlobName + "_unitofsalesupdatedevent" + "." + fileType), FileMode.Create))
+                using (FileStream downloadFileStream = new FileStream((expectedfilePath + "\\" + "UnitOfSaleUpdatedEvent" + "." + fileType), FileMode.Create))
                 {
                     blobDownload.Content.CopyTo(downloadFileStream);
                 }
 
-                return (expectedfilePath + "\\" + containerAndBlobName + "_unitofsalesupdatedevent" + "." + fileType);
+                return (expectedfilePath + "\\" + "UnitOfSaleUpdatedEvent" + "." + fileType);
             }
             catch (Exception ex)
             {
@@ -38,7 +38,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     BlobServiceClient blobServiceClient = new BlobServiceClient(Config.TestConfig.AzureStorageConfiguration.ConnectionString);
 
                     BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient("pricechangeblobs" + "\\" + containerAndBlobName + "\\" + productName);
-                    BlobClient blobClient = containerClient.GetBlobClient(containerAndBlobName + "/" + productName + "/" + productName + ".json");
+                    BlobClient blobClient = containerClient.GetBlobClient(containerAndBlobName + "/" + productName + "/" + "PriceChangeEvent" + ".json");
 
 
                     BlobDownloadInfo blobDownload = blobClient.Download();
@@ -85,6 +85,27 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 Console.WriteLine(containerAndBlobName + " " + ex.Message);
             }
             return directoryNames;
+        }
+
+        public string DownloadGeneratedXML(string expectedXMLfilePath, string containerAndBlobName)
+        {
+            
+            BlobServiceClient blobServiceClient = new BlobServiceClient(Config.TestConfig.AzureStorageConfiguration.ConnectionString);
+            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerAndBlobName);
+            BlobClient blobClient = containerClient.GetBlobClient("SapXmlPayload.xml");
+            try
+            {
+                BlobDownloadInfo blobDownload = blobClient.Download();
+                using (FileStream downloadFileStream = new FileStream((expectedXMLfilePath + "\\" + containerAndBlobName + ".xml"), FileMode.Create))
+                {
+                    blobDownload.Content.CopyTo(downloadFileStream);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(containerAndBlobName + " " + ex.Message);
+            }
+            return (expectedXMLfilePath + "\\" + containerAndBlobName + ".xml");
         }
     }
 }

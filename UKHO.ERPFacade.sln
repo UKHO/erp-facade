@@ -32,7 +32,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UKHO.ERPFacade.PublishPrice
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UKHO.ERPFacade.CleanUp.WebJob", "src\UKHO.ERPFacade.CleanUp.WebJob\UKHO.ERPFacade.CleanUp.WebJob.csproj", "{D172CA22-39E9-4DA6-B88A-4BDCEDB6699A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UKHO.ERPFacade.CleanUp.WebJob.UnitTests", "tests\UKHO.ERPFacade.CleanUp.WebJob.UnitTests\UKHO.ERPFacade.CleanUp.WebJob.UnitTests.csproj", "{E0EE87DB-1582-4DBD-8387-FAF180CBB845}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UKHO.ERPFacade.CleanUp.WebJob.UnitTests", "tests\UKHO.ERPFacade.CleanUp.WebJob.UnitTests\UKHO.ERPFacade.CleanUp.WebJob.UnitTests.csproj", "{E0EE87DB-1582-4DBD-8387-FAF180CBB845}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
