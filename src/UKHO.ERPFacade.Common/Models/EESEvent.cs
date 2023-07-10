@@ -36,7 +36,7 @@ namespace UKHO.ERPFacade.Common.Models
     {
         [JsonProperty("correlationId")]
         public string CorrelationId { get; set; }
-         
+
         [JsonProperty("products")]
         public List<Product> Products { get; set; }
 
@@ -74,8 +74,8 @@ namespace UKHO.ERPFacade.Common.Models
         [JsonProperty("mayAffectHoldings")]
         public bool MayAffectHoldings { get; set; }
 
-        [JsonProperty("contentChanged")]
-        public bool ContentChanged { get; set; }
+        [JsonProperty("contentChange")]
+        public bool ContentChange { get; set; }
 
         [JsonProperty("permit")]
         public string Permit { get; set; }
@@ -83,8 +83,8 @@ namespace UKHO.ERPFacade.Common.Models
         [JsonProperty("providerCode")]
         public string ProviderCode { get; set; }
 
-        [JsonProperty("providerDesc")]
-        public string ProviderDesc { get; set; }
+        [JsonProperty("providerName")]
+        public string ProviderName { get; set; }
 
         [JsonProperty("size")]
         public string Size { get; set; }
@@ -321,7 +321,7 @@ namespace UKHO.ERPFacade.Common.Models
         public int NumberOfMonths { get; set; }
 
         [JsonProperty("rrp")]
-        public string Rrp { get; set; }
+        public decimal Rrp { get; set; }
     }
 
     public enum Provider

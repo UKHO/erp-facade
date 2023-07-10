@@ -20,10 +20,10 @@
                 "editionNumber": 1,
                 "updateNumber": 0,
                 "mayAffectHoldings": true,
-                "contentChanged": false,
+                "contentChange": false,
                 "permit": "permitString",
                 "providerCode": 1,
-                "providerDesc": "ICE",
+                "providerName": "ICE",
                 "_COMMENT": "provider code and descrption are a n-1 mapping",
                 "_ENUM": [
                     "ICE",
@@ -163,7 +163,7 @@
                 "title": "Isla Clarion",
                 "unitType": "AVCS Units Coastal",
                 "unitSize": "large",
-                "unitOfSaleType": "Unit",
+                "unitOfSaleType": "unit",
                 "status": "ForSale",
                 "_ENUM": [
                     "ForSale",

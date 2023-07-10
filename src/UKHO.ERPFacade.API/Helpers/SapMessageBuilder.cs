@@ -70,10 +70,11 @@ namespace UKHO.ERPFacade.API.Helpers
             XmlNode actionItemNode = soapXml.SelectSingleNode(XpathActionItems);
 
             bool IsConditionSatisfied = false;
+
+            _logger.LogInformation(EventIds.BuildingSapActionStarted.ToEventId(), "Building SAP actions.");
+
             foreach (var product in eventData.Data.Products)
             {
-                _logger.LogInformation(EventIds.BuildingSapActionStarted.ToEventId(), "Building SAP actions.");
-
                 //Actions for ENC CELL
                 foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == EncCell))
                 {
@@ -84,7 +85,7 @@ namespace UKHO.ERPFacade.API.Helpers
                         case 5:
                         case 7:
                         case 9:
-                            var unitOfSale = eventData.Data.UnitsOfSales.Where(x => x.UnitOfSaleType == UnitSaleType && product.InUnitsOfSale.Contains(x.UnitName)).FirstOrDefault();
+                            var unitOfSale = GetUnitOfSaleForEncCell(eventData.Data.UnitsOfSales, product);
                             foreach (var rules in action.Rules)
                             {
                                 foreach (var conditions in rules.Conditions)
@@ -107,23 +108,24 @@ namespace UKHO.ERPFacade.API.Helpers
                             {
                                 actionNode = BuildAction(soapXml, product, unitOfSale, action);
                                 actionItemNode.AppendChild(actionNode);
+                                _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
 
                                 IsConditionSatisfied = false;
                             }
                             break;
 
                         case 4:
-                            var unitOfSaleReplace = eventData.Data.UnitsOfSales.Where(x => x.UnitOfSaleType == UnitSaleType && product.InUnitsOfSale.Contains(x.UnitName)).FirstOrDefault();
+                            var unitOfSaleReplace = GetUnitOfSaleForEncCell(eventData.Data.UnitsOfSales, product);
 
                             foreach (var replacedProduct in product.ReplacedBy)
                             {
                                 actionNode = BuildAction(soapXml, product, unitOfSaleReplace, action, null, replacedProduct);
                                 actionItemNode.AppendChild(actionNode);
+                                _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
                             }
-                            break;                        
+                            break;                       
 
-                    }
-                    _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
+                    }                    
                 }
 
                 //Actions for AVCS UNIT
@@ -157,6 +159,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                 {
                                     actionNode = BuildAction(soapXml, product, unitofSale, action);
                                     actionItemNode.AppendChild(actionNode);
+                                    _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
 
                                     IsConditionSatisfied = false;
                                 }
@@ -183,13 +186,13 @@ namespace UKHO.ERPFacade.API.Helpers
                                 {
                                     actionNode = BuildAction(soapXml, product, unitofSale, action);
                                     actionItemNode.AppendChild(actionNode);
+                                    _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
 
                                     IsConditionSatisfied = false;
                                 }
                                 break;
 
-                        }
-                        _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
+                        }                        
                     }
                 }
             }
@@ -224,6 +227,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                 var product = eventData.Data.Products.Where(x => x.ProductName == unitOfSale.UnitName).FirstOrDefault();
                                 actionNode = BuildAction(soapXml, product, unitOfSale, action);
                                 actionItemNode.AppendChild(actionNode);
+                                _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
 
                                 IsConditionSatisfied = false;
                             }
@@ -235,6 +239,7 @@ namespace UKHO.ERPFacade.API.Helpers
 
                                 actionNode = BuildAction(soapXml, product, unitOfSale, action, addProduct);
                                 actionItemNode.AppendChild(actionNode);
+                                _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
                             }
                             break;
 
@@ -245,11 +250,11 @@ namespace UKHO.ERPFacade.API.Helpers
 
                                 actionNode = BuildAction(soapXml, product, unitOfSale, action);
                                 actionItemNode.AppendChild(actionNode);
+                                _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
                             }
                             break;
 
-                    }
-                    _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
+                    }                    
                 }
             }
 
@@ -412,6 +417,24 @@ namespace UKHO.ERPFacade.API.Helpers
             {
                 return jsonFieldValue == attributeValue;
             }
+        }
+
+        private UnitOfSale GetUnitOfSaleForEncCell(List<UnitOfSale> listOfUnitOfSales, Product product)
+        {
+            UnitOfSale unitOfSale = new();
+            var unitOfSales = listOfUnitOfSales.Where(x => x.UnitOfSaleType == UnitSaleType && product.InUnitsOfSale.Contains(x.UnitName)).ToList();
+            if (unitOfSales.Any())
+            {
+                if (unitOfSales.Count > 1)
+                {
+                    unitOfSale = unitOfSales.Where(x => x.CompositionChanges.AddProducts.Contains(product.ProductName)).FirstOrDefault();
+                }
+                else
+                {
+                    unitOfSale = unitOfSales.FirstOrDefault();
+                }
+            }
+            return unitOfSale!;
         }
     }
 }

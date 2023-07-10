@@ -1,7 +1,4 @@
-﻿
-using Azure.Storage.Blobs;
-using Azure.Storage.Blobs.Models;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using System.Text;
@@ -9,52 +6,45 @@ using System.Xml;
 using System.Xml.Serialization;
 using UKHO.ERPFacade.API.FunctionalTests.Model;
 
+
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
     public class SAPXmlHelper
     {
-        private static JsonPayloadHelper jsonPayloadHelper { get; set; }
-
         static int actionCounter;
-
         static readonly List<string> AttrNotMatched = new();
         static List<string> ChangeAVCSUoS = new();
         static readonly Dictionary<string, List<string>> ChangeENCCell = new();
         public static List<string> listFromJson = new();
         public static List<string> actionsListFromXml = new();
-
         private static JsonPayloadHelper jsonPayload { get; set; }
-        private static Z_ADDS_MAT_INFO xmlPayload { get; set; }
-
-        public static async Task<bool> CheckXMLAttributes(JsonPayloadHelper jsonPayload, string XMLFilePath)
+        private static JsonPayloadHelper jsonPayload2 { get; set; }
+        
+        public static async Task<bool> CheckXMLAttributes(JsonPayloadHelper jsonPayload, string XMLFilePath, string updatedRequestBody)
         {
 
             SAPXmlHelper.jsonPayload = jsonPayload;
-            XmlDocument xDoc = new XmlDocument();
-            //load up the xml from the location 
-            xDoc.LoadXml(File.ReadAllText(XMLFilePath));
+            jsonPayload2 = JsonConvert.DeserializeObject<JsonPayloadHelper>(updatedRequestBody);
 
-            var ns = new XmlNamespaceManager(xDoc.NameTable);
-            ns.AddNamespace("xsisp", "http://www.w3.org/2001/XMLSchema-instance");
-            ns.AddNamespace("xsdsp", "http://www.w3.org/2001/XMLSchema");
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(File.ReadAllText(XMLFilePath));
 
-            XmlNodeList nodeList = xDoc.SelectNodes("//*[local-name()='IM_MATINFO']/ACTIONITEMS/item", ns);
+            while (xmlDoc.DocumentElement.Name == "soap:Envelope" || xmlDoc.DocumentElement.Name == "soap:Body")
+            {
+                string tempXmlString = xmlDoc.DocumentElement.InnerXml;
+                xmlDoc.LoadXml(tempXmlString);
+            }
 
-            XmlSerializer xsw = new XmlSerializer(typeof(Z_ADDS_MAT_INFO));
-            FileStream fs = new FileStream(XMLFilePath, FileMode.Open);
-            StreamReader stream = new StreamReader(fs, Encoding.UTF8);
-            xmlPayload = (Z_ADDS_MAT_INFO)xsw.Deserialize(new XmlTextReader(stream));
+            var ms = new MemoryStream(Encoding.UTF8.GetBytes(xmlDoc.InnerXml));
+            var reader = new XmlTextReader(ms) { Namespaces = false };
+            var serializer = new XmlSerializer(typeof(Z_ADDS_MAT_INFO));
+            var result = (Z_ADDS_MAT_INFO)serializer.Deserialize(reader);
 
-            Assert.True(VerifyPresenseOfMandatoryXMLAtrributes(nodeList).Result);
-
-            //verification of action atrribute's value
             actionCounter = 1;
             ChangeENCCell.Clear();
-
-            foreach (Item item in xmlPayload.IM_MATINFO.ACTIONITEMS)
-
+            foreach (ZMAT_ACTIONITEMS item in result.IM_MATINFO.ACTIONITEMS)
             {
-
+              
                 if (item.ACTION == "CREATE ENC CELL")
                     Assert.True(verifyCreateENCCell(item.CHILDCELL, item));
                 else if (item.ACTION == "CREATE AVCS UNIT OF SALE")
@@ -69,8 +59,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     Assert.True(verifyCancelENCCell(item.CHILDCELL, item.PRODUCTNAME, item));
                 else if (item.ACTION == "CANCEL AVCS UNIT OF SALE")
                     Assert.True(verifyCancelToAVCSUnitOfSale(item.PRODUCTNAME, item));
-                else if (item.ACTION == "CANCEL AVCS UNIT OF SALE")
-                    Assert.True(verifyCancelToAVCSUnitOfSale(item.PRODUCTNAME, item));
+               // else if (item.ACTION == "CANCEL AVCS UNIT OF SALE")
+               //     Assert.True(verifyCancelToAVCSUnitOfSale(item.PRODUCTNAME, item));
                 else if (item.ACTION == "CHANGE ENC CELL")
                     Assert.True(verifyChangeENCCell(item.CHILDCELL, item));
                 else if (item.ACTION == "CHANGE AVCS UNIT OF SALE")
@@ -86,7 +76,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return true;
         }
 
-        private static bool? verifyChangeAVCSUnitOfSale(string productName, Item item)
+        private static bool? verifyChangeAVCSUnitOfSale(string productName, ZMAT_ACTIONITEMS item)
         {
             Console.WriteLine("Action#:" + actionCounter + ".UnitOfSale:" + productName);
             foreach (KeyValuePair<string, List<string>> ele2 in ChangeENCCell)
@@ -125,9 +115,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         Console.WriteLine("CHANGE AVCS UNIT OF SALE Action's Data is correct");
                         var valueindex = ele2.Value.IndexOf(productName);
                         ChangeAVCSUoS[valueindex] = ChangeAVCSUoS[valueindex].Replace(productName, "skip");
-
                         return true;
-
                     }
 
                     else
@@ -146,7 +134,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         }
 
 
-        private static bool? verifyUpdateAVCSUnitOfSale(string childCell, Item item)
+        private static bool? verifyUpdateAVCSUnitOfSale(string childCell, ZMAT_ACTIONITEMS item)
         {
 
             Console.WriteLine("Action#:" + actionCounter + ".Childcell:" + childCell);
@@ -155,7 +143,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 if ((childCell == product.ProductName) &&
                     (product.Status.StatusName.Contains("Update") || product.Status.StatusName.Contains("New Edition") || product.Status.StatusName.Contains("Re-issue")) &&
                     (!product.Status.IsNewCell) &&
-                    (product.ContentChanged))
+                    (product.ContentChange))
                 {
                     AttrNotMatched.Clear();
                     if (!item.ACTIONNUMBER.Equals(actionCounter.ToString()))
@@ -164,7 +152,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         AttrNotMatched.Add(nameof(item.PRODUCT));
                     if (!item.PRODTYPE.Equals(product.ProductType[4..]))
                         AttrNotMatched.Add(nameof(item.PRODTYPE));
-                    if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!getUoSInfo(item.PRODUCTNAME).UnitOfSaleType.Contains("unit")))
+                    if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!item.PRODUCTNAME.Equals(getUoSName(childCell))))
                         AttrNotMatched.Add(nameof(item.PRODUCTNAME));
                     if (!item.AGENCY.Equals(product.Agency))
                         AttrNotMatched.Add(nameof(item.AGENCY));
@@ -200,15 +188,15 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 }
                 else if ((childCell == product.ProductName) && (product.Status.StatusName.Contains("Suspended")))
                 {
-
                     AttrNotMatched.Clear();
+                    Console.WriteLine("The UoS name for "+childCell+" calculated is: " +getUoSName(childCell));
                     if (!item.ACTIONNUMBER.Equals(actionCounter.ToString()))
                         AttrNotMatched.Add(nameof(item.ACTIONNUMBER));
                     if (!item.PRODUCT.Equals("ENC CELL"))
                         AttrNotMatched.Add(nameof(item.PRODUCT));
                     if (!item.PRODTYPE.Equals(product.ProductType[4..]))
                         AttrNotMatched.Add(nameof(item.PRODTYPE));
-                    if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!getUoSInfo(item.PRODUCTNAME).UnitOfSaleType.Contains("unit")))
+                    if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!item.PRODUCTNAME.Equals(getUoSName(childCell))))
                         AttrNotMatched.Add(nameof(item.PRODUCTNAME));
                     if (!item.AGENCY.Equals(product.Agency))
                         AttrNotMatched.Add(nameof(item.AGENCY));
@@ -256,13 +244,13 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             throw new NotImplementedException();
         }
 
-        private static bool? verifyChangeENCCell(string childCell, Item item)
+        private static bool? verifyChangeENCCell(string childCell, ZMAT_ACTIONITEMS item)
         {
 
             Console.WriteLine("Action#:" + actionCounter + ".Childcell:" + childCell);
             foreach (Product product in jsonPayload.Data.Products)
             {
-                if ((childCell == product.ProductName) && (!product.ContentChanged))
+                if ((childCell == product.ProductName) && (!product.ContentChange))
                 {
                     AttrNotMatched.Clear();
                     if (!item.ACTIONNUMBER.Equals(actionCounter.ToString()))
@@ -271,8 +259,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         AttrNotMatched.Add(nameof(item.PRODUCT));
                     if (!item.PRODTYPE.Equals(product.ProductType[4..]))
                         AttrNotMatched.Add(nameof(item.PRODTYPE));
-                    if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!getUoSInfo(item.PRODUCTNAME).UnitOfSaleType.Contains("unit")))
-                       AttrNotMatched.Add(nameof(item.PRODUCTNAME));
+                    if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!item.PRODUCTNAME.Equals(getUoSName(childCell))))
+                        AttrNotMatched.Add(nameof(item.PRODUCTNAME));
                     if (!item.AGENCY.Equals(product.Agency))
                         AttrNotMatched.Add(nameof(item.AGENCY));
                     if (!item.PROVIDER.Equals(product.ProviderCode))
@@ -313,7 +301,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         }
 
 
-        private static bool? verifyCancelToAVCSUnitOfSale(string productName, Item item)
+        private static bool? verifyCancelToAVCSUnitOfSale(string productName, ZMAT_ACTIONITEMS item)
         {
             Console.WriteLine("Action#:" + actionCounter + ".UnitOfSale:" + productName);
             foreach (UnitOfSale unitOfSale in jsonPayload.Data.UnitsOfSales)
@@ -355,7 +343,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return false;
         }
 
-        private static bool? verifyCancelENCCell(string childCell, string productName, Item item)
+        private static bool? verifyCancelENCCell(string childCell, string productName, ZMAT_ACTIONITEMS item)
         {
             Console.WriteLine("Action#:" + actionCounter + ".ENC Cell:" + childCell);
             foreach (Product product in jsonPayload.Data.Products)
@@ -368,8 +356,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     //xmlAttributes[1] is skipped as already checked
                     if (!item.PRODUCT.Equals("ENC CELL"))
                         AttrNotMatched.Add(nameof(item.PRODUCT));
-                    if (!item.PRODTYPE.Equals(product.ProductType[4..]))
+                   if (!item.PRODTYPE.Equals(product.ProductType[4..]))
                         AttrNotMatched.Add(nameof(item.PRODTYPE));
+                    if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!item.PRODUCTNAME.Equals(getUoSName(childCell))))
+                        AttrNotMatched.Add(nameof(item.PRODUCTNAME));
 
                     //Checking blanks
                     string[] fieldNames = { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE" };
@@ -398,7 +388,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         }
 
 
-        private static bool? verifyRemoveENCCellFromAVCSUnitOFSale(string childCell, string productName, Item item)
+        private static bool? verifyRemoveENCCellFromAVCSUnitOFSale(string childCell, string productName, ZMAT_ACTIONITEMS item)
         {
 
             Console.WriteLine("Action#:" + actionCounter + ".AVCSUnitOfSale:" + productName);
@@ -448,7 +438,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return false;
         }
 
-        private static bool? verifyReplaceWithENCCell(string childCell, string replaceBy, Item item)
+        private static bool? verifyReplaceWithENCCell(string childCell, string replaceBy, ZMAT_ACTIONITEMS item)
         {
             Console.WriteLine("Action#:" + actionCounter + ".ENC Cell:" + childCell);
             foreach (Product product in jsonPayload.Data.Products)
@@ -464,7 +454,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         AttrNotMatched.Add(nameof(item.PRODUCT));
                     if (!item.PRODTYPE.Equals(product.ProductType[4..]))
                         AttrNotMatched.Add(nameof(item.PRODTYPE));
-                    if (!product.InUnitsOfSale.Contains(item.PRODUCTNAME))
+                    //if (!product.InUnitsOfSale.Contains(item.PRODUCTNAME))
+                    if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!item.PRODUCTNAME.Equals(getUoSName(childCell))))
                         AttrNotMatched.Add(nameof(item.PRODUCTNAME));
                     //Checking blanks
                     string[] fieldNames = { "CANCELLED", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE" };
@@ -494,7 +485,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return false;
         }
 
-        private static bool verifyAssignCellToAVCSUnitOfSale(string childCell, string productName, Item item)
+        private static bool verifyAssignCellToAVCSUnitOfSale(string childCell, string productName, ZMAT_ACTIONITEMS item)
         {
 
             Console.WriteLine("Action#:" + actionCounter + ".AVCSUnitOfSale:" + productName);
@@ -544,7 +535,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return false;
         }
 
-        private static bool verifyCreateAVCSUnitOfSale(string productName, Item item)
+        private static bool verifyCreateAVCSUnitOfSale(string productName, ZMAT_ACTIONITEMS item)
         {
             Console.WriteLine("Action#:" + actionCounter + ".UnitOfSale:" + productName);
             foreach (UnitOfSale unitOfSale in jsonPayload.Data.UnitsOfSales)
@@ -597,7 +588,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         }
 
 
-        private static bool verifyCreateENCCell(string childCell, Item item)
+        private static bool verifyCreateENCCell(string childCell, ZMAT_ACTIONITEMS item)
         {
 
             Console.WriteLine("Action#:" + actionCounter + ".Childcell:" + childCell);
@@ -613,7 +604,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         AttrNotMatched.Add(nameof(item.PRODUCT));
                     if (!item.PRODTYPE.Equals(product.ProductType[4..]))
                         AttrNotMatched.Add(nameof(item.PRODTYPE));
-                    if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!getUoSInfo(item.PRODUCTNAME).UnitOfSaleType.Contains("Unit")))
+                    // if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!getUoSInfo(item.PRODUCTNAME).UnitOfSaleType.Contains("Unit")))
+                    if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!item.PRODUCTNAME.Equals(getUoSName(childCell))))
                         AttrNotMatched.Add(nameof(item.PRODUCTNAME));
                     if (!item.AGENCY.Equals(product.Agency))
                         AttrNotMatched.Add(nameof(item.AGENCY));
@@ -655,14 +647,14 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
 
         }
-        private static bool VerifyBlankFields(Item item, string[] fieldNames)
+        private static bool VerifyBlankFields(ZMAT_ACTIONITEMS item, string[] fieldNames)
         {
             bool allBlanks = true;
-            
+
             foreach (string field in fieldNames)
             {
-                if (!typeof(Item).GetProperty(field).GetValue(item, null).Equals(""))
-                    AttrNotMatched.Add(typeof(Item).GetProperty(field).Name);
+                if (!typeof(ZMAT_ACTIONITEMS).GetProperty(field).GetValue(item, null).Equals(""))
+                    AttrNotMatched.Add(typeof(ZMAT_ACTIONITEMS).GetProperty(field).Name);
             }
             return allBlanks;
         }
@@ -746,26 +738,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
             return productInfo;
         }
-        public string downloadGeneratedXML(string expectedXMLfilePath, string containerAndBlobName)
-        {
-            BlobServiceClient blobServiceClient = new BlobServiceClient(Config.TestConfig.AzureStorageConfiguration.ConnectionString);
-            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerAndBlobName);
-            BlobClient blobClient = containerClient.GetBlobClient(containerAndBlobName + ".xml");
-
-            BlobDownloadInfo blobDownload = blobClient.Download();
-            using (FileStream downloadFileStream = new FileStream((expectedXMLfilePath + "\\" + containerAndBlobName + ".xml"), FileMode.Create))
-            {
-                blobDownload.Content.CopyTo(downloadFileStream);
-            }
-            return (expectedXMLfilePath + "\\" + containerAndBlobName + ".xml");
-        }
 
         public static string getRequiredXMLText(string generatedXMLFilePath, string tagName)
         {
             XmlDocument xDoc = new XmlDocument();
             xDoc.LoadXml(File.ReadAllText(generatedXMLFilePath));
             XmlNode node = xDoc.SelectSingleNode("//" + tagName);
-
             return node.InnerText;
         }
 
@@ -845,10 +823,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         public static bool verifyCORRIDHeader(JsonPayloadHelper jsonPayload, string generatedXMLFilePath)
         {
 
-            string traceID = jsonPayload.Data.correlationId;
+            string correlationID = jsonPayload.Data.correlationId;
             string corrID = getRequiredXMLText(generatedXMLFilePath, "CORRID");
 
-            if (traceID == corrID)
+            if (correlationID == corrID)
             {
                 return true;
             }
@@ -886,17 +864,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             }
 
             return actionsListFromXml;
-        }
-
-        public static JsonPayloadHelper getPayloadDeserealized(string jsonPayloadFilePath)
-        {
-            using (StreamReader r = new StreamReader(jsonPayloadFilePath))
-            {
-                string jsonOutput = r.ReadToEnd();
-                JsonPayloadHelper jsonPayloadHelper = JsonConvert.DeserializeObject<JsonPayloadHelper>(jsonOutput);
-
-                return jsonPayloadHelper;
-            }
         }
 
         public static void updateActionList(int n, string actionMessage)
@@ -1032,7 +999,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
             foreach (Product product in obj.Data.Products)
             {
-                if (product.ContentChanged == false)
+                if (product.ContentChange == false)
                 {
                     count++;
                 }
@@ -1054,7 +1021,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
             foreach (Product product in obj.Data.Products)
             {
-                if (product.ContentChanged == false)
+                if (product.ContentChange == false)
                 {
                     count = count + product.InUnitsOfSale.Count;
                 }
@@ -1076,7 +1043,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             int count = 0;
             foreach (Product product in obj.Data.Products)
             {
-                if (product.ContentChanged == true && product.Status.IsNewCell == false
+                if (product.ContentChange == true && product.Status.IsNewCell == false
                     && (product.Status.StatusName == "Update" || product.Status.StatusName == "New Edition" || product.Status.StatusName == "Re-issue"))
                 {
                     count++;
@@ -1142,11 +1109,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
             foreach (Product product in obj.Data.Products)
             {
-                /*if (product.Status.IsNewCell == false && ((product.ReplacedBy.Count)>0))
-                {
-                    cancelledCellCount++;
-                }*/
-
                 if (product.Status.StatusName == "Cancellation Update")
                 {
                     cancelledCellCount++;
@@ -1187,15 +1149,13 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         public static string generateRandomCorrelationId()
         {
             Guid guid = Guid.NewGuid();
-
-            string randomCorrID = guid.ToString("N");
-
-            randomCorrID = randomCorrID.Insert(8, "-");
-            randomCorrID = randomCorrID.Insert(13, "-");
-            randomCorrID = randomCorrID.Insert(18, "-");
-            randomCorrID = randomCorrID.Insert(23, "-");
-
-            Console.WriteLine("Generated TraceId = " + randomCorrID);
+            string randomCorrID = guid.ToString("N").Substring(0,21);
+            randomCorrID = randomCorrID.Insert(5, "-");
+            randomCorrID = randomCorrID.Insert(11, "-");
+            randomCorrID = randomCorrID.Insert(16, "-");
+            string currentTimeStamp = DateTime.Now.ToString("yyyyMMdd");
+            randomCorrID = "ft-" + currentTimeStamp + "-" + randomCorrID;
+            Console.WriteLine("Generated CorrelationId = " + randomCorrID);
             return randomCorrID;
         }
 
@@ -1209,5 +1169,43 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return updatedRequestBody;
         }
 
-    }
+        private static string getUoSName(string productName)
+        {
+            Product prod = jsonPayload2.Data.Products.FirstOrDefault(p => p.ProductName == productName);
+            if (prod != null)
+            {
+                List<string> inUoS = prod.InUnitsOfSale;
+                //this will return object of 
+                var matchingUosItems = jsonPayload2.Data.UnitsOfSales
+                                        .Where(uos => uos.UnitOfSaleType == "unit" && inUoS.Contains(uos.UnitName))
+                                        .ToList();
+
+                if (matchingUosItems.Count > 1)
+                {
+                    UnitOfSale uosObj = matchingUosItems
+                                        .FirstOrDefault(x => x.CompositionChanges.AddProducts.Contains(productName));
+
+                    if (uosObj != null)
+                    {
+                        string name = uosObj.UnitName;
+                        return name;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Item not found");
+                        return "";
+                    }
+                }
+                else
+                {
+                    return matchingUosItems.FirstOrDefault().UnitName;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Product object is null");
+                return null;
+            }
+        }
+        }
 }

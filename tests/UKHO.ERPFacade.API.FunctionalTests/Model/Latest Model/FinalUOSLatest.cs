@@ -2,14 +2,7 @@
     {
 
         public class FinalUoSOutput
-        {
-            public string EventName { get; set; }
-            public string Subject { get; set; }
-            public Eventdata EventData { get; set; }
-        }
-
-        public class Eventdata
-        {
+    { 
             public string specversion { get; set; }
             public string type { get; set; }
             public string source { get; set; }
@@ -19,7 +12,8 @@
             public string subject { get; set; }
             public string datacontenttype { get; set; }
             public Data data { get; set; }
-        }
+            public string Subject { get; set; }
+    }
 
         public class Data
         {
@@ -41,10 +35,10 @@
             public int editionNumber { get; set; }
             public int updateNumber { get; set; }
             public bool mayAffectHoldings { get; set; }
-            public bool contentChanged { get; set; }
+            public bool contentChange { get; set; }
             public string permit { get; set; }
             public string providerCode { get; set; }
-            public string providerDesc { get; set; }
+            public string providerName { get; set; }
             public string size { get; set; }
             public string agency { get; set; }
             public Bundle[] bundle { get; set; }

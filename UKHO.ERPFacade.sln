@@ -10,6 +10,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E2E557E3-1BF9-47BD-9B86-949B7F1CE3FA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{50E64422-A1CF-4B77-9652-B141C13C6086}"
+	ProjectSection(SolutionItems) = preProject
+		src\UKHO.ERPFacade.Monitoring.WebJob\UKHO.ERPFacade.Monitoring.WebJob.v3.ncrunchproject = src\UKHO.ERPFacade.Monitoring.WebJob\UKHO.ERPFacade.Monitoring.WebJob.v3.ncrunchproject
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UKHO.ERPFacade.Common", "src\UKHO.ERPFacade.Common\UKHO.ERPFacade.Common.csproj", "{37689E17-E7FD-48D0-A361-B869B9B837BB}"
 EndProject
@@ -25,7 +28,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UKHO.ERPFacade.Common.UnitT
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UKHO.ERPFacade.PublishPriceChange.WebJob", "src\UKHO.ERPFacade.PublishPriceChange.WebJob\UKHO.ERPFacade.PublishPriceChange.WebJob.csproj", "{7724066C-6DE2-4494-85BD-3216CC921624}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UKHO.ERPFacade.PublishPriceChange.WebJob.UnitTests", "tests\UKHO.ERPFacade.PublishPriceChange.WebJob.UnitTests\UKHO.ERPFacade.PublishPriceChange.WebJob.UnitTests.csproj", "{92965435-4B86-4891-B492-F3E94E4651FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UKHO.ERPFacade.PublishPriceChange.WebJob.UnitTests", "tests\UKHO.ERPFacade.PublishPriceChange.WebJob.UnitTests\UKHO.ERPFacade.PublishPriceChange.WebJob.UnitTests.csproj", "{92965435-4B86-4891-B492-F3E94E4651FA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UKHO.ERPFacade.CleanUp.WebJob", "src\UKHO.ERPFacade.CleanUp.WebJob\UKHO.ERPFacade.CleanUp.WebJob.csproj", "{D172CA22-39E9-4DA6-B88A-4BDCEDB6699A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UKHO.ERPFacade.CleanUp.WebJob.UnitTests", "tests\UKHO.ERPFacade.CleanUp.WebJob.UnitTests\UKHO.ERPFacade.CleanUp.WebJob.UnitTests.csproj", "{E0EE87DB-1582-4DBD-8387-FAF180CBB845}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -73,6 +80,14 @@ Global
 		{92965435-4B86-4891-B492-F3E94E4651FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{92965435-4B86-4891-B492-F3E94E4651FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{92965435-4B86-4891-B492-F3E94E4651FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D172CA22-39E9-4DA6-B88A-4BDCEDB6699A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D172CA22-39E9-4DA6-B88A-4BDCEDB6699A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D172CA22-39E9-4DA6-B88A-4BDCEDB6699A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D172CA22-39E9-4DA6-B88A-4BDCEDB6699A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0EE87DB-1582-4DBD-8387-FAF180CBB845}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0EE87DB-1582-4DBD-8387-FAF180CBB845}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0EE87DB-1582-4DBD-8387-FAF180CBB845}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0EE87DB-1582-4DBD-8387-FAF180CBB845}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -88,6 +103,8 @@ Global
 		{4F7E2A82-02A8-4EA6-8EF8-D33D5EFC6BBB} = {50E64422-A1CF-4B77-9652-B141C13C6086}
 		{7724066C-6DE2-4494-85BD-3216CC921624} = {E2E557E3-1BF9-47BD-9B86-949B7F1CE3FA}
 		{92965435-4B86-4891-B492-F3E94E4651FA} = {50E64422-A1CF-4B77-9652-B141C13C6086}
+		{D172CA22-39E9-4DA6-B88A-4BDCEDB6699A} = {E2E557E3-1BF9-47BD-9B86-949B7F1CE3FA}
+		{E0EE87DB-1582-4DBD-8387-FAF180CBB845} = {50E64422-A1CF-4B77-9652-B141C13C6086}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BF0B4581-F0AA-473C-A20A-39248D227DF6}

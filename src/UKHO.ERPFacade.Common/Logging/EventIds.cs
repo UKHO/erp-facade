@@ -188,9 +188,9 @@
         UnitsOfSaleUpdatedEventPayloadCreated = 940037,
 
         /// <summary>
-        /// 940038 - Price Event exceeds the size limit of 1 MB
+        /// 940038 - UnitsOfSale updated event exceeds the size limit of 1 MB
         /// </summary>
-        PriceEventExceedSizeLimit = 940038,
+        UnitsOfSaleUpdatedEventSizeLimit = 940038,
 
         /// <summary>
         /// 940039 - Sap Health Check Xml Template Not Found
@@ -203,14 +203,14 @@
         SapHealthCheckRequestSentToSap = 940040,
 
         /// <summary>
-        /// 940041 - Uploading the UnitsOfSale updated event payload json in blob storage.
+        /// 940041 - Uploading the SAP xml payload in blob storage.
         /// </summary>
-        UploadUnitsOfSaleUpdatedEventPayloadInAzureBlob = 940041,
+        UploadSapXmlPayloadInAzureBlobStarted = 940041,
 
         /// <summary>
-        /// 940042 - UnitsOfSale updated event payload json is uploaded in blob storage successfully.
+        /// 940042 - SAP xml payload is uploaded in blob storage successfully.
         /// </summary>
-        UploadedUnitsOfSaleUpdatedEventPayloadInAzureBlob = 940042,
+        UploadSapXmlPayloadInAzureBlobCompleted = 940042,
 
         /// <summary>
         /// 940043 - UnitsOfSale updated event Pushed To EES
@@ -302,6 +302,111 @@
         /// <summary>
         /// 940061 - UnitsOfSale NotFound In SAP PriceInformation Payload
         /// </summary>
-        UnitsOfSaleNotFoundInSAPPriceInformationPayload = 940061
+        UnitsOfSaleNotFoundInSAPPriceInformationPayload = 940061,
+
+        /// <summary>
+        /// 940062 - Uploading the received Price information event in blob storage.
+        /// </summary>
+        UploadPriceInformationEventInAzureBlob = 940062,
+
+        /// <summary>
+        /// 940063 - Price information event is uploaded in blob storage successfully.
+        /// </summary>
+        UploadedPriceInformationEventInAzureBlob = 940063,
+
+        /// <summary>
+        /// 940064- Fetching master entities from azure table.
+        /// </summary>
+        FetchMasterEntities = 940064,
+
+        /// <summary>
+        /// 940065 Fetching create date of blob. 
+        /// </summary>
+        FetchBlobCreateDate = 940065,
+
+        /// <summary>
+        /// 940066 - Deleted Price master entity successfully from Azure Table
+        /// </summary>
+        DeletedPriceChangeMasterEntitySuccessful = 940066,
+
+        /// <summary>
+        /// 940067 - Deleted unit price change entity successfully from Azure Table
+        /// </summary>
+        DeletedUnitPriceChangeEntitySuccessful = 940067,
+
+        /// <summary>
+        /// 940068 - Deleted EES entity successfully from Azure Table
+        /// </summary>
+        DeletedEESEntitySuccessful = 940068,
+
+        /// <summary>
+        /// 940069 Fetching all blob present inside the container. 
+        /// </summary>
+        FetchBlobsFromContainer = 940069,
+
+        /// <summary>
+        /// 940070 - Deleted blob from storage container successfully.
+        /// </summary>
+        DeletedBlobSuccessful = 940070,
+
+        /// <summary>
+        /// 940071 Fetching all EES entities from Azure Table. 
+        /// </summary>
+        FetchEESEntities = 940071,
+
+        /// <summary>
+        /// 940072 - Deleted container successfully.
+        /// </summary>
+        DeletedContainerSuccessful = 940072,
+
+        /// <summary>
+        /// 940073- Webjob started cleanup process.
+        /// </summary>
+        WebjobCleanUpEventStarted = 940073,
+
+        /// <summary>
+        /// 940074- Webjob completed cleanup process.
+        /// </summary>
+        WebjobCleanUpEventCompleted = 940074,
+
+        /// <summary>
+        /// 940075 - Error occured while connecting EES
+        /// </summary>
+        ErrorOccuredInEES = 940075,
+
+        /// <summary>
+        /// 940076 - Uploading the pricechange event payload json in blob storage.
+        /// </summary>
+        UploadPriceChangeEventPayloadInAzureBlob = 940076,
+
+        /// <summary>
+        /// 940077 - pricechange event payload json is uploaded in blob storage successfully.
+        /// </summary>
+        UploadedPriceChangeEventPayloadInAzureBlob = 940077,
+
+        /// <summary>
+        /// 940078 - pricechange event Pushed To EES
+        /// </summary>
+        PriceChangeEventPushedToEES = 940078,
+
+        /// <summary>
+        /// 940079 - pricechange event created
+        /// </summary>
+        PriceChangeEventPayloadCreated = 940079,
+
+        /// <summary>
+        /// 940080 - Uploading the UnitsOfSale updated event payload json in blob storage.
+        /// </summary>
+        UploadUnitsOfSaleUpdatedEventPayloadInAzureBlob = 940080,
+
+        /// <summary>
+        /// 940081 - UnitsOfSale updated event payload json is uploaded in blob storage successfully.
+        /// </summary>
+        UploadedUnitsOfSaleUpdatedEventPayloadInAzureBlob = 940081,
+
+        /// <summary>
+        /// 940082 - Updated PublishDateTime entity successfully in Azure Table
+        /// </summary>
+        UpdatePublishDateTimeEntitySuccessful = 940082
     }
 }

@@ -5,11 +5,13 @@ namespace UKHO.ERPFacade.Common.Infrastructure
     [ExcludeFromCodeCoverage]
     public abstract class EventBase<T>
     {
-        public abstract string EventName { get; }
+        public string EventName { get; set; }
 
-        public abstract string Subject { get; }
+        public string Subject { get; set; }
 
-        public T EventData { get; set; }
+        public string Id { get; set; }
+
+        public T Data { get; set; }
 
     }
 }

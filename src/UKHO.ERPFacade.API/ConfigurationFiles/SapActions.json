@@ -408,7 +408,7 @@
             "Conditions": [
               {
                 "AttributeDataType": "bool",
-                "AttributeName": "ContentChanged",
+                "AttributeName": "ContentChange",
                 "AttributeValue": "False"
               }
             ]
@@ -510,7 +510,7 @@
             "Conditions": [
               {
                 "AttributeDataType": "bool",
-                "AttributeName": "ContentChanged",
+                "AttributeName": "ContentChange",
                 "AttributeValue": "False"
               }
             ]
@@ -617,7 +617,7 @@
               },
               {
                 "AttributeDataType": "bool",
-                "AttributeName": "ContentChanged",
+                "AttributeName": "ContentChange",
                 "AttributeValue": "True"
               },
               {
