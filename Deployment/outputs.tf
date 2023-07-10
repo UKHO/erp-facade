@@ -23,3 +23,7 @@ output "erp_facade_web_app_url" {
 output "erp_facade_mock_service_url" {
   value = local.env_name == "dev" ? "https://${module.webapp_service.default_site_hostname_mock}" :  null
 }
+
+output keyvault_uri {
+  value = module.key_vault.keyvault_uri
+}

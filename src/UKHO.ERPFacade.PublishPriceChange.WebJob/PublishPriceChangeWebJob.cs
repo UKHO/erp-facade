@@ -1,7 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.Extensions.Logging;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.PublishPriceChange.WebJob.Services;
 
@@ -13,7 +11,7 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob
         private readonly ILogger<PublishPriceChangeWebJob> _logger;
         private readonly ISlicingPublishingService _slicingPublishingService;
 
-        public PublishPriceChangeWebJob(ILogger<PublishPriceChangeWebJob> logger,ISlicingPublishingService slicingPublishingService)
+        public PublishPriceChangeWebJob(ILogger<PublishPriceChangeWebJob> logger, ISlicingPublishingService slicingPublishingService)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _slicingPublishingService = slicingPublishingService ?? throw new ArgumentNullException(nameof(slicingPublishingService));
@@ -25,7 +23,5 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob
             _slicingPublishingService.SliceAndPublishPriceChangeEvents();
             _logger.LogInformation(EventIds.WebjobPublishingPriceChangesEventCompleted.ToEventId(), "Webjob completed publishing price changes");
         }
-
-
     }
 }

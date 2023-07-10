@@ -1,11 +1,18 @@
 ﻿using FakeItEasy;
-using Microsoft.Extensions.Logging;
-using NUnit.Framework;
-using UKHO.ERPFacade.Common.IO.Azure;
-using UKHO.ERPFacade.PublishPriceChange.WebJob.Services;
 using FluentAssertions;
-using UKHO.ERPFacade.Common.Models.TableEntities;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using NUnit.Framework;
+using UKHO.ERPFacade.Common.Infrastructure;
+using UKHO.ERPFacade.Common.Infrastructure.EventService;
+using UKHO.ERPFacade.Common.Infrastructure.EventService.EventProvider;
+using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
+using UKHO.ERPFacade.Common.Models;
+using UKHO.ERPFacade.Common.Models.TableEntities;
+using UKHO.ERPFacade.Common.Services;
+using UKHO.ERPFacade.PublishPriceChange.WebJob.Services;
+using static UKHO.ERPFacade.Common.Infrastructure.Result;
 
 namespace UKHO.ERPFacade.PublishPriceChange.WebJob.UnitTests.Services
 {
@@ -15,7 +22,10 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.UnitTests.Services
         private IAzureTableReaderWriter _fakeAzureTableReaderWriter;
         private ILogger<SlicingPublishingService> _fakeLogger;
         private IAzureBlobEventWriter _fakeAzureBlobEventWriter;
-        private SlicingPublishingService _fakeMonitoringService;
+        private IErpFacadeService _fakeErpFacadeService;
+        private IEventPublisher _fakeEventPublisher;
+        private ICloudEventFactory _fakeCloudEventFactory;
+        private SlicingPublishingService _fakeSlicingPublishingService;
 
         [SetUp]
         public void Setup()
@@ -23,16 +33,19 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.UnitTests.Services
             _fakeAzureTableReaderWriter = A.Fake<IAzureTableReaderWriter>();
             _fakeLogger = A.Fake<ILogger<SlicingPublishingService>>();
             _fakeAzureBlobEventWriter = A.Fake<IAzureBlobEventWriter>();
-            _fakeMonitoringService = new SlicingPublishingService(_fakeLogger, _fakeAzureTableReaderWriter, _fakeAzureBlobEventWriter);
+            _fakeErpFacadeService = A.Fake<IErpFacadeService>();
+            _fakeEventPublisher = A.Fake<IEventPublisher>();
+            _fakeCloudEventFactory = A.Fake<ICloudEventFactory>();
+            _fakeSlicingPublishingService = new SlicingPublishingService(_fakeLogger, _fakeAzureTableReaderWriter, _fakeAzureBlobEventWriter, _fakeErpFacadeService, _fakeEventPublisher, _fakeCloudEventFactory);
         }
 
-        private string downloadPayload = "[\r\n  {\r\n    \"corrid\": \"\",\r\n    \"org\": \"UKHO\",\r\n    \"productname\": \"PAYSF\",\r\n    \"duration\": \"12\",\r\n    \"effectivedate\": \"20230427\",\r\n    \"effectivetime\": \"101454\",\r\n    \"price\": \"156.00 \",\r\n    \"currency\": \"USD\",\r\n    \"futuredate\": \"20230527\",\r\n    \"futuretime\": \"000001\",\r\n    \"futureprice\": \"180.00\",\r\n    \"futurecurr\": \"USD\",\r\n    \"reqdate\": \"20230328\",\r\n    \"reqtime\": \"160000\"\r\n  }\r\n]";
+        private readonly string PriceChangeInformationJson = "[\r\n  {\r\n    \"corrid\": \"\",\r\n    \"org\": \"UKHO\",\r\n    \"productname\": \"PAYSF\",\r\n    \"duration\": \"12\",\r\n    \"effectivedate\": \"20230427\",\r\n    \"effectivetime\": \"101454\",\r\n    \"price\": \"156.00 \",\r\n    \"currency\": \"USD\",\r\n    \"futuredate\": \"20230527\",\r\n    \"futuretime\": \"000001\",\r\n    \"futureprice\": \"180.00\",\r\n    \"futurecurr\": \"USD\",\r\n    \"reqdate\": \"20230328\",\r\n    \"reqtime\": \"160000\"\r\n  }\r\n]";
 
         [Test]
         public void Does_Constructor_Throws_ArgumentNullException_When_AzureTableReaderWriter_Paramter_Is_Null()
         {
             Assert.Throws<ArgumentNullException>(
-             () => new SlicingPublishingService(_fakeLogger, null, _fakeAzureBlobEventWriter))
+             () => new SlicingPublishingService(_fakeLogger, null, _fakeAzureBlobEventWriter, _fakeErpFacadeService, _fakeEventPublisher, _fakeCloudEventFactory))
              .ParamName
              .Should().Be("azureTableReaderWriter");
         }
@@ -41,7 +54,7 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.UnitTests.Services
         public void Does_Constructor_Throws_ArgumentNullException_When_Logger_Paramter_Is_Null()
         {
             Assert.Throws<ArgumentNullException>(
-             () => new SlicingPublishingService(null, _fakeAzureTableReaderWriter, _fakeAzureBlobEventWriter))
+             () => new SlicingPublishingService(null, _fakeAzureTableReaderWriter, _fakeAzureBlobEventWriter, _fakeErpFacadeService, _fakeEventPublisher, _fakeCloudEventFactory))
              .ParamName
              .Should().Be("logger");
         }
@@ -50,9 +63,36 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.UnitTests.Services
         public void Does_Constructor_Throws_ArgumentNullException_When_AzureBlobEventWriter_Paramter_Is_Null()
         {
             Assert.Throws<ArgumentNullException>(
-             () => new SlicingPublishingService(_fakeLogger, _fakeAzureTableReaderWriter, null))
+             () => new SlicingPublishingService(_fakeLogger, _fakeAzureTableReaderWriter, null, _fakeErpFacadeService, _fakeEventPublisher, _fakeCloudEventFactory))
              .ParamName
              .Should().Be("azureBlobEventWriter");
+        }
+
+        [Test]
+        public void WhenErpFacadeServiceParamterIsNull_ThenConstructorThrowsArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>(
+             () => new SlicingPublishingService(_fakeLogger, _fakeAzureTableReaderWriter, _fakeAzureBlobEventWriter, null, _fakeEventPublisher, _fakeCloudEventFactory))
+             .ParamName
+             .Should().Be("erpFacadeService");
+        }
+
+        [Test]
+        public void WhenEventPublisherParamterIsNull_ThenConstructorThrowsArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>(
+             () => new SlicingPublishingService(_fakeLogger, _fakeAzureTableReaderWriter, _fakeAzureBlobEventWriter, _fakeErpFacadeService, null, _fakeCloudEventFactory))
+             .ParamName
+             .Should().Be("eventPublisher");
+        }
+
+        [Test]
+        public void WhenCloudEventFactoryParamterIsNull_ThenConstructorThrowsArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>(
+             () => new SlicingPublishingService(_fakeLogger, _fakeAzureTableReaderWriter, _fakeAzureBlobEventWriter, _fakeErpFacadeService, _fakeEventPublisher, null))
+             .ParamName
+             .Should().Be("cloudEventFactory");
         }
 
         [Test]
@@ -61,12 +101,11 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.UnitTests.Services
             IList<PriceChangeMasterEntity> priceChangeMasterEntities = new List<PriceChangeMasterEntity>();
             A.CallTo(() => _fakeAzureTableReaderWriter.GetMasterEntities(A<string>.Ignored, A<string>.Ignored)).Returns(priceChangeMasterEntities);
 
-            _fakeMonitoringService.SliceAndPublishPriceChangeEvents();
+            _fakeSlicingPublishingService.SliceAndPublishPriceChangeEvents();
 
             A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
             A.CallTo(() => _fakeAzureTableReaderWriter.GetUnitPriceChangeEventsEntities(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
             A.CallTo(() => _fakeAzureBlobEventWriter.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
-
         }
 
         [Test]
@@ -85,34 +124,50 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.UnitTests.Services
                 }
             };
             IList<UnitPriceChangeEntity> unitPriceChangeEntities = new List<UnitPriceChangeEntity>();
+            List<UnitsOfSalePrices> unitsOfSalePriceList = GetUnitsOfSalePrices();
+            PriceChangeEventPayload priceChangeEventPayload = GePriceChangeEventPayload();
+            CloudEvent<PriceChangeEventData> priceChangeCloudEventData = GeCloudEventPayload();
 
             A.CallTo(() => _fakeAzureTableReaderWriter.GetMasterEntities(A<string>.Ignored, A<string>.Ignored)).Returns(priceChangeMasterEntities);
-            A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).Returns(downloadPayload);
+            A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).Returns(PriceChangeInformationJson);
             A.CallTo(() => _fakeAzureTableReaderWriter.GetUnitPriceChangeEventsEntities(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(unitPriceChangeEntities);
+            A.CallTo(() => _fakeErpFacadeService.MapAndBuildUnitsOfSalePrices(A<List<PriceInformation>>.Ignored, A<List<string>>.Ignored)).Returns(unitsOfSalePriceList);
+            A.CallTo(() => _fakeErpFacadeService.BuildPriceChangeEventPayload(A<List<UnitsOfSalePrices>>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(priceChangeEventPayload);
+            A.CallTo(() => _fakeCloudEventFactory.Create(A<PriceChangeEventPayload>.Ignored)).Returns(priceChangeCloudEventData);
+            A.CallTo(() => _fakeEventPublisher.Publish(A<CloudEvent<PriceChangeEventData>>.Ignored)).Returns(new Result(Statuses.Success, "Successfully sent event"));
 
-            _fakeMonitoringService.SliceAndPublishPriceChangeEvents();
+            _fakeSlicingPublishingService.SliceAndPublishPriceChangeEvents();
 
+            A.CallTo(() => _fakeAzureTableReaderWriter.GetMasterEntities(A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureTableReaderWriter.GetUnitPriceChangeEventsEntities(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
-            A.CallTo(() => _fakeAzureBlobEventWriter.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
-            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateUnitPriceChangeStatusEntity(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureTableReaderWriter.AddUnitPriceChangeEntity(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
-
-            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-            && call.GetArgument<LogLevel>(0) == LogLevel.Information
-            && call.GetArgument<EventId>(1) == EventIds.AppendingUnitofSalePricesToEncEventInWebJob.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Appending UnitofSale prices to ENC event in webjob.").MustHaveHappened();
+            A.CallTo(() => _fakeErpFacadeService.MapAndBuildUnitsOfSalePrices(A<List<PriceInformation>>.Ignored, A<List<string>>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeErpFacadeService.BuildPriceChangeEventPayload(A<List<UnitsOfSalePrices>>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeCloudEventFactory.Create(A<PriceChangeEventPayload>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeAzureBlobEventWriter.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedTwiceExactly();
+            A.CallTo(() => _fakeEventPublisher.Publish(A<CloudEvent<PriceChangeEventData>>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateUnitPriceChangeStatusAndPublishDateTimeEntity(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
             && call.GetArgument<EventId>(1) == EventIds.DownloadBulkPriceInformationEventFromAzureBlob.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Downloading Price Change information from blob").MustHaveHappened();
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Webjob started downloading pricechange information from blob.").MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
-            && call.GetArgument<EventId>(1) == EventIds.UploadedSlicedEventInAzureBlob.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Sliced event is uploaded in blob storage successfully.").MustHaveHappened();
+            && call.GetArgument<EventId>(1) == EventIds.UploadPriceChangeEventPayloadInAzureBlob.ToEventId()
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Uploading the pricechange event payload json in blob storage. | _X-Correlation-ID : {_X-Correlation-ID}").MustHaveHappenedOnceExactly();
 
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+            && call.GetArgument<LogLevel>(0) == LogLevel.Information
+            && call.GetArgument<EventId>(1) == EventIds.UploadedPriceChangeEventPayloadInAzureBlob.ToEventId()
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "pricechange event payload json is uploaded in blob storage successfully. | _X-Correlation-ID : {_X-Correlation-ID}").MustHaveHappenedOnceExactly();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+            && call.GetArgument<LogLevel>(0) == LogLevel.Information
+            && call.GetArgument<EventId>(1) == EventIds.PriceChangeEventPushedToEES.ToEventId()
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "pricechange event has been sent to EES successfully. | _X-Correlation-ID : {_X-Correlation-ID}").MustHaveHappenedOnceExactly();
         }
 
         [Test]
@@ -134,8 +189,8 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.UnitTests.Services
             {
                 new()
                 {
-                    Eventid = "FakeEventID",
-                    MasterCorrid = "FakeCorrID",
+                    EventId = "FakeEventID",
+                    MasterCorrId = "FakeCorrID",
                     RowKey = "FakeEventID",
                     ETag = new(),
                     PartitionKey = "FakeEventID",
@@ -145,8 +200,8 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.UnitTests.Services
                 },
                 new()
                 {
-                    Eventid = "FakeEventID2",
-                    MasterCorrid = "FakeCorrID",
+                    EventId = "FakeEventID2",
+                    MasterCorrId = "FakeCorrID",
                     RowKey = "FakeEventID2",
                     ETag = new(),
                     PartitionKey = "FakeEventID2",
@@ -155,34 +210,51 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.UnitTests.Services
                     UnitName = "FakeUnitName"
                 }
             };
+            List<UnitsOfSalePrices> unitsOfSalePriceList = GetUnitsOfSalePrices();
+            PriceChangeEventPayload priceChangeEventPayload = GePriceChangeEventPayload();
+            CloudEvent<PriceChangeEventData> priceChangeCloudEventData = GeCloudEventPayload();
 
             A.CallTo(() => _fakeAzureTableReaderWriter.GetMasterEntities(A<string>.Ignored, A<string>.Ignored)).Returns(priceChangeMasterEntities);
-            A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).Returns(downloadPayload);
+            A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).Returns(PriceChangeInformationJson);
             A.CallTo(() => _fakeAzureTableReaderWriter.GetUnitPriceChangeEventsEntities(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(unitPriceChangeEntities);
+            A.CallTo(() => _fakeErpFacadeService.MapAndBuildUnitsOfSalePrices(A<List<PriceInformation>>.Ignored, A<List<string>>.Ignored)).Returns(unitsOfSalePriceList);
+            A.CallTo(() => _fakeErpFacadeService.BuildPriceChangeEventPayload(A<List<UnitsOfSalePrices>>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(priceChangeEventPayload);
+            A.CallTo(() => _fakeCloudEventFactory.Create(A<PriceChangeEventPayload>.Ignored)).Returns(priceChangeCloudEventData);
+            A.CallTo(() => _fakeEventPublisher.Publish(A<CloudEvent<PriceChangeEventData>>.Ignored)).Returns(new Result(Statuses.Success, "Successfully sent event"));
 
-            _fakeMonitoringService.SliceAndPublishPriceChangeEvents();
+            _fakeSlicingPublishingService.SliceAndPublishPriceChangeEvents();
 
+            A.CallTo(() => _fakeAzureTableReaderWriter.GetMasterEntities(A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureTableReaderWriter.GetUnitPriceChangeEventsEntities(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeErpFacadeService.MapAndBuildUnitsOfSalePrices(A<List<PriceInformation>>.Ignored, A<List<string>>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeErpFacadeService.BuildPriceChangeEventPayload(A<List<UnitsOfSalePrices>>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeCloudEventFactory.Create(A<PriceChangeEventPayload>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureBlobEventWriter.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
-            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateUnitPriceChangeStatusEntity(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
-            A.CallTo(() => _fakeAzureTableReaderWriter.UpdatePriceMasterStatusEntity(A<string>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeEventPublisher.Publish(A<CloudEvent<PriceChangeEventData>>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateUnitPriceChangeStatusAndPublishDateTimeEntity(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpdatePriceMasterStatusAndPublishDateTimeEntity(A<string>.Ignored)).MustNotHaveHappened();
             A.CallTo(() => _fakeAzureTableReaderWriter.AddUnitPriceChangeEntity(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-            && call.GetArgument<LogLevel>(0) == LogLevel.Information
-            && call.GetArgument<EventId>(1) == EventIds.AppendingUnitofSalePricesToEncEventInWebJob.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Appending UnitofSale prices to ENC event in webjob.").MustHaveHappenedOnceExactly();
+           && call.GetArgument<LogLevel>(0) == LogLevel.Information
+           && call.GetArgument<EventId>(1) == EventIds.DownloadBulkPriceInformationEventFromAzureBlob.ToEventId()
+           && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Webjob started downloading pricechange information from blob.").MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
-            && call.GetArgument<EventId>(1) == EventIds.DownloadBulkPriceInformationEventFromAzureBlob.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Downloading Price Change information from blob").MustHaveHappened();
+            && call.GetArgument<EventId>(1) == EventIds.UploadPriceChangeEventPayloadInAzureBlob.ToEventId()
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Uploading the pricechange event payload json in blob storage. | _X-Correlation-ID : {_X-Correlation-ID}").MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
-            && call.GetArgument<EventId>(1) == EventIds.UploadedSlicedEventInAzureBlobForUnitPrices.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Sliced event is uploaded in blob storage successfully for incomplete unit prices.").MustHaveHappened();
+            && call.GetArgument<EventId>(1) == EventIds.UploadedPriceChangeEventPayloadInAzureBlob.ToEventId()
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "pricechange event payload json is uploaded in blob storage successfully. | _X-Correlation-ID : {_X-Correlation-ID}").MustHaveHappenedOnceExactly();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+            && call.GetArgument<LogLevel>(0) == LogLevel.Information
+            && call.GetArgument<EventId>(1) == EventIds.PriceChangeEventPushedToEES.ToEventId()
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "pricechange event has been sent to EES successfully. | _X-Correlation-ID : {_X-Correlation-ID}").MustHaveHappenedOnceExactly();
         }
 
         [Test]
@@ -204,8 +276,8 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.UnitTests.Services
             {
                 new UnitPriceChangeEntity()
                 {
-                    Eventid = "FakeEventID",
-                    MasterCorrid = "FakeCorrID",
+                    EventId = "FakeEventID",
+                    MasterCorrId = "FakeCorrID",
                     RowKey = "FakeEventID",
                     ETag = new(),
                     PartitionKey = "FakeEventID",
@@ -216,21 +288,45 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.UnitTests.Services
             };
 
             A.CallTo(() => _fakeAzureTableReaderWriter.GetMasterEntities(A<string>.Ignored, A<string>.Ignored)).Returns(priceChangeMasterEntities);
-            A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).Returns(downloadPayload);
+            A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).Returns(PriceChangeInformationJson);
             A.CallTo(() => _fakeAzureTableReaderWriter.GetUnitPriceChangeEventsEntities(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(unitPriceChangeEntities);
 
-            _fakeMonitoringService.SliceAndPublishPriceChangeEvents();
+            _fakeSlicingPublishingService.SliceAndPublishPriceChangeEvents();
 
             A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureTableReaderWriter.GetUnitPriceChangeEventsEntities(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureBlobEventWriter.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
-            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateUnitPriceChangeStatusEntity(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
-            A.CallTo(() => _fakeAzureTableReaderWriter.UpdatePriceMasterStatusEntity(A<string>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateUnitPriceChangeStatusAndPublishDateTimeEntity(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpdatePriceMasterStatusAndPublishDateTimeEntity(A<string>.Ignored)).MustHaveHappened();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
             && call.GetArgument<EventId>(1) == EventIds.AppendingUnitofSalePricesToEncEventInWebJob.ToEventId()
             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Appending UnitofSale prices to ENC event in webjob.").MustNotHaveHappened();
+        }
+
+        private List<UnitsOfSalePrices> GetUnitsOfSalePrices()
+        {
+            List<PriceInformation> priceInformationList = JsonConvert.DeserializeObject<List<PriceInformation>>(PriceChangeInformationJson)!;
+            var unitsOfSalePriceList = _fakeErpFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList, priceInformationList.Select(u => u.ProductName).Distinct().ToList());
+
+            return unitsOfSalePriceList;
+        }
+
+        private PriceChangeEventPayload GePriceChangeEventPayload()
+        {
+            List<UnitsOfSalePrices> unitsOfSalePriceList = GetUnitsOfSalePrices();
+            PriceChangeEventPayload priceChangeEventPayload = _fakeErpFacadeService.BuildPriceChangeEventPayload(unitsOfSalePriceList, Guid.NewGuid().ToString(), "PAYSF", "FakeCorrID");
+
+            return priceChangeEventPayload;
+        }
+
+        private CloudEvent<PriceChangeEventData> GeCloudEventPayload()
+        {
+            PriceChangeEventPayload priceChangeEventPayload = GePriceChangeEventPayload();
+            var priceChangeCloudEventData = _fakeCloudEventFactory.Create(priceChangeEventPayload);
+
+            return priceChangeCloudEventData;
         }
     }
 }

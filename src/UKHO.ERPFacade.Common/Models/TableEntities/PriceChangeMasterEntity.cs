@@ -17,6 +17,8 @@ namespace UKHO.ERPFacade.Common.Models.TableEntities
 
         public string Status { get; set; } = default!;
 
+        public DateTime? PublishDateTime { get; set; } = default!;
+
         public ETag ETag { get; set; } = default!;
     }
 }
