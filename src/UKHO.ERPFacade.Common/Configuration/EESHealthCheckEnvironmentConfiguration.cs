@@ -8,10 +8,6 @@ namespace UKHO.ERPFacade.Common.Configuration
 {
     public class EESHealthCheckEnvironmentConfiguration
     {
-        public string Environment { get; set; }
-
-        public string ExcludeEnvironment { get; set; }
-
         public string  EESHealthCheckUrl { get; set; }
     }
 }

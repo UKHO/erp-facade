@@ -12,7 +12,6 @@ namespace UKHO.ERPFacade.Common.HealthCheck
     {
         private readonly ILogger<SapServiceHealthCheck> _logger;
         private readonly IEESClient _eesClient;
-        private readonly IOptions<EESHealthCheckEnvironmentConfiguration> _eesHealthCheckEnvironmentConfiguration;
 
         public EESServiceHealthCheck(ILogger<SapServiceHealthCheck> logger,
                                      IEESClient eesClient,
@@ -20,7 +19,6 @@ namespace UKHO.ERPFacade.Common.HealthCheck
         {
             _logger = logger;
             _eesClient = eesClient;
-            _eesHealthCheckEnvironmentConfiguration = eesHealthCheckEnvironmentConfiguration;
         }
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
