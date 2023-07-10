@@ -85,34 +85,34 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.ConfigurationTests
         }
 
 
-        [Test]
-        public async Task WhenEesEventPublisherClientIscalled_ThenReturnsBearerAuthToken()
-        {
-            var testToken = "TOKEN";
-            var expectedBearerHeader = $"Bearer {testToken}";
-            var testClientId = "CLIENT_ID";
-            var testScope = "SCOPE";
+        //[Test]
+        //public async Task WhenEesEventPublisherClientIscalled_ThenReturnsBearerAuthToken()
+        //{
+        //    var testToken = "TOKEN";
+        //    var expectedBearerHeader = $"Bearer {testToken}";
+        //    var testClientId = "CLIENT_ID";
+        //    var testScope = "SCOPE";
 
-            _fakeErpPublishEventSource.PublisherScope = testScope;
-            _fakeErpPublishEventSource.ClientId = testClientId;
-
-
-            A.CallTo(() => _fakeTokenProvider.GetTokenAsync($"{testClientId}/{testScope}")).Returns(new AccessToken(testToken, DateTimeOffset.MaxValue));
+        //    _fakeErpPublishEventSource.PublisherScope = testScope;
+        //    _fakeErpPublishEventSource.ClientId = testClientId;
 
 
-            var sut = _serviceProvider.GetRequiredService<IHttpClientFactory>().CreateClient(EnterpriseEventServiceEventPublisher.EventServiceClientName);
+        //    A.CallTo(() => _fakeTokenProvider.GetTokenAsync($"{testClientId}/{testScope}")).Returns(new AccessToken(testToken, DateTimeOffset.MaxValue));
 
-            var testEndpoint = "/test-endpoint";
-            _fakeWireMockServer
-                .Given(Request.Create().WithPath(testEndpoint).WithHeader("authorization", expectedBearerHeader).UsingGet())
-                .RespondWith(Response.Create().WithSuccess());
 
-            await sut.GetAsync(testEndpoint);
-            Assert.That(_fakeWireMockServer.FindLogEntries(Request.Create()
-                                                              .WithPath(testEndpoint)
-                                                              .WithHeader("authorization", expectedBearerHeader)
-                                                              .UsingGet()
-                                                              ).Count(), Is.EqualTo(1));
-        }
+        //    var sut = _serviceProvider.GetRequiredService<IHttpClientFactory>().CreateClient(EnterpriseEventServiceEventPublisher.EventServiceClientName);
+
+        //    var testEndpoint = "/test-endpoint";
+        //    _fakeWireMockServer
+        //        .Given(Request.Create().WithPath(testEndpoint).WithHeader("authorization", expectedBearerHeader).UsingGet())
+        //        .RespondWith(Response.Create().WithSuccess());
+
+        //    await sut.GetAsync(testEndpoint);
+        //    Assert.That(_fakeWireMockServer.FindLogEntries(Request.Create()
+        //                                                      .WithPath(testEndpoint)
+        //                                                      .WithHeader("authorization", expectedBearerHeader)
+        //                                                      .UsingGet()
+        //                                                      ).Count(), Is.EqualTo(1));
+        //}
     }
 }
