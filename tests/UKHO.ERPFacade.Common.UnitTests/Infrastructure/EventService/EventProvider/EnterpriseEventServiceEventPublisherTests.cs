@@ -13,6 +13,7 @@ using UKHO.ERPFacade.Common.Infrastructure;
 using UKHO.ERPFacade.Common.Infrastructure.Config;
 using UKHO.ERPFacade.Common.Infrastructure.EventService;
 using UKHO.ERPFacade.Common.Infrastructure.EventService.EventProvider;
+using UKHO.ERPFacade.Common.IO.Azure;
 
 namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvider
 {
@@ -27,6 +28,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
         private HttpClient _fakeHttpClient;
         private ErpPublishEventSource _fakeErpPublishEventSource;
         private ILogger<EnterpriseEventServiceEventPublisher> _fakeLogger;
+        private IAzureBlobEventWriter _fakeAzureBlobEventWriter;
 
         [SetUp]
         public void Setup()
@@ -35,6 +37,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
             _fakeCloudEventFactory = A.Fake<ICloudEventFactory>();
             _fakeHttpClientFactory = A.Fake<IHttpClientFactory>();
             _fakeHttpClientMessageHandler = new MockHttpMessageHandler();
+            _fakeAzureBlobEventWriter = A.Fake<IAzureBlobEventWriter>();
             _fakeErpPublishEventSource = new ErpPublishEventSource
             {
                 ClientId = "testClientId",
@@ -49,7 +52,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
             _fakeHttpClient.BaseAddress = new Uri(_fakeServiceUrl);
             A.CallTo(() => _fakeHttpClientFactory.CreateClient(EnterpriseEventServiceEventPublisher.EventServiceClientName)).Returns(_fakeHttpClient);
 
-            _fakeEnterpriseEventServiceEventPublisher = new EnterpriseEventServiceEventPublisher(_fakeLogger, _fakeCloudEventFactory, _fakeHttpClientFactory, _optionsWrapper);
+            _fakeEnterpriseEventServiceEventPublisher = new EnterpriseEventServiceEventPublisher(_fakeLogger, _fakeCloudEventFactory, _fakeHttpClientFactory, _optionsWrapper, _fakeAzureBlobEventWriter);
         }
 
         [Test]
