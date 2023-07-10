@@ -10,12 +10,10 @@ namespace UKHO.ERPFacade.Common.HealthCheck
 {
     public class EESServiceHealthCheck : IHealthCheck
     {
-        private readonly ILogger<SapServiceHealthCheck> _logger;
+        private readonly ILogger<EESServiceHealthCheck> _logger;
         private readonly IEESClient _eesClient;
 
-        public EESServiceHealthCheck(ILogger<SapServiceHealthCheck> logger,
-                                     IEESClient eesClient,
-                                     IOptions<EESHealthCheckEnvironmentConfiguration> eesHealthCheckEnvironmentConfiguration)
+        public EESServiceHealthCheck(ILogger<EESServiceHealthCheck> logger,IEESClient eesClient)
         {
             _logger = logger;
             _eesClient = eesClient;
@@ -33,6 +31,7 @@ namespace UKHO.ERPFacade.Common.HealthCheck
                     _logger.LogError(EventIds.EESIsUnhealthy.ToEventId(), "EES is Unhealthy !!!");
                     return HealthCheckResult.Unhealthy("EES is Unhealthy");
                 }
+                
                 _logger.LogDebug(EventIds.EESIsHealthy.ToEventId(), "EES is Healthy");
                 return HealthCheckResult.Healthy("EES is Healthy !!!");
             }

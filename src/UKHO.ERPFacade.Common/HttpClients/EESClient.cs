@@ -1,8 +1,10 @@
-﻿using Microsoft.Extensions.Options;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Configuration;
 
 namespace UKHO.ERPFacade.Common.HttpClients
 {
+    [ExcludeFromCodeCoverage]
     public class EESClient : IEESClient
     {
         private readonly HttpClient _httpClient;
