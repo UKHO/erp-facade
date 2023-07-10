@@ -132,7 +132,7 @@ namespace UKHO.ERPFacade.Common.Services
             {
                 CorrelationId = encEventPayload!.Data.CorrelationId,
                 Products = encEventPayload.Data.Products,
-                UnitsOfSales = encEventPayload.Data.UnitsOfSales,
+                UnitsOfSale = encEventPayload.Data.UnitsOfSales,
                 UnitsOfSalePrices = unitsOfSalePriceList
             };
 

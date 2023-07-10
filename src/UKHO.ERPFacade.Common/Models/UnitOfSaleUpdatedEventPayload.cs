@@ -27,7 +27,7 @@ namespace UKHO.ERPFacade.Common.Models
         public List<Product> Products { get; set; }
 
         [JsonProperty("unitsOfSale")]
-        public List<UnitOfSale> UnitsOfSales { get; set; }
+        public List<UnitOfSale> UnitsOfSale { get; set; }
 
         [JsonProperty("unitsOfSalePrices")]
         public List<UnitsOfSalePrices> UnitsOfSalePrices { get; set; }

@@ -36,6 +36,7 @@ namespace UKHO.ERPFacade.Common.Infrastructure.EventService
         {
             var serializerOptions = new JsonSerializerOptions();
             serializerOptions.Converters.Add(new RoundTripDateTimeConverter());
+            serializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
             var cloudEventPayload = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(eventData, serializerOptions);
 
             var content = new ByteArrayContent(cloudEventPayload);

@@ -24,10 +24,10 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
             _fakeDateTimeProvider = A.Fake<IDateTimeProvider>();
             _fakeCurrentDateTime = new DateTime(1983, 4, 27);
             A.CallTo(() => _fakeDateTimeProvider.UtcNow).Returns(_fakeCurrentDateTime);
-                 _fakeErpPublishEventSource = new ErpPublishEventSource
-                 {
-                     ApplicationUri = "https://ourdomain.org/"
-                 };
+            _fakeErpPublishEventSource = new ErpPublishEventSource
+            {
+                ApplicationUri = "https://ourdomain.org/"
+            };
 
             _fakeCloudEventFactory = new CloudEventFactory(_fakeDateTimeProvider, new OptionsWrapper<ErpPublishEventSource>(_fakeErpPublishEventSource));
         }
@@ -39,7 +39,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
             {
                 CorrelationId = "CorrelationId",
                 Products = new List<Product>(),
-                UnitsOfSales = new List<UnitOfSale>(),
+                UnitsOfSale = new List<UnitOfSale>(),
                 UnitsOfSalePrices = new List<UnitsOfSalePrices>()
             };
 
