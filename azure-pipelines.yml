@@ -364,10 +364,6 @@ stages:
         value: $(AzureADConfigurationAutoTestClientIdNoRole)
       - name: "AzureADConfiguration.ClientSecretNoRole"
         value: $(AzureADConfigurationClientSecretNoRole)
-      - name: "AzureADConfiguration.AutoTestClientIdPricingInformationCaller"
-        value: $(ERP-API-TEST-AUTOTEST-PRICEINFORMATIONAPICALLER-APPLICATION-ID)
-      - name: "AzureADConfiguration.ClientSecretPricingInformationCaller"
-        value: $(ERP-API-TEST-AUTOTEST-PRICEINFORMATIONAPICALLER-SECRET)
       - name: "ErpPublishEventSource.ClientId"
         value: $(AzureADConfigurationClientId)
       - name: "SharedKeyConfiguration.Key"
@@ -457,10 +453,6 @@ stages:
         value: $(AzureADConfigurationAutoTestClientIdNoRole)
       - name: "AzureADConfiguration.ClientSecretNoRole"
         value: $(AzureADConfigurationClientSecretNoRole)
-      - name: "AzureADConfiguration.AutoTestClientIdPricingInformationCaller"
-        value: $(ERP-API-TEST-AUTOTEST-PRICEINFORMATIONAPICALLER-APPLICATION-ID)
-      - name: "AzureADConfiguration.ClientSecretPricingInformationCaller"
-        value: $(ERP-API-TEST-AUTOTEST-PRICEINFORMATIONAPICALLER-SECRET)
       - name: "ErpPublishEventSource.ClientId"
         value: $(EnterpriseEventServiceConfigurationClientId)
       - name: "SharedKeyConfiguration.Key"
