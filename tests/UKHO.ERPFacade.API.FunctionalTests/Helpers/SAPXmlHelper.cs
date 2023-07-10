@@ -551,11 +551,11 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     //xmlAttributes[1] is skipped as already checked
                     if (!item.PRODUCT.Equals("AVCS UNIT"))
                         AttrNotMatched.Add(nameof(item.PRODUCT));
-                    if (!item.PRODTYPE.Equals((getProductInfo(unitOfSale.CompositionChanges.AddProducts)).ProductType))
-                        AttrNotMatched.Add(nameof(item.PRODTYPE));
-                    if (!item.AGENCY.Equals((getProductInfo(unitOfSale.CompositionChanges.AddProducts)).Agency))
+                     if (!item.PRODTYPE.Equals((getFirstProductsInfoHavingUoS(productName)).ProductType))
+                            AttrNotMatched.Add(nameof(item.PRODTYPE));
+                    if (!item.AGENCY.Equals((getFirstProductsInfoHavingUoS(productName)).Agency))
                         AttrNotMatched.Add(nameof(item.AGENCY));
-                    if (!item.PROVIDER.Equals((getProductInfo(unitOfSale.CompositionChanges.AddProducts)).ProviderCode))
+                    if (!item.PROVIDER.Equals((getFirstProductsInfoHavingUoS(productName)).ProviderCode))
                         AttrNotMatched.Add(nameof(item.PROVIDER));
                     if (!item.ENCSIZE.Equals(unitOfSale.UnitSize))
                         AttrNotMatched.Add(nameof(item.ENCSIZE));
@@ -678,6 +678,28 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             }
             return productInfo;
         }
+
+        private static UoSProductInfo getFirstProductsInfoHavingUoS(string unitOfSalesName)
+        {
+            UoSProductInfo firstProductInfo = new UoSProductInfo();
+            Product prodHavingRequiredUoS = jsonPayload2.Data.Products.FirstOrDefault(p => p.InUnitsOfSale.Contains(unitOfSalesName));
+
+            if (prodHavingRequiredUoS != null)
+            {
+                firstProductInfo.ProductType = prodHavingRequiredUoS.ProductType[4..];
+                firstProductInfo.Agency = prodHavingRequiredUoS.Agency;
+                firstProductInfo.ProviderCode = prodHavingRequiredUoS.ProviderCode;
+                firstProductInfo.Title = prodHavingRequiredUoS.Title;
+
+            }
+            else
+            {
+                Console.WriteLine(unitOfSalesName + " not found in any Product's inUnitOfSale");
+            }
+
+            return firstProductInfo;
+        }
+
         private static ProductUoSInfo getUoSInfo(string productName)
         {
             ProductUoSInfo UoSInfo = new ProductUoSInfo();
