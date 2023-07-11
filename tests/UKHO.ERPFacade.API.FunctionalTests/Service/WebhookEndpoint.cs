@@ -57,7 +57,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
         {
             string requestBody;
 
-            using (StreamReader streamReader = new StreamReader(filePath))
+            using (StreamReader streamReader = new(filePath))
             {
                 requestBody = streamReader.ReadToEnd();
             }
