@@ -36,7 +36,7 @@ namespace UKHO.ERPFacade.Common.Models
     {
         [JsonProperty("correlationId")]
         public string CorrelationId { get; set; }
-         
+
         [JsonProperty("products")]
         public List<Product> Products { get; set; }
 
@@ -321,7 +321,7 @@ namespace UKHO.ERPFacade.Common.Models
         public int NumberOfMonths { get; set; }
 
         [JsonProperty("rrp")]
-        public string Rrp { get; set; }
+        public decimal Rrp { get; set; }
     }
 
     public enum Provider

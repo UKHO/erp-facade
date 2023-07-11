@@ -7,7 +7,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
     public class JSONHelper
     {
-        public string getDeserializedString(String filePath)
+        public string getDeserializedString(string filePath)
         {
             string requestBody;
 
@@ -29,13 +29,21 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return updatedUoSRequestBody;
         }
 
-        public List<string> GetProductListProductListFromSAPPayload(List<UoSInputJSONHelper> InputJSONHelper)
+        public List<string> GetProductListProductListFromSAPPayload(List<JsonInputPriceChangeHelper> _jsonInputPriceChangeHelper)
         {
             List<string> result = new List<string>();
-            //code to get Unique list from inout payload
-            return result;
+            int count = _jsonInputPriceChangeHelper.Count;
+            for (int i=0; i<count; i++)
+            {
+                result.Add(_jsonInputPriceChangeHelper[i].Productname);
+               
+            }
+            List<string> finalProducts = new HashSet<string>(result).ToList();
+            return finalProducts;
+            
         }
 
+        
     }
 }
 

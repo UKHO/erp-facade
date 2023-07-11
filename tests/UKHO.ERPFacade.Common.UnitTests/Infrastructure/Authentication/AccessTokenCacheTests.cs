@@ -4,6 +4,7 @@ using Azure.Core;
 using FakeItEasy;
 using FluentAssertions;
 using LazyCache;
+using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using UKHO.ERPFacade.Common.Infrastructure.Authentication;
 
@@ -14,12 +15,12 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.Authentication
         private const string Scope = "MyScope";
         private const string TokenValue = "MyToken";
         private ITokenProvider _fakeTokenProvider;
-        private AccessTokenCache _fakeAccessTokenCache;
+        private AccessTokenCache _fakeAccessTokenCache;        
 
         [SetUp]
         public void Setup()
         {
-            _fakeTokenProvider = A.Fake<ITokenProvider>();
+            _fakeTokenProvider = A.Fake<ITokenProvider>();            
 
             A.CallTo(() => _fakeTokenProvider.GetTokenAsync(Scope)).Returns(new AccessToken(TokenValue, DateTimeOffset.MaxValue));
 

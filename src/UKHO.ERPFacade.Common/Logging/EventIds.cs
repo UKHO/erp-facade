@@ -188,9 +188,9 @@
         UnitsOfSaleUpdatedEventPayloadCreated = 940037,
 
         /// <summary>
-        /// 940038 - Price Event exceeds the size limit of 1 MB
+        /// 940038 - UnitsOfSale updated event exceeds the size limit of 1 MB
         /// </summary>
-        PriceEventExceedSizeLimit = 940038,
+        UnitsOfSaleUpdatedEventSizeLimit = 940038,
 
         /// <summary>
         /// 940039 - Sap Health Check Xml Template Not Found
@@ -367,6 +367,46 @@
         /// <summary>
         /// 940074- Webjob completed cleanup process.
         /// </summary>
-        WebjobCleanUpEventCompleted = 940074
+        WebjobCleanUpEventCompleted = 940074,
+
+        /// <summary>
+        /// 940075 - Error occured while connecting EES
+        /// </summary>
+        ErrorOccuredInEES = 940075,
+
+        /// <summary>
+        /// 940076 - Uploading the pricechange event payload json in blob storage.
+        /// </summary>
+        UploadPriceChangeEventPayloadInAzureBlob = 940076,
+
+        /// <summary>
+        /// 940077 - pricechange event payload json is uploaded in blob storage successfully.
+        /// </summary>
+        UploadedPriceChangeEventPayloadInAzureBlob = 940077,
+
+        /// <summary>
+        /// 940078 - pricechange event Pushed To EES
+        /// </summary>
+        PriceChangeEventPushedToEES = 940078,
+
+        /// <summary>
+        /// 940079 - pricechange event created
+        /// </summary>
+        PriceChangeEventPayloadCreated = 940079,
+
+        /// <summary>
+        /// 940080 - Uploading the UnitsOfSale updated event payload json in blob storage.
+        /// </summary>
+        UploadUnitsOfSaleUpdatedEventPayloadInAzureBlob = 940080,
+
+        /// <summary>
+        /// 940081 - UnitsOfSale updated event payload json is uploaded in blob storage successfully.
+        /// </summary>
+        UploadedUnitsOfSaleUpdatedEventPayloadInAzureBlob = 940081,
+
+        /// <summary>
+        /// 940082 - Updated PublishDateTime entity successfully in Azure Table
+        /// </summary>
+        UpdatePublishDateTimeEntitySuccessful = 940082
     }
 }

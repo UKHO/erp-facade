@@ -6,10 +6,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <NoWarn>8603;8604;8618;8777</NoWarn>
+    <NoWarn>8603;8604;8618;8777;8602;8600</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <NoWarn>8603;8604;8618;8777</NoWarn>
+    <NoWarn>8603;8604;8618;8777;8602;8600</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Azure.Identity" Version="1.8.2" />

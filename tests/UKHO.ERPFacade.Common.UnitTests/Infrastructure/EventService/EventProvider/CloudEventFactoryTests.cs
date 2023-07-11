@@ -1,12 +1,13 @@
-﻿using FakeItEasy;
+﻿using System;
+using System.Collections.Generic;
+using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Options;
 using NUnit.Framework;
-using System;
 using UKHO.ERPFacade.Common.Infrastructure.Config;
 using UKHO.ERPFacade.Common.Infrastructure.EventService.EventProvider;
+using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Providers;
-using UKHO.ERPFacade.MockAPIService.Models;
 
 namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvider
 {
@@ -15,8 +16,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
         private DateTime _fakeCurrentDateTime;
         private CloudEventFactory _fakeCloudEventFactory;
         private IDateTimeProvider _fakeDateTimeProvider;
-        private IUniqueIdentifierFactory _fakeUniqueIdentifierFactory;
-        private NotificationsConfiguration _fakeNotificationsConfiguration;
+        private ErpPublishEventSource _fakeErpPublishEventSource;
 
         [SetUp]
         public void Setup()
@@ -24,34 +24,32 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
             _fakeDateTimeProvider = A.Fake<IDateTimeProvider>();
             _fakeCurrentDateTime = new DateTime(1983, 4, 27);
             A.CallTo(() => _fakeDateTimeProvider.UtcNow).Returns(_fakeCurrentDateTime);
-
-            _fakeUniqueIdentifierFactory = A.Fake<IUniqueIdentifierFactory>();
-            A.CallTo(() => _fakeUniqueIdentifierFactory.Create()).Returns("myId");
-
-            _fakeNotificationsConfiguration = new NotificationsConfiguration()
+            _fakeErpPublishEventSource = new ErpPublishEventSource
             {
                 ApplicationUri = "https://ourdomain.org/"
             };
 
-            _fakeCloudEventFactory = new CloudEventFactory(_fakeDateTimeProvider, _fakeUniqueIdentifierFactory, new OptionsWrapper<NotificationsConfiguration>(_fakeNotificationsConfiguration));
+            _fakeCloudEventFactory = new CloudEventFactory(_fakeDateTimeProvider, new OptionsWrapper<ErpPublishEventSource>(_fakeErpPublishEventSource));
         }
 
         [Test]
         public void WhenCloudEventFactoryCreateIsCalled_ThenObjectWithTheCorrectMappingsIsReturned()
         {
-            var productUpdatedData = new UnitOfSalePriceEvent()
+            var unitOfSaleUpdatedEventData = new UnitOfSaleUpdatedEventData()
             {
-                Subject = "MyProductName"
+                CorrelationId = "CorrelationId",
+                Products = new List<Product>(),
+                UnitsOfSale = new List<UnitOfSale>(),
+                UnitsOfSalePrices = new List<UnitsOfSalePrices>()
             };
 
-            var result = _fakeCloudEventFactory.Create(new UnitOfSalePriceEventPayload(productUpdatedData));
+            var result = _fakeCloudEventFactory.Create(new UnitOfSaleUpdatedEventPayload(unitOfSaleUpdatedEventData, "fakeSubject"));
 
-            result.Data.Should().Be(productUpdatedData);
-            result.Type.Should().Be("uk.gov.ukho.encpublishing.enccontentpublished.v2");
-            result.Subject.Should().Be("MyProductName");
+            result.Data.Should().Be(unitOfSaleUpdatedEventData);
+            result.Type.Should().Be("uk.gov.ukho.erp.unitOfSaleUpdated.v1");
+            result.Subject.Should().Be("fakeSubject");
             result.Time.Should().Be(_fakeCurrentDateTime);
-            result.Id.Should().Be("myId");
-            result.Source.Should().Be(_fakeNotificationsConfiguration.ApplicationUri);
+            result.Source.Should().Be(_fakeErpPublishEventSource.ApplicationUri);
             result.SpecVersion.Should().Be("1.0");
             result.DataContentType.Should().Be("application/json");
         }

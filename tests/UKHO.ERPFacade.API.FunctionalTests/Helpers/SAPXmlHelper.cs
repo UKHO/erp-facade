@@ -1,6 +1,4 @@
-﻿using Azure.Storage.Blobs;
-using Azure.Storage.Blobs.Models;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using System.Text;
@@ -762,19 +760,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
             return productInfo;
         }
-        public string downloadGeneratedXML(string expectedXMLfilePath, string containerAndBlobName)
-        {
-            BlobServiceClient blobServiceClient = new BlobServiceClient(Config.TestConfig.AzureStorageConfiguration.ConnectionString);
-            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerAndBlobName);
-            BlobClient blobClient = containerClient.GetBlobClient("SapXmlPayload.xml");
-
-            BlobDownloadInfo blobDownload = blobClient.Download();
-            using (FileStream downloadFileStream = new FileStream((expectedXMLfilePath + "\\" + containerAndBlobName + ".xml"), FileMode.Create))
-            {
-                blobDownload.Content.CopyTo(downloadFileStream);
-            }
-            return (expectedXMLfilePath + "\\" + containerAndBlobName + ".xml");
-        }
 
         public static string getRequiredXMLText(string generatedXMLFilePath, string tagName)
         {
@@ -1186,9 +1171,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         public static string generateRandomCorrelationId()
         {
             Guid guid = Guid.NewGuid();
-            string randomCorrID = guid.ToString("N").Substring(0,18);
+            string randomCorrID = guid.ToString("N").Substring(0,21);
             randomCorrID = randomCorrID.Insert(5, "-");
             randomCorrID = randomCorrID.Insert(11, "-");
+            randomCorrID = randomCorrID.Insert(16, "-");
             string currentTimeStamp = DateTime.Now.ToString("yyyyMMdd");
             randomCorrID = "ft-" + currentTimeStamp + "-" + randomCorrID;
             Console.WriteLine("Generated CorrelationId = " + randomCorrID);
