@@ -126,27 +126,27 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             var callBackDuration = string.IsNullOrEmpty(_erpFacadeWebjobConfig.Value.SapCallbackDurationInMins) ? DefaultCallbackDuration
                 : int.Parse(_erpFacadeWebjobConfig.Value.SapCallbackDurationInMins);
             var entities = tableClient.Query<EESEventEntity>(entity => entity.IsNotified!.Value == false);
-            foreach (var tableitem in entities)
+            foreach (var tableItem in entities)
             {
-                if (tableitem.RequestDateTime.HasValue)
+                if (tableItem.RequestDateTime.HasValue)
                 {
-                    if (!tableitem.ResponseDateTime.HasValue && (tableitem.RequestDateTime.Value - DateTime.Now) <= TimeSpan.FromMinutes(callBackDuration)
+                    if (!tableItem.ResponseDateTime.HasValue && (tableItem.RequestDateTime.Value - DateTime.Now) <= TimeSpan.FromMinutes(callBackDuration)
                         ||
-                        tableitem.ResponseDateTime.HasValue && ((tableitem.ResponseDateTime.Value - tableitem.RequestDateTime.Value) > TimeSpan.FromMinutes(callBackDuration)))
+                        tableItem.ResponseDateTime.HasValue && ((tableItem.ResponseDateTime.Value - tableItem.RequestDateTime.Value) > TimeSpan.FromMinutes(callBackDuration)))
                     {
-                        _logger.LogWarning(EventIds.WebjobCallbackTimeoutEventFromSAP.ToEventId(), "Request is timed out for the correlationid : {tableitem.CorrelationId}.", tableitem.CorrelationId);
+                        _logger.LogWarning(EventIds.WebjobCallbackTimeoutEventFromSAP.ToEventId(), "Request is timed out for the correlationid : {tableItem.CorrelationId}.", tableItem.CorrelationId);
 
-                        TableEntity tableEntity = new(tableitem.PartitionKey, tableitem.RowKey)
+                        TableEntity tableEntity = new(tableItem.PartitionKey, tableItem.RowKey)
                         {
                             { "IsNotified", true }
                         };
 
-                        tableClient.UpdateEntity(tableEntity, tableitem.ETag);
+                        tableClient.UpdateEntity(tableEntity, tableItem.ETag);
                     }
                 }
                 else
                 {
-                    _logger.LogError(EventIds.EmptyRequestDateTime.ToEventId(), "Empty RequestDateTime column for correlationid : {tableitem.CorrelationId}.", tableitem.CorrelationId);
+                    _logger.LogError(EventIds.EmptyRequestDateTime.ToEventId(), "Empty RequestDateTime column for correlationid : {tableItem.CorrelationId}.", tableItem.CorrelationId);
                 }
             }
         }
