@@ -41,7 +41,7 @@ namespace UKHO.ERPFacade.Common.HealthCheck
                 //Check whether template file exists or not
                 if (!_fileSystemHelper.IsFileExists(sapXmlTemplatePath))
                 {
-                    _logger.LogError(EventIds.SapHealthCheckXmlTemplateNotFound.ToEventId(), "The SAP Health Check xml template does not exist.");
+                    _logger.LogWarning(EventIds.SapHealthCheckXmlTemplateNotFound.ToEventId(), "The SAP Health Check xml template does not exist.");
                     throw new FileNotFoundException();
                 }
 
@@ -60,7 +60,7 @@ namespace UKHO.ERPFacade.Common.HealthCheck
             }
             catch (Exception ex)
             {
-                _logger.LogInformation(EventIds.ErrorOccuredInSap.ToEventId(), "An error occured while processing your request in SAP. | {Message}", ex.Message);
+                _logger.LogError(EventIds.ErrorOccuredInSap.ToEventId(), "An error occured while processing your request in SAP. | {Message}", ex.Message);
                 return HealthCheckResult.Unhealthy("SAP is Unhealthy" + ex.Message);
             }
         }
