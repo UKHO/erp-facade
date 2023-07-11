@@ -156,7 +156,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         {
             string filePathWebhook = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.WebhookPayloadFileName);
             string generatedXMLFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXMLFolder);
-            Console.WriteLine("Scenario:" + UoSPayloadFileName + "\n");
+            Console.WriteLine("Scenario: WhenPAYSFwith12MonthDuration_UoSAlteredPAYSFPricesFinalJson" + "\n");
             string filePathUOS = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, UoSPayloadFileName);
             string generatedJSONFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedJSONFolder);
             string webhookToken = await _authToken.GetAzureADToken(false);

@@ -1,0 +1,43 @@
+{
+  "SpecVersion": "1.0",
+  "Type": "uk.gov.ukho.erp.pricechange.v1",
+  "Source": "https://erp.ukho.gov.uk",
+  "Id": "35ffa0a1-43e0-4dfc-9f4a-d05eccb0c06c",
+  "Time": "2023-06-30T13:46:35.9860194Z",
+  "Subject": "AVCSO",
+  "DataContentType": "application/json",
+  "Data": {
+    "correlationId": "dce9c45c-83e3-4c98-bc12-80fd3e408ff5",
+    "unitsOfSalePrices": [
+      {
+        "unitName": "AVCSO",
+        "price": [
+          {
+            "effectiveDate": "2023-04-30T10:14:54+05:30",
+            "currency": "USD",
+            "standard": {
+              "priceDurations": [
+                {
+                  "numberOfMonths": 12,
+                  "rrp": "120.00 "
+                }
+              ]
+            }
+          },
+          {
+            "effectiveDate": "2023-05-27T00:00:01+05:30",
+            "currency": "USD",
+            "standard": {
+              "priceDurations": [
+                {
+                  "numberOfMonths": 12,
+                  "rrp": "150.00"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

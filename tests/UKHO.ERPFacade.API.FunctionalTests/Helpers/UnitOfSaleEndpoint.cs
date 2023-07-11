@@ -435,7 +435,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     Console.WriteLine(Environment.NewLine);
                     Console.WriteLine(string.Format("Comparing product - {0} for PAYSF 12 month Duration condition", SAPProduct.Productname));
                     var findProduct = data.FirstOrDefault(x => x.unitName == "PAYSF");
-                    //if (findProduct.price.Length == 0)
                     if (findProduct == null)
                     {
                         productValue = true;
