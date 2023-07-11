@@ -70,11 +70,10 @@ namespace UKHO.ERPFacade.API.Helpers
             XmlNode actionItemNode = soapXml.SelectSingleNode(XpathActionItems);
 
             bool IsConditionSatisfied = false;
-
-            _logger.LogInformation(EventIds.BuildingSapActionStarted.ToEventId(), "Building SAP actions.");
-
             foreach (var product in eventData.Data.Products)
             {
+                _logger.LogInformation(EventIds.BuildingSapActionStarted.ToEventId(), "Building SAP actions.");
+
                 //Actions for ENC CELL
                 foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == EncCell))
                 {
@@ -85,7 +84,7 @@ namespace UKHO.ERPFacade.API.Helpers
                         case 5:
                         case 7:
                         case 9:
-                            var unitOfSale = GetUnitOfSaleForEncCell(eventData.Data.UnitsOfSales, product);
+                            var unitOfSale = eventData.Data.UnitsOfSales.Where(x => x.UnitOfSaleType == UnitSaleType && product.InUnitsOfSale.Contains(x.UnitName)).FirstOrDefault();
                             foreach (var rules in action.Rules)
                             {
                                 foreach (var conditions in rules.Conditions)
@@ -108,24 +107,23 @@ namespace UKHO.ERPFacade.API.Helpers
                             {
                                 actionNode = BuildAction(soapXml, product, unitOfSale, action);
                                 actionItemNode.AppendChild(actionNode);
-                                _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
 
                                 IsConditionSatisfied = false;
                             }
                             break;
 
                         case 4:
-                            var unitOfSaleReplace = GetUnitOfSaleForEncCell(eventData.Data.UnitsOfSales, product);
+                            var unitOfSaleReplace = eventData.Data.UnitsOfSales.Where(x => x.UnitOfSaleType == UnitSaleType && product.InUnitsOfSale.Contains(x.UnitName)).FirstOrDefault();
 
                             foreach (var replacedProduct in product.ReplacedBy)
                             {
                                 actionNode = BuildAction(soapXml, product, unitOfSaleReplace, action, null, replacedProduct);
                                 actionItemNode.AppendChild(actionNode);
-                                _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
                             }
-                            break;                       
+                            break;
 
-                    }                    
+                    }
+                    _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
                 }
 
                 //Actions for AVCS UNIT
@@ -137,7 +135,7 @@ namespace UKHO.ERPFacade.API.Helpers
 
                         XmlElement actionNode;
                         switch (action.ActionNumber)
-                        {                            
+                        {
                             case 10:
                                 foreach (var rules in action.Rules)
                                 {
@@ -159,7 +157,6 @@ namespace UKHO.ERPFacade.API.Helpers
                                 {
                                     actionNode = BuildAction(soapXml, product, unitofSale, action);
                                     actionItemNode.AppendChild(actionNode);
-                                    _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
 
                                     IsConditionSatisfied = false;
                                 }
@@ -186,13 +183,13 @@ namespace UKHO.ERPFacade.API.Helpers
                                 {
                                     actionNode = BuildAction(soapXml, product, unitofSale, action);
                                     actionItemNode.AppendChild(actionNode);
-                                    _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
 
                                     IsConditionSatisfied = false;
                                 }
                                 break;
 
-                        }                        
+                        }
+                        _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
                     }
                 }
             }
@@ -227,7 +224,6 @@ namespace UKHO.ERPFacade.API.Helpers
                                 var product = eventData.Data.Products.Where(x => x.ProductName == unitOfSale.UnitName).FirstOrDefault();
                                 actionNode = BuildAction(soapXml, product, unitOfSale, action);
                                 actionItemNode.AppendChild(actionNode);
-                                _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
 
                                 IsConditionSatisfied = false;
                             }
@@ -239,7 +235,6 @@ namespace UKHO.ERPFacade.API.Helpers
 
                                 actionNode = BuildAction(soapXml, product, unitOfSale, action, addProduct);
                                 actionItemNode.AppendChild(actionNode);
-                                _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
                             }
                             break;
 
@@ -250,11 +245,11 @@ namespace UKHO.ERPFacade.API.Helpers
 
                                 actionNode = BuildAction(soapXml, product, unitOfSale, action);
                                 actionItemNode.AppendChild(actionNode);
-                                _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
                             }
                             break;
 
-                    }                    
+                    }
+                    _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
                 }
             }
 
@@ -379,24 +374,27 @@ namespace UKHO.ERPFacade.API.Helpers
 
         private static string GetXmlNodeValue(string fieldValue, string xmlNodeName = null)
         {
-            if (string.IsNullOrWhiteSpace(fieldValue))
-                return string.Empty;
-
-            if (xmlNodeName == ProdType)
+            if (!string.IsNullOrWhiteSpace(fieldValue))
             {
-                return GetProdType(fieldValue);
+                if (xmlNodeName == ProdType)
+                {
+                    return GetProdType(fieldValue);
+                }
+
+                return fieldValue.Substring(0, Math.Min(250, fieldValue.Length));
             }
 
-            return fieldValue.Substring(0, Math.Min(250, fieldValue.Length));
+            return string.Empty;
         }
 
         private static string GetProdType(string prodType)
         {
-            var parts = prodType.Split(' ').ToList();
-            if (parts != null)
+            if (!string.IsNullOrEmpty(prodType))
+            {
+                var parts = prodType.Split(' ').ToList();
                 return parts.Count > 1 ? parts[1] : parts[0];
-            else
-                return string.Empty;
+            }
+            return string.Empty;
         }
 
         private bool IsValidValue(string jsonFieldValue, string attributeValue)
@@ -417,24 +415,6 @@ namespace UKHO.ERPFacade.API.Helpers
             {
                 return jsonFieldValue == attributeValue;
             }
-        }
-
-        private UnitOfSale GetUnitOfSaleForEncCell(List<UnitOfSale> listOfUnitOfSales, Product product)
-        {
-            UnitOfSale unitOfSale = new();
-            var unitOfSales = listOfUnitOfSales.Where(x => x.UnitOfSaleType == UnitSaleType && product.InUnitsOfSale.Contains(x.UnitName)).ToList();
-            if (unitOfSales.Any())
-            {
-                if (unitOfSales.Count > 1)
-                {
-                    unitOfSale = unitOfSales.Where(x => x.CompositionChanges.AddProducts.Contains(product.ProductName)).FirstOrDefault();
-                }
-                else
-                {
-                    unitOfSale = unitOfSales.FirstOrDefault();
-                }
-            }
-            return unitOfSale!;
         }
     }
 }
