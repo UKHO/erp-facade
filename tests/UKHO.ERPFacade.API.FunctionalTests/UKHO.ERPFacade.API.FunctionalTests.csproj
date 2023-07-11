@@ -196,6 +196,9 @@
     <None Update="ERPFacadePayloadTestData\UoS_10_DiffntEffectiveAndDiffFutureDate.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ERPFacadePayloadTestData\UoS_12_SAPPricing_PAYSF12Months.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ERPFacadePayloadTestData\UoS_4_FutureDateFieldBlank.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

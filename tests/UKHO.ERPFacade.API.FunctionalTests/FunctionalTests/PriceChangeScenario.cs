@@ -68,7 +68,18 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
         }
 
-       
+        [Test, Order(0)]
+        [TestCase("PC1_MultipleProduct.JSON", TestName = "WhenPAYSFwith12MonthDuration_PriceChangeAlteredPAYSFPrices")]
+        public async Task WhenPAYSFwith12MonthDuration_PriceChangeAlteredPAYSFPrices(string payloadJsonFileName)
+        {
+            string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, payloadJsonFileName);
+            string generatedProductJsonFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedProductJsonFolder);
+            var response = await _priceChange.PostPriceChangeResponse200OKPAYSF12Months(filePath, generatedProductJsonFolder, Config.TestConfig.SharedKeyConfiguration.Key);
+            //response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+             Assert.That(response, Is.True, "PAYSF Price Info for 12 months {0} are displayed");
+        }
+
+
 
     }
 }
