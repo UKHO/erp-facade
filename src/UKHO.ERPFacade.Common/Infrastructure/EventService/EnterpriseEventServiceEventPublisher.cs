@@ -5,7 +5,6 @@ using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Converters;
 using UKHO.ERPFacade.Common.Infrastructure.Config;
 using UKHO.ERPFacade.Common.Infrastructure.EventService.EventProvider;
-using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
 
 namespace UKHO.ERPFacade.Common.Infrastructure.EventService
@@ -14,17 +13,13 @@ namespace UKHO.ERPFacade.Common.Infrastructure.EventService
     {
         public const string EventServiceClientName = "EventServiceClient";
         private readonly ILogger<EnterpriseEventServiceEventPublisher> _logger;
-        private readonly ICloudEventFactory _cloudEventFactory;
         private readonly IHttpClientFactory _httpClientFactory;
-        private readonly IAzureBlobEventWriter _azureBlobEventWriter;
         private readonly string _eventServiceEndpoint;
 
-        public EnterpriseEventServiceEventPublisher(ILogger<EnterpriseEventServiceEventPublisher> logger, ICloudEventFactory cloudEventFactory, IHttpClientFactory httpClientFactory, IOptions<ErpPublishEventSource> options, IAzureBlobEventWriter azureBlobEventWriter)
+        public EnterpriseEventServiceEventPublisher(ILogger<EnterpriseEventServiceEventPublisher> logger, IHttpClientFactory httpClientFactory, IOptions<ErpPublishEventSource> options)
         {
             _logger = logger;
-            _cloudEventFactory = cloudEventFactory;
             _httpClientFactory = httpClientFactory;
-            _azureBlobEventWriter = azureBlobEventWriter;
             _eventServiceEndpoint = options.Value.PublishEndpoint;
         }
 

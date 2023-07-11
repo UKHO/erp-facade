@@ -1,5 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using FakeItEasy;
+using FluentAssertions;
+using Microsoft.Extensions.Options;
+using NUnit.Framework;
+using UKHO.ERPFacade.Common.Infrastructure.Config;
+using UKHO.ERPFacade.Common.Infrastructure.EventService.EventProvider;
+using UKHO.ERPFacade.Common.Models;
+using UKHO.ERPFacade.Common.Providers;
 
 namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvider
 {
