@@ -2,8 +2,9 @@
 using RestSharp;
 using Newtonsoft.Json;
 using UKHO.ERPFacade.API.FunctionalTests.Model;
+using UKHO.ERPFacade.API.FunctionalTests.Helpers;
 
-namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
+namespace UKHO.ERPFacade.API.FunctionalTests.Service
 {
     public class PriceChangeEndpoint
     {
@@ -14,13 +15,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
         public JsonOutputPriceChangeHelper _jsonOuputPriceChangeHelper { get; set; }
         public List<JsonInputPriceChangeHelper> _jsonInputPriceChangeHelper { get; set; }
-        
-
         private AzureBlobStorageHelper azureBlobStorageHelper;
+
         List<string> UniquePdtFromInputPayload;
-
-
-
 
         public PriceChangeEndpoint(string url)
         {
@@ -28,9 +25,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             client = new RestClient(options);
             azureBlobStorageHelper = new();
             _jSONHelper = new JSONHelper();
-
         }
-
 
         public async Task<RestResponse> PostPriceChangeResponseAsync(string filePath, string sharedKey)
         {
@@ -80,7 +75,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
 
             RestResponse response = await client.ExecuteAsync(request);
-            
+
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 Thread.Sleep(90000);
@@ -89,14 +84,13 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 UniquePdtFromInputPayload = getProductListFromInputPayload(filePath);
 
                 List<string> UniquePdtFromAzureStorage = azureBlobStorageHelper.GetProductListFromBlobContainerAsync(responseHeadercorrelationID).Result;
-                
+
                 Assert.That(UniquePdtFromInputPayload.Count.Equals(UniquePdtFromAzureStorage.Count), Is.True, "Slicing is not correct");
-                       
+
                 foreach (string products in UniquePdtFromAzureStorage)
                 {
                     string generatedProductJsonFile = azureBlobStorageHelper.DownloadJSONFromAzureBlob(generatedProductJsonFolder, responseHeadercorrelationID, products, "ProductChange");
                     Console.WriteLine(generatedProductJsonFile);
-
 
                     JsonOutputPriceChangeHelper desiailzedProductOutput = getDeserializedProductJson(generatedProductJsonFile);
                     string correlation_ID = desiailzedProductOutput.data.correlationId;
@@ -104,15 +98,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     Assert.That(correlation_ID.Equals(responseHeadercorrelationID), Is.True, "response header corerelationId is same as generated product correlation id");
                     unitsOfSalePricesData[] data = desiailzedProductOutput.data.unitsOfSalePrices;
 
-
                     EffectiveDatesPerProductPC effectiveDate = new EffectiveDatesPerProductPC();
                     List<EffectiveDatesPerProductPC> effectiveDates = new List<EffectiveDatesPerProductPC>();
                     foreach (unitsOfSalePricesData unitOfSalesPrice in data)
                     {
-
                         foreach (var prices in unitOfSalesPrice.price)
                         {
-
                             foreach (PriceDurationsPriceChangeOutput priceDuration in prices.standard.priceDurations)
                             {
                                 effectiveDate = new EffectiveDatesPerProductPC();
@@ -123,10 +114,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                                 effectiveDates.Add(effectiveDate);
                             }
                         }
-
                     }
 
-                   
                     var inputData = _jsonInputPriceChangeHelper.Select(x => new
                     {
                         x.Productname,
@@ -148,7 +137,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         EffectiveDatesPerProductPC? findProduct = effectiveDates.FirstOrDefault(x => x.ProductName == SAPProduct.Productname
                                                          && x.EffectiveDates.Date == SAPProduct.EffectiveDateTime.Date
                                                          && x.rrp == SAPProduct.EffectivePrice && x.Duration == SAPProduct.Duration);
-
 
                         if (findProduct != null)
                         {
@@ -178,13 +166,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                                 Console.WriteLine(string.Format("Product - {0} Not found in Final UOS for Future Date - {1}, Duration - {2} and Price - {3}", SAPProduct.Productname, SAPProduct.FutureDateTime.Date, SAPProduct.Duration, SAPProduct.FuturePrice));
                             }
                         }
-
                     }
-
-
-
                 }
-
             }
             return response;
         }
@@ -199,13 +182,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
         private JsonOutputPriceChangeHelper getDeserializedProductJson(string generatedProductJson)
         {
-           
             string jsonString = _jSONHelper.getDeserializedString(generatedProductJson);
             _jsonOuputPriceChangeHelper = JsonConvert.DeserializeObject<JsonOutputPriceChangeHelper>(jsonString);
             return _jsonOuputPriceChangeHelper;
         }
 
-        private static String getResponseHeaderCorrelationID(RestResponse response)
+        private static string getResponseHeaderCorrelationID(RestResponse response)
         {
             string correlationID = response.Headers.ToList().Find(x => x.Name == "_X-Correlation-ID").Value.ToString();
             Console.WriteLine(correlationID);

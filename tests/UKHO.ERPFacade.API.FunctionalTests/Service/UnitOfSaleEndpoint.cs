@@ -1,10 +1,11 @@
 ﻿using Newtonsoft.Json;
 using NUnit.Framework;
 using RestSharp;
+using UKHO.ERPFacade.API.FunctionalTests.Helpers;
 using UKHO.ERPFacade.API.FunctionalTests.Model;
 using UKHO.ERPFacade.API.FunctionalTests.Model.Latest_Model;
 
-namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
+namespace UKHO.ERPFacade.API.FunctionalTests.Service
 {
     public class UnitOfSaleEndpoint
     {
@@ -27,7 +28,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             azureBlobStorageHelper = new();
         }
 
-        public async Task<RestResponse> PostUoSResponseAsync(string filePathWebhook, string generatedXMLFolder,string webhookToken, string filePath, string sharedKey)
+        public async Task<RestResponse> PostUoSResponseAsync(string filePathWebhook, string generatedXMLFolder, string webhookToken, string filePath, string sharedKey)
         {
 
 
@@ -93,7 +94,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             await _webhook.PostWebhookResponseAsyncForXML(webHookfilePath, generatedXMLFolder, webhookToken);
             //await _webhook.PostWebhookResponseAsync(webHookfilePath, webhookToken);
             string requestBody = _jsonHelper.getDeserializedString(uosFilePath);
-            requestBody=JSONHelper.replaceCorrID(requestBody, WebhookEndpoint.generatedCorrelationId);
+            requestBody = JSONHelper.replaceCorrID(requestBody, WebhookEndpoint.generatedCorrelationId);
             var request = new RestRequest("/erpfacade/priceinformation", Method.Post);
             request.AddHeader("Content-Type", "application/json");
             request.AddQueryParameter("Key", uosKey);
@@ -176,7 +177,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 Unitsofsaleprice[] data = generatedJsonPayload.data.unitsOfSalePrices;
                 List<string> finalUintNames = data.Select(x => x.unitName).ToList();
                 List<string> SAPProductNames = jsonPayload.Select(x => x.Productname).Distinct().ToList();
-                Assert.That(SAPProductNames.All(finalUintNames.Contains) && finalUintNames.All(SAPProductNames.Contains), Is.False, "ProductNames from SAP and FinalUOS are not same");             
+                Assert.That(SAPProductNames.All(finalUintNames.Contains) && finalUintNames.All(SAPProductNames.Contains), Is.False, "ProductNames from SAP and FinalUOS are not same");
             }
             return response;
         }
@@ -219,7 +220,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             RestResponse response = await client.ExecuteAsync(request);
             List<JsonInputPriceChangeHelper> jsonSAPPriceInfoPayload = JsonConvert.DeserializeObject<List<JsonInputPriceChangeHelper>>(requestBody);
             //Adding new code
-           if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 var SAPProductData = jsonSAPPriceInfoPayload.Select(x => new
                 {
@@ -248,7 +249,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 Unitsofsaleprice[] data = generatedJsonPayload.data.unitsOfSalePrices;
                 List<string> finalUintNames = data.Select(x => x.unitName).ToList();
                 List<string> SAPProductNames = jsonSAPPriceInfoPayload.Select(x => x.Productname).Distinct().ToList();
-                
+
                 var effectivePrices = data.Select(x => x.price);
                 List<EffectiveDatesPerProduct> effectiveDates = new List<EffectiveDatesPerProduct>();
                 foreach (Unitsofsaleprice unit in data)
@@ -291,12 +292,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
                     if (findProduct != null)
                     {
-                        
+
                         Console.WriteLine(string.Format("Product - {0} found in Final UOS for Effective Date - {1}, Duration - {2} and Price - {3}", SAPProduct.Productname, SAPProduct.EffectiveDateTime.Date, SAPProduct.Duration, SAPProduct.EffectivePrice));
                     }
                     else
                     {
-                        
+
                         Console.WriteLine(string.Format("Product - {0} Not found in Final UOS for Effective Date - {1}, Duration - {2} and Price - {3}", SAPProduct.Productname, SAPProduct.EffectiveDateTime.Date, SAPProduct.Duration, SAPProduct.EffectivePrice));
                     }
 
@@ -308,12 +309,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
                         if (findFutureProduct != null)
                         {
-                            
+
                             Console.WriteLine(string.Format("Product - {0} found in Final UOS for Future Date - {1}, Duration - {2} and Price - {3}", SAPProduct.Productname, SAPProduct.FutureDateTime.Date, SAPProduct.Duration, SAPProduct.FuturePrice));
                         }
                         else
                         {
-                            
+
                             Console.WriteLine(string.Format("Product - {0} Not found in Final UOS for Future Date - {1}, Duration - {2} and Price - {3}", SAPProduct.Productname, SAPProduct.FutureDateTime.Date, SAPProduct.Duration, SAPProduct.FuturePrice));
                         }
                     }

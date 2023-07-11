@@ -1,31 +1,32 @@
 ﻿using Newtonsoft.Json;
 using NUnit.Framework;
 using RestSharp;
+using UKHO.ERPFacade.API.FunctionalTests.Configuration;
+using UKHO.ERPFacade.API.FunctionalTests.Helpers;
 using UKHO.ERPFacade.API.FunctionalTests.Model;
 
-namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
+namespace UKHO.ERPFacade.API.FunctionalTests.Service
 {
     public class WebhookEndpoint
     {
         private readonly RestClient _client;
-        private readonly ADAuthTokenProvider _authToken;
-        private SAPXmlHelper _sapXmlHelper { get; set; }
-        private AzureBlobStorageHelper _azureBlobStorageHelper { get; set; }
+        private readonly AzureBlobStorageHelper _azureBlobStorageHelper;
+        private readonly RestClientOptions _options;
+
+        private const string WebhookRequestEndPoint = "/webhook/newenccontentpublishedeventreceived";
+
         public static string generatedCorrelationId = "";
 
         public WebhookEndpoint()
         {
-            _authToken = new();
-            _sapXmlHelper = new SAPXmlHelper();
-            _azureBlobStorageHelper = new AzureBlobStorageHelper();
-            var options = new RestClientOptions(Config.TestConfig.ErpFacadeConfiguration.BaseUrl);
-            _client = new RestClient(options);
-            
+            _azureBlobStorageHelper = new();
+            _options = new(Config.TestConfig.ErpFacadeConfiguration.BaseUrl);
+            _client = new(_options);
         }
 
         public async Task<RestResponse> OptionWebhookResponseAsync(string token)
         {
-            var request = new RestRequest("/webhook/newenccontentpublishedeventreceived");
+            var request = new RestRequest(WebhookRequestEndPoint);
             request.AddHeader("Authorization", "Bearer " + token);
             var response = await _client.OptionsAsync(request);
             return response;
@@ -44,7 +45,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             generatedCorrelationId = SAPXmlHelper.generateRandomCorrelationId();
             requestBody = SAPXmlHelper.updateTimeAndCorrIdField(requestBody, generatedCorrelationId);
 
-            var request = new RestRequest("/webhook/newenccontentpublishedeventreceived", Method.Post);
+            var request = new RestRequest(WebhookRequestEndPoint, Method.Post);
             request.AddHeader("Content-Type", "application/json");
             request.AddHeader("Authorization", "Bearer " + token);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
@@ -65,7 +66,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             generatedCorrelationId = SAPXmlHelper.generateRandomCorrelationId();
             requestBody = SAPXmlHelper.updateTimeAndCorrIdField(requestBody, generatedCorrelationId);
 
-            var request = new RestRequest("/webhook/newenccontentpublishedeventreceived", Method.Post);
+            var request = new RestRequest(WebhookRequestEndPoint, Method.Post);
             request.AddHeader("Content-Type", "application/json");
             request.AddHeader("Authorization", "Bearer " + token);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
@@ -87,23 +88,5 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
             return response;
         }
-        public async Task<RestResponse> PostWebhookResponseAsyncForXML(string filePath, string token)
-        {
-            string requestBody;
-
-            using (StreamReader streamReader = new StreamReader(filePath))
-            {
-                requestBody = streamReader.ReadToEnd();
-            }
-
-            var request = new RestRequest("/webhook/newenccontentpublishedeventreceived", Method.Post);
-            request.AddHeader("Content-Type", "application/json");
-            request.AddHeader("Authorization", "Bearer " + token);
-            request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
-            RestResponse response = await _client.ExecuteAsync(request);
-
-            return response;
-        }
-
     }
 }

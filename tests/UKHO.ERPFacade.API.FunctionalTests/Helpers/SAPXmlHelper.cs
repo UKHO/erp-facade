@@ -4,6 +4,7 @@ using NUnit.Framework;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
+using UKHO.ERPFacade.API.FunctionalTests.Configuration;
 using UKHO.ERPFacade.API.FunctionalTests.Model;
 
 

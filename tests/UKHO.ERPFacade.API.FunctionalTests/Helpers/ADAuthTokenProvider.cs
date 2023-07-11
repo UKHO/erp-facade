@@ -1,4 +1,5 @@
 ﻿using Microsoft.Identity.Client;
+using UKHO.ERPFacade.API.FunctionalTests.Configuration;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {

@@ -1,6 +1,6 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-
+using UKHO.ERPFacade.API.FunctionalTests.Configuration;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
