@@ -15,7 +15,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
 
         private const string WebhookRequestEndPoint = "/webhook/newenccontentpublishedeventreceived";
 
-        public static string generatedCorrelationId = "";
+        public static string generatedCorrelationId = string.Empty;
 
         public WebhookEndpoint()
         {
@@ -31,7 +31,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             var response = await _client.OptionsAsync(request);
             return response;
         }
-
 
         public async Task<RestResponse> PostWebhookResponseAsync(string filePath, string token)
         {

@@ -10,13 +10,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         {
             AzureADToken = null;
         }
-        public async Task<string> GetAzureADToken()
-        {
-            AzureADToken = await GenerateAzureADToken(Config.TestConfig.AzureADConfiguration.ClientId, Config.TestConfig.AzureADConfiguration.ClientSecret, AzureADToken);
-            await Console.Out.WriteLineAsync("value1:"+ Config.TestConfig.AzureADConfiguration.ClientId);
-            await Console.Out.WriteLineAsync("value1:" + Config.TestConfig.AzureADConfiguration.ClientSecret);
-            return AzureADToken;
-        }
 
         public async Task<string> GetAzureADToken(bool noRole)
         {
@@ -28,26 +21,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             else
             {
                 AzureADToken = null;
-                AzureADToken = await GenerateAzureADToken(Config.TestConfig.AzureADConfiguration.AutoTestClientId, Config.TestConfig.AzureADConfiguration.ClientSecret, AzureADToken);
-            }
-            return AzureADToken;
-        }
-        public async Task<string> GetAzureADToken(bool noRole,string endPointName)
-        {
-            if (noRole)
-            {
-                AzureADToken = null;
-                AzureADToken = await GenerateAzureADToken(Config.TestConfig.AzureADConfiguration.AutoTestClientIdNoRole, Config.TestConfig.AzureADConfiguration.ClientSecretNoRole, AzureADToken);
-            }
-            else if (endPointName == "UnitOfSale"|| endPointName == "BulkPriceUpdate") 
-            {
-                AzureADToken = null;
-                AzureADToken = await GenerateAzureADToken(Config.TestConfig.AzureADConfiguration.AutoTestClientIdPricingInformationCaller, Config.TestConfig.AzureADConfiguration.ClientSecretPricingInformationCaller, AzureADToken);
-            }
-
-            else
-            {
-                AzureADToken = await GenerateAzureADToken(Config.TestConfig.AzureADConfiguration.AutoTestClientId, Config.TestConfig.AzureADConfiguration.ClientSecret, AzureADToken);
+                AzureADToken = await  GenerateAzureADToken(Config.TestConfig.AzureADConfiguration.AutoTestClientId, Config.TestConfig.AzureADConfiguration.ClientSecret, AzureADToken);
             }
             return AzureADToken;
         }
@@ -80,12 +54,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
                         AuthenticationResult tokenTask = await app.AcquireTokenForClient(scopes).ExecuteAsync();
                         token = tokenTask.AccessToken;
-
-
-
                     }
                 }
-
             }
             catch (Exception ex)
             {
