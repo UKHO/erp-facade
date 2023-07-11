@@ -95,12 +95,12 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
             Assert.That(result.Message, Is.EqualTo("Successfully sent event"));
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-            && call.GetArgument<LogLevel>(0) == LogLevel.Trace
+            && call.GetArgument<LogLevel>(0) == LogLevel.Information
             && call.GetArgument<EventId>(1) == EventIds.StartingEnterpriseEventServiceEventPublisher.ToEventId()
             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Attempting to send {cloudEventType} for {cloudEventSubject} to Enterprise Event Service").MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-            && call.GetArgument<LogLevel>(0) == LogLevel.Trace
+            && call.GetArgument<LogLevel>(0) == LogLevel.Information
             && call.GetArgument<EventId>(1) == EventIds.EnterpriseEventServiceEventPublisherSuccess.ToEventId()
             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Successfully sent {cloudEventType} for {cloudEventSubject} to Enterprise Event Service").MustHaveHappenedOnceExactly();
         }
@@ -124,7 +124,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
             Assert.That(result.Status, Is.EqualTo(Result.Statuses.Failure));
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-            && call.GetArgument<LogLevel>(0) == LogLevel.Trace
+            && call.GetArgument<LogLevel>(0) == LogLevel.Information
             && call.GetArgument<EventId>(1) == EventIds.StartingEnterpriseEventServiceEventPublisher.ToEventId()
             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Attempting to send {cloudEventType} for {cloudEventSubject} to Enterprise Event Service").MustHaveHappenedOnceExactly();
 
@@ -152,7 +152,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
             Assert.That(result.Status, Is.EqualTo(Result.Statuses.Failure));
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-            && call.GetArgument<LogLevel>(0) == LogLevel.Trace
+            && call.GetArgument<LogLevel>(0) == LogLevel.Information
             && call.GetArgument<EventId>(1) == EventIds.StartingEnterpriseEventServiceEventPublisher.ToEventId()
             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Attempting to send {cloudEventType} for {cloudEventSubject} to Enterprise Event Service").MustHaveHappenedOnceExactly();
 
