@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
 using UKHO.ERPFacade.API.FunctionalTests.Configuration;
-using UKHO.ERPFacade.API.FunctionalTests.Helpers;
 using UKHO.ERPFacade.API.FunctionalTests.Service;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
@@ -9,14 +8,13 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
     [TestFixture]
     public class PriceChangeScenarios
     {
-
         private PriceChangeEndpoint _priceChange { get; set; }
-        private readonly ADAuthTokenProvider _authToken = new();
-        public static bool noRole = false;
+
         //for pipeline
         private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
+
         //for local
-       // private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
+        // private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
 
         [OneTimeSetUp]
         public void Setup()
@@ -28,9 +26,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         public async Task WhenValidPriceChangeEventReceivedWithValidToken_ThenPriceChangeReturns200OkResponse()
         {
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.PriceChangePayloadFileName);
-            var response = await _priceChange.PostPriceChangeResponseAsync(filePath,Config.TestConfig.SharedKeyConfiguration.Key);
-            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
+            var response = await _priceChange.PostPriceChangeResponseAsync(filePath, Config.TestConfig.SharedKeyConfiguration.Key);
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
 
         [Test(Description = "WhenValidPriceChangeEventReceivedWithInvalidToken_ThenPriceChangeReturns401UnAuthorizedResponse"), Order(1)]
@@ -40,9 +38,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
             var response = await _priceChange.PostPriceChangeResponseAsync(filePath, "invalidToken_abcd");
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
-
         }
-        
+
         [Test, Order(0)]
         [TestCase("PC1_MultipleProduct.JSON", TestName = "WhenValidEventReceivedWithValidTokenandMultipleProduct_ThenPriceChangeReturn200OkResponse")]
         [TestCase("PC2_FutureDateBlank.JSON", TestName = "WhenValidEventReceivedWithValidTokenandFutureDateBlank_ThenPriceChangeReturn200OkResponse")]
@@ -54,23 +51,20 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         {
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, payloadJsonFileName);
             string generatedProductJsonFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedProductJsonFolder);
+
             var response = await _priceChange.PostPriceChangeResponseAsyncForJSON(filePath, generatedProductJsonFolder, Config.TestConfig.SharedKeyConfiguration.Key);
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-
         }
-        
+
         [Test, Order(3)]
         [TestCase("PC7_ExistingCorrId.JSON", TestName = "WhenValidEventReceivedWithValidTokenandExistingCorelationID_ThenPriceChangeReturn500InternalServerErrorResponse")]
         public async Task WhenValidEventReceivedWithValidTokenandExistingCorelationID_ThenPriceChangeReturn500InternalServerErrorResponse(string payloadJsonFileName)
         {
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, payloadJsonFileName);
             string generatedProductJsonFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedProductJsonFolder);
+
             var response = await _priceChange.PostPriceChangeResponseAsyncForJSON(filePath, generatedProductJsonFolder, Config.TestConfig.SharedKeyConfiguration.Key);
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.InternalServerError);
-
         }
-
-       
-
     }
 }

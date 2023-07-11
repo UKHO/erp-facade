@@ -1,104 +1,75 @@
-﻿using NUnit.Framework;
+﻿using Newtonsoft.Json;
+using NUnit.Framework;
 using RestSharp;
-using Newtonsoft.Json;
-using UKHO.ERPFacade.API.FunctionalTests.Model;
 using UKHO.ERPFacade.API.FunctionalTests.Helpers;
+using UKHO.ERPFacade.API.FunctionalTests.Model;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Service
 {
     public class PriceChangeEndpoint
     {
-        private readonly RestClient client;
+        private readonly RestClient _client;
         private readonly JsonHelper _jsonHelper;
-        //private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
+        private readonly AzureBlobStorageHelper _azureBlobStorageHelper;
+        private const string ErpFacadeBulkPriceInformationEndPoint = "/erpfacade/bulkpriceinformation";
+        public const string XCorrelationIdHeaderKey = "_X-Correlation-ID";
 
-        public JsonOutputPriceChangeHelper _jsonOuputPriceChangeHelper { get; set; }
+
         public List<JsonInputPriceChangeHelper> _jsonInputPriceChangeHelper { get; set; }
-        private AzureBlobStorageHelper azureBlobStorageHelper;
 
-        List<string> UniquePdtFromInputPayload;
+        public AzureBlobStorageHelper AzureBlobStorageHelper => _azureBlobStorageHelper;
 
         public PriceChangeEndpoint(string url)
         {
             var options = new RestClientOptions(url);
-            client = new RestClient(options);
-            azureBlobStorageHelper = new();
-            _jsonHelper = new JsonHelper();
+            _client = new RestClient(options);
+            _azureBlobStorageHelper = new();
+            _jsonHelper = new();
         }
 
         public async Task<RestResponse> PostPriceChangeResponseAsync(string filePath, string sharedKey)
         {
-            string requestBody;
-
-            using (StreamReader streamReader = new StreamReader(filePath))
-            {
-                requestBody = streamReader.ReadToEnd();
-            }
-            var request = new RestRequest("/erpfacade/bulkpriceinformation", Method.Post);
-
-            request.AddHeader("Content-Type", "application/json");
-            request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
-            request.AddQueryParameter("Key", sharedKey);
-            RestResponse response = await client.ExecuteAsync(request);
+            RestRequest request = ErpFacadeBulkPriceInformationRequest(filePath, sharedKey);
+            RestResponse response = await _client.ExecuteAsync(request);
             return response;
         }
 
         public async Task<RestResponse> PostPriceChangeResponseAsyncWithJson(string filePath, string generatedProductJsonFolder, string sharedKey)
         {
-            string requestBody;
-
-            using (StreamReader streamReader = new StreamReader(filePath))
-            {
-                requestBody = streamReader.ReadToEnd();
-            }
-            var request = new RestRequest("/erpfacade/bulkpriceinformation", Method.Post);
-            request.AddHeader("Content-Type", "application/json");
-            request.AddQueryParameter("Key", sharedKey);
-            request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
-
-            RestResponse response = await client.ExecuteAsync(request);
+            RestRequest request = ErpFacadeBulkPriceInformationRequest(filePath, sharedKey);
+            RestResponse response = await _client.ExecuteAsync(request);
             return response;
         }
 
         public async Task<RestResponse> PostPriceChangeResponseAsyncForJSON(string filePath, string generatedProductJsonFolder, string sharedKey)
         {
-            string requestBody;
-            string responseHeadercorrelationID;
-            using (StreamReader streamReader = new StreamReader(filePath))
-            {
-                requestBody = streamReader.ReadToEnd();
-            }
-            var request = new RestRequest("/erpfacade/bulkpriceinformation", Method.Post);
-            request.AddHeader("Content-Type", "application/json");
-            request.AddQueryParameter("Key", sharedKey);
-            request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
-
-            RestResponse response = await client.ExecuteAsync(request);
+            RestRequest request = ErpFacadeBulkPriceInformationRequest(filePath, sharedKey);
+            RestResponse response = await _client.ExecuteAsync(request);
 
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 Thread.Sleep(90000);
 
-                responseHeadercorrelationID = getResponseHeaderCorrelationID(response);
-                UniquePdtFromInputPayload = getProductListFromInputPayload(filePath);
+                string responseHeaderCorrelationId = GetResponseHeaderCorrelationId(response);
+                List<string> uniqueProductFromInputPayload = GetProductListFromInputPayload(filePath);
 
-                List<string> UniquePdtFromAzureStorage = azureBlobStorageHelper.GetProductListFromBlobContainerAsync(responseHeadercorrelationID).Result;
+                List<string> uniqueProductFromAzureStorage = AzureBlobStorageHelper.GetProductListFromBlobContainerAsync(responseHeaderCorrelationId).Result;
 
-                Assert.That(UniquePdtFromInputPayload.Count.Equals(UniquePdtFromAzureStorage.Count), Is.True, "Slicing is not correct");
+                Assert.That(uniqueProductFromInputPayload.Count.Equals(uniqueProductFromAzureStorage.Count), Is.True, "Slicing is not correct");
 
-                foreach (string products in UniquePdtFromAzureStorage)
+                foreach (string products in uniqueProductFromAzureStorage)
                 {
-                    string generatedProductJsonFile = AzureBlobStorageHelper.DownloadJSONFromAzureBlob(generatedProductJsonFolder, responseHeadercorrelationID, products, "ProductChange");
+                    string generatedProductJsonFile = AzureBlobStorageHelper.DownloadJSONFromAzureBlob(generatedProductJsonFolder, responseHeaderCorrelationId, products, "ProductChange");
                     Console.WriteLine(generatedProductJsonFile);
 
-                    JsonOutputPriceChangeHelper desiailzedProductOutput = getDeserializedProductJson(generatedProductJsonFile);
-                    string correlation_ID = desiailzedProductOutput.data.correlationId;
+                    JsonOutputPriceChangeHelper deserializedProductOutput = GetDeserializedProductJson(generatedProductJsonFile);
+                    string correlationId = deserializedProductOutput.data.correlationId;
 
-                    Assert.That(correlation_ID.Equals(responseHeadercorrelationID), Is.True, "response header corerelationId is same as generated product correlation id");
-                    unitsOfSalePricesData[] data = desiailzedProductOutput.data.unitsOfSalePrices;
+                    Assert.That(correlationId.Equals(responseHeaderCorrelationId), Is.True, "response header corerelationId is same as generated product correlation id");
+                    unitsOfSalePricesData[] data = deserializedProductOutput.data.unitsOfSalePrices;
 
-                    EffectiveDatesPerProductPC effectiveDate = new EffectiveDatesPerProductPC();
-                    List<EffectiveDatesPerProductPC> effectiveDates = new List<EffectiveDatesPerProductPC>();
+                    EffectiveDatesPerProductPC effectiveDate = new();
+                    List<EffectiveDatesPerProductPC> effectiveDates = new();
                     foreach (unitsOfSalePricesData unitOfSalesPrice in data)
                     {
                         foreach (var prices in unitOfSalesPrice.price)
@@ -171,30 +142,39 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             return response;
         }
 
-        private List<string> getProductListFromInputPayload(string inputJSONFilePath)
+        private List<string> GetProductListFromInputPayload(string inputJSONFilePath)
         {
             string jsonPayload = _jsonHelper.GetDeserializedString(inputJSONFilePath);
             _jsonInputPriceChangeHelper = JsonConvert.DeserializeObject<List<JsonInputPriceChangeHelper>>(jsonPayload);
-            UniquePdtFromInputPayload = JsonHelper.GetProductListFromSAPPayload(_jsonInputPriceChangeHelper);
-            return UniquePdtFromInputPayload;
+            return JsonHelper.GetProductListFromSAPPayload(_jsonInputPriceChangeHelper);
         }
 
-        private JsonOutputPriceChangeHelper getDeserializedProductJson(string generatedProductJson)
+        private JsonOutputPriceChangeHelper GetDeserializedProductJson(string generatedProductJson)
         {
             string jsonString = _jsonHelper.GetDeserializedString(generatedProductJson);
-            _jsonOuputPriceChangeHelper = JsonConvert.DeserializeObject<JsonOutputPriceChangeHelper>(jsonString);
-            return _jsonOuputPriceChangeHelper;
+            return JsonConvert.DeserializeObject<JsonOutputPriceChangeHelper>(jsonString);
         }
 
-        private static string getResponseHeaderCorrelationID(RestResponse response)
+        private static string GetResponseHeaderCorrelationId(RestResponse response)
         {
-            string correlationID = response.Headers.ToList().Find(x => x.Name == "_X-Correlation-ID").Value.ToString();
-            Console.WriteLine(correlationID);
-            return correlationID;
+            string correlationId = response.Headers.ToList().Find(x => x.Name == XCorrelationIdHeaderKey).Value.ToString();
+            Console.WriteLine(correlationId);
+            return correlationId;
         }
 
+        private static RestRequest ErpFacadeBulkPriceInformationRequest(string filePath, string sharedKey)
+        {
+            string requestBody;
+
+            using (StreamReader streamReader = new StreamReader(filePath))
+            {
+                requestBody = streamReader.ReadToEnd();
+            }
+            var request = new RestRequest(ErpFacadeBulkPriceInformationEndPoint, Method.Post);
+            request.AddHeader("Content-Type", "application/json");
+            request.AddQueryParameter("Key", sharedKey);
+            request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
+            return request;
+        }
     }
-
-
 }
-

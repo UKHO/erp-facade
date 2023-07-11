@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Model
 {
-
     public class JsonOutputPriceChangeHelper
     {
-
         public string specversion { get; set; }
         public string type { get; set; }
         public string source { get; set; }
@@ -19,9 +12,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
         public string _COMMENT { get; set; }
         public string subject { get; set; }
         public string datacontenttype { get; set; }
+
         [JsonProperty("data")]
         public DataPriceChange data { get; set; }
-
     }
 
     // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
@@ -44,8 +37,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
         public string rrp { get; set; }
     }
 
-
-
     public class StandardPriceChangeOutput
     {
         public PriceDurationsPriceChangeOutput[] priceDurations { get; set; }
@@ -56,6 +47,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
         public string unitName { get; set; }
         public PricePriceChangeOutput[] price { get; set; }
     }
+
     public class EffectiveDatesPerProductPC
     {
         public string ProductName { get; set; }
@@ -64,6 +56,5 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
         public long Duration { get; set; }
 
         public string rrp { get; set; }
-
     }
 }
