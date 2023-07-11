@@ -52,6 +52,8 @@ namespace UKHO.SAP.MockAPIService
             builder.Services.AddSingleton<ISapConfiguration, SapConfiguration>();
             builder.Services.AddSingleton<IAzureBlobEventWriter, AzureBlobEventWriter>();
             builder.Services.AddSingleton<MockService>();
+            builder.Services.AddHealthChecks();
+            
             builder.Services.AddControllers(o =>
             {
                 o.AllowEmptyInputInBodyModelBinding = true;
@@ -64,7 +66,8 @@ namespace UKHO.SAP.MockAPIService
 
             app.UseHttpsRedirection();
 
-            app.UseWhen(context => !context.Request.Path.StartsWithSegments("/api"), appBuilder =>
+            app.UseWhen(context => (!context.Request.Path.StartsWithSegments("/api")&&
+                   !context.Request.Path.StartsWithSegments("/health")), appBuilder =>
             {
                 appBuilder.BasicAuthCustomMiddleware();
             });
@@ -76,7 +79,9 @@ namespace UKHO.SAP.MockAPIService
             app.UseEndpoints(endpoints =>
             {
                 endpoints.UseSoapEndpoint<Iz_adds_mat_info>("/z_adds_mat_info.asmx", new SoapEncoderOptions(), SoapSerializer.XmlSerializer);
+                endpoints.MapHealthChecks("/health");
             });
+
             app.Run();
         }
     }
