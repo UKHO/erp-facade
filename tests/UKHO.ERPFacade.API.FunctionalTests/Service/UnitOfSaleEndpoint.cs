@@ -79,7 +79,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             return response;
         }
 
-        public async Task<RestResponse> PostWebHookAndUoSResponseAsyncWithJSON(string webHookfilePath, string uosFilePath, string generatedXMLFolder, string generatedJSONFolder, string webhookToken, string uosKey)
+        public async Task<RestResponse> PostWebHookAndUoSResponseAsyncWithJson(string webHookfilePath, string uosFilePath, string generatedXMLFolder, string generatedJsonFolder, string webhookToken, string uosKey)
         {
             await _webhook.PostWebhookResponseAsyncForXML(webHookfilePath, generatedXMLFolder, webhookToken);
             
@@ -97,23 +97,23 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             {
                 string correlationId = jsonPayload[0].Corrid;
                 string generatedJsonCorrelationId = "";
-                string generatedJSONBody = "";
-                string generatedJSONFilePath = azureBlobStorageHelper.DownloadJsonFromAzureBlob(generatedJSONFolder, correlationId, "json");
-                using (StreamReader streamReader = new(generatedJSONFilePath))
+                string generatedJsonBody = "";
+                string generatedJsonFilePath = azureBlobStorageHelper.DownloadJsonFromAzureBlob(generatedJsonFolder, correlationId, "json");
+                using (StreamReader streamReader = new(generatedJsonFilePath))
                 {
-                    generatedJSONBody = streamReader.ReadToEnd();
+                    generatedJsonBody = streamReader.ReadToEnd();
                 }
-                FinalUoSOutput generatedJsonPayload = JsonConvert.DeserializeObject<FinalUoSOutput>(generatedJSONBody);
+                FinalUoSOutput generatedJsonPayload = JsonConvert.DeserializeObject<FinalUoSOutput>(generatedJsonBody);
                 generatedJsonCorrelationId = generatedJsonPayload.data.correlationId;
                 Assert.That(correlationId.Equals(generatedJsonCorrelationId), Is.True, "correlationIds from SAP and FinalUOS are not same");
 
-                Unitsofsaleprice[] data = generatedJsonPayload.data.unitsOfSalePrices;
-                List<string> finalUintNames = data.Select(x => x.unitName).ToList();
-                List<string> SAPProductNames = jsonPayload.Select(x => x.Productname).Distinct().ToList();
-                Assert.That(SAPProductNames.All(finalUintNames.Contains) && finalUintNames.All(SAPProductNames.Contains), Is.True, "ProductNames from SAP and FinalUOS are not same");
+                UnitsofSalePrice[] data = generatedJsonPayload.data.unitsOfSalePrices;
+                List<string> finalUnitName = data.Select(x => x.unitName).ToList();
+                List<string> SAPProductName = jsonPayload.Select(x => x.Productname).Distinct().ToList();
+                Assert.That(SAPProductName.All(finalUnitName.Contains) && finalUnitName.All(SAPProductName.Contains), Is.True, "ProductNames from SAP and FinalUOS are not same");
                 var effectivePrices = data.Select(x => x.price);
                 List<EffectiveDatesPerProduct> effectiveDates = new();
-                foreach (Unitsofsaleprice unit in data)
+                foreach (UnitsofSalePrice unit in data)
                 {
                     foreach (var prices in unit.price)
                     {
@@ -128,13 +128,13 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
                 foreach (IGrouping<string, EffectiveDatesPerProduct> date in effectiveDates.GroupBy(x => x.ProductName))
                 {
                     var product = date.Key;
-                    var effdates = date.Select(x => x.EffectiveDates).ToList();
-                    var distinctEffDates = effdates.Distinct().ToList();
+                    var effectiveDate = date.Select(x => x.EffectiveDates).ToList();
+                    var distEffectiveDate = effectiveDate.Distinct().ToList();
                     var duration = date.Select(x => x.Duration).ToList();
                     var distinctDurations = duration.Distinct().ToList();
                     var rrp = date.Select(x => x.rrp).ToList();
                     var distinctrrp = rrp.Distinct().ToList();
-                    Assert.That(effdates.All(distinctEffDates.Contains) && distinctEffDates.All(effdates.Contains), Is.True, "Effective dates for {0} are not distinct.");
+                    Assert.That(effectiveDate.All(distEffectiveDate.Contains) && distEffectiveDate.All(effectiveDate.Contains), Is.True, "Effective dates for {0} are not distinct.");
                     Assert.That(duration.All(distinctDurations.Contains) && distinctDurations.All(duration.Contains), Is.True, "Duration for {0} are not distinct.");
                     Assert.That(rrp.All(distinctrrp.Contains) && distinctrrp.All(rrp.Contains), Is.True, "RRP for {0} are not distinct.");
                 }
@@ -166,7 +166,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
                 FinalUoSOutput generatedJsonPayload = JsonConvert.DeserializeObject<FinalUoSOutput>(generatedJSONBody);
                 generatedJsonCorrelationId = generatedJsonPayload.data.correlationId;
                 Assert.That(correlationId.Equals(generatedJsonCorrelationId), Is.True, "correlationIds from SAP and FinalUOS are not same");
-                Unitsofsaleprice[] data = generatedJsonPayload.data.unitsOfSalePrices;
+                UnitsofSalePrice[] data = generatedJsonPayload.data.unitsOfSalePrices;
                 List<string> finalUintNames = data.Select(x => x.unitName).ToList();
                 List<string> SAPProductNames = jsonPayload.Select(x => x.Productname).Distinct().ToList();
                 Assert.That(SAPProductNames.All(finalUintNames.Contains) && finalUintNames.All(SAPProductNames.Contains), Is.False, "ProductNames from SAP and FinalUOS are not same");
@@ -200,7 +200,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             return response;
         }
 
-        public async Task<RestResponse> PostWebHookAndUoSResponse200OK(string webHookfilePath, string uosFilePath, string generatedXMLFolder, string generatedJSONFolder, string webhookToken, string uosKey)
+        public async Task<RestResponse> PostWebHookAndUoSResponse200OK(string webHookfilePath, string uosFilePath, string generatedXMLFolder, string generatedJsonFolder, string webhookToken, string uosKey)
         {
             await _webhook.PostWebhookResponseAsyncForXML(webHookfilePath, generatedXMLFolder, webhookToken);
             string requestBody = _jsonHelper.GetDeserializedString(uosFilePath);
@@ -228,31 +228,33 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
                 }).ToList();
                 string correlationId = jsonSAPPriceInfoPayload[0].Corrid;
                 string generatedJsonCorrelationId = "";
-                string generatedJSONBody = "";
-                string generatedJSONFilePath = azureBlobStorageHelper.DownloadJsonFromAzureBlob(generatedJSONFolder, correlationId, "json");
-                using (StreamReader streamReader = new StreamReader(generatedJSONFilePath))
+                string generatedJsonBody = "";
+                string generatedJsonFilePath = azureBlobStorageHelper.DownloadJsonFromAzureBlob(generatedJsonFolder, correlationId, "json");
+                using (StreamReader streamReader = new(generatedJsonFilePath))
                 {
-                    generatedJSONBody = streamReader.ReadToEnd();
+                    generatedJsonBody = streamReader.ReadToEnd();
                 }
-                FinalUoSOutput generatedJsonPayload = JsonConvert.DeserializeObject<FinalUoSOutput>(generatedJSONBody);
+                FinalUoSOutput generatedJsonPayload = JsonConvert.DeserializeObject<FinalUoSOutput>(generatedJsonBody);
                 generatedJsonCorrelationId = generatedJsonPayload.data.correlationId;
                 Assert.That(correlationId.Equals(generatedJsonCorrelationId), Is.True, "correlationIds from SAP and FinalUOS are not same");
 
-                Unitsofsaleprice[] data = generatedJsonPayload.data.unitsOfSalePrices;
-                List<string> finalUintNames = data.Select(x => x.unitName).ToList();
-                List<string> SAPProductNames = jsonSAPPriceInfoPayload.Select(x => x.Productname).Distinct().ToList();
+                UnitsofSalePrice[] data = generatedJsonPayload.data.unitsOfSalePrices;
+                List<string> finalUnitName = data.Select(x => x.unitName).ToList();
+                List<string> SAPProductName = jsonSAPPriceInfoPayload.Select(x => x.Productname).Distinct().ToList();
 
                 var effectivePrices = data.Select(x => x.price);
-                List<EffectiveDatesPerProduct> effectiveDates = new List<EffectiveDatesPerProduct>();
-                foreach (Unitsofsaleprice unit in data)
+                List<EffectiveDatesPerProduct> effectiveDates = new();
+                foreach (UnitsofSalePrice unit in data)
                 {
                     foreach (var prices in unit.price)
                     {
-                        EffectiveDatesPerProduct effectiveDate = new EffectiveDatesPerProduct();
-                        effectiveDate.ProductName = unit.unitName;
-                        effectiveDate.EffectiveDates = prices.effectiveDate;
-                        effectiveDate.Duration = prices.standard.priceDurations[0].numberOfMonths;
-                        effectiveDate.rrp = prices.standard.priceDurations[0].rrp;
+                        EffectiveDatesPerProduct effectiveDate = new()
+                        {
+                            ProductName = unit.unitName,
+                            EffectiveDates = prices.effectiveDate,
+                            Duration = prices.standard.priceDurations[0].numberOfMonths,
+                            rrp = prices.standard.priceDurations[0].rrp
+                        };
                         effectiveDates.Add(effectiveDate);
                     }
                 }

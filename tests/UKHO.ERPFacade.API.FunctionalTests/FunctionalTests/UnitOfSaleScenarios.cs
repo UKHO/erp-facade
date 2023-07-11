@@ -59,7 +59,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             string generatedJSONFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedJSONFolder);
             string webhookToken = await _authToken.GetAzureADToken(false);
             string uOSKey = Config.TestConfig.SharedKeyConfiguration.Key;
-            var response = await _unitOfSale.PostWebHookAndUoSResponseAsyncWithJSON(filePathWebhook, filePathUOS, generatedXMLFolder, generatedJSONFolder, webhookToken, uOSKey);
+            var response = await _unitOfSale.PostWebHookAndUoSResponseAsyncWithJson(filePathWebhook, filePathUOS, generatedXMLFolder, generatedJSONFolder, webhookToken, uOSKey);
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
         
