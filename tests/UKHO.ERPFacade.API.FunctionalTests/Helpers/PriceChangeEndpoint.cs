@@ -229,7 +229,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             Assert.AreEqual(System.Net.HttpStatusCode.OK, response.StatusCode);
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                Thread.Sleep(90000);
+                Thread.Sleep(100000);
                 responseHeadercorrelationID = getResponseHeaderCorrelationID(response);
                 UniquePdtFromInputPayload = getProductListFromInputPayload(filePath);
                 List<string> UniquePdtFromAzureStorage = azureBlobStorageHelper.GetProductListFromBlobContainerAsync(responseHeadercorrelationID).Result;

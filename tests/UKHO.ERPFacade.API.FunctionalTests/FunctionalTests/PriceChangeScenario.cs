@@ -26,7 +26,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         public async Task WhenValidPriceChangeEventReceivedWithValidToken_ThenPriceChangeReturns200OkResponse()
         {
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.PriceChangePayloadFileName);
-            var response = await _priceChange.PostPriceChangeResponseAsync(filePath,Config.TestConfig.SharedKeyConfiguration.Key);
+            var response = await _priceChange.PostPriceChangeResponseAsync(filePath, Config.TestConfig.SharedKeyConfiguration.Key);
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
         }
@@ -76,10 +76,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             string generatedProductJsonFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedProductJsonFolder);
             var response = await _priceChange.PostPriceChangeResponse200OKPAYSF12Months(filePath, generatedProductJsonFolder, Config.TestConfig.SharedKeyConfiguration.Key);
             //response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-             Assert.That(response, Is.True, "PAYSF Price Info for 12 months {0} are displayed");
+            Assert.That(response, Is.True, "PAYSF Price Info for 12 months {0} are displayed");
         }
 
-
+       
 
     }
 }
