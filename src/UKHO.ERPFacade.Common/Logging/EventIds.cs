@@ -405,8 +405,38 @@
         UpdatePublishDateTimeEntitySuccessful = 940082,
 
         /// <summary>
-        /// 940083 - Failed to connect to the enterprise event service
+        /// 940075 - Error occurred while connecting EES
         /// </summary>
-        EnterpriseEventServiceEventConnectionFailure = 940083,
+        ErrorOccurredInEES = 940083,
+
+        /// <summary>
+        /// 940076 - EES Health Check Request Sent To EES
+        /// </summary>
+        EESHealthCheckRequestSentToEES = 940084,
+
+        /// <summary>
+        /// 940077 - SAP Is Healthy
+        /// </summary>
+        SAPIsHealthy = 940085,
+
+        /// <summary>
+        /// 940078 - SAP Is Unhealty
+        /// </summary>
+        SAPIsUnhealthy = 940086,
+
+        /// <summary>
+        /// 940079 - EES Is Healthy
+        /// </summary>
+        EESIsHealthy = 940087,
+
+        /// <summary>
+        /// 940080 - EES Is Unhealty
+        /// </summary>
+        EESIsUnhealthy = 940088,
+
+        /// <summary>
+        /// 940089 - Failed to connect to the enterprise event service
+        /// </summary>
+        EnterpriseEventServiceEventConnectionFailure = 940089,
     }
 }
