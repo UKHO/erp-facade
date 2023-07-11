@@ -84,7 +84,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
                 Assert.That(SAPXmlHelper.VerifyOrderOfActions(jsonPayload, generatedXMLFilePath), Is.True);
                 Assert.That(SAPXmlHelper.CheckXMLAttributes(jsonPayload, generatedXMLFilePath, requestBody).Result, Is.True);
             }
-
             return response;
         }
     }

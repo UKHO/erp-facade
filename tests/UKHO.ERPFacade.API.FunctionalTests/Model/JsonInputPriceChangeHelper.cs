@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Model
 {
@@ -19,15 +14,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
         public string Productname { get; set; }
 
         [JsonProperty("duration")]
-        //[JsonConverter(typeof(ParseStringConverter))]
         public long Duration { get; set; }
 
         [JsonProperty("effectivedate")]
-        //[JsonConverter(typeof(ParseStringConverter))]
         public long Effectivedate { get; set; }
 
         [JsonProperty("effectivetime")]
-        //[JsonConverter(typeof(ParseStringConverter))]
         public long Effectivetime { get; set; }
 
         [JsonProperty("price")]
@@ -37,7 +29,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
         public string Currency { get; set; }
 
         [JsonProperty("futuredate")]
-        //[JsonConverter(typeof(ParseStringConverter))]
         public long? Futuredate { get; set; }
 
         [JsonProperty("futuretime")]
@@ -50,11 +41,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
         public string? Futurecurr { get; set; }
 
         [JsonProperty("reqdate")]
-        //[JsonConverter(typeof(ParseStringConverter))]
         public long Reqdate { get; set; }
 
         [JsonProperty("reqtime")]
-        //[JsonConverter(typeof(ParseStringConverter))]
         public long Reqtime { get; set; }
     }
 }
