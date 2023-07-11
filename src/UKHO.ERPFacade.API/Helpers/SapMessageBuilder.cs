@@ -33,6 +33,8 @@ namespace UKHO.ERPFacade.API.Helpers
         private const string UnitSaleType = "unit";
         private const string EncCell = "ENC CELL";
         private const string AvcsUnit = "AVCS UNIT";
+        private const string RecDateFormat = "yyyyMMdd";
+        private const string RecTimeFormat = "hhmmss";
 
         public SapMessageBuilder(ILogger<SapMessageBuilder> logger,
                                  IXmlHelper xmlHelper,
@@ -260,8 +262,8 @@ namespace UKHO.ERPFacade.API.Helpers
 
             corrId.InnerText = correlationId;
             noOfActions.InnerText = xmlNode.ChildNodes.Count.ToString();
-            recDate.InnerText = DateTime.UtcNow.ToString("yyyyMMdd");
-            recTime.InnerText = DateTime.UtcNow.ToString("hhmmss");
+            recDate.InnerText = DateTime.UtcNow.ToString(RecDateFormat);
+            recTime.InnerText = DateTime.UtcNow.ToString(RecTimeFormat);
 
             IM_MATINFONode.AppendChild(xmlNode);
 
@@ -372,9 +374,19 @@ namespace UKHO.ERPFacade.API.Helpers
 
         private static string GetXmlNodeValue(string fieldValue, string xmlNodeName = null)
         {
-            return !string.IsNullOrWhiteSpace(fieldValue)
-                ? xmlNodeName == ProdType ? GetProdType(fieldValue) : fieldValue.Substring(0, Math.Min(250, fieldValue.Length))
-                : string.Empty;
+            if (!string.IsNullOrWhiteSpace(fieldValue))
+            {
+                if (xmlNodeName == ProdType)
+                {
+                    return GetProdType(fieldValue);
+                }
+
+                return fieldValue.Substring(0, Math.Min(250, fieldValue.Length));
+            }
+            return string.Empty;
+            //return !string.IsNullOrWhiteSpace(fieldValue)
+            //    ? xmlNodeName == ProdType ? GetProdType(fieldValue) : fieldValue.Substring(0, Math.Min(250, fieldValue.Length))
+            //    : string.Empty;
         }
 
         private static string GetProdType(string prodType)
