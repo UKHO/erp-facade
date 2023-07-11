@@ -31,7 +31,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
         }
 
-        [Test(Description = "WhenValidPriceChangeEventReceivedWithInvalidToken_ThenPriceChangeReturns401UnAuthorizedResponse"), Order(1)]
+        [Test(Description = "WhenValidPriceChangeEventReceivedWithInvalidToken_ThenPriceChangeReturns401UnAuthorizedResponse"), Order(9)]
         public async Task WhenValidPriceChangeEventReceivedWithInvalidToken_ThenPriceChangeReturns401UnAuthorizedResponse()
         {
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.PriceChangePayloadFileName);
@@ -41,14 +41,59 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
         }
         
-        [Test, Order(0)]
-        [TestCase("PC1_MultipleProduct.JSON", TestName = "WhenValidEventReceivedWithValidTokenandMultipleProduct_ThenPriceChangeReturn200OkResponse")]
-        [TestCase("PC2_FutureDateBlank.JSON", TestName = "WhenValidEventReceivedWithValidTokenandFutureDateBlank_ThenPriceChangeReturn200OkResponse")]
-        [TestCase("PC3_MultipleProductDifferentDuration.JSON", TestName = "WhenValidEventReceivedWithValidTokenandMultipleProductDifferentDuration_ThenPriceChangeReturn200OkResponse")]
-        [TestCase("PC4_MultipleDurationSameEffectiveAndFutureDate.JSON", TestName = "WhenValidEventReceivedWithValidTokenandMultipleDurationSameEffectiveAndFutureDate_ThenPriceChangeReturn200OkResponse")]
-        [TestCase("PC5_MultipleDurationDifferentEffectiveAndFutureDate.JSON", TestName = "WhenValidEventReceivedWithValidTokenandMultipleDurationDifferentEffectiveAndFutureDate_ThenPriceChangeReturn200OkResponse")]
-        [TestCase("PC6_MultipleDurationSameEffectiveDifferentFutureDate.JSON", TestName = "WhenValidEventReceivedWithValidTokenandMultipleDurationSameEffectiveDifferentFutureDate_ThenPriceChangeReturn200OkResponse")]
-        public async Task WhenValidEventReceivedWithValidTokenand_ThenPriceChangeReturn200OkResponse(string payloadJsonFileName)
+        [Test, Order(1)]
+        [TestCase("PC1_MultipleProduct.JSON", TestName = "WhenMultipleProduct_ThenPriceChangeReturn200OkResponse")]
+        public async Task WhenMultipleProduct_ThenPriceChangeReturn200OkResponse(string payloadJsonFileName)
+        {
+            string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, payloadJsonFileName);
+            string generatedProductJsonFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedProductJsonFolder);
+            var response = await _priceChange.PostPriceChangeResponseAsyncForJSON(filePath, generatedProductJsonFolder, Config.TestConfig.SharedKeyConfiguration.Key);
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
+        }
+        [Test, Order(2)]
+        [TestCase("PC2_FutureDateBlank.JSON", TestName = "WhenFutureDateBlank_ThenPriceChangeReturn200OkResponse")]
+        public async Task WhenFutureDateBlank_ThenPriceChangeReturn200OkResponse(string payloadJsonFileName)
+        {
+            string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, payloadJsonFileName);
+            string generatedProductJsonFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedProductJsonFolder);
+            var response = await _priceChange.PostPriceChangeResponseAsyncForJSON(filePath, generatedProductJsonFolder, Config.TestConfig.SharedKeyConfiguration.Key);
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
+        }
+        [Test, Order(3)]
+        [TestCase("PC3_MultipleProductDifferentDuration.JSON", TestName = "WhenMultipleProductDifferentDuration_ThenPriceChangeReturn200OkResponse")]
+        public async Task WhenMultipleProductDifferentDuration_ThenPriceChangeReturn200OkResponse(string payloadJsonFileName)
+        {
+            string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, payloadJsonFileName);
+            string generatedProductJsonFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedProductJsonFolder);
+            var response = await _priceChange.PostPriceChangeResponseAsyncForJSON(filePath, generatedProductJsonFolder, Config.TestConfig.SharedKeyConfiguration.Key);
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
+        }
+        [Test, Order(4)]
+        [TestCase("PC4_MultipleDurationSameEffectiveAndFutureDate.JSON", TestName = "WhenMultipleDurationSameEffectiveAndFutureDate_ThenPriceChangeReturn200OkResponse")]
+        public async Task WhenMultipleDurationSameEffectiveAndFutureDate_ThenPriceChangeReturn200OkResponse(string payloadJsonFileName)
+        {
+            string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, payloadJsonFileName);
+            string generatedProductJsonFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedProductJsonFolder);
+            var response = await _priceChange.PostPriceChangeResponseAsyncForJSON(filePath, generatedProductJsonFolder, Config.TestConfig.SharedKeyConfiguration.Key);
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
+        }
+        [Test, Order(5)]
+        [TestCase("PC5_MultipleDurationDifferentEffectiveAndFutureDate.JSON", TestName = "WhenMultipleDurationDifferentEffectiveAndFutureDate_ThenPriceChangeReturn200OkResponse")]
+        public async Task WhenMultipleDurationDifferentEffectiveAndFutureDate_ThenPriceChangeReturn200OkResponse(string payloadJsonFileName)
+        {
+            string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, payloadJsonFileName);
+            string generatedProductJsonFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedProductJsonFolder);
+            var response = await _priceChange.PostPriceChangeResponseAsyncForJSON(filePath, generatedProductJsonFolder, Config.TestConfig.SharedKeyConfiguration.Key);
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
+        }
+        [Test, Order(6)]
+        [TestCase("PC6_MultipleDurationSameEffectiveDifferentFutureDate.JSON", TestName = "WhenMultipleDurationSameEffectiveDifferentFutureDate_ThenPriceChangeReturn200OkResponse")]
+        public async Task WhenMultipleDurationSameEffectiveDifferentFutureDate_ThenPriceChangeReturn200OkResponse(string payloadJsonFileName)
         {
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, payloadJsonFileName);
             string generatedProductJsonFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedProductJsonFolder);
@@ -57,9 +102,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
         }
         
-        [Test, Order(3)]
-        [TestCase("PC7_ExistingCorrId.JSON", TestName = "WhenValidEventReceivedWithValidTokenandExistingCorelationID_ThenPriceChangeReturn500InternalServerErrorResponse")]
-        public async Task WhenValidEventReceivedWithValidTokenandExistingCorelationID_ThenPriceChangeReturn500InternalServerErrorResponse(string payloadJsonFileName)
+        [Test, Order(8)]
+        [TestCase("PC7_ExistingCorrId.JSON", TestName = "WhenExistingCorelationID_ThenPriceChangeReturn500InternalServerErrorResponse")]
+        public async Task WhenExistingCorelationID_ThenPriceChangeReturn500InternalServerErrorResponse(string payloadJsonFileName)
         {
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, payloadJsonFileName);
             string generatedProductJsonFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedProductJsonFolder);
@@ -68,8 +113,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
         }
 
-        [Test, Order(0)]
-        [TestCase("PC1_MultipleProduct.JSON", TestName = "WhenPAYSFwith12MonthDuration_PriceChangeAlteredPAYSFPrices")]
+        [Test, Order(7)]
+        [TestCase("PC8_PAYSFDuration12Month.JSON", TestName = "WhenPAYSFwith12MonthDuration_PriceChangeAlteredPAYSFPrices")]
         public async Task WhenPAYSFwith12MonthDuration_PriceChangeAlteredPAYSFPrices(string payloadJsonFileName)
         {
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, payloadJsonFileName);
