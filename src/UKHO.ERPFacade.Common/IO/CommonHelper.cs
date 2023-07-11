@@ -48,10 +48,19 @@ namespace UKHO.ERPFacade.Common.IO
 
         public static string ToIndentedString(this XmlDocument doc)
         {
-            var stringWriter = new StringWriter(new StringBuilder());
-            var xmlTextWriter = new XmlTextWriter(stringWriter) { Formatting = Formatting.Indented };
-            doc.Save(xmlTextWriter);
-            return stringWriter.ToString();
+            StringBuilder sb = new StringBuilder();
+            XmlWriterSettings settings = new XmlWriterSettings
+            {
+                Indent = true,
+                IndentChars = "  ",
+                NewLineChars = "\r\n",
+                NewLineHandling = NewLineHandling.Replace
+            };
+            using (XmlWriter writer = XmlWriter.Create(sb, settings))
+            {
+                doc.Save(writer);
+            }
+            return sb.ToString();
         }
     }
 }
