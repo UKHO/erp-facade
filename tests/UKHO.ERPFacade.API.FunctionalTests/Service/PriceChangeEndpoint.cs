@@ -8,9 +8,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
 {
     public class PriceChangeEndpoint
     {
-
         private readonly RestClient client;
-        private readonly JSONHelper _jSONHelper;
+        private readonly JsonHelper _jsonHelper;
         //private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
 
         public JsonOutputPriceChangeHelper _jsonOuputPriceChangeHelper { get; set; }
@@ -24,7 +23,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             var options = new RestClientOptions(url);
             client = new RestClient(options);
             azureBlobStorageHelper = new();
-            _jSONHelper = new JSONHelper();
+            _jsonHelper = new JsonHelper();
         }
 
         public async Task<RestResponse> PostPriceChangeResponseAsync(string filePath, string sharedKey)
@@ -89,7 +88,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
 
                 foreach (string products in UniquePdtFromAzureStorage)
                 {
-                    string generatedProductJsonFile = azureBlobStorageHelper.DownloadJSONFromAzureBlob(generatedProductJsonFolder, responseHeadercorrelationID, products, "ProductChange");
+                    string generatedProductJsonFile = AzureBlobStorageHelper.DownloadJSONFromAzureBlob(generatedProductJsonFolder, responseHeadercorrelationID, products, "ProductChange");
                     Console.WriteLine(generatedProductJsonFile);
 
                     JsonOutputPriceChangeHelper desiailzedProductOutput = getDeserializedProductJson(generatedProductJsonFile);
@@ -174,15 +173,15 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
 
         private List<string> getProductListFromInputPayload(string inputJSONFilePath)
         {
-            string jsonPayload = _jSONHelper.getDeserializedString(inputJSONFilePath);
+            string jsonPayload = _jsonHelper.GetDeserializedString(inputJSONFilePath);
             _jsonInputPriceChangeHelper = JsonConvert.DeserializeObject<List<JsonInputPriceChangeHelper>>(jsonPayload);
-            UniquePdtFromInputPayload = _jSONHelper.GetProductListProductListFromSAPPayload(_jsonInputPriceChangeHelper);
+            UniquePdtFromInputPayload = JsonHelper.GetProductListFromSAPPayload(_jsonInputPriceChangeHelper);
             return UniquePdtFromInputPayload;
         }
 
         private JsonOutputPriceChangeHelper getDeserializedProductJson(string generatedProductJson)
         {
-            string jsonString = _jSONHelper.getDeserializedString(generatedProductJson);
+            string jsonString = _jsonHelper.GetDeserializedString(generatedProductJson);
             _jsonOuputPriceChangeHelper = JsonConvert.DeserializeObject<JsonOutputPriceChangeHelper>(jsonString);
             return _jsonOuputPriceChangeHelper;
         }

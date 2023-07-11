@@ -9,7 +9,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
     [TestFixture]
     public class UnitOfSaleScenarios
     {
-
         private UnitOfSaleEndpoint _unitOfSale { get; set; }
         private WebhookEndpoint _webhook { get; set; }
         private readonly ADAuthTokenProvider _authToken = new();
