@@ -9,11 +9,9 @@ namespace UKHO.ERPFacade.Common.Models
     {
         public UnitOfSalePriceEventPayload(UnitOfSalePriceEvent unitOfSalePriceEvent)
         {
-            EventData = unitOfSalePriceEvent;
+            Data = unitOfSalePriceEvent;
         }
 
-        public override string EventName => "uk.gov.ukho.encpublishing.enccontentpublished.v2";
-        public override string Subject => EventData.Subject;
     }
 
     [ExcludeFromCodeCoverage]
@@ -33,9 +31,6 @@ namespace UKHO.ERPFacade.Common.Models
 
         [JsonProperty("time")]
         public string Time { get; set; }
-
-        [JsonProperty("_COMMENT")]
-        public string _COMMENT { get; set; }
 
         [JsonProperty("subject")]
         public string Subject { get; set; }

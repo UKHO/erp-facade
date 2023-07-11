@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\UKHO.ERPFacade.Common\UKHO.ERPFacade.Common.csproj" />
     <ProjectReference Include="..\..\src\UKHO.SAP.MockAPIService\UKHO.SAP.MockAPIService.csproj" />
   </ItemGroup>
 
