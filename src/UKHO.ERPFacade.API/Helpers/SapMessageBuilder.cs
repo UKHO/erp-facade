@@ -123,9 +123,9 @@ namespace UKHO.ERPFacade.API.Helpers
                                 actionItemNode.AppendChild(actionNode);
                                 _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
                             }
-                            break;                       
+                            break;
 
-                    }                    
+                    }
                 }
 
                 //Actions for AVCS UNIT
@@ -137,7 +137,7 @@ namespace UKHO.ERPFacade.API.Helpers
 
                         XmlElement actionNode;
                         switch (action.ActionNumber)
-                        {                            
+                        {
                             case 10:
                                 foreach (var rules in action.Rules)
                                 {
@@ -192,7 +192,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                 }
                                 break;
 
-                        }                        
+                        }
                     }
                 }
             }
@@ -224,7 +224,9 @@ namespace UKHO.ERPFacade.API.Helpers
                             }
                             if (IsConditionSatisfied)
                             {
-                                var product = eventData.Data.Products.Where(x => x.ProductName == unitOfSale.UnitName).FirstOrDefault();
+                                var product = eventData.Data.Products.Where(x => x.InUnitsOfSale.Contains(unitOfSale.UnitName)
+                                              && unitOfSale.UnitOfSaleType == UnitSaleType).FirstOrDefault();
+
                                 actionNode = BuildAction(soapXml, product, unitOfSale, action);
                                 actionItemNode.AppendChild(actionNode);
                                 _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
@@ -254,7 +256,7 @@ namespace UKHO.ERPFacade.API.Helpers
                             }
                             break;
 
-                    }                    
+                    }
                 }
             }
 
