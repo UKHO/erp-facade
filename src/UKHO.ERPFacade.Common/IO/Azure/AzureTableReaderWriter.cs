@@ -130,7 +130,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             {
                 if (tableItem.RequestDateTime.HasValue)
                 {
-                    if (!tableItem.ResponseDateTime.HasValue && (tableItem.RequestDateTime.Value - DateTime.Now) <= TimeSpan.FromMinutes(callBackDuration)
+                    if (!tableItem.ResponseDateTime.HasValue && (DateTime.UtcNow - tableItem.RequestDateTime.Value) > TimeSpan.FromMinutes(callBackDuration)
                         ||
                         tableItem.ResponseDateTime.HasValue && ((tableItem.ResponseDateTime.Value - tableItem.RequestDateTime.Value) > TimeSpan.FromMinutes(callBackDuration)))
                     {
