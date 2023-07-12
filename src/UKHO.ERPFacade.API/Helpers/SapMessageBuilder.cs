@@ -121,6 +121,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                 _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
                             }
                             break;
+
                     }
                 }
 
@@ -187,6 +188,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                     IsConditionSatisfied = false;
                                 }
                                 break;
+
                         }
                     }
                 }
@@ -219,7 +221,9 @@ namespace UKHO.ERPFacade.API.Helpers
                             }
                             if (IsConditionSatisfied)
                             {
-                                var product = eventData.Data.Products.Where(x => x.ProductName == unitOfSale.UnitName).FirstOrDefault();
+                                var product = eventData.Data.Products.Where(x => x.InUnitsOfSale.Contains(unitOfSale.UnitName)
+                                              && unitOfSale.UnitOfSaleType == UnitSaleType).FirstOrDefault();
+
                                 actionNode = BuildAction(soapXml, product, unitOfSale, action);
                                 actionItemNode.AppendChild(actionNode);
                                 _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
@@ -249,6 +253,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                 _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
                             }
                             break;
+
                     }
                 }
             }
@@ -425,9 +430,14 @@ namespace UKHO.ERPFacade.API.Helpers
             var unitOfSales = listOfUnitOfSales.Where(x => x.UnitOfSaleType == UnitSaleType && product.InUnitsOfSale.Contains(x.UnitName)).ToList();
             if (unitOfSales.Any())
             {
-                unitOfSale = unitOfSales.Count > 1
-                    ? unitOfSales.Where(x => x.CompositionChanges.AddProducts.Contains(product.ProductName)).FirstOrDefault()
-                    : unitOfSales.FirstOrDefault();
+                if (unitOfSales.Count > 1)
+                {
+                    unitOfSale = unitOfSales.Where(x => x.CompositionChanges.AddProducts.Contains(product.ProductName)).FirstOrDefault();
+                }
+                else
+                {
+                    unitOfSale = unitOfSales.FirstOrDefault();
+                }
             }
             return unitOfSale!;
         }

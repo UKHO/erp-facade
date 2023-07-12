@@ -102,6 +102,12 @@
     <None Update="ERPFacadePayloadTestData\PC2_FutureDateBlank.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ERPFacadePayloadTestData\ID37_CreateUoSHavingMultipleItemsInAddProducts.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\PriceChangeInput.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ERPFacadePayloadTestData\ID20_newEditionAdditionalCoverageV_01.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
