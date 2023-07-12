@@ -13,7 +13,6 @@ using UKHO.ERPFacade.Common.Infrastructure;
 using UKHO.ERPFacade.Common.Infrastructure.Config;
 using UKHO.ERPFacade.Common.Infrastructure.EventService;
 using UKHO.ERPFacade.Common.Infrastructure.EventService.EventProvider;
-using UKHO.ERPFacade.Common.IO.Azure;
 
 namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvider
 {
@@ -21,23 +20,20 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
     {
         private readonly string _fakeServiceUrl = "https://testservice.com";
         private EnterpriseEventServiceEventPublisher _fakeEnterpriseEventServiceEventPublisher;
-        private ICloudEventFactory _fakeCloudEventFactory;
         private IHttpClientFactory _fakeHttpClientFactory;
         private MockHttpMessageHandler _fakeHttpClientMessageHandler;
         private OptionsWrapper<ErpPublishEventSource> _optionsWrapper;
         private HttpClient _fakeHttpClient;
         private ErpPublishEventSource _fakeErpPublishEventSource;
         private ILogger<EnterpriseEventServiceEventPublisher> _fakeLogger;
-        private IAzureBlobEventWriter _fakeAzureBlobEventWriter;
 
         [SetUp]
         public void Setup()
         {
             _fakeLogger = A.Fake<ILogger<EnterpriseEventServiceEventPublisher>>();
-            _fakeCloudEventFactory = A.Fake<ICloudEventFactory>();
             _fakeHttpClientFactory = A.Fake<IHttpClientFactory>();
             _fakeHttpClientMessageHandler = new MockHttpMessageHandler();
-            _fakeAzureBlobEventWriter = A.Fake<IAzureBlobEventWriter>();
+
             _fakeErpPublishEventSource = new ErpPublishEventSource
             {
                 ClientId = "testClientId",
@@ -52,19 +48,17 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
             _fakeHttpClient.BaseAddress = new Uri(_fakeServiceUrl);
             A.CallTo(() => _fakeHttpClientFactory.CreateClient(EnterpriseEventServiceEventPublisher.EventServiceClientName)).Returns(_fakeHttpClient);
 
-            _fakeEnterpriseEventServiceEventPublisher = new EnterpriseEventServiceEventPublisher(_fakeLogger, _fakeCloudEventFactory, _fakeHttpClientFactory, _optionsWrapper, _fakeAzureBlobEventWriter);
+            _fakeEnterpriseEventServiceEventPublisher = new EnterpriseEventServiceEventPublisher(_fakeLogger, _fakeHttpClientFactory, _optionsWrapper);
         }
 
         [Test]
         public async Task Publish_SendsSerializedEventData_UsingEventServiceHttpClient()
         {
-            var eventData = A.Dummy<EventBase<string>>();
             var cloudEvent = new CloudEvent<string>
             {
                 Data = "test"
             };
 
-            A.CallTo(() => _fakeCloudEventFactory.Create(eventData)).Returns(cloudEvent);
             _fakeHttpClientMessageHandler
                 .Expect(HttpMethod.Post, $"{_fakeServiceUrl}/{_fakeErpPublishEventSource.PublishEndpoint}")
                 .Respond(req => new HttpResponseMessage());
@@ -72,13 +66,13 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
             await _fakeEnterpriseEventServiceEventPublisher.Publish(cloudEvent);
 
             A.CallTo(() => _fakeHttpClientFactory.CreateClient(EnterpriseEventServiceEventPublisher.EventServiceClientName)).MustHaveHappened();
+
             _fakeHttpClientMessageHandler.VerifyNoOutstandingExpectation();
         }
 
         [Test]
         public async Task Publish_SendsSerializedEventData_SendsAValidCloudEventRequest()
         {
-            var eventData = A.Dummy<EventBase<string>>();
             var cloudEvent = new CloudEvent<string>
             {
                 Data = "test"
@@ -86,7 +80,6 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
 
             var jsonOptions = new JsonSerializerOptions();
             jsonOptions.Converters.Add(new RoundTripDateTimeConverter());
-            A.CallTo(() => _fakeCloudEventFactory.Create(eventData)).Returns(cloudEvent);
 
             _fakeHttpClientMessageHandler
                 .Expect("*")
@@ -97,6 +90,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
             var result = await _fakeEnterpriseEventServiceEventPublisher.Publish(cloudEvent);
 
             A.CallTo(() => _fakeHttpClientFactory.CreateClient(EnterpriseEventServiceEventPublisher.EventServiceClientName)).MustHaveHappened();
+
             _fakeHttpClientMessageHandler.VerifyNoOutstandingExpectation();
             Assert.That(result.Status, Is.EqualTo(Result.Statuses.Success));
         }
@@ -104,13 +98,11 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
         [Test]
         public async Task Publish_SendsSerializedEventData_ReturnsFailureIfHttpRequestThrows()
         {
-            var eventData = A.Dummy<EventBase<string>>();
             var cloudEvent = new CloudEvent<string>
             {
                 Data = "test"
             };
 
-            A.CallTo(() => _fakeCloudEventFactory.Create(eventData)).Returns(cloudEvent);
             _fakeHttpClientMessageHandler
                 .Expect("*")
                 .Throw(new Exception());
@@ -124,13 +116,11 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
         [Test]
         public async Task Publish_SendsSerializedEventData_ReturnsFailureIfHttpResponseIsNotSuccess()
         {
-            var eventData = A.Dummy<EventBase<string>>();
             var cloudEvent = new CloudEvent<string>
             {
                 Data = "test"
             };
 
-            A.CallTo(() => _fakeCloudEventFactory.Create(eventData)).Returns(cloudEvent);
             _fakeHttpClientMessageHandler
                 .Expect("*")
                 .Respond(req => new HttpResponseMessage(HttpStatusCode.InternalServerError));
