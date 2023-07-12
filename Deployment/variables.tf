@@ -32,6 +32,7 @@ variable "sku_name" {
   default = {
              "dev"  =  "P1v2"
              "qa"   =  "P1v3"
+             live   =  "P1v3"
             }
 }
 
