@@ -1,19 +1,19 @@
-﻿using FakeItEasy;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Xml;
+using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Xml;
 using UKHO.ERPFacade.API.Helpers;
-using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
-using System.Reflection;
+using UKHO.ERPFacade.Common.Models;
 
 namespace UKHO.ERPFacade.API.UnitTests.Helpers
 {

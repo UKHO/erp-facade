@@ -9,6 +9,14 @@
     <IsTestProject>true</IsTestProject>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;8632</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoWarn>1701;1702;8632</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="Helpers\UnitOfSaleEndpoint - Copy.cs" />
   </ItemGroup>
@@ -81,13 +89,13 @@
     <None Update="ERPFacadePayloadTestData\ID36_MoveAndSuspended_With_2UoS_But1_Having_addProductsValue.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ERPFacadePayloadTestData\PC7_PAYSFDuration12Month.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ERPFacadePayloadTestData\PC3_MultipleProductDifferentDuration.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPFacadePayloadTestData\PC6_MultipleDurationSameEffectiveDifferentFutureDate.JSON">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ERPFacadePayloadTestData\PC7_ExistingCorrId.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPFacadePayloadTestData\PC1_MultipleProduct.JSON">
@@ -100,6 +108,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPFacadePayloadTestData\PC2_FutureDateBlank.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\ID37_CreateUoSHavingMultipleItemsInAddProducts.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\PriceChangeInput.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPFacadePayloadTestData\ID20_newEditionAdditionalCoverageV_01.JSON">
@@ -194,6 +208,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPFacadePayloadTestData\UoS_10_DiffntEffectiveAndDiffFutureDate.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\UoS_12_SAPPricing_PAYSF12Months.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPFacadePayloadTestData\UoS_4_FutureDateFieldBlank.JSON">

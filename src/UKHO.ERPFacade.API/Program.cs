@@ -1,3 +1,6 @@
+using System.Diagnostics.CodeAnalysis;
+using System.IO.Abstractions;
+using System.Reflection;
 using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
@@ -7,19 +10,16 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Newtonsoft.Json.Serialization;
 using Serilog;
-using System.Diagnostics.CodeAnalysis;
-using System.IO.Abstractions;
-using System.Reflection;
 using UKHO.ERPFacade.API.Filters;
 using UKHO.ERPFacade.API.Helpers;
-using UKHO.ERPFacade.Common.Models;
-using UKHO.ERPFacade.Common.Services;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.HealthCheck;
 using UKHO.ERPFacade.Common.HttpClients;
-using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Infrastructure;
+using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.IO.Azure;
+using UKHO.ERPFacade.Common.Models;
+using UKHO.ERPFacade.Common.Services;
 using UKHO.Logging.EventHubLogProvider;
 
 namespace UKHO.ERPFacade
@@ -140,8 +140,7 @@ namespace UKHO.ERPFacade
 
             builder.Services.AddAuthorization(options =>
             {
-                options.AddPolicy("WebhookCaller", policy => policy.RequireRole("WebhookCaller"));
-                options.AddPolicy("PriceInformationApiCaller", policy => policy.RequireRole("PriceInformationApiCaller"));
+                options.AddPolicy("WebhookCaller", policy => policy.RequireRole("WebhookCaller"));                
             });
 
             // The following line enables Application Insights telemetry collection.
@@ -168,6 +167,7 @@ namespace UKHO.ERPFacade
 
             builder.Services.Configure<SapActionConfiguration>(configuration.GetSection("SapActionConfiguration"));
             sapActionConfiguration = configuration.GetSection("SapActionConfiguration").Get<SapActionConfiguration>()!;
+            builder.Services.Configure<EESHealthCheckEnvironmentConfiguration>(configuration.GetSection("EESHealthCheckEnvironmentConfiguration"));
 
             builder.Services.AddInfrastructure();
 
@@ -183,9 +183,11 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<IErpFacadeService, ErpFacadeService>();
             builder.Services.AddScoped<IJsonHelper, JsonHelper>();
             builder.Services.AddScoped<SharedKeyAuthFilter>();
+            builder.Services.AddScoped<IEESClient, EESClient>();
 
             builder.Services.AddHealthChecks()
-                .AddCheck<SapServiceHealthCheck>("SapServiceHealthCheck");
+                .AddCheck<SapServiceHealthCheck>("SapServiceHealthCheck")
+                .AddCheck<EESServiceHealthCheck>("EESServiceHealthCheck");
 
             builder.Services.AddHttpClient<ISapClient, SapClient>(c =>
             {
