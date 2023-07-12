@@ -522,7 +522,6 @@ stages:
     variables:
       - group: "ERP-Facade-Live"
       - group: "Erp-Live"
-      - group: "ERP-FACADE-Live-KV"
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
     jobs:
       - deployment: LiveDeployTerraform
