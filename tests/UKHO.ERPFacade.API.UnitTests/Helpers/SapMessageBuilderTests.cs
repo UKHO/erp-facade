@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using NUnit.Framework;
 using UKHO.ERPFacade.API.Helpers;
 using UKHO.ERPFacade.API.UnitTests.Common;
+using UKHO.ERPFacade.Common.Infrastructure;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
@@ -27,6 +28,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         private ILogger<SapMessageBuilder> _fakeLogger;
 
         private SapMessageBuilder _fakeSapMessageBuilder;
+        private const string XpathActionItems = $"//*[local-name()='ACTIONITEMS']";
+        private const string EncCell = "ENC CELL";
 
         private readonly string sapXmlFile = @"<?xml version=""1.0"" encoding=""utf-8""?>
 <soap:Envelope xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:soap=""http://schemas.xmlsoap.org/soap/envelope/"">
@@ -94,7 +97,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             var result = _fakeSapMessageBuilder.BuildSapMessageXml(scenarios!, correlationId);
 
             result.Should().BeOfType<XmlDocument>();
-
+            var actionItem = result.SelectSingleNode(XpathActionItems);
+            actionItem.ChildNodes.Count.Should().Be(17);
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
             && call.GetArgument<EventId>(1) == EventIds.BuildingSapActionStarted.ToEventId()
@@ -121,6 +125,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             var result = _fakeSapMessageBuilder.BuildSapMessageXml(scenarios!, correlationId);
 
             result.Should().BeOfType<XmlDocument>();
+            var actionItem = result.SelectSingleNode(XpathActionItems);
+            actionItem.ChildNodes.Count.Should().Be(7);
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
@@ -261,6 +267,29 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
 
             var firstNode = result.Cast<XmlNode>().FirstOrDefault().InnerText;
             Assert.AreEqual(firstNode, expectedResult);
+        }
+        [Test]
+        public  void BuildActionTest()
+        {
+            var actualXmlElement = @"<ACTIONNUMBER>1</ACTIONNUMBER><ACTION>CREATE ENC CELL</ACTION><PRODUCT>ENC CELL</PRODUCT><PRODTYPE>S57</PRODTYPE><CHILDCELL>US5AK83M</CHILDCELL><PRODUCTNAME>US5AK83M</PRODUCTNAME><CANCELLED></CANCELLED><REPLACEDBY></REPLACEDBY><AGENCY>US</AGENCY><PROVIDER>1</PROVIDER><ENCSIZE>small</ENCSIZE><TITLE>St. Michael Bay</TITLE><EDITIONNO>0</EDITIONNO><UPDATENO>1</UPDATENO><UNITTYPE></UNITTYPE>";
+
+            var scenarios = JsonConvert.DeserializeObject<EncEventPayload>(scenariosDataCancelReplaceCell);
+            XmlDocument soapXml = new();
+            soapXml.LoadXml(sapXmlFile);
+
+            MethodInfo GetUnitOfSaleForEncCell = typeof(SapMessageBuilder).GetMethod("GetUnitOfSaleForEncCell", BindingFlags.NonPublic | BindingFlags.Instance)!;
+            var unitOfSale = (UnitOfSale)GetUnitOfSaleForEncCell.Invoke(_fakeSapMessageBuilder, new object[] { scenarios.Data.UnitsOfSales,
+                scenarios.Data.Products.FirstOrDefault()! })!;
+
+            var Action = _fakeSapActionConfig.Value.SapActions.Where(x => x.Product == EncCell).FirstOrDefault();
+
+            MethodInfo BuildAction = typeof(SapMessageBuilder).GetMethod("BuildAction", BindingFlags.NonPublic| BindingFlags.Static | BindingFlags.Instance)!;
+            var data =(XmlElement)BuildAction.Invoke(_fakeSapMessageBuilder, new object[] {soapXml,scenarios.Data.Products.FirstOrDefault()!,
+                unitOfSale,Action!,null,null})!;
+          
+            data.ChildNodes.Count.Should().Be(15);
+            data.InnerXml.Should().Be(actualXmlElement);
+
         }
     }
 }

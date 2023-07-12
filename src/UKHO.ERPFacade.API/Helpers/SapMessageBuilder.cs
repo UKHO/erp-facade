@@ -389,9 +389,6 @@ namespace UKHO.ERPFacade.API.Helpers
                 return fieldValue.Substring(0, Math.Min(250, fieldValue.Length));
             }
             return string.Empty;
-            //return !string.IsNullOrWhiteSpace(fieldValue)
-            //    ? xmlNodeName == ProdType ? GetProdType(fieldValue) : fieldValue.Substring(0, Math.Min(250, fieldValue.Length))
-            //    : string.Empty;
         }
 
         private static string GetProdType(string prodType)
