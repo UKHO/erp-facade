@@ -46,7 +46,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     }
                     else
                     {
-
                         IConfidentialClientApplication app = ConfidentialClientApplicationBuilder.Create(clientId)
                                                         .WithClientSecret(clientSecret)
                                                         .WithAuthority(new Uri($"{Config.TestConfig.AzureADConfiguration.MicrosoftOnlineLoginUrl}{Config.TestConfig.AzureADConfiguration.TenantId}"))
