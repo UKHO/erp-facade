@@ -385,11 +385,6 @@
         UploadedPriceChangeEventPayloadInAzureBlob = 940077,
 
         /// <summary>
-        /// 940078 - pricechange event Pushed To EES
-        /// </summary>
-        PriceChangeEventPushedToEES = 940078,
-
-        /// <summary>
         /// 940079 - pricechange event created
         /// </summary>
         PriceChangeEventPayloadCreated = 940079,
@@ -437,6 +432,11 @@
         /// <summary>
         /// 940080 - EES Is Unhealty
         /// </summary>
-        EESIsUnhealthy = 940088
+        EESIsUnhealthy = 940088,
+
+        /// <summary>
+        /// 940089 - Failed to connect to the enterprise event service
+        /// </summary>
+        EnterpriseEventServiceEventConnectionFailure = 940089,
     }
 }
