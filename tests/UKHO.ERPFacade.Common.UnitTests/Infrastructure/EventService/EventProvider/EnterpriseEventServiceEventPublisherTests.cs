@@ -131,7 +131,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Error
             && call.GetArgument<EventId>(1) == EventIds.EnterpriseEventServiceEventPublisherFailure.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Failed to send event type: {cloudEventType} to the enterprise event service for product: {cloudEventSubject}").MustHaveHappenedOnceExactly();
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Failed to send event type: {cloudEventType} to the enterprise event service for product: {cloudEventSubject} | Exception Message : {ExceptionMessage}").MustHaveHappenedOnceExactly();
         }
 
         [Test]
@@ -159,7 +159,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Error
             && call.GetArgument<EventId>(1) == EventIds.EnterpriseEventServiceEventPublisherFailure.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Failed to send event type: {cloudEventType} to the enterprise event service for product: {cloudEventSubject}").MustHaveHappenedOnceExactly();
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Failed to send event type: {cloudEventType} to the enterprise event service for product: {cloudEventSubject} | Status Code : {StatusCode}").MustHaveHappenedOnceExactly();
         }
     }
 }

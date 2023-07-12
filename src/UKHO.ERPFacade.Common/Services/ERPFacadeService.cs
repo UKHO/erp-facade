@@ -58,13 +58,12 @@ namespace UKHO.ERPFacade.Common.Services
                             var existingUnitOfSalePrice = unitsOfSalePriceList.Where(x => x.UnitName.Contains(priceInformation.ProductName)).FirstOrDefault();
 
                             var effectiveUnitOfSalePriceDurations = existingUnitOfSalePrice!.Price.Where(x => x.EffectiveDate.ToString("yyyyMMdd") == priceInformation.EffectiveDate).ToList();
-
                             var effectiveStandard = effectiveUnitOfSalePriceDurations.Select(x => x.Standard).FirstOrDefault();
 
                             var futureUnitOfSalePriceDurations = existingUnitOfSalePrice.Price.Where(x => x.EffectiveDate.ToString("yyyyMMdd") == priceInformation.FutureDate).ToList();
                             var futureStandard = futureUnitOfSalePriceDurations.Select(x => x.Standard).FirstOrDefault();
 
-                            if (effectiveStandard != null && !string.IsNullOrEmpty(priceInformation.EffectiveDate))
+                            if (effectiveStandard != null)
                             {
                                 if (!effectiveStandard.PriceDurations.Any(x => x.NumberOfMonths == Convert.ToInt32(priceInformation.Duration) && x.Rrp == Convert.ToDecimal(String.Format("{0:0.00}", Math.Round(Convert.ToDecimal(priceInformation.Price), 2)))))
                                 {
@@ -85,7 +84,7 @@ namespace UKHO.ERPFacade.Common.Services
                                     existingUnitOfSalePrice.Price.Add(effectivePrice);
                                 }
                             }
-                            if (futureStandard != null && !string.IsNullOrEmpty(priceInformation.FutureDate))
+                            if (futureStandard != null)
                             {
                                 if (!futureStandard.PriceDurations.Any(x => x.NumberOfMonths == Convert.ToInt32(priceInformation.Duration) && x.Rrp == Convert.ToDecimal(String.Format("{0:0.00}", Math.Round(Convert.ToDecimal(priceInformation.FuturePrice), 2)))))
                                 {

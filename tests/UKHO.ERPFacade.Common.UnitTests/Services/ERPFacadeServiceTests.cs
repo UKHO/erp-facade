@@ -74,7 +74,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Services
 
             priceInformationList.Count.Should().BeGreaterThan(0);
             priceInformationList.FirstOrDefault().EffectiveDate.Should().NotBeNullOrEmpty();
-            priceInformationList.FirstOrDefault().EffectiveDate.Should().NotBeNullOrEmpty();
+            priceInformationList.FirstOrDefault().FutureDate.Should().NotBeNullOrEmpty();
 
             List<string> unitOfSaleList = GetUnitOfSaleData();
             unitOfSaleList.Count.Should().BeGreaterThan(0);
@@ -92,7 +92,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Services
         {
             List<PriceInformation>? priceInformationList = GetPriceInformationData(jsonStringWithEmptyDates);
             priceInformationList.FirstOrDefault().EffectiveDate.Should().BeNullOrEmpty();
-            priceInformationList.FirstOrDefault().EffectiveDate.Should().BeNullOrEmpty();
+            priceInformationList.FirstOrDefault().FutureDate.Should().BeNullOrEmpty();
 
             List<string> unitOfSaleList = GetUnitOfSaleData();
             List<UnitsOfSalePrices>? result = _fakeERPFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList, unitOfSaleList);
