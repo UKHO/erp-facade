@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json.Linq;
-
 using UKHO.ERPFacade.API.FunctionalTests.Model;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers

@@ -1,6 +1,5 @@
 ﻿namespace UKHO.ERPFacade.API.FunctionalTests.Model.Latest_Model
 {
-
     public class FinalUoSOutput
     {
         public string specversion { get; set; }

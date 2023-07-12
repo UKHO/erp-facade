@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 
-
 namespace UKHO.ERPFacade.API.FunctionalTests.Configuration
 {
     public static class Config
@@ -21,8 +20,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Configuration
 
             TestConfig = new();
             ConfigurationRoot.Bind(TestConfig);
-
-
 
         }
     }

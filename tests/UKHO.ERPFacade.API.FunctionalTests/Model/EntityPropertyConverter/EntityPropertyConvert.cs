@@ -1,6 +1,6 @@
-﻿using Microsoft.WindowsAzure.Storage.Table;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.WindowsAzure.Storage.Table;
 using Newtonsoft.Json;
-using System.Diagnostics.CodeAnalysis;
 namespace UKHO.ERPFacade.API.FunctionalTests.Model.EntityPropertyConverter
 {
     [ExcludeFromCodeCoverage]
