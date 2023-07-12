@@ -14,7 +14,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
         private const string ErpFacadeBulkPriceInformationEndPoint = "/erpfacade/bulkpriceinformation";
         public const string XCorrelationIdHeaderKey = "_X-Correlation-ID";
 
-
+        private List<string> _uniquePdtFromInputPayload;
         public List<JsonInputPriceChangeHelper> _jsonInputPriceChangeHelper { get; set; }
 
         public AzureBlobStorageHelper AzureBlobStorageHelper => _azureBlobStorageHelper;
@@ -177,7 +177,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             return request;
         }
 
-        public async Task<Boolean> PostPriceChangeResponse200OKPAYSF12Months(string filePath, string generatedProductJsonFolder, string sharedKey)
+        public async Task<bool> PostPriceChangeResponse200OKPAYSF12Months(string filePath, string generatedProductJsonFolder, string sharedKey)
         {
             string requestBody;
             string responseHeadercorrelationID;
@@ -189,22 +189,22 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             request.AddHeader("Content-Type", "application/json");
             request.AddQueryParameter("Key", sharedKey);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
-            Boolean productValue = true;
-            RestResponse response = await client.ExecuteAsync(request);
+            bool productValue = true;
+            RestResponse response = await _client.ExecuteAsync(request);
             Assert.AreEqual(System.Net.HttpStatusCode.OK, response.StatusCode);
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 Thread.Sleep(120000);
-                responseHeadercorrelationID = getResponseHeaderCorrelationID(response);
-                UniquePdtFromInputPayload = getProductListFromInputPayload(filePath);
-                List<string> UniquePdtFromAzureStorage = azureBlobStorageHelper.GetProductListFromBlobContainerAsync(responseHeadercorrelationID).Result;
-                Assert.That(UniquePdtFromInputPayload.Count.Equals(UniquePdtFromAzureStorage.Count), Is.True, "Slicing is not correct");
+                responseHeadercorrelationID = GetResponseHeaderCorrelationId(response);
+                _uniquePdtFromInputPayload = GetProductListFromInputPayload(filePath);
+                List<string> UniquePdtFromAzureStorage = _azureBlobStorageHelper.GetProductListFromBlobContainerAsync(responseHeadercorrelationID).Result;
+                Assert.That(_uniquePdtFromInputPayload.Count.Equals(UniquePdtFromAzureStorage.Count), Is.True, "Slicing is not correct");
                 foreach (string products in UniquePdtFromAzureStorage)
                 {
-                    string generatedProductJsonFile = azureBlobStorageHelper.DownloadJSONFromAzureBlob(generatedProductJsonFolder, responseHeadercorrelationID, products, "ProductChange");
+                    string generatedProductJsonFile = AzureBlobStorageHelper.DownloadJSONFromAzureBlob(generatedProductJsonFolder, responseHeadercorrelationID, products, "ProductChange");
                     Console.WriteLine(generatedProductJsonFile);
 
-                    JsonOutputPriceChangeHelper desiailzedProductOutput = getDeserializedProductJson(generatedProductJsonFile);
+                    JsonOutputPriceChangeHelper desiailzedProductOutput = GetDeserializedProductJson(generatedProductJsonFile);
                     string correlation_ID = desiailzedProductOutput.data.correlationId;
 
                     Assert.That(correlation_ID.Equals(responseHeadercorrelationID), Is.True, "response header corerelationId is same as generated product correlation id");
@@ -250,7 +250,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
                                                          && x.EffectiveDates.Date == SAPProduct.EffectiveDateTime.Date
                                                          && x.rrp == SAPProduct.EffectivePrice && x.Duration == SAPProduct.Duration);
 
-
                         if (findProduct != null)
                         {
                             // Match Found for Product , Date and price combination
@@ -285,7 +284,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
                         Console.WriteLine(Environment.NewLine);
                         Console.WriteLine(string.Format("Comparing product - {0} for PAYSF 12 month Duration condition", SAPProduct.Productname));
                         var findProduct = data.FirstOrDefault(x => x.unitName == "PAYSF");
-                        //if (findProduct.price.Length == 0)
                         if (findProduct == null)
                         {
                             productValue = true;
