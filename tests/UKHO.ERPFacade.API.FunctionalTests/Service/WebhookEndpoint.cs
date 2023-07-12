@@ -80,9 +80,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             //Logic to verifyxml
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                Assert.That(SAPXmlHelper.VerifyInitialXMLHeaders(jsonPayload, generatedXMLFilePath), Is.True);
-                Assert.That(SAPXmlHelper.VerifyOrderOfActions(jsonPayload, generatedXMLFilePath), Is.True);
-                Assert.That(SAPXmlHelper.CheckXMLAttributes(jsonPayload, generatedXMLFilePath, requestBody).Result, Is.True);
+                Assert.That(SAPXmlHelper.VerifyInitialXMLHeaders(jsonPayload, generatedXMLFilePath), Is.True ,"Initial Header Value Not Correct");
+                Assert.That(SAPXmlHelper.VerifyOrderOfActions(jsonPayload, generatedXMLFilePath), Is.True, "Order of Action Not Correct in XML File");
+                Assert.That(SAPXmlHelper.CheckXMLAttributes(jsonPayload, generatedXMLFilePath, requestBody).Result, Is.True, "CheckXMLAttributes Failed");
             }
             return response;
         }
