@@ -34,6 +34,8 @@ namespace UKHO.ERPFacade.Common.UnitTests.Services
 
         private readonly string jsonStringWithEmptyDates = "\"[{\\\"corrid\\\":\\\"367ce4a4-1d62-4f56-b359-59e178d77321\\\",\\\"org\\\":\\\"UKHO\\\",\\\"productname\\\":\\\"MX545010\\\",\\\"duration\\\":\\\"9\\\",\\\"effectivedate\\\":\\\"\\\",\\\"effectivetime\\\":\\\"101454\\\",\\\"price\\\":\\\"35.60 \\\",\\\"currency\\\":\\\"USD\\\",\\\"futuredate\\\":\\\"\\\",\\\"futuretime\\\":\\\"101454\\\",\\\"futureprice\\\":\\\"15.60\\\",\\\"futurecurr\\\":\\\"\\\",\\\"reqdate\\\":\\\"20230328\\\",\\\"reqtime\\\":\\\"160000\\\"}]\"";
 
+        private readonly string jsonStringWithDuplicateData = "\"[{\\\"corrid\\\":\\\"367ce4a4-1d62-4f56-b359-59e178d77321\\\",\\\"org\\\":\\\"UKHO\\\",\\\"productname\\\":\\\"MX545010\\\",\\\"duration\\\":\\\"12\\\",\\\"effectivedate\\\":\\\"20230427\\\",\\\"effectivetime\\\":\\\"101454\\\",\\\"price\\\":\\\"35.60 \\\",\\\"currency\\\":\\\"USD\\\",\\\"futuredate\\\":\\\"20230428\\\",\\\"futuretime\\\":\\\"101454\\\",\\\"futureprice\\\":\\\"32.04\\\",\\\"futurecurr\\\":\\\"\\\",\\\"reqdate\\\":\\\"20230328\\\",\\\"reqtime\\\":\\\"160000\\\"},{\\\"corrid\\\":\\\"367ce4a4-1d62-4f56-b359-59e178d77321\\\",\\\"org\\\":\\\"UKHO\\\",\\\"productname\\\":\\\"MX545010\\\",\\\"duration\\\":\\\"12\\\",\\\"effectivedate\\\":\\\"20230427\\\",\\\"effectivetime\\\":\\\"101454\\\",\\\"price\\\":\\\"35.60 \\\",\\\"currency\\\":\\\"USD\\\",\\\"futuredate\\\":\\\"20230428\\\",\\\"futuretime\\\":\\\"101454\\\",\\\"futureprice\\\":\\\"32.04\\\",\\\"futurecurr\\\":\\\"\\\",\\\"reqdate\\\":\\\"20230328\\\",\\\"reqtime\\\":\\\"160000\\\"}]\"";
+
         #endregion Data
 
         [Test]
@@ -85,6 +87,10 @@ namespace UKHO.ERPFacade.Common.UnitTests.Services
             result.Count.Should().Be(unitOfSaleList.Count);
 
             result.FirstOrDefault().Price.Count().Should().NotBe(0);
+
+            result.Where(x => x.UnitName == "MX545010").FirstOrDefault().Price.Count.Should().Be(4);
+            result.Where(x => x.UnitName == "MX545010").FirstOrDefault().Price.FirstOrDefault().Standard.PriceDurations.Count.Should().Be(2);
+
         }
 
         [Test]
@@ -101,6 +107,20 @@ namespace UKHO.ERPFacade.Common.UnitTests.Services
             result.Count.Should().Be(unitOfSaleList.Count);
 
             result.FirstOrDefault().Price.Count().Should().Be(0);
+        }
+
+        [Test]
+        public void WhenDurationAndPriceAreDuplicate_ThenReturnsUnitsOfSalePricesWithPriceCountZero()
+        {
+            List<PriceInformation>? priceInformationList = GetPriceInformationData(jsonStringWithDuplicateData);
+            List<string> unitOfSaleList = GetUnitOfSaleData();
+
+            List<UnitsOfSalePrices>? result = _fakeERPFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList, unitOfSaleList);
+
+            result.Should().BeOfType<List<UnitsOfSalePrices>>();
+
+            result.Where(x => x.UnitName == "MX545010").FirstOrDefault().Price.Count.Should().Be(2);
+            result.Where(x => x.UnitName == "MX545010").FirstOrDefault().Price.FirstOrDefault().Standard.PriceDurations.Count.Should().Be(1);
         }
 
         [Test]
