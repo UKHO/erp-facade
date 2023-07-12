@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
-using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.SAP.MockAPIService.Models;
 
 namespace UKHO.SAP.MockAPIService.Services

@@ -1,7 +1,7 @@
-﻿using NUnit.Framework;
-using System.Text;
+﻿using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
+using NUnit.Framework;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.SAP.MockAPIService.Models;
 
