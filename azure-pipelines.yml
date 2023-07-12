@@ -248,19 +248,6 @@ stages:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)\UKHO.ERPFacade.API\UKHOERPFacadeAPI.zip'
               ArtifactName: UKHOERPFacadeAPI
 
-          - task: PowerShell@2
-            displayName: "Generate event id runbook"
-            inputs:
-              targetType: filePath
-              filePath: '$(Build.SourcesDirectory)\Utility\XmlToRtfTransformation.ps1'
-              arguments: '-xmlFilePath $(Build.ArtifactStagingDirectory)\UKHOERPFacadeAPI\UKHO.ERPFacade.API.xml -xsltFilePath $(Build.SourcesDirectory)\Utility\EventIdXmlTransformation.xslt -outputFileName Runbook-EventId'
-          
-          - task: PublishBuildArtifacts@1
-            displayName: "Publish event id runbook"
-            inputs:
-              PathtoPublish: '$(Build.SourcesDirectory)\Utility\Runbook-EventId.rtf'
-              ArtifactName: Runbook
-
       - job: PublishFunctionalTestsAndTerraform
         workspace:
           clean: all
