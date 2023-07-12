@@ -364,18 +364,14 @@ stages:
         value: $(AzureADConfigurationAutoTestClientIdNoRole)
       - name: "AzureADConfiguration.ClientSecretNoRole"
         value: $(AzureADConfigurationClientSecretNoRole)
-      - name: "AzureADConfiguration.AutoTestClientIdPricingInformationCaller"
-        value: $(ERP-API-TEST-AUTOTEST-PRICEINFORMATIONAPICALLER-APPLICATION-ID)
-      - name: "AzureADConfiguration.ClientSecretPricingInformationCaller"
-        value: $(ERP-API-TEST-AUTOTEST-PRICEINFORMATIONAPICALLER-SECRET)
-      - name: "EnterpriseEventServiceConfiguration.ClientId"
+      - name: "ErpPublishEventSource.ClientId"
         value: $(AzureADConfigurationClientId)
       - name: "SharedKeyConfiguration.Key"
         value: $(SharedKeyConfigurationKey)
 
     jobs:
       - deployment: DevDeployTerraform
-        displayName: "Dev - Deploy Terraform and Dotnet App"
+        displayName: "Dev - Deploy Terraform"
         environment: "ERP-Dev"
         pool: $(DeploymentPool)
         container: ${{variables.Container}}
@@ -402,6 +398,8 @@ stages:
             value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
           - name : MOCK_WEB_APP_NAME
             value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp'] ]
+          - name : "KeyVaultSettings.ServiceUri"
+            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.keyvaulturi'] ]
         workspace:
           clean: all
         strategy:
@@ -455,11 +453,7 @@ stages:
         value: $(AzureADConfigurationAutoTestClientIdNoRole)
       - name: "AzureADConfiguration.ClientSecretNoRole"
         value: $(AzureADConfigurationClientSecretNoRole)
-      - name: "AzureADConfiguration.AutoTestClientIdPricingInformationCaller"
-        value: $(ERP-API-TEST-AUTOTEST-PRICEINFORMATIONAPICALLER-APPLICATION-ID)
-      - name: "AzureADConfiguration.ClientSecretPricingInformationCaller"
-        value: $(ERP-API-TEST-AUTOTEST-PRICEINFORMATIONAPICALLER-SECRET)
-      - name: "EnterpriseEventServiceConfiguration.ClientId"
+      - name: "ErpPublishEventSource.ClientId"
         value: $(EnterpriseEventServiceConfigurationClientId)
       - name: "SharedKeyConfiguration.Key"
         value: $(SharedKeyConfigurationKey)
@@ -495,6 +489,8 @@ stages:
         variables:
           - name : WEB_APP_NAME
             value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.WEB_APP'] ]
+          - name : "KeyVaultSettings.ServiceUri"
+            value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.keyvaulturi'] ]
         workspace:
           clean: all
         strategy:

@@ -1,6 +1,4 @@
-﻿using Azure.Storage.Blobs;
-using Azure.Storage.Blobs.Models;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using System.Text;
@@ -551,11 +549,11 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     //xmlAttributes[1] is skipped as already checked
                     if (!item.PRODUCT.Equals("AVCS UNIT"))
                         AttrNotMatched.Add(nameof(item.PRODUCT));
-                    if (!item.PRODTYPE.Equals((getProductInfo(unitOfSale.CompositionChanges.AddProducts)).ProductType))
-                        AttrNotMatched.Add(nameof(item.PRODTYPE));
-                    if (!item.AGENCY.Equals((getProductInfo(unitOfSale.CompositionChanges.AddProducts)).Agency))
+                     if (!item.PRODTYPE.Equals((getFirstProductsInfoHavingUoS(productName)).ProductType))
+                            AttrNotMatched.Add(nameof(item.PRODTYPE));
+                    if (!item.AGENCY.Equals((getFirstProductsInfoHavingUoS(productName)).Agency))
                         AttrNotMatched.Add(nameof(item.AGENCY));
-                    if (!item.PROVIDER.Equals((getProductInfo(unitOfSale.CompositionChanges.AddProducts)).ProviderCode))
+                    if (!item.PROVIDER.Equals((getFirstProductsInfoHavingUoS(productName)).ProviderCode))
                         AttrNotMatched.Add(nameof(item.PROVIDER));
                     if (!item.ENCSIZE.Equals(unitOfSale.UnitSize))
                         AttrNotMatched.Add(nameof(item.ENCSIZE));
@@ -678,6 +676,28 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             }
             return productInfo;
         }
+
+        private static UoSProductInfo getFirstProductsInfoHavingUoS(string unitOfSalesName)
+        {
+            UoSProductInfo firstProductInfo = new UoSProductInfo();
+            Product prodHavingRequiredUoS = jsonPayload2.Data.Products.FirstOrDefault(p => p.InUnitsOfSale.Contains(unitOfSalesName));
+
+            if (prodHavingRequiredUoS != null)
+            {
+                firstProductInfo.ProductType = prodHavingRequiredUoS.ProductType[4..];
+                firstProductInfo.Agency = prodHavingRequiredUoS.Agency;
+                firstProductInfo.ProviderCode = prodHavingRequiredUoS.ProviderCode;
+                firstProductInfo.Title = prodHavingRequiredUoS.Title;
+
+            }
+            else
+            {
+                Console.WriteLine(unitOfSalesName + " not found in any Product's inUnitOfSale");
+            }
+
+            return firstProductInfo;
+        }
+
         private static ProductUoSInfo getUoSInfo(string productName)
         {
             ProductUoSInfo UoSInfo = new ProductUoSInfo();
@@ -739,19 +759,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             }
 
             return productInfo;
-        }
-        public string downloadGeneratedXML(string expectedXMLfilePath, string containerAndBlobName)
-        {
-            BlobServiceClient blobServiceClient = new BlobServiceClient(Config.TestConfig.AzureStorageConfiguration.ConnectionString);
-            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerAndBlobName);
-            BlobClient blobClient = containerClient.GetBlobClient("SapXmlPayload.xml");
-
-            BlobDownloadInfo blobDownload = blobClient.Download();
-            using (FileStream downloadFileStream = new FileStream((expectedXMLfilePath + "\\" + containerAndBlobName + ".xml"), FileMode.Create))
-            {
-                blobDownload.Content.CopyTo(downloadFileStream);
-            }
-            return (expectedXMLfilePath + "\\" + containerAndBlobName + ".xml");
         }
 
         public static string getRequiredXMLText(string generatedXMLFilePath, string tagName)
@@ -1164,9 +1171,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         public static string generateRandomCorrelationId()
         {
             Guid guid = Guid.NewGuid();
-            string randomCorrID = guid.ToString("N").Substring(0,18);
+            string randomCorrID = guid.ToString("N").Substring(0,21);
             randomCorrID = randomCorrID.Insert(5, "-");
             randomCorrID = randomCorrID.Insert(11, "-");
+            randomCorrID = randomCorrID.Insert(16, "-");
             string currentTimeStamp = DateTime.Now.ToString("yyyyMMdd");
             randomCorrID = "ft-" + currentTimeStamp + "-" + randomCorrID;
             Console.WriteLine("Generated CorrelationId = " + randomCorrID);

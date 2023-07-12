@@ -1,12 +1,16 @@
-﻿using Newtonsoft.Json;
-
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Model
 {
-    public class UoSInputJSONHelper
+    public class JsonInputPriceChangeHelper
     {
         [JsonProperty("corrid")]
-        public string Corrid { get; set; }
+        public string? Corrid { get; set; }
 
         [JsonProperty("org")]
         public string Org { get; set; }
@@ -53,5 +57,4 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
         //[JsonConverter(typeof(ParseStringConverter))]
         public long Reqtime { get; set; }
     }
-
 }

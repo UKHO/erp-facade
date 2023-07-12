@@ -16,11 +16,12 @@ namespace UKHO.ERPFacade.Common.IO.Azure
         private readonly ILogger<AzureTableReaderWriter> _logger;
         private readonly IOptions<AzureStorageConfiguration> _azureStorageConfig;
         private readonly IOptions<ErpFacadeWebJobConfiguration> _erpFacadeWebjobConfig;
-        private const string ErpFacadeTableName = "eesevents";
+        private const string ErpFacadeTableName = "encevents";
         private const string PriceChangeMasterTableName = "pricechangemaster";
         private const string UnitPriceChangeTableName = "unitpricechangeevents";
         private const int DefaultCallbackDuration = 5;
-        enum Statuses
+
+        private enum Statuses
         {
             Incomplete,
             Complete
@@ -51,6 +52,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
                     CorrelationId = correlationId,
                     RequestDateTime = null,
                     ResponseDateTime = null,
+                    PublishDateTime= null,
                     IsNotified = false
                 };
 
@@ -106,33 +108,45 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             }
         }
 
+        public async Task UpdatePublishDateTimeEntity(string correlationId)
+        {
+            TableClient tableClient = GetTableClient(ErpFacadeTableName);
+            EESEventEntity existingEntity = await GetEntity(correlationId);
+            if (existingEntity != null)
+            {
+                existingEntity.PublishDateTime = DateTime.UtcNow;
+                await tableClient.UpdateEntityAsync(existingEntity, ETag.All, TableUpdateMode.Replace);
+                _logger.LogInformation(EventIds.UpdatePublishDateTimeEntitySuccessful.ToEventId(), "PublishDateTime is updated in azure table successfully.");
+            }
+        }
+
         public void ValidateAndUpdateIsNotifiedEntity()
         {
             TableClient tableClient = GetTableClient(ErpFacadeTableName);
             var callBackDuration = string.IsNullOrEmpty(_erpFacadeWebjobConfig.Value.SapCallbackDurationInMins) ? DefaultCallbackDuration
                 : int.Parse(_erpFacadeWebjobConfig.Value.SapCallbackDurationInMins);
             var entities = tableClient.Query<EESEventEntity>(entity => entity.IsNotified!.Value == false);
-            foreach (var tableitem in entities)
+            foreach (var tableItem in entities)
             {
-                if (tableitem.RequestDateTime.HasValue)
+                if (tableItem.RequestDateTime.HasValue)
                 {
-                    if (!tableitem.ResponseDateTime.HasValue && (tableitem.RequestDateTime.Value - DateTime.Now) <= TimeSpan.FromMinutes(callBackDuration)
+                    if (!tableItem.ResponseDateTime.HasValue && (tableItem.RequestDateTime.Value - DateTime.Now) <= TimeSpan.FromMinutes(callBackDuration)
                         ||
-                        tableitem.ResponseDateTime.HasValue && ((tableitem.ResponseDateTime.Value - tableitem.RequestDateTime.Value) > TimeSpan.FromMinutes(callBackDuration)))
+                        tableItem.ResponseDateTime.HasValue && ((tableItem.ResponseDateTime.Value - tableItem.RequestDateTime.Value) > TimeSpan.FromMinutes(callBackDuration)))
                     {
-                        _logger.LogWarning(EventIds.WebjobCallbackTimeoutEventFromSAP.ToEventId(), $"Request is timed out for the correlationid : {tableitem.CorrelationId}.");
+                        _logger.LogWarning(EventIds.WebjobCallbackTimeoutEventFromSAP.ToEventId(), "Request is timed out for the correlationid : {tableItem.CorrelationId}.", tableItem.CorrelationId);
 
-                        TableEntity tableEntity = new(tableitem.PartitionKey, tableitem.RowKey)
+                        TableEntity tableEntity = new(tableItem.PartitionKey, tableItem.RowKey)
                         {
                             { "IsNotified", true }
                         };
 
-                        tableClient.UpdateEntity(tableEntity, tableitem.ETag);
+                        tableClient.UpdateEntity(tableEntity, tableItem.ETag);
                     }
                 }
                 else
                 {
-                    _logger.LogError(EventIds.EmptyRequestDateTime.ToEventId(), $"Empty RequestDateTime column for correlationid : {tableitem.CorrelationId}");
+                    _logger.LogError(EventIds.EmptyRequestDateTime.ToEventId(), "Empty RequestDateTime column for correlationid : {tableItem.CorrelationId}.", tableItem.CorrelationId);
                 }
             }
         }
@@ -156,10 +170,10 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             IList<UnitPriceChangeEntity> records = new List<UnitPriceChangeEntity>();
             TableClient tableClient = GetTableClient(UnitPriceChangeTableName);
             Pageable<UnitPriceChangeEntity> entities = string.IsNullOrEmpty(status)
-                ? tableClient.Query<UnitPriceChangeEntity>(filter: TableClient.CreateQueryFilter($"MasterCorrid eq {masterCorrId}"), maxPerPage: 1)
+                ? tableClient.Query<UnitPriceChangeEntity>(filter: TableClient.CreateQueryFilter($"MasterCorrId eq {masterCorrId}"), maxPerPage: 1)
                 : string.IsNullOrEmpty(unitName) && string.IsNullOrEmpty(eventId)
-                ? tableClient.Query<UnitPriceChangeEntity>(filter: TableClient.CreateQueryFilter($"Status eq {status} and MasterCorrid eq {masterCorrId}"), maxPerPage: 1)
-                : tableClient.Query<UnitPriceChangeEntity>(filter: TableClient.CreateQueryFilter($"Status eq {status} and MasterCorrid eq {masterCorrId} and UnitName eq {unitName} and Eventid eq {eventId}"), maxPerPage: 1);
+                ? tableClient.Query<UnitPriceChangeEntity>(filter: TableClient.CreateQueryFilter($"Status eq {status} and MasterCorrId eq {masterCorrId}"), maxPerPage: 1)
+                : tableClient.Query<UnitPriceChangeEntity>(filter: TableClient.CreateQueryFilter($"Status eq {status} and MasterCorrId eq {masterCorrId} and UnitName eq {unitName} and EventId eq {eventId}"), maxPerPage: 1);
             foreach (var entity in entities)
             {
                 records.Add(entity);
@@ -177,12 +191,13 @@ namespace UKHO.ERPFacade.Common.IO.Azure
                 PartitionKey = correlationId,
                 Timestamp = DateTime.UtcNow,
                 CorrId = correlationId,
+                PublishDateTime = null,
                 Status = "Incomplete"
             };
 
             await tableClient.AddEntityAsync(priceChangeEventEntity, CancellationToken.None);
 
-            _logger.LogInformation(EventIds.AddedBulkPriceInformationEventInAzureTable.ToEventId(), "Bulk price information event in added in azure table successfully.");
+            _logger.LogInformation(EventIds.AddedBulkPriceInformationEventInAzureTable.ToEventId(), "Bulk price information event is added in azure table successfully. | _X-Correlation-ID : {_X-Correlation-ID}", correlationId);
         }
 
         public void AddUnitPriceChangeEntity(string correlationId, string eventId, string unitName)
@@ -194,38 +209,41 @@ namespace UKHO.ERPFacade.Common.IO.Azure
                 RowKey = eventId,
                 PartitionKey = eventId,
                 Timestamp = DateTime.UtcNow,
-                MasterCorrid = correlationId,
-                Eventid = eventId,
+                MasterCorrId = correlationId,
+                EventId = eventId,
                 UnitName = unitName,
+                PublishDateTime= null,
                 Status = "Incomplete"
             };
 
             tableClient.AddEntity(unitPriceChangeEventEntity, CancellationToken.None);
 
-            _logger.LogInformation(EventIds.AddedUnitPriceChangeEventInAzureTable.ToEventId(), "Unit price change event in added in azure table successfully.");
+            _logger.LogInformation(EventIds.AddedUnitPriceChangeEventInAzureTable.ToEventId(), "Unit price change event in added in azure table successfully. | _X-Correlation-ID : {_X-Correlation-ID}", correlationId);
         }
 
-        public void UpdateUnitPriceChangeStatusEntity(string correlationId, string unitName, string eventId)
+        public void UpdateUnitPriceChangeStatusAndPublishDateTimeEntity(string correlationId, string unitName, string eventId)
         {
             TableClient tableClient = GetTableClient(UnitPriceChangeTableName);
             UnitPriceChangeEntity? existingEntity = GetUnitPriceChangeEventsEntities(correlationId, Statuses.Incomplete.ToString(), unitName, eventId).ToList().FirstOrDefault();
             if (existingEntity != null)
             {
                 existingEntity.Status = "Complete";
+                existingEntity.PublishDateTime = DateTime.UtcNow;
                 tableClient.UpdateEntity(existingEntity, ETag.All, TableUpdateMode.Replace);
-                _logger.LogInformation(EventIds.UpdatedPriceChangeStatusEntitySuccessful.ToEventId(), "Unit price change status is updated in azure table successfully.");
+                _logger.LogInformation(EventIds.UpdatedPriceChangeStatusEntitySuccessful.ToEventId(), "Unit price change status and PublishingDateTime is updated in azure table successfully. | _X-Correlation-ID : {_X-Correlation-ID}", correlationId);
             }
         }
 
-        public void UpdatePriceMasterStatusEntity(string correlationId)
+        public void UpdatePriceMasterStatusAndPublishDateTimeEntity(string correlationId)
         {
             TableClient tableClient = GetTableClient(PriceChangeMasterTableName);
             PriceChangeMasterEntity? existingEntity = GetMasterEntities(Statuses.Incomplete.ToString(), correlationId).ToList().FirstOrDefault();
             if (existingEntity != null)
             {
                 existingEntity.Status = "Complete";
+                existingEntity.PublishDateTime = DateTime.UtcNow;
                 tableClient.UpdateEntity(existingEntity, ETag.All, TableUpdateMode.Replace);
-                _logger.LogInformation(EventIds.UpdatedPriceChangeMasterStatusEntitySuccessful.ToEventId(), "Price change master status is updated in azure table successfully.");
+                _logger.LogInformation(EventIds.UpdatedPriceChangeMasterStatusEntitySuccessful.ToEventId(), "Price change master status and PublishDatetime is updated in azure table successfully. | _X-Correlation-ID : {_X-Correlation-ID}", correlationId);
             }
         }
 
@@ -235,7 +253,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             PriceChangeMasterEntity? existingEntity = GetMasterEntities(Statuses.Complete.ToString(), correlationId).ToList().FirstOrDefault();
             if (existingEntity != null)
             {
-                tableClient.DeleteEntity(existingEntity.PartitionKey,existingEntity.RowKey);
+                tableClient.DeleteEntity(existingEntity.PartitionKey, existingEntity.RowKey);
                 _logger.LogInformation(EventIds.DeletedPriceChangeMasterEntitySuccessful.ToEventId(), "Price change master entity is deleted from azure table successfully.");
             }
         }
@@ -248,7 +266,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             {
                 foreach (var entity in existingEntities)
                 {
-                    tableClient.DeleteEntity(entity.PartitionKey,entity.RowKey); 
+                    tableClient.DeleteEntity(entity.PartitionKey, entity.RowKey);
                 }
                 _logger.LogInformation(EventIds.DeletedUnitPriceChangeEntitySuccessful.ToEventId(), "Unit price change status is deleted from azure table successfully.");
             }
@@ -272,7 +290,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             EESEventEntity existingEntity = await GetEntity(correlationId);
             if (existingEntity != null)
             {
-                 tableClient.DeleteEntity(existingEntity.PartitionKey,existingEntity.RowKey);
+                tableClient.DeleteEntity(existingEntity.PartitionKey, existingEntity.RowKey);
                 _logger.LogInformation(EventIds.DeletedEESEntitySuccessful.ToEventId(), "EES entity is deleted from azure table successfully.");
             }
         }

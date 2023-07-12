@@ -64,6 +64,7 @@ Write-Host "##vso[task.setvariable variable=AzureStorageConnectionString;issecre
 Write-Host "##vso[task.setvariable variable=AzureStorageConfiguration.ConnectionString;issecret=true]$($terraformOutput.storage_connection_string.value)"
 Write-Host "##vso[task.setvariable variable=SapMockConfiguration.BaseUrl]$($terraformOutput.erp_facade_mock_service_url.value)"
 Write-Host "##vso[task.setvariable variable=mockwebappurl;isOutput=true]$($terraformOutput.erp_facade_mock_service_url.value)"
+Write-Host "##vso[task.setvariable variable=keyvaulturi;isOutput=true]$($terraformOutput.keyvault_uri.value)"
 
 $terraformOutput | ConvertTo-Json -Depth 5 > $terraformJsonOutputFile
 
