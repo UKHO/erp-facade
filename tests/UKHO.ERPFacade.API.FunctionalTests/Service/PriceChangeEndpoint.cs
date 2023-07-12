@@ -191,7 +191,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
             bool productValue = true;
             RestResponse response = await _client.ExecuteAsync(request);
-            Assert.AreEqual(System.Net.HttpStatusCode.OK, response.StatusCode);
+            Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK));
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 Thread.Sleep(120000);
@@ -284,14 +284,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
                         Console.WriteLine(Environment.NewLine);
                         Console.WriteLine(string.Format("Comparing product - {0} for PAYSF 12 month Duration condition", SAPProduct.Productname));
                         var findProduct = data.FirstOrDefault(x => x.unitName == "PAYSF");
-                        if (findProduct == null)
-                        {
-                            productValue = true;
-                        }
-                        else
-                        {
-                            productValue = false;
-                        }
+                        productValue = findProduct == null;
                     }
                 }
             }

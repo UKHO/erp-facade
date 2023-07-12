@@ -62,7 +62,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Services
 
             result.Should().BeOfType<List<UnitsOfSalePrices>>();
             result.Count.Should().Be(unitOfSaleList.Count);
-            result.FirstOrDefault().Price.Count().Should().Be(0);
+            result.FirstOrDefault()!.Price.Count().Should().Be(0);
         }
 
         [Test]
@@ -78,8 +78,8 @@ namespace UKHO.ERPFacade.Common.UnitTests.Services
 
             result.Should().BeOfType<List<UnitsOfSalePrices>>();
             result.Count.Should().Be(unitOfSaleList.Count);
-            result.FirstOrDefault().Price.Count().Should().NotBe(0);
-            result.Where(x => x.UnitName == "PAYSF").FirstOrDefault().Price.Count().Should().Be(1);
+            result.FirstOrDefault()!.Price.Count().Should().NotBe(0);
+            result.Where(x => x.UnitName == "PAYSF").FirstOrDefault()!.Price.Count().Should().Be(1);
         }
 
         [Test]
@@ -126,14 +126,14 @@ namespace UKHO.ERPFacade.Common.UnitTests.Services
         private List<PriceInformation> GetPriceInformationData()
         {
             object? requestJson = JsonConvert.DeserializeObject(jsonString);
-            List<PriceInformation>? priceInformationList = JsonConvert.DeserializeObject<List<PriceInformation>>(requestJson.ToString()!);
+            List<PriceInformation>? priceInformationList = JsonConvert.DeserializeObject<List<PriceInformation>>(requestJson!.ToString()!);
             return priceInformationList!;
         }
 
         private List<string> GetUnitOfSaleData()
         {
             var encContentData = JsonConvert.DeserializeObject<EncEventPayload>(encContentPublishedJson.ToString());
-            var unitOfSaleList = encContentData.Data.UnitsOfSales.Select(x => x.UnitName).ToList();
+            var unitOfSaleList = encContentData!.Data.UnitsOfSales.Select(x => x.UnitName).ToList();
             return unitOfSaleList!;
         }
 
