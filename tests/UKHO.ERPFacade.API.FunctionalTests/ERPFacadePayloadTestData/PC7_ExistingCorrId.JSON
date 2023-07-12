@@ -4,7 +4,7 @@
         "corrid": "aef244d4-6643-48b4-a1cc-d3a0450986f9",
         "org": "UKHO",
         "productname": "PAYSF",
-        "duration": "12",
+        "duration": "3",
         "effectivedate": "20230427",
         "effectivetime": "101454",
         "price": "156.00 ",
@@ -15,6 +15,7 @@
         "futurecurr": "USD",
         "reqdate": "20230328",
         "reqtime": "160000"
+    },
     }
-       
+
 ]

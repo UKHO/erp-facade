@@ -167,6 +167,7 @@ namespace UKHO.ERPFacade
 
             builder.Services.Configure<SapActionConfiguration>(configuration.GetSection("SapActionConfiguration"));
             sapActionConfiguration = configuration.GetSection("SapActionConfiguration").Get<SapActionConfiguration>()!;
+            builder.Services.Configure<EESHealthCheckEnvironmentConfiguration>(configuration.GetSection("EESHealthCheckEnvironmentConfiguration"));
 
             builder.Services.AddInfrastructure();
 
@@ -182,9 +183,11 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<IErpFacadeService, ErpFacadeService>();
             builder.Services.AddScoped<IJsonHelper, JsonHelper>();
             builder.Services.AddScoped<SharedKeyAuthFilter>();
+            builder.Services.AddScoped<IEESClient, EESClient>();
 
             builder.Services.AddHealthChecks()
-                .AddCheck<SapServiceHealthCheck>("SapServiceHealthCheck");
+                .AddCheck<SapServiceHealthCheck>("SapServiceHealthCheck")
+                .AddCheck<EESServiceHealthCheck>("EESServiceHealthCheck");
 
             builder.Services.AddHttpClient<ISapClient, SapClient>(c =>
             {
