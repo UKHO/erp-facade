@@ -87,7 +87,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Services
             result.Count.Should().Be(unitOfSaleList.Count);
 
             result.FirstOrDefault().Price.Count().Should().NotBe(0);
-
+            result.Where(x => x.UnitName == "PAYSF").FirstOrDefault().Price.Count().Should().Be(1);
             result.Where(x => x.UnitName == "MX545010").FirstOrDefault().Price.Count.Should().Be(4);
             result.Where(x => x.UnitName == "MX545010").FirstOrDefault().Price.FirstOrDefault().Standard.PriceDurations.Count.Should().Be(2);
 

@@ -393,6 +393,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             CloudEvent<UnitOfSaleUpdatedEventData> unitOfSaleUpdatedCloudEventData = GetUnitOfSaleUpdatedEventData();
 
             A.CallTo(() => _fakeAzureBlobEventWriter.CheckIfContainerExists(A<string>.Ignored)).Returns(true);
+
             A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).Returns(encContentPublishedJson);
 
             A.CallTo(() => _fakeErpFacadeService.MapAndBuildUnitsOfSalePrices(A<List<PriceInformation>>.Ignored, A<List<string>>.Ignored)).Returns(unitsOfSalePricesList);

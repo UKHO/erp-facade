@@ -126,13 +126,11 @@ namespace UKHO.ERPFacade.API.Controllers
 
                 if (result.Status == Result.Statuses.Success)
                 {
-                    _logger.LogInformation(EventIds.UnitsOfSaleUpdatedEventPushedToEES.ToEventId(), "UnitsOfSaleUpdated event has been sent to EES successfully.");
                     await _azureTableReaderWriter.UpdatePublishDateTimeEntity(correlationId);
                     return new OkObjectResult(StatusCodes.Status200OK);
                 }
                 else
                 {
-                    _logger.LogError(EventIds.ErrorOccuredInEES.ToEventId(), "An error occured for UnitsOfSaleUpdated event while processing your request in EES. | {Status}", result.Status);
                     throw new ERPFacadeException(EventIds.ErrorOccuredInEES.ToEventId());
                 }
             }

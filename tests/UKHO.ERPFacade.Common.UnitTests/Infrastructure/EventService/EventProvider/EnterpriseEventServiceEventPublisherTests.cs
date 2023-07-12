@@ -61,11 +61,15 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
                 Data = "test"
             };
 
+            _fakeHttpClientMessageHandler
+                .Expect(HttpMethod.Post, $"{_fakeServiceUrl}/{_fakeErpPublishEventSource.PublishEndpoint}")
+                .Respond(req => new HttpResponseMessage());
 
 
             await _fakeEnterpriseEventServiceEventPublisher.Publish(cloudEvent);
 
             A.CallTo(() => _fakeHttpClientFactory.CreateClient(EnterpriseEventServiceEventPublisher.EventServiceClientName)).MustHaveHappened();
+
             _fakeHttpClientMessageHandler.VerifyNoOutstandingExpectation();
         }
 
@@ -90,6 +94,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
             var result = await _fakeEnterpriseEventServiceEventPublisher.Publish(cloudEvent);
 
             A.CallTo(() => _fakeHttpClientFactory.CreateClient(EnterpriseEventServiceEventPublisher.EventServiceClientName)).MustHaveHappened();
+
             _fakeHttpClientMessageHandler.VerifyNoOutstandingExpectation();
             Assert.That(result.Status, Is.EqualTo(Result.Statuses.Success));
             Assert.That(result.Message, Is.EqualTo("Successfully sent event"));
@@ -112,7 +117,6 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
             {
                 Data = "test"
             };
-
 
             _fakeHttpClientMessageHandler
                 .Expect("*")
