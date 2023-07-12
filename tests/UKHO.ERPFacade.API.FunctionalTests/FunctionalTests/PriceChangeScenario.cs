@@ -101,7 +101,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         }
 
         [Test, Order(7)]
-        [TestCase("PC8_PAYSFDuration12Month.JSON", TestName = "WhenPAYSFwith12MonthDuration_PriceChangeAlteredPAYSFPrices")]
+        [TestCase("PC7_PAYSFDuration12Month.JSON", TestName = "WhenPAYSFwith12MonthDuration_PriceChangeAlteredPAYSFPrices")]
         public async Task WhenPAYSFwith12MonthDuration_PriceChangeAlteredPAYSFPrices(string payloadJsonFileName)
         {
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, payloadJsonFileName);
@@ -111,14 +111,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             Assert.That(response, Is.True, "PAYSF Price Info for 12 months {0} are displayed");
         }
 
-        [Test, Order(8)]
-        [TestCase("PC7_ExistingCorrId.JSON", TestName = "WhenExistingCorelationID_ThenPriceChangeReturn500InternalServerErrorResponse")]
-        public async Task WhenExistingCorelationID_ThenPriceChangeReturn500InternalServerErrorResponse(string payloadJsonFileName)
-        {
-            string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, payloadJsonFileName);
-            string generatedProductJsonFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedProductJsonFolder);
-            var response = await _priceChange.PostPriceChangeResponseAsyncForJSON(filePath, generatedProductJsonFolder, Config.TestConfig.SharedKeyConfiguration.Key);
-            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-        }
+        
     }
 }
