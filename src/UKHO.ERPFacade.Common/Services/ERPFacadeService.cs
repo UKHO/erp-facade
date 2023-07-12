@@ -30,80 +30,81 @@ namespace UKHO.ERPFacade.Common.Services
                 {
                     foreach (var priceInformation in unitPriceInformationList)
                     {
-                        var isUnitOfSalePriceExists = unitsOfSalePriceList.Any(x => x.UnitName.Contains(priceInformation.ProductName));
-
-                        if (!isUnitOfSalePriceExists)
+                        bool isUnitOfSalePriceExists = unitsOfSalePriceList.Any(x => x.UnitName.Contains(priceInformation.ProductName));
+                        if (!(priceInformation.ProductName == "PAYSF" && priceInformation.Duration == "12"))
                         {
-                            if (!string.IsNullOrEmpty(priceInformation.EffectiveDate))
-                            {
-                                DateTimeOffset effectiveDate = GetDate(priceInformation.EffectiveDate, priceInformation.EffectiveTime);
-                                Price effectivePrice = BuildPriceInformation(priceInformation.Duration, priceInformation.Price, effectiveDate, priceInformation.Currency);
-                                priceList.Add(effectivePrice);
-                            }
-
-                            if (!string.IsNullOrEmpty(priceInformation.FutureDate))
-                            {
-                                DateTimeOffset futureDate = GetDate(priceInformation.FutureDate, priceInformation.FutureTime);
-                                Price futurePrice = BuildPriceInformation(priceInformation.Duration, priceInformation.FuturePrice, futureDate, priceInformation.FutureCurr);
-                                priceList.Add(futurePrice);
-                            }
-
-                            unitsOfSalePrice.UnitName = priceInformation.ProductName;
-                            unitsOfSalePrice.Price = priceList;
-
-                            unitsOfSalePriceList.Add(unitsOfSalePrice);
-                        }
-                        else
-                        {
-                            var existingUnitOfSalePrice = unitsOfSalePriceList.Where(x => x.UnitName.Contains(priceInformation.ProductName)).FirstOrDefault();
-
-                            var effectiveUnitOfSalePriceDurations = existingUnitOfSalePrice!.Price.Where(x => x.EffectiveDate.ToString("yyyyMMdd") == priceInformation.EffectiveDate).ToList();
-
-                            var effectiveStandard = effectiveUnitOfSalePriceDurations.Select(x => x.Standard).FirstOrDefault();
-
-                            var futureUnitOfSalePriceDurations = existingUnitOfSalePrice.Price.Where(x => x.EffectiveDate.ToString("yyyyMMdd") == priceInformation.FutureDate).ToList();
-                            var futureStandard = futureUnitOfSalePriceDurations.Select(x => x.Standard).FirstOrDefault();
-
-                            if (effectiveStandard != null && !string.IsNullOrEmpty(priceInformation.EffectiveDate))
-                            {
-                                if (!effectiveStandard.PriceDurations.Any(x => x.NumberOfMonths == Convert.ToInt32(priceInformation.Duration) && x.Rrp == Convert.ToDecimal(String.Format("{0:0.00}", Math.Round(Convert.ToDecimal(priceInformation.Price), 2)))))
-                                {
-                                    PriceDurations priceDuration = new();
-
-                                    priceDuration.NumberOfMonths = Convert.ToInt32(priceInformation.Duration);
-                                    priceDuration.Rrp = Convert.ToDecimal(String.Format("{0:0.00}", Math.Round(Convert.ToDecimal(priceInformation.Price), 2)));
-
-                                    effectiveStandard.PriceDurations.Add(priceDuration);
-                                }
-                            }
-                            else
+                            if (!isUnitOfSalePriceExists)
                             {
                                 if (!string.IsNullOrEmpty(priceInformation.EffectiveDate))
                                 {
                                     DateTimeOffset effectiveDate = GetDate(priceInformation.EffectiveDate, priceInformation.EffectiveTime);
                                     Price effectivePrice = BuildPriceInformation(priceInformation.Duration, priceInformation.Price, effectiveDate, priceInformation.Currency);
-                                    existingUnitOfSalePrice.Price.Add(effectivePrice);
+                                    priceList.Add(effectivePrice);
                                 }
-                            }
-                            if (futureStandard != null && !string.IsNullOrEmpty(priceInformation.FutureDate))
-                            {
-                                if (!futureStandard.PriceDurations.Any(x => x.NumberOfMonths == Convert.ToInt32(priceInformation.Duration) && x.Rrp == Convert.ToDecimal(String.Format("{0:0.00}", Math.Round(Convert.ToDecimal(priceInformation.FuturePrice), 2)))))
-                                {
-                                    PriceDurations priceDuration = new();
 
-                                    priceDuration.NumberOfMonths = Convert.ToInt32(priceInformation.Duration);
-                                    priceDuration.Rrp = Convert.ToDecimal(String.Format("{0:0.00}", Math.Round(Convert.ToDecimal(priceInformation.FuturePrice), 2)));
-
-                                    futureStandard.PriceDurations.Add(priceDuration);
-                                }
-                            }
-                            else
-                            {
                                 if (!string.IsNullOrEmpty(priceInformation.FutureDate))
                                 {
                                     DateTimeOffset futureDate = GetDate(priceInformation.FutureDate, priceInformation.FutureTime);
                                     Price futurePrice = BuildPriceInformation(priceInformation.Duration, priceInformation.FuturePrice, futureDate, priceInformation.FutureCurr);
-                                    existingUnitOfSalePrice.Price.Add(futurePrice);
+                                    priceList.Add(futurePrice);
+                                }
+
+                                unitsOfSalePrice.UnitName = priceInformation.ProductName;
+                                unitsOfSalePrice.Price = priceList;
+
+                                unitsOfSalePriceList.Add(unitsOfSalePrice);
+                            }
+                            else
+                            {
+                                var existingUnitOfSalePrice = unitsOfSalePriceList.Where(x => x.UnitName.Contains(priceInformation.ProductName)).FirstOrDefault();
+
+                                var effectiveUnitOfSalePriceDurations = existingUnitOfSalePrice.Price.Where(x => x.EffectiveDate.ToString("yyyyMMdd") == priceInformation.EffectiveDate).ToList();
+                                var effectiveStandard = effectiveUnitOfSalePriceDurations.Select(x => x.Standard).FirstOrDefault();
+
+                                var futureUnitOfSalePriceDurations = existingUnitOfSalePrice.Price.Where(x => x.EffectiveDate.ToString("yyyyMMdd") == priceInformation.FutureDate).ToList();
+                                var futureStandard = futureUnitOfSalePriceDurations.Select(x => x.Standard).FirstOrDefault();
+
+                                if (effectiveStandard != null && !string.IsNullOrEmpty(priceInformation.EffectiveDate))
+                                {
+                                    if (!effectiveStandard.PriceDurations.Any(x => x.NumberOfMonths == Convert.ToInt32(priceInformation.Duration) && x.Rrp == Convert.ToDecimal(string.Format("{0:0.00}", Math.Round(Convert.ToDecimal(priceInformation.Price), 2)))))
+                                    {
+                                        PriceDurations priceDuration = new();
+
+                                        priceDuration.NumberOfMonths = Convert.ToInt32(priceInformation.Duration);
+                                        priceDuration.Rrp = Convert.ToDecimal(string.Format("{0:0.00}", Math.Round(Convert.ToDecimal(priceInformation.Price), 2)));
+
+                                        effectiveStandard.PriceDurations.Add(priceDuration);
+                                    }
+                                }
+                                else
+                                {
+                                    if (!string.IsNullOrEmpty(priceInformation.EffectiveDate))
+                                    {
+                                        DateTimeOffset effectiveDate = GetDate(priceInformation.EffectiveDate, priceInformation.EffectiveTime);
+                                        Price effectivePrice = BuildPriceInformation(priceInformation.Duration, priceInformation.Price, effectiveDate, priceInformation.Currency);
+                                        existingUnitOfSalePrice.Price.Add(effectivePrice);
+                                    }
+                                }
+                                if (futureStandard != null && !string.IsNullOrEmpty(priceInformation.FutureDate))
+                                {
+                                    if (!futureStandard.PriceDurations.Any(x => x.NumberOfMonths == Convert.ToInt32(priceInformation.Duration) && x.Rrp == Convert.ToDecimal(string.Format("{0:0.00}", Math.Round(Convert.ToDecimal(priceInformation.FuturePrice), 2)))))
+                                    {
+                                        PriceDurations priceDuration = new();
+
+                                        priceDuration.NumberOfMonths = Convert.ToInt32(priceInformation.Duration);
+                                        priceDuration.Rrp = Convert.ToDecimal(string.Format("{0:0.00}", Math.Round(Convert.ToDecimal(priceInformation.FuturePrice), 2)));
+
+                                        futureStandard.PriceDurations.Add(priceDuration);
+                                    }
+                                }
+                                else
+                                {
+                                    if (!string.IsNullOrEmpty(priceInformation.FutureDate))
+                                    {
+                                        DateTimeOffset futureDate = GetDate(priceInformation.FutureDate, priceInformation.FutureTime);
+                                        Price futurePrice = BuildPriceInformation(priceInformation.Duration, priceInformation.FuturePrice, futureDate, priceInformation.FutureCurr);
+                                        existingUnitOfSalePrice.Price.Add(futurePrice);
+                                    }
                                 }
                             }
                         }
@@ -170,7 +171,7 @@ namespace UKHO.ERPFacade.Common.Services
             List<PriceDurations> priceDurationsList = new();
 
             priceDurations.NumberOfMonths = Convert.ToInt32(duration);
-            priceDurations.Rrp = Convert.ToDecimal(String.Format("{0:0.00}", Math.Round(Convert.ToDecimal(rrp), 2)));
+            priceDurations.Rrp = Convert.ToDecimal(string.Format("{0:0.00}", Math.Round(Convert.ToDecimal(rrp), 2)));
             priceDurationsList.Add(priceDurations);
 
             standard.PriceDurations = priceDurationsList;

@@ -150,7 +150,22 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             var response = await _unitOfSale.PostWebHookAndUoSResponse200OK(filePathWebhook, filePathUOS, generatedXMLFolder, generatedJSONFolder, webhookToken, uOSKey);
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
-        
+
+        [Test, Order(0)]
+        [TestCase("UoS_12_SAPPricing_PAYSF12Months.JSON", TestName = "WhenPAYSFwith12MonthDuration_UoSAlteredPAYSFPricesFinalJson")]
+        public async Task WhenPAYSFwith12MonthDuration_UoSAlteredPAYSFPricesFinalJson(string UoSPayloadFileName)
+        {
+            string filePathWebhook = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.WebhookPayloadFileName);
+            string generatedXMLFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXMLFolder);
+            Console.WriteLine("Scenario: WhenPAYSFwith12MonthDuration_UoSAlteredPAYSFPricesFinalJson" + "\n");
+            string filePathUOS = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, UoSPayloadFileName);
+            string generatedJSONFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedJSONFolder);
+            string webhookToken = await _authToken.GetAzureADToken(false);
+            string uOSKey = Config.TestConfig.SharedKeyConfiguration.Key;
+            var response = await _unitOfSale.PostWebHookAndUoSResponse200OKPAYSF12Months(filePathWebhook, filePathUOS, generatedXMLFolder, generatedJSONFolder, webhookToken, uOSKey);
+            Assert.That(response, Is.True, "PAYSF Price Info for 12 months {0} are displayed");
+        }
+
     }
 }
 

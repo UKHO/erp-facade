@@ -1,0 +1,43 @@
+{
+  "SpecVersion": "1.0",
+  "Type": "uk.gov.ukho.erp.pricechange.v1",
+  "Source": "https://erp.ukho.gov.uk",
+  "Id": "f3901dda-d2b8-4926-8741-ac9cc384d4d7",
+  "Time": "2023-06-30T13:51:41.0026823Z",
+  "Subject": "PAYSF",
+  "DataContentType": "application/json",
+  "Data": {
+    "correlationId": "9d88eadd-4c6c-4f57-b5a3-6acd353d0402",
+    "unitsOfSalePrices": [
+      {
+        "unitName": "PAYSF",
+        "price": [
+          {
+            "effectiveDate": "2023-04-27T10:14:54+05:30",
+            "currency": "USD",
+            "standard": {
+              "priceDurations": [
+                {
+                  "numberOfMonths": 12,
+                  "rrp": "156.00 "
+                }
+              ]
+            }
+          },
+          {
+            "effectiveDate": "2023-05-27T10:14:56+05:30",
+            "currency": "USD",
+            "standard": {
+              "priceDurations": [
+                {
+                  "numberOfMonths": 12,
+                  "rrp": "180.00"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
