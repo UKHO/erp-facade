@@ -34,7 +34,12 @@ namespace UKHO.ERPFacade.Common.UnitTests.Services
 
         private readonly string jsonStringWithEmptyDates = "\"[{\\\"corrid\\\":\\\"367ce4a4-1d62-4f56-b359-59e178d77321\\\",\\\"org\\\":\\\"UKHO\\\",\\\"productname\\\":\\\"MX545010\\\",\\\"duration\\\":\\\"9\\\",\\\"effectivedate\\\":\\\"\\\",\\\"effectivetime\\\":\\\"101454\\\",\\\"price\\\":\\\"35.60 \\\",\\\"currency\\\":\\\"USD\\\",\\\"futuredate\\\":\\\"\\\",\\\"futuretime\\\":\\\"101454\\\",\\\"futureprice\\\":\\\"15.60\\\",\\\"futurecurr\\\":\\\"\\\",\\\"reqdate\\\":\\\"20230328\\\",\\\"reqtime\\\":\\\"160000\\\"}]\"";
 
+        private readonly string jsonStringWithNullDates = "\"[{\\\"corrid\\\":\\\"367ce4a4-1d62-4f56-b359-59e178d77321\\\",\\\"org\\\":\\\"UKHO\\\",\\\"productname\\\":\\\"MX545010\\\",\\\"duration\\\":\\\"9\\\",\\\"effectivetime\\\":\\\"101454\\\",\\\"price\\\":\\\"35.60 \\\",\\\"currency\\\":\\\"USD\\\",\\\"futuretime\\\":\\\"101454\\\",\\\"futureprice\\\":\\\"15.60\\\",\\\"futurecurr\\\":\\\"\\\",\\\"reqdate\\\":\\\"20230328\\\",\\\"reqtime\\\":\\\"160000\\\"}]\"";
+
         private readonly string jsonStringWithDuplicateData = "\"[{\\\"corrid\\\":\\\"367ce4a4-1d62-4f56-b359-59e178d77321\\\",\\\"org\\\":\\\"UKHO\\\",\\\"productname\\\":\\\"MX545010\\\",\\\"duration\\\":\\\"12\\\",\\\"effectivedate\\\":\\\"20230427\\\",\\\"effectivetime\\\":\\\"101454\\\",\\\"price\\\":\\\"35.60 \\\",\\\"currency\\\":\\\"USD\\\",\\\"futuredate\\\":\\\"20230428\\\",\\\"futuretime\\\":\\\"101454\\\",\\\"futureprice\\\":\\\"32.04\\\",\\\"futurecurr\\\":\\\"\\\",\\\"reqdate\\\":\\\"20230328\\\",\\\"reqtime\\\":\\\"160000\\\"},{\\\"corrid\\\":\\\"367ce4a4-1d62-4f56-b359-59e178d77321\\\",\\\"org\\\":\\\"UKHO\\\",\\\"productname\\\":\\\"MX545010\\\",\\\"duration\\\":\\\"12\\\",\\\"effectivedate\\\":\\\"20230427\\\",\\\"effectivetime\\\":\\\"101454\\\",\\\"price\\\":\\\"35.60 \\\",\\\"currency\\\":\\\"USD\\\",\\\"futuredate\\\":\\\"20230428\\\",\\\"futuretime\\\":\\\"101454\\\",\\\"futureprice\\\":\\\"32.04\\\",\\\"futurecurr\\\":\\\"\\\",\\\"reqdate\\\":\\\"20230328\\\",\\\"reqtime\\\":\\\"160000\\\"}]\"";
+
+        private readonly string jsonStringWithUniqueData = "\"[{\\\"corrid\\\":\\\"367ce4a4-1d62-4f56-b359-59e178d77321\\\",\\\"org\\\":\\\"UKHO\\\",\\\"productname\\\":\\\"MX545010\\\",\\\"duration\\\":\\\"12\\\",\\\"effectivedate\\\":\\\"20230427\\\",\\\"effectivetime\\\":\\\"101454\\\",\\\"price\\\":\\\"35.60 \\\",\\\"currency\\\":\\\"USD\\\",\\\"futuredate\\\":\\\"20230428\\\",\\\"futuretime\\\":\\\"101454\\\",\\\"futureprice\\\":\\\"32.04\\\",\\\"futurecurr\\\":\\\"\\\",\\\"reqdate\\\":\\\"20230328\\\",\\\"reqtime\\\":\\\"160000\\\"},{\\\"corrid\\\":\\\"367ce4a4-1d62-4f56-b359-59e178d77321\\\",\\\"org\\\":\\\"UKHO\\\",\\\"productname\\\":\\\"MX545010\\\",\\\"duration\\\":\\\"12\\\",\\\"effectivedate\\\":\\\"20230427\\\",\\\"effectivetime\\\":\\\"101454\\\",\\\"price\\\":\\\"35.60 \\\",\\\"currency\\\":\\\"USD\\\",\\\"futuredate\\\":\\\"20230428\\\",\\\"futuretime\\\":\\\"101454\\\",\\\"futureprice\\\":\\\"32.04\\\",\\\"futurecurr\\\":\\\"\\\",\\\"reqdate\\\":\\\"20230328\\\",\\\"reqtime\\\":\\\"160000\\\"},{\\\"corrid\\\":\\\"367ce4a4-1d62-4f56-b359-59e178d77321\\\",\\\"org\\\":\\\"UKHO\\\",\\\"productname\\\":\\\"MX545010\\\",\\\"duration\\\":\\\"6\\\",\\\"effectivedate\\\":\\\"20230427\\\",\\\"effectivetime\\\":\\\"101454\\\",\\\"price\\\":\\\"35.60 \\\",\\\"currency\\\":\\\"USD\\\",\\\"futuredate\\\":\\\"20230428\\\",\\\"futuretime\\\":\\\"101454\\\",\\\"futureprice\\\":\\\"32.04\\\",\\\"futurecurr\\\":\\\"\\\",\\\"reqdate\\\":\\\"20230328\\\",\\\"reqtime\\\":\\\"160000\\\"},{\\\"corrid\\\":\\\"367ce4a4-1d62-4f56-b359-59e178d77321\\\",\\\"org\\\":\\\"UKHO\\\",\\\"productname\\\":\\\"MX545010\\\",\\\"duration\\\":\\\"12\\\",\\\"effectivedate\\\":\\\"20230427\\\",\\\"effectivetime\\\":\\\"101454\\\",\\\"price\\\":\\\"35.60 \\\",\\\"currency\\\":\\\"USD\\\",\\\"futuredate\\\":\\\"20230428\\\",\\\"futuretime\\\":\\\"101454\\\",\\\"futureprice\\\":\\\"32.04\\\",\\\"futurecurr\\\":\\\"\\\",\\\"reqdate\\\":\\\"20230328\\\",\\\"reqtime\\\":\\\"160000\\\"}]\"";
+
 
         #endregion Data
 
@@ -52,10 +57,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Services
         public void WhenPriceInformationDetailsIsNotPassed_ThenReturnsUnitsOfSalePricesWithPriceCountZero()
         {
             List<PriceInformation>? priceInformationList = new();
-            priceInformationList.Count.Should().BeLessThanOrEqualTo(0);
-
             List<string> unitOfSaleList = GetUnitOfSaleData();
-            unitOfSaleList.Count.Should().BeGreaterThan(0);
 
             List<UnitsOfSalePrices>? result = _fakeERPFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList, unitOfSaleList);
 
@@ -73,13 +75,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Services
         public void WhenPriceInformationDetailsPassed_ThenReturnsUnitsOfSalePrices()
         {
             List<PriceInformation>? priceInformationList = GetPriceInformationData(jsonString);
-
-            priceInformationList.Count.Should().BeGreaterThan(0);
-            priceInformationList.FirstOrDefault().EffectiveDate.Should().NotBeNullOrEmpty();
-            priceInformationList.FirstOrDefault().FutureDate.Should().NotBeNullOrEmpty();
-
             List<string> unitOfSaleList = GetUnitOfSaleData();
-            unitOfSaleList.Count.Should().BeGreaterThan(0);
 
             List<UnitsOfSalePrices>? result = _fakeERPFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList, unitOfSaleList);
 
@@ -93,11 +89,44 @@ namespace UKHO.ERPFacade.Common.UnitTests.Services
         }
 
         [Test]
-        public void WhenDatesAreNullOrEmpty_ThenReturnsUnitsOfSalePricesWithPriceCountZero()
+        public void WhenSinglePriceInformationPassed_ThenReturnsUnitsOfSalePrices()
+        {
+            List<PriceInformation>? priceInformationList = new List<PriceInformation>()
+            {
+                new PriceInformation(){
+                    Corrid = "123-456-abc",
+                    Currency = "USD",
+                    Duration = "3",
+                    EffectiveDate = "20230712",
+                    EffectiveTime = "101010",
+                    FutureDate = "20230713",
+                    FutureTime = "101111",
+                    FuturePrice = "13.60",
+                    Price = "156.00",
+                    ProductName = "PAYSF",
+                    FutureCurr = "USD",
+                    Org = "UKHO",
+                    ReqDate = "20230710",
+                    ReqTime = "101110"
+                } };
+            List<string> unitOfSaleList = new()
+            {
+                "PAYSF"
+            };
+
+            List<UnitsOfSalePrices>? result = _fakeERPFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList, unitOfSaleList);
+
+            result.Should().BeOfType<List<UnitsOfSalePrices>>();
+            result.Count.Should().Be(unitOfSaleList.Count);
+
+            result.FirstOrDefault().Price.Count().Should().NotBe(0);
+            result.Where(x => x.UnitName == "PAYSF").FirstOrDefault().Price.Count().Should().Be(2);
+        }
+
+        [Test]
+        public void WhenDatesAreEmpty_ThenReturnsUnitsOfSalePricesWithPriceCountZero()
         {
             List<PriceInformation>? priceInformationList = GetPriceInformationData(jsonStringWithEmptyDates);
-            priceInformationList.FirstOrDefault().EffectiveDate.Should().BeNullOrEmpty();
-            priceInformationList.FirstOrDefault().FutureDate.Should().BeNullOrEmpty();
 
             List<string> unitOfSaleList = GetUnitOfSaleData();
             List<UnitsOfSalePrices>? result = _fakeERPFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList, unitOfSaleList);
@@ -109,10 +138,27 @@ namespace UKHO.ERPFacade.Common.UnitTests.Services
         }
 
         [Test]
+        public void WhenDatesAreNull_ThenReturnsUnitsOfSalePricesWithPriceCountZero()
+        {
+            List<PriceInformation>? priceInformationList = GetPriceInformationData(jsonStringWithNullDates);
+
+            List<string> unitOfSaleList = GetUnitOfSaleData();
+            List<UnitsOfSalePrices>? result = _fakeERPFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList, unitOfSaleList);
+
+            result.Should().BeOfType<List<UnitsOfSalePrices>>();
+            result.Count.Should().Be(unitOfSaleList.Count);
+
+            result.FirstOrDefault().Price.Count().Should().Be(0);
+        }
+         
+        [Test]
         public void WhenDurationAndPriceAreDuplicate_ThenReturnsUnitsOfSalePricesWithPriceCountZero()
         {
             List<PriceInformation>? priceInformationList = GetPriceInformationData(jsonStringWithDuplicateData);
-            List<string> unitOfSaleList = GetUnitOfSaleData();
+            List<string> unitOfSaleList = new()
+            {
+                "MX545010"
+            };
 
             List<UnitsOfSalePrices>? result = _fakeERPFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList, unitOfSaleList);
 
@@ -120,6 +166,23 @@ namespace UKHO.ERPFacade.Common.UnitTests.Services
 
             result.Where(x => x.UnitName == "MX545010").FirstOrDefault().Price.Count.Should().Be(2);
             result.Where(x => x.UnitName == "MX545010").FirstOrDefault().Price.FirstOrDefault().Standard.PriceDurations.Count.Should().Be(1);
+        }
+
+        [Test]
+        public void WhenAllDetailsAreNotDuplicate_ThenReturnsUnitsOfSalePrices()
+        {
+            List<PriceInformation>? priceInformationList = GetPriceInformationData(jsonStringWithUniqueData);
+            List<string> unitOfSaleList = new()
+            {
+                "MX545010"
+            };
+
+            List<UnitsOfSalePrices>? result = _fakeERPFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList, unitOfSaleList);
+
+            result.Should().BeOfType<List<UnitsOfSalePrices>>();
+
+            result.Where(x => x.UnitName == "MX545010").FirstOrDefault().Price.Count.Should().Be(2);
+            result.Where(x => x.UnitName == "MX545010").FirstOrDefault().Price.FirstOrDefault().Standard.PriceDurations.Count.Should().Be(2);
         }
 
         [Test]
