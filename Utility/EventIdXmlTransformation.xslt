@@ -12,7 +12,7 @@
                 <th>Description</th>
             </thead>
 
-            <xsl:for-each select="/doc/members/member[contains(@name,'UKHO.ERPFacade.Common.EventIds.')]">
+            <xsl:for-each select="/doc/members/member[contains(@name,'UKHO.ERPFacade.Common.Logging.EventIds.')]">
                 <tr>
                     <td>
                         <xsl:value-of select="substring-before(summary,' - ')"/>
