@@ -1,21 +1,21 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-
+using UKHO.ERPFacade.API.FunctionalTests.Configuration;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
     public class AzureBlobStorageHelper
     {
-        public string DownloadJSONFromAzureBlob(string expectedfilePath, string containerAndBlobName, string fileType)
+        public string DownloadJsonFromAzureBlob(string expectedfilePath, string containerAndBlobName, string fileType)
         {
             try
             {
-                BlobServiceClient blobServiceClient = new BlobServiceClient(Config.TestConfig.AzureStorageConfiguration.ConnectionString);
+                BlobServiceClient blobServiceClient = new(Config.TestConfig.AzureStorageConfiguration.ConnectionString);
                 BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerAndBlobName);
                 BlobClient blobClient = containerClient.GetBlobClient("UnitOfSaleUpdatedEvent" + "." + fileType);
 
                 BlobDownloadInfo blobDownload = blobClient.Download();
-                using (FileStream downloadFileStream = new FileStream((expectedfilePath + "\\" + "UnitOfSaleUpdatedEvent" + "." + fileType), FileMode.Create))
+                using (FileStream downloadFileStream = new((expectedfilePath + "\\" + "UnitOfSaleUpdatedEvent" + "." + fileType), FileMode.Create))
                 {
                     blobDownload.Content.CopyTo(downloadFileStream);
                 }
@@ -28,7 +28,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             }
             return (expectedfilePath + "\\" + containerAndBlobName + ".JSON");
         }
-        public string DownloadJSONFromAzureBlob(string expectedJSONfilePath, string containerAndBlobName, string productName, string endPoint)
+
+        public static string DownloadJsonFromAzureBlob(string expectedJSONfilePath, string blobContainer, string productName, string endPoint)
         {
             string fileName = "";
             try
@@ -37,14 +38,13 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 {
                     BlobServiceClient blobServiceClient = new BlobServiceClient(Config.TestConfig.AzureStorageConfiguration.ConnectionString);
 
-                    BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient("pricechangeblobs" + "\\" + containerAndBlobName + "\\" + productName);
-                    BlobClient blobClient = containerClient.GetBlobClient(containerAndBlobName + "/" + productName + "/" + "PriceChangeEvent" + ".json");
-
+                    BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient("pricechangeblobs" + "\\" + blobContainer + "\\" + productName);
+                    BlobClient blobClient = containerClient.GetBlobClient(blobContainer + "/" + productName + "/" + "PriceChangeEvent" + ".json");
 
                     BlobDownloadInfo blobDownload = blobClient.Download();
-                    fileName = expectedJSONfilePath + "\\" + containerAndBlobName + "\\" + productName + ".JSON";
+                    fileName = expectedJSONfilePath + "\\" + blobContainer + "\\" + productName + ".JSON";
                     Directory.CreateDirectory(Path.GetDirectoryName(fileName));
-                    using (FileStream downloadFileStream = new FileStream(fileName, FileMode.Create))
+                    using (FileStream downloadFileStream = new(fileName, FileMode.Create))
                     {
                         blobDownload.Content.CopyTo(downloadFileStream);
                     }
@@ -53,20 +53,21 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(containerAndBlobName + " " + ex.Message);
+                Console.WriteLine(blobContainer + " " + ex.Message);
             }
             return fileName;
         }
-        public async Task<List<string>> GetProductListFromBlobContainerAsync(string containerAndBlobName)
+
+        public async Task<List<string>> GetProductListFromBlobContainerAsync(string blobContainer)
         {
-            List<string> directoryNames = new List<string>();
+            List<string> directoryNames = new();
             try
             {
-                BlobServiceClient blobServiceClient = new BlobServiceClient(Config.TestConfig.AzureStorageConfiguration.ConnectionString);
+                BlobServiceClient blobServiceClient = new(Config.TestConfig.AzureStorageConfiguration.ConnectionString);
                 BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient("pricechangeblobs");
 
                 // List all the directories
-                await foreach (BlobHierarchyItem blobHierarchyItem in containerClient.GetBlobsByHierarchyAsync(prefix: containerAndBlobName + "/", delimiter: "/"))
+                await foreach (BlobHierarchyItem blobHierarchyItem in containerClient.GetBlobsByHierarchyAsync(prefix: blobContainer + "/", delimiter: "/"))
                 {
                     if (blobHierarchyItem.IsPrefix)
                     {
@@ -82,30 +83,29 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(containerAndBlobName + " " + ex.Message);
+                Console.WriteLine(blobContainer + " " + ex.Message);
             }
             return directoryNames;
         }
 
-        public string DownloadGeneratedXML(string expectedXMLfilePath, string containerAndBlobName)
+        public string DownloadGeneratedXML(string expectedXMLfilePath, string blobContainer)
         {
-            
             BlobServiceClient blobServiceClient = new BlobServiceClient(Config.TestConfig.AzureStorageConfiguration.ConnectionString);
-            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerAndBlobName);
+            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(blobContainer);
             BlobClient blobClient = containerClient.GetBlobClient("SapXmlPayload.xml");
             try
             {
                 BlobDownloadInfo blobDownload = blobClient.Download();
-                using (FileStream downloadFileStream = new FileStream((expectedXMLfilePath + "\\" + containerAndBlobName + ".xml"), FileMode.Create))
+                using (FileStream downloadFileStream = new((expectedXMLfilePath + "\\" + blobContainer + ".xml"), FileMode.Create))
                 {
                     blobDownload.Content.CopyTo(downloadFileStream);
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(containerAndBlobName + " " + ex.Message);
+                Console.WriteLine(blobContainer + " " + ex.Message);
             }
-            return (expectedXMLfilePath + "\\" + containerAndBlobName + ".xml");
+            return (expectedXMLfilePath + "\\" + blobContainer + ".xml");
         }
     }
 }

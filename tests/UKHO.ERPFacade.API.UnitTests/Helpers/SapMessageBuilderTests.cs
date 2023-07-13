@@ -12,7 +12,6 @@ using Newtonsoft.Json;
 using NUnit.Framework;
 using UKHO.ERPFacade.API.Helpers;
 using UKHO.ERPFacade.API.UnitTests.Common;
-using UKHO.ERPFacade.Common.Infrastructure;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;

@@ -1,18 +1,18 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
-using UKHO.ERPFacade.API.FunctionalTests.Helpers;
+using UKHO.ERPFacade.API.FunctionalTests.Configuration;
+using UKHO.ERPFacade.API.FunctionalTests.Service;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 {
     [TestFixture]
     public class PriceChangeScenarios
     {
-
         private PriceChangeEndpoint _priceChange { get; set; }
-        private readonly ADAuthTokenProvider _authToken = new();
-        public static bool noRole = false;
+
         //for pipeline
         private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
+
         //for local
         // private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
 
@@ -45,6 +45,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         {
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, payloadJsonFileName);
             string generatedProductJsonFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedProductJsonFolder);
+
             var response = await _priceChange.PostPriceChangeResponseAsyncForJSON(filePath, generatedProductJsonFolder, Config.TestConfig.SharedKeyConfiguration.Key);
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
@@ -75,6 +76,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         {
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, payloadJsonFileName);
             string generatedProductJsonFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedProductJsonFolder);
+
             var response = await _priceChange.PostPriceChangeResponseAsyncForJSON(filePath, generatedProductJsonFolder, Config.TestConfig.SharedKeyConfiguration.Key);
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }

@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Infrastructure;
 using UKHO.ERPFacade.Common.Infrastructure.EventService;
 using UKHO.ERPFacade.Common.Infrastructure.EventService.EventProvider;
@@ -68,7 +67,7 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
 
                                     var priceChangeCloudEventData = _cloudEventFactory.Create(priceChangeEventPayload);
 
-                                    var priceChangeCloudEventDataJson = JObject.Parse(JsonConvert.SerializeObject(priceChangeCloudEventData));
+                                    var priceChangeCloudEventDataJson = JsonConvert.SerializeObject(priceChangeCloudEventData);
 
                                     SavePriceChangeEventPayloadInAzureBlob(priceChangeCloudEventDataJson, entity.CorrId, unitPriceInformation.UnitName, unitPriceInformation.EventId);
 
@@ -106,9 +105,9 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
 
                                 var priceChangeCloudEventData = _cloudEventFactory.Create(priceChangeEventPayload);
 
-                                var priceChangeCloudEventDataJson = JObject.Parse(JsonConvert.SerializeObject(priceChangeCloudEventData));
+                                var priceChangeCloudEventDataJson = JsonConvert.SerializeObject(priceChangeCloudEventData);
 
-                                SavePriceChangeEventPayloadInAzureBlob(priceChangeCloudEventDataJson, entity.CorrId, unitName, eventId);
+                                SavePriceChangeEventPayloadInAzureBlob(priceChangeCloudEventDataJson.ToString(), entity.CorrId, unitName, eventId);
 
                                 PublishEvent(priceChangeCloudEventData, entity.CorrId, unitName, eventId);
                             }
@@ -146,11 +145,11 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
             }
         }
 
-        private void SavePriceChangeEventPayloadInAzureBlob(JObject priceChangeCloudEventDataJson, string masterCorrId, string unitName, string correlationId)
+        private void SavePriceChangeEventPayloadInAzureBlob(string priceChangeCloudEventDataJson, string masterCorrId, string unitName, string correlationId)
         {
             _logger.LogInformation(EventIds.UploadPriceChangeEventPayloadInAzureBlob.ToEventId(), "Uploading the pricechange event payload json in blob storage. | _X-Correlation-ID : {_X-Correlation-ID}", correlationId);
 
-            _azureBlobEventWriter.UploadEvent(priceChangeCloudEventDataJson.ToString(), ContainerName, masterCorrId + '/' + unitName + '/' + PriceChangeEventFileName);
+            _azureBlobEventWriter.UploadEvent(priceChangeCloudEventDataJson, ContainerName, masterCorrId + '/' + unitName + '/' + PriceChangeEventFileName);
 
             _logger.LogInformation(EventIds.UploadedPriceChangeEventPayloadInAzureBlob.ToEventId(), "pricechange event payload json is uploaded in blob storage successfully. | _X-Correlation-ID : {_X-Correlation-ID}", correlationId);
         }

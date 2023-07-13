@@ -1,13 +1,14 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
+using UKHO.ERPFacade.API.FunctionalTests.Configuration;
 using UKHO.ERPFacade.API.FunctionalTests.Helpers;
+using UKHO.ERPFacade.API.FunctionalTests.Service;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 {
     [TestFixture]
     public class UnitOfSaleScenarios
     {
-
         private UnitOfSaleEndpoint _unitOfSale { get; set; }
         private WebhookEndpoint _webhook { get; set; }
         private readonly ADAuthTokenProvider _authToken = new();
@@ -58,7 +59,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             string generatedJSONFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedJSONFolder);
             string webhookToken = await _authToken.GetAzureADToken(false);
             string uOSKey = Config.TestConfig.SharedKeyConfiguration.Key;
-            var response = await _unitOfSale.PostWebHookAndUoSResponseAsyncWithJSON(filePathWebhook, filePathUOS, generatedXMLFolder, generatedJSONFolder, webhookToken, uOSKey);
+            var response = await _unitOfSale.PostWebHookAndUoSResponseAsyncWithJson(filePathWebhook, filePathUOS, generatedXMLFolder, generatedJSONFolder, webhookToken, uOSKey);
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
         

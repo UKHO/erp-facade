@@ -2,16 +2,11 @@
 using Azure.Data.Tables;
 using Azure;
 using UKHO.ERPFacade.Common.Models.TableEntities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+using UKHO.ERPFacade.API.FunctionalTests.Configuration;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
-    
+
     public class AzureTableHelper
     {
         private const string ErpFacadeTableName = "encevents";

@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 
-
-namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
+namespace UKHO.ERPFacade.API.FunctionalTests.Configuration
 {
     public static class Config
     {
@@ -18,11 +17,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                                .AddEnvironmentVariables()
                                .Build();
 
-            
+
             TestConfig = new();
             ConfigurationRoot.Bind(TestConfig);
-         
-
 
         }
     }

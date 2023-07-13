@@ -22,7 +22,7 @@
                 "mayAffectHoldings": true,
                 "contentChange": true,
                 "permit": "permitString",
-                "providerCode": 1,
+                "providerCode": "1",
                 "providerName": "ICE",
                 "_COMMENT": "The units in which product is included, including any 1-1 unit",
                 "_ENUM": [
