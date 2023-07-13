@@ -232,8 +232,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         [TestCase(null, "")]
         public void GetProdTypeTest(string prodType, string actual)
         {
-            MethodInfo sumPrivate = typeof(SapMessageBuilder).GetMethod("GetProdType", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
-            string result = (string)sumPrivate.Invoke(_fakeSapMessageBuilder, new object[] { prodType })!;
+            MethodInfo getProdType = typeof(SapMessageBuilder).GetMethod("GetProdType", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
+            string result = (string)getProdType.Invoke(_fakeSapMessageBuilder, new object[] { prodType })!;
 
             Assert.AreEqual(result, actual);
         }
@@ -281,14 +281,14 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             var unitOfSale = (UnitOfSale)GetUnitOfSaleForEncCell.Invoke(_fakeSapMessageBuilder, new object[] { scenarios.Data.UnitsOfSales,
                 scenarios.Data.Products.FirstOrDefault()! })!;
 
-            var Action = _fakeSapActionConfig.Value.SapActions.Where(x => x.Product == EncCell).FirstOrDefault();
+            var action = _fakeSapActionConfig.Value.SapActions.Where(x => x.Product == EncCell).FirstOrDefault();
 
-            MethodInfo BuildAction = typeof(SapMessageBuilder).GetMethod("BuildAction", BindingFlags.NonPublic| BindingFlags.Static | BindingFlags.Instance)!;
-            var data =(XmlElement)BuildAction.Invoke(_fakeSapMessageBuilder, new object[] {soapXml,scenarios.Data.Products.FirstOrDefault()!,
-                unitOfSale,Action!,null,null})!;
-          
-            data.ChildNodes.Count.Should().Be(15);
-            data.InnerXml.Should().Be(actualXmlElement);
+            MethodInfo buildAction = typeof(SapMessageBuilder).GetMethod("BuildAction", BindingFlags.NonPublic| BindingFlags.Static | BindingFlags.Instance)!;
+            var result =(XmlElement)buildAction.Invoke(_fakeSapMessageBuilder, new object[] {soapXml,scenarios.Data.Products.FirstOrDefault()!,
+                unitOfSale,action!,null,null})!;
+
+            result.ChildNodes.Count.Should().Be(15);
+            result.InnerXml.Should().Be(actualXmlElement);
 
         }
     }
