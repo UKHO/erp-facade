@@ -1,7 +1,9 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
 using RestSharp;
+using UKHO.ERPFacade.API.FunctionalTests.Configuration;
 using UKHO.ERPFacade.API.FunctionalTests.Helpers;
+using UKHO.ERPFacade.API.FunctionalTests.Service;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 {
@@ -9,9 +11,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
     public class WebhookScenarios
     {
         private WebhookEndpoint _webhook { get; set; }
-        private SAPXmlHelper SapXmlHelper { get; set; }
         private readonly ADAuthTokenProvider _authToken = new();
-        public static bool noRole = false;
         private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
         //for local
         //private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
@@ -20,7 +20,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         public void Setup()
         {
             _webhook = new WebhookEndpoint();
-            SapXmlHelper = new SAPXmlHelper();
         }
 
         [Test(Description = "WhenValidEventInNewEncContentPublishedEventOptions_ThenWebhookReturns200OkResponse"), Order(0)]

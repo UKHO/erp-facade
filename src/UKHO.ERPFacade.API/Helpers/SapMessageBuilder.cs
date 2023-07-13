@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.Options;
-using System.Xml;
-using UKHO.ERPFacade.Common.Models;
+﻿using System.Xml;
+using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
+using UKHO.ERPFacade.Common.Models;
 
 namespace UKHO.ERPFacade.API.Helpers
 {
@@ -33,7 +33,8 @@ namespace UKHO.ERPFacade.API.Helpers
         private const string UnitSaleType = "unit";
         private const string EncCell = "ENC CELL";
         private const string AvcsUnit = "AVCS UNIT";
-
+        private const string RecDateFormat = "yyyyMMdd";
+        private const string RecTimeFormat = "hhmmss";
 
         public SapMessageBuilder(ILogger<SapMessageBuilder> logger,
                                  IXmlHelper xmlHelper,
@@ -70,9 +71,7 @@ namespace UKHO.ERPFacade.API.Helpers
             XmlNode actionItemNode = soapXml.SelectSingleNode(XpathActionItems);
 
             bool IsConditionSatisfied = false;
-
             _logger.LogInformation(EventIds.BuildingSapActionStarted.ToEventId(), "Building SAP actions.");
-
             foreach (var product in eventData.Data.Products)
             {
                 //Actions for ENC CELL
@@ -109,14 +108,12 @@ namespace UKHO.ERPFacade.API.Helpers
                                 actionNode = BuildAction(soapXml, product, unitOfSale, action);
                                 actionItemNode.AppendChild(actionNode);
                                 _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
-
                                 IsConditionSatisfied = false;
                             }
                             break;
 
                         case 4:
                             var unitOfSaleReplace = GetUnitOfSaleForEncCell(eventData.Data.UnitsOfSales, product);
-
                             foreach (var replacedProduct in product.ReplacedBy)
                             {
                                 actionNode = BuildAction(soapXml, product, unitOfSaleReplace, action, null, replacedProduct);
@@ -234,6 +231,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                 IsConditionSatisfied = false;
                             }
                             break;
+
                         case 3:
                             foreach (var addProduct in unitOfSale.CompositionChanges.AddProducts)
                             {
@@ -269,8 +267,8 @@ namespace UKHO.ERPFacade.API.Helpers
 
             corrId.InnerText = correlationId;
             noOfActions.InnerText = xmlNode.ChildNodes.Count.ToString();
-            recDate.InnerText = DateTime.UtcNow.ToString("yyyyMMdd");
-            recTime.InnerText = DateTime.UtcNow.ToString("hhmmss");
+            recDate.InnerText = DateTime.UtcNow.ToString(RecDateFormat);
+            recTime.InnerText = DateTime.UtcNow.ToString(RecTimeFormat);
 
             IM_MATINFONode.AppendChild(xmlNode);
 
@@ -381,24 +379,26 @@ namespace UKHO.ERPFacade.API.Helpers
 
         private static string GetXmlNodeValue(string fieldValue, string xmlNodeName = null)
         {
-            if (string.IsNullOrWhiteSpace(fieldValue))
-                return string.Empty;
-
-            if (xmlNodeName == ProdType)
+            if (!string.IsNullOrWhiteSpace(fieldValue))
             {
-                return GetProdType(fieldValue);
-            }
+                if (xmlNodeName == ProdType)
+                {
+                    return GetProdType(fieldValue);
+                }
 
-            return fieldValue.Substring(0, Math.Min(250, fieldValue.Length));
+                return fieldValue.Substring(0, Math.Min(250, fieldValue.Length));
+            }
+            return string.Empty;
         }
 
         private static string GetProdType(string prodType)
         {
-            var parts = prodType.Split(' ').ToList();
-            if (parts != null)
+            if (!string.IsNullOrEmpty(prodType))
+            {
+                var parts = prodType.Split(' ').ToList();
                 return parts.Count > 1 ? parts[1] : parts[0];
-            else
-                return string.Empty;
+            }
+            return string.Empty;
         }
 
         private bool IsValidValue(string jsonFieldValue, string attributeValue)

@@ -22,7 +22,7 @@
         "mayAffectHoldings": false,
         "contentChange": false,
         "permit": "permitString",
-        "providerCode": 2,
+        "providerCode": "2",
         "providerName": "PRIMAR",
         "_COMMENT": "provider code and descrption are a n-1 mapping",
         "_ENUM": [
@@ -167,7 +167,7 @@
         "mayAffectHoldings": false,
         "contentChange": false,
         "permit": "permitString",
-        "providerCode": 2,
+        "providerCode": "2",
         "providerName": "PRIMAR",
         "_COMMENT": "provider code and descrption are a n-1 mapping",
         "_ENUM": [

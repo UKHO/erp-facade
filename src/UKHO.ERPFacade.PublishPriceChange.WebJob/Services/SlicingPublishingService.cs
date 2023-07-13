@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Infrastructure;
 using UKHO.ERPFacade.Common.Infrastructure.EventService;
 using UKHO.ERPFacade.Common.Infrastructure.EventService.EventProvider;
@@ -26,6 +25,8 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
         private const string BulkPriceInformationFileName = "BulkPriceInformation.json";
         private const string PriceInformationFileName = "PriceInformation.json";
         private const string PriceChangeEventFileName = "PriceChangeEvent.json";
+        private int PublishProductsCounter = 0;
+        private int UnpublishProductsCounter = 0;
 
         public SlicingPublishingService(ILogger<SlicingPublishingService> logger, IAzureTableReaderWriter azureTableReaderWriter, IAzureBlobEventWriter azureBlobEventWriter, IErpFacadeService erpFacadeService, IEventPublisher eventPublisher, ICloudEventFactory cloudEventFactory)
         {
@@ -66,7 +67,7 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
 
                                     var priceChangeCloudEventData = _cloudEventFactory.Create(priceChangeEventPayload);
 
-                                    var priceChangeCloudEventDataJson = JObject.Parse(JsonConvert.SerializeObject(priceChangeCloudEventData));
+                                    var priceChangeCloudEventDataJson = JsonConvert.SerializeObject(priceChangeCloudEventData);
 
                                     SavePriceChangeEventPayloadInAzureBlob(priceChangeCloudEventDataJson, entity.CorrId, unitPriceInformation.UnitName, unitPriceInformation.EventId);
 
@@ -82,7 +83,11 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
                     else
                     {
                         var slicedPrices = priceInformationList.Select(p => p.ProductName).Distinct().ToList();
+                        _logger.LogInformation(EventIds.ProductsToSliceCount.ToEventId(), "Total products to slice are {Count} | _X-Correlation-ID : {_X-Correlation-ID}", slicedPrices.Count, entity.CorrId);
+
                         string eventId;
+                        PublishProductsCounter = 0;
+                        UnpublishProductsCounter = 0;
 
                         Parallel.ForEach(slicedPrices, unitName =>
                         {
@@ -100,13 +105,15 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
 
                                 var priceChangeCloudEventData = _cloudEventFactory.Create(priceChangeEventPayload);
 
-                                var priceChangeCloudEventDataJson = JObject.Parse(JsonConvert.SerializeObject(priceChangeCloudEventData));
+                                var priceChangeCloudEventDataJson = JsonConvert.SerializeObject(priceChangeCloudEventData);
 
-                                SavePriceChangeEventPayloadInAzureBlob(priceChangeCloudEventDataJson, entity.CorrId, unitName, eventId);
+                                SavePriceChangeEventPayloadInAzureBlob(priceChangeCloudEventDataJson.ToString(), entity.CorrId, unitName, eventId);
 
                                 PublishEvent(priceChangeCloudEventData, entity.CorrId, unitName, eventId);
                             }
                         });
+
+                        _logger.LogInformation(EventIds.ProductsPublishedUnpublishedCount.ToEventId(), "Total products published are {Count} and unpublished are {unpublishedCount} | _X-Correlation-ID : {_X-Correlation-ID}", PublishProductsCounter,UnpublishProductsCounter, entity.CorrId);
                     }
                 }
             }
@@ -129,14 +136,20 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
             if (result.Result.Status == Result.Statuses.Success)
             {
                 _azureTableReaderWriter.UpdateUnitPriceChangeStatusAndPublishDateTimeEntity(masterCorrId, unitName, eventId);
+                PublishProductsCounter++;
+            }
+            else
+            {
+                UnpublishProductsCounter++;
+                _logger.LogWarning(EventIds.ProductsUnpublishedCount.ToEventId(), "Product {unitName} was not published successfully | _X-Correlation-ID : {_X-Correlation-ID}", unitName, masterCorrId);
             }
         }
 
-        private void SavePriceChangeEventPayloadInAzureBlob(JObject priceChangeCloudEventDataJson, string masterCorrId, string unitName, string correlationId)
+        private void SavePriceChangeEventPayloadInAzureBlob(string priceChangeCloudEventDataJson, string masterCorrId, string unitName, string correlationId)
         {
             _logger.LogInformation(EventIds.UploadPriceChangeEventPayloadInAzureBlob.ToEventId(), "Uploading the pricechange event payload json in blob storage. | _X-Correlation-ID : {_X-Correlation-ID}", correlationId);
 
-            _azureBlobEventWriter.UploadEvent(priceChangeCloudEventDataJson.ToString(), ContainerName, masterCorrId + '/' + unitName + '/' + PriceChangeEventFileName);
+            _azureBlobEventWriter.UploadEvent(priceChangeCloudEventDataJson, ContainerName, masterCorrId + '/' + unitName + '/' + PriceChangeEventFileName);
 
             _logger.LogInformation(EventIds.UploadedPriceChangeEventPayloadInAzureBlob.ToEventId(), "pricechange event payload json is uploaded in blob storage successfully. | _X-Correlation-ID : {_X-Correlation-ID}", correlationId);
         }

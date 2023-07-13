@@ -22,7 +22,7 @@
         "mayAffectHoldings": true,
         "contentChange": true,
         "permit": "4A4E096BC7SDSAFEQAE71194324",
-        "providerCode": 1,
+        "providerCode": "1",
         "providerName": "ICE",
         "_COMMENT": "provider code and descrption are a n-1 mapping",
         "_ENUM": [
@@ -125,7 +125,7 @@
         "mayAffectHoldings": true,
         "contentChange": true,
         "permit": "4A4E096BC7SDSAFEQAE71194324",
-        "providerCode": 1,
+        "providerCode": "1",
         "providerName": "ICE",
         "_COMMENT": "provider code and descrption are a n-1 mapping",
         "_ENUM": [

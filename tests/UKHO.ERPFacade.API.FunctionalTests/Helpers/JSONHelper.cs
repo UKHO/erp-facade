@@ -1,17 +1,15 @@
 ﻿using Newtonsoft.Json.Linq;
-
 using UKHO.ERPFacade.API.FunctionalTests.Model;
-
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
-    public class JSONHelper
+    public class JsonHelper
     {
-        public string getDeserializedString(string filePath)
+        public string GetDeserializedString(string filePath)
         {
             string requestBody;
 
-            using (StreamReader streamReader = new StreamReader(filePath))
+            using (StreamReader streamReader = new(filePath))
             {
                 requestBody = streamReader.ReadToEnd();
             }
@@ -29,21 +27,19 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return updatedUoSRequestBody;
         }
 
-        public List<string> GetProductListProductListFromSAPPayload(List<JsonInputPriceChangeHelper> _jsonInputPriceChangeHelper)
+        public static List<string> GetProductListFromSAPPayload(List<JsonInputPriceChangeHelper> _jsonInputPriceChangeHelper)
         {
             List<string> result = new List<string>();
             int count = _jsonInputPriceChangeHelper.Count;
-            for (int i=0; i<count; i++)
+            for (int i = 0; i < count; i++)
             {
                 result.Add(_jsonInputPriceChangeHelper[i].Productname);
-               
+
             }
             List<string> finalProducts = new HashSet<string>(result).ToList();
             return finalProducts;
-            
-        }
 
-        
+        }
     }
 }
 

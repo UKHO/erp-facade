@@ -1,118 +1,79 @@
-﻿using NUnit.Framework;
+﻿using Newtonsoft.Json;
+using NUnit.Framework;
 using RestSharp;
-using Newtonsoft.Json;
+using UKHO.ERPFacade.API.FunctionalTests.Helpers;
 using UKHO.ERPFacade.API.FunctionalTests.Model;
 
-namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
+namespace UKHO.ERPFacade.API.FunctionalTests.Service
 {
     public class PriceChangeEndpoint
     {
+        private readonly RestClient _client;
+        private readonly JsonHelper _jsonHelper;
+        private readonly AzureBlobStorageHelper _azureBlobStorageHelper;
+        private const string ErpFacadeBulkPriceInformationEndPoint = "/erpfacade/bulkpriceinformation";
+        public const string XCorrelationIdHeaderKey = "_X-Correlation-ID";
 
-        private readonly RestClient client;
-        private readonly JSONHelper _jSONHelper;
-        //private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
-
-        public JsonOutputPriceChangeHelper _jsonOuputPriceChangeHelper { get; set; }
+        private List<string> _uniquePdtFromInputPayload;
         public List<JsonInputPriceChangeHelper> _jsonInputPriceChangeHelper { get; set; }
-        
 
-        private AzureBlobStorageHelper azureBlobStorageHelper;
-        List<string> UniquePdtFromInputPayload;
-
-
-
+        public AzureBlobStorageHelper AzureBlobStorageHelper => _azureBlobStorageHelper;
 
         public PriceChangeEndpoint(string url)
         {
             var options = new RestClientOptions(url);
-            client = new RestClient(options);
-            azureBlobStorageHelper = new();
-            _jSONHelper = new JSONHelper();
-
+            _client = new RestClient(options);
+            _azureBlobStorageHelper = new();
+            _jsonHelper = new();
         }
-
 
         public async Task<RestResponse> PostPriceChangeResponseAsync(string filePath, string sharedKey)
         {
-            string requestBody;
-
-            using (StreamReader streamReader = new StreamReader(filePath))
-            {
-                requestBody = streamReader.ReadToEnd();
-            }
-            var request = new RestRequest("/erpfacade/bulkpriceinformation", Method.Post);
-
-            request.AddHeader("Content-Type", "application/json");
-            request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
-            request.AddQueryParameter("Key", sharedKey);
-            RestResponse response = await client.ExecuteAsync(request);
+            RestRequest request = ErpFacadeBulkPriceInformationRequest(filePath, sharedKey);
+            RestResponse response = await _client.ExecuteAsync(request);
             return response;
         }
 
         public async Task<RestResponse> PostPriceChangeResponseAsyncWithJson(string filePath, string generatedProductJsonFolder, string sharedKey)
         {
-            string requestBody;
-
-            using (StreamReader streamReader = new StreamReader(filePath))
-            {
-                requestBody = streamReader.ReadToEnd();
-            }
-            var request = new RestRequest("/erpfacade/bulkpriceinformation", Method.Post);
-            request.AddHeader("Content-Type", "application/json");
-            request.AddQueryParameter("Key", sharedKey);
-            request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
-
-            RestResponse response = await client.ExecuteAsync(request);
+            RestRequest request = ErpFacadeBulkPriceInformationRequest(filePath, sharedKey);
+            RestResponse response = await _client.ExecuteAsync(request);
             return response;
         }
 
         public async Task<RestResponse> PostPriceChangeResponseAsyncForJSON(string filePath, string generatedProductJsonFolder, string sharedKey)
         {
-            string requestBody;
-            string responseHeadercorrelationID;
-            using (StreamReader streamReader = new StreamReader(filePath))
-            {
-                requestBody = streamReader.ReadToEnd();
-            }
-            var request = new RestRequest("/erpfacade/bulkpriceinformation", Method.Post);
-            request.AddHeader("Content-Type", "application/json");
-            request.AddQueryParameter("Key", sharedKey);
-            request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
+            RestRequest request = ErpFacadeBulkPriceInformationRequest(filePath, sharedKey);
+            RestResponse response = await _client.ExecuteAsync(request);
 
-            RestResponse response = await client.ExecuteAsync(request);
-            
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 Thread.Sleep(120000);
 
-                responseHeadercorrelationID = getResponseHeaderCorrelationID(response);
-                UniquePdtFromInputPayload = getProductListFromInputPayload(filePath);
+                string responseHeaderCorrelationId = GetResponseHeaderCorrelationId(response);
+                List<string> uniqueProductFromInputPayload = GetProductListFromInputPayload(filePath);
 
-                List<string> UniquePdtFromAzureStorage = azureBlobStorageHelper.GetProductListFromBlobContainerAsync(responseHeadercorrelationID).Result;
-                
-                Assert.That(UniquePdtFromInputPayload.Count.Equals(UniquePdtFromAzureStorage.Count), Is.True, "Slicing is not correct");
-                       
-                foreach (string products in UniquePdtFromAzureStorage)
+                List<string> uniqueProductFromAzureStorage = AzureBlobStorageHelper.GetProductListFromBlobContainerAsync(responseHeaderCorrelationId).Result;
+
+                Assert.That(uniqueProductFromInputPayload.Count.Equals(uniqueProductFromAzureStorage.Count), Is.True, "Slicing is not correct");
+
+                foreach (string products in uniqueProductFromAzureStorage)
                 {
-                    string generatedProductJsonFile = azureBlobStorageHelper.DownloadJSONFromAzureBlob(generatedProductJsonFolder, responseHeadercorrelationID, products, "ProductChange");
+                    string generatedProductJsonFile = AzureBlobStorageHelper.DownloadJsonFromAzureBlob(generatedProductJsonFolder, responseHeaderCorrelationId, products, "ProductChange");
                     Console.WriteLine(generatedProductJsonFile);
 
+                    JsonOutputPriceChangeHelper deserializedProductOutput = GetDeserializedProductJson(generatedProductJsonFile);
+                    string correlationId = deserializedProductOutput.data.correlationId;
 
-                    JsonOutputPriceChangeHelper desiailzedProductOutput = getDeserializedProductJson(generatedProductJsonFile);
-                    string correlation_ID = desiailzedProductOutput.data.correlationId;
+                    Assert.That(correlationId.Equals(responseHeaderCorrelationId), Is.True, "response header corerelationId is same as generated product correlation id");
+                    unitsOfSalePricesData[] data = deserializedProductOutput.data.unitsOfSalePrices;
 
-                    Assert.That(correlation_ID.Equals(responseHeadercorrelationID), Is.True, "response header corerelationId is same as generated product correlation id");
-                    unitsOfSalePricesData[] data = desiailzedProductOutput.data.unitsOfSalePrices;
-
-
-                    EffectiveDatesPerProductPC effectiveDate = new EffectiveDatesPerProductPC();
-                    List<EffectiveDatesPerProductPC> effectiveDates = new List<EffectiveDatesPerProductPC>();
+                    EffectiveDatesPerProductPC effectiveDate = new();
+                    List<EffectiveDatesPerProductPC> effectiveDates = new();
                     foreach (unitsOfSalePricesData unitOfSalesPrice in data)
                     {
-
                         foreach (var prices in unitOfSalesPrice.price)
                         {
-
                             foreach (PriceDurationsPriceChangeOutput priceDuration in prices.standard.priceDurations)
                             {
                                 effectiveDate = new EffectiveDatesPerProductPC();
@@ -123,10 +84,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                                 effectiveDates.Add(effectiveDate);
                             }
                         }
-
                     }
 
-                   
                     var inputData = _jsonInputPriceChangeHelper.Select(x => new
                     {
                         x.Productname,
@@ -148,7 +107,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         EffectiveDatesPerProductPC? findProduct = effectiveDates.FirstOrDefault(x => x.ProductName == SAPProduct.Productname
                                                          && x.EffectiveDates.Date == SAPProduct.EffectiveDateTime.Date
                                                          && x.rrp == SAPProduct.EffectivePrice && x.Duration == SAPProduct.Duration);
-
 
                         if (findProduct != null)
                         {
@@ -178,41 +136,48 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                                 Console.WriteLine(string.Format("Product - {0} Not found in Final UOS for Future Date - {1}, Duration - {2} and Price - {3}", SAPProduct.Productname, SAPProduct.FutureDateTime.Date, SAPProduct.Duration, SAPProduct.FuturePrice));
                             }
                         }
-
                     }
-
-
-
                 }
-
             }
             return response;
         }
 
-        private List<string> getProductListFromInputPayload(string inputJSONFilePath)
+        private List<string> GetProductListFromInputPayload(string inputJSONFilePath)
         {
-            string jsonPayload = _jSONHelper.getDeserializedString(inputJSONFilePath);
+            string jsonPayload = _jsonHelper.GetDeserializedString(inputJSONFilePath);
             _jsonInputPriceChangeHelper = JsonConvert.DeserializeObject<List<JsonInputPriceChangeHelper>>(jsonPayload);
-            UniquePdtFromInputPayload = _jSONHelper.GetProductListProductListFromSAPPayload(_jsonInputPriceChangeHelper);
-            return UniquePdtFromInputPayload;
+            return JsonHelper.GetProductListFromSAPPayload(_jsonInputPriceChangeHelper);
         }
 
-        private JsonOutputPriceChangeHelper getDeserializedProductJson(string generatedProductJson)
+        private JsonOutputPriceChangeHelper GetDeserializedProductJson(string generatedProductJson)
         {
-           
-            string jsonString = _jSONHelper.getDeserializedString(generatedProductJson);
-            _jsonOuputPriceChangeHelper = JsonConvert.DeserializeObject<JsonOutputPriceChangeHelper>(jsonString);
-            return _jsonOuputPriceChangeHelper;
+            string jsonString = _jsonHelper.GetDeserializedString(generatedProductJson);
+            return JsonConvert.DeserializeObject<JsonOutputPriceChangeHelper>(jsonString);
         }
 
-        private static String getResponseHeaderCorrelationID(RestResponse response)
+        private static string GetResponseHeaderCorrelationId(RestResponse response)
         {
-            string correlationID = response.Headers.ToList().Find(x => x.Name == "_X-Correlation-ID").Value.ToString();
-            Console.WriteLine(correlationID);
-            return correlationID;
+            string correlationId = response.Headers.ToList().Find(x => x.Name == XCorrelationIdHeaderKey).Value.ToString();
+            Console.WriteLine(correlationId);
+            return correlationId;
         }
 
-        public async Task<Boolean> PostPriceChangeResponse200OKPAYSF12Months(string filePath, string generatedProductJsonFolder, string sharedKey)
+        private static RestRequest ErpFacadeBulkPriceInformationRequest(string filePath, string sharedKey)
+        {
+            string requestBody;
+
+            using (StreamReader streamReader = new StreamReader(filePath))
+            {
+                requestBody = streamReader.ReadToEnd();
+            }
+            var request = new RestRequest(ErpFacadeBulkPriceInformationEndPoint, Method.Post);
+            request.AddHeader("Content-Type", "application/json");
+            request.AddQueryParameter("Key", sharedKey);
+            request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
+            return request;
+        }
+
+        public async Task<bool> PostPriceChangeResponse200OKPAYSF12Months(string filePath, string generatedProductJsonFolder, string sharedKey)
         {
             string requestBody;
             string responseHeadercorrelationID;
@@ -224,22 +189,22 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             request.AddHeader("Content-Type", "application/json");
             request.AddQueryParameter("Key", sharedKey);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
-            Boolean productValue = true;
-            RestResponse response = await client.ExecuteAsync(request);
-            Assert.AreEqual(System.Net.HttpStatusCode.OK, response.StatusCode);
+            bool productValue = true;
+            RestResponse response = await _client.ExecuteAsync(request);
+            Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK));
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 Thread.Sleep(120000);
-                responseHeadercorrelationID = getResponseHeaderCorrelationID(response);
-                UniquePdtFromInputPayload = getProductListFromInputPayload(filePath);
-                List<string> UniquePdtFromAzureStorage = azureBlobStorageHelper.GetProductListFromBlobContainerAsync(responseHeadercorrelationID).Result;
-                Assert.That(UniquePdtFromInputPayload.Count.Equals(UniquePdtFromAzureStorage.Count), Is.True, "Slicing is not correct");
+                responseHeadercorrelationID = GetResponseHeaderCorrelationId(response);
+                _uniquePdtFromInputPayload = GetProductListFromInputPayload(filePath);
+                List<string> UniquePdtFromAzureStorage = _azureBlobStorageHelper.GetProductListFromBlobContainerAsync(responseHeadercorrelationID).Result;
+                Assert.That(_uniquePdtFromInputPayload.Count.Equals(UniquePdtFromAzureStorage.Count), Is.True, "Slicing is not correct");
                 foreach (string products in UniquePdtFromAzureStorage)
                 {
-                    string generatedProductJsonFile = azureBlobStorageHelper.DownloadJSONFromAzureBlob(generatedProductJsonFolder, responseHeadercorrelationID, products, "ProductChange");
+                    string generatedProductJsonFile = AzureBlobStorageHelper.DownloadJsonFromAzureBlob(generatedProductJsonFolder, responseHeadercorrelationID, products, "ProductChange");
                     Console.WriteLine(generatedProductJsonFile);
 
-                    JsonOutputPriceChangeHelper desiailzedProductOutput = getDeserializedProductJson(generatedProductJsonFile);
+                    JsonOutputPriceChangeHelper desiailzedProductOutput = GetDeserializedProductJson(generatedProductJsonFile);
                     string correlation_ID = desiailzedProductOutput.data.correlationId;
 
                     Assert.That(correlation_ID.Equals(responseHeadercorrelationID), Is.True, "response header corerelationId is same as generated product correlation id");
@@ -284,7 +249,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         EffectiveDatesPerProductPC? findProduct = effectiveDates.FirstOrDefault(x => x.ProductName == SAPProduct.Productname
                                                          && x.EffectiveDates.Date == SAPProduct.EffectiveDateTime.Date
                                                          && x.rrp == SAPProduct.EffectivePrice && x.Duration == SAPProduct.Duration);
-
 
                         if (findProduct != null)
                         {
@@ -320,15 +284,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         Console.WriteLine(Environment.NewLine);
                         Console.WriteLine(string.Format("Comparing product - {0} for PAYSF 12 month Duration condition", SAPProduct.Productname));
                         var findProduct = data.FirstOrDefault(x => x.unitName == "PAYSF");
-                        //if (findProduct.price.Length == 0)
-                        if (findProduct == null)
-                        {
-                            productValue = true;
-                        }
-                        else
-                        {
-                            productValue = false;
-                        }
+                        productValue = findProduct == null;
                     }
                 }
             }
@@ -336,7 +292,4 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         }
 
     }
-
-
 }
-

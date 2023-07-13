@@ -22,7 +22,7 @@
         "mayAffectHoldings": true,
         "contentChange": true,
         "permit": "permitString",
-        "providerCode": 1,
+        "providerCode": "1",
         "providerName": "ICE",
         "_COMMENT": "provider code and descrption are a n-1 mapping",
         "_ENUM": [
@@ -167,7 +167,7 @@
         "mayAffectHoldings": false,
         "contentChange": true,
         "permit": "permitString",
-        "providerCode": 1,
+        "providerCode": "1",
         "providerName": "ICE",
         "_COMMENT": "provider code and descrption are n-1 mapping",
         "_ENUM": [
@@ -317,7 +317,7 @@
         "mayAffectHoldings": false,
         "contentChange": false,
         "permit": "permitString",
-        "providerCode": 2,
+        "providerCode": "2",
         "providerName": "PRIMAR",
         "_COMMENT": "provider code and descrption are a n-1 mapping",
         "_ENUM": [

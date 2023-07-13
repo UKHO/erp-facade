@@ -1,24 +1,24 @@
-﻿using FakeItEasy;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Xml;
+using FakeItEasy;
+using FluentAssertions;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using NUnit.Framework;
 using UKHO.ERPFacade.Common.Configuration;
+using UKHO.ERPFacade.Common.HealthCheck;
 using UKHO.ERPFacade.Common.HttpClients;
 using UKHO.ERPFacade.Common.IO;
-using NUnit.Framework;
-using UKHO.ERPFacade.Common.HealthCheck;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System.Net.Http;
-using System.Net;
-using System.Xml;
 using UKHO.ERPFacade.Common.Logging;
-using System.Threading;
-using FluentAssertions;
-using System.IO;
-using System;
-using System.Text;
 
 namespace UKHO.ERPFacade.Common.UnitTests.HealthCheck
 {
@@ -104,6 +104,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.HealthCheck
             HealthCheckResult result = await _fakeSapServiceHealthCheck.CheckHealthAsync(new HealthCheckContext(), fakeCancellationToken);
 
             result.Status.Should().Be(HealthStatus.Healthy);
+            result.Description.Should().Be("SAP is Healthy !!!");
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
@@ -129,6 +130,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.HealthCheck
             HealthCheckResult result = await _fakeSapServiceHealthCheck.CheckHealthAsync(new HealthCheckContext(), fakeCancellationToken);
 
             result.Status.Should().Be(HealthStatus.Unhealthy);
+            result.Description.Should().Be("SAP is Unhealthy");
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
@@ -147,11 +149,17 @@ namespace UKHO.ERPFacade.Common.UnitTests.HealthCheck
             HealthCheckResult result = await _fakeSapServiceHealthCheck.CheckHealthAsync(new HealthCheckContext(), fakeCancellationToken);
 
             result.Status.Should().Be(HealthStatus.Unhealthy);
+            result.Description.Should().Contain("SAP is Unhealthy");
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+                                    && call.GetArgument<LogLevel>(0) == LogLevel.Warning
+                                    && call.GetArgument<EventId>(1) == EventIds.SapHealthCheckXmlTemplateNotFound.ToEventId()
+                                    && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "The SAP Health Check xml template does not exist.").MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                     && call.GetArgument<LogLevel>(0) == LogLevel.Error
-                                    && call.GetArgument<EventId>(1) == EventIds.SapHealthCheckXmlTemplateNotFound.ToEventId()
-                                    && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "The SAP Health Check xml template does not exist.").MustHaveHappenedOnceExactly();
+                                    && call.GetArgument<EventId>(1) == EventIds.ErrorOccuredInSap.ToEventId()
+                                    && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "An error occured while processing your request in SAP. | {Message}").MustHaveHappened();
         }
     }
 }

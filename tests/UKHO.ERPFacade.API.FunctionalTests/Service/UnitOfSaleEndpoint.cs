@@ -1,55 +1,49 @@
 ﻿using Newtonsoft.Json;
 using NUnit.Framework;
 using RestSharp;
+using UKHO.ERPFacade.API.FunctionalTests.Helpers;
 using UKHO.ERPFacade.API.FunctionalTests.Model;
 using UKHO.ERPFacade.API.FunctionalTests.Model.Latest_Model;
 
-namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
+namespace UKHO.ERPFacade.API.FunctionalTests.Service
 {
     public class UnitOfSaleEndpoint
     {
+        private readonly RestClient _client;
 
-        private readonly RestClient client;
-        private JsonPayloadHelper generatedJsonPayload { get; set; }
         private AzureTableHelper azureTableHelper { get; set; }
         private WebhookEndpoint _webhook { get; set; }
         private AzureBlobStorageHelper azureBlobStorageHelper { get; set; }
-        private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
-        private JSONHelper _jsonHelper { get; set; }
+        private JsonHelper _jsonHelper { get; set; }
+
+        private const string UnitOfSaleRequestEndPoint = "/erpfacade/priceinformation";
 
         public UnitOfSaleEndpoint(string url)
         {
             _webhook = new WebhookEndpoint();
-            _jsonHelper = new JSONHelper();
+            _jsonHelper = new JsonHelper();
             var options = new RestClientOptions(url);
-            client = new RestClient(options);
+            _client = new RestClient(options);
             azureTableHelper = new AzureTableHelper();
             azureBlobStorageHelper = new();
         }
 
-        public async Task<RestResponse> PostUoSResponseAsync(string filePathWebhook, string generatedXMLFolder,string webhookToken, string filePath, string sharedKey)
+        public async Task<RestResponse> PostUoSResponseAsync(string filePathWebhook, string generatedXMLFolder, string webhookToken, string filePath, string sharedKey)
         {
-
-
             await _webhook.PostWebhookResponseAsyncForXML(filePathWebhook, generatedXMLFolder, webhookToken);
-            //string requestBody = _jsonHelper.getDeserializedString(filePath);
-
             string requestBody;
-
-            using (StreamReader streamReader = new StreamReader(filePath))
+            using (StreamReader streamReader = new(filePath))
             {
                 requestBody = streamReader.ReadToEnd();
             }
-            requestBody = JSONHelper.replaceCorrID(requestBody, WebhookEndpoint.generatedCorrelationId);
+            requestBody = JsonHelper.replaceCorrID(requestBody, WebhookEndpoint.generatedCorrelationId);
 
-            var request = new RestRequest("/erpfacade/priceinformation", Method.Post);
-
-
+            var request = new RestRequest(UnitOfSaleRequestEndPoint, Method.Post);
             request.AddHeader("Content-Type", "application/json");
             request.AddQueryParameter("Key", sharedKey);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
 
-            RestResponse response = await client.ExecuteAsync(request);
+            RestResponse response = await _client.ExecuteAsync(request);
             List<JsonInputPriceChangeHelper> jsonPayload = JsonConvert.DeserializeObject<List<JsonInputPriceChangeHelper>>(requestBody);
             string corrId = jsonPayload[0].Corrid;
 
@@ -57,74 +51,42 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             {
                 Assert.That(azureTableHelper.CheckResponseDateTime(corrId), Is.True, "ResponseDateTime Not updated in Azure table");
             }
-
             return response;
         }
 
-        public async Task<RestResponse> PostUoSResponseAsyncWithJSON(string filePath, string generatedJSONFolder, string sharedKey)
-        {
-            string requestBody;
-
-            using (StreamReader streamReader = new StreamReader(filePath))
-            {
-                requestBody = streamReader.ReadToEnd();
-            }
-            var request = new RestRequest("/erpfacade/priceinformation", Method.Post);
-
-            request.AddHeader("Content-Type", "application/json");
-            request.AddQueryParameter("Key", sharedKey);
-            request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
-
-            RestResponse response = await client.ExecuteAsync(request);
-            List<JsonInputPriceChangeHelper> jsonPayload = JsonConvert.DeserializeObject<List<JsonInputPriceChangeHelper>>(requestBody);
-            string correlationId = jsonPayload[0].Corrid;
-
-
-            if (response.StatusCode == System.Net.HttpStatusCode.OK)
-            {
-                string generatedJSONFilePath = azureBlobStorageHelper.DownloadJSONFromAzureBlob(generatedJSONFolder, correlationId, "json");
-            }
-
-            return response;
-        }
-
-        public async Task<RestResponse> PostWebHookAndUoSResponseAsyncWithJSON(string webHookfilePath, string uosFilePath, string generatedXMLFolder, string generatedJSONFolder, string webhookToken, string uosKey)
+        public async Task<RestResponse> PostWebHookAndUoSResponseAsyncWithJson(string webHookfilePath, string uosFilePath, string generatedXMLFolder, string generatedJsonFolder, string webhookToken, string uosKey)
         {
             await _webhook.PostWebhookResponseAsyncForXML(webHookfilePath, generatedXMLFolder, webhookToken);
-            //await _webhook.PostWebhookResponseAsync(webHookfilePath, webhookToken);
-            string requestBody = _jsonHelper.getDeserializedString(uosFilePath);
-            requestBody=JSONHelper.replaceCorrID(requestBody, WebhookEndpoint.generatedCorrelationId);
+
+            string requestBody = _jsonHelper.GetDeserializedString(uosFilePath);
+            requestBody = JsonHelper.replaceCorrID(requestBody, WebhookEndpoint.generatedCorrelationId);
+
             var request = new RestRequest("/erpfacade/priceinformation", Method.Post);
             request.AddHeader("Content-Type", "application/json");
             request.AddQueryParameter("Key", uosKey);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
-            RestResponse response = await client.ExecuteAsync(request);
+
+            RestResponse response = await _client.ExecuteAsync(request);
             List<JsonInputPriceChangeHelper> jsonPayload = JsonConvert.DeserializeObject<List<JsonInputPriceChangeHelper>>(requestBody);
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 string correlationId = jsonPayload[0].Corrid;
                 string generatedJsonCorrelationId = "";
-                string generatedJSONBody = "";
-                string generatedJSONFilePath = azureBlobStorageHelper.DownloadJSONFromAzureBlob(generatedJSONFolder, correlationId, "json");
-                using (StreamReader streamReader = new StreamReader(generatedJSONFilePath))
-                {
-                    generatedJSONBody = streamReader.ReadToEnd();
-                }
-                FinalUoSOutput generatedJsonPayload = JsonConvert.DeserializeObject<FinalUoSOutput>(generatedJSONBody);
+                FinalUoSOutput generatedJsonPayload = GenerateJson(correlationId, generatedJsonFolder);
                 generatedJsonCorrelationId = generatedJsonPayload.data.correlationId;
                 Assert.That(correlationId.Equals(generatedJsonCorrelationId), Is.True, "correlationIds from SAP and FinalUOS are not same");
 
-                Unitsofsaleprice[] data = generatedJsonPayload.data.unitsOfSalePrices;
-                List<string> finalUintNames = data.Select(x => x.unitName).ToList();
-                List<string> SAPProductNames = jsonPayload.Select(x => x.Productname).Distinct().ToList();
-                Assert.That(SAPProductNames.All(finalUintNames.Contains) && finalUintNames.All(SAPProductNames.Contains), Is.True, "ProductNames from SAP and FinalUOS are not same");
+                UnitsofSalePrice[] data = generatedJsonPayload.data.unitsOfSalePrices;
+                List<string> finalUnitName = data.Select(x => x.unitName).ToList();
+                List<string> SAPProductName = jsonPayload.Select(x => x.Productname).Distinct().ToList();
+                Assert.That(SAPProductName.All(finalUnitName.Contains) && finalUnitName.All(SAPProductName.Contains), Is.True, "ProductNames from SAP and FinalUOS are not same");
                 var effectivePrices = data.Select(x => x.price);
-                List<EffectiveDatesPerProduct> effectiveDates = new List<EffectiveDatesPerProduct>();
-                foreach (Unitsofsaleprice unit in data)
+                List<EffectiveDatesPerProduct> effectiveDates = new();
+                foreach (UnitsofSalePrice unit in data)
                 {
                     foreach (var prices in unit.price)
                     {
-                        EffectiveDatesPerProduct effectiveDate = new EffectiveDatesPerProduct();
+                        EffectiveDatesPerProduct effectiveDate = new();
                         effectiveDate.ProductName = unit.unitName;
                         effectiveDate.EffectiveDates = prices.effectiveDate;
                         effectiveDate.Duration = prices.standard.priceDurations[0].numberOfMonths;
@@ -135,48 +97,42 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 foreach (IGrouping<string, EffectiveDatesPerProduct> date in effectiveDates.GroupBy(x => x.ProductName))
                 {
                     var product = date.Key;
-                    var effdates = date.Select(x => x.EffectiveDates).ToList();
-                    var distinctEffDates = effdates.Distinct().ToList();
+                    var effectiveDate = date.Select(x => x.EffectiveDates).ToList();
+                    var distEffectiveDate = effectiveDate.Distinct().ToList();
                     var duration = date.Select(x => x.Duration).ToList();
-                    var distinctDurations = duration.Distinct().ToList();
+                    var distinctDuration = duration.Distinct().ToList();
                     var rrp = date.Select(x => x.rrp).ToList();
                     var distinctrrp = rrp.Distinct().ToList();
-                    Assert.That(effdates.All(distinctEffDates.Contains) && distinctEffDates.All(effdates.Contains), Is.True, "Effective dates for {0} are not distinct.");
-                    Assert.That(duration.All(distinctDurations.Contains) && distinctDurations.All(duration.Contains), Is.True, "Duration for {0} are not distinct.");
+                    Assert.That(effectiveDate.All(distEffectiveDate.Contains) && distEffectiveDate.All(effectiveDate.Contains), Is.True, "Effective dates for {0} are not distinct.");
+                    Assert.That(duration.All(distinctDuration.Contains) && distinctDuration.All(duration.Contains), Is.True, "Duration for {0} are not distinct.");
                     Assert.That(rrp.All(distinctrrp.Contains) && distinctrrp.All(rrp.Contains), Is.True, "RRP for {0} are not distinct.");
                 }
             }
             return response;
         }
 
-        public async Task<RestResponse> PostWebHookAndUoSResponseAsyncWithNullProduct(string webHookfilePath, string uosFilePath, string generatedXMLFolder, string generatedJSONFolder, string webhookToken, string uosKey)
+        public async Task<RestResponse> PostWebHookAndUoSResponseAsyncWithNullProduct(string webHookfilePath, string uosFilePath, string generatedXMLFolder, string generatedJsonFolder, string webhookToken, string uosKey)
         {
             await _webhook.PostWebhookResponseAsyncForXML(webHookfilePath, generatedXMLFolder, webhookToken);
-            string requestBody = _jsonHelper.getDeserializedString(uosFilePath);
-            requestBody = JSONHelper.replaceCorrID(requestBody, WebhookEndpoint.generatedCorrelationId);
-            var request = new RestRequest("/erpfacade/priceinformation", Method.Post);
+            string requestBody = _jsonHelper.GetDeserializedString(uosFilePath);
+            requestBody = JsonHelper.replaceCorrID(requestBody, WebhookEndpoint.generatedCorrelationId);
+            var request = new RestRequest(UnitOfSaleRequestEndPoint, Method.Post);
             request.AddHeader("Content-Type", "application/json");
             request.AddQueryParameter("Key", uosKey);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
-            RestResponse response = await client.ExecuteAsync(request);
+            RestResponse response = await _client.ExecuteAsync(request);
             List<JsonInputPriceChangeHelper> jsonPayload = JsonConvert.DeserializeObject<List<JsonInputPriceChangeHelper>>(requestBody);
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 string correlationId = jsonPayload[0].Corrid;
                 string generatedJsonCorrelationId = "";
-                string generatedJSONBody = "";
-                string generatedJSONFilePath = azureBlobStorageHelper.DownloadJSONFromAzureBlob(generatedJSONFolder, correlationId, "json");
-                using (StreamReader streamReader = new StreamReader(generatedJSONFilePath))
-                {
-                    generatedJSONBody = streamReader.ReadToEnd();
-                }
-                FinalUoSOutput generatedJsonPayload = JsonConvert.DeserializeObject<FinalUoSOutput>(generatedJSONBody);
+                FinalUoSOutput generatedJsonPayload = GenerateJson(correlationId, generatedJsonFolder);
                 generatedJsonCorrelationId = generatedJsonPayload.data.correlationId;
                 Assert.That(correlationId.Equals(generatedJsonCorrelationId), Is.True, "correlationIds from SAP and FinalUOS are not same");
-                Unitsofsaleprice[] data = generatedJsonPayload.data.unitsOfSalePrices;
+                UnitsofSalePrice[] data = generatedJsonPayload.data.unitsOfSalePrices;
                 List<string> finalUintNames = data.Select(x => x.unitName).ToList();
                 List<string> SAPProductNames = jsonPayload.Select(x => x.Productname).Distinct().ToList();
-                Assert.That(SAPProductNames.All(finalUintNames.Contains) && finalUintNames.All(SAPProductNames.Contains), Is.False, "ProductNames from SAP and FinalUOS are not same");             
+                Assert.That(SAPProductNames.All(finalUintNames.Contains) && finalUintNames.All(SAPProductNames.Contains), Is.False, "ProductNames from SAP and FinalUOS are not same");
             }
             return response;
         }
@@ -184,42 +140,42 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         public async Task<RestResponse> PostWebHookAndUoSNoCorrIdResponse400BadRequest(string webHookfilePath, string uosFilePath, string generatedXMLFolder, string generatedJSONFolder, string webhookToken, string uosKey)
         {
             await _webhook.PostWebhookResponseAsyncForXML(webHookfilePath, generatedXMLFolder, webhookToken);
-            string requestBody = _jsonHelper.getDeserializedString(uosFilePath);
-            requestBody = JSONHelper.replaceCorrID(requestBody, "");
-            var request = new RestRequest("/erpfacade/priceinformation", Method.Post);
+            string requestBody = _jsonHelper.GetDeserializedString(uosFilePath);
+            requestBody = JsonHelper.replaceCorrID(requestBody, "");
+            var request = new RestRequest(UnitOfSaleRequestEndPoint, Method.Post);
             request.AddHeader("Content-Type", "application/json");
             request.AddQueryParameter("Key", uosKey);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
-            RestResponse response = await client.ExecuteAsync(request);
+            RestResponse response = await _client.ExecuteAsync(request);
             return response;
         }
 
         public async Task<RestResponse> PostWebHookAndUoSInvalidCorrIdResponse404NotFound(string webHookfilePath, string uosFilePath, string generatedXMLFolder, string generatedJSONFolder, string webhookToken, string uosKey)
         {
             await _webhook.PostWebhookResponseAsyncForXML(webHookfilePath, generatedXMLFolder, webhookToken);
-            string requestBody = _jsonHelper.getDeserializedString(uosFilePath);
-            requestBody = JSONHelper.replaceCorrID(requestBody, "ssyyttddhhttaaww");
-            var request = new RestRequest("/erpfacade/priceinformation", Method.Post);
+            string requestBody = _jsonHelper.GetDeserializedString(uosFilePath);
+            requestBody = JsonHelper.replaceCorrID(requestBody, "ssyyttddhhttaaww");
+            var request = new RestRequest(UnitOfSaleRequestEndPoint, Method.Post);
             request.AddHeader("Content-Type", "application/json");
             request.AddQueryParameter("Key", uosKey);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
-            RestResponse response = await client.ExecuteAsync(request);
+            RestResponse response = await _client.ExecuteAsync(request);
             return response;
         }
 
-        public async Task<RestResponse> PostWebHookAndUoSResponse200OK(string webHookfilePath, string uosFilePath, string generatedXMLFolder, string generatedJSONFolder, string webhookToken, string uosKey)
+        public async Task<RestResponse> PostWebHookAndUoSResponse200OK(string webHookfilePath, string uosFilePath, string generatedXMLFolder, string generatedJsonFolder, string webhookToken, string uosKey)
         {
             await _webhook.PostWebhookResponseAsyncForXML(webHookfilePath, generatedXMLFolder, webhookToken);
-            string requestBody = _jsonHelper.getDeserializedString(uosFilePath);
-            requestBody = JSONHelper.replaceCorrID(requestBody, WebhookEndpoint.generatedCorrelationId);
-            var request = new RestRequest("/erpfacade/priceinformation", Method.Post);
+            string requestBody = _jsonHelper.GetDeserializedString(uosFilePath);
+            requestBody = JsonHelper.replaceCorrID(requestBody, WebhookEndpoint.generatedCorrelationId);
+            var request = new RestRequest(UnitOfSaleRequestEndPoint, Method.Post);
             request.AddHeader("Content-Type", "application/json");
             request.AddQueryParameter("Key", uosKey);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
-            RestResponse response = await client.ExecuteAsync(request);
+            RestResponse response = await _client.ExecuteAsync(request);
             List<JsonInputPriceChangeHelper> jsonSAPPriceInfoPayload = JsonConvert.DeserializeObject<List<JsonInputPriceChangeHelper>>(requestBody);
             //Adding new code
-           if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 var SAPProductData = jsonSAPPriceInfoPayload.Select(x => new
                 {
@@ -235,31 +191,28 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 }).ToList();
                 string correlationId = jsonSAPPriceInfoPayload[0].Corrid;
                 string generatedJsonCorrelationId = "";
-                string generatedJSONBody = "";
-                string generatedJSONFilePath = azureBlobStorageHelper.DownloadJSONFromAzureBlob(generatedJSONFolder, correlationId, "json");
-                using (StreamReader streamReader = new StreamReader(generatedJSONFilePath))
-                {
-                    generatedJSONBody = streamReader.ReadToEnd();
-                }
-                FinalUoSOutput generatedJsonPayload = JsonConvert.DeserializeObject<FinalUoSOutput>(generatedJSONBody);
+                FinalUoSOutput generatedJsonPayload = GenerateJson(correlationId, generatedJsonFolder);
+
                 generatedJsonCorrelationId = generatedJsonPayload.data.correlationId;
                 Assert.That(correlationId.Equals(generatedJsonCorrelationId), Is.True, "correlationIds from SAP and FinalUOS are not same");
 
-                Unitsofsaleprice[] data = generatedJsonPayload.data.unitsOfSalePrices;
-                List<string> finalUintNames = data.Select(x => x.unitName).ToList();
-                List<string> SAPProductNames = jsonSAPPriceInfoPayload.Select(x => x.Productname).Distinct().ToList();
-                
+                UnitsofSalePrice[] data = generatedJsonPayload.data.unitsOfSalePrices;
+                List<string> finalUnitName = data.Select(x => x.unitName).ToList();
+                List<string> SAPProductName = jsonSAPPriceInfoPayload.Select(x => x.Productname).Distinct().ToList();
+
                 var effectivePrices = data.Select(x => x.price);
-                List<EffectiveDatesPerProduct> effectiveDates = new List<EffectiveDatesPerProduct>();
-                foreach (Unitsofsaleprice unit in data)
+                List<EffectiveDatesPerProduct> effectiveDates = new();
+                foreach (UnitsofSalePrice unit in data)
                 {
                     foreach (var prices in unit.price)
                     {
-                        EffectiveDatesPerProduct effectiveDate = new EffectiveDatesPerProduct();
-                        effectiveDate.ProductName = unit.unitName;
-                        effectiveDate.EffectiveDates = prices.effectiveDate;
-                        effectiveDate.Duration = prices.standard.priceDurations[0].numberOfMonths;
-                        effectiveDate.rrp = prices.standard.priceDurations[0].rrp;
+                        EffectiveDatesPerProduct effectiveDate = new()
+                        {
+                            ProductName = unit.unitName,
+                            EffectiveDates = prices.effectiveDate,
+                            Duration = prices.standard.priceDurations[0].numberOfMonths,
+                            rrp = prices.standard.priceDurations[0].rrp
+                        };
                         effectiveDates.Add(effectiveDate);
                     }
                 }
@@ -291,12 +244,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
                     if (findProduct != null)
                     {
-                        
+
                         Console.WriteLine(string.Format("Product - {0} found in Final UOS for Effective Date - {1}, Duration - {2} and Price - {3}", SAPProduct.Productname, SAPProduct.EffectiveDateTime.Date, SAPProduct.Duration, SAPProduct.EffectivePrice));
                     }
                     else
                     {
-                        
+
                         Console.WriteLine(string.Format("Product - {0} Not found in Final UOS for Effective Date - {1}, Duration - {2} and Price - {3}", SAPProduct.Productname, SAPProduct.EffectiveDateTime.Date, SAPProduct.Duration, SAPProduct.EffectivePrice));
                     }
 
@@ -308,34 +261,33 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
                         if (findFutureProduct != null)
                         {
-                            
+
                             Console.WriteLine(string.Format("Product - {0} found in Final UOS for Future Date - {1}, Duration - {2} and Price - {3}", SAPProduct.Productname, SAPProduct.FutureDateTime.Date, SAPProduct.Duration, SAPProduct.FuturePrice));
                         }
                         else
                         {
-                            
+
                             Console.WriteLine(string.Format("Product - {0} Not found in Final UOS for Future Date - {1}, Duration - {2} and Price - {3}", SAPProduct.Productname, SAPProduct.FutureDateTime.Date, SAPProduct.Duration, SAPProduct.FuturePrice));
                         }
                     }
-
                 }
             }
             return response;
         }
 
-        public async Task<Boolean> PostWebHookAndUoSResponse200OKPAYSF12Months(string webHookfilePath, string uosFilePath, string generatedXMLFolder, string generatedJSONFolder, string webhookToken, string uosKey)
+        public async Task<bool> PostWebHookAndUoSResponse200OKPAYSF12Months(string webHookfilePath, string uosFilePath, string generatedXMLFolder, string generatedJSONFolder, string webhookToken, string uosKey)
         {
             await _webhook.PostWebhookResponseAsyncForXML(webHookfilePath, generatedXMLFolder, webhookToken);
-            string requestBody = _jsonHelper.getDeserializedString(uosFilePath);
-            requestBody = JSONHelper.replaceCorrID(requestBody, WebhookEndpoint.generatedCorrelationId);
+            string requestBody = _jsonHelper.GetDeserializedString(uosFilePath);
+            requestBody = JsonHelper.replaceCorrID(requestBody, WebhookEndpoint.generatedCorrelationId);
             var request = new RestRequest("/erpfacade/priceinformation", Method.Post);
             request.AddHeader("Content-Type", "application/json");
             request.AddQueryParameter("Key", uosKey);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
-            RestResponse response = await client.ExecuteAsync(request);
+            RestResponse response = await _client.ExecuteAsync(request);
             List<JsonInputPriceChangeHelper> jsonSAPPriceInfoPayload = JsonConvert.DeserializeObject<List<JsonInputPriceChangeHelper>>(requestBody);
-            Boolean productValue = true;
-            Assert.AreEqual(System.Net.HttpStatusCode.OK, response.StatusCode);
+            bool productValue = true;
+            Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK));
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 var SAPProductData = jsonSAPPriceInfoPayload.Select(x => new
@@ -353,7 +305,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 string correlationId = jsonSAPPriceInfoPayload[0].Corrid;
                 string generatedJsonCorrelationId = "";
                 string generatedJSONBody = "";
-                string generatedJSONFilePath = azureBlobStorageHelper.DownloadJSONFromAzureBlob(generatedJSONFolder, correlationId, "json");
+                string generatedJSONFilePath = azureBlobStorageHelper.DownloadJsonFromAzureBlob(generatedJSONFolder, correlationId, "json");
                 using (StreamReader streamReader = new StreamReader(generatedJSONFilePath))
                 {
                     generatedJSONBody = streamReader.ReadToEnd();
@@ -362,13 +314,13 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 generatedJsonCorrelationId = generatedJsonPayload.data.correlationId;
                 Assert.That(correlationId.Equals(generatedJsonCorrelationId), Is.True, "correlationIds from SAP and FinalUOS are not same");
 
-                Unitsofsaleprice[] data = generatedJsonPayload.data.unitsOfSalePrices;
+                UnitsofSalePrice[] data = generatedJsonPayload.data.unitsOfSalePrices;
                 List<string> finalUintNames = data.Select(x => x.unitName).ToList();
                 List<string> SAPProductNames = jsonSAPPriceInfoPayload.Select(x => x.Productname).Distinct().ToList();
 
                 var effectivePrices = data.Select(x => x.price);
                 List<EffectiveDatesPerProduct> effectiveDates = new List<EffectiveDatesPerProduct>();
-                foreach (Unitsofsaleprice unit in data)
+                foreach (UnitsofSalePrice unit in data)
                 {
                     foreach (var prices in unit.price)
                     {
@@ -427,7 +379,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                             Console.WriteLine(string.Format("Product - {0} Not found in Final UOS for Future Date - {1}, Duration - {2} and Price - {3}", SAPProduct.Productname, SAPProduct.FutureDateTime.Date, SAPProduct.Duration, SAPProduct.FuturePrice));
                         }
                     }
-
                 }
 
                 foreach (var SAPProduct in SAPProductData.Where(x => x.Duration == 12 && x.Productname.Equals("PAYSF")))
@@ -435,20 +386,22 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     Console.WriteLine(Environment.NewLine);
                     Console.WriteLine(string.Format("Comparing product - {0} for PAYSF 12 month Duration condition", SAPProduct.Productname));
                     var findProduct = data.FirstOrDefault(x => x.unitName == "PAYSF");
-                    if (findProduct == null)
-                    {
-                        productValue = true;
-                    }
-                    else
-                    {
-                        productValue = false;
-                    }
+                    productValue = findProduct == null;
                 }
             }
             return productValue;
         }
 
-
+        private FinalUoSOutput GenerateJson(string correlationId, string generatedJsonFolder)
+        {
+            string generatedJsonBody = "";
+            string generatedJsonFilePath = azureBlobStorageHelper.DownloadJsonFromAzureBlob(generatedJsonFolder, correlationId, "json");
+            using (StreamReader streamReader = new(generatedJsonFilePath))
+            {
+                generatedJsonBody = streamReader.ReadToEnd();
+            }
+            FinalUoSOutput generatedJsonPayload = JsonConvert.DeserializeObject<FinalUoSOutput>(generatedJsonBody);
+            return generatedJsonPayload;
+        }
     }
 }
-
