@@ -25,6 +25,8 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
         private const string BulkPriceInformationFileName = "BulkPriceInformation.json";
         private const string PriceInformationFileName = "PriceInformation.json";
         private const string PriceChangeEventFileName = "PriceChangeEvent.json";
+        private int PublishProductsCounter = 0;
+        private int UnpublishProductsCounter = 0;
 
         public SlicingPublishingService(ILogger<SlicingPublishingService> logger, IAzureTableReaderWriter azureTableReaderWriter, IAzureBlobEventWriter azureBlobEventWriter, IErpFacadeService erpFacadeService, IEventPublisher eventPublisher, ICloudEventFactory cloudEventFactory)
         {
@@ -81,7 +83,11 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
                     else
                     {
                         var slicedPrices = priceInformationList.Select(p => p.ProductName).Distinct().ToList();
+                        _logger.LogInformation(EventIds.ProductsToSliceCount.ToEventId(), "Total products to slice are {Count} | _X-Correlation-ID : {_X-Correlation-ID}", slicedPrices.Count, entity.CorrId);
+
                         string eventId;
+                        PublishProductsCounter = 0;
+                        UnpublishProductsCounter = 0;
 
                         Parallel.ForEach(slicedPrices, unitName =>
                         {
@@ -106,6 +112,8 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
                                 PublishEvent(priceChangeCloudEventData, entity.CorrId, unitName, eventId);
                             }
                         });
+
+                        _logger.LogInformation(EventIds.ProductsPublishedUnpublishedCount.ToEventId(), "Total products published are {Count} and unpublished are {unpublishedCount} | _X-Correlation-ID : {_X-Correlation-ID}", PublishProductsCounter,UnpublishProductsCounter, entity.CorrId);
                     }
                 }
             }
@@ -128,6 +136,12 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
             if (result.Result.Status == Result.Statuses.Success)
             {
                 _azureTableReaderWriter.UpdateUnitPriceChangeStatusAndPublishDateTimeEntity(masterCorrId, unitName, eventId);
+                PublishProductsCounter++;
+            }
+            else
+            {
+                UnpublishProductsCounter++;
+                _logger.LogWarning(EventIds.ProductsUnpublishedCount.ToEventId(), "Product {unitName} was not published successfully | _X-Correlation-ID : {_X-Correlation-ID}", unitName, masterCorrId);
             }
         }
 
