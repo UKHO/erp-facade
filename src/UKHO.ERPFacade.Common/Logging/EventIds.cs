@@ -78,7 +78,7 @@ namespace UKHO.ERPFacade.Common.Logging
         WebjobProcessEventStarted = 940014,
 
         /// <summary>
-        /// 940015- Webjob completed to process the incomplete transactions.
+        /// 940015 - Webjob completed to process the incomplete transactions.
         /// </summary>
         WebjobProcessEventCompleted = 940015,
 
