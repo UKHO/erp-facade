@@ -1,5 +1,10 @@
-﻿namespace UKHO.ERPFacade.Common.Logging
+﻿using Microsoft.Extensions.Logging;
+
+namespace UKHO.ERPFacade.Common.Logging
 {
+    /// <summary>
+    /// Event Ids
+    /// </summary>
     public enum EventIds
     {
         /// <summary>
@@ -68,12 +73,12 @@
         EncUpdatePushedToSap = 940013,
 
         /// <summary>
-        /// 940014- Webjob started to process the incomplete transactions.
+        /// 940014 - Webjob started to process the incomplete transactions.
         /// </summary>
         WebjobProcessEventStarted = 940014,
 
         /// <summary>
-        /// 940015- Webjob completed to process the incomplete transactions.
+        /// 940015 - Webjob completed to process the incomplete transactions.
         /// </summary>
         WebjobProcessEventCompleted = 940015,
 
@@ -285,12 +290,12 @@
         AddedBulkPriceInformationEventInAzureTable = 940057,
 
         /// <summary>
-        /// 940058- Webjob started to process the publishing price changes.
+        /// 940058 - Webjob started to process the publishing price changes.
         /// </summary>
         WebjobPublishingPriceChangesEventStarted = 940058,
 
         /// <summary>
-        /// 940059- Webjob completed processing the publishing price changes.
+        /// 940059 - Webjob completed processing the publishing price changes.
         /// </summary>
         WebjobPublishingPriceChangesEventCompleted = 940059,
 
@@ -315,12 +320,12 @@
         UploadedPriceInformationEventInAzureBlob = 940063,
 
         /// <summary>
-        /// 940064- Fetching master entities from azure table.
+        /// 940064 - Fetching master entities from azure table.
         /// </summary>
         FetchMasterEntities = 940064,
 
         /// <summary>
-        /// 940065 Fetching create date of blob. 
+        /// 940065 - Fetching create date of blob. 
         /// </summary>
         FetchBlobCreateDate = 940065,
 
@@ -340,7 +345,7 @@
         DeletedEESEntitySuccessful = 940068,
 
         /// <summary>
-        /// 940069 Fetching all blob present inside the container. 
+        /// 940069 - Fetching all blob present inside the container. 
         /// </summary>
         FetchBlobsFromContainer = 940069,
 
@@ -350,7 +355,7 @@
         DeletedBlobSuccessful = 940070,
 
         /// <summary>
-        /// 940071 Fetching all EES entities from Azure Table. 
+        /// 940071 - Fetching all EES entities from Azure Table. 
         /// </summary>
         FetchEESEntities = 940071,
 
@@ -360,12 +365,12 @@
         DeletedContainerSuccessful = 940072,
 
         /// <summary>
-        /// 940073- Webjob started cleanup process.
+        /// 940073 - Webjob started cleanup process.
         /// </summary>
         WebjobCleanUpEventStarted = 940073,
 
         /// <summary>
-        /// 940074- Webjob completed cleanup process.
+        /// 940074 - Webjob completed cleanup process.
         /// </summary>
         WebjobCleanUpEventCompleted = 940074,
 
@@ -453,5 +458,21 @@
         /// 940092 - Count of unpublished products 
         /// </summary>
         ProductsUnpublishedCount = 940092
+    }
+
+    /// <summary>
+    /// EventId Extensions
+    /// </summary>
+    public static class EventIdExtensions
+    {
+        /// <summary>
+        /// Event Id
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <returns></returns>
+        public static EventId ToEventId(this EventIds eventId)
+        {
+            return new EventId((int)eventId, eventId.ToString());
+        }
     }
 }

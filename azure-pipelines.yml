@@ -248,6 +248,19 @@ stages:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)\UKHO.ERPFacade.API\UKHOERPFacadeAPI.zip'
               ArtifactName: UKHOERPFacadeAPI
 
+          - task: PowerShell@2
+            displayName: "Generate event id runbook"
+            inputs:
+              targetType: filePath
+              filePath: '$(Build.SourcesDirectory)\Utility\XmlToRtfTransformation.ps1'
+              arguments: '-xmlFilePath $(Build.ArtifactStagingDirectory)\UKHO.ERPFacade.API\UKHO.ERPFacade.Common.xml -xsltFilePath $(Build.SourcesDirectory)\Utility\EventIdXmlTransformation.xslt -outputFileName Runbook-EventId'
+          
+          - task: PublishBuildArtifacts@1
+            displayName: "Publish event id runbook"
+            inputs:
+              PathtoPublish: '$(Build.SourcesDirectory)\Utility\Runbook-EventId.rtf'
+              ArtifactName: Runbook
+
       - job: PublishFunctionalTestsAndTerraform
         workspace:
           clean: all
@@ -522,10 +535,18 @@ stages:
     variables:
       - group: "ERP-Facade-Live"
       - group: "Erp-Live"
+      - name: "AzureADConfiguration.TenantId"
+        value: $(AzureADConfigurationTenantId)
+      - name: "AzureADConfiguration.ClientId"
+        value: $(AzureADConfigurationClientId)
+      - name: "ErpPublishEventSource.ClientId"
+        value: $(EnterpriseEventServiceConfigurationClientId)
+      - name: "SharedKeyConfiguration.Key"
+        value: $(SharedKeyConfigurationKey)
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
     jobs:
       - deployment: LiveDeployTerraform
-        displayName: "Live - Deploy Terraform and Dotnet App"
+        displayName: "Live - Deploy Terraform"
         environment: "ERP-Live"
         pool: $(DeploymentPool)
         container: ${{variables.Container}}
@@ -538,4 +559,22 @@ stages:
                 - template: Deployment/templates/continuous-deployment.yml
                   parameters:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
+                    AzureSubscription: "ERP-Facade-Live-A.011.05.12"
+
+      - deployment: LiveDeployApp
+        dependsOn: LiveDeployTerraform
+        displayName: "Live - Deploy Dotnet App"
+        environment: "ERP-Live"
+        pool: $(DeploymentPoolPE)
+        variables:
+          - name : WEB_APP_NAME
+            value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.WEB_APP'] ]
+        workspace:
+          clean: all
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - template: Deployment/templates/continuous-deployment-app.yml
+                  parameters:
                     AzureSubscription: "ERP-Facade-Live-A.011.05.12"
