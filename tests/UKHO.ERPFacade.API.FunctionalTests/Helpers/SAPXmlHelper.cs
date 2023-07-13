@@ -685,7 +685,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
         public static bool VerifyInitialXMLHeaders(JsonPayloadHelper jsonPayload, string generatedXMLFilePath)
         {
-            bool isNoOfActionsMatching = VerifyNOOFACTIONSHeader(jsonPayload, generatedXMLFilePath);
+            bool isNoOfActionsMatching = VerifyNoOfActionsHeader(jsonPayload, generatedXMLFilePath);
             bool isRecTimeMatching = VerifyRECTIMEHeader(jsonPayload, generatedXMLFilePath);
             bool isCorrIdMatching = VerifyCORRIDHeader(jsonPayload, generatedXMLFilePath);
             bool isOrgMatching = VerifyORGHeader(jsonPayload, generatedXMLFilePath);
@@ -720,7 +720,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             }
         }
 
-        public static bool VerifyNOOFACTIONSHeader(JsonPayloadHelper jsonPayload, string generatedXMLFilePath)
+        public static bool VerifyNoOfActionsHeader(JsonPayloadHelper jsonPayload, string generatedXMLFilePath)
         {
             int totalNumberofActions = CalculateTotalNumberOfActions(jsonPayload);
             int noofActions = int.Parse(GetRequiredXMLText(generatedXMLFilePath, "NOOFACTIONS"));
