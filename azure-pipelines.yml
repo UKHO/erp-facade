@@ -253,7 +253,7 @@ stages:
             inputs:
               targetType: filePath
               filePath: '$(Build.SourcesDirectory)\Utility\XmlToRtfTransformation.ps1'
-              arguments: '-xmlFilePath $(Build.ArtifactStagingDirectory)\UKHOERPFacadeAPI\UKHO.ERPFacade.Common.xml -xsltFilePath $(Build.SourcesDirectory)\Utility\EventIdXmlTransformation.xslt -outputFileName Runbook-EventId'
+              arguments: '-xmlFilePath $(Build.ArtifactStagingDirectory)\UKHOERPFacadeAPI\UKHO.ERPFacade.API.xml -xsltFilePath $(Build.SourcesDirectory)\Utility\EventIdXmlTransformation.xslt -outputFileName Runbook-EventId'
           
           - task: PublishBuildArtifacts@1
             displayName: "Publish event id runbook"
