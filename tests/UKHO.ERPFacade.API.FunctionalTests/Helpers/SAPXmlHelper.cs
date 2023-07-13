@@ -4,7 +4,10 @@ using System.Xml.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
+using NUnit.Framework.Interfaces;
+using UKHO.ERPFacade.API.FunctionalTests.Configuration;
 using UKHO.ERPFacade.API.FunctionalTests.Model;
+using UKHO.ERPFacade.Common.Infrastructure;
 
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
@@ -38,6 +41,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             var reader = new XmlTextReader(ms) { Namespaces = false };
             var serializer = new XmlSerializer(typeof(Z_ADDS_MAT_INFO));
             var result = (Z_ADDS_MAT_INFO)serializer.Deserialize(reader);
+
+            Assert.True(VerifyPresenseOfMandatoryXMLAtrributes(result.IM_MATINFO.ACTIONITEMS).Result);
 
             ActionCounter = 1;
             ChangeENCCell.Clear();
@@ -606,6 +611,44 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 }
             }
             return productInfo;
+        }
+
+        public static async Task<bool> VerifyPresenseOfMandatoryXMLAtrributes(ZMAT_ACTIONITEMS[] ZMAT_ACTIONITEMS)
+        {
+            List<string> ActionAttributesSeq = new List<string>();
+            ActionAttributesSeq = Config.TestConfig.XMLActionList.ToList<string>();
+            List<string> CurrentActionAttributes = new List<string>();
+
+            foreach (ZMAT_ACTIONITEMS item in ZMAT_ACTIONITEMS)
+            {
+                CurrentActionAttributes.Clear();
+                Type arrayType = item.GetType();
+                var properties = arrayType.GetProperties();
+
+                foreach (var property in properties)
+                {
+                    CurrentActionAttributes.Add(property.Name);
+                }
+
+
+                for (int i = 0; i < 15; i++)
+                {
+                    if (CurrentActionAttributes[i] != ActionAttributesSeq[i])
+                    {
+                        Console.WriteLine("First missed Attribute is:" + ActionAttributesSeq[i] + " for action number:" + item.ACTIONNUMBER);
+                        return false;
+                    }
+                }
+
+            }
+            if (ZMAT_ACTIONITEMS.Length > 0)
+            {
+                Console.WriteLine("Mandatory atrributes are present in all XML actions");
+                await Task.CompletedTask;
+                return true;
+            }
+            else
+                return false;
         }
 
         private static UoSProductInfo GetFirstProductsInfoHavingUoS(string unitOfSalesName)
