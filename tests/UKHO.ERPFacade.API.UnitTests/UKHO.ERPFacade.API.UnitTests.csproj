@@ -32,4 +32,10 @@
     <ProjectReference Include="..\..\src\UKHO.ERPFacade.Common\UKHO.ERPFacade.Common.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="ERPTestData\ActionItemNodeTest.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
