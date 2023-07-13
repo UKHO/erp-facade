@@ -10,6 +10,9 @@ namespace UKHO.ERPFacade.Common.Services
     {
         private readonly ILogger<ErpFacadeService> _logger;
 
+        private const string EffectiveDateFormat = "yyyyMMdd";
+        private const string DateTimeFormat = "yyyyMMddHHmmss";
+
         public ErpFacadeService(ILogger<ErpFacadeService> logger)
         {
             _logger = logger;
@@ -58,20 +61,20 @@ namespace UKHO.ERPFacade.Common.Services
                             {
                                 var existingUnitOfSalePrice = unitsOfSalePriceList.Where(x => x.UnitName.Contains(priceInformation.ProductName)).FirstOrDefault();
 
-                                var effectiveUnitOfSalePriceDurations = existingUnitOfSalePrice!.Price.Where(x => x.EffectiveDate.ToString("yyyyMMdd") == priceInformation.EffectiveDate).ToList();
+                                var effectiveUnitOfSalePriceDurations = existingUnitOfSalePrice!.Price.Where(x => x.EffectiveDate.ToString(EffectiveDateFormat) == priceInformation.EffectiveDate).ToList();
                                 var effectiveStandard = effectiveUnitOfSalePriceDurations.Select(x => x.Standard).FirstOrDefault();
 
-                                var futureUnitOfSalePriceDurations = existingUnitOfSalePrice.Price.Where(x => x.EffectiveDate.ToString("yyyyMMdd") == priceInformation.FutureDate).ToList();
+                                var futureUnitOfSalePriceDurations = existingUnitOfSalePrice.Price.Where(x => x.EffectiveDate.ToString(EffectiveDateFormat) == priceInformation.FutureDate).ToList();
                                 var futureStandard = futureUnitOfSalePriceDurations.Select(x => x.Standard).FirstOrDefault();
 
                                 if (effectiveStandard != null)
                                 {
-                                    if (!effectiveStandard.PriceDurations.Any(x => x.NumberOfMonths == Convert.ToInt32(priceInformation.Duration) && x.Rrp == Convert.ToDecimal(String.Format("{0:0.00}", Math.Round(Convert.ToDecimal(priceInformation.Price), 2)))))
+                                    if (!effectiveStandard.PriceDurations.Any(x => x.NumberOfMonths == Convert.ToInt32(priceInformation.Duration) && x.Rrp == GetPriceInDecimal(priceInformation.Price)))
                                     {
                                         PriceDurations priceDuration = new()
                                         {
                                             NumberOfMonths = Convert.ToInt32(priceInformation.Duration),
-                                            Rrp = Convert.ToDecimal(string.Format("{0:0.00}", Math.Round(Convert.ToDecimal(priceInformation.Price), 2)))
+                                            Rrp = GetPriceInDecimal(priceInformation.Price)
                                         };
 
                                         effectiveStandard.PriceDurations.Add(priceDuration);
@@ -88,12 +91,12 @@ namespace UKHO.ERPFacade.Common.Services
                                 }
                                 if (futureStandard != null)
                                 {
-                                    if (!futureStandard.PriceDurations.Any(x => x.NumberOfMonths == Convert.ToInt32(priceInformation.Duration) && x.Rrp == Convert.ToDecimal(String.Format("{0:0.00}", Math.Round(Convert.ToDecimal(priceInformation.FuturePrice), 2)))))
+                                    if (!futureStandard.PriceDurations.Any(x => x.NumberOfMonths == Convert.ToInt32(priceInformation.Duration) && x.Rrp == GetPriceInDecimal(priceInformation.FuturePrice)))
                                     {
                                         PriceDurations priceDuration = new()
                                         {
                                             NumberOfMonths = Convert.ToInt32(priceInformation.Duration),
-                                            Rrp = Convert.ToDecimal(string.Format("{0:0.00}", Math.Round(Convert.ToDecimal(priceInformation.FuturePrice), 2)))
+                                            Rrp = GetPriceInDecimal(priceInformation.FuturePrice)
                                         };
 
                                         futureStandard.PriceDurations.Add(priceDuration);
@@ -173,7 +176,7 @@ namespace UKHO.ERPFacade.Common.Services
             List<PriceDurations> priceDurationsList = new();
 
             priceDurations.NumberOfMonths = Convert.ToInt32(duration);
-            priceDurations.Rrp = Convert.ToDecimal(string.Format("{0:0.00}", Math.Round(Convert.ToDecimal(rrp), 2)));
+            priceDurations.Rrp = GetPriceInDecimal(rrp);
             priceDurationsList.Add(priceDurations);
 
             standard.PriceDurations = priceDurationsList;
@@ -187,10 +190,16 @@ namespace UKHO.ERPFacade.Common.Services
 
         private static DateTimeOffset GetDate(string date, string time)
         {
-            DateTime dateTime = DateTime.ParseExact(date + "" + time, "yyyyMMddHHmmss", CultureInfo.InvariantCulture);
+            DateTime dateTime = DateTime.ParseExact(date + "" + time, DateTimeFormat, CultureInfo.InvariantCulture);
             DateTimeOffset dateTimeOffset = new(dateTime);
 
             return dateTimeOffset;
+        }
+
+        private static Decimal GetPriceInDecimal(string price)
+        {
+            Decimal priceInDecimal = Convert.ToDecimal(string.Format("{0:0.00}", Math.Round(Convert.ToDecimal(price), 2)));
+            return priceInDecimal;
         }
     }
 }
