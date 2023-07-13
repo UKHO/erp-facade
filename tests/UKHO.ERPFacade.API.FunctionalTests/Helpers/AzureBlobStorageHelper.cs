@@ -29,7 +29,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return (expectedfilePath + "\\" + containerAndBlobName + ".JSON");
         }
 
-        public static string DownloadJSONFromAzureBlob(string expectedJSONfilePath, string blobContainer, string productName, string endPoint)
+        public static string DownloadJsonFromAzureBlob(string expectedJSONfilePath, string blobContainer, string productName, string endPoint)
         {
             string fileName = "";
             try

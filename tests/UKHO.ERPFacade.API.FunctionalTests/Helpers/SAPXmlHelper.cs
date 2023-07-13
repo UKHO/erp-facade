@@ -685,12 +685,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
         public static bool VerifyInitialXMLHeaders(JsonPayloadHelper jsonPayload, string generatedXMLFilePath)
         {
-            bool isNoOfFactionsMatching = VerifyNOOFACTIONSHeader(jsonPayload, generatedXMLFilePath);
+            bool isNoOfActionsMatching = VerifyNOOFACTIONSHeader(jsonPayload, generatedXMLFilePath);
             bool isRecTimeMatching = VerifyRECTIMEHeader(jsonPayload, generatedXMLFilePath);
             bool isCorrIdMatching = VerifyCORRIDHeader(jsonPayload, generatedXMLFilePath);
             bool isOrgMatching = VerifyORGHeader(jsonPayload, generatedXMLFilePath);
 
-            if (isRecTimeMatching && isNoOfFactionsMatching && isCorrIdMatching && isOrgMatching)
+            if (isRecTimeMatching && isNoOfActionsMatching && isCorrIdMatching && isOrgMatching)
             {
                 Console.WriteLine("XML headers are correct");
                 return true;

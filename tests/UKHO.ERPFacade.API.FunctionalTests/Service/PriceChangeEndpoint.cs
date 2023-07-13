@@ -59,7 +59,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
 
                 foreach (string products in uniqueProductFromAzureStorage)
                 {
-                    string generatedProductJsonFile = AzureBlobStorageHelper.DownloadJSONFromAzureBlob(generatedProductJsonFolder, responseHeaderCorrelationId, products, "ProductChange");
+                    string generatedProductJsonFile = AzureBlobStorageHelper.DownloadJsonFromAzureBlob(generatedProductJsonFolder, responseHeaderCorrelationId, products, "ProductChange");
                     Console.WriteLine(generatedProductJsonFile);
 
                     JsonOutputPriceChangeHelper deserializedProductOutput = GetDeserializedProductJson(generatedProductJsonFile);
@@ -201,7 +201,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
                 Assert.That(_uniquePdtFromInputPayload.Count.Equals(UniquePdtFromAzureStorage.Count), Is.True, "Slicing is not correct");
                 foreach (string products in UniquePdtFromAzureStorage)
                 {
-                    string generatedProductJsonFile = AzureBlobStorageHelper.DownloadJSONFromAzureBlob(generatedProductJsonFolder, responseHeadercorrelationID, products, "ProductChange");
+                    string generatedProductJsonFile = AzureBlobStorageHelper.DownloadJsonFromAzureBlob(generatedProductJsonFolder, responseHeadercorrelationID, products, "ProductChange");
                     Console.WriteLine(generatedProductJsonFile);
 
                     JsonOutputPriceChangeHelper desiailzedProductOutput = GetDeserializedProductJson(generatedProductJsonFile);
