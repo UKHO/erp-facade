@@ -438,5 +438,20 @@
         /// 940089 - Failed to connect to the enterprise event service
         /// </summary>
         EnterpriseEventServiceEventConnectionFailure = 940089,
+
+        /// <summary>
+        /// 940090 - Count of products to be sliced
+        /// </summary>
+        ProductsToSliceCount = 940090,
+
+        /// <summary>
+        /// 940091 - Count of products that are published and unpublished
+        /// </summary>
+        ProductsPublishedUnpublishedCount = 940091,
+
+        /// <summary>
+        /// 940092 - Count of unpublished products 
+        /// </summary>
+        ProductsUnpublishedCount = 940092
     }
 }
