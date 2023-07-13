@@ -1,5 +1,10 @@
-﻿namespace UKHO.ERPFacade.Common.Logging
+﻿using Microsoft.Extensions.Logging;
+
+namespace UKHO.ERPFacade.Common.Logging
 {
+    /// <summary>
+    /// Event Ids
+    /// </summary>
     public enum EventIds
     {
         /// <summary>
@@ -437,6 +442,22 @@
         /// <summary>
         /// 940089 - Failed to connect to the enterprise event service
         /// </summary>
-        EnterpriseEventServiceEventConnectionFailure = 940089,
+        EnterpriseEventServiceEventConnectionFailure = 940089
+    }
+
+    /// <summary>
+    /// EventId Extensions
+    /// </summary>
+    public static class EventIdExtensions
+    {
+        /// <summary>
+        /// Event Id
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <returns></returns>
+        public static EventId ToEventId(this EventIds eventId)
+        {
+            return new EventId((int)eventId, eventId.ToString());
+        }
     }
 }
