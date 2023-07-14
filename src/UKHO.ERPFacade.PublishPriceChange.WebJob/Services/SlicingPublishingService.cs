@@ -67,7 +67,7 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
 
                                     var priceChangeCloudEventData = _cloudEventFactory.Create(priceChangeEventPayload);
 
-                                    var priceChangeCloudEventDataJson = JsonConvert.SerializeObject(priceChangeCloudEventData);
+                                    var priceChangeCloudEventDataJson = JsonConvert.SerializeObject(priceChangeCloudEventData, Formatting.Indented);
 
                                     SavePriceChangeEventPayloadInAzureBlob(priceChangeCloudEventDataJson, entity.CorrId, unitPriceInformation.UnitName, unitPriceInformation.EventId);
 
@@ -105,7 +105,7 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
 
                                 var priceChangeCloudEventData = _cloudEventFactory.Create(priceChangeEventPayload);
 
-                                var priceChangeCloudEventDataJson = JsonConvert.SerializeObject(priceChangeCloudEventData);
+                                var priceChangeCloudEventDataJson = JsonConvert.SerializeObject(priceChangeCloudEventData, Formatting.Indented);
 
                                 SavePriceChangeEventPayloadInAzureBlob(priceChangeCloudEventDataJson.ToString(), entity.CorrId, unitName, eventId);
 
@@ -113,7 +113,7 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
                             }
                         });
 
-                        _logger.LogInformation(EventIds.ProductsPublishedUnpublishedCount.ToEventId(), "Total products published are {Count} and unpublished are {unpublishedCount} | _X-Correlation-ID : {_X-Correlation-ID}", PublishProductsCounter,UnpublishProductsCounter, entity.CorrId);
+                        _logger.LogInformation(EventIds.ProductsPublishedUnpublishedCount.ToEventId(), "Total products published are {Count} and unpublished are {unpublishedCount} | _X-Correlation-ID : {_X-Correlation-ID}", PublishProductsCounter, UnpublishProductsCounter, entity.CorrId);
                     }
                 }
             }
