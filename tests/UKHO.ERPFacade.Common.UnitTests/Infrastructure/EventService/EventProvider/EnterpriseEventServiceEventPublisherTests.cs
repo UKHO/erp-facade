@@ -102,12 +102,12 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
             && call.GetArgument<EventId>(1) == EventIds.StartingEnterpriseEventServiceEventPublisher.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Attempting to publish {cloudEventType} event for {cloudEventSubject} to Enterprise Event Service").MustHaveHappenedOnceExactly();
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Attempting to publish {cloudEventType} event for {cloudEventSubject} to Enterprise Event Service | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}").MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
             && call.GetArgument<EventId>(1) == EventIds.EnterpriseEventServiceEventPublisherSuccess.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Event {cloudEventType} for {cloudEventSubject} is published to Enterprise Event Service successfully").MustHaveHappenedOnceExactly();
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Event {cloudEventType} for {cloudEventSubject} is published to Enterprise Event Service successfully | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}").MustHaveHappenedOnceExactly();
         }
 
         [Test]
@@ -130,12 +130,12 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
             && call.GetArgument<EventId>(1) == EventIds.StartingEnterpriseEventServiceEventPublisher.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Attempting to publish {cloudEventType} event for {cloudEventSubject} to Enterprise Event Service").MustHaveHappenedOnceExactly();
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Attempting to publish {cloudEventType} event for {cloudEventSubject} to Enterprise Event Service | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}").MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Error
             && call.GetArgument<EventId>(1) == EventIds.EnterpriseEventServiceEventConnectionFailure.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Failed to connect to Enterprise Event Service. | Exception Message : {ExceptionMessage}").MustHaveHappenedOnceExactly();
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Failed to connect to Enterprise Event Service. | Exception Message : {ExceptionMessage} | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}").MustHaveHappenedOnceExactly();
         }
 
         [Test]
@@ -158,12 +158,12 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
             && call.GetArgument<EventId>(1) == EventIds.StartingEnterpriseEventServiceEventPublisher.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Attempting to publish {cloudEventType} event for {cloudEventSubject} to Enterprise Event Service").MustHaveHappenedOnceExactly();
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Attempting to publish {cloudEventType} event for {cloudEventSubject} to Enterprise Event Service | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}").MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Error
             && call.GetArgument<EventId>(1) == EventIds.EnterpriseEventServiceEventPublisherFailure.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Failed to publish {cloudEventType} event to the Enterprise Event Service for {cloudEventSubject} | Status Code : {StatusCode}").MustHaveHappenedOnceExactly();
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Failed to publish {cloudEventType} event to the Enterprise Event Service for {cloudEventSubject} | Status Code : {StatusCode} | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}").MustHaveHappenedOnceExactly();
         }
     }
 }

@@ -18,7 +18,7 @@ namespace UKHO.ERPFacade.Common.Services
             _logger = logger;
         }
 
-        public List<UnitsOfSalePrices> MapAndBuildUnitsOfSalePrices(List<PriceInformation> priceInformationList, List<string> unitOfSalesList)
+        public List<UnitsOfSalePrices> MapAndBuildUnitsOfSalePrices(List<PriceInformation> priceInformationList, List<string> unitOfSalesList, string correlationId, string eventId)
         {
             List<UnitsOfSalePrices> unitsOfSalePriceList = new();
 
@@ -117,7 +117,7 @@ namespace UKHO.ERPFacade.Common.Services
                 }
                 else
                 {
-                    _logger.LogWarning(EventIds.UnitsOfSaleNotFoundInSAPPriceInformationPayload.ToEventId(), "PriceInformation is missing for {UnitName} in price information payload received from SAP ", unitOfSale);
+                    _logger.LogWarning(EventIds.UnitsOfSaleNotFoundInSAPPriceInformationPayload.ToEventId(), "PriceInformation is missing for {UnitName} in price information payload received from SAP. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}", unitOfSale, correlationId, eventId);
 
                     unitsOfSalePrice.UnitName = unitOfSale;
                     unitsOfSalePrice.Price = new();
@@ -128,9 +128,9 @@ namespace UKHO.ERPFacade.Common.Services
             return unitsOfSalePriceList;
         }
 
-        public UnitOfSaleUpdatedEventPayload BuildUnitsOfSaleUpdatedEventPayload(List<UnitsOfSalePrices> unitsOfSalePriceList, string encEventPayloadJson)
+        public UnitOfSaleUpdatedEventPayload BuildUnitsOfSaleUpdatedEventPayload(List<UnitsOfSalePrices> unitsOfSalePriceList, string encEventPayloadJson, string correlationId, string eventId)
         {
-            _logger.LogInformation(EventIds.AppendingUnitofSalePricesToEncEvent.ToEventId(), "Appending UnitofSale prices to ENC event.");
+            _logger.LogInformation(EventIds.AppendingUnitofSalePricesToEncEvent.ToEventId(), "Appending UnitofSale prices to ENC event. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}", correlationId, eventId);
 
             EncEventPayload encEventPayload = JsonConvert.DeserializeObject<EncEventPayload>(encEventPayloadJson)!;
 
@@ -142,26 +142,26 @@ namespace UKHO.ERPFacade.Common.Services
                 UnitsOfSalePrices = unitsOfSalePriceList
             };
 
-            UnitOfSaleUpdatedEventPayload unitOfSaleUpdatedEventPayload = new(unitOfSaleUpdatedEventData, encEventPayload.Subject);
+            UnitOfSaleUpdatedEventPayload unitOfSaleUpdatedEventPayload = new(unitOfSaleUpdatedEventData, encEventPayload.Subject, eventId);
 
-            _logger.LogInformation(EventIds.UnitsOfSaleUpdatedEventPayloadCreated.ToEventId(), "UnitofSale updated event payload created.");
+            _logger.LogInformation(EventIds.UnitsOfSaleUpdatedEventPayloadCreated.ToEventId(), "UnitofSale updated event payload created. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}", correlationId, eventId);
 
             return unitOfSaleUpdatedEventPayload;
         }
 
-        public PriceChangeEventPayload BuildPriceChangeEventPayload(List<UnitsOfSalePrices> unitsOfSalePriceList, string eventId, string unitName, string corrID)
+        public PriceChangeEventPayload BuildPriceChangeEventPayload(List<UnitsOfSalePrices> unitsOfSalePriceList, string unitName, string correlationId, string eventId)
         {
-            _logger.LogInformation(EventIds.AppendingUnitofSalePricesToEncEventInWebJob.ToEventId(), "Appending UnitofSale prices to ENC event in webjob.");
+            _logger.LogInformation(EventIds.AppendingUnitofSalePricesToEncEventInWebJob.ToEventId(), "Appending UnitofSale prices to ENC event in webjob. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}", correlationId, eventId);
 
             PriceChangeEventData priceChangeEventData = new()
             {
-                CorrelationId = corrID,
+                CorrelationId = correlationId,
                 UnitsOfSalePrices = unitsOfSalePriceList,
             };
 
             PriceChangeEventPayload priceChangeEventPayload = new(priceChangeEventData, unitName, eventId);
 
-            _logger.LogInformation(EventIds.PriceChangeEventPayloadCreated.ToEventId(), "pricechange event payload created.");
+            _logger.LogInformation(EventIds.PriceChangeEventPayloadCreated.ToEventId(), "pricechange event payload created. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}", correlationId, eventId);
 
             return priceChangeEventPayload;
         }

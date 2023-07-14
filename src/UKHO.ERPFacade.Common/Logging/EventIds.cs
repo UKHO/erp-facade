@@ -457,7 +457,17 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940092 - Count of unpublished products 
         /// </summary>
-        ProductsUnpublishedCount = 940092
+        ProductsUnpublishedCount = 940092,
+
+        /// <summary>
+        /// 940093 - Uploading the Sliced Price information event in blob storage.
+        /// </summary>
+        UploadSlicedPriceInformationEventInAzureBlob = 940093,
+
+        /// <summary>
+        /// 940094 - Sliced Price information event is uploaded in blob storage successfully.
+        /// </summary>
+        UploadedSlicedPriceInformationEventInAzureBlob = 940094
     }
 
     /// <summary>
