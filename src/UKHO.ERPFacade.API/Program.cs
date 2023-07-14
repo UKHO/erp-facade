@@ -140,7 +140,7 @@ namespace UKHO.ERPFacade
 
             builder.Services.AddAuthorization(options =>
             {
-                options.AddPolicy("WebhookCaller", policy => policy.RequireRole("WebhookCaller"));                
+                options.AddPolicy("WebhookCaller", policy => policy.RequireRole("WebhookCaller"));
             });
 
             // The following line enables Application Insights telemetry collection.
@@ -158,7 +158,7 @@ namespace UKHO.ERPFacade
 
             builder.Services.Configure<KestrelServerOptions>(options =>
             {
-                options.Limits.MaxRequestBodySize = 50 * 1024 * 1024;
+                options.Limits.MaxRequestBodySize = long.MaxValue;
             });
 
             builder.Services.Configure<AzureStorageConfiguration>(configuration.GetSection("AzureStorageConfiguration"));
