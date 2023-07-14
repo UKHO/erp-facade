@@ -12,7 +12,7 @@ namespace UKHO.ERPFacade.Common.Models
             Data = priceChangeEventData;
             Subject = subject;
             Id = eventId;
-            EventName = "uk.gov.ukho.erp.pricechange.v1";
+            EventName = "uk.gov.ukho.erp.priceChange.v1";
         }
     }
 

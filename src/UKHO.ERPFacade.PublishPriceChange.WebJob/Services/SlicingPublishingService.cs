@@ -99,7 +99,11 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
 
                                 _azureTableReaderWriter.AddUnitPriceChangeEntity(entity.CorrId, eventId, unitName);
 
+                                _logger.LogInformation(EventIds.UploadSlicedPriceInformationEventInAzureBlob.ToEventId(), "Uploading the sliced price information in blob storage. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}", entity.CorrId, eventId);
+
                                 _azureBlobEventWriter.UploadEvent(pricesJson.ToString(), ContainerName, entity.CorrId + '/' + unitName + '/' + PriceInformationFileName);
+
+                                _logger.LogInformation(EventIds.UploadedSlicedPriceInformationEventInAzureBlob.ToEventId(), "Sliced price information is uploaded in blob storage successfully. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}", entity.CorrId, eventId);
 
                                 PriceChangeEventPayload priceChangeEventPayload = MapAndBuildPriceChangeEventPayload(prices, entity.CorrId, unitName, eventId);
 
@@ -123,9 +127,9 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
         {
             var prices = priceInformationList.Where(p => p.ProductName == unitName).ToList();
 
-            List<UnitsOfSalePrices> unitsOfSalePriceList = _erpFacadeService.MapAndBuildUnitsOfSalePrices(prices, prices.Select(u => u.ProductName).Distinct().ToList());
+            List<UnitsOfSalePrices> unitsOfSalePriceList = _erpFacadeService.MapAndBuildUnitsOfSalePrices(prices, prices.Select(u => u.ProductName).Distinct().ToList(), masterCorrId, eventId);
 
-            PriceChangeEventPayload priceChangeEventPayload = _erpFacadeService.BuildPriceChangeEventPayload(unitsOfSalePriceList, eventId, unitName, masterCorrId);
+            PriceChangeEventPayload priceChangeEventPayload = _erpFacadeService.BuildPriceChangeEventPayload(unitsOfSalePriceList, unitName, masterCorrId, eventId);
             return priceChangeEventPayload;
         }
 
@@ -141,17 +145,17 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
             else
             {
                 UnpublishProductsCounter++;
-                _logger.LogWarning(EventIds.ProductsUnpublishedCount.ToEventId(), "Product {unitName} was not published successfully | _X-Correlation-ID : {_X-Correlation-ID}", unitName, masterCorrId);
+                _logger.LogWarning(EventIds.ProductsUnpublishedCount.ToEventId(), "Product {unitName} was not published successfully | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}", unitName, masterCorrId, eventId);
             }
         }
 
-        private void SavePriceChangeEventPayloadInAzureBlob(string priceChangeCloudEventDataJson, string masterCorrId, string unitName, string correlationId)
+        private void SavePriceChangeEventPayloadInAzureBlob(string priceChangeCloudEventDataJson, string masterCorrId, string unitName, string eventId)
         {
-            _logger.LogInformation(EventIds.UploadPriceChangeEventPayloadInAzureBlob.ToEventId(), "Uploading the pricechange event payload json in blob storage. | _X-Correlation-ID : {_X-Correlation-ID}", correlationId);
+            _logger.LogInformation(EventIds.UploadPriceChangeEventPayloadInAzureBlob.ToEventId(), "Uploading the PriceChange event payload json in blob storage. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}", masterCorrId, eventId);
 
             _azureBlobEventWriter.UploadEvent(priceChangeCloudEventDataJson, ContainerName, masterCorrId + '/' + unitName + '/' + PriceChangeEventFileName);
 
-            _logger.LogInformation(EventIds.UploadedPriceChangeEventPayloadInAzureBlob.ToEventId(), "pricechange event payload json is uploaded in blob storage successfully. | _X-Correlation-ID : {_X-Correlation-ID}", correlationId);
+            _logger.LogInformation(EventIds.UploadedPriceChangeEventPayloadInAzureBlob.ToEventId(), "PriceChange event payload json is uploaded in blob storage successfully. | _X-Correlation-ID : {_X-Correlation-ID}", eventId);
         }
     }
 }

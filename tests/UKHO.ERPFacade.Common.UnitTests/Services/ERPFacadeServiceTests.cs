@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using FakeItEasy;
 using FluentAssertions;
@@ -47,7 +46,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Services
         public void WhenUnitOfSaleDetailIsNotPassed_ThenDoesNotReturnUnitsOfSalePrices()
         {
             List<PriceInformation>? priceInformationList = GetPriceInformationData(jsonString);
-            List<UnitsOfSalePrices>? result = _fakeERPFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList, new());
+            List<UnitsOfSalePrices>? result = _fakeERPFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList, new(), "fakeCorrId", "fakeEventId");
 
             result.Should().BeOfType<List<UnitsOfSalePrices>>();
             result.Count.Should().Be(0);
@@ -59,12 +58,12 @@ namespace UKHO.ERPFacade.Common.UnitTests.Services
             List<PriceInformation>? priceInformationList = new();
             List<string> unitOfSaleList = GetUnitOfSaleData();
 
-            List<UnitsOfSalePrices>? result = _fakeERPFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList, unitOfSaleList);
+            List<UnitsOfSalePrices>? result = _fakeERPFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList, unitOfSaleList, "fakeCorrId", "fakeEventId");
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
          && call.GetArgument<LogLevel>(0) == LogLevel.Warning
          && call.GetArgument<EventId>(1) == EventIds.UnitsOfSaleNotFoundInSAPPriceInformationPayload.ToEventId()
-         && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "PriceInformation is missing for {UnitName} in price information payload received from SAP ").MustHaveHappened();
+         && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "PriceInformation is missing for {UnitName} in price information payload received from SAP. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}").MustHaveHappened();
 
             result.Should().BeOfType<List<UnitsOfSalePrices>>();
             result.Count.Should().Be(unitOfSaleList.Count);
@@ -77,7 +76,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Services
             List<PriceInformation>? priceInformationList = GetPriceInformationData(jsonString);
             List<string> unitOfSaleList = GetUnitOfSaleData();
 
-            List<UnitsOfSalePrices>? result = _fakeERPFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList, unitOfSaleList);
+            List<UnitsOfSalePrices>? result = _fakeERPFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList, unitOfSaleList, "fakeCorrId", "fakeEventId");
 
             result.Should().BeOfType<List<UnitsOfSalePrices>>();
             result.Count.Should().Be(unitOfSaleList.Count);
@@ -114,7 +113,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Services
                 "PAYSF"
             };
 
-            List<UnitsOfSalePrices>? result = _fakeERPFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList, unitOfSaleList);
+            List<UnitsOfSalePrices>? result = _fakeERPFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList, unitOfSaleList, "fakeCorrId", "fakeEventId");
 
             result.Should().BeOfType<List<UnitsOfSalePrices>>();
             result.Count.Should().Be(unitOfSaleList.Count);
@@ -129,7 +128,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Services
             List<PriceInformation>? priceInformationList = GetPriceInformationData(jsonStringWithEmptyDates);
 
             List<string> unitOfSaleList = GetUnitOfSaleData();
-            List<UnitsOfSalePrices>? result = _fakeERPFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList, unitOfSaleList);
+            List<UnitsOfSalePrices>? result = _fakeERPFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList, unitOfSaleList, "fakeCorrId", "fakeEventId");
 
             result.Should().BeOfType<List<UnitsOfSalePrices>>();
             result.Count.Should().Be(unitOfSaleList.Count);
@@ -143,14 +142,14 @@ namespace UKHO.ERPFacade.Common.UnitTests.Services
             List<PriceInformation>? priceInformationList = GetPriceInformationData(jsonStringWithNullDates);
 
             List<string> unitOfSaleList = GetUnitOfSaleData();
-            List<UnitsOfSalePrices>? result = _fakeERPFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList, unitOfSaleList);
+            List<UnitsOfSalePrices>? result = _fakeERPFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList, unitOfSaleList, "fakeCorrId", "fakeEventId");
 
             result.Should().BeOfType<List<UnitsOfSalePrices>>();
             result.Count.Should().Be(unitOfSaleList.Count);
 
             result.FirstOrDefault().Price.Count().Should().Be(0);
         }
-         
+
         [Test]
         public void WhenDurationAndPriceAreDuplicate_ThenReturnsUnitsOfSalePricesWithPriceCountZero()
         {
@@ -160,7 +159,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Services
                 "MX545010"
             };
 
-            List<UnitsOfSalePrices>? result = _fakeERPFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList, unitOfSaleList);
+            List<UnitsOfSalePrices>? result = _fakeERPFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList, unitOfSaleList, "fakeCorrId", "fakeEventId");
 
             result.Should().BeOfType<List<UnitsOfSalePrices>>();
 
@@ -177,7 +176,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Services
                 "MX545010"
             };
 
-            List<UnitsOfSalePrices>? result = _fakeERPFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList, unitOfSaleList);
+            List<UnitsOfSalePrices>? result = _fakeERPFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList, unitOfSaleList, "fakeCorrId", "fakeEventId");
 
             result.Should().BeOfType<List<UnitsOfSalePrices>>();
 
@@ -191,17 +190,17 @@ namespace UKHO.ERPFacade.Common.UnitTests.Services
             List<UnitsOfSalePrices>? unitsOfSalePricesList = GetUnitsOfSalePriceList();
 
             object? existingEESJson = JsonConvert.DeserializeObject(encContentPublishedJson);
-            UnitOfSaleUpdatedEventPayload? result = _fakeERPFacadeService.BuildUnitsOfSaleUpdatedEventPayload(unitsOfSalePricesList, existingEESJson!.ToString()!);
+            UnitOfSaleUpdatedEventPayload? result = _fakeERPFacadeService.BuildUnitsOfSaleUpdatedEventPayload(unitsOfSalePricesList, existingEESJson!.ToString()!, "fakeCorrId", "fakeEventId");
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
          && call.GetArgument<LogLevel>(0) == LogLevel.Information
          && call.GetArgument<EventId>(1) == EventIds.AppendingUnitofSalePricesToEncEvent.ToEventId()
-         && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Appending UnitofSale prices to ENC event.").MustHaveHappenedOnceExactly();
+         && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Appending UnitofSale prices to ENC event. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}").MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
          && call.GetArgument<LogLevel>(0) == LogLevel.Information
          && call.GetArgument<EventId>(1) == EventIds.UnitsOfSaleUpdatedEventPayloadCreated.ToEventId()
-         && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "UnitofSale updated event payload created.").MustHaveHappenedOnceExactly();
+         && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "UnitofSale updated event payload created. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}").MustHaveHappenedOnceExactly();
 
             result.Should().BeOfType<UnitOfSaleUpdatedEventPayload>();
         }
@@ -211,17 +210,17 @@ namespace UKHO.ERPFacade.Common.UnitTests.Services
         {
             List<UnitsOfSalePrices>? unitsOfSalePricesList = GetUnitsOfSalePriceList();
 
-            PriceChangeEventPayload? result = _fakeERPFacadeService.BuildPriceChangeEventPayload(unitsOfSalePricesList, Guid.NewGuid().ToString(), "PAYSF", "FakeCorrID");
+            PriceChangeEventPayload? result = _fakeERPFacadeService.BuildPriceChangeEventPayload(unitsOfSalePricesList, "PAYSF", "FakeCorrID", "FakeEventId");
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
          && call.GetArgument<LogLevel>(0) == LogLevel.Information
          && call.GetArgument<EventId>(1) == EventIds.AppendingUnitofSalePricesToEncEventInWebJob.ToEventId()
-         && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Appending UnitofSale prices to ENC event in webjob.").MustHaveHappenedOnceExactly();
+         && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Appending UnitofSale prices to ENC event in webjob. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}").MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
          && call.GetArgument<LogLevel>(0) == LogLevel.Information
          && call.GetArgument<EventId>(1) == EventIds.PriceChangeEventPayloadCreated.ToEventId()
-         && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "pricechange event payload created.").MustHaveHappenedOnceExactly();
+         && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "pricechange event payload created. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}").MustHaveHappenedOnceExactly();
 
             result.Should().BeOfType<PriceChangeEventPayload>();
         }
@@ -243,7 +242,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Services
         private List<UnitsOfSalePrices> GetUnitsOfSalePriceList()
         {
             List<PriceInformation>? priceInformationList = GetPriceInformationData(jsonString);
-            List<UnitsOfSalePrices>? unitsOfSalePricesList = _fakeERPFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList, new());
+            List<UnitsOfSalePrices>? unitsOfSalePricesList = _fakeERPFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList, new(), "fakeCorrId", "fakeEventId");
 
             return unitsOfSalePricesList!;
         }

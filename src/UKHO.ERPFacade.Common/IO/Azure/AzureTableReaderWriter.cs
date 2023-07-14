@@ -52,7 +52,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
                     CorrelationId = correlationId,
                     RequestDateTime = null,
                     ResponseDateTime = null,
-                    PublishDateTime= null,
+                    PublishDateTime = null,
                     IsNotified = false
                 };
 
@@ -108,7 +108,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             }
         }
 
-        public async Task UpdatePublishDateTimeEntity(string correlationId)
+        public async Task UpdatePublishDateTimeEntity(string correlationId, string eventId)
         {
             TableClient tableClient = GetTableClient(ErpFacadeTableName);
             EESEventEntity existingEntity = await GetEntity(correlationId);
@@ -116,7 +116,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             {
                 existingEntity.PublishDateTime = DateTime.UtcNow;
                 await tableClient.UpdateEntityAsync(existingEntity, ETag.All, TableUpdateMode.Replace);
-                _logger.LogInformation(EventIds.UpdatePublishDateTimeEntitySuccessful.ToEventId(), "PublishDateTime is updated in azure table successfully.");
+                _logger.LogInformation(EventIds.UpdatePublishDateTimeEntitySuccessful.ToEventId(), "PublishDateTime is updated in azure table successfully. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}", correlationId, eventId);
             }
         }
 
@@ -212,13 +212,13 @@ namespace UKHO.ERPFacade.Common.IO.Azure
                 MasterCorrId = correlationId,
                 EventId = eventId,
                 UnitName = unitName,
-                PublishDateTime= null,
+                PublishDateTime = null,
                 Status = "Incomplete"
             };
 
             tableClient.AddEntity(unitPriceChangeEventEntity, CancellationToken.None);
 
-            _logger.LogInformation(EventIds.AddedUnitPriceChangeEventInAzureTable.ToEventId(), "Unit price change event in added in azure table successfully. | _X-Correlation-ID : {_X-Correlation-ID}", correlationId);
+            _logger.LogInformation(EventIds.AddedUnitPriceChangeEventInAzureTable.ToEventId(), "Unit price change event in added in azure table successfully. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}", correlationId, eventId);
         }
 
         public void UpdateUnitPriceChangeStatusAndPublishDateTimeEntity(string correlationId, string unitName, string eventId)
@@ -230,7 +230,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
                 existingEntity.Status = "Complete";
                 existingEntity.PublishDateTime = DateTime.UtcNow;
                 tableClient.UpdateEntity(existingEntity, ETag.All, TableUpdateMode.Replace);
-                _logger.LogInformation(EventIds.UpdatedPriceChangeStatusEntitySuccessful.ToEventId(), "Unit price change status and PublishingDateTime is updated in azure table successfully. | _X-Correlation-ID : {_X-Correlation-ID}", correlationId);
+                _logger.LogInformation(EventIds.UpdatedPriceChangeStatusEntitySuccessful.ToEventId(), "Unit price change status and PublishingDateTime is updated in azure table successfully. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}", correlationId, eventId);
             }
         }
 

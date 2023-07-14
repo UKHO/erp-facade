@@ -43,11 +43,12 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
                 UnitsOfSalePrices = new List<UnitsOfSalePrices>()
             };
 
-            var result = _fakeCloudEventFactory.Create(new UnitOfSaleUpdatedEventPayload(unitOfSaleUpdatedEventData, "fakeSubject"));
+            var result = _fakeCloudEventFactory.Create(new UnitOfSaleUpdatedEventPayload(unitOfSaleUpdatedEventData, "fakeSubject", "fakeEventId"));
 
             result.Data.Should().Be(unitOfSaleUpdatedEventData);
             result.Type.Should().Be("uk.gov.ukho.erp.unitOfSaleUpdated.v1");
             result.Subject.Should().Be("fakeSubject");
+            result.Id.Should().Be("fakeEventId");
             result.Time.Should().Be(_fakeCurrentDateTime);
             result.Source.Should().Be(_fakeErpPublishEventSource.ApplicationUri);
             result.SpecVersion.Should().Be("1.0");

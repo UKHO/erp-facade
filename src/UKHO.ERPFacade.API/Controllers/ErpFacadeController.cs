@@ -100,25 +100,26 @@ namespace UKHO.ERPFacade.API.Controllers
 
                 List<string> encEventUnitOfSalesList = encEventPayloadData.Data.UnitsOfSales.Select(x => x.UnitName).ToList();
 
-                List<UnitsOfSalePrices> unitsOfSalePriceList = _erpFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList, encEventUnitOfSalesList);
+                string eventId = Guid.NewGuid().ToString();
+                List<UnitsOfSalePrices> unitsOfSalePriceList = _erpFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList, encEventUnitOfSalesList, correlationId, eventId);
 
-                UnitOfSaleUpdatedEventPayload unitsOfSaleUpdatedEventPayload = _erpFacadeService.BuildUnitsOfSaleUpdatedEventPayload(unitsOfSalePriceList, encEventPayloadJson);
+                UnitOfSaleUpdatedEventPayload unitsOfSaleUpdatedEventPayload = _erpFacadeService.BuildUnitsOfSaleUpdatedEventPayload(unitsOfSalePriceList, encEventPayloadJson, correlationId, eventId);
 
                 var unitsOfSaleUpdatedCloudEventData = _cloudEventFactory.Create(unitsOfSaleUpdatedEventPayload);
 
                 var unitsOfSaleUpdatedCloudEventDataJson = JsonConvert.SerializeObject(unitsOfSaleUpdatedCloudEventData, Formatting.Indented);
 
-                _logger.LogInformation(EventIds.UploadUnitsOfSaleUpdatedEventPayloadInAzureBlob.ToEventId(), "Uploading the UnitsOfSaleUpdated event payload json in blob storage.");
+                _logger.LogInformation(EventIds.UploadUnitsOfSaleUpdatedEventPayloadInAzureBlob.ToEventId(), "Uploading the UnitsOfSaleUpdated event payload json in blob storage. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}", correlationId, eventId);
 
                 await _azureBlobEventWriter.UploadEvent(unitsOfSaleUpdatedCloudEventDataJson.ToString(), correlationId!, UnitOfSaleUpdatedEventFileName);
 
-                _logger.LogInformation(EventIds.UploadedUnitsOfSaleUpdatedEventPayloadInAzureBlob.ToEventId(), "UnitsOfSaleUpdated event payload json is uploaded in blob storage successfully.");
+                _logger.LogInformation(EventIds.UploadedUnitsOfSaleUpdatedEventPayloadInAzureBlob.ToEventId(), "UnitsOfSaleUpdated event payload json is uploaded in blob storage successfully. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}", correlationId, eventId);
 
                 int eventSize = _jsonHelper.GetPayloadJsonSize(unitsOfSaleUpdatedCloudEventDataJson.ToString());
 
                 if (eventSize > EventSizeLimit)
                 {
-                    _logger.LogError(EventIds.UnitsOfSaleUpdatedEventSizeLimit.ToEventId(), "UnitsOfSaleUpdated event exceeds the size limit of 1 MB.");
+                    _logger.LogError(EventIds.UnitsOfSaleUpdatedEventSizeLimit.ToEventId(), "UnitsOfSaleUpdated event exceeds the size limit of 1 MB. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}", correlationId, eventId);
                     throw new ERPFacadeException(EventIds.UnitsOfSaleUpdatedEventSizeLimit.ToEventId());
                 }
 
@@ -126,7 +127,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
                 if (result.Status == Result.Statuses.Success)
                 {
-                    await _azureTableReaderWriter.UpdatePublishDateTimeEntity(correlationId);
+                    await _azureTableReaderWriter.UpdatePublishDateTimeEntity(correlationId, eventId);
                     return new OkObjectResult(StatusCodes.Status200OK);
                 }
                 else

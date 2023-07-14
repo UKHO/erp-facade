@@ -7,11 +7,11 @@ namespace UKHO.ERPFacade.Common.Models
     [ExcludeFromCodeCoverage]
     public class UnitOfSaleUpdatedEventPayload : EventBase<UnitOfSaleUpdatedEventData>
     {
-        public UnitOfSaleUpdatedEventPayload(UnitOfSaleUpdatedEventData unitOfSaleUpdatedEventData, string subject)
+        public UnitOfSaleUpdatedEventPayload(UnitOfSaleUpdatedEventData unitOfSaleUpdatedEventData, string subject, string eventId)
         {
             Data = unitOfSaleUpdatedEventData;
             Subject = subject;
-            Id = Guid.NewGuid().ToString();
+            Id = eventId;
             EventName = "uk.gov.ukho.erp.unitOfSaleUpdated.v1";
         }
 
