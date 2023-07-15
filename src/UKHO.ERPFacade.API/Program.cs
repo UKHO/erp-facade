@@ -7,6 +7,7 @@ using Azure.Security.KeyVault.Secrets;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Newtonsoft.Json.Serialization;
 using Serilog;
@@ -155,12 +156,6 @@ namespace UKHO.ERPFacade
             {
                 options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             });
-
-            builder.Services.Configure<KestrelServerOptions>(options =>
-            {
-                options.Limits.MaxRequestBodySize = long.MaxValue;
-            });
-
             builder.Services.Configure<AzureStorageConfiguration>(configuration.GetSection("AzureStorageConfiguration"));
             builder.Services.Configure<SapConfiguration>(configuration.GetSection("SapConfiguration"));
             builder.Services.Configure<SharedKeyConfiguration>(configuration.GetSection("SharedKeyConfiguration"));
@@ -196,7 +191,15 @@ namespace UKHO.ERPFacade
 
             var app = builder.Build();
 
-            app.UseLoggingMiddleware();
+            app.Use(async (context, next) =>
+            {
+                var httpMaxRequestBodySizeFeature = context.Features.Get<IHttpMaxRequestBodySizeFeature>();
+
+                if (httpMaxRequestBodySizeFeature is not null)
+                    httpMaxRequestBodySizeFeature.MaxRequestBodySize = 50 * 1024 * 1024;
+
+                await next(context);
+            });
 
             app.UseHttpsRedirection();
 
