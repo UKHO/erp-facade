@@ -23,7 +23,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.ConfigurationTests
     {
         private WireMockServer _fakeWireMockServer;
         private ITokenProvider _fakeTokenProvider;
-        private ErpPublishEventSource _fakeErpPublishEventSource;
+        private EnterpriseEventServiceConfiguration _fakeErpPublishEventSource;
         private ServiceProvider _serviceProvider;
 
         [SetUp]
@@ -31,7 +31,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.ConfigurationTests
         {
             _fakeWireMockServer = WireMockServer.Start();
             _fakeTokenProvider = A.Fake<ITokenProvider>();
-            _fakeErpPublishEventSource = new ErpPublishEventSource
+            _fakeErpPublishEventSource = new EnterpriseEventServiceConfiguration
             {
                 ServiceUrl = _fakeWireMockServer.Urls.First(),
             };
@@ -39,7 +39,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.ConfigurationTests
             IServiceCollection services = new ServiceCollection();
             services.AddInfrastructure();
             services.Replace(ServiceDescriptor.Singleton(typeof(ITokenProvider), _fakeTokenProvider));
-            services.Replace(ServiceDescriptor.Singleton(typeof(IOptions<ErpPublishEventSource>), new OptionsWrapper<ErpPublishEventSource>(_fakeErpPublishEventSource)));
+            services.Replace(ServiceDescriptor.Singleton(typeof(IOptions<EnterpriseEventServiceConfiguration>), new OptionsWrapper<EnterpriseEventServiceConfiguration>(_fakeErpPublishEventSource)));
             _serviceProvider = services.BuildServiceProvider();
         }
 

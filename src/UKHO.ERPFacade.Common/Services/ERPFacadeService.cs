@@ -196,9 +196,9 @@ namespace UKHO.ERPFacade.Common.Services
             return dateTimeOffset;
         }
 
-        private static Decimal GetPriceInDecimal(string price)
+        private static decimal GetPriceInDecimal(string price)
         {
-            Decimal priceInDecimal = Convert.ToDecimal(string.Format("{0:0.00}", Math.Round(Convert.ToDecimal(price), 2)));
+            decimal priceInDecimal = Convert.ToDecimal(string.Format("{0:0.00}", Math.Round(Convert.ToDecimal(price), 2)));
             return priceInDecimal;
         }
     }

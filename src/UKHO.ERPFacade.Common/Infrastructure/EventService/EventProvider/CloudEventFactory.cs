@@ -7,9 +7,9 @@ namespace UKHO.ERPFacade.Common.Infrastructure.EventService.EventProvider
     public class CloudEventFactory : ICloudEventFactory
     {
         private readonly IDateTimeProvider _dateTimeProvider;
-        private readonly ErpPublishEventSource _erpPublishEventSource;
+        private readonly EnterpriseEventServiceConfiguration _erpPublishEventSource;
 
-        public CloudEventFactory(IDateTimeProvider dateTimeProvider, IOptions<ErpPublishEventSource> erpPublishEventSource)
+        public CloudEventFactory(IDateTimeProvider dateTimeProvider, IOptions<EnterpriseEventServiceConfiguration> erpPublishEventSource)
         {
             _dateTimeProvider = dateTimeProvider;
             _erpPublishEventSource = erpPublishEventSource.Value;

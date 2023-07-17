@@ -9,10 +9,10 @@ namespace UKHO.ERPFacade.Common.Infrastructure.Authentication
     [ExcludeFromCodeCoverage]
     public class InteractiveTokenProvider : ITokenProvider
     {
-        private readonly ErpPublishEventSource _eesOptions;
+        private readonly EnterpriseEventServiceConfiguration _eesOptions;
         private readonly InteractiveLoginConfiguration _loginOptions;
 
-        public InteractiveTokenProvider(IOptions<ErpPublishEventSource> eesOptions, IOptions<InteractiveLoginConfiguration> loginOptions)
+        public InteractiveTokenProvider(IOptions<EnterpriseEventServiceConfiguration> eesOptions, IOptions<InteractiveLoginConfiguration> loginOptions)
         {
             _loginOptions = loginOptions.Value;
             _eesOptions = eesOptions.Value;

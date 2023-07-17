@@ -25,9 +25,9 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
         private EnterpriseEventServiceEventPublisher _fakeEnterpriseEventServiceEventPublisher;
         private IHttpClientFactory _fakeHttpClientFactory;
         private MockHttpMessageHandler _fakeHttpClientMessageHandler;
-        private OptionsWrapper<ErpPublishEventSource> _optionsWrapper;
+        private OptionsWrapper<EnterpriseEventServiceConfiguration> _optionsWrapper;
         private HttpClient _fakeHttpClient;
-        private ErpPublishEventSource _fakeErpPublishEventSource;
+        private EnterpriseEventServiceConfiguration _fakeErpPublishEventSource;
         private ILogger<EnterpriseEventServiceEventPublisher> _fakeLogger;
 
         [SetUp]
@@ -36,7 +36,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
             _fakeLogger = A.Fake<ILogger<EnterpriseEventServiceEventPublisher>>();
             _fakeHttpClientFactory = A.Fake<IHttpClientFactory>();
             _fakeHttpClientMessageHandler = new MockHttpMessageHandler();
-            _fakeErpPublishEventSource = new ErpPublishEventSource
+            _fakeErpPublishEventSource = new EnterpriseEventServiceConfiguration
             {
                 ClientId = "testClientId",
                 PublishEndpoint = "testPublishEndpoint",
@@ -44,7 +44,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
                 ServiceUrl = _fakeServiceUrl,
             };
 
-            _optionsWrapper = new OptionsWrapper<ErpPublishEventSource>(_fakeErpPublishEventSource);
+            _optionsWrapper = new OptionsWrapper<EnterpriseEventServiceConfiguration>(_fakeErpPublishEventSource);
 
             _fakeHttpClient = _fakeHttpClientMessageHandler.ToHttpClient();
             _fakeHttpClient.BaseAddress = new Uri(_fakeServiceUrl);
