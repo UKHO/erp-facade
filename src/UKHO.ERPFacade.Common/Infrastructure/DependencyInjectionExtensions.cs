@@ -20,7 +20,7 @@ namespace UKHO.ERPFacade.Common.Infrastructure
         {
             services.AddOptions<EnterpriseEventServiceConfiguration>().Configure<IConfiguration>((settings, configuration) =>
             {
-                configuration.GetSection("ErpPublishEventSource").Bind(settings);
+                configuration.GetSection("EnterpriseEventServiceConfiguration").Bind(settings);
             });
 
             services.AddOptions<InteractiveLoginConfiguration>().Configure<IConfiguration>((settings, configuration) =>
