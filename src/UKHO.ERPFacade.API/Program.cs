@@ -155,12 +155,6 @@ namespace UKHO.ERPFacade
                 options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             });
 
-            builder.WebHost.ConfigureKestrel(options =>
-            {
-                options.Limits.MaxRequestBodySize = 50_000_000;
-            })
-            .UseIISIntegration();
-
             builder.Services.Configure<AzureStorageConfiguration>(configuration.GetSection("AzureStorageConfiguration"));
             builder.Services.Configure<SapConfiguration>(configuration.GetSection("SapConfiguration"));
             builder.Services.Configure<SharedKeyConfiguration>(configuration.GetSection("SharedKeyConfiguration"));
