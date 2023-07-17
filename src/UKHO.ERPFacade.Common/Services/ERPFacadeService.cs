@@ -151,7 +151,7 @@ namespace UKHO.ERPFacade.Common.Services
 
         public PriceChangeEventPayload BuildPriceChangeEventPayload(List<UnitsOfSalePrices> unitsOfSalePriceList, string unitName, string correlationId, string eventId)
         {
-            _logger.LogInformation(EventIds.AppendingUnitofSalePricesToEncEventInWebJob.ToEventId(), "Appending UnitofSale prices to ENC event in webjob. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}", correlationId, eventId);
+            _logger.LogInformation(EventIds.WebjobStartedBuildingPriceChangeEvent.ToEventId(), "Webjob started building PriceChange event. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}", correlationId, eventId);
 
             PriceChangeEventData priceChangeEventData = new()
             {
@@ -161,7 +161,7 @@ namespace UKHO.ERPFacade.Common.Services
 
             PriceChangeEventPayload priceChangeEventPayload = new(priceChangeEventData, unitName, eventId);
 
-            _logger.LogInformation(EventIds.PriceChangeEventPayloadCreated.ToEventId(), "pricechange event payload created. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}", correlationId, eventId);
+            _logger.LogInformation(EventIds.PriceChangeEventPayloadCreated.ToEventId(), "PriceChange event payload created. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}", correlationId, eventId);
 
             return priceChangeEventPayload;
         }

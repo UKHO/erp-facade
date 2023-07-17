@@ -214,13 +214,13 @@ namespace UKHO.ERPFacade.Common.UnitTests.Services
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
          && call.GetArgument<LogLevel>(0) == LogLevel.Information
-         && call.GetArgument<EventId>(1) == EventIds.AppendingUnitofSalePricesToEncEventInWebJob.ToEventId()
-         && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Appending UnitofSale prices to ENC event in webjob. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}").MustHaveHappenedOnceExactly();
+         && call.GetArgument<EventId>(1) == EventIds.WebjobStartedBuildingPriceChangeEvent.ToEventId()
+         && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Webjob started building PriceChange event. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}").MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
          && call.GetArgument<LogLevel>(0) == LogLevel.Information
          && call.GetArgument<EventId>(1) == EventIds.PriceChangeEventPayloadCreated.ToEventId()
-         && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "pricechange event payload created. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}").MustHaveHappenedOnceExactly();
+         && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "PriceChange event payload created. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}").MustHaveHappenedOnceExactly();
 
             result.Should().BeOfType<PriceChangeEventPayload>();
         }

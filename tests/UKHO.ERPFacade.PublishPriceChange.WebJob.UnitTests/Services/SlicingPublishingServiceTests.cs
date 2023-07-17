@@ -383,8 +383,8 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.UnitTests.Services
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
-            && call.GetArgument<EventId>(1) == EventIds.AppendingUnitofSalePricesToEncEventInWebJob.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Appending UnitofSale prices to ENC event in webjob.").MustNotHaveHappened();
+            && call.GetArgument<EventId>(1) == EventIds.WebjobStartedBuildingPriceChangeEvent.ToEventId()
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Webjob started building PriceChange event.").MustNotHaveHappened();
         }
 
         private List<UnitsOfSalePrices> GetUnitsOfSalePrices()

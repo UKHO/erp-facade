@@ -238,9 +238,9 @@ namespace UKHO.ERPFacade.Common.Logging
         EnterpriseEventServiceEventPublisherFailure = 940046,
 
         /// <summary>
-        /// 940047 - Building unit of sale price event started in webjob
+        /// 940047 - Webjob started building pricechange event
         /// </summary>
-        AppendingUnitofSalePricesToEncEventInWebJob = 940047,
+        WebjobStartedBuildingPriceChangeEvent = 940047,
 
         /// <summary>
         /// 940048 - Updated Price change status entity successfully in Azure Table
