@@ -61,9 +61,9 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
                             {
                                 lock (this)
                                 {
-                                    var prices = priceInformationList.Where(p => p.ProductName == unitPriceInformation.UnitName).ToList();
+                                    var unitPriceInformationList = priceInformationList.Where(p => p.ProductName == unitPriceInformation.UnitName).ToList();
 
-                                    PriceChangeEventPayload priceChangeEventPayload = MapAndBuildPriceChangeEventPayload(prices, entity.CorrId, unitPriceInformation.UnitName, unitPriceInformation.EventId);
+                                    PriceChangeEventPayload priceChangeEventPayload = MapAndBuildPriceChangeEventPayload(unitPriceInformationList, entity.CorrId, unitPriceInformation.UnitName, unitPriceInformation.EventId);
 
                                     var priceChangeCloudEventData = _cloudEventFactory.Create(priceChangeEventPayload);
 
@@ -117,17 +117,19 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
                             }
                         });
 
+                        if (PublishProductsCounter == slicedPrices.Count)
+                        {
+                            _azureTableReaderWriter.UpdatePriceMasterStatusAndPublishDateTimeEntity(entity.CorrId);
+                        }
                         _logger.LogInformation(EventIds.ProductsPublishedUnpublishedCount.ToEventId(), "Total products published are {Count} and unpublished are {unpublishedCount} | _X-Correlation-ID : {_X-Correlation-ID}", PublishProductsCounter, UnpublishProductsCounter, entity.CorrId);
                     }
                 }
             }
         }
 
-        private PriceChangeEventPayload MapAndBuildPriceChangeEventPayload(List<PriceInformation> priceInformationList, string masterCorrId, string unitName, string eventId)
+        private PriceChangeEventPayload MapAndBuildPriceChangeEventPayload(List<PriceInformation> unitPriceInformationList, string masterCorrId, string unitName, string eventId)
         {
-            var prices = priceInformationList.Where(p => p.ProductName == unitName).ToList();
-
-            List<UnitsOfSalePrices> unitsOfSalePriceList = _erpFacadeService.MapAndBuildUnitsOfSalePrices(prices, prices.Select(u => u.ProductName).Distinct().ToList(), masterCorrId, eventId);
+            List<UnitsOfSalePrices> unitsOfSalePriceList = _erpFacadeService.MapAndBuildUnitsOfSalePrices(unitPriceInformationList, new() { unitName}, masterCorrId, eventId);
 
             PriceChangeEventPayload priceChangeEventPayload = _erpFacadeService.BuildPriceChangeEventPayload(unitsOfSalePriceList, unitName, masterCorrId, eventId);
             return priceChangeEventPayload;
@@ -151,11 +153,11 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
 
         private void SavePriceChangeEventPayloadInAzureBlob(string priceChangeCloudEventDataJson, string masterCorrId, string unitName, string eventId)
         {
-            _logger.LogInformation(EventIds.UploadPriceChangeEventPayloadInAzureBlob.ToEventId(), "Uploading the PriceChange event payload json in blob storage. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}", masterCorrId, eventId);
+            _logger.LogInformation(EventIds.UploadPriceChangeEventPayloadInAzureBlob.ToEventId(), "Uploading the PriceChange event payload json for {UnitName} in blob storage. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}",unitName, masterCorrId, eventId);
 
             _azureBlobEventWriter.UploadEvent(priceChangeCloudEventDataJson, ContainerName, masterCorrId + '/' + unitName + '/' + PriceChangeEventFileName);
 
-            _logger.LogInformation(EventIds.UploadedPriceChangeEventPayloadInAzureBlob.ToEventId(), "PriceChange event payload json is uploaded in blob storage successfully. | _X-Correlation-ID : {_X-Correlation-ID}", eventId);
+            _logger.LogInformation(EventIds.UploadedPriceChangeEventPayloadInAzureBlob.ToEventId(), "PriceChange event payload json for {UnitName} is uploaded in blob storage successfully. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}",unitName, masterCorrId, eventId);
         }
     }
 }
