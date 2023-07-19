@@ -252,14 +252,17 @@ namespace UKHO.ERPFacade.Common.Logging
         /// 940049 - Updated Price master status entity successfully in Azure Table
         /// </summary>
         UpdatedPriceChangeMasterStatusEntitySuccessful = 940049,
+
         /// <summary>
         /// 940050 - Downloading the price change information event from blob storage.
         /// </summary>
         DownloadBulkPriceInformationEventFromAzureBlob = 940050,
+
         /// <summary>
         /// 940051 - Sliced event is uploaded in blob storage successfully.
         /// </summary>
         UploadedSlicedEventInAzureBlob = 940051,
+
         /// <summary>
         /// 940052 - Sliced event is uploaded in blob storage successfully for incomplete unit prices.
         /// </summary>
@@ -326,7 +329,7 @@ namespace UKHO.ERPFacade.Common.Logging
         FetchMasterEntities = 940064,
 
         /// <summary>
-        /// 940065 - Fetching create date of blob. 
+        /// 940065 - Fetching create date of blob.
         /// </summary>
         FetchBlobCreateDate = 940065,
 
@@ -346,7 +349,7 @@ namespace UKHO.ERPFacade.Common.Logging
         DeletedEESEntitySuccessful = 940068,
 
         /// <summary>
-        /// 940069 - Fetching all blob present inside the container. 
+        /// 940069 - Fetching all blob present inside the container.
         /// </summary>
         FetchBlobsFromContainer = 940069,
 
@@ -356,7 +359,7 @@ namespace UKHO.ERPFacade.Common.Logging
         DeletedBlobSuccessful = 940070,
 
         /// <summary>
-        /// 940071 - Fetching all EES entities from Azure Table. 
+        /// 940071 - Fetching all EES entities from Azure Table.
         /// </summary>
         FetchEESEntities = 940071,
 
@@ -411,32 +414,32 @@ namespace UKHO.ERPFacade.Common.Logging
         UpdatePublishDateTimeEntitySuccessful = 940082,
 
         /// <summary>
-        /// 940075 - Error occurred while connecting EES
+        /// 940083 - Error occurred while connecting EES
         /// </summary>
         ErrorOccurredInEES = 940083,
 
         /// <summary>
-        /// 940076 - EES Health Check Request Sent To EES
+        /// 940084 - EES Health Check Request Sent To EES
         /// </summary>
         EESHealthCheckRequestSentToEES = 940084,
 
         /// <summary>
-        /// 940077 - SAP Is Healthy
+        /// 940085 - SAP Is Healthy
         /// </summary>
         SAPIsHealthy = 940085,
 
         /// <summary>
-        /// 940078 - SAP Is Unhealty
+        /// 940086 - SAP Is Unhealty
         /// </summary>
         SAPIsUnhealthy = 940086,
 
         /// <summary>
-        /// 940079 - EES Is Healthy
+        /// 940087 - EES Is Healthy
         /// </summary>
         EESIsHealthy = 940087,
 
         /// <summary>
-        /// 940080 - EES Is Unhealty
+        /// 940088 - EES Is Unhealty
         /// </summary>
         EESIsUnhealthy = 940088,
 
@@ -456,7 +459,7 @@ namespace UKHO.ERPFacade.Common.Logging
         ProductsPublishedUnpublishedCount = 940091,
 
         /// <summary>
-        /// 940092 - Count of unpublished products 
+        /// 940092 - Count of unpublished products
         /// </summary>
         ProductsUnpublishedCount = 940092,
 
