@@ -16,8 +16,8 @@ steps:
     inputs:
       targetType: 'inline'
       script: |
-          echo "##vso[task.setvariable variable=SapConfiguration.Password]$(SapConfiguration--Password)"
-          echo "##vso[task.setvariable variable=SapConfiguration.Username]$(SapConfiguration--Username)"
+          echo "##vso[task.setvariable variable=SapConfiguration.Password]$(SapConfigurationPassword)"
+          echo "##vso[task.setvariable variable=SapConfiguration.Username]$(SapConfigurationUsername)"
 
   - task: AzureCLI@2
     displayName: "Set FT Configuration Application Settings for Mock Webapp"
@@ -52,7 +52,6 @@ steps:
 
   - task: DotNetCoreCLI@2
     displayName: "Run Functional tests"
-    continueOnError: true
     inputs:
       command: "test"
       projects: |

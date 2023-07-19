@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.Extensions.Logging;
 
 namespace UKHO.ERPFacade.Common.Logging
 {
@@ -473,6 +474,7 @@ namespace UKHO.ERPFacade.Common.Logging
     /// <summary>
     /// EventId Extensions
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public static class EventIdExtensions
     {
         /// <summary>

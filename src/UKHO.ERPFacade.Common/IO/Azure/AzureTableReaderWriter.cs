@@ -16,6 +16,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
         private readonly ILogger<AzureTableReaderWriter> _logger;
         private readonly IOptions<AzureStorageConfiguration> _azureStorageConfig;
         private readonly IOptions<ErpFacadeWebJobConfiguration> _erpFacadeWebjobConfig;
+        private readonly TableClient _unitPriceChangeTableClient;
         private const string ErpFacadeTableName = "encevents";
         private const string PriceChangeMasterTableName = "pricechangemaster";
         private const string UnitPriceChangeTableName = "unitpricechangeevents";
@@ -34,6 +35,8 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _azureStorageConfig = azureStorageConfig ?? throw new ArgumentNullException(nameof(azureStorageConfig));
             _erpFacadeWebjobConfig = erpFacadeWebjobConfig ?? throw new ArgumentNullException(nameof(erpFacadeWebjobConfig));
+
+            _unitPriceChangeTableClient = GetTableClient(UnitPriceChangeTableName);
         }
 
         public async Task UpsertEntity(string correlationId)
@@ -202,8 +205,6 @@ namespace UKHO.ERPFacade.Common.IO.Azure
 
         public void AddUnitPriceChangeEntity(string correlationId, string eventId, string unitName)
         {
-            TableClient tableClient = GetTableClient(UnitPriceChangeTableName);
-
             UnitPriceChangeEntity unitPriceChangeEventEntity = new()
             {
                 RowKey = eventId,
@@ -216,7 +217,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
                 Status = "Incomplete"
             };
 
-            tableClient.AddEntity(unitPriceChangeEventEntity, CancellationToken.None);
+            _unitPriceChangeTableClient.AddEntity(unitPriceChangeEventEntity, CancellationToken.None);
 
             _logger.LogInformation(EventIds.AddedUnitPriceChangeEventInAzureTable.ToEventId(), "Unit price change event in added in azure table successfully. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}", correlationId, eventId);
         }
