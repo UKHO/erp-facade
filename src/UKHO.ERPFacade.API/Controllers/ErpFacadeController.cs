@@ -120,7 +120,7 @@ namespace UKHO.ERPFacade.API.Controllers
                 if (eventSize > EventSizeLimit)
                 {
                     _logger.LogError(EventIds.UnitsOfSaleUpdatedEventSizeLimit.ToEventId(), "UnitsOfSaleUpdated event exceeds the size limit of 1 MB. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}", correlationId, eventId);
-                    throw new ERPFacadeException(EventIds.UnitsOfSaleUpdatedEventSizeLimit.ToEventId());
+                    return new OkObjectResult(StatusCodes.Status200OK);
                 }
 
                 Result result = await _eventPublisher.Publish(unitsOfSaleUpdatedCloudEventData);
@@ -128,12 +128,8 @@ namespace UKHO.ERPFacade.API.Controllers
                 if (result.Status == Result.Statuses.Success)
                 {
                     await _azureTableReaderWriter.UpdatePublishDateTimeEntity(correlationId, eventId);
-                    return new OkObjectResult(StatusCodes.Status200OK);
                 }
-                else
-                {
-                    throw new ERPFacadeException(EventIds.ErrorOccuredInEES.ToEventId());
-                }
+                return new OkObjectResult(StatusCodes.Status200OK);
             }
             else
             {
