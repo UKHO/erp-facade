@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
+﻿using System.Xml;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System.Xml;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.HttpClients;
 using UKHO.ERPFacade.Common.IO;
@@ -56,7 +56,7 @@ namespace UKHO.ERPFacade.Common.HealthCheck
                     _logger.LogError(EventIds.SAPIsUnhealthy.ToEventId(), "SAP is Unhealthy !!!");
                     return HealthCheckResult.Unhealthy("SAP is Unhealthy");
                 }
-                _logger.LogDebug(EventIds.SAPIsHealthy.ToEventId(), "SAP is Healthy");
+                _logger.LogInformation(EventIds.SAPIsHealthy.ToEventId(), "SAP is Healthy");
                 return HealthCheckResult.Healthy("SAP is Healthy !!!");
             }
             catch (Exception ex)
