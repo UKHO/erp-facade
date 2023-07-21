@@ -184,7 +184,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             return records;
         }
 
-        public async Task AddPriceChangeEntity(string correlationId)
+        public async Task AddPriceChangeEntity(string correlationId, int productCount)
         {
             TableClient tableClient = GetTableClient(PriceChangeMasterTableName);
 
@@ -195,6 +195,8 @@ namespace UKHO.ERPFacade.Common.IO.Azure
                 Timestamp = DateTime.UtcNow,
                 CorrId = correlationId,
                 PublishDateTime = null,
+                CreatedDateTime = DateTime.UtcNow,
+                ProductCount = productCount,
                 Status = "Incomplete"
             };
 

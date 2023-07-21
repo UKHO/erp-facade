@@ -350,7 +350,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             var result = (OkObjectResult)await _fakeErpFacadeController.PostBulkPriceInformation(fakeSapEventJson);
             result.StatusCode.Should().Be(200);
 
-            A.CallTo(() => _fakeAzureTableReaderWriter.AddPriceChangeEntity(A<string>.Ignored)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _fakeAzureTableReaderWriter.AddPriceChangeEntity(A<string>.Ignored, A<int>.Ignored)).MustHaveHappenedOnceExactly();
             A.CallTo(() => _fakeAzureBlobEventWriter.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"

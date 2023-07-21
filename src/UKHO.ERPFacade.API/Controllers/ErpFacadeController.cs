@@ -149,7 +149,11 @@ namespace UKHO.ERPFacade.API.Controllers
 
             _logger.LogInformation(EventIds.StoreBulkPriceInformationEventInAzureTable.ToEventId(), "Storing the received Bulk price information event in azure table.");
 
-            await _azureTableReaderWriter.AddPriceChangeEntity(correlationId);
+            List<PriceInformation> priceInformationList = JsonConvert.DeserializeObject<List<PriceInformation>>(bulkPriceInformationJson.ToString());
+
+            var productCount = priceInformationList.Select(p => p.ProductName).Distinct().ToList().Count;
+
+            await _azureTableReaderWriter.AddPriceChangeEntity(correlationId, productCount);
 
             _logger.LogInformation(EventIds.UploadBulkPriceInformationEventInAzureBlob.ToEventId(), "Uploading the received Bulk price information event in blob storage.");
 

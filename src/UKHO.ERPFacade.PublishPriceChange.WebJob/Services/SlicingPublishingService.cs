@@ -7,6 +7,7 @@ using UKHO.ERPFacade.Common.Infrastructure.EventService.EventProvider;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
+using UKHO.ERPFacade.Common.Models.TableEntities;
 using UKHO.ERPFacade.Common.Services;
 
 namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
@@ -20,6 +21,7 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
         private readonly IEventPublisher _eventPublisher;
         private readonly ICloudEventFactory _cloudEventFactory;
 
+        private const string CompleteStatus = "Complete";
         private const string IncompleteStatus = "Incomplete";
         private const string ContainerName = "pricechangeblobs";
         private const string BulkPriceInformationFileName = "BulkPriceInformation.json";
@@ -52,79 +54,103 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
                 {
                     List<PriceInformation> priceInformationList = JsonConvert.DeserializeObject<List<PriceInformation>>(priceChangeInformationJson);
 
-                    var unitPriceInformationEntities = _azureTableReaderWriter.GetUnitPriceChangeEventsEntities(entity.CorrId);
-                    if (unitPriceInformationEntities.Count > 0)
+                    var existingEntites = _azureTableReaderWriter.GetUnitPriceChangeEventsEntities(entity.CorrId);
+
+                    if (existingEntites.Count > 0)
                     {
-                        if (unitPriceInformationEntities.Any(i => i.Status == IncompleteStatus))
+                        if (entity.ProductCount == existingEntites.Where(i => i.Status == CompleteStatus).ToList().Count)
                         {
-                            Parallel.ForEach(unitPriceInformationEntities.Where(i => i.Status == IncompleteStatus).ToList(), unitPriceInformation =>
-                            {
-                                lock (this)
-                                {
-                                    var unitPriceInformationList = priceInformationList.Where(p => p.ProductName == unitPriceInformation.UnitName).ToList();
-
-                                    PriceChangeEventPayload priceChangeEventPayload = MapAndBuildPriceChangeEventPayload(unitPriceInformationList, entity.CorrId, unitPriceInformation.UnitName, unitPriceInformation.EventId);
-
-                                    var priceChangeCloudEventData = _cloudEventFactory.Create(priceChangeEventPayload);
-
-                                    var priceChangeCloudEventDataJson = JsonConvert.SerializeObject(priceChangeCloudEventData, Formatting.Indented);
-
-                                    SavePriceChangeEventPayloadInAzureBlob(priceChangeCloudEventDataJson, entity.CorrId, unitPriceInformation.UnitName, unitPriceInformation.EventId);
-
-                                    PublishEvent(priceChangeCloudEventData, entity.CorrId, unitPriceInformation.UnitName, unitPriceInformation.EventId);
-                                }
-                            });
+                            _azureTableReaderWriter.UpdatePriceMasterStatusAndPublishDateTimeEntity(entity.CorrId);
                         }
                         else
                         {
-                            _azureTableReaderWriter.UpdatePriceMasterStatusAndPublishDateTimeEntity(entity.CorrId);
+                            var recordsNotProcessedEntites = priceInformationList.Where(p => !existingEntites.Any(u => p.ProductName == u.UnitName)).ToList();
+                            if (recordsNotProcessedEntites.Count > 0) //slice and try publish
+                            {
+                                foreach (var record in recordsNotProcessedEntites)
+                                {
+                                    SlicePriceInformationAndPublishPriceChangeEvents(entity, recordsNotProcessedEntites);
+                                }
+                            }
+
+                            var incompleteStatusEntites = existingEntites.Where(i => i.Status == IncompleteStatus).ToList();
+                            if (incompleteStatusEntites.Count > 0) //products sliced but not published.
+                            {
+                                ProcessIncompleteStatusEntites(incompleteStatusEntites, priceInformationList);
+                            }
                         }
                     }
-                    else
+                    else  //slice and try publish
                     {
-                        var slicedPrices = priceInformationList.Select(p => p.ProductName).Distinct().ToList();
-                        _logger.LogInformation(EventIds.ProductsToSliceCount.ToEventId(), "Total products to slice are {Count} | _X-Correlation-ID : {_X-Correlation-ID}", slicedPrices.Count, entity.CorrId);
-
-                        string eventId;
-                        PublishProductsCounter = 0;
-                        UnpublishProductsCounter = 0;
-
-                        Parallel.ForEach(slicedPrices, unitName =>
-                        {
-                            lock (this)
-                            {
-                                eventId = Guid.NewGuid().ToString();
-                                var prices = priceInformationList.Where(p => p.ProductName == unitName).ToList();
-                                var pricesJson = JArray.Parse(JsonConvert.SerializeObject(prices));
-
-                                _azureTableReaderWriter.AddUnitPriceChangeEntity(entity.CorrId, eventId, unitName);
-
-                                _logger.LogInformation(EventIds.UploadSlicedPriceInformationEventInAzureBlob.ToEventId(), "Uploading the sliced price information in blob storage. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}", entity.CorrId, eventId);
-
-                                _azureBlobEventWriter.UploadEvent(pricesJson.ToString(), ContainerName, entity.CorrId + '/' + unitName + '/' + PriceInformationFileName);
-
-                                _logger.LogInformation(EventIds.UploadedSlicedPriceInformationEventInAzureBlob.ToEventId(), "Sliced price information is uploaded in blob storage successfully. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}", entity.CorrId, eventId);
-
-                                PriceChangeEventPayload priceChangeEventPayload = MapAndBuildPriceChangeEventPayload(prices, entity.CorrId, unitName, eventId);
-
-                                var priceChangeCloudEventData = _cloudEventFactory.Create(priceChangeEventPayload);
-
-                                var priceChangeCloudEventDataJson = JsonConvert.SerializeObject(priceChangeCloudEventData, Formatting.Indented);
-
-                                SavePriceChangeEventPayloadInAzureBlob(priceChangeCloudEventDataJson.ToString(), entity.CorrId, unitName, eventId);
-
-                                PublishEvent(priceChangeCloudEventData, entity.CorrId, unitName, eventId);
-                            }
-                        });
-
-                        if (PublishProductsCounter == slicedPrices.Count)
-                        {
-                            _azureTableReaderWriter.UpdatePriceMasterStatusAndPublishDateTimeEntity(entity.CorrId);
-                        }
-                        _logger.LogInformation(EventIds.ProductsPublishedUnpublishedCount.ToEventId(), "Total products published are {Count} and unpublished are {unpublishedCount} | _X-Correlation-ID : {_X-Correlation-ID}", PublishProductsCounter, UnpublishProductsCounter, entity.CorrId);
+                        SlicePriceInformationAndPublishPriceChangeEvents(entity, priceInformationList);
                     }
                 }
             }
+        }
+
+        private void ProcessIncompleteStatusEntites(IList<UnitPriceChangeEntity> unitPriceInformationEntities, List<PriceInformation> priceInformationList)
+        {
+            Parallel.ForEach(unitPriceInformationEntities, unitPriceInformation =>
+            {
+                lock (this)
+                {
+                    var unitPriceInformationList = priceInformationList.Where(p => p.ProductName == unitPriceInformation.UnitName).ToList();
+
+                    PriceChangeEventPayload priceChangeEventPayload = MapAndBuildPriceChangeEventPayload(unitPriceInformationList, unitPriceInformation.MasterCorrId, unitPriceInformation.UnitName, unitPriceInformation.EventId);
+
+                    var priceChangeCloudEventData = _cloudEventFactory.Create(priceChangeEventPayload);
+
+                    //var priceChangeCloudEventDataJson = JsonConvert.SerializeObject(priceChangeCloudEventData, Formatting.Indented);
+
+                    //SavePriceChangeEventPayloadInAzureBlob(priceChangeCloudEventDataJson, unitPriceInformation.MasterCorrId, unitPriceInformation.UnitName, unitPriceInformation.EventId);
+
+                    PublishEvent(priceChangeCloudEventData, unitPriceInformation.MasterCorrId, unitPriceInformation.UnitName, unitPriceInformation.EventId);
+                }
+            });
+        }
+
+        private void SlicePriceInformationAndPublishPriceChangeEvents(PriceChangeMasterEntity entity, List<PriceInformation> priceInformationList)
+        {
+            var slicedPrices = priceInformationList.Select(p => p.ProductName).Distinct().ToList();
+            _logger.LogInformation(EventIds.ProductsToSliceCount.ToEventId(), "Total products to slice are {Count} | _X-Correlation-ID : {_X-Correlation-ID}", slicedPrices.Count, entity.CorrId);
+
+            string eventId;
+            PublishProductsCounter = 0;
+            UnpublishProductsCounter = 0;
+
+            Parallel.ForEach(slicedPrices, unitName =>
+            {
+                lock (this)
+                {
+                    eventId = Guid.NewGuid().ToString();
+                    var prices = priceInformationList.Where(p => p.ProductName == unitName).ToList();
+                    var pricesJson = JArray.Parse(JsonConvert.SerializeObject(prices));
+
+                    _azureTableReaderWriter.AddUnitPriceChangeEntity(entity.CorrId, eventId, unitName);
+
+                    _logger.LogInformation(EventIds.UploadSlicedPriceInformationEventInAzureBlob.ToEventId(), "Uploading the sliced price information in blob storage. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}", entity.CorrId, eventId);
+
+                    _azureBlobEventWriter.UploadEvent(pricesJson.ToString(), ContainerName, entity.CorrId + '/' + unitName + '/' + PriceInformationFileName);
+
+                    _logger.LogInformation(EventIds.UploadedSlicedPriceInformationEventInAzureBlob.ToEventId(), "Sliced price information is uploaded in blob storage successfully. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}", entity.CorrId, eventId);
+
+                    PriceChangeEventPayload priceChangeEventPayload = MapAndBuildPriceChangeEventPayload(prices, entity.CorrId, unitName, eventId);
+
+                    var priceChangeCloudEventData = _cloudEventFactory.Create(priceChangeEventPayload);
+
+                    var priceChangeCloudEventDataJson = JsonConvert.SerializeObject(priceChangeCloudEventData, Formatting.Indented);
+
+                    SavePriceChangeEventPayloadInAzureBlob(priceChangeCloudEventDataJson.ToString(), entity.CorrId, unitName, eventId);
+
+                    PublishEvent(priceChangeCloudEventData, entity.CorrId, unitName, eventId);
+                }
+            });
+
+            if (PublishProductsCounter == slicedPrices.Count)
+            {
+                _azureTableReaderWriter.UpdatePriceMasterStatusAndPublishDateTimeEntity(entity.CorrId);
+            }
+            _logger.LogInformation(EventIds.ProductsPublishedUnpublishedCount.ToEventId(), "Total products published are {Count} and unpublished are {unpublishedCount} | _X-Correlation-ID : {_X-Correlation-ID}", PublishProductsCounter, UnpublishProductsCounter, entity.CorrId);
         }
 
         private PriceChangeEventPayload MapAndBuildPriceChangeEventPayload(List<PriceInformation> unitPriceInformationList, string masterCorrId, string unitName, string eventId)

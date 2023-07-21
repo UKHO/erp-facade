@@ -1,6 +1,6 @@
-﻿using Azure;
+﻿using System.Diagnostics.CodeAnalysis;
+using Azure;
 using Azure.Data.Tables;
-using System.Diagnostics.CodeAnalysis;
 
 namespace UKHO.ERPFacade.Common.Models.TableEntities
 {
@@ -18,6 +18,10 @@ namespace UKHO.ERPFacade.Common.Models.TableEntities
         public string Status { get; set; } = default!;
 
         public DateTime? PublishDateTime { get; set; } = default!;
+
+        public DateTime? CreatedDateTime { get; set; } = default!;
+
+        public int ProductCount { get; set; } = default!;
 
         public ETag ETag { get; set; } = default!;
     }
