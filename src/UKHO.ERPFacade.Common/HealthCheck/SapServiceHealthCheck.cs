@@ -56,7 +56,7 @@ namespace UKHO.ERPFacade.Common.HealthCheck
                     _logger.LogError(EventIds.SAPIsUnhealthy.ToEventId(), "SAP is Unhealthy !!!");
                     return HealthCheckResult.Unhealthy("SAP is Unhealthy");
                 }
-                _logger.LogInformation(EventIds.SAPIsHealthy.ToEventId(), "SAP is Healthy");
+                _logger.LogDebug(EventIds.SAPIsHealthy.ToEventId(), "SAP is Healthy");
                 return HealthCheckResult.Healthy("SAP is Healthy !!!");
             }
             catch (Exception ex)
