@@ -471,7 +471,12 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940094 - Sliced Price information event is uploaded in blob storage successfully.
         /// </summary>
-        UploadedSlicedPriceInformationEventInAzureBlob = 940094
+        UploadedSlicedPriceInformationEventInAzureBlob = 940094,
+
+        /// <summary>
+        /// 940095 - Count of pending products to be sliced
+        /// </summary>
+        PendingProductsToSliceCount = 940095
     }
 
     /// <summary>

@@ -58,29 +58,26 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
 
                     if (existingEntites.Count > 0)
                     {
-                        if (entity.ProductCount == existingEntites.Where(i => i.Status == CompleteStatus).ToList().Count)
+                        if (entity.ProductCount == existingEntites.Where(i => i.Status.Equals(CompleteStatus)).ToList().Count)
                         {
                             _azureTableReaderWriter.UpdatePriceMasterStatusAndPublishDateTimeEntity(entity.CorrId);
                         }
                         else
                         {
                             var recordsNotProcessedEntites = priceInformationList.Where(p => !existingEntites.Any(u => p.ProductName == u.UnitName)).ToList();
-                            if (recordsNotProcessedEntites.Count > 0) //slice and try publish
+                            if (recordsNotProcessedEntites.Count > 0)
                             {
-                                foreach (var record in recordsNotProcessedEntites)
-                                {
-                                    SlicePriceInformationAndPublishPriceChangeEvents(entity, recordsNotProcessedEntites);
-                                }
+                                SlicePriceInformationAndPublishPriceChangeEvents(entity, recordsNotProcessedEntites, true);
                             }
 
-                            var incompleteStatusEntites = existingEntites.Where(i => i.Status == IncompleteStatus).ToList();
-                            if (incompleteStatusEntites.Count > 0) //products sliced but not published.
+                            var incompleteStatusEntites = existingEntites.Where(i => i.Status.Equals(IncompleteStatus)).ToList();
+                            if (incompleteStatusEntites.Count > 0)
                             {
                                 ProcessIncompleteStatusEntites(incompleteStatusEntites, priceInformationList);
                             }
                         }
                     }
-                    else  //slice and try publish
+                    else
                     {
                         SlicePriceInformationAndPublishPriceChangeEvents(entity, priceInformationList);
                     }
@@ -100,19 +97,24 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
 
                     var priceChangeCloudEventData = _cloudEventFactory.Create(priceChangeEventPayload);
 
-                    //var priceChangeCloudEventDataJson = JsonConvert.SerializeObject(priceChangeCloudEventData, Formatting.Indented);
-
-                    //SavePriceChangeEventPayloadInAzureBlob(priceChangeCloudEventDataJson, unitPriceInformation.MasterCorrId, unitPriceInformation.UnitName, unitPriceInformation.EventId);
-
                     PublishEvent(priceChangeCloudEventData, unitPriceInformation.MasterCorrId, unitPriceInformation.UnitName, unitPriceInformation.EventId);
                 }
             });
         }
 
-        private void SlicePriceInformationAndPublishPriceChangeEvents(PriceChangeMasterEntity entity, List<PriceInformation> priceInformationList)
+        private void SlicePriceInformationAndPublishPriceChangeEvents(PriceChangeMasterEntity entity, List<PriceInformation> priceInformationList, bool IsRecordsNotProcessed = false)
         {
             var slicedPrices = priceInformationList.Select(p => p.ProductName).Distinct().ToList();
-            _logger.LogInformation(EventIds.ProductsToSliceCount.ToEventId(), "Total products to slice are {Count} | _X-Correlation-ID : {_X-Correlation-ID}", slicedPrices.Count, entity.CorrId);
+
+            if (!IsRecordsNotProcessed)
+            {
+                _logger.LogInformation(EventIds.ProductsToSliceCount.ToEventId(), "Total products to slice are {Count} | _X-Correlation-ID : {_X-Correlation-ID}", slicedPrices.Count, entity.CorrId);
+            }
+            else
+            {
+                _logger.LogInformation(EventIds.PendingProductsToSliceCount.ToEventId(), "Pending products to slice are {Count} | _X-Correlation-ID : {_X-Correlation-ID}", slicedPrices.Count, entity.CorrId);
+            }
+
 
             string eventId;
             PublishProductsCounter = 0;
@@ -146,7 +148,7 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
                 }
             });
 
-            if (PublishProductsCounter == slicedPrices.Count)
+            if (PublishProductsCounter == slicedPrices.Count && !IsRecordsNotProcessed)
             {
                 _azureTableReaderWriter.UpdatePriceMasterStatusAndPublishDateTimeEntity(entity.CorrId);
             }
@@ -166,7 +168,7 @@ namespace UKHO.ERPFacade.PublishPriceChange.WebJob.Services
         {
             var result = _eventPublisher.Publish(priceChangeCloudEventData);
 
-            if (result.Result.Status == Result.Statuses.Success)
+            if (result.Result.Status is Result.Statuses.Success)
             {
                 _azureTableReaderWriter.UpdateUnitPriceChangeStatusAndPublishDateTimeEntity(masterCorrId, unitName, eventId);
                 PublishProductsCounter++;
