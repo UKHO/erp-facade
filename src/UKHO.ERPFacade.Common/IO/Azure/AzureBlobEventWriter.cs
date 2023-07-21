@@ -44,10 +44,10 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             return blobClient.GetProperties().Value.CreatedOn.DateTime;
         }
 
-        public IEnumerable<string> GetBlobsInContainer(string blobContainerName,string corrId)
+        public IEnumerable<string> GetBlobsInContainer(string blobContainerName, string corrId)
         {
             BlobContainerClient blobContainerClient = new(_azureStorageConfig.Value.ConnectionString, blobContainerName);
-            var blobs=blobContainerClient.GetBlobs(BlobTraits.None,BlobStates.None, corrId);
+            var blobs = blobContainerClient.GetBlobs(BlobTraits.None, BlobStates.None, corrId);
             foreach (BlobItem blob in blobs)
             {
                 yield return blob.Name;

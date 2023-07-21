@@ -79,9 +79,9 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             A.CallTo(() => _fakeCloudEventFactory.Create(A<UnitOfSaleUpdatedEventPayload>.Ignored)).Returns(unitOfSaleUpdatedCloudEventData);
             A.CallTo(() => _fakeEventPublisher.Publish(A<CloudEvent<UnitOfSaleUpdatedEventData>>.Ignored)).Returns(new Result(Statuses.Success, "Successfully sent event"));
 
-            A.CallTo(() => _fakeErpFacadeService.MapAndBuildUnitsOfSalePrices(A<List<PriceInformation>>.Ignored, A<List<string>>.Ignored)).Returns(unitsOfSalePricesList);
+            A.CallTo(() => _fakeErpFacadeService.MapAndBuildUnitsOfSalePrices(A<List<PriceInformation>>.Ignored, A<List<string>>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(unitsOfSalePricesList);
 
-            A.CallTo(() => _fakeErpFacadeService.BuildUnitsOfSaleUpdatedEventPayload(A<List<UnitsOfSalePrices>>.Ignored, A<string>.Ignored)).Returns(eesPriceEventPayload);
+            A.CallTo(() => _fakeErpFacadeService.BuildUnitsOfSaleUpdatedEventPayload(A<List<UnitsOfSalePrices>>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(eesPriceEventPayload);
 
             A.CallTo(() => _fakeCloudEventFactory.Create(A<UnitOfSaleUpdatedEventPayload>.Ignored)).Returns(unitOfSaleUpdatedCloudEventData);
 
@@ -96,7 +96,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             A.CallTo(() => _fakeAzureBlobEventWriter.CheckIfContainerExists(A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeEventPublisher.Publish(A<CloudEvent<UnitOfSaleUpdatedEventData>>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureBlobEventWriter.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedTwiceExactly();
-            A.CallTo(() => _fakeAzureTableReaderWriter.UpdatePublishDateTimeEntity(A<string>.Ignored)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpdatePublishDateTimeEntity(A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
@@ -111,13 +111,12 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
             && call.GetArgument<EventId>(1) == EventIds.UploadUnitsOfSaleUpdatedEventPayloadInAzureBlob.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Uploading the UnitsOfSaleUpdated event payload json in blob storage.").MustHaveHappenedOnceExactly();
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Uploading the UnitsOfSaleUpdated event payload json in blob storage. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}").MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
             && call.GetArgument<EventId>(1) == EventIds.UploadedUnitsOfSaleUpdatedEventPayloadInAzureBlob.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "UnitsOfSaleUpdated event payload json is uploaded in blob storage successfully.").MustHaveHappenedOnceExactly();
-
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "UnitsOfSaleUpdated event payload json is uploaded in blob storage successfully. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}").MustHaveHappenedOnceExactly();
         }
 
         [Test]
@@ -183,9 +182,9 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             A.CallTo(() => _fakeAzureBlobEventWriter.CheckIfContainerExists(A<string>.Ignored)).Returns(true);
             A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).Returns(encContentPublishedJson);
 
-            A.CallTo(() => _fakeErpFacadeService.MapAndBuildUnitsOfSalePrices(A<List<PriceInformation>>.Ignored, A<List<string>>.Ignored)).Returns(unitsOfSalePricesList);
+            A.CallTo(() => _fakeErpFacadeService.MapAndBuildUnitsOfSalePrices(A<List<PriceInformation>>.Ignored, A<List<string>>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(unitsOfSalePricesList);
 
-            A.CallTo(() => _fakeErpFacadeService.BuildUnitsOfSaleUpdatedEventPayload(A<List<UnitsOfSalePrices>>.Ignored, A<string>.Ignored)).Returns(eesPriceEventPayload);
+            A.CallTo(() => _fakeErpFacadeService.BuildUnitsOfSaleUpdatedEventPayload(A<List<UnitsOfSalePrices>>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(eesPriceEventPayload);
 
             A.CallTo(() => _fakeCloudEventFactory.Create(A<UnitOfSaleUpdatedEventPayload>.Ignored)).Returns(unitOfSaleUpdatedCloudEventData);
 
@@ -231,17 +230,16 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
             && call.GetArgument<EventId>(1) == EventIds.DownloadEncEventPayloadCompleted.ToEventId()
             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "ENC event payload is downloaded from azure blob storage successfully.").MustHaveHappenedOnceExactly();
-             
+
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
             && call.GetArgument<EventId>(1) == EventIds.UploadUnitsOfSaleUpdatedEventPayloadInAzureBlob.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Uploading the UnitsOfSaleUpdated event payload json in blob storage.").MustHaveHappenedOnceExactly();
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Uploading the UnitsOfSaleUpdated event payload json in blob storage. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}").MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
             && call.GetArgument<EventId>(1) == EventIds.UploadedUnitsOfSaleUpdatedEventPayloadInAzureBlob.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "UnitsOfSaleUpdated event payload json is uploaded in blob storage successfully.").MustHaveHappenedOnceExactly();
-
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "UnitsOfSaleUpdated event payload json is uploaded in blob storage successfully. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}").MustHaveHappenedOnceExactly();
         }
 
         [Test]
@@ -251,9 +249,9 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
 
             A.CallTo(() => _fakeAzureBlobEventWriter.CheckIfContainerExists(A<string>.Ignored)).Returns(true);
 
-            A.CallTo(() => _fakeErpFacadeService.MapAndBuildUnitsOfSalePrices(A<List<PriceInformation>>.Ignored, A<List<string>>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeErpFacadeService.MapAndBuildUnitsOfSalePrices(A<List<PriceInformation>>.Ignored, A<List<string>>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
 
-            A.CallTo(() => _fakeErpFacadeService.BuildUnitsOfSaleUpdatedEventPayload(A<List<UnitsOfSalePrices>>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeErpFacadeService.BuildUnitsOfSaleUpdatedEventPayload(A<List<UnitsOfSalePrices>>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
 
             Assert.ThrowsAsync<ERPFacadeException>(() => _fakeErpFacadeController.PostPriceInformation(fakePriceInformationJson));
 
@@ -279,7 +277,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         }
 
         [Test]
-        public void WhenUnitsOfSaleUpdatedEventPayloadJsonSizeGreaterThanOneMb_ThenErpFacadeThrowsException()
+        public async Task WhenUnitsOfSaleUpdatedEventPayloadJsonSizeGreaterThanOneMb_ThenErpFacadeReturns200OkResponseAndLogError()
         {
             var requestJson = JArray.Parse(JsonConvert.DeserializeObject(jsonString).ToString()!);
             var unitsOfSalePricesList = GetUnitsOfSalePriceList();
@@ -291,19 +289,22 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             A.CallTo(() => _fakeCloudEventFactory.Create(A<UnitOfSaleUpdatedEventPayload>.Ignored)).Returns(unitOfSaleUpdatedCloudEventData);
             A.CallTo(() => _fakeEventPublisher.Publish(A<CloudEvent<UnitOfSaleUpdatedEventData>>.Ignored)).Returns(new Result(Statuses.Success, "Successfully sent event"));
 
-            A.CallTo(() => _fakeErpFacadeService.MapAndBuildUnitsOfSalePrices(A<List<PriceInformation>>.Ignored, A<List<string>>.Ignored)).Returns(unitsOfSalePricesList);
+            A.CallTo(() => _fakeErpFacadeService.MapAndBuildUnitsOfSalePrices(A<List<PriceInformation>>.Ignored, A<List<string>>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(unitsOfSalePricesList);
 
-            A.CallTo(() => _fakeErpFacadeService.BuildUnitsOfSaleUpdatedEventPayload(A<List<UnitsOfSalePrices>>.Ignored, A<string>.Ignored)).Returns(eesPriceEventPayload);
+            A.CallTo(() => _fakeErpFacadeService.BuildUnitsOfSaleUpdatedEventPayload(A<List<UnitsOfSalePrices>>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(eesPriceEventPayload);
 
             A.CallTo(() => _fakeCloudEventFactory.Create(A<UnitOfSaleUpdatedEventPayload>.Ignored)).Returns(unitOfSaleUpdatedCloudEventData);
 
             A.CallTo(() => _fakeJsonHelper.GetPayloadJsonSize(A<string>.Ignored)).Returns(2000000);
 
-            Assert.ThrowsAsync<ERPFacadeException>(() => _fakeErpFacadeController.PostPriceInformation(requestJson));
+            var result = (OkObjectResult)await _fakeErpFacadeController.PostPriceInformation(requestJson);
+            result.StatusCode.Should().Be(200);
 
             A.CallTo(() => _fakeAzureTableReaderWriter.UpdateResponseTimeEntity(A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureBlobEventWriter.CheckIfContainerExists(A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeEventPublisher.Publish(A<CloudEvent<UnitOfSaleUpdatedEventData>>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpdatePublishDateTimeEntity(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
@@ -328,18 +329,17 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Error
             && call.GetArgument<EventId>(1) == EventIds.UnitsOfSaleUpdatedEventSizeLimit.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "UnitsOfSaleUpdated event exceeds the size limit of 1 MB.").MustHaveHappenedOnceExactly();
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "UnitsOfSaleUpdated event exceeds the size limit of 1 MB. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}").MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
             && call.GetArgument<EventId>(1) == EventIds.UploadUnitsOfSaleUpdatedEventPayloadInAzureBlob.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Uploading the UnitsOfSaleUpdated event payload json in blob storage.").MustHaveHappenedOnceExactly();
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Uploading the UnitsOfSaleUpdated event payload json in blob storage. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}").MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
             && call.GetArgument<EventId>(1) == EventIds.UploadedUnitsOfSaleUpdatedEventPayloadInAzureBlob.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "UnitsOfSaleUpdated event payload json is uploaded in blob storage successfully.").MustHaveHappenedOnceExactly();
-
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "UnitsOfSaleUpdated event payload json is uploaded in blob storage successfully. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}").MustHaveHappenedOnceExactly();
         }
 
         [Test]
@@ -350,7 +350,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             var result = (OkObjectResult)await _fakeErpFacadeController.PostBulkPriceInformation(fakeSapEventJson);
             result.StatusCode.Should().Be(200);
 
-            A.CallTo(() => _fakeAzureTableReaderWriter.AddPriceChangeEntity(A<string>.Ignored)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _fakeAzureTableReaderWriter.AddPriceChangeEntity(A<string>.Ignored, A<int>.Ignored)).MustHaveHappenedOnceExactly();
             A.CallTo(() => _fakeAzureBlobEventWriter.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
@@ -379,79 +379,6 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Bulk price information event is uploaded in blob storage successfully.").MustHaveHappenedOnceExactly();
         }
 
-        [Test]
-        public void WhenPublishToEESFails_ThenErpFacadeThrowsExceptionErrorOccuredInEES()
-        {
-            var requestJson = JArray.Parse(JsonConvert.DeserializeObject(jsonString).ToString()!);
-            var unitsOfSalePricesList = GetUnitsOfSalePriceList();
-            var eesPriceEventPayload = GetUnitsOfSaleUpdatedEventPayloadData();
-            CloudEvent<UnitOfSaleUpdatedEventData> unitOfSaleUpdatedCloudEventData = GetUnitOfSaleUpdatedEventData();
-
-            A.CallTo(() => _fakeAzureBlobEventWriter.CheckIfContainerExists(A<string>.Ignored)).Returns(true);
-
-            A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).Returns(encContentPublishedJson);
-
-            A.CallTo(() => _fakeErpFacadeService.MapAndBuildUnitsOfSalePrices(A<List<PriceInformation>>.Ignored, A<List<string>>.Ignored)).Returns(unitsOfSalePricesList);
-
-            A.CallTo(() => _fakeErpFacadeService.BuildUnitsOfSaleUpdatedEventPayload(A<List<UnitsOfSalePrices>>.Ignored, A<string>.Ignored)).Returns(eesPriceEventPayload);
-
-            A.CallTo(() => _fakeCloudEventFactory.Create(A<UnitOfSaleUpdatedEventPayload>.Ignored)).Returns(unitOfSaleUpdatedCloudEventData);
-
-            A.CallTo(() => _fakeJsonHelper.GetPayloadJsonSize(A<string>.Ignored)).Returns(1000000);
-
-            A.CallTo(() => _fakeEventPublisher.Publish(A<CloudEvent<PriceChangeEventData>>.Ignored)).Returns(new Result(Statuses.Failure, "exception"));
-
-            Assert.ThrowsAsync<ERPFacadeException>(() => _fakeErpFacadeController.PostPriceInformation(requestJson));
-
-            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateResponseTimeEntity(A<string>.Ignored)).MustHaveHappened();
-            A.CallTo(() => _fakeAzureBlobEventWriter.CheckIfContainerExists(A<string>.Ignored)).MustHaveHappened();
-            A.CallTo(() => _fakeAzureBlobEventWriter.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
-            A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
-            A.CallTo(() => _fakeCloudEventFactory.Create(A<UnitOfSaleUpdatedEventPayload>.Ignored)).Returns(unitOfSaleUpdatedCloudEventData);
-            A.CallTo(() => _fakeEventPublisher.Publish(A<CloudEvent<UnitOfSaleUpdatedEventData>>.Ignored)).Returns(new Result(Statuses.Failure, "Successfully sent event"));
-
-            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-            && call.GetArgument<LogLevel>(0) == LogLevel.Information
-            && call.GetArgument<EventId>(1) == EventIds.SapUnitsOfSalePriceInformationPayloadReceived.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "UnitsOfSale price information payload received from SAP.").MustHaveHappenedOnceExactly();
-
-            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-            && call.GetArgument<LogLevel>(0) == LogLevel.Information
-            && call.GetArgument<EventId>(1) == EventIds.ERPFacadeToSAPRequestFound.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Valid SAP callback.").MustHaveHappenedOnceExactly();
-
-            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-            && call.GetArgument<LogLevel>(0) == LogLevel.Information
-            && call.GetArgument<EventId>(1) == EventIds.UploadPriceInformationEventInAzureBlob.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Uploading the price information received from SAP in blob storage.").MustHaveHappenedOnceExactly();
-
-            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-            && call.GetArgument<LogLevel>(0) == LogLevel.Information
-            && call.GetArgument<EventId>(1) == EventIds.UploadedPriceInformationEventInAzureBlob.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Price information is uploaded in blob storage successfully.").MustHaveHappenedOnceExactly();
-
-            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-            && call.GetArgument<LogLevel>(0) == LogLevel.Information
-            && call.GetArgument<EventId>(1) == EventIds.DownloadEncEventPayloadStarted.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Downloading the ENC event payload from azure blob storage.").MustHaveHappenedOnceExactly();
-
-            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-            && call.GetArgument<LogLevel>(0) == LogLevel.Information
-            && call.GetArgument<EventId>(1) == EventIds.DownloadEncEventPayloadCompleted.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "ENC event payload is downloaded from azure blob storage successfully.").MustHaveHappenedOnceExactly();
- 
-            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-            && call.GetArgument<LogLevel>(0) == LogLevel.Information
-            && call.GetArgument<EventId>(1) == EventIds.UploadUnitsOfSaleUpdatedEventPayloadInAzureBlob.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Uploading the UnitsOfSaleUpdated event payload json in blob storage.").MustHaveHappenedOnceExactly();
-
-            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-            && call.GetArgument<LogLevel>(0) == LogLevel.Information
-            && call.GetArgument<EventId>(1) == EventIds.UploadedUnitsOfSaleUpdatedEventPayloadInAzureBlob.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "UnitsOfSaleUpdated event payload json is uploaded in blob storage successfully.").MustHaveHappenedOnceExactly();
-
-        }
-
         private List<PriceInformation> GetPriceInformationData()
         {
             var requestJson = JsonConvert.DeserializeObject(jsonString);
@@ -471,7 +398,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             var priceInformationList = GetPriceInformationData();
             var unitOfSaleList = GetUnitOfSaleData();
 
-            var unitsOfSalePricesList = _fakeErpFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList, unitOfSaleList);
+            var unitsOfSalePricesList = _fakeErpFacadeService.MapAndBuildUnitsOfSalePrices(priceInformationList, unitOfSaleList, "fakeCorrId", "fakeEventId");
 
             return unitsOfSalePricesList!;
         }
@@ -480,7 +407,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         {
             var unitsOfSalePricesList = GetUnitsOfSalePriceList();
             var existingEESJson = JsonConvert.DeserializeObject(encContentPublishedJson);
-            var eesPriceEventPayload = _fakeErpFacadeService.BuildUnitsOfSaleUpdatedEventPayload(unitsOfSalePricesList, existingEESJson.ToString()!);
+            var eesPriceEventPayload = _fakeErpFacadeService.BuildUnitsOfSaleUpdatedEventPayload(unitsOfSalePricesList, existingEESJson.ToString()!, "fakeCorrId", "fakeEventId");
 
             return eesPriceEventPayload;
         }

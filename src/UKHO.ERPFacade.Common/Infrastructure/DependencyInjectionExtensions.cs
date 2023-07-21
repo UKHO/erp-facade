@@ -18,9 +18,9 @@ namespace UKHO.ERPFacade.Common.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
-            services.AddOptions<ErpPublishEventSource>().Configure<IConfiguration>((settings, configuration) =>
+            services.AddOptions<EnterpriseEventServiceConfiguration>().Configure<IConfiguration>((settings, configuration) =>
             {
-                configuration.GetSection("ErpPublishEventSource").Bind(settings);
+                configuration.GetSection("EnterpriseEventServiceConfiguration").Bind(settings);
             });
 
             services.AddOptions<InteractiveLoginConfiguration>().Configure<IConfiguration>((settings, configuration) =>
@@ -47,7 +47,7 @@ namespace UKHO.ERPFacade.Common.Infrastructure
 
             services.AddHttpClient(EnterpriseEventServiceEventPublisher.EventServiceClientName, (sp, client) =>
             {
-                ErpPublishEventSource config = sp.GetRequiredService<IOptions<ErpPublishEventSource>>().Value;
+                EnterpriseEventServiceConfiguration config = sp.GetRequiredService<IOptions<EnterpriseEventServiceConfiguration>>().Value;
                 var accessTokenCache = sp.GetRequiredService<IAccessTokenCache>();
                 client.BaseAddress = new Uri(config.ServiceUrl);
 

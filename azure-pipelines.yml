@@ -377,7 +377,7 @@ stages:
         value: $(AzureADConfigurationAutoTestClientIdNoRole)
       - name: "AzureADConfiguration.ClientSecretNoRole"
         value: $(AzureADConfigurationClientSecretNoRole)
-      - name: "ErpPublishEventSource.ClientId"
+      - name: "EnterpriseEventServiceConfiguration.ClientId"
         value: $(AzureADConfigurationClientId)
       - name: "SharedKeyConfiguration.Key"
         value: $(SharedKeyConfigurationKey)
@@ -466,7 +466,7 @@ stages:
         value: $(AzureADConfigurationAutoTestClientIdNoRole)
       - name: "AzureADConfiguration.ClientSecretNoRole"
         value: $(AzureADConfigurationClientSecretNoRole)
-      - name: "ErpPublishEventSource.ClientId"
+      - name: "EnterpriseEventServiceConfiguration.ClientId"
         value: $(EnterpriseEventServiceConfigurationClientId)
       - name: "SharedKeyConfiguration.Key"
         value: $(SharedKeyConfigurationKey)
@@ -539,7 +539,7 @@ stages:
         value: $(AzureADConfigurationTenantId)
       - name: "AzureADConfiguration.ClientId"
         value: $(AzureADConfigurationClientId)
-      - name: "ErpPublishEventSource.ClientId"
+      - name: "EnterpriseEventServiceConfiguration.ClientId"
         value: $(EnterpriseEventServiceConfigurationClientId)
       - name: "SharedKeyConfiguration.Key"
         value: $(SharedKeyConfigurationKey)

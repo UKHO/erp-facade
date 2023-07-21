@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
+﻿using System.Xml;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System.Xml;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.HttpClients;
 using UKHO.ERPFacade.Common.IO;

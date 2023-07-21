@@ -23,11 +23,11 @@
     <PackageReference Include="coverlet.collector" Version="3.1.2" />
     <PackageReference Include="RichardSzalay.MockHttp" Version="6.0.0" />
     <PackageReference Include="WireMock.Net" Version="1.5.26" />
+    <PackageReference Include="coverlet.msbuild" Version="3.1.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\UKHO.ERPFacade.Common\UKHO.ERPFacade.Common.csproj" />
-    <ProjectReference Include="..\..\src\UKHO.SAP.MockAPIService\UKHO.SAP.MockAPIService.csproj" />
   </ItemGroup>
 
 </Project>

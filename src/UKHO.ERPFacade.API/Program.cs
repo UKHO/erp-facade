@@ -7,6 +7,7 @@ using Azure.Security.KeyVault.Secrets;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Newtonsoft.Json.Serialization;
 using Serilog;
@@ -140,7 +141,7 @@ namespace UKHO.ERPFacade
 
             builder.Services.AddAuthorization(options =>
             {
-                options.AddPolicy("WebhookCaller", policy => policy.RequireRole("WebhookCaller"));                
+                options.AddPolicy("WebhookCaller", policy => policy.RequireRole("WebhookCaller"));
             });
 
             // The following line enables Application Insights telemetry collection.
@@ -158,7 +159,7 @@ namespace UKHO.ERPFacade
 
             builder.Services.Configure<KestrelServerOptions>(options =>
             {
-                options.Limits.MaxRequestBodySize = 50 * 1024 * 1024;
+                options.Limits.MaxRequestBodySize = 51 * 1024 * 1024;
             });
 
             builder.Services.Configure<AzureStorageConfiguration>(configuration.GetSection("AzureStorageConfiguration"));
@@ -195,8 +196,6 @@ namespace UKHO.ERPFacade
             });
 
             var app = builder.Build();
-
-            app.UseLoggingMiddleware();
 
             app.UseHttpsRedirection();
 
