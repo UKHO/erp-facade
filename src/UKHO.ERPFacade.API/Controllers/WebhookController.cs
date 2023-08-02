@@ -33,6 +33,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
         private const string RecordOfSaleContainerName = "recordofsaleblobs";
         private const string RecordOfSaleEventFileName = "RecordOfSaleEvent.json";
+        private const string RecordOfSaleTableName = "recordofsaleevents";
 
         public WebhookController(IHttpContextAccessor contextAccessor,
                                  ILogger<WebhookController> logger,
@@ -146,7 +147,12 @@ namespace UKHO.ERPFacade.API.Controllers
                 return new BadRequestObjectResult(StatusCodes.Status400BadRequest);
             }
 
+            _logger.LogInformation(EventIds.StoreRecordOfSalePublishedEventInAzureTable.ToEventId(), "Storing the received Record of sale published event in azure table.");
+            await _azureTableReaderWriter.UpsertRecordOfSaleEntity(correlationId, RecordOfSaleTableName);
+
+            _logger.LogInformation(EventIds.UploadRecordOfSalePublishedEventInAzureBlob.ToEventId(), "Uploading the received Record of sale published event in blob storage.");
             await _azureBlobEventWriter.UploadEvent(recordOfSaleEventJson.ToString(), RecordOfSaleContainerName, correlationId + '/' + RecordOfSaleEventFileName);
+            _logger.LogInformation(EventIds.UploadedRecordOfSalePublishedEventInAzureBlob.ToEventId(), "Record of sale published event is uploaded in blob storage successfully.");
 
             return new OkObjectResult(StatusCodes.Status200OK);
         }

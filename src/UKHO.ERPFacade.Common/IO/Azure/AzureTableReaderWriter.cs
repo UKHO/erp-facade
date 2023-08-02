@@ -298,6 +298,51 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             }
         }
 
+        public async Task UpsertRecordOfSaleEntity(string correlationId, string tableName)
+        {
+            TableClient tableClient = GetTableClient(tableName);
+
+            RecordOfSaleEventEntity existingEntity = await GetRecordOfSaleEntity(correlationId, tableName);
+
+            if (existingEntity == null)
+            {
+                RecordOfSaleEventEntity recordOfSaleEvent = new()
+                {
+                    RowKey = Guid.NewGuid().ToString(),
+                    PartitionKey = Guid.NewGuid().ToString(),
+                    Timestamp = DateTime.UtcNow,
+                    CorrelationId = correlationId,
+                    Status = "Incomplete"
+                };
+
+                await tableClient.AddEntityAsync(recordOfSaleEvent, CancellationToken.None);
+
+                _logger.LogInformation(EventIds.AddedRecordOfSalePublishedEventInAzureTable.ToEventId(), "Record Of Sale published event is added in azure table successfully.");
+            }
+            else
+            {
+                _logger.LogWarning(EventIds.ReceivedDuplicateRecordOfSalePublishedEvent.ToEventId(), "Duplicate record of sale published event received.");
+
+                existingEntity.Timestamp = DateTime.UtcNow;
+
+                await tableClient.UpdateEntityAsync(existingEntity, ETag.All, TableUpdateMode.Replace);
+
+                _logger.LogInformation(EventIds.UpdatedRecordOfSalePublishedEventInAzureTable.ToEventId(), "Existing Record Of Sale published event is updated in azure table successfully.");
+            }
+        }
+
+        public async Task<RecordOfSaleEventEntity> GetRecordOfSaleEntity(string correlationId, string tableName)
+        {
+            IList<RecordOfSaleEventEntity> records = new List<RecordOfSaleEventEntity>();
+            TableClient tableClient = GetTableClient(tableName);
+            var entities = tableClient.QueryAsync<RecordOfSaleEventEntity>(filter: TableClient.CreateQueryFilter($"CorrelationId eq {correlationId}"), maxPerPage: 1);
+            await foreach (var entity in entities)
+            {
+                records.Add(entity);
+            }
+            return records.FirstOrDefault();
+        }
+
         //Private Methods
         private TableClient GetTableClient(string tableName)
         {
