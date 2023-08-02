@@ -135,6 +135,14 @@ namespace UKHO.ERPFacade.API.Controllers
         {
             _logger.LogInformation(EventIds.NewRecordOfSalePublishedEventReceived.ToEventId(), "ERP Facade webhook has received new recordofsale event from EES.");
 
+            string correlationId = recordOfSaleEventJson.SelectToken(CorrelationIdKey)?.Value<string>();
+
+            if (string.IsNullOrEmpty(correlationId))
+            {
+                _logger.LogWarning(EventIds.CorrelationIdMissingInEvent.ToEventId(), "CorrelationId is missing in Record of Sale published event.");
+                return new BadRequestObjectResult(StatusCodes.Status400BadRequest);
+            }
+
             return new OkObjectResult(StatusCodes.Status200OK);
         }
     }
