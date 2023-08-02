@@ -476,7 +476,22 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940095 - Count of pending products to be sliced
         /// </summary>
-        PendingProductsToSliceCount = 940095
+        PendingProductsToSliceCount = 940095,
+
+        /// <summary>
+        /// 940096 - New Record of Sale published event options call started.
+        /// </summary>
+        NewRecordOfSalePublishedEventOptionsCallStarted = 940096,
+
+        /// <summary>
+        /// 940097 - New Record of Sale published event options call completed.
+        /// </summary>
+        NewRecordOfSalePublishedEventOptionsCallCompleted = 940097,
+
+        /// <summary>
+        /// 940098 - New Record of Sale published event received by ERP Facade webhook.
+        /// </summary>
+        NewRecordOfSalePublishedEventReceived = 940098
     }
 
     /// <summary>

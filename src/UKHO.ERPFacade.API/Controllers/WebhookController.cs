@@ -17,7 +17,7 @@ namespace UKHO.ERPFacade.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class WebhookController : BaseController<WebhookController>
     {
         private readonly ILogger<WebhookController> _logger;
@@ -111,6 +111,31 @@ namespace UKHO.ERPFacade.API.Controllers
 
             return new OkObjectResult(StatusCodes.Status200OK);
 
+        }
+
+        [HttpOptions]
+        [Route("/webhook/newrecordofsalepublishedeventreceived")]
+        public IActionResult NewRecordOfSalePublishedEventOptions()
+        {
+            var webhookRequestOrigin = HttpContext.Request.Headers["WebHook-Request-Origin"].FirstOrDefault();
+
+            _logger.LogInformation(EventIds.NewRecordOfSalePublishedEventOptionsCallStarted.ToEventId(), "Started processing the Options request for the New Record of Sale Published event for webhook. | WebHook-Request-Origin : {webhookRequestOrigin}", webhookRequestOrigin);
+
+            HttpContext.Response.Headers.Add("WebHook-Allowed-Rate", "*");
+            HttpContext.Response.Headers.Add("WebHook-Allowed-Origin", webhookRequestOrigin);
+
+            _logger.LogInformation(EventIds.NewRecordOfSalePublishedEventOptionsCallCompleted.ToEventId(), "Completed processing the Options request for the New Record of Sale Published event for webhook. | WebHook-Request-Origin : {webhookRequestOrigin}", webhookRequestOrigin);
+
+            return new OkObjectResult(StatusCodes.Status200OK);
+        }
+
+        [HttpPost]
+        [Route("/webhook/newrecordofsalepublishedeventreceived")]
+        public virtual async Task<IActionResult> NewRecordOfSalePublishedEventReceived([FromBody] JObject recordOfSaleEventJson)
+        {
+            _logger.LogInformation(EventIds.NewRecordOfSalePublishedEventReceived.ToEventId(), "ERP Facade webhook has received new recordofsale event from EES.");
+
+            return new OkObjectResult(StatusCodes.Status200OK);
         }
     }
 }
