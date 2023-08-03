@@ -17,7 +17,7 @@ namespace UKHO.ERPFacade.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class WebhookController : BaseController<WebhookController>
     {
         private readonly ILogger<WebhookController> _logger;
@@ -33,7 +33,6 @@ namespace UKHO.ERPFacade.API.Controllers
 
         private const string RecordOfSaleContainerName = "recordofsaleblobs";
         private const string RecordOfSaleEventFileName = "RecordOfSaleEvent.json";
-        private const string RecordOfSaleTableName = "recordofsaleevents";
 
         public WebhookController(IHttpContextAccessor contextAccessor,
                                  ILogger<WebhookController> logger,
@@ -119,6 +118,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
         [HttpOptions]
         [Route("/webhook/recordofsalepublishedeventreceived")]
+        [Authorize(Policy = "WebhookCaller")]
         public IActionResult RecordOfSalePublishedEventOptions()
         {
             var webhookRequestOrigin = HttpContext.Request.Headers["WebHook-Request-Origin"].FirstOrDefault();
@@ -135,20 +135,21 @@ namespace UKHO.ERPFacade.API.Controllers
 
         [HttpPost]
         [Route("/webhook/recordofsalepublishedeventreceived")]
+        [Authorize(Policy = "WebhookCaller")]
         public virtual async Task<IActionResult> RecordOfSalePublishedEventReceived([FromBody] JObject recordOfSaleEventJson)
         {
-            _logger.LogInformation(EventIds.RecordOfSalePublishedEventReceived.ToEventId(), "ERP Facade webhook has received recordofsale event from EES.");
+            _logger.LogInformation(EventIds.RecordOfSalePublishedEventReceived.ToEventId(), "ERP Facade webhook has received record of sale event from EES.");
 
             string correlationId = recordOfSaleEventJson.SelectToken(CorrelationIdKey)?.Value<string>();
 
             if (string.IsNullOrEmpty(correlationId))
             {
-                _logger.LogWarning(EventIds.CorrelationIdMissingInEvent.ToEventId(), "CorrelationId is missing in Record of Sale published event.");
+                _logger.LogWarning(EventIds.CorrelationIdMissingInRecordOfSaleEvent.ToEventId(), "CorrelationId is missing in Record of Sale published event.");
                 return new BadRequestObjectResult(StatusCodes.Status400BadRequest);
             }
 
             _logger.LogInformation(EventIds.StoreRecordOfSalePublishedEventInAzureTable.ToEventId(), "Storing the received Record of sale published event in azure table.");
-            await _azureTableReaderWriter.UpsertRecordOfSaleEntity(correlationId, RecordOfSaleTableName);
+            await _azureTableReaderWriter.UpsertRecordOfSaleEntity(correlationId);
 
             _logger.LogInformation(EventIds.UploadRecordOfSalePublishedEventInAzureBlob.ToEventId(), "Uploading the received Record of sale published event in blob storage.");
             await _azureBlobEventWriter.UploadEvent(recordOfSaleEventJson.ToString(), RecordOfSaleContainerName, correlationId + '/' + RecordOfSaleEventFileName);

@@ -20,7 +20,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
         void DeleteUnitPriceChangeEntityForMasterCorrId(string correlationId);
         IList<EESEventEntity> GetAllEntityForEESTable();
         Task DeleteEESEntity(string correlationId);
-        Task UpsertRecordOfSaleEntity(string correlationId, string tableName);
+        Task UpsertRecordOfSaleEntity(string correlationId);
         Task<RecordOfSaleEventEntity> GetRecordOfSaleEntity(string correlationId, string tableName);
     }
 }

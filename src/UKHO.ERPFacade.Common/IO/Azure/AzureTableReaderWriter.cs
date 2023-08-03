@@ -22,6 +22,8 @@ namespace UKHO.ERPFacade.Common.IO.Azure
         private const string UnitPriceChangeTableName = "unitpricechangeevents";
         private const int DefaultCallbackDuration = 5;
 
+        private const string RecordOfSaleTableName = "recordofsaleevents";
+
         private enum Statuses
         {
             Incomplete,
@@ -298,11 +300,11 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             }
         }
 
-        public async Task UpsertRecordOfSaleEntity(string correlationId, string tableName)
+        public async Task UpsertRecordOfSaleEntity(string correlationId)
         {
-            TableClient tableClient = GetTableClient(tableName);
+            TableClient tableClient = GetTableClient(RecordOfSaleTableName);
 
-            RecordOfSaleEventEntity existingEntity = await GetRecordOfSaleEntity(correlationId, tableName);
+            RecordOfSaleEventEntity existingEntity = await GetRecordOfSaleEntity(correlationId, RecordOfSaleTableName);
 
             if (existingEntity == null)
             {

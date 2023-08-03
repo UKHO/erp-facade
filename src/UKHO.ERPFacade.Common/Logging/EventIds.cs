@@ -521,7 +521,12 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940104 - Record of sale published event is uploaded in blob storage successfully.
         /// </summary>
-        UploadedRecordOfSalePublishedEventInAzureBlob = 940104
+        UploadedRecordOfSalePublishedEventInAzureBlob = 940104,
+
+        /// <summary>
+        /// 940105 - CorrelationId is missing in Record of sale published event.
+        /// </summary>
+        CorrelationIdMissingInRecordOfSaleEvent = 940105
     }
 
     /// <summary>
