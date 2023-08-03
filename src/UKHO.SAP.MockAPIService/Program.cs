@@ -49,6 +49,7 @@ namespace UKHO.SAP.MockAPIService
             builder.Services.Configure<AzureStorageConfiguration>(configuration.GetSection("AzureStorageConfiguration"));
 
             builder.Services.AddSingleton<Iz_adds_mat_info, z_adds_mat_info>();
+            builder.Services.AddSingleton<Iz_adds_ros, z_adds_ros>();
             builder.Services.AddSingleton<ISapConfiguration, SapConfiguration>();
             builder.Services.AddSingleton<IAzureBlobEventWriter, AzureBlobEventWriter>();
             builder.Services.AddSingleton<MockService>();
@@ -79,6 +80,7 @@ namespace UKHO.SAP.MockAPIService
             app.UseEndpoints(endpoints =>
             {
                 endpoints.UseSoapEndpoint<Iz_adds_mat_info>("/z_adds_mat_info.asmx", new SoapEncoderOptions(), SoapSerializer.XmlSerializer);
+                endpoints.UseSoapEndpoint<Iz_adds_ros>("/z_adds_ros.asmx", new SoapEncoderOptions(), SoapSerializer.XmlSerializer);
                 endpoints.MapHealthChecks("/health");
             });
 

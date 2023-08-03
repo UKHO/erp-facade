@@ -12,5 +12,13 @@ namespace UKHO.ERPFacade.Common.Configuration
         public string Username { get; set; }
 
         public string Password { get; set; }
+
+        public string BaseAddressRos { get; set; }
+
+        public string SapServiceOperationRos { get; set; }
+
+        public string UsernameRos { get; set; }
+
+        public string PasswordRos { get; set; }
     }
 }

@@ -52,8 +52,9 @@ namespace UKHO.SAP.MockAPIService.Filters
                 int separator = credentials.IndexOf(':');
                 string name = credentials.Substring(0, separator);
                 string password = credentials.Substring(separator + 1);
+                string contextReqPath = context.Request.Path;
 
-                if (!IsUserAuthenticated(name, password))
+                if (!IsUserAuthenticated(name, password, contextReqPath))
                 {
                     context.Response.StatusCode = 401;
                 }
@@ -74,9 +75,25 @@ namespace UKHO.SAP.MockAPIService.Filters
             }
         }
 
-        private bool IsUserAuthenticated(string username, string password)
+        private bool IsUserAuthenticated(string username, string password, string contextReqPath)
         {
-            return username == _sapConfiguration.Value.Username && password == _sapConfiguration.Value.Password;
+            string matInfoBaseAddress = _sapConfiguration.Value.BaseAddress;
+            string splittedMatInfoBaseAddress= matInfoBaseAddress.Substring(matInfoBaseAddress.LastIndexOf("/"));
+
+            string rosBaseAddress = _sapConfiguration.Value.BaseAddressRos;
+            string splittedBaseAddressRos = rosBaseAddress.Substring(rosBaseAddress.LastIndexOf("/"));
+
+            if (contextReqPath == splittedMatInfoBaseAddress)
+            {
+                return username == _sapConfiguration.Value.Username && password == _sapConfiguration.Value.Password;
+            }
+
+            if (contextReqPath == splittedBaseAddressRos)
+            {
+                return username == _sapConfiguration.Value.UsernameRos && password == _sapConfiguration.Value.PasswordRos;
+            }
+
+            return false;
         }
     }
 }
