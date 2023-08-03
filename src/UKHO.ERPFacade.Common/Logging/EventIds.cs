@@ -476,7 +476,42 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940095 - Count of pending products to be sliced
         /// </summary>
-        PendingProductsToSliceCount = 940095
+        PendingProductsToSliceCount = 940095,
+
+        /// <summary>
+        /// 940106 - Licence update published event options call started.
+        /// </summary>
+        LicenceUpdateEventOptionsCallStarted = 940106,
+
+        /// <summary>
+        /// 940107 - Licence update published event options call completed.
+        /// </summary>
+        LicenceUpdateEventOptionsCallCompleted = 940107,
+
+        /// <summary>
+        /// 940108 - Licence update published event received by ERP Facade webhook.
+        /// </summary>
+        LicenceUpdateEventPublishedEventReceived = 940108,
+
+        /// <summary>
+        /// 940109 - CorrelationId is missing in Licence update published event.
+        /// </summary>
+        CorrelationIdMissingInLicenceUpdateEvent = 940109,
+
+        /// <summary>
+        /// 940110 - Storing the received Licence update published event in azure table.
+        /// </summary>
+        StoreLicenceUpdatePublishedEventInAzureTable = 940110,
+
+        /// <summary>
+        /// 940111 - Uploading the received Licence update published event in blob storage.
+        /// </summary>
+        UploadLicenceUpdatePublishedEventInAzureBlob = 940111,
+
+        /// <summary>
+        /// 940112 - Licence update published event is uploaded in blob storage successfully.
+        /// </summary>
+        UploadedLicenceUpdatePublishedEventInAzureBlob = 940112,
     }
 
     /// <summary>
