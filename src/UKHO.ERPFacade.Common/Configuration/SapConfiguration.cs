@@ -15,8 +15,6 @@ namespace UKHO.ERPFacade.Common.Configuration
 
         public string RosBaseAddress { get; set; }
 
-        public string RosSapServiceOperation { get; set; }
-
         public string RosUsername { get; set; }
 
         public string RosPassword { get; set; }
