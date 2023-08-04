@@ -78,19 +78,19 @@ namespace UKHO.SAP.MockAPIService.Filters
         private bool IsUserAuthenticated(string username, string password, string contextReqPath)
         {
             string matInfoBaseAddress = _sapConfiguration.Value.BaseAddress;
-            string splittedMatInfoBaseAddress= matInfoBaseAddress.Substring(matInfoBaseAddress.LastIndexOf("/"));
+            string splitMatInfoBaseAddress = matInfoBaseAddress.Substring(matInfoBaseAddress.LastIndexOf("/", StringComparison.Ordinal));
 
-            string rosBaseAddress = _sapConfiguration.Value.BaseAddressRos;
-            string splittedBaseAddressRos = rosBaseAddress.Substring(rosBaseAddress.LastIndexOf("/"));
+            string rosBaseAddress = _sapConfiguration.Value.RosBaseAddress;
+            string splitRosBaseAddress = rosBaseAddress.Substring(rosBaseAddress.LastIndexOf("/", StringComparison.Ordinal));
 
-            if (contextReqPath == splittedMatInfoBaseAddress)
+            if (contextReqPath == splitMatInfoBaseAddress)
             {
                 return username == _sapConfiguration.Value.Username && password == _sapConfiguration.Value.Password;
             }
 
-            if (contextReqPath == splittedBaseAddressRos)
+            if (contextReqPath == splitRosBaseAddress)
             {
-                return username == _sapConfiguration.Value.UsernameRos && password == _sapConfiguration.Value.PasswordRos;
+                return username == _sapConfiguration.Value.RosUsername && password == _sapConfiguration.Value.RosPassword;
             }
 
             return false;
