@@ -12,7 +12,7 @@ namespace UKHO.SAP.MockAPIService.Services
         {
             return new Z_ADDS_ROSResponse()
             {
-                EX_MESSAGE = "Record successfully received for CorrelationId :" + zSALES_ADDS.GUID,
+                EX_MESSAGE = "Record successfully received for License GUID :" + zSALES_ADDS.GUID,
                 EX_STATUS = "0"
             };
         }
