@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,7 +11,8 @@ using Newtonsoft.Json.Converters;
 
 namespace UKHO.ERPFacade.Common.Models
 {
-    public class LicenceUpdateEventPayload
+    [ExcludeFromCodeCoverage]
+    public class LicenceUpdatedEventPayload
     {
         [JsonProperty("specversion")]
         public string Specversion { get; set; }

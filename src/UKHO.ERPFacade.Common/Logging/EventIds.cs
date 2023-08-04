@@ -520,12 +520,12 @@ namespace UKHO.ERPFacade.Common.Logging
         AddedLicenceUpdatedPublishedEventInAzureTable = 940113,
 
         /// <summary>
-        /// 940008 - Duplicate Licence updated published event received.
+        /// 940114 - Duplicate Licence updated published event received.
         /// </summary>
         ReceivedDuplicateLicenceUpdatedPublishedEvent = 940114,
 
         /// <summary>
-        /// 940009 - Existing Licence updated published event updated in azure table successfully.
+        /// 940115 - Existing Licence updated published event updated in azure table successfully.
         /// </summary>
         UpdatedLicenceUpdatedPublishedEventInAzureTable = 940115,
     }
