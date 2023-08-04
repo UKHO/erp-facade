@@ -479,39 +479,55 @@ namespace UKHO.ERPFacade.Common.Logging
         PendingProductsToSliceCount = 940095,
 
         /// <summary>
-        /// 940106 - Licence update published event options call started.
+        /// 940106 - Licence updated published event options call started.
         /// </summary>
-        LicenceUpdateEventOptionsCallStarted = 940106,
+        LicenceUpdatedEventOptionsCallStarted = 940106,
 
         /// <summary>
-        /// 940107 - Licence update published event options call completed.
+        /// 940107 - Licence updated published event options call completed.
         /// </summary>
-        LicenceUpdateEventOptionsCallCompleted = 940107,
+        LicenceUpdatedEventOptionsCallCompleted = 940107,
 
         /// <summary>
-        /// 940108 - Licence update published event received by ERP Facade webhook.
+        /// 940108 - Licence updated published event received by ERP Facade webhook.
         /// </summary>
-        LicenceUpdateEventPublishedEventReceived = 940108,
+        LicenceUpdatedEventPublishedEventReceived = 940108,
 
         /// <summary>
-        /// 940109 - CorrelationId is missing in Licence update published event.
+        /// 940109 - CorrelationId is missing in Licence updated published event.
         /// </summary>
-        CorrelationIdMissingInLicenceUpdateEvent = 940109,
+        CorrelationIdMissingInLicenceUpdatedEvent = 940109,
 
         /// <summary>
-        /// 940110 - Storing the received Licence update published event in azure table.
+        /// 940110 - Storing the received Licence updated published event in azure table.
         /// </summary>
-        StoreLicenceUpdatePublishedEventInAzureTable = 940110,
+        StoreLicenceUpdatedPublishedEventInAzureTable = 940110,
 
         /// <summary>
-        /// 940111 - Uploading the received Licence update published event in blob storage.
+        /// 940111 - Uploading the received Licence updated published event in blob storage.
         /// </summary>
-        UploadLicenceUpdatePublishedEventInAzureBlob = 940111,
+        UploadLicenceUpdatedPublishedEventInAzureBlob = 940111,
 
         /// <summary>
-        /// 940112 - Licence update published event is uploaded in blob storage successfully.
+        /// 940112 - Licence updated published event is uploaded in blob storage successfully.
         /// </summary>
-        UploadedLicenceUpdatePublishedEventInAzureBlob = 940112,
+        UploadedLicenceUpdatedPublishedEventInAzureBlob = 940112,
+
+
+        /// <summary>
+        /// 940113 - Licence updated published event in added in azure table successfully.
+        /// </summary>
+        AddedLicenceUpdatedPublishedEventInAzureTable = 940113,
+
+        /// <summary>
+        /// 940008 - Duplicate Licence updated published event received.
+        /// </summary>
+        ReceivedDuplicateLicenceUpdatedPublishedEvent = 940114,
+
+        /// <summary>
+        /// 940009 - Existing Licence updated published event updated in azure table successfully.
+        /// </summary>
+        UpdatedLicenceUpdatedPublishedEventInAzureTable = 940115,
     }
 
     /// <summary>

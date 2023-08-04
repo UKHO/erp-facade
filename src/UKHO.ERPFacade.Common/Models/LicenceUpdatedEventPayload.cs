@@ -61,15 +61,12 @@ namespace UKHO.ERPFacade.Common.Models
         public string TransactionType { get; set; }
 
         [JsonProperty("distributorCustomerNumber")]
-       // [JsonConverter(typeof(ParseStringConverter))]
         public string DistributorCustomerNumber { get; set; }
 
         [JsonProperty("shippingCoNumber")]
-        //[JsonConverter(typeof(ParseStringConverter))]
         public string ShippingCoNumber { get; set; }
 
         [JsonProperty("ordernumber")]
-        //[JsonConverter(typeof(ParseStringConverter))]
         public string Ordernumber { get; set; }
 
         [JsonProperty("orderDate")]
@@ -82,7 +79,6 @@ namespace UKHO.ERPFacade.Common.Models
         public string HoldingsExpiryDate { get; set; }
 
         [JsonProperty("sapId")]
-       // [JsonConverter(typeof(ParseStringConverter))]
         public string SapId { get; set; }
 
         [JsonProperty("vesselName")]
@@ -98,7 +94,6 @@ namespace UKHO.ERPFacade.Common.Models
         public string LicenceType { get; set; }
 
         [JsonProperty("licenceTypeID")]
-       // [JsonConverter(typeof(ParseStringConverter))]
         public int LicenceTypeId { get; set; }
 
         [JsonProperty("fleetName")]

@@ -76,7 +76,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             }
         }
 
-        public async Task UpsertLicenceUpdateEntity(string correlationId)
+        public async Task UpsertLicenceUpdatedEntity(string correlationId)
         {
             TableClient tableClient = GetTableClient(LicenceUpdateTableName);
 
@@ -95,17 +95,17 @@ namespace UKHO.ERPFacade.Common.IO.Azure
 
                 await tableClient.AddEntityAsync(licenceUpdatedEventsEntity, CancellationToken.None);
 
-                _logger.LogInformation(EventIds.AddedEncContentPublishedEventInAzureTable.ToEventId(), "ENC content published event is added in azure table successfully.");
+                _logger.LogInformation(EventIds.AddedLicenceUpdatedPublishedEventInAzureTable.ToEventId(), "Licence updated published event is added in azure table successfully.");
             }
             else
             {
-                _logger.LogWarning(EventIds.ReceivedDuplicateEncContentPublishedEvent.ToEventId(), "Duplicate ENC content published event received.");
+                _logger.LogWarning(EventIds.ReceivedDuplicateLicenceUpdatedPublishedEvent.ToEventId(), "Duplicate Licence updated published event received.");
 
                 existingEntity.Timestamp = DateTime.UtcNow;
 
                 await tableClient.UpdateEntityAsync(existingEntity, ETag.All, TableUpdateMode.Replace);
 
-                _logger.LogInformation(EventIds.UpdatedEncContentPublishedEventInAzureTable.ToEventId(), "Existing ENC content published event is updated in azure table successfully.");
+                _logger.LogInformation(EventIds.UpdatedLicenceUpdatedPublishedEventInAzureTable.ToEventId(), "Existing Licence updated published event is updated in azure table successfully.");
             }
         }
 
