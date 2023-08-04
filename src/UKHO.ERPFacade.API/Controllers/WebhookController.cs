@@ -30,7 +30,7 @@ namespace UKHO.ERPFacade.API.Controllers
         private const string CorrelationIdKey = "data.correlationId";
         private const string EncEventFileName = "EncPublishingEvent.json";
         private const string SapXmlPayloadFileName = "SapXmlPayload.xml";
-        private const string LicenceUpdateContainerName = "testcontainertest";
+        private const string LicenceUpdateContainerName = "licenceupdatedblobs";
         private const string LicenceUpdateFileName = "LicenceUpdateEvent.json";
 
         public WebhookController(IHttpContextAccessor contextAccessor,
