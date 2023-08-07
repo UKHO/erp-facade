@@ -118,7 +118,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
         [HttpOptions]
         [Route("/webhook/recordofsalepublishedeventreceived")]
-        [Authorize(Policy = "WebhookCaller")]
+        [Authorize(Policy = "RecordOfSaleWebhookCaller")]
         public IActionResult RecordOfSalePublishedEventOptions()
         {
             var webhookRequestOrigin = HttpContext.Request.Headers["WebHook-Request-Origin"].FirstOrDefault();
@@ -135,7 +135,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
         [HttpPost]
         [Route("/webhook/recordofsalepublishedeventreceived")]
-        [Authorize(Policy = "WebhookCaller")]
+        [Authorize(Policy = "RecordOfSaleWebhookCaller")]
         public virtual async Task<IActionResult> RecordOfSalePublishedEventReceived([FromBody] JObject recordOfSaleEventJson)
         {
             _logger.LogInformation(EventIds.RecordOfSalePublishedEventReceived.ToEventId(), "ERP Facade webhook has received record of sale event from EES.");

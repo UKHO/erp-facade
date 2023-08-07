@@ -142,6 +142,7 @@ namespace UKHO.ERPFacade
             builder.Services.AddAuthorization(options =>
             {
                 options.AddPolicy("WebhookCaller", policy => policy.RequireRole("WebhookCaller"));
+                options.AddPolicy("RecordOfSaleWebhookCaller", policy => policy.RequireRole("RecordOfSaleWebhookCaller"));
             });
 
             // The following line enables Application Insights telemetry collection.
