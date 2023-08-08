@@ -3,7 +3,7 @@
 namespace UKHO.ERPFacade.Common.Configuration
 {
     [ExcludeFromCodeCoverage]
-    public class SapConfiguration : ISapConfiguration
+    public class SapConfiguration
     {
         public string BaseAddress { get; set; }
 
