@@ -47,7 +47,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
 
             EESEventEntity existingEntity = await GetEntity(correlationId);
 
-            if (existingEntity == null)
+            if (existingEntity == null!)
             {
                 EESEventEntity eESEvent = new()
                 {
@@ -306,7 +306,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
 
             RecordOfSaleEventEntity existingEntity = await GetRecordOfSaleEntity(correlationId, RecordOfSaleTableName);
 
-            if (existingEntity == null)
+            if (existingEntity == null!)
             {
                 RecordOfSaleEventEntity recordOfSaleEvent = new()
                 {
