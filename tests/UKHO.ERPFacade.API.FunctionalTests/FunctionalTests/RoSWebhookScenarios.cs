@@ -43,8 +43,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         }
 
         [Test, Order(0)]
-        [TestCase("ID01_GenericJson.json", TestName = "WhenValidEventInNewEncContentPublishedEventPostReceivedWithValidToken_ThenWebhookReturns200OkResponse")]
-        public async Task WhenValidEventInNewEncContentPublishedEventPostReceivedWithValidToken_ThenWebhookReturns200OkResponse(string payloadFileName)
+        [TestCase("ID01_GenericJson.json", TestName = "WhenValidRoSEventInNewEncContentPublishedEventPostReceivedWithValidToken_ThenWebhookReturns200OkResponse")]
+        public async Task WhenValidRoSEventInNewEncContentPublishedEventPostReceivedWithValidToken_ThenWebhookReturns200OkResponse(string payloadFileName)
         {
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, "RoSPayloadTestData", payloadFileName);
             var response = await _RosWebhookEndpoint.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(false));
@@ -52,8 +52,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         }
 
         [Test, Order(1)]
-        [TestCase("ID01_GenericJson.json", TestName = "WhenValidEventInNewEncContentPublishedEventPostReceivedWithInvalidToken_ThenWebhookReturns401UnauthorizedResponse")]
-        public async Task WhenValidEventInNewEncContentPublishedEventPostReceivedWithInvalidToken_ThenWebhookReturns401UnauthorizedResponse(string payloadFileName)
+        [TestCase("ID01_GenericJson.json", TestName = "WhenValidRoSEventInNewEncContentPublishedEventPostReceivedWithInvalidToken_ThenWebhookReturns401UnauthorizedResponse")]
+        public async Task WhenValidRoSEventInNewEncContentPublishedEventPostReceivedWithInvalidToken_ThenWebhookReturns401UnauthorizedResponse(string payloadFileName)
         {
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, "RoSPayloadTestData", payloadFileName);
             var response = await _RosWebhookEndpoint.PostWebhookResponseAsync(filePath, "invalidToken_abcd");
@@ -61,8 +61,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         }
 
         [Test, Order(3)]
-        [TestCase("ID01_GenericJson.json", TestName = "WhenValidEventInNewEncContentPublishedEventPostReceivedWithInvalidToken_ThenWebhookReturns403ForbiddenResponse")]
-        public async Task WhenValidEventInNewEncContentPublishedEventPostReceivedWithInvalidToken_ThenWebhookReturns403ForbiddenResponse(string payloadFileName)
+        [TestCase("ID01_GenericJson.json", TestName = "WhenValidRoSEventInNewEncContentPublishedEventPostReceivedWithInvalidToken_ThenWebhookReturns403ForbiddenResponse")]
+        public async Task WhenValidRoSEventInNewEncContentPublishedEventPostReceivedWithInvalidToken_ThenWebhookReturns403ForbiddenResponse(string payloadFileName)
         {
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, "RoSPayloadTestData", payloadFileName);
             var response = await _RosWebhookEndpoint.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(true));
@@ -70,8 +70,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         }
 
         [Test, Order(2)]
-        [TestCase("ID03_InvalidRoSJsonFile.json", TestName = "WhenInValidEventInNewEncContentPublishedEventPostReceived_ThenWebhookReturns400BadRequestResponse")]
-        public async Task WhenInValidEventInNewEncContentPublishedEventPostReceived_ThenWebhookReturns400BadRequestResponse(string payloadFileName)
+        [TestCase("ID03_InvalidRoSJsonFile.json", TestName = "WhenInValidRoSEventInNewEncContentPublishedEventPostReceived_ThenWebhookReturns400BadRequestResponse")]
+        public async Task WhenInValidRoSEventInNewEncContentPublishedEventPostReceived_ThenWebhookReturns400BadRequestResponse(string payloadFileName)
         {
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, "RoSPayloadTestData", payloadFileName);
             var response = await _RosWebhookEndpoint.PostWebhookResponseAsync("Bad Request", filePath, await _authToken.GetAzureADToken(false));
@@ -79,8 +79,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         }
 
         [Test, Order(2)]
-        [TestCase("ID02_UnSupportedPayloadType.xml", TestName = "WhenInvalidEventInNewEncContentPublishedEventPostReceivedWithInvalidPayloadType_ThenWebhookReturns415UnsupportedMediaResponse")]
-        public async Task WhenInvalidEventInNewEncContentPublishedEventPostReceivedWithInvalidPayloadType_ThenWebhookReturns415UnsupportedMediaResponse(string payloadFileName)
+        [TestCase("ID02_UnSupportedPayloadType.xml", TestName = "WhenInvalidRoSEventInNewEncContentPublishedEventPostReceivedWithInvalidPayloadType_ThenWebhookReturns415UnsupportedMediaResponse")]
+        public async Task WhenInvalidRoSEventInNewEncContentPublishedEventPostReceivedWithInvalidPayloadType_ThenWebhookReturns415UnsupportedMediaResponse(string payloadFileName)
         {
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, "RoSPayloadTestData", payloadFileName);
             var response = await _RosWebhookEndpoint.PostWebhookResponseAsync("Unsupported Media Type", filePath, await _authToken.GetAzureADToken(false));
