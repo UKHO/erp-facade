@@ -141,7 +141,7 @@ namespace UKHO.ERPFacade
 
             builder.Services.AddAuthorization(options =>
             {
-                options.AddPolicy("WebhookCaller", policy => policy.RequireRole("WebhookCaller"));
+                options.AddPolicy("EncContentPublishedWebhookCaller", policy => policy.RequireRole("EncContentPublishedWebhookCaller"));
                 options.AddPolicy("LicenceUpdatedWebhookCaller", policy => policy.RequireRole("LicenceUpdatedWebhookCaller"));
             });
 
