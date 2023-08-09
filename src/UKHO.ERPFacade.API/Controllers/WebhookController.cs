@@ -30,8 +30,8 @@ namespace UKHO.ERPFacade.API.Controllers
         private const string CorrelationIdKey = "data.correlationId";
         private const string EncEventFileName = "EncPublishingEvent.json";
         private const string SapXmlPayloadFileName = "SapXmlPayload.xml";
-        private const string LicenceUpdateContainerName = "licenceupdatedblobs";
-        private const string LicenceUpdateFileName = "LicenceUpdateEvent.json";
+        private const string LicenceUpdatedContainerName = "licenceupdatedblobs";
+        private const string LicenceUpdatedFileName = "LicenceUpdateEvent.json";
 
         public WebhookController(IHttpContextAccessor contextAccessor,
                                  ILogger<WebhookController> logger,
@@ -117,7 +117,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
         [HttpOptions]
         [Route("/webhook/licenceupdatedpublishedeventreceived")]
-        [Authorize(Policy = "WebhookCaller")]
+        [Authorize(Policy = "LicenceUpdatedWebhookCaller")]
         public IActionResult LicenceUpdatedPublishedEventReceivedOption()
         {
             var webhookRequestOrigin = HttpContext.Request.Headers["WebHook-Request-Origin"].FirstOrDefault();
@@ -134,10 +134,10 @@ namespace UKHO.ERPFacade.API.Controllers
 
         [HttpPost]
         [Route("/webhook/licenceupdatedpublishedeventreceived")]
-        [Authorize(Policy = "WebhookCaller")]
+        [Authorize(Policy = "LicenceUpdatedWebhookCaller")]
         public virtual async Task<IActionResult> LicenceUpdatedPublishedEventReceived([FromBody] JObject licenceUpdatedEventJson)
         {
-            _logger.LogInformation(EventIds.LicenceUpdatedEventPublishedEventReceived.ToEventId(), "ERP Facade webhook has received new licenceupdatedpublish event from EES.");
+            _logger.LogInformation(EventIds.LicenceUpdatedEventPublishedEventReceived.ToEventId(), "ERP Facade webhook has received new licence updated publish event from EES.");
 
             string correlationId = licenceUpdatedEventJson.SelectToken(CorrelationIdKey)?.Value<string>();
 
@@ -153,7 +153,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
             _logger.LogInformation(EventIds.UploadLicenceUpdatedPublishedEventInAzureBlob.ToEventId(), "Uploading the received Licence updated  published event in blob storage.");
 
-            await _azureBlobEventWriter.UploadEvent(licenceUpdatedEventJson.ToString(), LicenceUpdateContainerName, correlationId + '/' + LicenceUpdateFileName);
+            await _azureBlobEventWriter.UploadEvent(licenceUpdatedEventJson.ToString(), LicenceUpdatedContainerName, correlationId + '/' + LicenceUpdatedFileName);
 
             _logger.LogInformation(EventIds.UploadedLicenceUpdatedPublishedEventInAzureBlob.ToEventId(), "Licence updated  published event is uploaded in blob storage successfully.");
            
