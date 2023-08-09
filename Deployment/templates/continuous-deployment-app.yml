@@ -10,6 +10,8 @@ steps:
       script: |
           echo "##vso[task.setvariable variable=SapConfiguration.Password]$(SapConfigurationPassword)"
           echo "##vso[task.setvariable variable=SapConfiguration.Username]$(SapConfigurationUsername)"
+          echo "##vso[task.setvariable variable=SapConfiguration.RosUsername]$(SapConfigurationRosUsername)"
+          echo "##vso[task.setvariable variable=SapConfiguration.RosPassword]$(SapConfigurationRosPassword)"
 
   - task: FileTransform@1
     displayName: "File Transform: Mock Service Application Settings"
