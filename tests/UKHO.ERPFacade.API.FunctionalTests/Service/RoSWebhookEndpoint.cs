@@ -25,9 +25,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
 
         public async Task<RestResponse> OptionRosWebhookResponseAsync(string token)
         {
-            var request = new RestRequest(RoSWebhookRequestEndPoint);
+            var request = new RestRequest(RoSWebhookRequestEndPoint, Method.Options);
             request.AddHeader("Authorization", "Bearer " + token);
-            RestResponse response = await _client.OptionsAsync(request);
+            RestResponse response = await _client.ExecuteAsync(request);
             return response;
         }
 
