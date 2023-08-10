@@ -112,7 +112,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         {
             BlobServiceClient blobServiceClient = new BlobServiceClient(Config.TestConfig.AzureStorageConfiguration.ConnectionString);
             BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(parentContainerName);
-            BlobClient blobClient = containerClient.GetBlobClient(subContainerName);
 
             foreach (BlobItem blobItem in containerClient.GetBlobs())
             {
