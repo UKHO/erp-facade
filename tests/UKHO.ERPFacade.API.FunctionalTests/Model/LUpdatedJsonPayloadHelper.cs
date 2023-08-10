@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace UKHO.ERPFacade.API.FunctionalTests.Model
+﻿namespace UKHO.ERPFacade.API.FunctionalTests.Model
 {
     public class LUpdatedJsonPayloadHelper
     {
