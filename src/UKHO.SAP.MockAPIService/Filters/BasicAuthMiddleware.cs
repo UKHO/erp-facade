@@ -77,20 +77,20 @@ namespace UKHO.SAP.MockAPIService.Filters
 
         private bool IsUserAuthenticated(string username, string password, string contextReqPath)
         {
-            string matInfoBaseAddress = _sapConfiguration.Value.BaseAddress;
-            string splitMatInfoBaseAddress = matInfoBaseAddress.Substring(matInfoBaseAddress.LastIndexOf("/", StringComparison.Ordinal));
+            string SapEndpointBaseAddressForEncEvent = _sapConfiguration.Value.SapEndpointBaseAddressForEncEvent;
+            string splitSapEndpointBaseAddressForEncEvent = SapEndpointBaseAddressForEncEvent.Substring(SapEndpointBaseAddressForEncEvent.LastIndexOf("/", StringComparison.Ordinal));
 
-            string rosBaseAddress = _sapConfiguration.Value.RosBaseAddress;
-            string splitRosBaseAddress = rosBaseAddress.Substring(rosBaseAddress.LastIndexOf("/", StringComparison.Ordinal));
+            string sapEndpointBaseAddressForRecordOfSale = _sapConfiguration.Value.SapEndpointBaseAddressForRecordOfSale;
+            string splitSapEndpointBaseAddressForRecordOfSale = sapEndpointBaseAddressForRecordOfSale.Substring(sapEndpointBaseAddressForRecordOfSale.LastIndexOf("/", StringComparison.Ordinal));
 
-            if (contextReqPath == splitMatInfoBaseAddress)
+            if (contextReqPath == splitSapEndpointBaseAddressForEncEvent)
             {
-                return username == _sapConfiguration.Value.Username && password == _sapConfiguration.Value.Password;
+                return username == _sapConfiguration.Value.SapUsernameForEncEvent && password == _sapConfiguration.Value.SapPasswordForEncEvent;
             }
 
-            if (contextReqPath == splitRosBaseAddress)
+            if (contextReqPath == splitSapEndpointBaseAddressForRecordOfSale)
             {
-                return username == _sapConfiguration.Value.RosUsername && password == _sapConfiguration.Value.RosPassword;
+                return username == _sapConfiguration.Value.SapUsernameForRecordOfSale && password == _sapConfiguration.Value.SapPasswordForRecordOfSale;
             }
 
             return false;
