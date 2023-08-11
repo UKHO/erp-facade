@@ -27,8 +27,6 @@
             public int shippingCoNumber { get; set; }
             public int ordernumber { get; set; }
             public string orderDate { get; set; }
-
-            [JsonProperty("po-ref")]
             public string poref { get; set; }
             public string holdingsExpiryDate { get; set; }
             public int sapId { get; set; }
