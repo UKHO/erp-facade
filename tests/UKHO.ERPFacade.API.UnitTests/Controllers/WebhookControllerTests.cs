@@ -49,7 +49,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             _fakeSapMessageBuilder = A.Fake<ISapMessageBuilder>();
             _fakeSapConfig = Options.Create(new SapConfiguration()
             {
-                SapServiceOperation = "Z_ADDS_MAT_INFO"
+                SapServiceOperationForEncEvent = "Z_ADDS_MAT_INFO"
             });
 
             _fakeWebHookController = new WebhookController(_fakeHttpContextAccessor,

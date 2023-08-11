@@ -76,7 +76,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.HealthCheck
             _fakeFileSystemHelper = A.Fake<IFileSystemHelper>();
             _fakeSapConfig = Options.Create(new SapConfiguration()
             {
-                SapServiceOperation = "Z_ADDS_MAT_INFO"
+                SapServiceOperationForEncEvent = "Z_ADDS_MAT_INFO"
             });
 
             _fakeSapServiceHealthCheck = new SapServiceHealthCheck(_fakeSapClient,

@@ -52,8 +52,9 @@ namespace UKHO.SAP.MockAPIService.Filters
                 int separator = credentials.IndexOf(':');
                 string name = credentials.Substring(0, separator);
                 string password = credentials.Substring(separator + 1);
+                string contextReqPath = context.Request.Path;
 
-                if (!IsUserAuthenticated(name, password))
+                if (!IsUserAuthenticated(name, password, contextReqPath))
                 {
                     context.Response.StatusCode = 401;
                 }
@@ -74,9 +75,25 @@ namespace UKHO.SAP.MockAPIService.Filters
             }
         }
 
-        private bool IsUserAuthenticated(string username, string password)
+        private bool IsUserAuthenticated(string username, string password, string contextReqPath)
         {
-            return username == _sapConfiguration.Value.Username && password == _sapConfiguration.Value.Password;
+            string SapEndpointBaseAddressForEncEvent = _sapConfiguration.Value.SapEndpointBaseAddressForEncEvent;
+            string splitSapEndpointBaseAddressForEncEvent = SapEndpointBaseAddressForEncEvent.Substring(SapEndpointBaseAddressForEncEvent.LastIndexOf("/", StringComparison.Ordinal));
+
+            string sapEndpointBaseAddressForRecordOfSale = _sapConfiguration.Value.SapEndpointBaseAddressForRecordOfSale;
+            string splitSapEndpointBaseAddressForRecordOfSale = sapEndpointBaseAddressForRecordOfSale.Substring(sapEndpointBaseAddressForRecordOfSale.LastIndexOf("/", StringComparison.Ordinal));
+
+            if (contextReqPath == splitSapEndpointBaseAddressForEncEvent)
+            {
+                return username == _sapConfiguration.Value.SapUsernameForEncEvent && password == _sapConfiguration.Value.SapPasswordForEncEvent;
+            }
+
+            if (contextReqPath == splitSapEndpointBaseAddressForRecordOfSale)
+            {
+                return username == _sapConfiguration.Value.SapUsernameForRecordOfSale && password == _sapConfiguration.Value.SapPasswordForRecordOfSale;
+            }
+
+            return false;
         }
     }
 }

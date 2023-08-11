@@ -176,7 +176,6 @@ namespace UKHO.ERPFacade
 
             builder.Services.AddScoped<IAzureTableReaderWriter, AzureTableReaderWriter>();
             builder.Services.AddScoped<IAzureBlobEventWriter, AzureBlobEventWriter>();
-            builder.Services.AddScoped<ISapConfiguration, SapConfiguration>();
             builder.Services.AddScoped<ISapMessageBuilder, SapMessageBuilder>();
             builder.Services.AddScoped<IXmlHelper, XmlHelper>();
             builder.Services.AddScoped<IFileSystemHelper, FileSystemHelper>();
@@ -192,7 +191,7 @@ namespace UKHO.ERPFacade
 
             builder.Services.AddHttpClient<ISapClient, SapClient>(c =>
             {
-                c.BaseAddress = new Uri(configuration.GetValue<string>("SapConfiguration:BaseAddress"));
+                c.BaseAddress = new Uri(configuration.GetValue<string>("SapConfiguration:SapEndpointBaseAddressForEncEvent"));
             });
 
             var app = builder.Build();
