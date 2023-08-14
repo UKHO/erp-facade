@@ -47,7 +47,7 @@ namespace UKHO.ERPFacade.Common.HealthCheck
 
                 XmlDocument sapPayload = _xmlHelper.CreateXmlDocument(sapXmlTemplatePath);
 
-                HttpResponseMessage response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapServiceOperation);
+                HttpResponseMessage response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapServiceOperationForEncEvent);
 
                 _logger.LogInformation(EventIds.SapHealthCheckRequestSentToSap.ToEventId(), "SAP Health Check request has been sent to SAP successfully. | {StatusCode}", response.StatusCode);
 
