@@ -31,6 +31,9 @@ namespace UKHO.ERPFacade.API.Controllers
         private const string EncEventFileName = "EncPublishingEvent.json";
         private const string SapXmlPayloadFileName = "SapXmlPayload.xml";
 
+        private const string RecordOfSaleContainerName = "recordofsaleblobs";
+        private const string RecordOfSaleEventFileName = "RecordOfSaleEvent.json";
+
         public WebhookController(IHttpContextAccessor contextAccessor,
                                  ILogger<WebhookController> logger,
                                  IAzureTableReaderWriter azureTableReaderWriter,
@@ -111,6 +114,48 @@ namespace UKHO.ERPFacade.API.Controllers
 
             return new OkObjectResult(StatusCodes.Status200OK);
 
+        }
+
+        [HttpOptions]
+        [Route("/webhook/recordofsalepublishedeventreceived")]
+        [Authorize(Policy = "RecordOfSaleWebhookCaller")]
+        public IActionResult RecordOfSalePublishedEventOptions()
+        {
+            var webhookRequestOrigin = HttpContext.Request.Headers["WebHook-Request-Origin"].FirstOrDefault();
+
+            _logger.LogInformation(EventIds.RecordOfSalePublishedEventOptionsCallStarted.ToEventId(), "Started processing the Options request for the Record of Sale Published event for webhook. | WebHook-Request-Origin : {webhookRequestOrigin}", webhookRequestOrigin);
+
+            HttpContext.Response.Headers.Add("WebHook-Allowed-Rate", "*");
+            HttpContext.Response.Headers.Add("WebHook-Allowed-Origin", webhookRequestOrigin);
+
+            _logger.LogInformation(EventIds.RecordOfSalePublishedEventOptionsCallCompleted.ToEventId(), "Completed processing the Options request for the Record of Sale Published event for webhook. | WebHook-Request-Origin : {webhookRequestOrigin}", webhookRequestOrigin);
+
+            return new OkObjectResult(StatusCodes.Status200OK);
+        }
+
+        [HttpPost]
+        [Route("/webhook/recordofsalepublishedeventreceived")]
+        [Authorize(Policy = "RecordOfSaleWebhookCaller")]
+        public virtual async Task<IActionResult> RecordOfSalePublishedEventReceived([FromBody] JObject recordOfSaleEventJson)
+        {
+            _logger.LogInformation(EventIds.RecordOfSalePublishedEventReceived.ToEventId(), "ERP Facade webhook has received record of sale event from EES.");
+
+            string correlationId = recordOfSaleEventJson.SelectToken(CorrelationIdKey)?.Value<string>();
+
+            if (string.IsNullOrEmpty(correlationId))
+            {
+                _logger.LogWarning(EventIds.CorrelationIdMissingInRecordOfSaleEvent.ToEventId(), "CorrelationId is missing in Record of Sale published event.");
+                return new BadRequestObjectResult(StatusCodes.Status400BadRequest);
+            }
+
+            _logger.LogInformation(EventIds.StoreRecordOfSalePublishedEventInAzureTable.ToEventId(), "Storing the received Record of sale published event in azure table.");
+            await _azureTableReaderWriter.UpsertRecordOfSaleEntity(correlationId);
+
+            _logger.LogInformation(EventIds.UploadRecordOfSalePublishedEventInAzureBlob.ToEventId(), "Uploading the received Record of sale published event in blob storage.");
+            await _azureBlobEventWriter.UploadEvent(recordOfSaleEventJson.ToString(), RecordOfSaleContainerName, correlationId + '/' + RecordOfSaleEventFileName);
+            _logger.LogInformation(EventIds.UploadedRecordOfSalePublishedEventInAzureBlob.ToEventId(), "Record of sale published event is uploaded in blob storage successfully.");
+
+            return new OkObjectResult(StatusCodes.Status200OK);
         }
     }
 }

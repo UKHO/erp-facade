@@ -476,7 +476,57 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940095 - Count of pending products to be sliced
         /// </summary>
-        PendingProductsToSliceCount = 940095
+        PendingProductsToSliceCount = 940095,
+
+        /// <summary>
+        /// 940096 - Record of Sale published event options call started.
+        /// </summary>
+        RecordOfSalePublishedEventOptionsCallStarted = 940096,
+
+        /// <summary>
+        /// 940097 - Record of Sale published event options call completed.
+        /// </summary>
+        RecordOfSalePublishedEventOptionsCallCompleted = 940097,
+
+        /// <summary>
+        /// 940098 - Record of Sale published event received by ERP Facade webhook.
+        /// </summary>
+        RecordOfSalePublishedEventReceived = 940098,
+
+        /// <summary>
+        /// 940099 - Storing the received Record of sale published event in azure table.
+        /// </summary>
+        StoreRecordOfSalePublishedEventInAzureTable = 940099,
+
+        /// <summary>
+        /// 940100 - Record of sale published event in added in azure table successfully.
+        /// </summary>
+        AddedRecordOfSalePublishedEventInAzureTable = 940100,
+
+        /// <summary>
+        /// 940101 - Duplicate Record of sale published event received.
+        /// </summary>
+        ReceivedDuplicateRecordOfSalePublishedEvent = 940101,
+
+        /// <summary>
+        /// 940102 - Existing Record of sale published event updated in azure table successfully.
+        /// </summary>
+        UpdatedRecordOfSalePublishedEventInAzureTable = 940102,
+
+        /// <summary>
+        /// 940103 - Uploading the received Record of sale published event in blob storage.
+        /// </summary>
+        UploadRecordOfSalePublishedEventInAzureBlob = 940103,
+
+        /// <summary>
+        /// 940104 - Record of sale published event is uploaded in blob storage successfully.
+        /// </summary>
+        UploadedRecordOfSalePublishedEventInAzureBlob = 940104,
+
+        /// <summary>
+        /// 940105 - CorrelationId is missing in Record of sale published event.
+        /// </summary>
+        CorrelationIdMissingInRecordOfSaleEvent = 940105
     }
 
     /// <summary>

@@ -107,5 +107,21 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             }
             return (expectedXMLfilePath + "\\" + blobContainer + ".xml");
         }
+
+        public bool VerifyBlobExists(string parentContainerName, string subContainerName)
+        {
+            BlobServiceClient blobServiceClient = new BlobServiceClient(Config.TestConfig.AzureStorageConfiguration.ConnectionString);
+            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(parentContainerName);
+
+            foreach (BlobItem blobItem in containerClient.GetBlobs())
+            {
+                if (blobItem.Name.Substring(0,36) == subContainerName)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }

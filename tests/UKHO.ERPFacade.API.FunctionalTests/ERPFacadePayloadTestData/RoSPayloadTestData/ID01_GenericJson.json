@@ -1,0 +1,51 @@
+{
+    "specversion": "1.0",
+    "type": "uk.gov.ukho.shop.recordOfSale.v1",
+    "source": "https://uk.gov.ukho.shop",
+    "id": "guid",
+    "time": "2023-07-20T10:40:00.000000Z",
+    "subject": "releasability set changes holdings Record of Sale",
+    "datacontenttype": "application/json",
+    "data": {
+        "correlationId": "367ce4a4-1d62-4f56-b359-59e178d77100",
+        "recordsOfSale": [
+            {
+                "licenseId": "11870",
+                "licenseGUID": "FC795DF6-8D8D-47E4-860F-5A4A6C1B0BEC",
+                "productType": "AVCS",
+                "transactionType": "UPDATEHOLDINGS",
+                "distributorCustomerNumber": 9454,
+                "shippingCoNumber": 9454,
+                "ordernumber": "5432796",
+                "orderDate": "2023-06-20 08:55:28.553",
+                "purchaseOrderReference": "",
+                "holdingsExpiryDate": "2025-06-30 23:59:00.000",
+                "sapId": 9454,
+                "vesselName": "Cornelia Maersk",
+                "imoNumber": "IMO9245756",
+                "callSign": "OWWS2",
+                "licenceType": "IMO Vessel",
+                "licenceTypeID": 1,
+                "fleetName": "",
+                "numberLicenceUsers": "",
+                "upn": "send ECDISMANUFACTURER?",
+                "unitsOfSale": [
+                    {
+                        "unitName": "PT111101",
+                        "endDate": "2023-10-31 00:00:00.000",
+                        "duration": "3",
+                        "renew": "Y/N/E/U",
+                        "repeat": "Y/N or 1/0"
+                    },
+                    {
+                        "unitName": "GB302409",
+                        "endDate": "2023-12-01 00:00:00.000",
+                        "duration": "2",
+                        "renew": "Y/N/E/U",
+                        "repeat": "Y/N or 1/0"
+                    }
+                ]
+            }
+        ]
+    }
+}
