@@ -326,5 +326,87 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
              && call.GetArgument<EventId>(1) == EventIds.CorrelationIdMissingInRecordOfSaleEvent.ToEventId()
              && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "CorrelationId is missing in Record of Sale published event.").MustHaveHappenedOnceExactly();
         }
+
+        [Test]
+        public void WhenValidHeaderRequestedInLicenceUpdatedPublishedEventOptions_ThenWebhookReturns200OkResponse()
+        {
+            var responseHeaders = A.Fake<IHeaderDictionary>();
+            var httpContext = A.Fake<HttpContext>();
+
+            A.CallTo(() => httpContext.Response.Headers).Returns(responseHeaders);
+            A.CallTo(() => _fakeHttpContextAccessor.HttpContext).Returns(httpContext);
+            A.CallTo(() => httpContext.Request.Headers["WebHook-Request-Origin"]).Returns(new[] { "test.com" });
+
+            var result = (OkObjectResult)_fakeWebHookController.LicenceUpdatedPublishedEventReceivedOption();
+
+            result.StatusCode.Should().Be(200);
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+              && call.GetArgument<LogLevel>(0) == LogLevel.Information
+              && call.GetArgument<EventId>(1) == EventIds.LicenceUpdatedEventOptionsCallStarted.ToEventId()
+              && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Started processing the Options request for the Licence updated event for webhook. | WebHook-Request-Origin : {webhookRequestOrigin}").MustHaveHappenedOnceExactly();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+              && call.GetArgument<LogLevel>(0) == LogLevel.Information
+              && call.GetArgument<EventId>(1) == EventIds.LicenceUpdatedEventOptionsCallCompleted.ToEventId()
+              && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Completed processing the Options request for the Licence updated event for webhook. | WebHook-Request-Origin : {webhookRequestOrigin}").MustHaveHappenedOnceExactly();
+
+            A.CallTo(() => responseHeaders.Add("WebHook-Allowed-Rate", "*")).MustHaveHappened();
+            A.CallTo(() => responseHeaders.Add("WebHook-Allowed-Origin", "test.com")).MustHaveHappened();
+        }
+
+        [Test]
+        public async Task WhenValidEventInLicenceUpdatedPublishedEventReceived_ThenWebhookReturns200OkResponse()
+        {
+            var fakeLicenceUpdatedEventJson = JObject.Parse(@"{""data"":{""correlationId"":""123""}}");
+            
+            var result = (OkObjectResult)await _fakeWebHookController.LicenceUpdatedPublishedEventReceived(fakeLicenceUpdatedEventJson);
+
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpsertLicenceUpdatedEntity(A<string>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeAzureBlobEventWriter.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceExactly();
+            result.StatusCode.Should().Be(200);
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+             && call.GetArgument<LogLevel>(0) == LogLevel.Information
+             && call.GetArgument<EventId>(1) == EventIds.LicenceUpdatedEventPublishedEventReceived.ToEventId()
+             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "ERP Facade webhook has received new licence updated publish event from EES.").MustHaveHappenedOnceExactly();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+             && call.GetArgument<LogLevel>(0) == LogLevel.Information
+             && call.GetArgument<EventId>(1) == EventIds.StoreLicenceUpdatedPublishedEventInAzureTable.ToEventId()
+             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Storing the received Licence updated published event in azure table.").MustHaveHappenedOnceExactly();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+             && call.GetArgument<LogLevel>(0) == LogLevel.Information
+             && call.GetArgument<EventId>(1) == EventIds.UploadLicenceUpdatedPublishedEventInAzureBlob.ToEventId()
+             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Uploading the received Licence updated  published event in blob storage.").MustHaveHappenedOnceExactly();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+             && call.GetArgument<LogLevel>(0) == LogLevel.Information
+             && call.GetArgument<EventId>(1) == EventIds.UploadedLicenceUpdatedPublishedEventInAzureBlob.ToEventId()
+             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Licence updated  published event is uploaded in blob storage successfully.").MustHaveHappenedOnceExactly();
+
+        }
+
+        [Test]
+        public async Task WhenCorrelationIdIsMissingInLicenceUpdatedPublishedEvent_ThenWebhookReturns400BadRequestResponse()
+        {
+            var fakeLicenceUpdatedEventJson = JObject.Parse(@"{""data"":{""corId"":""123""}}");
+
+            var result = (BadRequestObjectResult)await _fakeWebHookController.LicenceUpdatedPublishedEventReceived(fakeLicenceUpdatedEventJson);
+
+           result.StatusCode.Should().Be(400);
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+             && call.GetArgument<LogLevel>(0) == LogLevel.Information
+             && call.GetArgument<EventId>(1) == EventIds.LicenceUpdatedEventPublishedEventReceived.ToEventId()
+             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "ERP Facade webhook has received new licence updated publish event from EES.").MustHaveHappenedOnceExactly();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+            && call.GetArgument<LogLevel>(0) == LogLevel.Warning
+            && call.GetArgument<EventId>(1) == EventIds.CorrelationIdMissingInLicenceUpdatedEvent.ToEventId()
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "CorrelationId is missing in Licence updated published event.").MustHaveHappenedOnceExactly();
+
+        }
     }
 }

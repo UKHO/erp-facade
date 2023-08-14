@@ -30,6 +30,8 @@ namespace UKHO.ERPFacade.API.Controllers
         private const string CorrelationIdKey = "data.correlationId";
         private const string EncEventFileName = "EncPublishingEvent.json";
         private const string SapXmlPayloadFileName = "SapXmlPayload.xml";
+        private const string LicenceUpdatedContainerName = "licenceupdatedblobs";
+        private const string LicenceUpdatedFileName = "LicenceUpdateEvent.json";
 
         private const string RecordOfSaleContainerName = "recordofsaleblobs";
         private const string RecordOfSaleEventFileName = "RecordOfSaleEvent.json";
@@ -156,6 +158,52 @@ namespace UKHO.ERPFacade.API.Controllers
             _logger.LogInformation(EventIds.UploadedRecordOfSalePublishedEventInAzureBlob.ToEventId(), "Record of sale published event is uploaded in blob storage successfully.");
 
             return new OkObjectResult(StatusCodes.Status200OK);
+        }
+
+        [HttpOptions]
+        [Route("/webhook/licenceupdatedpublishedeventreceived")]
+        [Authorize(Policy = "LicenceUpdatedWebhookCaller")]
+        public IActionResult LicenceUpdatedPublishedEventReceivedOption()
+        {
+            var webhookRequestOrigin = HttpContext.Request.Headers["WebHook-Request-Origin"].FirstOrDefault();
+
+            _logger.LogInformation(EventIds.LicenceUpdatedEventOptionsCallStarted.ToEventId(), "Started processing the Options request for the Licence updated event for webhook. | WebHook-Request-Origin : {webhookRequestOrigin}", webhookRequestOrigin);
+
+            HttpContext.Response.Headers.Add("WebHook-Allowed-Rate", "*");
+            HttpContext.Response.Headers.Add("WebHook-Allowed-Origin", webhookRequestOrigin);
+
+            _logger.LogInformation(EventIds.LicenceUpdatedEventOptionsCallCompleted.ToEventId(), "Completed processing the Options request for the Licence updated event for webhook. | WebHook-Request-Origin : {webhookRequestOrigin}", webhookRequestOrigin);
+
+            return new OkObjectResult(StatusCodes.Status200OK);
+        }
+
+        [HttpPost]
+        [Route("/webhook/licenceupdatedpublishedeventreceived")]
+        [Authorize(Policy = "LicenceUpdatedWebhookCaller")]
+        public virtual async Task<IActionResult> LicenceUpdatedPublishedEventReceived([FromBody] JObject licenceUpdatedEventJson)
+        {
+            _logger.LogInformation(EventIds.LicenceUpdatedEventPublishedEventReceived.ToEventId(), "ERP Facade webhook has received new licence updated publish event from EES.");
+
+            string correlationId = licenceUpdatedEventJson.SelectToken(CorrelationIdKey)?.Value<string>();
+
+            if (string.IsNullOrEmpty(correlationId))
+            {
+                _logger.LogWarning(EventIds.CorrelationIdMissingInLicenceUpdatedEvent.ToEventId(), "CorrelationId is missing in Licence updated published event.");
+                return new BadRequestObjectResult(StatusCodes.Status400BadRequest);
+            }
+
+            _logger.LogInformation(EventIds.StoreLicenceUpdatedPublishedEventInAzureTable.ToEventId(), "Storing the received Licence updated published event in azure table.");
+
+            await _azureTableReaderWriter.UpsertLicenceUpdatedEntity(correlationId);
+
+            _logger.LogInformation(EventIds.UploadLicenceUpdatedPublishedEventInAzureBlob.ToEventId(), "Uploading the received Licence updated  published event in blob storage.");
+
+            await _azureBlobEventWriter.UploadEvent(licenceUpdatedEventJson.ToString(), LicenceUpdatedContainerName, correlationId + '/' + LicenceUpdatedFileName);
+
+            _logger.LogInformation(EventIds.UploadedLicenceUpdatedPublishedEventInAzureBlob.ToEventId(), "Licence updated  published event is uploaded in blob storage successfully.");
+           
+            return new OkObjectResult(StatusCodes.Status200OK);
+
         }
     }
 }

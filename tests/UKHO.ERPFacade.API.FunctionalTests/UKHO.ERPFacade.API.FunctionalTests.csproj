@@ -92,6 +92,15 @@
     <None Update="ERPFacadePayloadTestData\ID36_MoveAndSuspended_With_2UoS_But1_Having_addProductsValue.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ERPFacadePayloadTestData\LicenceUpdatedPayloadTestData\ID01_ValidLUJsonFile.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\LicenceUpdatedPayloadTestData\ID02_UnSupportedPayloadType.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\LicenceUpdatedPayloadTestData\ID03_InvalidLUJsonFile.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ERPFacadePayloadTestData\PC7_PAYSFDuration12Month.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

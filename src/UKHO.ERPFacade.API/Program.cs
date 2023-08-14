@@ -143,6 +143,7 @@ namespace UKHO.ERPFacade
             {
                 options.AddPolicy("EncContentPublishedWebhookCaller", policy => policy.RequireRole("EncContentPublishedWebhookCaller"));
                 options.AddPolicy("RecordOfSaleWebhookCaller", policy => policy.RequireRole("RecordOfSaleWebhookCaller"));
+                options.AddPolicy("LicenceUpdatedWebhookCaller", policy => policy.RequireRole("LicenceUpdatedWebhookCaller"));
             });
 
             // The following line enables Application Insights telemetry collection.

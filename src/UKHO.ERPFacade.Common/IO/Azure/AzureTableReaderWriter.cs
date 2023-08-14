@@ -20,6 +20,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
         private const string ErpFacadeTableName = "encevents";
         private const string PriceChangeMasterTableName = "pricechangemaster";
         private const string UnitPriceChangeTableName = "unitpricechangeevents";
+        private const string LicenceUpdateTableName = "licenceupdatedevents";
         private const int DefaultCallbackDuration = 5;
 
         private const string RecordOfSaleTableName = "recordofsaleevents";
@@ -74,6 +75,39 @@ namespace UKHO.ERPFacade.Common.IO.Azure
                 await tableClient.UpdateEntityAsync(existingEntity, ETag.All, TableUpdateMode.Replace);
 
                 _logger.LogInformation(EventIds.UpdatedEncContentPublishedEventInAzureTable.ToEventId(), "Existing ENC content published event is updated in azure table successfully.");
+            }
+        }
+
+        public async Task UpsertLicenceUpdatedEntity(string correlationId)
+        {
+            TableClient tableClient = GetTableClient(LicenceUpdateTableName);
+
+            var existingEntity = await GetRecordOfSaleEntity(correlationId, LicenceUpdateTableName);
+
+            if (existingEntity == null)
+            {
+                RecordOfSaleEventEntity licenceUpdatedEventsEntity = new()
+                {
+                    RowKey = Guid.NewGuid().ToString(),
+                    PartitionKey = Guid.NewGuid().ToString(),
+                    Timestamp = DateTime.UtcNow,
+                    CorrelationId = correlationId,
+                    Status = "InComplete"
+                };
+
+                await tableClient.AddEntityAsync(licenceUpdatedEventsEntity, CancellationToken.None);
+
+                _logger.LogInformation(EventIds.AddedLicenceUpdatedPublishedEventInAzureTable.ToEventId(), "Licence updated published event is added in azure table successfully.");
+            }
+            else
+            {
+                _logger.LogWarning(EventIds.ReceivedDuplicateLicenceUpdatedPublishedEvent.ToEventId(), "Duplicate Licence updated published event received.");
+
+                existingEntity.Timestamp = DateTime.UtcNow;
+
+                await tableClient.UpdateEntityAsync(existingEntity, ETag.All, TableUpdateMode.Replace);
+
+                _logger.LogInformation(EventIds.UpdatedLicenceUpdatedPublishedEventInAzureTable.ToEventId(), "Existing Licence updated published event is updated in azure table successfully.");
             }
         }
 
