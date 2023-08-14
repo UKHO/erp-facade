@@ -23,6 +23,8 @@ namespace UKHO.ERPFacade.Common.IO.Azure
         private const string LicenceUpdateTableName = "licenceupdatedevents";
         private const int DefaultCallbackDuration = 5;
 
+        private const string RecordOfSaleTableName = "recordofsaleevents";
+
         private enum Statuses
         {
             Incomplete,
@@ -46,7 +48,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
 
             EESEventEntity existingEntity = await GetEntity(correlationId);
 
-            if (existingEntity == null)
+            if (existingEntity == null!)
             {
                 EESEventEntity eESEvent = new()
                 {
@@ -330,6 +332,51 @@ namespace UKHO.ERPFacade.Common.IO.Azure
                 tableClient.DeleteEntity(existingEntity.PartitionKey, existingEntity.RowKey);
                 _logger.LogInformation(EventIds.DeletedEESEntitySuccessful.ToEventId(), "EES entity is deleted from azure table successfully.");
             }
+        }
+
+        public async Task UpsertRecordOfSaleEntity(string correlationId)
+        {
+            TableClient tableClient = GetTableClient(RecordOfSaleTableName);
+
+            RecordOfSaleEventEntity existingEntity = await GetRecordOfSaleEntity(correlationId, RecordOfSaleTableName);
+
+            if (existingEntity == null!)
+            {
+                RecordOfSaleEventEntity recordOfSaleEvent = new()
+                {
+                    RowKey = Guid.NewGuid().ToString(),
+                    PartitionKey = Guid.NewGuid().ToString(),
+                    Timestamp = DateTime.UtcNow,
+                    CorrelationId = correlationId,
+                    Status = "Incomplete"
+                };
+
+                await tableClient.AddEntityAsync(recordOfSaleEvent, CancellationToken.None);
+
+                _logger.LogInformation(EventIds.AddedRecordOfSalePublishedEventInAzureTable.ToEventId(), "Record Of Sale published event is added in azure table successfully.");
+            }
+            else
+            {
+                _logger.LogWarning(EventIds.ReceivedDuplicateRecordOfSalePublishedEvent.ToEventId(), "Duplicate record of sale published event received.");
+
+                existingEntity.Timestamp = DateTime.UtcNow;
+
+                await tableClient.UpdateEntityAsync(existingEntity, ETag.All, TableUpdateMode.Replace);
+
+                _logger.LogInformation(EventIds.UpdatedRecordOfSalePublishedEventInAzureTable.ToEventId(), "Existing Record Of Sale published event is updated in azure table successfully.");
+            }
+        }
+
+        public async Task<RecordOfSaleEventEntity> GetRecordOfSaleEntity(string correlationId, string tableName)
+        {
+            IList<RecordOfSaleEventEntity> records = new List<RecordOfSaleEventEntity>();
+            TableClient tableClient = GetTableClient(tableName);
+            var entities = tableClient.QueryAsync<RecordOfSaleEventEntity>(filter: TableClient.CreateQueryFilter($"CorrelationId eq {correlationId}"), maxPerPage: 1);
+            await foreach (var entity in entities)
+            {
+                records.Add(entity);
+            }
+            return records.FirstOrDefault();
         }
 
         //Private Methods
