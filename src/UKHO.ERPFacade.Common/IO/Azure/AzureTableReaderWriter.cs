@@ -395,17 +395,5 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             TableClient tableClient = serviceClient.GetTableClient(tableName);
             return tableClient;
         }
-
-        public async Task<RecordOfSaleEventEntity> GetRecordOfSaleEntity(string correlationId, string tableName)
-        {
-            IList<RecordOfSaleEventEntity> records = new List<RecordOfSaleEventEntity>();
-            TableClient tableClient = GetTableClient(tableName);
-            var entities = tableClient.QueryAsync<RecordOfSaleEventEntity>(filter: TableClient.CreateQueryFilter($"CorrelationId eq {correlationId}"), maxPerPage: 1);
-            await foreach (var entity in entities)
-            {
-                records.Add(entity);
-            }
-            return records.FirstOrDefault();
-        }
     }
 }

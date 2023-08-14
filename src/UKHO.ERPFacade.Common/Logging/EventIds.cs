@@ -526,8 +526,7 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940105 - CorrelationId is missing in Record of sale published event.
         /// </summary>
-        CorrelationIdMissingInRecordOfSaleEvent = 940105
-        PendingProductsToSliceCount = 940095,
+        CorrelationIdMissingInRecordOfSaleEvent = 940105,
 
         /// <summary>
         /// 940106 - Licence updated published event options call started.
