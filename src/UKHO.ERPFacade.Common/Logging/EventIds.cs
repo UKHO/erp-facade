@@ -578,6 +578,21 @@ namespace UKHO.ERPFacade.Common.Logging
         /// 940115 - Existing Licence updated published event updated in azure table successfully.
         /// </summary>
         UpdatedLicenceUpdatedPublishedEventInAzureTable = 940115,
+
+        /// <summary>
+        /// 940116 - The record of sale xml template does not exist.
+        /// </summary>
+        RecordOfSaleXmlTemplateNotFound = 940116,
+
+        /// <summary>
+        /// 940117 - Status of existing record of sale published event updated in azure table successfully.
+        /// </summary>
+        UpdatedStatusOfRecordOfSalePublishedEventInAzureTable = 940117,
+
+        /// <summary>
+        /// 940118 - Status of existing licence updated published event updated in azure table successfully.
+        /// </summary>
+        UpdatedStatusOfUploadedLicenceRecordOfSaleEntityEvent = 940118,
     }
 
     /// <summary>

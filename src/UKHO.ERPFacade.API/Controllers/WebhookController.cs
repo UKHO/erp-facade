@@ -1,6 +1,7 @@
 ﻿using System.Xml;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -8,6 +9,7 @@ using UKHO.ERPFacade.API.Helpers;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.HttpClients;
+using UKHO.ERPFacade.Common.Infrastructure;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
@@ -26,6 +28,8 @@ namespace UKHO.ERPFacade.API.Controllers
         private readonly ISapClient _sapClient;
         private readonly ISapMessageBuilder _sapMessageBuilder;
         private readonly IOptions<SapConfiguration> _sapConfig;
+        private readonly IXmlHelper _xmlHelper;
+        private readonly IFileSystemHelper _fileSystemHelper;
 
         private const string CorrelationIdKey = "data.correlationId";
         private const string EncEventFileName = "EncPublishingEvent.json";
@@ -35,6 +39,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
         private const string RecordOfSaleContainerName = "recordofsaleblobs";
         private const string RecordOfSaleEventFileName = "RecordOfSaleEvent.json";
+        private const string RosXmlFilePath = "SapXmlTemplates\\ROSRequest.xml";
 
         public WebhookController(IHttpContextAccessor contextAccessor,
                                  ILogger<WebhookController> logger,
@@ -42,8 +47,10 @@ namespace UKHO.ERPFacade.API.Controllers
                                  IAzureBlobEventWriter azureBlobEventWriter,
                                  ISapClient sapClient,
                                  ISapMessageBuilder sapMessageBuilder,
-                                 IOptions<SapConfiguration> sapConfig)
-        : base(contextAccessor)
+                                 IOptions<SapConfiguration> sapConfig,
+                                 IXmlHelper xmlHelper,
+                                 IFileSystemHelper fileSystemHelper)
+            : base(contextAccessor)
         {
             _logger = logger;
             _azureTableReaderWriter = azureTableReaderWriter;
@@ -51,6 +58,8 @@ namespace UKHO.ERPFacade.API.Controllers
             _sapClient = sapClient;
             _sapMessageBuilder = sapMessageBuilder;
             _sapConfig = sapConfig ?? throw new ArgumentNullException(nameof(sapConfig));
+            _xmlHelper = xmlHelper;
+            _fileSystemHelper = fileSystemHelper;
         }
 
         [HttpOptions]
@@ -103,7 +112,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
             _logger.LogInformation(EventIds.UploadSapXmlPayloadInAzureBlobCompleted.ToEventId(), "SAP xml payload is uploaded in blob storage successfully.");
 
-            HttpResponseMessage response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapServiceOperationForEncEvent);
+            HttpResponseMessage response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapServiceOperationForEncEvent, _sapConfig.Value.SapUsernameForEncEvent, _sapConfig.Value.SapPasswordForEncEvent);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -157,6 +166,27 @@ namespace UKHO.ERPFacade.API.Controllers
             await _azureBlobEventWriter.UploadEvent(recordOfSaleEventJson.ToString(), RecordOfSaleContainerName, correlationId + '/' + RecordOfSaleEventFileName);
             _logger.LogInformation(EventIds.UploadedRecordOfSalePublishedEventInAzureBlob.ToEventId(), "Record of sale published event is uploaded in blob storage successfully.");
 
+            string recordOfSalesXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, RosXmlFilePath);
+          
+            if (!_fileSystemHelper.IsFileExists(recordOfSalesXmlTemplatePath))
+            {
+                _logger.LogWarning(EventIds.RecordOfSaleXmlTemplateNotFound.ToEventId(), "The record of sale xml template does not exist.");
+                throw new FileNotFoundException();
+            }
+            XmlDocument rosPayload = _xmlHelper.CreateXmlDocument(recordOfSalesXmlTemplatePath);
+
+
+            HttpResponseMessage response = await _sapClient.PostEventData(rosPayload, _sapConfig.Value.SapServiceOperationForRecordOfSale, _sapConfig.Value.SapUsernameForRecordOfSale, _sapConfig.Value.SapPasswordForRecordOfSale);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogError(EventIds.ErrorOccuredInSap.ToEventId(), "An error occured while processing your request in SAP. | {StatusCode}", response.StatusCode);
+                throw new ERPFacadeException(EventIds.ErrorOccuredInSap.ToEventId());
+            }
+
+            await _azureTableReaderWriter.UpdateStatusOfRecordOfSaleEntityPublisedEvent(correlationId);
+            
+
             return new OkObjectResult(StatusCodes.Status200OK);
         }
 
@@ -201,9 +231,29 @@ namespace UKHO.ERPFacade.API.Controllers
             await _azureBlobEventWriter.UploadEvent(licenceUpdatedEventJson.ToString(), LicenceUpdatedContainerName, correlationId + '/' + LicenceUpdatedFileName);
 
             _logger.LogInformation(EventIds.UploadedLicenceUpdatedPublishedEventInAzureBlob.ToEventId(), "Licence updated  published event is uploaded in blob storage successfully.");
-           
+
+            string recordOfSalesXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, RosXmlFilePath);
+         
+            if (!_fileSystemHelper.IsFileExists(recordOfSalesXmlTemplatePath))
+            {
+                _logger.LogWarning(EventIds.RecordOfSaleXmlTemplateNotFound.ToEventId(), "The record of sale xml template does not exist.");
+                throw new FileNotFoundException();
+            }
+            XmlDocument rosPayload = _xmlHelper.CreateXmlDocument(recordOfSalesXmlTemplatePath);
+
+            HttpResponseMessage response = await _sapClient.PostEventData(rosPayload, _sapConfig.Value.SapServiceOperationForRecordOfSale, _sapConfig.Value.SapUsernameForRecordOfSale, _sapConfig.Value.SapPasswordForRecordOfSale);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogError(EventIds.ErrorOccuredInSap.ToEventId(), "An error occured while processing your request in SAP. | {StatusCode}", response.StatusCode);
+                throw new ERPFacadeException(EventIds.ErrorOccuredInSap.ToEventId());
+            }
+            
+            await _azureTableReaderWriter.UpdateStatusOfUploadedLicenceRecordOfSaleEntityEvent(correlationId);
+
             return new OkObjectResult(StatusCodes.Status200OK);
 
         }
+
     }
 }

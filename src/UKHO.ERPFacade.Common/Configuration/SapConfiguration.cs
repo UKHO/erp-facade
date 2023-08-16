@@ -15,6 +15,8 @@ namespace UKHO.ERPFacade.Common.Configuration
 
         public string SapEndpointBaseAddressForRecordOfSale { get; set; }
 
+        public string SapServiceOperationForRecordOfSale { get; set; }
+
         public string SapUsernameForRecordOfSale { get; set; }
 
         public string SapPasswordForRecordOfSale { get; set; }

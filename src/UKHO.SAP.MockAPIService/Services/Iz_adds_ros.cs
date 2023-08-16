@@ -9,6 +9,6 @@ namespace UKHO.SAP.MockAPIService.Services
     {
         [OperationContract(Name = "Z_ADDS_ROS")]
         [return: XmlElement("Z_ADDS_ROSResponse", Namespace = "urn:sap-com:document:sap:rfc:functions")]
-        public Z_ADDS_ROSResponse Z_ADDS_ROS([XmlElement("ZSALES_ADDS", Namespace = "")] ZSALES_ADDS zSALES_ADDS);
+        public Z_ADDS_ROSResponse Z_ADDS_ROS([XmlElement("IM_ORDER", Namespace = "")] IM_ORDER iM_ORDER);
     }
 }

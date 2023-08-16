@@ -123,6 +123,32 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             return records.FirstOrDefault();
         }
 
+        public async Task<RecordOfSaleEventEntity> GetRecordOfSaleEventEntity(string correlationId)
+        {
+            IList<RecordOfSaleEventEntity> records = new List<RecordOfSaleEventEntity>();
+            TableClient tableClient = GetTableClient(RecordOfSaleTableName);
+            var entities = tableClient.QueryAsync<RecordOfSaleEventEntity>(filter: TableClient.CreateQueryFilter($"CorrelationId eq {correlationId}"), maxPerPage: 1);
+            await foreach (var entity in entities)
+            {
+                records.Add(entity);
+            }
+            return records.FirstOrDefault();
+        }
+
+        public async Task<RecordOfSaleEventEntity> GetRecordOfSaleLicenceEventEntity(string correlationId)
+        {
+            IList<RecordOfSaleEventEntity> records = new List<RecordOfSaleEventEntity>();
+            TableClient tableClient = GetTableClient(LicenceUpdateTableName);
+            var entities = tableClient.QueryAsync<RecordOfSaleEventEntity>(filter: TableClient.CreateQueryFilter($"CorrelationId eq {correlationId}"), maxPerPage: 1);
+            await foreach (var entity in entities)
+            {
+                records.Add(entity);
+            }
+            return records.FirstOrDefault();
+        }
+
+
+
         public async Task UpdateRequestTimeEntity(string correlationId)
         {
             TableClient tableClient = GetTableClient(ErpFacadeTableName);
@@ -378,6 +404,35 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             }
             return records.FirstOrDefault();
         }
+
+        public async Task UpdateStatusOfRecordOfSaleEntityPublisedEvent(string correlationId)
+        {
+            TableClient tableClient = GetTableClient(RecordOfSaleTableName);
+            RecordOfSaleEventEntity existingEntity = await GetRecordOfSaleEventEntity(correlationId);
+
+            if (existingEntity != null)
+            {
+                existingEntity.Status = "Complete";
+                await tableClient.UpdateEntityAsync(existingEntity, ETag.All, TableUpdateMode.Replace);
+
+                _logger.LogInformation(EventIds.UpdatedStatusOfRecordOfSalePublishedEventInAzureTable.ToEventId(), "Status of existing record of sale published event updated in azure table successfully.");
+            }
+        }
+
+        public async Task UpdateStatusOfUploadedLicenceRecordOfSaleEntityEvent(string correlationId)
+        {
+            TableClient tableClient = GetTableClient(LicenceUpdateTableName);
+            RecordOfSaleEventEntity existingEntity = await GetRecordOfSaleLicenceEventEntity(correlationId);
+
+            if (existingEntity != null)
+            {
+                existingEntity.Status = "Complete";
+                await tableClient.UpdateEntityAsync(existingEntity, ETag.All, TableUpdateMode.Replace);
+
+                _logger.LogInformation(EventIds.UpdatedStatusOfUploadedLicenceRecordOfSaleEntityEvent.ToEventId(), "Existing Record Of Sale published event is updated in azure table successfully.");
+            }
+        }
+
 
         //Private Methods
         private TableClient GetTableClient(string tableName)

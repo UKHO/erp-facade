@@ -97,7 +97,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             var fakeEncEventJson = JObject.Parse(@"{""data"":{""correlationId"":""123""}}");            
 
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(xmlDocument);
-            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored))
+            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                 .Returns(new HttpResponseMessage()
                 {
                     StatusCode = HttpStatusCode.OK
@@ -108,7 +108,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             A.CallTo(() => _fakeAzureTableReaderWriter.UpsertEntity(A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureTableReaderWriter.UpdateRequestTimeEntity(A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureBlobEventWriter.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened(2,Times.Exactly);
-            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, "Z_ADDS_MAT_INFO")).MustHaveHappened();
+            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, "Z_ADDS_MAT_INFO", A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
 
             result.StatusCode.Should().Be(200);
 
@@ -180,7 +180,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             var fakeEncEventJson = JObject.Parse(@"{""data"":{""correlationId"":""123""}}");
 
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(xmlDocument);
-            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored))
+            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                 .Returns(new HttpResponseMessage()
                 {
                     StatusCode = HttpStatusCode.Unauthorized

@@ -23,5 +23,8 @@ namespace UKHO.ERPFacade.Common.IO.Azure
         Task DeleteEESEntity(string correlationId);
         Task UpsertRecordOfSaleEntity(string correlationId);
         Task<RecordOfSaleEventEntity> GetRecordOfSaleEntity(string correlationId, string tableName);
+        Task UpdateStatusOfRecordOfSaleEntityPublisedEvent(string correlationId);
+        Task UpdateStatusOfUploadedLicenceRecordOfSaleEntityEvent(string correlationId);
+
     }
 }
