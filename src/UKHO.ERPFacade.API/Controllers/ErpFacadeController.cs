@@ -81,9 +81,7 @@ namespace UKHO.ERPFacade.API.Controllers
             _logger.LogInformation(EventIds.ERPFacadeToSAPRequestFound.ToEventId(), "Valid SAP callback.");
 
             _logger.LogInformation(EventIds.UploadPriceInformationEventInAzureBlob.ToEventId(), "Uploading the price information received from SAP in blob storage.");
-
             await _azureBlobEventWriter.UploadEvent(priceInformationJson.ToString(), correlationId, PriceInformationFileName);
-
             _logger.LogInformation(EventIds.UploadedPriceInformationEventInAzureBlob.ToEventId(), "Price information is uploaded in blob storage successfully.");
 
             List<PriceInformation> priceInformationList = JsonConvert.DeserializeObject<List<PriceInformation>>(priceInformationJson.ToString());
@@ -110,9 +108,7 @@ namespace UKHO.ERPFacade.API.Controllers
                 var unitsOfSaleUpdatedCloudEventDataJson = JsonConvert.SerializeObject(unitsOfSaleUpdatedCloudEventData, Formatting.Indented);
 
                 _logger.LogInformation(EventIds.UploadUnitsOfSaleUpdatedEventPayloadInAzureBlob.ToEventId(), "Uploading the UnitsOfSaleUpdated event payload json in blob storage. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}", correlationId, eventId);
-
                 await _azureBlobEventWriter.UploadEvent(unitsOfSaleUpdatedCloudEventDataJson.ToString(), correlationId!, UnitOfSaleUpdatedEventFileName);
-
                 _logger.LogInformation(EventIds.UploadedUnitsOfSaleUpdatedEventPayloadInAzureBlob.ToEventId(), "UnitsOfSaleUpdated event payload json is uploaded in blob storage successfully. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}", correlationId, eventId);
 
                 int eventSize = _jsonHelper.GetPayloadJsonSize(unitsOfSaleUpdatedCloudEventDataJson.ToString());
@@ -156,9 +152,7 @@ namespace UKHO.ERPFacade.API.Controllers
             await _azureTableReaderWriter.AddPriceChangeEntity(correlationId, productCount);
 
             _logger.LogInformation(EventIds.UploadBulkPriceInformationEventInAzureBlob.ToEventId(), "Uploading the received Bulk price information event in blob storage.");
-
             await _azureBlobEventWriter.UploadEvent(bulkPriceInformationJson.ToString(), ContainerName, correlationId + '/' + BulkPriceInformationFileName);
-
             _logger.LogInformation(EventIds.UploadedBulkPriceInformationEventInAzureBlob.ToEventId(), "Bulk price information event is uploaded in blob storage successfully.");
 
             return new OkObjectResult(StatusCodes.Status200OK);
