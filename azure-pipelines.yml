@@ -578,3 +578,11 @@ stages:
                 - template: Deployment/templates/continuous-deployment-app.yml
                   parameters:
                     AzureSubscription: "ERP-Facade-Live-A.011.05.12"
+
+      - job: PostDeploymentActions
+        dependsOn:
+        - LiveDeployApp                 
+        pool: $(WindowsPool)        
+        displayName: Post Deployment Actions
+        steps:
+          - template: Deployment/templates/retain-pipeline.yml
