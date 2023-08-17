@@ -32,7 +32,6 @@ namespace UKHO.ERPFacade
         internal static void Main(string[] args)
         {
             EventHubLoggingConfiguration eventHubLoggingConfiguration;
-            SapActionConfiguration sapActionConfiguration;
 
             IHttpContextAccessor httpContextAccessor = new HttpContextAccessor();
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -47,6 +46,7 @@ namespace UKHO.ERPFacade
                 .AddJsonFile("ConfigurationFiles/ScenarioRules.json", true, true)
                 .AddJsonFile("ConfigurationFiles/ActionNumbers.json", true, true)
                 .AddJsonFile("ConfigurationFiles/SapActions.json", true, true)
+                .AddJsonFile("ConfigurationFiles/LicenceUpdatedSapAction.json", true, true)
 #if DEBUG
                 //Add development overrides configuration
                 .AddJsonFile("appsettings.local.overrides.json", true, true)
@@ -169,7 +169,7 @@ namespace UKHO.ERPFacade
             builder.Services.Configure<SharedKeyConfiguration>(configuration.GetSection("SharedKeyConfiguration"));
 
             builder.Services.Configure<SapActionConfiguration>(configuration.GetSection("SapActionConfiguration"));
-            sapActionConfiguration = configuration.GetSection("SapActionConfiguration").Get<SapActionConfiguration>()!;
+            builder.Services.Configure<LicenceUpdatedSapActionConfiguration>(configuration.GetSection("LicenceUpdatedSapActions"));
             builder.Services.Configure<EESHealthCheckEnvironmentConfiguration>(configuration.GetSection("EESHealthCheckEnvironmentConfiguration"));
 
             builder.Services.AddInfrastructure();
@@ -186,6 +186,7 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<IJsonHelper, JsonHelper>();
             builder.Services.AddScoped<SharedKeyAuthFilter>();
             builder.Services.AddScoped<IEESClient, EESClient>();
+            builder.Services.AddScoped<ILicenceUpdatedSapMessageBuilder, LicenceUpdatedSapMessageBuilder>();
 
             builder.Services.AddHealthChecks()
                 .AddCheck<SapServiceHealthCheck>("SapServiceHealthCheck")

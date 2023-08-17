@@ -26,6 +26,7 @@ namespace UKHO.ERPFacade.API.Controllers
         private readonly ISapClient _sapClient;
         private readonly ISapMessageBuilder _sapMessageBuilder;
         private readonly IOptions<SapConfiguration> _sapConfig;
+        private readonly ILicenceUpdatedSapMessageBuilder _licenceUpdatedSapMessageBuilder;
 
         private const string CorrelationIdKey = "data.correlationId";
         private const string EncEventFileName = "EncPublishingEvent.json";
@@ -41,7 +42,8 @@ namespace UKHO.ERPFacade.API.Controllers
                                  IAzureBlobEventWriter azureBlobEventWriter,
                                  ISapClient sapClient,
                                  ISapMessageBuilder sapMessageBuilder,
-                                 IOptions<SapConfiguration> sapConfig)
+                                 IOptions<SapConfiguration> sapConfig,
+                                 ILicenceUpdatedSapMessageBuilder LicenceUpdatedSapMessageBuilder)
         : base(contextAccessor)
         {
             _logger = logger;
@@ -49,6 +51,7 @@ namespace UKHO.ERPFacade.API.Controllers
             _azureBlobEventWriter = azureBlobEventWriter;
             _sapClient = sapClient;
             _sapMessageBuilder = sapMessageBuilder;
+            _licenceUpdatedSapMessageBuilder = LicenceUpdatedSapMessageBuilder;
             _sapConfig = sapConfig ?? throw new ArgumentNullException(nameof(sapConfig));
         }
 
@@ -174,8 +177,8 @@ namespace UKHO.ERPFacade.API.Controllers
         [Route("/webhook/licenceupdatedpublishedeventreceived")]
         [Authorize(Policy = "LicenceUpdatedWebhookCaller")]
         public virtual async Task<IActionResult> LicenceUpdatedPublishedEventReceived([FromBody] JObject licenceUpdatedEventJson)
-        {
-            _logger.LogInformation(EventIds.LicenceUpdatedEventPublishedEventReceived.ToEventId(), "ERP Facade webhook has received new licence updated publish event from EES.");
+       {
+           _logger.LogInformation(EventIds.LicenceUpdatedEventPublishedEventReceived.ToEventId(), "ERP Facade webhook has received new licence updated publish event from EES.");
 
             string correlationId = licenceUpdatedEventJson.SelectToken(CorrelationIdKey)?.Value<string>();
 
@@ -191,7 +194,9 @@ namespace UKHO.ERPFacade.API.Controllers
             _logger.LogInformation(EventIds.UploadLicenceUpdatedPublishedEventInAzureBlob.ToEventId(), "Uploading the received Licence updated  published event in blob storage.");
             await _azureBlobEventWriter.UploadEvent(licenceUpdatedEventJson.ToString(), LicenceUpdatedContainerName, correlationId + '/' + LicenceUpdatedFileName);
             _logger.LogInformation(EventIds.UploadedLicenceUpdatedPublishedEventInAzureBlob.ToEventId(), "Licence updated  published event is uploaded in blob storage successfully.");
-           
+
+            XmlDocument sapPayload = _licenceUpdatedSapMessageBuilder.BuildLicenceUpdatedSapMessageXml(JsonConvert.DeserializeObject<LicenceUpdatedEventPayLoad>(licenceUpdatedEventJson.ToString()), correlationId);
+
             return new OkObjectResult(StatusCodes.Status200OK);
         }
     }

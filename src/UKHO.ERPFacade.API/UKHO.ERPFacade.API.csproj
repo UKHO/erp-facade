@@ -29,6 +29,9 @@
     <None Remove="SapXmlTemplates\SAPHealthCheckRequest.xml" />
   </ItemGroup>
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="ConfigurationFiles\LicenceUpdatedSapAction.json" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="SapXmlTemplates\SAPHealthCheckRequest.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
