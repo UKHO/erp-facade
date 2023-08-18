@@ -36,6 +36,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         private ISapMessageBuilder _fakeSapMessageBuilder;
         private IOptions<SapConfiguration> _fakeSapConfig;
         private WebhookController _fakeWebHookController;
+        private ILicenceUpdatedSapMessageBuilder _fakeLicenceUpdatedSapMessageBuilder;
 
         [SetUp]
         public void Setup()
@@ -58,7 +59,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
                                                            _fakeAzureBlobEventWriter,
                                                            _fakeSapClient,
                                                            _fakeSapMessageBuilder,
-                                                           _fakeSapConfig);
+                                                           _fakeSapConfig,
+                                                           _fakeLicenceUpdatedSapMessageBuilder);
         }
 
         [Test]
@@ -238,7 +240,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
                                                            _fakeAzureBlobEventWriter,
                                                            _fakeSapClient,
                                                            _fakeSapMessageBuilder,
-                                                           null))
+                                                           null,
+                                                           _fakeLicenceUpdatedSapMessageBuilder))
              .ParamName
              .Should().Be("sapConfig");
         }
