@@ -41,34 +41,38 @@ namespace UKHO.ERPFacade.API.Helpers
             }
 
             XmlDocument soapXml = _xmlHelper.CreateXmlDocument(sapXmlTemplatePath);
+            string xml = SapXmlPayloadCreation(eventData);
+            soapXml.SelectSingleNode(XpathImOrder).InnerXml = xml;
 
-            LicenceData licenceData = eventData.Data;
-            Licence licence =  licenceData.Licence;
+            return soapXml;
+        }
 
+        public string SapXmlPayloadCreation(LicenceUpdatedEventPayLoad eventData)
+        {
             LicenceUpdatedUnitOfSale licenceUpdatedUnitOfSale = new();
 
             var sapPaylaod = new SapRecordOfSalePayLaod();
 
-            sapPaylaod.CorrelationId = licenceData.CorrelationId;
-            sapPaylaod.ServiceType = licence.ProductType;
-            sapPaylaod.LicTransaction = licence.TransactionType;
-            sapPaylaod.SoldToAcc = licence.DistributorCustomerNumber.ToString();
-            sapPaylaod.LicenseEacc = licence.ShippingCoNumber.ToString();
-            sapPaylaod.StartDate = licence.OrderDate;
-            sapPaylaod.EndDate = licence.HoldingsExpiryDate;
-            sapPaylaod.LicenceNumber = licence.SapId.ToString();
-            sapPaylaod.VesselName = licence.VesselName;
-            sapPaylaod.IMONumber = licence.ImoNumber;
-            sapPaylaod.CallSign = licence.CallSign;
-            sapPaylaod.ShoreBased = licence.LicenceType;
-            sapPaylaod.FleetName = licence.FleetName;
-            sapPaylaod.Users = Convert.ToInt32(licence.NumberLicenceUsers);
-            sapPaylaod.EndUserId = licence.LicenceId.ToString();
-            sapPaylaod.ECDISMANUF = licence.Upn;
-            sapPaylaod.LicenceType = licence.LicenceTypeId.ToString();
-            sapPaylaod.LicenceDuration = Convert.ToInt32(licence.HoldingsExpiryDate);
-            sapPaylaod.PurachaseOrder = licence.PoRef;
-            sapPaylaod.OrderNumber = licence.Ordernumber.ToString();
+            sapPaylaod.CorrelationId = eventData.Data.CorrelationId;
+            sapPaylaod.ServiceType = eventData.Data.Licence.ProductType;
+            sapPaylaod.LicTransaction = eventData.Data.Licence.TransactionType;
+            sapPaylaod.SoldToAcc = eventData.Data.Licence.DistributorCustomerNumber.ToString();
+            sapPaylaod.LicenseEacc = eventData.Data.Licence.ShippingCoNumber.ToString();
+            sapPaylaod.StartDate = eventData.Data.Licence.OrderDate;
+            sapPaylaod.EndDate = eventData.Data.Licence.HoldingsExpiryDate;
+            sapPaylaod.LicenceNumber = eventData.Data.Licence.SapId.ToString();
+            sapPaylaod.VesselName = eventData.Data.Licence.VesselName;
+            sapPaylaod.IMONumber = eventData.Data.Licence.ImoNumber;
+            sapPaylaod.CallSign = eventData.Data.Licence.CallSign;
+            sapPaylaod.ShoreBased = eventData.Data.Licence.LicenceType;
+            sapPaylaod.FleetName = eventData.Data.Licence.FleetName;
+            sapPaylaod.Users = Convert.ToInt32(eventData.Data.Licence.NumberLicenceUsers);
+            sapPaylaod.EndUserId = eventData.Data.Licence.LicenceId.ToString();
+            sapPaylaod.ECDISMANUF = eventData.Data.Licence.Upn;
+            sapPaylaod.LicenceType = eventData.Data.Licence.LicenceTypeId.ToString();
+            sapPaylaod.LicenceDuration = Convert.ToInt32(eventData.Data.Licence.HoldingsExpiryDate);
+            sapPaylaod.PurachaseOrder = eventData.Data.Licence.PoRef;
+            sapPaylaod.OrderNumber = eventData.Data.Licence.Ordernumber.ToString();
 
             PROD prod = new();
             var unitOfSaleList = new List<UnitOfSales>()
@@ -83,31 +87,7 @@ namespace UKHO.ERPFacade.API.Helpers
                 }
             };
 
-            prod.UnitOfSales = unitOfSaleList;
-            sapPaylaod.PROD = prod;
-
-            var xml = string.Empty;
-
-            // Remove Declaration  
-            var settings = new XmlWriterSettings
-            {
-                Indent = true,
-                OmitXmlDeclaration = true
-            };
-
-            // Remove Namespace  
-            var ns = new XmlSerializerNamespaces(new[] { XmlQualifiedName.Empty });
-
-            using (var stream = new StringWriter())
-            using (var writer = XmlWriter.Create(stream, settings))
-            {
-                var serializer = new XmlSerializer(typeof(SapRecordOfSalePayLaod));
-                serializer.Serialize(writer, sapPaylaod, ns);
-                xml = stream.ToString();
-            }
-
-            soapXml.SelectSingleNode(XpathImOrder).InnerXml = xml;
-            return soapXml;
+          return  _xmlHelper.CreateRecordOfSaleSapXmlPayLoad(sapPaylaod);
         }
     }
 }
