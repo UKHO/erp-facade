@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
-using UKHO.ERPFacade.Common.Converters;
 
-namespace UKHO.ERPFacade.Common
+namespace UKHO.ERPFacade.Common.Models
 {
+    [ExcludeFromCodeCoverage]
     [XmlRoot(ElementName = "IM_ORDER")]
     public class SapRecordOfSalePayLaod
     {
@@ -21,10 +16,8 @@ namespace UKHO.ERPFacade.Common
         [XmlElement(ElementName = "LICTRANSACTION")]
         public string LicTransaction { get; set; }
 
-
         [XmlElement(ElementName = "SOLDTOACC")]
         public string SoldToAcc { get; set; }
-
 
         [XmlElement(ElementName = "LICENSEEACC")]
         public string LicenseEacc { get; set; }
@@ -34,7 +27,6 @@ namespace UKHO.ERPFacade.Common
 
         [XmlElement(ElementName = "ENDDATE")]
         public string EndDate { get; set; }
-
 
         [XmlElement(ElementName = "LICNO")]
         public string LicenceNumber { get; set; }
@@ -47,7 +39,6 @@ namespace UKHO.ERPFacade.Common
 
         [XmlElement(ElementName = "CALLSIGN")]
         public string CallSign { get; set; }
-
 
         [XmlElement(ElementName = "SHOREBASED")]
         public string ShoreBased { get; set; }
@@ -78,32 +69,29 @@ namespace UKHO.ERPFacade.Common
 
         [XmlElement(ElementName = "PROD")]
         public PROD PROD { get; set; }
-
-      
     }
 
+    [ExcludeFromCodeCoverage]
     [XmlRoot(ElementName = "PROD")]
     public class PROD
     {
-
         [XmlElement(ElementName = "item")]
-        public List<UnitOfSale> UnitOfSales { get; set; }
+        public List<UnitOfSales> UnitOfSales { get; set; }
     }
 
-   
-    public class UnitOfSale
+    [ExcludeFromCodeCoverage]
+    public class UnitOfSales
     {
-
         [XmlElement(ElementName = "ID")]
         public string Id { get; set; }
 
         [XmlElement(ElementName = "ENDDA")]
-        public string EndDate{ get; set; }
+        public string EndDate { get; set; }
 
         [XmlElement(ElementName = "DURATION")]
         public string Duration { get; set; }
 
-        [XmlElement(ElementName= "RENEW")]
+        [XmlElement(ElementName = "RENEW")]
         public string ReNew { get; set; }
 
         [XmlElement(ElementName = "REPEAT")]

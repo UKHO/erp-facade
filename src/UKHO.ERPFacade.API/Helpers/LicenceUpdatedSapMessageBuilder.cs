@@ -1,14 +1,9 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Reflection;
-using System.Xml;
+﻿using System.Xml;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json.Linq;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
 using System.Xml.Serialization;
-using System.IO;
-using UKHO.ERPFacade.Common;
 
 namespace UKHO.ERPFacade.API.Helpers
 {
@@ -34,9 +29,9 @@ namespace UKHO.ERPFacade.API.Helpers
             _sapActionConfig = sapActionConfig;
         }
         public LicenceUpdatedSapMessageBuilder(){}
+
         public XmlDocument BuildLicenceUpdatedSapMessageXml(LicenceUpdatedEventPayLoad eventData, string correlationId)
         {
-
             string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, SapXmlPath);
 
             if (!_fileSystemHelper.IsFileExists(sapXmlTemplatePath))
@@ -46,49 +41,53 @@ namespace UKHO.ERPFacade.API.Helpers
             }
 
             XmlDocument soapXml = _xmlHelper.CreateXmlDocument(sapXmlTemplatePath);
-            //Test Data
+
+            LicenceData licenceData = eventData.Data;
+            Licence licence =  licenceData.Licence;
+
+            LicenceUpdatedUnitOfSale licenceUpdatedUnitOfSale = new();
+
             var sapPaylaod = new SapRecordOfSalePayLaod();
 
-            sapPaylaod.CorrelationId = "CorrId1234";
-            sapPaylaod.ServiceType = "123";
-            sapPaylaod.LicTransaction = "122";
-            sapPaylaod.SoldToAcc = "CorrId1234";
-            sapPaylaod.LicenseEacc = "123";
-            sapPaylaod.StartDate = "122";
-            sapPaylaod.EndDate = "CorrId1234";
-            sapPaylaod.LicenceNumber = "123";
-            sapPaylaod.VesselName = "122";
-            sapPaylaod.IMONumber = "CorrId1234";
-            sapPaylaod.CallSign = "123";
-            sapPaylaod.ShoreBased = "122";
-            sapPaylaod.FleetName = "CorrId1234";
-            sapPaylaod.Users = "123";
-            sapPaylaod.EndUserId = "122";
-            sapPaylaod.ECDISMANUF = "CorrId1234";
-            sapPaylaod.LicenceType = "123";
+            sapPaylaod.CorrelationId = licenceData.CorrelationId;
+            sapPaylaod.ServiceType = licence.ProductType;
+            sapPaylaod.LicTransaction = licence.TransactionType;
+            sapPaylaod.SoldToAcc = licence.DistributorCustomerNumber.ToString();
+            sapPaylaod.LicenseEacc = licence.ShippingCoNumber.ToString();
+            sapPaylaod.StartDate = licence.OrderDate;
+            sapPaylaod.EndDate = licence.HoldingsExpiryDate;
+            sapPaylaod.LicenceNumber = licence.SapId.ToString();
+            sapPaylaod.VesselName = licence.VesselName;
+            sapPaylaod.IMONumber = licence.ImoNumber;
+            sapPaylaod.CallSign = licence.CallSign;
+            sapPaylaod.ShoreBased = licence.LicenceType;
+            sapPaylaod.FleetName = licence.FleetName;
+            sapPaylaod.Users = Convert.ToInt32(licence.NumberLicenceUsers);
+            sapPaylaod.EndUserId = licence.LicenceId.ToString();
+            sapPaylaod.ECDISMANUF = licence.Upn;
+            sapPaylaod.LicenceType = licence.LicenceTypeId.ToString();
+            sapPaylaod.LicenceDuration = Convert.ToInt32(licence.HoldingsExpiryDate);
+            sapPaylaod.PurachaseOrder = licence.PoRef;
+            sapPaylaod.OrderNumber = licence.Ordernumber.ToString();
 
-            sapPaylaod.LicenceDuration = "122";
-            sapPaylaod.PurachaseOrder = "123";
-
-            sapPaylaod.OrderNumber = "CorrId1234";
-
-            var Prod = new List<Common.UnitOfSale>()
+            PROD prod = new();
+            var unitOfSaleList = new List<UnitOfSales>()
             {
-                new Common.UnitOfSale()
+                new UnitOfSales()
                 {
-                    Id="Sam",
-                    EndDate="EDAA",
-                    Duration = "12",
-                    ReNew = "Y",
-                    Repeat = "N"
+                    Id= licenceUpdatedUnitOfSale.Id,
+                    EndDate= licenceUpdatedUnitOfSale.EndDate,
+                    Duration = licenceUpdatedUnitOfSale.Duration.ToString(),
+                    ReNew = licenceUpdatedUnitOfSale.ReNew,
+                    Repeat = licenceUpdatedUnitOfSale.Repeat
                 }
             };
 
-            var itemProd = new PROD();
-            itemProd.UnitOfSales = Prod;
-            ;
-            sapPaylaod.PROD = itemProd;
+            prod.UnitOfSales = unitOfSaleList;
+            sapPaylaod.PROD = prod;
+
             var xml = string.Empty;
+
             // Remove Declaration  
             var settings = new XmlWriterSettings
             {
