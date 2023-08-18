@@ -56,7 +56,7 @@ namespace UKHO.ERPFacade.Common
         public string FleetName { get; set; }
 
         [XmlElement(ElementName = "USERS")]
-        public string Users { get; set; }
+        public int Users { get; set; }
 
         [XmlElement(ElementName = "ENDUSERID")]
         public string EndUserId { get; set; }
@@ -68,7 +68,7 @@ namespace UKHO.ERPFacade.Common
         public string LicenceType { get; set; }
 
         [XmlElement(ElementName = "LICDUR")]
-        public string LicenceDuration { get; set; }
+        public int LicenceDuration { get; set; }
 
         [XmlElement(ElementName = "PO")]
         public string PurachaseOrder { get; set; }

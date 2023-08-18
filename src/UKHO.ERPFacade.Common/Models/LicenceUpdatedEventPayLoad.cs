@@ -16,13 +16,13 @@ namespace UKHO.ERPFacade.Common.Models
         public string Type { get; set; }
 
         [JsonProperty("source")]
-        public Uri Source { get; set; }
+        public string Source { get; set; }
 
         [JsonProperty("id")]
         public string Id { get; set; }
 
         [JsonProperty("time")]
-        public DateTimeOffset Time { get; set; }
+        public string Time { get; set; }
 
         [JsonProperty("subject")]
         public string Subject { get; set; }
@@ -46,10 +46,7 @@ namespace UKHO.ERPFacade.Common.Models
     public partial class License
     {
         [JsonProperty("licenseId")]
-        public long LicenseId { get; set; }
-
-        [JsonProperty("licenseGUID")]
-        public string LicenseGuid { get; set; }
+        public int LicenseId { get; set; }
 
         [JsonProperty("productType")]
         public string ProductType { get; set; }
@@ -58,16 +55,16 @@ namespace UKHO.ERPFacade.Common.Models
         public string TransactionType { get; set; }
 
         [JsonProperty("distributorCustomerNumber")]
-        public long DistributorCustomerNumber { get; set; }
+        public int DistributorCustomerNumber { get; set; }
 
         [JsonProperty("shippingCoNumber")]
-        public long ShippingCoNumber { get; set; }
+        public int ShippingCoNumber { get; set; }
 
         [JsonProperty("ordernumber")]
-        public long Ordernumber { get; set; }
+        public int Ordernumber { get; set; }
 
         [JsonProperty("orderDate")]
-        public DateTimeOffset OrderDate { get; set; }
+        public string OrderDate { get; set; }
 
         [JsonProperty("po-ref")]
         public string PoRef { get; set; }
@@ -76,7 +73,7 @@ namespace UKHO.ERPFacade.Common.Models
         public string HoldingsExpiryDate { get; set; }
 
         [JsonProperty("sapId")]
-        public long SapId { get; set; }
+        public int SapId { get; set; }
 
         [JsonProperty("vesselName")]
         public string VesselName { get; set; }
@@ -91,7 +88,7 @@ namespace UKHO.ERPFacade.Common.Models
         public string LicenceType { get; set; }
 
         [JsonProperty("licenceTypeID")]
-        public long LicenceTypeId { get; set; }
+        public int LicenceTypeId { get; set; }
 
         [JsonProperty("fleetName")]
         public string FleetName { get; set; }

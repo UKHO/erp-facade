@@ -32,6 +32,7 @@ namespace UKHO.ERPFacade
         internal static void Main(string[] args)
         {
             EventHubLoggingConfiguration eventHubLoggingConfiguration;
+            SapActionConfiguration sapActionConfiguration;
 
             IHttpContextAccessor httpContextAccessor = new HttpContextAccessor();
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -169,6 +170,7 @@ namespace UKHO.ERPFacade
             builder.Services.Configure<SharedKeyConfiguration>(configuration.GetSection("SharedKeyConfiguration"));
 
             builder.Services.Configure<SapActionConfiguration>(configuration.GetSection("SapActionConfiguration"));
+            sapActionConfiguration = configuration.GetSection("SapActionConfiguration").Get<SapActionConfiguration>()!;
             builder.Services.Configure<LicenceUpdatedSapActionConfiguration>(configuration.GetSection("LicenceUpdatedSapActions"));
             builder.Services.Configure<EESHealthCheckEnvironmentConfiguration>(configuration.GetSection("EESHealthCheckEnvironmentConfiguration"));
 
