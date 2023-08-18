@@ -1,7 +1,6 @@
 ﻿using System.Xml;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -9,7 +8,6 @@ using UKHO.ERPFacade.API.Helpers;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.HttpClients;
-using UKHO.ERPFacade.Common.Infrastructure;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
@@ -124,7 +122,6 @@ namespace UKHO.ERPFacade.API.Controllers
             await _azureTableReaderWriter.UpdateRequestTimeEntity(correlationId);
 
             return new OkObjectResult(StatusCodes.Status200OK);
-
         }
 
         [HttpOptions]
@@ -175,7 +172,6 @@ namespace UKHO.ERPFacade.API.Controllers
             }
             XmlDocument rosPayload = _xmlHelper.CreateXmlDocument(recordOfSalesXmlTemplatePath);
 
-
             HttpResponseMessage response = await _sapClient.PostEventData(rosPayload, _sapConfig.Value.SapServiceOperationForRecordOfSale, _sapConfig.Value.SapUsernameForRecordOfSale, _sapConfig.Value.SapPasswordForRecordOfSale);
 
             if (!response.IsSuccessStatusCode)
@@ -184,8 +180,9 @@ namespace UKHO.ERPFacade.API.Controllers
                 throw new ERPFacadeException(EventIds.ErrorOccuredInSap.ToEventId());
             }
 
+            _logger.LogInformation(EventIds.RecordOfSalePublishedEventUpdatePushedToSap.ToEventId(), "The record of sale published event update has been sent to SAP successfully. | {StatusCode}", response.StatusCode);
+
             await _azureTableReaderWriter.UpdateStatusOfRecordOfSaleEntityPublisedEvent(correlationId);
-            
 
             return new OkObjectResult(StatusCodes.Status200OK);
         }
@@ -248,12 +245,12 @@ namespace UKHO.ERPFacade.API.Controllers
                 _logger.LogError(EventIds.ErrorOccuredInSap.ToEventId(), "An error occured while processing your request in SAP. | {StatusCode}", response.StatusCode);
                 throw new ERPFacadeException(EventIds.ErrorOccuredInSap.ToEventId());
             }
-            
+
+            _logger.LogInformation(EventIds.LicenceUpdatedPublishedEventUpdatePushedToSap.ToEventId(), "The record of sale licence updated published event update has been sent to SAP successfully. | {StatusCode}", response.StatusCode);
+
             await _azureTableReaderWriter.UpdateStatusOfUploadedLicenceRecordOfSaleEntityEvent(correlationId);
 
             return new OkObjectResult(StatusCodes.Status200OK);
-
         }
-
     }
 }
