@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 namespace UKHO.ERPFacade.Common.Models
 {
     [ExcludeFromCodeCoverage]
-    public class LicenceUpdatedEventPayLoad
+    public class RecordOfSaleEventPayLoad
     {
         [JsonProperty("specversion")]
         public string Specversion { get; set; }
@@ -113,7 +113,7 @@ namespace UKHO.ERPFacade.Common.Models
         public string EndDate { get; set; }
 
         [JsonProperty("duration")]
-        public int Duration { get; set; }
+        public int? Duration { get; set; }
 
         [JsonProperty("renew")]
         public string ReNew { get; set; }

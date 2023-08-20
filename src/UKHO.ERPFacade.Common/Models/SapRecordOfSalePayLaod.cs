@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 namespace UKHO.ERPFacade.Common.Models
 {
     [ExcludeFromCodeCoverage]
-    [XmlRoot(ElementName = "IM_ORDER")]
+   [XmlRoot(ElementName = "IM_ORDER", Namespace = "RecordOfSale")]
     public class SapRecordOfSalePayLaod
     {
         [XmlElement(ElementName = "GUID")]

@@ -5,6 +5,6 @@ namespace UKHO.ERPFacade.API.Helpers
 {
     public interface ILicenceUpdatedSapMessageBuilder
     {
-        XmlDocument BuildLicenceUpdatedSapMessageXml(LicenceUpdatedEventPayLoad eventData, string correlationId);
+        XmlDocument BuildLicenceUpdatedSapMessageXml(RecordOfSaleEventPayLoad eventData, string correlationId);
     }
 }
