@@ -18,9 +18,9 @@ namespace UKHO.ERPFacade.Common.HttpClients
             _sapConfig = sapConfig ?? throw new ArgumentNullException(nameof(sapConfig));
         }
 
-        public async Task<HttpResponseMessage> PostEventData(XmlDocument sapMessageXml, string sapServiceOperation, string userName, string password)
+        public async Task<HttpResponseMessage> PostEventData(XmlDocument sapMessageXml, string sapServiceOperation, string username, string password)
         {
-            var credentials = "Basic " + Convert.ToBase64String(Encoding.ASCII.GetBytes(userName + ":" + password));
+            var credentials = "Basic " + Convert.ToBase64String(Encoding.ASCII.GetBytes(username + ":" + password));
 
             if (sapServiceOperation == _sapConfig.Value.SapServiceOperationForEncEvent)
             {

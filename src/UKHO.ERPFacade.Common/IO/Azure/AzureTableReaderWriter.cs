@@ -405,7 +405,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             return records.FirstOrDefault();
         }
 
-        public async Task UpdateStatusOfRecordOfSaleEntityPublisedEvent(string correlationId)
+        public async Task UpdateStatusOfRecordOfSalePublishedEvent(string correlationId)
         {
             TableClient tableClient = GetTableClient(RecordOfSaleTableName);
             RecordOfSaleEventEntity existingEntity = await GetRecordOfSaleEventEntity(correlationId);
@@ -419,7 +419,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             }
         }
 
-        public async Task UpdateStatusOfUploadedLicenceRecordOfSaleEntityEvent(string correlationId)
+        public async Task UpdateStatusOfLicenceUpdatedPublishedEvent(string correlationId)
         {
             TableClient tableClient = GetTableClient(LicenceUpdateTableName);
             RecordOfSaleEventEntity existingEntity = await GetRecordOfSaleLicenceEventEntity(correlationId);
@@ -428,8 +428,8 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             {
                 existingEntity.Status = "Complete";
                 await tableClient.UpdateEntityAsync(existingEntity, ETag.All, TableUpdateMode.Replace);
-
-                _logger.LogInformation(EventIds.UpdatedStatusOfUploadedLicenceRecordOfSaleEntityEvent.ToEventId(), "Existing Record Of Sale published event is updated in azure table successfully.");
+                
+                _logger.LogInformation(EventIds.UpdatedStatusOfLicenceUpdatedPublishedEventInAzureTable.ToEventId(), "Status of existing licence updated published event updated in azure table successfully.");
             }
         }
 

@@ -26,8 +26,6 @@ namespace UKHO.ERPFacade.API.Controllers
         private readonly ISapClient _sapClient;
         private readonly ISapMessageBuilder _sapMessageBuilder;
         private readonly IOptions<SapConfiguration> _sapConfig;
-        private readonly IXmlHelper _xmlHelper;
-        private readonly IFileSystemHelper _fileSystemHelper;
 
         private const string CorrelationIdKey = "data.correlationId";
         private const string EncEventFileName = "EncPublishingEvent.json";
@@ -168,13 +166,13 @@ namespace UKHO.ERPFacade.API.Controllers
 
             if (!response.IsSuccessStatusCode)
             {
-                _logger.LogError(EventIds.ErrorOccuredInSap.ToEventId(), "An error occured while processing your request in SAP. | {StatusCode}", response.StatusCode);
-                throw new ERPFacadeException(EventIds.ErrorOccuredInSap.ToEventId());
+                _logger.LogError(EventIds.ErrorOccurredInSapForRecordOfSalePublishedEvent.ToEventId(), "An error occurred while processing your record of sale published event request in SAP. | {StatusCode}", response.StatusCode);
+                throw new ERPFacadeException(EventIds.ErrorOccurredInSapForRecordOfSalePublishedEvent.ToEventId());
             }
 
             _logger.LogInformation(EventIds.RecordOfSalePublishedEventUpdatePushedToSap.ToEventId(), "The record of sale published event update has been sent to SAP successfully. | {StatusCode}", response.StatusCode);
 
-            await _azureTableReaderWriter.UpdateStatusOfRecordOfSaleEntityPublisedEvent(correlationId);
+            await _azureTableReaderWriter.UpdateStatusOfRecordOfSalePublishedEvent(correlationId);
 
             return new OkObjectResult(StatusCodes.Status200OK);
         }
@@ -230,13 +228,13 @@ namespace UKHO.ERPFacade.API.Controllers
 
             if (!response.IsSuccessStatusCode)
             {
-                _logger.LogError(EventIds.ErrorOccuredInSap.ToEventId(), "An error occured while processing your request in SAP. | {StatusCode}", response.StatusCode);
-                throw new ERPFacadeException(EventIds.ErrorOccuredInSap.ToEventId());
+                _logger.LogError(EventIds.ErrorOccurredInSapForLicenceUpdatedPublishedEvent.ToEventId(), "An error occurred while processing your licence updated published record of sale request in SAP. | {StatusCode}", response.StatusCode);
+                throw new ERPFacadeException(EventIds.ErrorOccurredInSapForLicenceUpdatedPublishedEvent.ToEventId());
             }
 
             _logger.LogInformation(EventIds.LicenceUpdatedPublishedEventUpdatePushedToSap.ToEventId(), "The record of sale licence updated published event update has been sent to SAP successfully. | {StatusCode}", response.StatusCode);
 
-            await _azureTableReaderWriter.UpdateStatusOfUploadedLicenceRecordOfSaleEntityEvent(correlationId);
+            await _azureTableReaderWriter.UpdateStatusOfLicenceUpdatedPublishedEvent(correlationId);
 
             return new OkObjectResult(StatusCodes.Status200OK);
         }

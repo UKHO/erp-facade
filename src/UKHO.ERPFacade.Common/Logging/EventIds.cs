@@ -587,7 +587,7 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940117 - Status of existing licence updated published event updated in azure table successfully.
         /// </summary>
-        UpdatedStatusOfUploadedLicenceRecordOfSaleEntityEvent = 940117,
+        UpdatedStatusOfLicenceUpdatedPublishedEventInAzureTable = 940117,
 
         /// <summary>
         /// 940118 - The record of sale published event update has been sent to SAP successfully.
@@ -598,6 +598,16 @@ namespace UKHO.ERPFacade.Common.Logging
         /// 940119 - The record of sale licence updated published event update has been sent to SAP successfully.
         /// </summary>
         LicenceUpdatedPublishedEventUpdatePushedToSap = 940119,
+
+        /// <summary>
+        /// 940120 - An error occurred while processing your record of sale published event request in SAP.
+        /// </summary>
+        ErrorOccurredInSapForRecordOfSalePublishedEvent = 940120,
+
+        /// <summary>
+        /// 940121 - An error occurred while processing your licence updated published record of sale request in SAP.
+        /// </summary>
+        ErrorOccurredInSapForLicenceUpdatedPublishedEvent = 940121,
     }
 
     /// <summary>
