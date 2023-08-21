@@ -36,7 +36,6 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         private ISapMessageBuilder _fakeSapMessageBuilder;
         private IOptions<SapConfiguration> _fakeSapConfig;
         private WebhookController _fakeWebHookController;
-        private IFileSystemHelper _fakeFileSystemHelper;
 
         [SetUp]
         public void Setup()
@@ -52,7 +51,6 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             {
                 SapServiceOperationForEncEvent = "Z_ADDS_MAT_INFO"
             });
-            _fakeFileSystemHelper = A.Fake<IFileSystemHelper>();
 
             _fakeWebHookController = new WebhookController(_fakeHttpContextAccessor,
                                                            _fakeLogger,
@@ -60,9 +58,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
                                                            _fakeAzureBlobEventWriter,
                                                            _fakeSapClient,
                                                            _fakeSapMessageBuilder,
-                                                           _fakeSapConfig,
-                                                           _fakeXmlHelper,
-                                                           _fakeFileSystemHelper);
+                                                           _fakeSapConfig);
         }
 
         [Test]
@@ -242,9 +238,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
                                               _fakeAzureBlobEventWriter,
                                               _fakeSapClient,
                                               _fakeSapMessageBuilder,
-                                              null,
-                                              _fakeXmlHelper,
-                                              _fakeFileSystemHelper))
+                                              null))
              .ParamName
              .Should().Be("sapConfig");
         }
@@ -282,10 +276,6 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         {
             var fakeEncEventJson = JObject.Parse(@"{""data"":{""correlationId"":""123""}}");
 
-            XmlDocument xmlDocument = new();
-
-            A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(xmlDocument);
-            A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
             A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                 .Returns(new HttpResponseMessage()
                 {
@@ -386,10 +376,6 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         {
             var fakeLicenceUpdatedEventJson = JObject.Parse(@"{""data"":{""correlationId"":""123""}}");
 
-            XmlDocument xmlDocument = new();
-
-            A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(xmlDocument);
-            A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
             A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                 .Returns(new HttpResponseMessage()
                 {
@@ -447,7 +433,6 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             && call.GetArgument<LogLevel>(0) == LogLevel.Warning
             && call.GetArgument<EventId>(1) == EventIds.CorrelationIdMissingInLicenceUpdatedEvent.ToEventId()
             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "CorrelationId is missing in Licence updated published event.").MustHaveHappenedOnceExactly();
-
         }
     }
 }

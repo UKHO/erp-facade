@@ -580,29 +580,24 @@ namespace UKHO.ERPFacade.Common.Logging
         UpdatedLicenceUpdatedPublishedEventInAzureTable = 940115,
 
         /// <summary>
-        /// 940116 - The record of sale xml template does not exist.
+        /// 940116 - Status of existing record of sale published event updated in azure table successfully.
         /// </summary>
-        RecordOfSaleXmlTemplateNotFound = 940116,
+        UpdatedStatusOfRecordOfSalePublishedEventInAzureTable = 940116,
 
         /// <summary>
-        /// 940117 - Status of existing record of sale published event updated in azure table successfully.
+        /// 940117 - Status of existing licence updated published event updated in azure table successfully.
         /// </summary>
-        UpdatedStatusOfRecordOfSalePublishedEventInAzureTable = 940117,
+        UpdatedStatusOfUploadedLicenceRecordOfSaleEntityEvent = 940117,
 
         /// <summary>
-        /// 940118 - Status of existing licence updated published event updated in azure table successfully.
+        /// 940118 - The record of sale published event update has been sent to SAP successfully.
         /// </summary>
-        UpdatedStatusOfUploadedLicenceRecordOfSaleEntityEvent = 940118,
+        RecordOfSalePublishedEventUpdatePushedToSap = 940118,
 
         /// <summary>
-        /// 940119 - The record of sale published event update has been sent to SAP successfully.
+        /// 940119 - The record of sale licence updated published event update has been sent to SAP successfully.
         /// </summary>
-        RecordOfSalePublishedEventUpdatePushedToSap = 940119,
-
-        /// <summary>
-        /// 940120 - The record of sale licence updated published event update has been sent to SAP successfully.
-        /// </summary>
-        LicenceUpdatedPublishedEventUpdatePushedToSap = 940120,
+        LicenceUpdatedPublishedEventUpdatePushedToSap = 940119,
     }
 
     /// <summary>
