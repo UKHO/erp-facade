@@ -176,16 +176,6 @@
 	<suppress>
 		<notes>
 			<![CDATA[
-   file name: GetDocument.Insider.dll
-  CVE References ASP.Net versions 1.0-1.1. ERPFacade is built on ASP.Net Core SDK > 6.0.101, not classic ASP.Net.
-  See https://nvd.nist.gov/vuln/detail/CVE-2005-2224 and https://www.securityfocus.com/bid/14217 for more details.
-   ]]>
-		</notes>
-		<cve>CVE-2005-2224</cve>
-	</suppress>
-	<suppress>
-		<notes>
-			<![CDATA[
    file name: Microsoft.AspNetCore.Http.Abstractions.dll
    See https://github.com/aspnet/announcements/issues/316 for MS details on this CVE.
    If the highest .NET Core SDK version is less that 2.1.402 or the highest Microsoft.AspNetCore.App runtime version is less that 2.1.4 you are vulnerable to this issue
@@ -209,36 +199,12 @@
 	<suppress>
 		<notes>
 			<![CDATA[
-   file name: NETStandard.Library:1.6.0
-   This CVE applies to any .NET  to the password protection option for the Compressed Folders feature which allows local users to recover the passwords and read the compressed folders.
-   ]]>
-		</notes>
-		<cve>CVE-2001-0152</cve>
-	</suppress>
-	<suppress>
-		<notes>
-			<![CDATA[
    file name: WindowsAzure.Storage:9.3.3
    This CVE applies to .NET Core 2.1, .NET Core 1.0, .NET Core 1.1, PowerShell Core 6.0. ERP Facade is pinned to .Net core SDK > 6.0.101 for .NET and Visual Studio Information Disclosure Vulnerability.
        This is a temporary suppression pending a fix being available.       
    ]]>
 		</notes>
 		<cve>CVE-2022-30187</cve>
-	</suppress>
-	<suppress>
-		<notes>
-			<![CDATA[
-	file name: System.Net.WebSockets.Client:4.0.0
-	For details on these CVEs see:
-		http://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2017-0247
-		http://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2017-0249
-		http://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2017-0256
-	This is a temporary suppression pending a fix being available.	
-	]]>
-		</notes>
-		<cve>CVE-2017-0247</cve>
-		<cve>CVE-2017-0249</cve>
-		<cve>CVE-2017-0256</cve>
 	</suppress>
 	<suppress>
 		<notes>
@@ -254,32 +220,12 @@
 			<![CDATA[
    file name: System.Security.Cryptography.X509Certificates:4.1.0
    This part of .NetCoreApp. Either waiting on fix through .net sdk to fix, or update to .net core 8 when available.
-   ]]>
-		</notes>
-		<cve>CVE-2017-11770</cve>
-	</suppress>
-	<suppress>
-		<notes>
-			<![CDATA[
    file name: System.Security.Cryptography.X509Certificates:4.3.0
    This CVE applies to . NET Core 1.0, 1.1, and 2.0 allow an unauthenticated attacker to remotely cause a denial of service attack against
    a . NET Core web application by improperly parsing certificate data.Either waiting on fix through .net sdk to fix, or update to .net core 8 when available
    ]]>
 		</notes>
 		<cve>CVE-2017-11770</cve>
-	</suppress>
-	<suppress>
-		<notes>
-			<![CDATA[
-   file name: System.Net.Http:4.3.3
-   See https://github.com/dotnet/announcements/issues/111 for MS details on this CVE.
-    Package name: System.Net.Http:4.3.3 (included as part of the .Net Core runtime)
-    Vulnerable versions: 4.3.3 and below
-    Secure versions: 4.3.4+
-    This CVE applies to .NET Core 2.1, .NET Core 1.0, .NET Core 1.1, PowerShell Core 6.0. ERP Facade is pinned to .Net core SDK > 6.0.101 which is not vulnerable, and deployed to Azure App Service which will have the security patch applied.
-   ]]>
-		</notes>
-		<cve>CVE-2018-8292</cve>
 	</suppress>
 	<suppress>
 		<notes>
