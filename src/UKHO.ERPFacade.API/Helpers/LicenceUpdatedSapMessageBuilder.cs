@@ -43,6 +43,7 @@ namespace UKHO.ERPFacade.API.Helpers
 
             XmlDocument soapXml = _xmlHelper.CreateXmlDocument(sapXmlTemplatePath);
             string xml = SapXmlPayloadCreation(eventData);
+
             string sapXml = xml.Replace(ImOrderNameSpace, ""); ;
             soapXml.SelectSingleNode(XpathZAddsRos).InnerXml = sapXml;
 
@@ -51,49 +52,52 @@ namespace UKHO.ERPFacade.API.Helpers
 
         public string SapXmlPayloadCreation(RecordOfSaleEventPayLoad eventData)
         {
-            
+            var sapPaylaod = new SapRecordOfSalePayLaod();
 
-            var sapPayLaod = new SapRecordOfSalePayLaod();
+            sapPaylaod.CorrelationId = eventData.Data.CorrelationId;
+            sapPaylaod.ServiceType = eventData.Data.Licence.ProductType;
+            sapPaylaod.LicTransaction = eventData.Data.Licence.TransactionType;
+            sapPaylaod.SoldToAcc = eventData.Data.Licence.DistributorCustomerNumber.ToString();
+            sapPaylaod.LicenseEacc = eventData.Data.Licence.ShippingCoNumber.ToString();
+            sapPaylaod.StartDate = eventData.Data.Licence.OrderDate;
+            sapPaylaod.EndDate = eventData.Data.Licence.HoldingsExpiryDate;
+            sapPaylaod.LicenceNumber = eventData.Data.Licence.SapId.ToString();
+            sapPaylaod.VesselName = eventData.Data.Licence.VesselName;
+            sapPaylaod.IMONumber = eventData.Data.Licence.ImoNumber;
+            sapPaylaod.CallSign = eventData.Data.Licence.CallSign;
+            sapPaylaod.ShoreBased = eventData.Data.Licence.LicenceType;
+            sapPaylaod.FleetName = eventData.Data.Licence.FleetName;
+            sapPaylaod.Users = Convert.ToInt32(eventData.Data.Licence.NumberLicenceUsers);
+            sapPaylaod.EndUserId = eventData.Data.Licence.LicenceId.ToString();
+            sapPaylaod.ECDISMANUF = eventData.Data.Licence.Upn;
+            sapPaylaod.LicenceType = eventData.Data.Licence.LicenceTypeId.ToString();
+            sapPaylaod.LicenceDuration = Convert.ToInt32(eventData.Data.Licence.HoldingsExpiryDate);
+            sapPaylaod.PurachaseOrder = eventData.Data.Licence.PoRef;
+            sapPaylaod.OrderNumber = eventData.Data.Licence.Ordernumber.ToString();
+           
+            var unitOfSaleList = new List<UnitOfSales>();
 
-            sapPayLaod.CorrelationId = eventData.Data.CorrelationId;
-            sapPayLaod.ServiceType = eventData.Data.Licence.ProductType;
-            sapPayLaod.LicTransaction = eventData.Data.Licence.TransactionType;
-            sapPayLaod.SoldToAcc = eventData.Data.Licence.DistributorCustomerNumber.ToString();
-            sapPayLaod.LicenseEacc = eventData.Data.Licence.ShippingCoNumber.ToString();
-            sapPayLaod.StartDate = eventData.Data.Licence.OrderDate;
-            sapPayLaod.EndDate = eventData.Data.Licence.HoldingsExpiryDate;
-            sapPayLaod.LicenceNumber = eventData.Data.Licence.SapId.ToString();
-            sapPayLaod.VesselName = eventData.Data.Licence.VesselName;
-            sapPayLaod.IMONumber = eventData.Data.Licence.ImoNumber;
-            sapPayLaod.CallSign = eventData.Data.Licence.CallSign;
-            sapPayLaod.ShoreBased = eventData.Data.Licence.LicenceType;
-            sapPayLaod.FleetName = eventData.Data.Licence.FleetName;
-            sapPayLaod.Users = Convert.ToInt32(eventData.Data.Licence.NumberLicenceUsers);
-            sapPayLaod.EndUserId = eventData.Data.Licence.LicenceId.ToString();
-            sapPayLaod.ECDISMANUF = eventData.Data.Licence.Upn;
-            sapPayLaod.LicenceType = eventData.Data.Licence.LicenceTypeId.ToString();
-            sapPayLaod.LicenceDuration = Convert.ToInt32(eventData.Data.Licence.HoldingsExpiryDate);
-            sapPayLaod.PurachaseOrder = eventData.Data.Licence.PoRef;
-            sapPayLaod.OrderNumber = eventData.Data.Licence.Ordernumber.ToString();
-
-            PROD prod = new();
-            var unitOfSaleList = new List<UnitOfSales>()
+            foreach (var unit in eventData.Data.Licence.LicenceUpdatedUnitOfSale)
             {
-                new UnitOfSales()
+                var unitOfSale = new UnitOfSales()
                 {
-                    Id= eventData.Data.Licence.LicenceUpdatedUnitOfSale[0].Id,
-                    EndDate= eventData.Data.Licence.LicenceUpdatedUnitOfSale[0].EndDate,
-                    Duration = eventData.Data.Licence.LicenceUpdatedUnitOfSale[0].Duration.ToString(),
-                    ReNew = eventData.Data.Licence.LicenceUpdatedUnitOfSale[0].ReNew,
-                    Repeat = eventData.Data.Licence.LicenceUpdatedUnitOfSale[0].Repeat
-                }
-            };
-            prod.UnitOfSales = unitOfSaleList;
+                    Id = unit.Id,
+                    EndDate = unit.EndDate,
+                    Duration = unit.Duration.ToString(),
+                    ReNew = unit.ReNew,
+                    Repeat = unit.Repeat
+                };
 
-            sapPayLaod.PROD = prod;
+                unitOfSaleList.Add(unitOfSale);
+            }
 
+            if (unitOfSaleList.Count > 0)
+            {
+                var prod = new PROD() { UnitOfSales = unitOfSaleList };
+                sapPaylaod.PROD = prod;
+            }
 
-          return  _xmlHelper.CreateRecordOfSaleSapXmlPayLoad(sapPayLaod);
+          return  _xmlHelper.CreateRecordOfSaleSapXmlPayLoad(sapPaylaod);
         }
     }
 }

@@ -195,7 +195,7 @@ namespace UKHO.ERPFacade.API.Controllers
             await _azureBlobEventWriter.UploadEvent(licenceUpdatedEventJson.ToString(), LicenceUpdatedContainerName, correlationId + '/' + LicenceUpdatedFileName);
             _logger.LogInformation(EventIds.UploadedLicenceUpdatedPublishedEventInAzureBlob.ToEventId(), "Licence updated  published event is uploaded in blob storage successfully.");
 
-            XmlDocument sapPayload = _licenceUpdatedSapMessageBuilder.BuildLicenceUpdatedSapMessageXml(JsonConvert.DeserializeObject<LicenceUpdatedEventPayLoad>(licenceUpdatedEventJson.ToString()), correlationId);
+            XmlDocument sapPayload = _licenceUpdatedSapMessageBuilder.BuildLicenceUpdatedSapMessageXml(JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(licenceUpdatedEventJson.ToString()), correlationId);
 
             return new OkObjectResult(StatusCodes.Status200OK);
         }

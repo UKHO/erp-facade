@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Runtime.InteropServices.ComTypes;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 
@@ -46,7 +47,7 @@ namespace UKHO.ERPFacade.Common.Models
     public class Licence
     {
         [JsonProperty("licenseId")]
-        public int LicenceId { get; set; }
+        public string LicenceId { get; set; }
 
         [JsonProperty("productType")]
         public string ProductType { get; set; }
@@ -55,13 +56,13 @@ namespace UKHO.ERPFacade.Common.Models
         public string TransactionType { get; set; }
 
         [JsonProperty("distributorCustomerNumber")]
-        public int DistributorCustomerNumber { get; set; }
+        public string DistributorCustomerNumber { get; set; }
 
         [JsonProperty("shippingCoNumber")]
-        public int ShippingCoNumber { get; set; }
+        public string ShippingCoNumber { get; set; }
 
         [JsonProperty("ordernumber")]
-        public int Ordernumber { get; set; }
+        public string Ordernumber { get; set; }
 
         [JsonProperty("orderDate")]
         public string OrderDate { get; set; }
@@ -73,7 +74,7 @@ namespace UKHO.ERPFacade.Common.Models
         public string HoldingsExpiryDate { get; set; }
 
         [JsonProperty("sapId")]
-        public int SapId { get; set; }
+        public string SapId { get; set; }
 
         [JsonProperty("vesselName")]
         public string VesselName { get; set; }
@@ -94,7 +95,7 @@ namespace UKHO.ERPFacade.Common.Models
         public string FleetName { get; set; }
 
         [JsonProperty("numberLicenceUsers")]
-        public string NumberLicenceUsers { get; set; }
+        public int NumberLicenceUsers { get; set; }
 
         [JsonProperty("upn")]
         public string Upn { get; set; }
