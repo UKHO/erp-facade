@@ -56,7 +56,7 @@ namespace UKHO.ERPFacade.Common.Models
         public string ECDISMANUF { get; set; }
 
         [XmlElement(ElementName = "LTYPE")]
-        public string LicenceType { get; set; }
+        public int LicenceType { get; set; }
 
         [XmlElement(ElementName = "LICDUR")]
         public int LicenceDuration { get; set; }
@@ -89,7 +89,7 @@ namespace UKHO.ERPFacade.Common.Models
         public string EndDate { get; set; }
 
         [XmlElement(ElementName = "DURATION")]
-        public string Duration { get; set; }
+        public int? Duration { get; set; }
 
         [XmlElement(ElementName = "RENEW")]
         public string ReNew { get; set; }

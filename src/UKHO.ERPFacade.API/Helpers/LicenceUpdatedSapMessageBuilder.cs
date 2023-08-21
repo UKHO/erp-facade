@@ -70,7 +70,7 @@ namespace UKHO.ERPFacade.API.Helpers
             sapPaylaod.Users = Convert.ToInt32(eventData.Data.Licence.NumberLicenceUsers);
             sapPaylaod.EndUserId = eventData.Data.Licence.LicenceId.ToString();
             sapPaylaod.ECDISMANUF = eventData.Data.Licence.Upn;
-            sapPaylaod.LicenceType = eventData.Data.Licence.LicenceTypeId.ToString();
+            sapPaylaod.LicenceType = eventData.Data.Licence.LicenceTypeId;
             sapPaylaod.LicenceDuration = Convert.ToInt32(eventData.Data.Licence.HoldingsExpiryDate);
             sapPaylaod.PurachaseOrder = eventData.Data.Licence.PoRef;
             sapPaylaod.OrderNumber = eventData.Data.Licence.Ordernumber.ToString();
@@ -83,7 +83,7 @@ namespace UKHO.ERPFacade.API.Helpers
                 {
                     Id = unit.Id,
                     EndDate = unit.EndDate,
-                    Duration = unit.Duration.ToString(),
+                    Duration = unit.Duration,
                     ReNew = unit.ReNew,
                     Repeat = unit.Repeat
                 };
