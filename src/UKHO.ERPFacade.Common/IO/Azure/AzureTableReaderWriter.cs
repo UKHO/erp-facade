@@ -21,9 +21,8 @@ namespace UKHO.ERPFacade.Common.IO.Azure
         private const string PriceChangeMasterTableName = "pricechangemaster";
         private const string UnitPriceChangeTableName = "unitpricechangeevents";
         private const string LicenceUpdateTableName = "licenceupdatedevents";
-        private const int DefaultCallbackDuration = 5;
-
         private const string RecordOfSaleTableName = "recordofsaleevents";
+        private const int DefaultCallbackDuration = 5;
 
         private enum Statuses
         {

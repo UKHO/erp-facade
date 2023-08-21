@@ -595,7 +595,7 @@ namespace UKHO.ERPFacade.Common.Logging
         RecordOfSalePublishedEventUpdatePushedToSap = 940118,
 
         /// <summary>
-        /// 940119 - The record of sale licence updated published event update has been sent to SAP successfully.
+        /// 940119 - The licence updated published event update has been sent to SAP successfully.
         /// </summary>
         LicenceUpdatedPublishedEventUpdatePushedToSap = 940119,
 
@@ -605,7 +605,7 @@ namespace UKHO.ERPFacade.Common.Logging
         ErrorOccurredInSapForRecordOfSalePublishedEvent = 940120,
 
         /// <summary>
-        /// 940121 - An error occurred while processing your licence updated published record of sale request in SAP.
+        /// 940121 - An error occurred while processing your licence updated published event request in SAP.
         /// </summary>
         ErrorOccurredInSapForLicenceUpdatedPublishedEvent = 940121,
     }

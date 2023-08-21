@@ -228,11 +228,11 @@ namespace UKHO.ERPFacade.API.Controllers
 
             if (!response.IsSuccessStatusCode)
             {
-                _logger.LogError(EventIds.ErrorOccurredInSapForLicenceUpdatedPublishedEvent.ToEventId(), "An error occurred while processing your licence updated published record of sale request in SAP. | {StatusCode}", response.StatusCode);
+                _logger.LogError(EventIds.ErrorOccurredInSapForLicenceUpdatedPublishedEvent.ToEventId(), "An error occurred while processing your licence updated published event request in SAP. | {StatusCode}", response.StatusCode);
                 throw new ERPFacadeException(EventIds.ErrorOccurredInSapForLicenceUpdatedPublishedEvent.ToEventId());
             }
 
-            _logger.LogInformation(EventIds.LicenceUpdatedPublishedEventUpdatePushedToSap.ToEventId(), "The record of sale licence updated published event update has been sent to SAP successfully. | {StatusCode}", response.StatusCode);
+            _logger.LogInformation(EventIds.LicenceUpdatedPublishedEventUpdatePushedToSap.ToEventId(), "The licence updated published event update has been sent to SAP successfully. | {StatusCode}", response.StatusCode);
 
             await _azureTableReaderWriter.UpdateStatusOfLicenceUpdatedPublishedEvent(correlationId);
 
