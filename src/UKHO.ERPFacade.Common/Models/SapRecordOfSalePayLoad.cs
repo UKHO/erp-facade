@@ -5,7 +5,7 @@ namespace UKHO.ERPFacade.Common.Models
 {
     [ExcludeFromCodeCoverage]
    [XmlRoot(ElementName = "IM_ORDER", Namespace = "RecordOfSale")]
-    public class SapRecordOfSalePayLaod
+    public class SapRecordOfSalePayLoad
     {
         [XmlElement(ElementName = "GUID")]
         public string CorrelationId { get; set; }

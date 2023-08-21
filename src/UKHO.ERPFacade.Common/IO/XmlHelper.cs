@@ -8,7 +8,6 @@ namespace UKHO.ERPFacade.Common.IO
     [ExcludeFromCodeCoverage]
     public class XmlHelper : IXmlHelper
     {
-      
         public XmlDocument CreateXmlDocument(string xmlPath)
         {
             XmlDocument xmlDocument = new();
@@ -16,7 +15,7 @@ namespace UKHO.ERPFacade.Common.IO
             return xmlDocument;
         }
 
-        public string CreateRecordOfSaleSapXmlPayLoad1(SapRecordOfSalePayLaod sapRecordOfSalePayLaod)
+        public string CreateRecordOfSaleSapXmlPayLoad1(SapRecordOfSalePayLoad sapRecordOfSalePayLoad)
         {
             var xml = string.Empty;
 
@@ -33,8 +32,8 @@ namespace UKHO.ERPFacade.Common.IO
             using (var stream = new StringWriter())
             using (var writer = XmlWriter.Create(stream, settings))
             {
-                var serializer = new XmlSerializer(typeof(SapRecordOfSalePayLaod));
-                serializer.Serialize(writer, sapRecordOfSalePayLaod, ns);
+                var serializer = new XmlSerializer(typeof(SapRecordOfSalePayLoad));
+                serializer.Serialize(writer, sapRecordOfSalePayLoad, ns);
                 xml = stream.ToString();
             }
 
@@ -65,6 +64,5 @@ namespace UKHO.ERPFacade.Common.IO
 
             return xml;
         }
-
     }
 }

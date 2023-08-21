@@ -3,7 +3,6 @@ using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
-using System.Xml.Serialization;
 
 namespace UKHO.ERPFacade.API.Helpers
 {
@@ -52,28 +51,28 @@ namespace UKHO.ERPFacade.API.Helpers
 
         public string SapXmlPayloadCreation(RecordOfSaleEventPayLoad eventData)
         {
-            var sapPaylaod = new SapRecordOfSalePayLaod();
+            var sapPayload = new SapRecordOfSalePayLoad();
 
-            sapPaylaod.CorrelationId = eventData.Data.CorrelationId;
-            sapPaylaod.ServiceType = eventData.Data.Licence.ProductType;
-            sapPaylaod.LicTransaction = eventData.Data.Licence.TransactionType;
-            sapPaylaod.SoldToAcc = eventData.Data.Licence.DistributorCustomerNumber.ToString();
-            sapPaylaod.LicenseEacc = eventData.Data.Licence.ShippingCoNumber.ToString();
-            sapPaylaod.StartDate = eventData.Data.Licence.OrderDate;
-            sapPaylaod.EndDate = eventData.Data.Licence.HoldingsExpiryDate;
-            sapPaylaod.LicenceNumber = eventData.Data.Licence.SapId.ToString();
-            sapPaylaod.VesselName = eventData.Data.Licence.VesselName;
-            sapPaylaod.IMONumber = eventData.Data.Licence.ImoNumber;
-            sapPaylaod.CallSign = eventData.Data.Licence.CallSign;
-            sapPaylaod.ShoreBased = eventData.Data.Licence.LicenceType;
-            sapPaylaod.FleetName = eventData.Data.Licence.FleetName;
-            sapPaylaod.Users = Convert.ToInt32(eventData.Data.Licence.NumberLicenceUsers);
-            sapPaylaod.EndUserId = eventData.Data.Licence.LicenceId.ToString();
-            sapPaylaod.ECDISMANUF = eventData.Data.Licence.Upn;
-            sapPaylaod.LicenceType = eventData.Data.Licence.LicenceTypeId;
-            sapPaylaod.LicenceDuration = Convert.ToInt32(eventData.Data.Licence.HoldingsExpiryDate);
-            sapPaylaod.PurachaseOrder = eventData.Data.Licence.PoRef;
-            sapPaylaod.OrderNumber = eventData.Data.Licence.Ordernumber.ToString();
+            sapPayload.CorrelationId = eventData.Data.CorrelationId;
+            sapPayload.ServiceType = eventData.Data.Licence.ProductType;
+            sapPayload.LicTransaction = eventData.Data.Licence.TransactionType;
+            sapPayload.SoldToAcc = eventData.Data.Licence.DistributorCustomerNumber.ToString();
+            sapPayload.LicenseEacc = eventData.Data.Licence.ShippingCoNumber.ToString();
+            sapPayload.StartDate = eventData.Data.Licence.OrderDate;
+            sapPayload.EndDate = eventData.Data.Licence.HoldingsExpiryDate;
+            sapPayload.LicenceNumber = eventData.Data.Licence.SapId.ToString();
+            sapPayload.VesselName = eventData.Data.Licence.VesselName;
+            sapPayload.IMONumber = eventData.Data.Licence.ImoNumber;
+            sapPayload.CallSign = eventData.Data.Licence.CallSign;
+            sapPayload.ShoreBased = eventData.Data.Licence.LicenceType;
+            sapPayload.FleetName = eventData.Data.Licence.FleetName;
+            sapPayload.Users = Convert.ToInt32(eventData.Data.Licence.NumberLicenceUsers);
+            sapPayload.EndUserId = eventData.Data.Licence.LicenceId.ToString();
+            sapPayload.ECDISMANUF = eventData.Data.Licence.Upn;
+            sapPayload.LicenceType = eventData.Data.Licence.LicenceTypeId;
+            sapPayload.LicenceDuration = Convert.ToInt32(eventData.Data.Licence.HoldingsExpiryDate);
+            sapPayload.PurachaseOrder = eventData.Data.Licence.PoRef;
+            sapPayload.OrderNumber = eventData.Data.Licence.Ordernumber.ToString();
            
             var unitOfSaleList = new List<UnitOfSales>();
 
@@ -94,10 +93,10 @@ namespace UKHO.ERPFacade.API.Helpers
             if (unitOfSaleList.Count > 0)
             {
                 var prod = new PROD() { UnitOfSales = unitOfSaleList };
-                sapPaylaod.PROD = prod;
+                sapPayload.PROD = prod;
             }
 
-          return  _xmlHelper.CreateRecordOfSaleSapXmlPayLoad(sapPaylaod);
+            return  _xmlHelper.CreateRecordOfSaleSapXmlPayLoad(sapPayload);
         }
     }
 }
