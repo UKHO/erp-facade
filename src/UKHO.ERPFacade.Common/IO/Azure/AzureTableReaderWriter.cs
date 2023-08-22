@@ -91,7 +91,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
                     PartitionKey = Guid.NewGuid().ToString(),
                     Timestamp = DateTime.UtcNow,
                     CorrelationId = correlationId,
-                    Status = "InComplete"
+                    Status = Statuses.Incomplete.ToString()
                 };
 
                 await tableClient.AddEntityAsync(licenceUpdatedEventsEntity, CancellationToken.None);
@@ -258,7 +258,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
                 PublishDateTime = null,
                 CreatedDateTime = DateTime.UtcNow,
                 ProductCount = productCount,
-                Status = "Incomplete"
+                Status = Statuses.Incomplete.ToString()
             };
 
             await tableClient.AddEntityAsync(priceChangeEventEntity, CancellationToken.None);
@@ -277,7 +277,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
                 EventId = eventId,
                 UnitName = unitName,
                 PublishDateTime = null,
-                Status = "Incomplete"
+                Status = Statuses.Incomplete.ToString()
             };
 
             _unitPriceChangeTableClient.AddEntity(unitPriceChangeEventEntity, CancellationToken.None);
@@ -291,7 +291,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             UnitPriceChangeEntity? existingEntity = GetUnitPriceChangeEventsEntities(correlationId, Statuses.Incomplete.ToString(), unitName, eventId).ToList().FirstOrDefault();
             if (existingEntity != null)
             {
-                existingEntity.Status = "Complete";
+                existingEntity.Status = Statuses.Complete.ToString();
                 existingEntity.PublishDateTime = DateTime.UtcNow;
                 tableClient.UpdateEntity(existingEntity, ETag.All, TableUpdateMode.Replace);
                 _logger.LogInformation(EventIds.UpdatedPriceChangeStatusEntitySuccessful.ToEventId(), "Unit price change status and PublishingDateTime is updated in azure table successfully. | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}", correlationId, eventId);
@@ -304,7 +304,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             PriceChangeMasterEntity? existingEntity = GetMasterEntities(Statuses.Incomplete.ToString(), correlationId).ToList().FirstOrDefault();
             if (existingEntity != null)
             {
-                existingEntity.Status = "Complete";
+                existingEntity.Status = Statuses.Complete.ToString();
                 existingEntity.PublishDateTime = DateTime.UtcNow;
                 tableClient.UpdateEntity(existingEntity, ETag.All, TableUpdateMode.Replace);
                 _logger.LogInformation(EventIds.UpdatedPriceChangeMasterStatusEntitySuccessful.ToEventId(), "Price change master status and PublishDatetime is updated in azure table successfully. | _X-Correlation-ID : {_X-Correlation-ID}", correlationId);
@@ -373,7 +373,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
                     PartitionKey = Guid.NewGuid().ToString(),
                     Timestamp = DateTime.UtcNow,
                     CorrelationId = correlationId,
-                    Status = "Incomplete"
+                    Status = Statuses.Incomplete.ToString()
                 };
 
                 await tableClient.AddEntityAsync(recordOfSaleEvent, CancellationToken.None);
@@ -411,7 +411,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
 
             if (existingEntity != null)
             {
-                existingEntity.Status = "Complete";
+                existingEntity.Status = Statuses.Complete.ToString();
                 await tableClient.UpdateEntityAsync(existingEntity, ETag.All, TableUpdateMode.Replace);
 
                 _logger.LogInformation(EventIds.UpdatedStatusOfRecordOfSalePublishedEventInAzureTable.ToEventId(), "Status of existing record of sale published event updated in azure table successfully.");
@@ -425,7 +425,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
 
             if (existingEntity != null)
             {
-                existingEntity.Status = "Complete";
+                existingEntity.Status = Statuses.Complete.ToString();
                 await tableClient.UpdateEntityAsync(existingEntity, ETag.All, TableUpdateMode.Replace);
                 
                 _logger.LogInformation(EventIds.UpdatedStatusOfLicenceUpdatedPublishedEventInAzureTable.ToEventId(), "Status of existing licence updated published event updated in azure table successfully.");
