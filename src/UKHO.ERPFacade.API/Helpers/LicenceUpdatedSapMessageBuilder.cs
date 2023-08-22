@@ -15,8 +15,8 @@ namespace UKHO.ERPFacade.API.Helpers
         private readonly IOptions<LicenceUpdatedSapActionConfiguration> _sapActionConfig;
 
         private const string SapXmlPath = "SapXmlTemplates\\LicenceUpdatedSapRequest.xml";
-        private const string XpathZAddsRos = $"//*[local-name()='IM_ORDER']";
-        private const string ImOrderNameSpace = "RecordOfSale";
+        private const string XpathZAddsRos = $"//*[local-name()='Z_ADDS_ROS']";
+        private const string ShoredBasedValues = "IMO,Non-IMO";
 
         public LicenceUpdatedSapMessageBuilder(ILogger<LicenceUpdatedSapMessageBuilder> logger,
             IXmlHelper xmlHelper,
@@ -29,7 +29,6 @@ namespace UKHO.ERPFacade.API.Helpers
             _fileSystemHelper = fileSystemHelper;
             _sapActionConfig = sapActionConfig;
         }
-        public LicenceUpdatedSapMessageBuilder(){}
 
         public XmlDocument BuildLicenceUpdatedSapMessageXml(RecordOfSaleEventPayLoad eventData, string correlationId)
         {
@@ -43,12 +42,10 @@ namespace UKHO.ERPFacade.API.Helpers
 
             XmlDocument soapXml = _xmlHelper.CreateXmlDocument(sapXmlTemplatePath);
             string xml = SapXmlPayloadCreation(eventData);
-
-            string sapXml = xml.Replace(ImOrderNameSpace, ""); ;
+            
+            string sapXml= RemoveNullFields(xml);
             soapXml.SelectSingleNode(XpathZAddsRos).InnerXml = sapXml;
-
-            RemoveNullFields(soapXml);
-
+        
             return soapXml;
         }
 
@@ -67,7 +64,7 @@ namespace UKHO.ERPFacade.API.Helpers
             sapPayload.VesselName = eventData.Data.Licence.VesselName;
             sapPayload.IMONumber = eventData.Data.Licence.ImoNumber;
             sapPayload.CallSign = eventData.Data.Licence.CallSign;
-            sapPayload.ShoreBased = eventData.Data.Licence.LicenceType;
+            sapPayload.ShoreBased = GetShoreBasedValue(eventData.Data.Licence.LicenceType);
             sapPayload.FleetName = eventData.Data.Licence.FleetName;
             sapPayload.Users = eventData.Data.Licence.NumberLicenceUsers;
             sapPayload.EndUserId = eventData.Data.Licence.LicenceId;
@@ -105,8 +102,11 @@ namespace UKHO.ERPFacade.API.Helpers
             return  _xmlHelper.CreateRecordOfSaleSapXmlPayLoad(sapPayload);
         }
 
-        private  XmlDocument RemoveNullFields( XmlDocument xmldoc)
+        private  string RemoveNullFields( string xml)
         {
+            XmlDocument xmldoc = new();
+            xmldoc.LoadXml(xml);
+
             XmlNamespaceManager mgr = new XmlNamespaceManager(xmldoc.NameTable);
             mgr.AddNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
             
@@ -121,7 +121,7 @@ namespace UKHO.ERPFacade.API.Helpers
                     string newNode = "<"+ nullFields[i].Name + "></"+nullFields[i].Name +">";
                     xmlDocFrag.InnerXml = newNode;
                   
-                    var previousNode= (nullFields[i].PreviousSibling).PreviousSibling;
+                    var previousNode= nullFields[i].PreviousSibling;
                     string Xpath = $"//*[local-name()='{previousNode.Name}']";
 
                     XmlElement element = (XmlElement)xmldoc.SelectSingleNode(Xpath);
@@ -131,12 +131,27 @@ namespace UKHO.ERPFacade.API.Helpers
                     XmlNode parent = element.ParentNode;
                     //now, use that parent element and it's InsertAfter method to add new node as sibling to your found element
                     parent.InsertAfter(xmlDocFrag, element);
-
-
                 }
             }
+            return xmldoc.InnerXml;
+        }
 
-            return xmldoc;
+        private string GetShoreBasedValue(string LicenceType)
+        {
+            string[] shortBase = ShoredBasedValues.Split(",").ToArray();
+            bool flag;
+            if (string.IsNullOrEmpty(LicenceType)) return "";
+
+            if (shortBase.Contains(LicenceType))
+            {
+                flag = false;
+                return Convert.ToInt32(flag).ToString();
+            }
+            else
+            {
+                flag = true;
+                return Convert.ToInt32(flag).ToString();
+            }
         }
     }
 }
