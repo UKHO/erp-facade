@@ -1,4 +1,5 @@
 ﻿using System.Xml;
+using System.Xml.Linq;
 using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
@@ -14,7 +15,7 @@ namespace UKHO.ERPFacade.API.Helpers
         private readonly IOptions<LicenceUpdatedSapActionConfiguration> _sapActionConfig;
 
         private const string SapXmlPath = "SapXmlTemplates\\LicenceUpdatedSapRequest.xml";
-        private const string XpathZAddsRos = $"//*[local-name()='Z_ADDS_ROS']";
+        private const string XpathZAddsRos = $"//*[local-name()='IM_ORDER']";
         private const string ImOrderNameSpace = "RecordOfSale";
 
         public LicenceUpdatedSapMessageBuilder(ILogger<LicenceUpdatedSapMessageBuilder> logger,
@@ -46,6 +47,8 @@ namespace UKHO.ERPFacade.API.Helpers
             string sapXml = xml.Replace(ImOrderNameSpace, ""); ;
             soapXml.SelectSingleNode(XpathZAddsRos).InnerXml = sapXml;
 
+            RemoveNullFields(soapXml);
+
             return soapXml;
         }
 
@@ -56,23 +59,23 @@ namespace UKHO.ERPFacade.API.Helpers
             sapPayload.CorrelationId = eventData.Data.CorrelationId;
             sapPayload.ServiceType = eventData.Data.Licence.ProductType;
             sapPayload.LicTransaction = eventData.Data.Licence.TransactionType;
-            sapPayload.SoldToAcc = eventData.Data.Licence.DistributorCustomerNumber.ToString();
-            sapPayload.LicenseEacc = eventData.Data.Licence.ShippingCoNumber.ToString();
+            sapPayload.SoldToAcc = eventData.Data.Licence.DistributorCustomerNumber;
+            sapPayload.LicenseEacc = eventData.Data.Licence.ShippingCoNumber;
             sapPayload.StartDate = eventData.Data.Licence.OrderDate;
             sapPayload.EndDate = eventData.Data.Licence.HoldingsExpiryDate;
-            sapPayload.LicenceNumber = eventData.Data.Licence.SapId.ToString();
+            sapPayload.LicenceNumber = eventData.Data.Licence.SapId;
             sapPayload.VesselName = eventData.Data.Licence.VesselName;
             sapPayload.IMONumber = eventData.Data.Licence.ImoNumber;
             sapPayload.CallSign = eventData.Data.Licence.CallSign;
             sapPayload.ShoreBased = eventData.Data.Licence.LicenceType;
             sapPayload.FleetName = eventData.Data.Licence.FleetName;
-            sapPayload.Users = Convert.ToInt32(eventData.Data.Licence.NumberLicenceUsers);
-            sapPayload.EndUserId = eventData.Data.Licence.LicenceId.ToString();
+            sapPayload.Users = eventData.Data.Licence.NumberLicenceUsers;
+            sapPayload.EndUserId = eventData.Data.Licence.LicenceId;
             sapPayload.ECDISMANUF = eventData.Data.Licence.Upn;
             sapPayload.LicenceType = eventData.Data.Licence.LicenceTypeId;
-            sapPayload.LicenceDuration = 12;
+            sapPayload.LicenceDuration = eventData.Data.Licence.licenceDuration;
             sapPayload.PurachaseOrder = eventData.Data.Licence.PoRef;
-            sapPayload.OrderNumber = eventData.Data.Licence.Ordernumber.ToString();
+            sapPayload.OrderNumber = eventData.Data.Licence.Ordernumber;
 
             if(eventData.Data.Licence.LicenceUpdatedUnitOfSale != null!)
             {
@@ -100,6 +103,40 @@ namespace UKHO.ERPFacade.API.Helpers
             }
 
             return  _xmlHelper.CreateRecordOfSaleSapXmlPayLoad(sapPayload);
+        }
+
+        private  XmlDocument RemoveNullFields( XmlDocument xmldoc)
+        {
+            XmlNamespaceManager mgr = new XmlNamespaceManager(xmldoc.NameTable);
+            mgr.AddNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
+            
+            XmlNodeList nullFields = xmldoc.SelectNodes("//*[@xsi:nil='true']", mgr);
+
+            if (nullFields != null && nullFields.Count > 0)
+            {
+                for (int i = 0; i < nullFields.Count; i++)
+                {
+
+                    XmlDocumentFragment xmlDocFrag = xmldoc.CreateDocumentFragment();
+                    string newNode = "<"+ nullFields[i].Name + "></"+nullFields[i].Name +">";
+                    xmlDocFrag.InnerXml = newNode;
+                  
+                    var previousNode= (nullFields[i].PreviousSibling).PreviousSibling;
+                    string Xpath = $"//*[local-name()='{previousNode.Name}']";
+
+                    XmlElement element = (XmlElement)xmldoc.SelectSingleNode(Xpath);
+
+                    nullFields[i].ParentNode.RemoveChild(nullFields[i]);
+
+                    XmlNode parent = element.ParentNode;
+                    //now, use that parent element and it's InsertAfter method to add new node as sibling to your found element
+                    parent.InsertAfter(xmlDocFrag, element);
+
+
+                }
+            }
+
+            return xmldoc;
         }
     }
 }

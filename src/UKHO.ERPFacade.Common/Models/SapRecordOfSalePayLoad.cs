@@ -47,7 +47,7 @@ namespace UKHO.ERPFacade.Common.Models
         public string FleetName { get; set; }
 
         [XmlElement(ElementName = "USERS")]
-        public int Users { get; set; }
+        public int? Users { get; set; }
 
         [XmlElement(ElementName = "ENDUSERID")]
         public string EndUserId { get; set; }
@@ -56,7 +56,7 @@ namespace UKHO.ERPFacade.Common.Models
         public string ECDISMANUF { get; set; }
 
         [XmlElement(ElementName = "LTYPE")]
-        public int LicenceType { get; set; }
+        public int? LicenceType { get; set; }
 
         [XmlElement(ElementName = "LICDUR")]
         public int LicenceDuration { get; set; }
@@ -75,7 +75,7 @@ namespace UKHO.ERPFacade.Common.Models
     [XmlRoot(ElementName = "PROD")]
     public class PROD
     {
-        [XmlElement(ElementName = "item")]
+        [XmlElement(ElementName = "item") ]
         public List<UnitOfSales> UnitOfSales { get; set; }
     }
 

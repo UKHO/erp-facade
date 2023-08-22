@@ -89,16 +89,19 @@ namespace UKHO.ERPFacade.Common.Models
         public string LicenceType { get; set; }
 
         [JsonProperty("licenceTypeID")]
-        public int LicenceTypeId { get; set; }
+        public int? LicenceTypeId { get; set; }
 
         [JsonProperty("fleetName")]
         public string FleetName { get; set; }
 
         [JsonProperty("numberLicenceUsers")]
-        public int NumberLicenceUsers { get; set; }
+        public int? NumberLicenceUsers { get; set; }
 
         [JsonProperty("upn")]
         public string Upn { get; set; }
+
+        [JsonProperty("licenceDuration")]
+        public int licenceDuration { get; set; }
 
         [JsonProperty("unitsOfSale")]
         public List<LicenceUpdatedUnitOfSale> LicenceUpdatedUnitOfSale { get; set; }

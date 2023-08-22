@@ -15,31 +15,6 @@ namespace UKHO.ERPFacade.Common.IO
             return xmlDocument;
         }
 
-        public string CreateRecordOfSaleSapXmlPayLoad1(SapRecordOfSalePayLoad sapRecordOfSalePayLoad)
-        {
-            var xml = string.Empty;
-
-            // Remove Declaration  
-            var settings = new XmlWriterSettings
-            {
-                Indent = true,
-                OmitXmlDeclaration = true
-            };
-
-            // Remove Namespace  
-            var ns = new XmlSerializerNamespaces(new[] { XmlQualifiedName.Empty });
-
-            using (var stream = new StringWriter())
-            using (var writer = XmlWriter.Create(stream, settings))
-            {
-                var serializer = new XmlSerializer(typeof(SapRecordOfSalePayLoad));
-                serializer.Serialize(writer, sapRecordOfSalePayLoad, ns);
-                xml = stream.ToString();
-            }
-
-            return xml;
-        }
-
         public  string CreateRecordOfSaleSapXmlPayLoad<T>(T anyobject)
         {
             var xml = string.Empty;
