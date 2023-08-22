@@ -18,6 +18,7 @@ namespace UKHO.ERPFacade.API.Helpers
         private const string SapXmlPath = "SapXmlTemplates\\LicenceUpdatedSapRequest.xml";
         private const string XpathZAddsRos = $"//*[local-name()='Z_ADDS_ROS']";
         private const string ShoredBasedValues = "IMO,Non-IMO";
+        private const string ImOrderNameSpace = "RecordOfSale";
 
         public LicenceUpdatedSapMessageBuilder(ILogger<LicenceUpdatedSapMessageBuilder> logger,
             IXmlHelper xmlHelper,
@@ -43,8 +44,8 @@ namespace UKHO.ERPFacade.API.Helpers
 
             XmlDocument soapXml = _xmlHelper.CreateXmlDocument(sapXmlTemplatePath);
             string xml = SapXmlPayloadCreation(eventData);
-            
-            string sapXml= RemoveNullFields(xml);
+
+            string sapXml = RemoveNullFields(xml.Replace(ImOrderNameSpace, ""));
             soapXml.SelectSingleNode(XpathZAddsRos).InnerXml = sapXml;
         
             return soapXml;
@@ -139,18 +140,16 @@ namespace UKHO.ERPFacade.API.Helpers
         private string GetShoreBasedValue(string licenceType)
         {
             string[] shortBase = ShoredBasedValues.Split(",").ToArray();
-            bool flag;
+
             if (string.IsNullOrEmpty(licenceType)) return "";
 
             if (shortBase.Contains(licenceType))
             {
-                flag = false;
-                return Convert.ToInt32(flag).ToString();
+                return "0"; 
             }
             else
             {
-                flag = true;
-                return Convert.ToInt32(flag).ToString();
+                return "1";
             }
         }
 

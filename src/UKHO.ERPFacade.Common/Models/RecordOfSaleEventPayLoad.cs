@@ -101,7 +101,7 @@ namespace UKHO.ERPFacade.Common.Models
         public string Upn { get; set; }
 
         [JsonProperty("licenceDuration")]
-        public int LicenceDuration { get; set; }
+        public int? LicenceDuration { get; set; }
 
         [JsonProperty("unitsOfSale")]
         public List<LicenceUpdatedUnitOfSale> LicenceUpdatedUnitOfSale { get; set; }

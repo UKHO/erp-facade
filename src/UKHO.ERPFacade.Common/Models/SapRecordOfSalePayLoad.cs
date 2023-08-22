@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 namespace UKHO.ERPFacade.Common.Models
 {
     [ExcludeFromCodeCoverage]
-   [XmlRoot(ElementName = "IM_ORDER", Namespace = "")]
+   [XmlRoot(ElementName = "IM_ORDER", Namespace = "RecordOfSale")]
     public class SapRecordOfSalePayLoad
     {
         [XmlElement(ElementName = "GUID")]
@@ -59,7 +59,7 @@ namespace UKHO.ERPFacade.Common.Models
         public int? LicenceType { get; set; }
 
         [XmlElement(ElementName = "LICDUR")]
-        public int LicenceDuration { get; set; }
+        public int? LicenceDuration { get; set; }
 
         [XmlElement(ElementName = "PO")]
         public string PurachaseOrder { get; set; }
