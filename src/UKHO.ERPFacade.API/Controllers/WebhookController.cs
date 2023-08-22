@@ -166,13 +166,13 @@ namespace UKHO.ERPFacade.API.Controllers
 
             if (!response.IsSuccessStatusCode)
             {
-                _logger.LogError(EventIds.ErrorOccurredInSapForRecordOfSalePublishedEvent.ToEventId(), "An error occurred while processing your record of sale published event request in SAP. | {StatusCode}", response.StatusCode);
+                _logger.LogError(EventIds.ErrorOccurredInSapForRecordOfSalePublishedEvent.ToEventId(), "An error occurred while sending record of sale published event data to SAP. | {StatusCode}", response.StatusCode);
                 throw new ERPFacadeException(EventIds.ErrorOccurredInSapForRecordOfSalePublishedEvent.ToEventId());
             }
 
-            _logger.LogInformation(EventIds.RecordOfSalePublishedEventUpdatePushedToSap.ToEventId(), "The record of sale published event update has been sent to SAP successfully. | {StatusCode}", response.StatusCode);
+            _logger.LogInformation(EventIds.RecordOfSalePublishedEventDataPushedToSap.ToEventId(), "The record of sale event data has been sent to SAP successfully. | {StatusCode}", response.StatusCode);
 
-            await _azureTableReaderWriter.UpdateStatusOfRecordOfSalePublishedEvent(correlationId);
+            await _azureTableReaderWriter.UpdateRecordOfSaleEventStatus(correlationId);
 
             return new OkObjectResult(StatusCodes.Status200OK);
         }
@@ -228,13 +228,13 @@ namespace UKHO.ERPFacade.API.Controllers
 
             if (!response.IsSuccessStatusCode)
             {
-                _logger.LogError(EventIds.ErrorOccurredInSapForLicenceUpdatedPublishedEvent.ToEventId(), "An error occurred while processing your licence updated published event request in SAP. | {StatusCode}", response.StatusCode);
+                _logger.LogError(EventIds.ErrorOccurredInSapForLicenceUpdatedPublishedEvent.ToEventId(), "An error occurred while sending licence updated event data to SAP. | {StatusCode}", response.StatusCode);
                 throw new ERPFacadeException(EventIds.ErrorOccurredInSapForLicenceUpdatedPublishedEvent.ToEventId());
             }
 
-            _logger.LogInformation(EventIds.LicenceUpdatedPublishedEventUpdatePushedToSap.ToEventId(), "The licence updated published event update has been sent to SAP successfully. | {StatusCode}", response.StatusCode);
+            _logger.LogInformation(EventIds.LicenceUpdatedPublishedEventUpdatePushedToSap.ToEventId(), "The licence updated event data has been sent to SAP successfully. | {StatusCode}", response.StatusCode);
 
-            await _azureTableReaderWriter.UpdateStatusOfLicenceUpdatedPublishedEvent(correlationId);
+            await _azureTableReaderWriter.UpdateLicenceUpdatedEventStatus(correlationId);
 
             return new OkObjectResult(StatusCodes.Status200OK);
         }

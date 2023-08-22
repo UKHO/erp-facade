@@ -404,7 +404,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             return records.FirstOrDefault();
         }
 
-        public async Task UpdateStatusOfRecordOfSalePublishedEvent(string correlationId)
+        public async Task UpdateRecordOfSaleEventStatus(string correlationId)
         {
             TableClient tableClient = GetTableClient(RecordOfSaleTableName);
             RecordOfSaleEventEntity existingEntity = await GetRecordOfSaleEventEntity(correlationId);
@@ -418,7 +418,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             }
         }
 
-        public async Task UpdateStatusOfLicenceUpdatedPublishedEvent(string correlationId)
+        public async Task UpdateLicenceUpdatedEventStatus(string correlationId)
         {
             TableClient tableClient = GetTableClient(LicenceUpdateTableName);
             RecordOfSaleEventEntity existingEntity = await GetRecordOfSaleLicenceEventEntity(correlationId);
