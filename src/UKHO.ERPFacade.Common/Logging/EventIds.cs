@@ -578,6 +578,16 @@ namespace UKHO.ERPFacade.Common.Logging
         /// 940115 - Existing Licence updated published event updated in azure table successfully.
         /// </summary>
         UpdatedLicenceUpdatedPublishedEventInAzureTable = 940115,
+
+        /// <summary>
+        /// 940116 - Uploading Sap Xml payload for licence updated event in Azure blob.
+        /// </summary>
+        UploadLicenceUpdatedSapXmlPayloadInAzureBlob = 940116,
+
+        /// <summary>
+        /// 940117 - SAP xml payload for licence updated event is uploaded in blob storage successfully.
+        /// </summary>
+        UploadedLicenceUpdatedSapXmlPayloadInAzureBlob = 940117
     }
 
     /// <summary>

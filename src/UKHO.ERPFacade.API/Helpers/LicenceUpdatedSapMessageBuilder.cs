@@ -70,30 +70,33 @@ namespace UKHO.ERPFacade.API.Helpers
             sapPayload.EndUserId = eventData.Data.Licence.LicenceId.ToString();
             sapPayload.ECDISMANUF = eventData.Data.Licence.Upn;
             sapPayload.LicenceType = eventData.Data.Licence.LicenceTypeId;
-            sapPayload.LicenceDuration = Convert.ToInt32(eventData.Data.Licence.HoldingsExpiryDate);
+            sapPayload.LicenceDuration = 12;
             sapPayload.PurachaseOrder = eventData.Data.Licence.PoRef;
             sapPayload.OrderNumber = eventData.Data.Licence.Ordernumber.ToString();
-           
-            var unitOfSaleList = new List<UnitOfSales>();
 
-            foreach (var unit in eventData.Data.Licence.LicenceUpdatedUnitOfSale)
+            if(eventData.Data.Licence.LicenceUpdatedUnitOfSale != null!)
             {
-                var unitOfSale = new UnitOfSales()
+                var unitOfSaleList = new List<UnitOfSales>();
+
+                foreach (var unit in eventData.Data.Licence.LicenceUpdatedUnitOfSale)
                 {
-                    Id = unit.Id,
-                    EndDate = unit.EndDate,
-                    Duration = unit.Duration,
-                    ReNew = unit.ReNew,
-                    Repeat = unit.Repeat
-                };
+                    var unitOfSale = new UnitOfSales()
+                    {
+                        Id = unit.Id,
+                        EndDate = unit.EndDate,
+                        Duration = unit.Duration,
+                        ReNew = unit.ReNew,
+                        Repeat = unit.Repeat
+                    };
 
-                unitOfSaleList.Add(unitOfSale);
-            }
+                    unitOfSaleList.Add(unitOfSale);
+                }
 
-            if (unitOfSaleList.Count > 0)
-            {
-                var prod = new PROD() { UnitOfSales = unitOfSaleList };
-                sapPayload.PROD = prod;
+                if (unitOfSaleList.Count > 0)
+                {
+                    var prod = new PROD() { UnitOfSales = unitOfSaleList };
+                    sapPayload.PROD = prod;
+                } 
             }
 
             return  _xmlHelper.CreateRecordOfSaleSapXmlPayLoad(sapPayload);
