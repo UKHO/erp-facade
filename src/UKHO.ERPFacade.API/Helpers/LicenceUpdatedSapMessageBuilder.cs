@@ -1,5 +1,6 @@
-﻿using System.Xml;
-using System.Xml.Linq;
+﻿using System.Globalization;
+using System.Runtime.Serialization;
+using System.Xml;
 using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
@@ -13,6 +14,8 @@ namespace UKHO.ERPFacade.API.Helpers
         private readonly IXmlHelper _xmlHelper;
         private readonly IFileSystemHelper _fileSystemHelper;
         private readonly IOptions<LicenceUpdatedSapActionConfiguration> _sapActionConfig;
+
+        private const string DateFormat = "yyyy-mm-dd";
 
         private const string SapXmlPath = "SapXmlTemplates\\LicenceUpdatedSapRequest.xml";
         private const string XpathZAddsRos = $"//*[local-name()='IM_ORDER']";
@@ -61,8 +64,8 @@ namespace UKHO.ERPFacade.API.Helpers
             sapPayload.LicTransaction = eventData.Data.Licence.TransactionType;
             sapPayload.SoldToAcc = eventData.Data.Licence.DistributorCustomerNumber;
             sapPayload.LicenseEacc = eventData.Data.Licence.ShippingCoNumber;
-            sapPayload.StartDate = eventData.Data.Licence.OrderDate;
-            sapPayload.EndDate = eventData.Data.Licence.HoldingsExpiryDate;
+            sapPayload.StartDate = GetDate(eventData.Data.Licence.OrderDate);
+            sapPayload.EndDate = GetDate(eventData.Data.Licence.HoldingsExpiryDate);
             sapPayload.LicenceNumber = eventData.Data.Licence.SapId;
             sapPayload.VesselName = eventData.Data.Licence.VesselName;
             sapPayload.IMONumber = eventData.Data.Licence.ImoNumber;
@@ -73,7 +76,7 @@ namespace UKHO.ERPFacade.API.Helpers
             sapPayload.EndUserId = eventData.Data.Licence.LicenceId;
             sapPayload.ECDISMANUF = eventData.Data.Licence.Upn;
             sapPayload.LicenceType = eventData.Data.Licence.LicenceTypeId;
-            sapPayload.LicenceDuration = eventData.Data.Licence.licenceDuration;
+            sapPayload.LicenceDuration = eventData.Data.Licence.LicenceDuration;
             sapPayload.PurachaseOrder = eventData.Data.Licence.PoRef;
             sapPayload.OrderNumber = eventData.Data.Licence.Ordernumber;
 
@@ -86,7 +89,7 @@ namespace UKHO.ERPFacade.API.Helpers
                     var unitOfSale = new UnitOfSales()
                     {
                         Id = unit.Id,
-                        EndDate = unit.EndDate,
+                        EndDate = GetDate(unit.EndDate),
                         Duration = unit.Duration,
                         ReNew = unit.ReNew,
                         Repeat = unit.Repeat
@@ -105,7 +108,7 @@ namespace UKHO.ERPFacade.API.Helpers
             return  _xmlHelper.CreateRecordOfSaleSapXmlPayLoad(sapPayload);
         }
 
-        private  XmlDocument RemoveNullFields( XmlDocument xmldoc)
+        private XmlDocument RemoveNullFields( XmlDocument xmldoc)
         {
             XmlNamespaceManager mgr = new XmlNamespaceManager(xmldoc.NameTable);
             mgr.AddNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
@@ -116,7 +119,6 @@ namespace UKHO.ERPFacade.API.Helpers
             {
                 for (int i = 0; i < nullFields.Count; i++)
                 {
-
                     XmlDocumentFragment xmlDocFrag = xmldoc.CreateDocumentFragment();
                     string newNode = "<"+ nullFields[i].Name + "></"+nullFields[i].Name +">";
                     xmlDocFrag.InnerXml = newNode;
@@ -131,12 +133,16 @@ namespace UKHO.ERPFacade.API.Helpers
                     XmlNode parent = element.ParentNode;
                     //now, use that parent element and it's InsertAfter method to add new node as sibling to your found element
                     parent.InsertAfter(xmlDocFrag, element);
-
-
                 }
             }
 
             return xmldoc;
+        }
+
+        private static string GetDate(string dateTime)
+        {
+            DateOnly date = DateOnly.ParseExact(dateTime, DateFormat, CultureInfo.InvariantCulture);
+            return date.ToString();
         }
     }
 }
