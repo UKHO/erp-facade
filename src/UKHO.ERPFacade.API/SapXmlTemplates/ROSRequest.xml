@@ -4,14 +4,14 @@
     <Z_ADDS_ROS xmlns="urn:sap-com:document:sap:rfc:functions">
       <IM_ORDER xmlns="">
         <GUID>332ce4a4-1d62-4f56-b359-59e178d77332</GUID>
-        <SERVICETYPE></SERVICETYPE>
-        <LICTRANSACTION></LICTRANSACTION>
-        <SOLDTOACC></SOLDTOACC>
+        <SERVICETYPE>AVCS</SERVICETYPE>
+        <LICTRANSACTION>CHANGELICENCE</LICTRANSACTION>
+        <SOLDTOACC>9016</SOLDTOACC>
         <LICENSEEACC></LICENSEEACC>
         <STARTDATE></STARTDATE>
         <ENDDATE></ENDDATE>
-        <LICNO></LICNO>
-        <VNAME></VNAME>
+        <LICNO>49205N</LICNO>
+        <VNAME>EVER ATOP</VNAME>
         <IMO></IMO>
         <CALLSIGN></CALLSIGN>
         <SHOREBASED></SHOREBASED>
@@ -29,6 +29,7 @@
             <ENDDA></ENDDA>
             <DURATION></DURATION>
             <RENEW></RENEW>
+            <REPEAT></REPEAT>
           </item>
         </PROD>                 
       </IM_ORDER>
