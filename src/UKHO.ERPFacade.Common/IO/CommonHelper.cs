@@ -62,5 +62,19 @@ namespace UKHO.ERPFacade.Common.IO
             }
             return sb.ToString();
         }
+
+        public static string SetXmlClosingTags(this string xmlString)
+        {
+            XmlDocument xmldoc = new();
+            xmldoc.LoadXml(xmlString);
+            XmlNodeList emptyElementList = xmldoc.SelectNodes(@"//*[not(node()) and count(@*) = 0]");
+
+            for (int i = 0; i < emptyElementList.Count; i++)
+            {
+                emptyElementList[i].InnerText = "";
+            }
+
+           return xmldoc.InnerXml;
+        }
     }
 }

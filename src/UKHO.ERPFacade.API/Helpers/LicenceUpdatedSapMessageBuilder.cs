@@ -41,8 +41,8 @@ namespace UKHO.ERPFacade.API.Helpers
             string xml = SapXmlPayloadCreation(eventData);
 
             string sapXml = RemoveNullFields(xml.Replace(ImOrderNameSpace, ""));
-            soapXml.SelectSingleNode(XpathZAddsRos).InnerXml = sapXml;
-        
+            soapXml.SelectSingleNode(XpathZAddsRos).InnerXml = sapXml.SetXmlClosingTags();
+            
             return soapXml;
         }
 
