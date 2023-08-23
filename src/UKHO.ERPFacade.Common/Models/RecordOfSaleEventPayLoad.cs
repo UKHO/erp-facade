@@ -1,6 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Runtime.InteropServices.ComTypes;
-using System.Xml.Serialization;
 using Newtonsoft.Json;
 
 namespace UKHO.ERPFacade.Common.Models

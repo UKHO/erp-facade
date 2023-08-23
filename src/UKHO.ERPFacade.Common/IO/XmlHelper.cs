@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Xml;
 using System.Xml.Serialization;
-using UKHO.ERPFacade.Common.Models;
 
 namespace UKHO.ERPFacade.Common.IO
 {

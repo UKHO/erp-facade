@@ -1,6 +1,7 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
 using Newtonsoft.Json;
 using System.Diagnostics.CodeAnalysis;
+
 namespace UKHO.SAP.MockAPIService.EntityPropertyConverter
 {
     [ExcludeFromCodeCoverage]

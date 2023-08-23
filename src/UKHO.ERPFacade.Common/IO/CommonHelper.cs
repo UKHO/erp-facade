@@ -74,7 +74,7 @@ namespace UKHO.ERPFacade.Common.IO
                 emptyElementList[i].InnerText = "";
             }
 
-           return xmldoc.InnerXml;
+            return xmldoc.InnerXml;
         }
     }
 }
