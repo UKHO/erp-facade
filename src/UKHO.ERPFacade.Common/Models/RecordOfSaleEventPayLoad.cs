@@ -62,7 +62,7 @@ namespace UKHO.ERPFacade.Common.Models
         public string ShippingCoNumber { get; set; }
 
         [JsonProperty("ordernumber")]
-        public string Ordernumber { get; set; }
+        public string OrderNumber { get; set; }
 
         [JsonProperty("orderDate")]
         public string OrderDate { get; set; }
@@ -88,8 +88,8 @@ namespace UKHO.ERPFacade.Common.Models
         [JsonProperty("licenceType")]
         public string LicenceType { get; set; }
 
-        [JsonProperty("licenceTypeID")]
-        public int? LicenceTypeId { get; set; }
+        [JsonProperty("shoreBased")]
+        public string ShoreBased { get; set; }
 
         [JsonProperty("fleetName")]
         public string FleetName { get; set; }
@@ -117,7 +117,7 @@ namespace UKHO.ERPFacade.Common.Models
         public string EndDate { get; set; }
 
         [JsonProperty("duration")]
-        public int? Duration { get; set; }
+        public string Duration { get; set; }
 
         [JsonProperty("renew")]
         public string ReNew { get; set; }

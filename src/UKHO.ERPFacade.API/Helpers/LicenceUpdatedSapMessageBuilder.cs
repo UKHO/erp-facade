@@ -14,8 +14,8 @@ namespace UKHO.ERPFacade.API.Helpers
 
         private const string SapXmlPath = "SapXmlTemplates\\RosSapRequest.xml";
         private const string XpathZAddsRos = $"//*[local-name()='Z_ADDS_ROS']";
-        private const string ShoredBasedValues = "IMO,Non-IMO";
         private const string ImOrderNameSpace = "RecordOfSale";
+        private const string TransactionType = "CHANGELICENCE";
 
         public LicenceUpdatedSapMessageBuilder(ILogger<LicenceUpdatedSapMessageBuilder> logger,
             IXmlHelper xmlHelper,
@@ -48,55 +48,46 @@ namespace UKHO.ERPFacade.API.Helpers
 
         public string SapXmlPayloadCreation(RecordOfSaleEventPayLoad eventData)
         {
-            var sapPayload = new SapRecordOfSalePayLoad();
-
-            sapPayload.CorrelationId = eventData.Data.CorrelationId;
-            sapPayload.ServiceType = eventData.Data.Licence.ProductType;
-            sapPayload.LicTransaction = eventData.Data.Licence.TransactionType;
-            sapPayload.SoldToAcc = eventData.Data.Licence.DistributorCustomerNumber;
-            sapPayload.LicenseEacc = eventData.Data.Licence.ShippingCoNumber;
-            sapPayload.StartDate = eventData.Data.Licence.OrderDate;
-            sapPayload.EndDate = eventData.Data.Licence.HoldingsExpiryDate;
-            sapPayload.LicenceNumber = eventData.Data.Licence.SapId;
-            sapPayload.VesselName = eventData.Data.Licence.VesselName;
-            sapPayload.IMONumber = eventData.Data.Licence.ImoNumber;
-            sapPayload.CallSign = eventData.Data.Licence.CallSign;
-            sapPayload.ShoreBased = GetShoreBasedValue(eventData.Data.Licence.LicenceType);
-            sapPayload.FleetName = eventData.Data.Licence.FleetName;
-            sapPayload.Users = eventData.Data.Licence.NumberLicenceUsers;
-            sapPayload.EndUserId = eventData.Data.Licence.LicenceId;
-            sapPayload.ECDISMANUF = eventData.Data.Licence.Upn;
-            sapPayload.LicenceType = eventData.Data.Licence.LicenceTypeId.ToString();
-            sapPayload.LicenceDuration = eventData.Data.Licence.LicenceDuration;
-            sapPayload.PurachaseOrder = eventData.Data.Licence.PoRef;
-            sapPayload.OrderNumber = eventData.Data.Licence.Ordernumber;
-
-            if(eventData.Data.Licence.LicenceUpdatedUnitOfSale != null!)
+            var sapPayload = new SapRecordOfSalePayLoad
             {
-                var unitOfSaleList = new List<UnitOfSales>();
-
-                foreach (var unit in eventData.Data.Licence.LicenceUpdatedUnitOfSale)
+                CorrelationId = eventData.Data.CorrelationId,
+                ServiceType = eventData.Data.Licence.ProductType,
+                LicTransaction = eventData.Data.Licence.TransactionType,
+                SoldToAcc = eventData.Data.Licence.DistributorCustomerNumber,
+                LicenseEacc = eventData.Data.Licence.ShippingCoNumber,
+                LicenceNumber = eventData.Data.Licence.SapId,
+                VesselName = eventData.Data.Licence.VesselName,
+                IMONumber = eventData.Data.Licence.ImoNumber,
+                CallSign = eventData.Data.Licence.CallSign,
+                ShoreBased = eventData.Data.Licence.ShoreBased,
+                FleetName = eventData.Data.Licence.FleetName,
+                Users = eventData.Data.Licence.NumberLicenceUsers,
+                EndUserId = eventData.Data.Licence.LicenceId,
+                ECDISMANUF = eventData.Data.Licence.Upn,
+                OrderNumber = eventData.Data.Licence.TransactionType == TransactionType ? "" : eventData.Data.Licence.OrderNumber,
+                StartDate = eventData.Data.Licence.TransactionType == TransactionType ? "" : eventData.Data.Licence.OrderDate,
+                PurachaseOrder = eventData.Data.Licence.TransactionType == TransactionType ? "" : eventData.Data.Licence.PoRef,
+                EndDate = eventData.Data.Licence.TransactionType == TransactionType ? "" : eventData.Data.Licence.HoldingsExpiryDate,
+                LicenceType = eventData.Data.Licence.TransactionType == TransactionType ? "" : eventData.Data.Licence.LicenceType,
+                LicenceDuration = eventData.Data.Licence.TransactionType == TransactionType ? null : eventData.Data.Licence.LicenceDuration
+            };
+             
+            sapPayload.PROD = new PROD()
+            {
+                UnitOfSales = new List<UnitOfSales>()
                 {
-                    var unitOfSale = new UnitOfSales()
+                    new UnitOfSales()
                     {
-                        Id = unit.Id,
-                        EndDate = unit.EndDate,
-                        Duration = Convert.ToString(unit.Duration),
-                        ReNew = unit.ReNew,
-                        Repeat = unit.Repeat
-                    };
-
-                    unitOfSaleList.Add(unitOfSale);
+                        Id = "",
+                        EndDate = "",
+                        Duration = "",
+                        ReNew = "",
+                        Repeat = ""
+                    }
                 }
-
-                if (unitOfSaleList.Count > 0)
-                {
-                    var prod = new PROD() { UnitOfSales = unitOfSaleList };
-                    sapPayload.PROD = prod;
-                } 
-            }
-
-            return  _xmlHelper.CreateRecordOfSaleSapXmlPayLoad(sapPayload);
+            };
+ 
+            return _xmlHelper.CreateRecordOfSaleSapXmlPayLoad(sapPayload);
         }
 
         private string RemoveNullFields( string xml)
@@ -131,29 +122,5 @@ namespace UKHO.ERPFacade.API.Helpers
             }
             return xmldoc.InnerXml;
         }
-
-        private string GetShoreBasedValue(string licenceType)
-        {
-            string[] shortBase = ShoredBasedValues.Split(",").ToArray();
-
-            if (string.IsNullOrEmpty(licenceType)) return "";
-
-            if (shortBase.Contains(licenceType))
-            {
-                return "0"; 
-            }
-            else
-            {
-                return "1";
-            }
-        }
-
-        //private static string GetDate(string dateTime)
-        //{
-        //    string date = dateTime.Split(" ")[0];
-        //    string newDateFormat = string.Format("{0:yyyy-MM-dd}", date);
-
-        //    return newDateFormat;
-        //}
     }
 }
