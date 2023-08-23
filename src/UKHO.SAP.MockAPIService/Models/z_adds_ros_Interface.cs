@@ -3,10 +3,58 @@ using UKHO.SAP.MockAPIService.EntityPropertyConverter;
 
 namespace UKHO.SAP.MockAPIService.Models
 {
-    [ExcludeFromCodeCoverage]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.1.0")]
+
+    // NOTE: Generated code may require at least .NET Framework 4.5 or .NET Core/Standard 2.0.
+    /// <remarks/>
+    //[System.SerializableAttribute()]
+   // [System.ComponentModel.DesignerCategoryAttribute("code")]
+    //[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://schemas.xmlsoap.org/soap/envelope/")]
+   // [System.Xml.Serialization.XmlRootAttribute(Namespace = "http://schemas.xmlsoap.org/soap/envelope/", IsNullable = false)]
+    /*public partial class Envelope
+    {
+
+        private EnvelopeBody bodyField;
+
+        /// <remarks/>
+        public EnvelopeBody Body
+        {
+            get
+            {
+                return this.bodyField;
+            }
+            set
+            {
+                this.bodyField = value;
+            }
+        }
+    }
+
+    /// <remarks/>
     [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://schemas.xmlsoap.org/soap/envelope/")]
+    public partial class EnvelopeBody
+    {
+
+        private Z_ADDS_ROS z_ADDS_ROSField;
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Namespace = "urn:sap-com:document:sap:rfc:functions")]
+        public Z_ADDS_ROS Z_ADDS_ROS
+        {
+            get
+            {
+                return this.z_ADDS_ROSField;
+            }
+            set
+            {
+                this.z_ADDS_ROSField = value;
+            }
+        }
+    }*/
+
+    /// <remarks/>
+    [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:sap-com:document:sap:rfc:functions")]
     public partial class Z_ADDS_ROS
