@@ -4,6 +4,6 @@ namespace UKHO.ERPFacade.Common.HttpClients
 {
     public interface ISapClient
     {
-        Task<HttpResponseMessage> PostEventData(XmlDocument sapMessageXml, string sapServiceOperation);
+        Task<HttpResponseMessage> PostEventData(XmlDocument sapMessageXml, string sapServiceOperation, string username, string password);
     }
 }

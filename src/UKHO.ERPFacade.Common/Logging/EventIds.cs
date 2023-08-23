@@ -580,14 +580,44 @@ namespace UKHO.ERPFacade.Common.Logging
         UpdatedLicenceUpdatedPublishedEventInAzureTable = 940115,
 
         /// <summary>
-        /// 940116 - Uploading Sap Xml payload for licence updated event in Azure blob.
+        /// 940116 - Status of existing record of sale published event updated in azure table successfully.
         /// </summary>
-        UploadLicenceUpdatedSapXmlPayloadInAzureBlob = 940116,
+        UpdatedStatusOfRecordOfSalePublishedEventInAzureTable = 940116,
 
         /// <summary>
-        /// 940117 - SAP xml payload for licence updated event is uploaded in blob storage successfully.
+        /// 940117 - Status of existing licence updated published event updated in azure table successfully.
         /// </summary>
-        UploadedLicenceUpdatedSapXmlPayloadInAzureBlob = 940117
+        UpdatedStatusOfLicenceUpdatedPublishedEventInAzureTable = 940117,
+
+        /// <summary>
+        /// 940118 - The record of sale event data has been sent to SAP successfully.
+        /// </summary>
+        RecordOfSalePublishedEventDataPushedToSap = 940118,
+
+        /// <summary>
+        /// 940119 - The licence updated event data has been sent to SAP successfully.
+        /// </summary>
+        LicenceUpdatedPublishedEventUpdatePushedToSap = 940119,
+
+        /// <summary>
+        /// 940120 - An error occurred while sending record of sale published event data to SAP.
+        /// </summary>
+        ErrorOccurredInSapForRecordOfSalePublishedEvent = 940120,
+
+        /// <summary>
+        /// 940121 - An error occurred while sending licence updated event data to SAP.
+        /// </summary>
+        ErrorOccurredInSapForLicenceUpdatedPublishedEvent = 940121,
+
+        /// <summary>
+        /// 940122 - Uploading Sap Xml payload for licence updated event in Azure blob.
+        /// </summary>
+        UploadLicenceUpdatedSapXmlPayloadInAzureBlob = 940122,
+
+        /// <summary>
+        /// 940123 - SAP xml payload for licence updated event is uploaded in blob storage successfully.
+        /// </summary>
+        UploadedLicenceUpdatedSapXmlPayloadInAzureBlob = 940123
     }
 
     /// <summary>

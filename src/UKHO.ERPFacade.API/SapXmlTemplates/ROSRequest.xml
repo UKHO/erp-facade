@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <Z_ADDS_ROS xmlns="urn:sap-com:document:sap:rfc:functions">
+      <IM_ORDER xmlns="">
+        <GUID>332ce4a4-1d62-4f56-b359-59e178d77332</GUID>
+        <SERVICETYPE>AVCS</SERVICETYPE>
+        <LICTRANSACTION>CHANGELICENCE</LICTRANSACTION>
+        <SOLDTOACC>9016</SOLDTOACC>
+        <LICENSEEACC></LICENSEEACC>
+        <STARTDATE></STARTDATE>
+        <ENDDATE></ENDDATE>
+        <LICNO>49205N</LICNO>
+        <VNAME>EVER ATOP</VNAME>
+        <IMO></IMO>
+        <CALLSIGN></CALLSIGN>
+        <SHOREBASED></SHOREBASED>
+        <FLEET></FLEET>
+        <USERS></USERS>
+        <ENDUSERID></ENDUSERID>
+        <ECDISMANUF></ECDISMANUF>
+        <LTYPE></LTYPE>
+        <LICDUR></LICDUR>
+        <PO></PO>
+        <ADSORDNO></ADSORDNO>
+        <PROD>
+          <item>
+            <ID></ID>
+            <ENDDA></ENDDA>
+            <DURATION></DURATION>
+            <RENEW></RENEW>
+            <REPEAT></REPEAT>
+          </item>
+        </PROD>                 
+      </IM_ORDER>
+    </Z_ADDS_ROS>
+  </soap:Body>
+</soap:Envelope>

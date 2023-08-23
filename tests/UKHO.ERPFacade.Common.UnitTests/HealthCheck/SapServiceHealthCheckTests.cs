@@ -98,7 +98,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.HealthCheck
 
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(fakeSapXmlPayload);
 
-            A.CallTo(() => _fakeSapClient.PostEventData(fakeSapXmlPayload, "Z_ADDS_MAT_INFO"))
+            A.CallTo(() => _fakeSapClient.PostEventData(fakeSapXmlPayload, "Z_ADDS_MAT_INFO", A<string>.Ignored, A<string>.Ignored))
                .Returns(new HttpResponseMessage() { StatusCode = HttpStatusCode.OK, RequestMessage = new HttpRequestMessage() { RequestUri = new Uri("http://abc.com") }, Content = new StreamContent(new MemoryStream(Encoding.UTF8.GetBytes("ServiceUnavailable"))) });
 
             HealthCheckResult result = await _fakeSapServiceHealthCheck.CheckHealthAsync(new HealthCheckContext(), fakeCancellationToken);
@@ -129,7 +129,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.HealthCheck
 
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(fakeSapXmlPayload);
 
-            A.CallTo(() => _fakeSapClient.PostEventData(fakeSapXmlPayload, "Z_ADDS_MAT_INFO"))
+            A.CallTo(() => _fakeSapClient.PostEventData(fakeSapXmlPayload, "Z_ADDS_MAT_INFO", A<string>.Ignored, A<string>.Ignored))
               .Returns(new HttpResponseMessage() { StatusCode = HttpStatusCode.ServiceUnavailable, RequestMessage = new HttpRequestMessage() { RequestUri = new Uri("http://abc.com") }, Content = new StreamContent(new MemoryStream(Encoding.UTF8.GetBytes("ServiceUnavailable"))) });
 
             HealthCheckResult result = await _fakeSapServiceHealthCheck.CheckHealthAsync(new HealthCheckContext(), fakeCancellationToken);
@@ -154,7 +154,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.HealthCheck
             CancellationToken fakeCancellationToken = default;
 
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(false);
-            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored)).Throws<FileNotFoundException>();
+            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Throws<FileNotFoundException>();
 
             HealthCheckResult result = await _fakeSapServiceHealthCheck.CheckHealthAsync(new HealthCheckContext(), fakeCancellationToken);
 

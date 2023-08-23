@@ -12,19 +12,19 @@ namespace UKHO.SAP.MockAPIService.Models
     public partial class Z_ADDS_ROS
     {
 
-        private ZSALES_ADDS iZSALES_ADDSField;
+        private IM_ORDER iM_ORDERField;
 
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 0)]
-        public ZSALES_ADDS ZSALES_ADDS
+        public IM_ORDER IM_ORDER
         {
             get
             {
-                return this.iZSALES_ADDSField;
+                return this.iM_ORDERField;
             }
             set
             {
-                this.iZSALES_ADDSField = value;
+                this.iM_ORDERField = value;
             }
         }
     }
@@ -34,7 +34,7 @@ namespace UKHO.SAP.MockAPIService.Models
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "")]
-    public partial class ZSALES_ADDS
+    public partial class IM_ORDER
     {
 
         private string gUIDField;
