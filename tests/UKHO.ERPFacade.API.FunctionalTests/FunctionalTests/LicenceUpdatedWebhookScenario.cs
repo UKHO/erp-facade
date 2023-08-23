@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
+using RestSharp;
 using UKHO.ERPFacade.API.FunctionalTests.Configuration;
 using UKHO.ERPFacade.API.FunctionalTests.Helpers;
 using UKHO.ERPFacade.API.FunctionalTests.Service;
@@ -11,9 +12,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
     {
         private LicenceUpdatedEndpoint _LUpdatedWebhookEndpoint { get; set; }
         private readonly ADAuthTokenProvider _authToken = new();
-        private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
+        //private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
         //for local
-        //private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
+        private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
 
         [SetUp]
         public void Setup()
@@ -85,6 +86,19 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, "LicenceUpdatedPayloadTestData", payloadFileName);
             var response = await _LUpdatedWebhookEndpoint.PostLicenceUpdatedWebhookResponseAsync("Unsupported Media Type", filePath, await _authToken.GetAzureADToken(false));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.UnsupportedMediaType);
+        }
+
+        [Test, Order(0)]
+        [TestCase("LicenceUpdated.json", TestName = "WhenValidLUEventInLicenceUpdatedPublishedEventReceivedPostReceivedWithValidPayload_ThenWebhookReturns200OkResponse")]
+        public async Task WhenValidLUEventInLicenceUpdatedPublishedEventReceivedPostReceivedWithValidPayload_ThenWebhookReturns200OkResponse(string payloadJsonFileName)
+        {
+            Console.WriteLine("Scenario:" + payloadJsonFileName + "\n");
+            string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.LicenseUpdate,  payloadJsonFileName);
+            string generatedXMLFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXMLFolder,Config.TestConfig.LicenseUpdate);
+            string generatedXMLFilePath =
+                "D://UpdatedERP//tests//UKHO.ERPFacade.API.FunctionalTests//ERPFacadeGeneratedXmlFiles//FMLicenseUpdateXMLGenerated//FM-RoS-XMLPayloadUpdateLicense.xml";
+            RestResponse response = await _LUpdatedWebhookEndpoint.PostLicenceUpdatedResponseAsyncForXML(filePath, generatedXMLFolder, await _authToken.GetAzureADToken(false));
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
     }
 }

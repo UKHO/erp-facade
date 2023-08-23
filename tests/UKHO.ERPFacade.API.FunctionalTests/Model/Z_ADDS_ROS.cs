@@ -1,0 +1,515 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace UKHO.ERPFacade.API.FunctionalTests.Model
+{
+
+
+    // NOTE: Generated code may require at least .NET Framework 4.5 or .NET Core/Standard 2.0.
+    /// <remarks/>
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://schemas.xmlsoap.org/soap/envelope/")]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace = "http://schemas.xmlsoap.org/soap/envelope/", IsNullable = false)]
+    public partial class Envelope
+    {
+
+        private EnvelopeBody bodyField;
+
+        /// <remarks/>
+        public EnvelopeBody Body
+        {
+            get
+            {
+                return this.bodyField;
+            }
+            set
+            {
+                this.bodyField = value;
+            }
+        }
+    }
+
+    /// <remarks/>
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://schemas.xmlsoap.org/soap/envelope/")]
+    public partial class EnvelopeBody
+    {
+
+        private Z_ADDS_ROS z_ADDS_ROSField;
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Namespace = "")]
+        public Z_ADDS_ROS Z_ADDS_ROS
+        {
+            get
+            {
+                return this.z_ADDS_ROSField;
+            }
+            set
+            {
+                this.z_ADDS_ROSField = value;
+            }
+        }
+    }
+
+    /// <remarks/>
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace = "", IsNullable = false)]
+    public partial class Z_ADDS_ROS
+    {
+
+        private Z_ADDS_ROSIM_ORDER iM_ORDERField;
+
+        /// <remarks/>
+        public Z_ADDS_ROSIM_ORDER IM_ORDER
+        {
+            get
+            {
+                return this.iM_ORDERField;
+            }
+            set
+            {
+                this.iM_ORDERField = value;
+            }
+        }
+    }
+
+    /// <remarks/>
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+    public partial class Z_ADDS_ROSIM_ORDER
+    {
+
+        private string gUIDField;
+
+        private string sERVICETYPEField;
+
+        private string lICTRANSACTIONField;
+
+        private ushort sOLDTOACCField;
+
+        private ushort lICENSEEACCField;
+
+        private object sTARTDATEField;
+
+        private object eNDDATEField;
+
+        private string lICNOField;
+
+        private string vNAMEField;
+
+        private string iMOField;
+
+        private string cALLSIGNField;
+
+        private object sHOREBASEDField;
+
+        private string fLEETField;
+
+        private object uSERSField;
+
+        private object eNDUSERIDField;
+
+        private string eCDISMANUFField;
+
+        private object lTYPEField;
+
+        private object lICDURField;
+
+        private object poField;
+
+        private object aDSORDNOField;
+
+        private Z_ADDS_ROSIM_ORDERPROD pRODField;
+
+        /// <remarks/>
+        public string GUID
+        {
+            get
+            {
+                return this.gUIDField;
+            }
+            set
+            {
+                this.gUIDField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string SERVICETYPE
+        {
+            get
+            {
+                return this.sERVICETYPEField;
+            }
+            set
+            {
+                this.sERVICETYPEField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string LICTRANSACTION
+        {
+            get
+            {
+                return this.lICTRANSACTIONField;
+            }
+            set
+            {
+                this.lICTRANSACTIONField = value;
+            }
+        }
+
+        /// <remarks/>
+        public ushort SOLDTOACC
+        {
+            get
+            {
+                return this.sOLDTOACCField;
+            }
+            set
+            {
+                this.sOLDTOACCField = value;
+            }
+        }
+
+        /// <remarks/>
+        public ushort LICENSEEACC
+        {
+            get
+            {
+                return this.lICENSEEACCField;
+            }
+            set
+            {
+                this.lICENSEEACCField = value;
+            }
+        }
+
+        /// <remarks/>
+        public object STARTDATE
+        {
+            get
+            {
+                return this.sTARTDATEField;
+            }
+            set
+            {
+                this.sTARTDATEField = value;
+            }
+        }
+
+        /// <remarks/>
+        public object ENDDATE
+        {
+            get
+            {
+                return this.eNDDATEField;
+            }
+            set
+            {
+                this.eNDDATEField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string LICNO
+        {
+            get
+            {
+                return this.lICNOField;
+            }
+            set
+            {
+                this.lICNOField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string VNAME
+        {
+            get
+            {
+                return this.vNAMEField;
+            }
+            set
+            {
+                this.vNAMEField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string IMO
+        {
+            get
+            {
+                return this.iMOField;
+            }
+            set
+            {
+                this.iMOField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string CALLSIGN
+        {
+            get
+            {
+                return this.cALLSIGNField;
+            }
+            set
+            {
+                this.cALLSIGNField = value;
+            }
+        }
+
+        /// <remarks/>
+        public object SHOREBASED
+        {
+            get
+            {
+                return this.sHOREBASEDField;
+            }
+            set
+            {
+                this.sHOREBASEDField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string FLEET
+        {
+            get
+            {
+                return this.fLEETField;
+            }
+            set
+            {
+                this.fLEETField = value;
+            }
+        }
+
+        /// <remarks/>
+        public object USERS
+        {
+            get
+            {
+                return this.uSERSField;
+            }
+            set
+            {
+                this.uSERSField = value;
+            }
+        }
+
+        /// <remarks/>
+        public object ENDUSERID
+        {
+            get
+            {
+                return this.eNDUSERIDField;
+            }
+            set
+            {
+                this.eNDUSERIDField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string ECDISMANUF
+        {
+            get
+            {
+                return this.eCDISMANUFField;
+            }
+            set
+            {
+                this.eCDISMANUFField = value;
+            }
+        }
+
+        /// <remarks/>
+        public object LTYPE
+        {
+            get
+            {
+                return this.lTYPEField;
+            }
+            set
+            {
+                this.lTYPEField = value;
+            }
+        }
+
+        /// <remarks/>
+        public object LICDUR
+        {
+            get
+            {
+                return this.lICDURField;
+            }
+            set
+            {
+                this.lICDURField = value;
+            }
+        }
+
+        /// <remarks/>
+        public object PO
+        {
+            get
+            {
+                return this.poField;
+            }
+            set
+            {
+                this.poField = value;
+            }
+        }
+
+        /// <remarks/>
+        public object ADSORDNO
+        {
+            get
+            {
+                return this.aDSORDNOField;
+            }
+            set
+            {
+                this.aDSORDNOField = value;
+            }
+        }
+
+        /// <remarks/>
+        public Z_ADDS_ROSIM_ORDERPROD PROD
+        {
+            get
+            {
+                return this.pRODField;
+            }
+            set
+            {
+                this.pRODField = value;
+            }
+        }
+    }
+
+    /// <remarks/>
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+    public partial class Z_ADDS_ROSIM_ORDERPROD
+    {
+
+        private Z_ADDS_ROSIM_ORDERPRODItem itemField;
+
+        /// <remarks/>
+        public Z_ADDS_ROSIM_ORDERPRODItem item
+        {
+            get
+            {
+                return this.itemField;
+            }
+            set
+            {
+                this.itemField = value;
+            }
+        }
+    }
+
+    /// <remarks/>
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+    public partial class Z_ADDS_ROSIM_ORDERPRODItem
+    {
+
+        private object idField;
+
+        private object eNDDAField;
+
+        private object dURATIONField;
+
+        private object rENEWField;
+
+        private object rEPEATField;
+
+        /// <remarks/>
+        public object ID
+        {
+            get
+            {
+                return this.idField;
+            }
+            set
+            {
+                this.idField = value;
+            }
+        }
+
+        /// <remarks/>
+        public object ENDDA
+        {
+            get
+            {
+                return this.eNDDAField;
+            }
+            set
+            {
+                this.eNDDAField = value;
+            }
+        }
+
+        /// <remarks/>
+        public object DURATION
+        {
+            get
+            {
+                return this.dURATIONField;
+            }
+            set
+            {
+                this.dURATIONField = value;
+            }
+        }
+
+        /// <remarks/>
+        public object RENEW
+        {
+            get
+            {
+                return this.rENEWField;
+            }
+            set
+            {
+                this.rENEWField = value;
+            }
+        }
+
+        /// <remarks/>
+        public object REPEAT
+        {
+            get
+            {
+                return this.rEPEATField;
+            }
+            set
+            {
+                this.rEPEATField = value;
+            }
+        }
+    }
+
+
+
+}

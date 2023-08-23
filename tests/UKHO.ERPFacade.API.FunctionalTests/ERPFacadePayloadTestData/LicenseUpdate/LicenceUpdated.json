@@ -1,0 +1,42 @@
+{
+    "specversion": "1.0",
+    "type": "uk.gov.ukho.licensing.licenceUpdated.v1",
+    "source": "https://uk.gov.ukho.licensing",
+    "id": "guid",
+    "time": "2023-07-20T10:40:00.000000Z",
+    "subject": "licence update changes that need to go to SAP Record of Sale via ERP Facade",
+    "datacontenttype": "application/json",
+    "data": {
+        "correlationId": "ft-20230822-1d62-4f56-b359-59e178d77100",
+        "license": {
+            "licenseId": "11870",
+            "productType": "AVCS",
+            "transactionType": "CHANGELICENCE",
+            "distributorCustomerNumber": "9454",
+            "shippingCoNumber": "9454",
+            "ordernumber": "5432796",
+            "orderDate": "2023-06-20 08:55:28.553",
+            "po-ref": "",
+            "holdingsExpiryDate": "",
+            "sapId": "49205N",
+            "vesselName": "Cornelia Maersk",
+            "imoNumber": "IMO9245756",
+            "callSign": "OWWS2",
+            "licenceType": "IMO Vessel",
+            "licenceTypeID": "1",
+            "fleetName": "German Navy",
+            "numberLicenceUsers":"1" ,
+            "upn": "Japan Radio",
+            "licenceDuration": "12",
+            "unitsOfSale": [
+                {
+                    "unitName": "",
+                    "endDate": "",
+                    "duration": null,
+                    "renew": "",
+                    "repeat": ""
+                }
+            ]
+        }
+    }
+}

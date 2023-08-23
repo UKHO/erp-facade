@@ -1,4 +1,5 @@
-﻿using Azure.Storage.Blobs;
+﻿using System.IO.Abstractions;
+using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using UKHO.ERPFacade.API.FunctionalTests.Configuration;
 
@@ -108,7 +109,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return (expectedXMLfilePath + "\\" + blobContainer + ".xml");
         }
 
-        public bool VerifyBlobExists(string parentContainerName, string subContainerName)
+        public bool VerifyBlobExists(string parentContainerName, string subContainerName )
         {
             BlobServiceClient blobServiceClient = new BlobServiceClient(Config.TestConfig.AzureStorageConfiguration.ConnectionString);
             BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(parentContainerName);
@@ -123,6 +124,29 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             }
 
             return false;
+        }
+        public string DownloadGeneratedXMLFile(string expectedXMLfilePath, string blobContainer,string parentContainerName)
+        {
+            string fileName = "";
+            BlobServiceClient blobServiceClient = new BlobServiceClient(Config.TestConfig.AzureStorageConfiguration.ConnectionString);
+
+            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(parentContainerName + "\\" + blobContainer );
+            BlobClient blobClient = containerClient.GetBlobClient(blobContainer+ "/" + "FM-RoS-XMLPayloadUpdateLicense" + ".xml");
+            try
+            {
+                BlobDownloadInfo blobDownload = blobClient.Download();
+                 fileName = expectedXMLfilePath +  "\\" + blobContainer + "\\"+ "FM-RoS-XMLPayloadUpdateLicense" + ".xml";
+               Directory.CreateDirectory(Path.GetDirectoryName(fileName));
+               using (FileStream downloadFileStream = new(fileName, FileMode.Create))
+                {
+                    blobDownload.Content.CopyTo(downloadFileStream);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(blobContainer + " " + ex.Message);
+            }
+            return fileName;
         }
     }
 }
