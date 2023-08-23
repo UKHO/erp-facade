@@ -35,7 +35,7 @@ namespace UKHO.ERPFacade.API.Controllers
         private const string LicenceUpdatedFileName = "LicenceUpdatedEvent.json";
         private const string RecordOfSaleContainerName = "recordofsaleblobs";
         private const string RecordOfSaleEventFileName = "RecordOfSaleEvent.json";
-        private const string RosXmlFilePath = "SapXmlTemplates\\ROSRequest.xml";
+        private const string RosXmlFilePath = "SapXmlTemplates\\RosSapRequest.xml";
 
         public WebhookController(IHttpContextAccessor contextAccessor,
                                  ILogger<WebhookController> logger,
@@ -218,15 +218,8 @@ namespace UKHO.ERPFacade.API.Controllers
             _logger.LogInformation(EventIds.UploadLicenceUpdatedSapXmlPayloadInAzureBlob.ToEventId(), "Uploading the SAP xml payload for licence updated event in blob storage.");
             await _azureBlobEventWriter.UploadEvent(sapPayload.ToIndentedString(), LicenceUpdatedContainerName, correlationId + '/' + SapXmlPayloadFileName);
             _logger.LogInformation(EventIds.UploadedLicenceUpdatedSapXmlPayloadInAzureBlob.ToEventId(), "SAP xml payload for licence updated event is uploaded in blob storage successfully.");
-
-            _logger.LogInformation(EventIds.UploadedLicenceUpdatedPublishedEventInAzureBlob.ToEventId(), "Licence updated  published event is uploaded in blob storage successfully.");
-
-            string recordOfSalesXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, RosXmlFilePath);
-
-            XmlDocument rosPayload = new();
-            rosPayload.Load(recordOfSalesXmlTemplatePath);
-
-            HttpResponseMessage response = await _sapClient.PostEventData(rosPayload, _sapConfig.Value.SapServiceOperationForRecordOfSale, _sapConfig.Value.SapUsernameForRecordOfSale, _sapConfig.Value.SapPasswordForRecordOfSale);
+ 
+            HttpResponseMessage response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapServiceOperationForRecordOfSale, _sapConfig.Value.SapUsernameForRecordOfSale, _sapConfig.Value.SapPasswordForRecordOfSale);
 
             if (!response.IsSuccessStatusCode)
             {

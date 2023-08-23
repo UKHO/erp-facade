@@ -47,7 +47,6 @@ namespace UKHO.ERPFacade
                 .AddJsonFile("ConfigurationFiles/ScenarioRules.json", true, true)
                 .AddJsonFile("ConfigurationFiles/ActionNumbers.json", true, true)
                 .AddJsonFile("ConfigurationFiles/SapActions.json", true, true)
-                .AddJsonFile("ConfigurationFiles/LicenceUpdatedSapAction.json", true, true)
 #if DEBUG
                 //Add development overrides configuration
                 .AddJsonFile("appsettings.local.overrides.json", true, true)
@@ -171,7 +170,6 @@ namespace UKHO.ERPFacade
 
             builder.Services.Configure<SapActionConfiguration>(configuration.GetSection("SapActionConfiguration"));
             sapActionConfiguration = configuration.GetSection("SapActionConfiguration").Get<SapActionConfiguration>()!;
-            builder.Services.Configure<LicenceUpdatedSapActionConfiguration>(configuration.GetSection("LicenceUpdatedSapActions"));
             builder.Services.Configure<EESHealthCheckEnvironmentConfiguration>(configuration.GetSection("EESHealthCheckEnvironmentConfiguration"));
 
             builder.Services.AddInfrastructure();

@@ -563,7 +563,6 @@ namespace UKHO.ERPFacade.Common.Logging
         /// </summary>
         UploadedLicenceUpdatedPublishedEventInAzureBlob = 940112,
 
-
         /// <summary>
         /// 940113 - Licence updated published event in added in azure table successfully.
         /// </summary>
