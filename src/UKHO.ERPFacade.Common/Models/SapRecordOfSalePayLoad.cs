@@ -75,7 +75,7 @@ namespace UKHO.ERPFacade.Common.Models
     [XmlRoot(ElementName = "PROD")]
     public class PROD
     {
-        [XmlElement(ElementName = "item") ]
+        [XmlElement(ElementName = "item")]
         public List<UnitOfSales> UnitOfSales { get; set; }
     }
 

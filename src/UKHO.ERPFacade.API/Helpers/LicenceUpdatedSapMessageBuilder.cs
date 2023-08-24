@@ -74,7 +74,7 @@ namespace UKHO.ERPFacade.API.Helpers
                 LicenceType = eventData.Data.Licence.TransactionType == TransactionType ? "" : eventData.Data.Licence.LicenceType,
                 LicenceDuration = eventData.Data.Licence.TransactionType == TransactionType ? null : eventData.Data.Licence.LicenceDuration
             };
-             
+
             sapPayload.PROD = new PROD()
             {
                 UnitOfSales = new List<UnitOfSales>()
@@ -89,18 +89,18 @@ namespace UKHO.ERPFacade.API.Helpers
                     }
                 }
             };
- 
+
             return _xmlHelper.CreateRecordOfSaleSapXmlPayLoad(sapPayload);
         }
 
-        private string RemoveNullFields( string xml)
+        private string RemoveNullFields(string xml)
         {
             XmlDocument xmldoc = new();
             xmldoc.LoadXml(xml);
 
             XmlNamespaceManager mgr = new XmlNamespaceManager(xmldoc.NameTable);
             mgr.AddNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
-            
+
             XmlNodeList nullFields = xmldoc.SelectNodes("//*[@xsi:nil='true']", mgr);
 
             if (nullFields != null && nullFields.Count > 0)
@@ -108,10 +108,10 @@ namespace UKHO.ERPFacade.API.Helpers
                 for (int i = 0; i < nullFields.Count; i++)
                 {
                     XmlDocumentFragment xmlDocFrag = xmldoc.CreateDocumentFragment();
-                    string newNode = "<"+ nullFields[i].Name + "></"+nullFields[i].Name +">";
+                    string newNode = "<" + nullFields[i].Name + "></" + nullFields[i].Name + ">";
                     xmlDocFrag.InnerXml = newNode;
-                  
-                    var previousNode= nullFields[i].PreviousSibling;
+
+                    var previousNode = nullFields[i].PreviousSibling;
                     string Xpath = $"//*[local-name()='{previousNode.Name}']";
 
                     XmlElement element = (XmlElement)xmldoc.SelectSingleNode(Xpath);
@@ -119,7 +119,6 @@ namespace UKHO.ERPFacade.API.Helpers
                     nullFields[i].ParentNode.RemoveChild(nullFields[i]);
 
                     XmlNode parent = element.ParentNode;
-                    //now, use that parent element and it's InsertAfter method to add new node as sibling to your found element
                     parent.InsertAfter(xmlDocFrag, element);
                 }
             }
