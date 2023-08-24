@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Model
 {
-
-
     // NOTE: Generated code may require at least .NET Framework 4.5 or .NET Core/Standard 2.0.
     /// <remarks/>
     [System.SerializableAttribute()]
@@ -94,13 +92,13 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
 
         private string lICTRANSACTIONField;
 
-        private ushort sOLDTOACCField;
+        private string sOLDTOACCField;
 
-        private ushort lICENSEEACCField;
+        private string lICENSEEACCField;
 
-        private object sTARTDATEField;
+        private string sTARTDATEField;
 
-        private object eNDDATEField;
+        private string eNDDATEField;
 
         private string lICNOField;
 
@@ -110,25 +108,25 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
 
         private string cALLSIGNField;
 
-        private object sHOREBASEDField;
+        private string sHOREBASEDField;
 
         private string fLEETField;
 
-        private object uSERSField;
+        private int uSERSField;
 
-        private object eNDUSERIDField;
+        private string eNDUSERIDField;
 
         private string eCDISMANUFField;
 
-        private object lTYPEField;
+        private string lTYPEField;
 
-        private object lICDURField;
+        private int lICDURField;
 
-        private object poField;
+        private string poField;
 
-        private object aDSORDNOField;
+        private string aDSORDNOField;
 
-        private Z_ADDS_ROSIM_ORDERPROD pRODField;
+        private Z_ADDS_ROSIM_ORDERItem[] pRODField;
 
         /// <remarks/>
         public string GUID
@@ -170,7 +168,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
         }
 
         /// <remarks/>
-        public ushort SOLDTOACC
+        public string SOLDTOACC
         {
             get
             {
@@ -183,7 +181,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
         }
 
         /// <remarks/>
-        public ushort LICENSEEACC
+        public string LICENSEEACC
         {
             get
             {
@@ -196,7 +194,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
         }
 
         /// <remarks/>
-        public object STARTDATE
+        public string STARTDATE
         {
             get
             {
@@ -209,7 +207,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
         }
 
         /// <remarks/>
-        public object ENDDATE
+        public string ENDDATE
         {
             get
             {
@@ -274,7 +272,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
         }
 
         /// <remarks/>
-        public object SHOREBASED
+        public string SHOREBASED
         {
             get
             {
@@ -300,7 +298,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
         }
 
         /// <remarks/>
-        public object USERS
+        public int USERS
         {
             get
             {
@@ -313,7 +311,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
         }
 
         /// <remarks/>
-        public object ENDUSERID
+        public string ENDUSERID
         {
             get
             {
@@ -339,7 +337,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
         }
 
         /// <remarks/>
-        public object LTYPE
+        public string LTYPE
         {
             get
             {
@@ -352,7 +350,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
         }
 
         /// <remarks/>
-        public object LICDUR
+        public int LICDUR
         {
             get
             {
@@ -365,7 +363,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
         }
 
         /// <remarks/>
-        public object PO
+        public string PO
         {
             get
             {
@@ -378,7 +376,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
         }
 
         /// <remarks/>
-        public object ADSORDNO
+        public string ADSORDNO
         {
             get
             {
@@ -391,7 +389,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
         }
 
         /// <remarks/>
-        public Z_ADDS_ROSIM_ORDERPROD PROD
+        [System.Xml.Serialization.XmlArrayItemAttribute("item", IsNullable = false)]
+        public Z_ADDS_ROSIM_ORDERItem[] PROD
         {
             get
             {
@@ -408,44 +407,21 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    public partial class Z_ADDS_ROSIM_ORDERPROD
+    public partial class Z_ADDS_ROSIM_ORDERItem
     {
 
-        private Z_ADDS_ROSIM_ORDERPRODItem itemField;
+        private string idField;
+
+        private string eNDDAField;
+
+        private string dURATIONField;
+
+        private string rENEWField;
+
+        private string rEPEATField;
 
         /// <remarks/>
-        public Z_ADDS_ROSIM_ORDERPRODItem item
-        {
-            get
-            {
-                return this.itemField;
-            }
-            set
-            {
-                this.itemField = value;
-            }
-        }
-    }
-
-    /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    public partial class Z_ADDS_ROSIM_ORDERPRODItem
-    {
-
-        private object idField;
-
-        private object eNDDAField;
-
-        private object dURATIONField;
-
-        private object rENEWField;
-
-        private object rEPEATField;
-
-        /// <remarks/>
-        public object ID
+        public string ID
         {
             get
             {
@@ -458,7 +434,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
         }
 
         /// <remarks/>
-        public object ENDDA
+        public string ENDDA
         {
             get
             {
@@ -471,7 +447,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
         }
 
         /// <remarks/>
-        public object DURATION
+        public string DURATION
         {
             get
             {
@@ -484,7 +460,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
         }
 
         /// <remarks/>
-        public object RENEW
+        public string RENEW
         {
             get
             {
@@ -497,7 +473,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
         }
 
         /// <remarks/>
-        public object REPEAT
+        public string REPEAT
         {
             get
             {

@@ -16,7 +16,9 @@
         public string GeneratedJSONFolder { get; set; }
         public SharedKeyConfiguration SharedKeyConfiguration { get; set; }
         public string LicenseUpdate { get; set; }
+        public string[] ROSLUXMLList { get; set; }
         
+
     }
 
 

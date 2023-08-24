@@ -20,7 +20,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         private static readonly JsonHelper _jsonHelper;
         private static readonly List<string> AttrNotMatched = new();
         private static string XMLFilePath = "D://UpdatedERP//tests//UKHO.ERPFacade.API.FunctionalTests//ERPFacadeGeneratedXmlFiles//FMLicenseUpdateXMLGenerated//FM-RoS-XMLPayloadUpdateLicense.xml";
-        
         public static async Task<bool> CheckXMLAttributes(LUpdatedJsonPayloadHelper jsonPayload, string XMLFilePath, string updatedRequestBody)
         {
             
@@ -35,14 +34,17 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 string tempXmlString = xmlDoc.DocumentElement.InnerXml;
                 xmlDoc.LoadXml(tempXmlString);
             }
-
+           
             var ms = new MemoryStream(Encoding.UTF8.GetBytes(xmlDoc.InnerXml));
             var reader = new XmlTextReader(ms) { Namespaces = false };
             var serializer = new XmlSerializer(typeof(Z_ADDS_ROS));
             var result = (Z_ADDS_ROS)serializer.Deserialize(reader);
             LUpdatedJsonPayloadHelper.License  licencefeildsJSON = UpdatedJsonPayload.data.license;
             Z_ADDS_ROSIM_ORDER licResult =result.IM_ORDER;
+            
 
+        Assert.True(VerifyPresenseOfMandatoryXMLAtrributes(licResult).Result);
+          Assert.That(UpdatedJsonPayload.data.correlationId.Equals(licResult.GUID),"GUID in xml is same a corrid as in EES JSON");
 
             if (licResult.SERVICETYPE.Equals(licencefeildsJSON.productType))
             {
@@ -80,11 +82,19 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 AttrNotMatched.Add(nameof(licResult.CALLSIGN));
             if (!licResult.FLEET.Equals(licencefeildsJSON.fleetName))
                 AttrNotMatched.Add(nameof(licResult.FLEET));
-            
+            if (!licResult.ENDUSERID.Equals(licencefeildsJSON.licenseId))
+                AttrNotMatched.Add(nameof(licResult.ENDUSERID));
+            if (!licResult.USERS.Equals(licencefeildsJSON.numberLicenceUsers))
+                AttrNotMatched.Add(nameof(licResult.USERS));
 
-           
-            string[] fieldNames = { "STARTDATE", "ENDDATE", "SHOREBASED", "USERS", "ENDUSERID", "LTYPE" , "LICDUR", "PO", "ADSORDNO", "ID", "ENDDA" , "DURATION" , "RENEW", "Repeat" };
+
+
+
+            string[] fieldNames = { "STARTDATE", "ENDDATE", "SHOREBASED", "LTYPE" , "LICDUR", "PO", "ADSORDNO" };
+            string[] fieldNamesProduct = { "ID", "ENDDA", "DURATION", "RENEW", "REPEAT" };
+            Z_ADDS_ROSIM_ORDERItem[] items = licResult.PROD;
             VerifyBlankFields(licResult, fieldNames);
+            VerifyBlankProductFields(items[0], fieldNamesProduct);
             return true;
         }
 
@@ -94,10 +104,79 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
             foreach (string field in fieldNames)
             {
-                if (!typeof(Z_ADDS_ROSIM_ORDER).GetProperty(field).GetValue(licResult, null).Equals(""))
-                    AttrNotMatched.Add(typeof(Z_ADDS_ROS).GetProperty(field).Name);
+               
+               if (!typeof(Z_ADDS_ROSIM_ORDER).GetProperty(field).GetValue(licResult, null).Equals(""))
+               AttrNotMatched.Add(typeof(Z_ADDS_ROSIM_ORDER).GetProperty(field).Name);
             }
             return allBlanks;
         }
+        private static bool VerifyBlankProductFields(Z_ADDS_ROSIM_ORDERItem items, string[] fieldNamesProduct)
+        {
+            bool allBlanks = true;
+
+            foreach (string field in fieldNamesProduct)
+            {
+                
+                    if (!typeof(Z_ADDS_ROSIM_ORDERItem).GetProperty(field).GetValue(items, null).Equals(""))
+                        AttrNotMatched.Add(typeof(Z_ADDS_ROSIM_ORDERItem).GetProperty(field).Name);
+                
+            }
+
+            return allBlanks;
+        }
+
+        public static async Task<bool> VerifyPresenseOfMandatoryXMLAtrributes(Z_ADDS_ROSIM_ORDER licResult)
+        {
+            List<string> ActionAttributesSeq = new List<string>();
+            ActionAttributesSeq = Config.TestConfig.ROSLUXMLList.ToList<string>();
+            List<string> CurrentActionAttributes = new List<string>();
+
+            CurrentActionAttributes.Add("ENDUSERID");
+            CurrentActionAttributes.Add("SERVICETYPE");
+            CurrentActionAttributes.Add("LICTRANSACTION");
+            CurrentActionAttributes.Add("SOLDTOACC");
+            CurrentActionAttributes.Add("LICENSEEACC");
+            CurrentActionAttributes.Add("LICNO");
+            CurrentActionAttributes.Add("VNAME");
+            CurrentActionAttributes.Add("IMO");
+            CurrentActionAttributes.Add("CALLSIGN");
+            CurrentActionAttributes.Add("FLEET");
+            CurrentActionAttributes.Add("USERS");
+            CurrentActionAttributes.Add("ECDISMANUF");
+            
+            foreach (var CurrentActionAttributess in CurrentActionAttributes)
+            {
+                //CurrentActionAttributes.Clear();
+                //Type arrayType = CurrentActionAttributess.GetType();
+               // var properties = arrayType.GetProperties();
+
+                /*foreach (var property in properties)
+                {
+                    CurrentActionAttributes.Add(property.Name);
+                }*/
+
+
+                for (int i = 0; i < 11; i++)
+                {
+                    if (CurrentActionAttributes[i] != ActionAttributesSeq[i])
+                    {
+                        Console.WriteLine("First missed Attribute is:" + ActionAttributesSeq[i] + " for action number:" + CurrentActionAttributess[i]);
+                        return false;
+                    }
+                }
+
+            }
+            if (CurrentActionAttributes.Count > 0)
+            {
+                Console.WriteLine("Mandatory atrributes are present in all XML actions");
+                await Task.CompletedTask;
+                return true;
+            }
+            else
+                return false;
+        }
+
+       
+
     }
 }

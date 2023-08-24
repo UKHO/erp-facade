@@ -2,16 +2,16 @@
 {
     public class LUpdatedJsonPayloadHelper
     {
-
-        public string specversion { get; set; }
-        public string type { get; set; }
-        public string source { get; set; }
-        public string id { get; set; }
-        public DateTime time { get; set; }
-        public string subject { get; set; }
-        public string datacontenttype { get; set; }
-        public DataLU data { get; set; }
-
+       
+            public string specversion { get; set; }
+            public string type { get; set; }
+            public string source { get; set; }
+            public string id { get; set; }
+            public string time { get; set; }
+            public string subject { get; set; }
+            public string datacontenttype { get; set; }
+            public DataLU data { get; set; }
+        
 
         public class DataLU
         {
@@ -35,7 +35,7 @@
             public string imoNumber { get; set; }
             public string callSign { get; set; }
             public string licenceType { get; set; }
-            public int licenceTypeID { get; set; }
+            public string shoreBased { get; set; }
             public string fleetName { get; set; }
             public int numberLicenceUsers { get; set; }
             public string upn { get; set; }
@@ -47,10 +47,11 @@
         {
             public string unitName { get; set; }
             public string endDate { get; set; }
-            public object duration { get; set; }
+            public string duration { get; set; }
             public string renew { get; set; }
             public string repeat { get; set; }
         }
+
     }
 
 }
