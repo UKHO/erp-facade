@@ -616,7 +616,17 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940123 - SAP xml payload for licence updated event is uploaded in blob storage successfully.
         /// </summary>
-        UploadedLicenceUpdatedSapXmlPayloadInAzureBlob = 940123
+        UploadedLicenceUpdatedSapXmlPayloadInAzureBlob = 940123,
+
+        /// <summary>
+        /// 940124 - Creating Sap Xml payload.
+        /// </summary>
+        CreatingSapPayload = 940124,
+
+        /// <summary>
+        /// 940125 - SAP xml payload created.
+        /// </summary>
+        CreatedSapPayload = 940125
     }
 
     /// <summary>

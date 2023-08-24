@@ -36,12 +36,16 @@ namespace UKHO.ERPFacade.API.Helpers
                 throw new FileNotFoundException();
             }
 
+            _logger.LogInformation(EventIds.CreatingSapPayload.ToEventId(), "Creating SAP Payload.");
+
             XmlDocument soapXml = _xmlHelper.CreateXmlDocument(sapXmlTemplatePath);
             string xml = SapXmlPayloadCreation(eventData);
 
             string sapXml = RemoveNullFields(xml.Replace(ImOrderNameSpace, ""));
             soapXml.SelectSingleNode(XpathZAddsRos).InnerXml = sapXml.SetXmlClosingTags();
-            
+
+            _logger.LogInformation(EventIds.CreatedSapPayload.ToEventId(), "SAP payload created.");
+
             return soapXml;
         }
 
