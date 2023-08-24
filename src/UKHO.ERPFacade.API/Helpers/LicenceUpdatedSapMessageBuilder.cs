@@ -49,7 +49,7 @@ namespace UKHO.ERPFacade.API.Helpers
             return soapXml;
         }
 
-        public string SapXmlPayloadCreation(RecordOfSaleEventPayLoad eventData)
+        private string SapXmlPayloadCreation(RecordOfSaleEventPayLoad eventData)
         {
             var sapPayload = new SapRecordOfSalePayLoad
             {

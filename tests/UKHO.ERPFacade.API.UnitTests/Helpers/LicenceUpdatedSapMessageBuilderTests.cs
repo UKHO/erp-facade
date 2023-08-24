@@ -1,13 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Xml;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NUnit.Framework;
+using NUnit.Framework.Internal;
 using UKHO.ERPFacade.API.Helpers;
+using UKHO.ERPFacade.API.UnitTests.Common;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
@@ -22,6 +25,15 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         private IFileSystemHelper _fakeFileSystemHelper;
 
         private LicenceUpdatedSapMessageBuilder _fakeLicenceUpdatedSapMessageBuilder;
+        private readonly string XpathZAddsRos = $"//*[local-name()='Z_ADDS_ROS']";
+        private readonly string XpathStartDate = $"//*[local-name()='STARTDATE']";
+        private readonly string XpathEndDate = $"//*[local-name()='ENDDATE']";
+        private readonly string XpathLType = $"//*[local-name()='LTYPE']";
+        private readonly string XpathLicDur = $"//*[local-name()='LICDUR']";
+        private readonly string XpathPO = $"//*[local-name()='PO']";
+        private readonly string XpathAdsOrdno = $"//*[local-name()='ADSORDNO']";
+        private readonly string XpathProd = $"//*[local-name()='PROD']";
+        private readonly string XpathGuid = $"//*[local-name()='GUID']";
 
         private readonly string RosSapXmlFile = @"<?xml version=""1.0"" encoding=""utf-8""?>
 <soap:Envelope xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:soap=""http://schemas.xmlsoap.org/soap/envelope/"">
@@ -80,20 +92,43 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         }
 
         [Test]
-        public void WhenBuildSapMessageXml_ThenReturnXMLDocument()
+        public void WhenTransactionTypeIsChangeLicence_ThenReturnXMLDocument()
         {
             var jsonData = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(licenceUpdatedJsonData);
             var correlationId = "123-abc-456-xyz-333";
+            var sapReqXml = TestHelper.ReadFileData("ERPTestData\\RoSPayloadTest.xml");
 
             XmlDocument soapXml = new();
             soapXml.LoadXml(RosSapXmlFile);
 
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
+            A.CallTo(() => _fakeXmlHelper.CreateRecordOfSaleSapXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
 
             var result = _fakeLicenceUpdatedSapMessageBuilder.BuildLicenceUpdatedSapMessageXml(jsonData!, correlationId);
 
             result.Should().BeOfType<XmlDocument>();
+
+            var actionItem = result.SelectSingleNode(XpathZAddsRos);
+            actionItem.ChildNodes.Count.Should().Be(1);
+            actionItem.ChildNodes[0].ChildNodes.Count.Should().Be(21);
+
+            var startDateItem = result.SelectSingleNode(XpathStartDate);
+            var endDateItem = result.SelectSingleNode(XpathEndDate);
+            var lTypeItem = result.SelectSingleNode(XpathLType);
+            var licDurItem = result.SelectSingleNode(XpathLicDur);
+            var pOItem = result.SelectSingleNode(XpathPO);
+            var adsOrdNoItem = result.SelectSingleNode(XpathAdsOrdno);
+            var prodItem = result.SelectSingleNode(XpathProd);
+
+            startDateItem.InnerXml.Should().BeEmpty();
+            endDateItem.InnerXml.Should().BeEmpty();
+            lTypeItem.InnerXml.Should().BeEmpty();
+            licDurItem.InnerXml.Should().BeEmpty();
+            pOItem.InnerXml.Should().BeEmpty();
+            adsOrdNoItem.InnerXml.Should().BeEmpty();
+            prodItem.ChildNodes.Count.Should().Be(1);
+            prodItem.ChildNodes[0].ChildNodes.Count.Should().Be(5);
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Information
@@ -120,6 +155,20 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Error
                                                 && call.GetArgument<EventId>(1) == EventIds.LicenceUpdatedSapXmlTemplateNotFound.ToEventId()
                                                 && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "The licence updated SAP message xml template does not exist.").MustHaveHappenedOnceExactly();
+        }
+
+        [Test]
+        public void SapXmlPayloadCreationTests()
+        {
+            var jsonData = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(licenceUpdatedJsonData);
+            var sapReqXml = TestHelper.ReadFileData("ERPTestData\\RoSPayloadTest.xml");
+
+            A.CallTo(() => _fakeXmlHelper.CreateRecordOfSaleSapXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
+
+            MethodInfo methodInfo = typeof(LicenceUpdatedSapMessageBuilder).GetMethod("SapXmlPayloadCreation", BindingFlags.NonPublic | BindingFlags.Instance)!;
+            var result = (string)methodInfo.Invoke(_fakeLicenceUpdatedSapMessageBuilder, new object[] { jsonData!})!;
+
+            result.Should().NotBeNull();
         }
     }
 }

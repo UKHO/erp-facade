@@ -39,6 +39,9 @@
     <None Update="ERPTestData\ActionItemNodeTest.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ERPTestData\RoSPayloadTest.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
