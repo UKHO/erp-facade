@@ -8,7 +8,6 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 using UKHO.ERPFacade.API.Helpers;
 using UKHO.ERPFacade.API.UnitTests.Common;
 using UKHO.ERPFacade.Common.IO;
@@ -33,7 +32,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         private readonly string XpathPO = $"//*[local-name()='PO']";
         private readonly string XpathAdsOrdno = $"//*[local-name()='ADSORDNO']";
         private readonly string XpathProd = $"//*[local-name()='PROD']";
-        private readonly string XpathGuid = $"//*[local-name()='GUID']";
+        private const string XmlNameSpace = "http://www.w3.org/2001/XMLSchema-instance";
 
         private readonly string RosSapXmlFile = @"<?xml version=""1.0"" encoding=""utf-8""?>
 <soap:Envelope xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:soap=""http://schemas.xmlsoap.org/soap/envelope/"">
@@ -158,7 +157,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         }
 
         [Test]
-        public void SapXmlPayloadCreationTests()
+        public void WhenTransactionTypeIsChangeLicenceshouldReturns_SomeFieldsEmpty_SapXmlPayloadCreationTests()
         {
             var jsonData = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(licenceUpdatedJsonData);
             var sapReqXml = TestHelper.ReadFileData("ERPTestData\\RoSPayloadTest.xml");
@@ -166,9 +165,64 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             A.CallTo(() => _fakeXmlHelper.CreateRecordOfSaleSapXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
 
             MethodInfo methodInfo = typeof(LicenceUpdatedSapMessageBuilder).GetMethod("SapXmlPayloadCreation", BindingFlags.NonPublic | BindingFlags.Instance)!;
-            var result = (string)methodInfo.Invoke(_fakeLicenceUpdatedSapMessageBuilder, new object[] { jsonData! })!;
+            var result = (SapRecordOfSalePayLoad)methodInfo.Invoke(_fakeLicenceUpdatedSapMessageBuilder, new object[] { jsonData! })!;
 
             result.Should().NotBeNull();
+            result.CorrelationId.Should().Be("123-abc-456-xyz-333");
+            result.PROD.UnitOfSales.Count.Should().Be(1);
+            result.OrderNumber.Should().Be("");
+            result.StartDate.Should().Be("");
+            result.PurachaseOrder.Should().Be("");
+            result.EndDate.Should().Be("");
+            result.LicenceType.Should().Be("");
+            result.LicenceDuration.Should().Be(null);
+        }
+        [Test]
+        public void WhenTransactionTypeIsNotChangeLicenceShouldNotReturns_SomeFieldsEmpty_SapXmlPayloadCreationTests()
+        {
+            var jsonData = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(licenceUpdatedJsonData);
+            jsonData.Data.Licence.TransactionType = "NEWLICENCE";
+            jsonData.Data.Licence.OrderNumber = "1232T";
+            jsonData.Data.Licence.OrderDate = "2023-7-24";
+            jsonData.Data.Licence.PoRef = "ref-121";
+            jsonData.Data.Licence.HoldingsExpiryDate = "2023-7-24";
+            jsonData.Data.Licence.LicenceType = "1";
+            jsonData.Data.Licence.LicenceDuration = 2;
+
+
+            var sapReqXml = TestHelper.ReadFileData("ERPTestData\\RoSPayloadTest.xml");
+
+            A.CallTo(() => _fakeXmlHelper.CreateRecordOfSaleSapXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
+
+            MethodInfo methodInfo = typeof(LicenceUpdatedSapMessageBuilder).GetMethod("SapXmlPayloadCreation", BindingFlags.NonPublic | BindingFlags.Instance)!;
+            var result = (SapRecordOfSalePayLoad)methodInfo.Invoke(_fakeLicenceUpdatedSapMessageBuilder, new object[] { jsonData! })!;
+
+            result.Should().NotBeNull();
+            result.CorrelationId.Should().Be("123-abc-456-xyz-333");
+            result.PROD.UnitOfSales.Count.Should().Be(1);
+            result.OrderNumber.Should().Be(jsonData.Data.Licence.OrderNumber);
+            result.StartDate.Should().Be(jsonData.Data.Licence.OrderDate);
+            result.PurachaseOrder.Should().Be(jsonData.Data.Licence.PoRef);
+            result.EndDate.Should().Be(jsonData.Data.Licence.HoldingsExpiryDate);
+            result.LicenceType.Should().Be(jsonData.Data.Licence.LicenceType);
+            result.LicenceDuration.Should().Be(jsonData.Data.Licence.LicenceDuration);
+            result.PROD.UnitOfSales[0].Duration.Should().Be("");
+            result.PROD.UnitOfSales[0].Id.Should().Be("");
+            result.PROD.UnitOfSales[0].EndDate.Should().Be("");
+            result.PROD.UnitOfSales[0].ReNew.Should().Be("");
+            result.PROD.UnitOfSales[0].Repeat.Should().Be("");
+        }
+
+        [Test]
+        public void RemoveNullFieldsTest()
+        {
+            string licenceUpdatedSapPayloadXml = TestHelper.ReadFileData("ERPTestData\\SapPayloadWithnullableNameSpace.xml");
+
+            MethodInfo methodInfo = typeof(LicenceUpdatedSapMessageBuilder).GetMethod("RemoveNullFields", BindingFlags.NonPublic | BindingFlags.Instance)!;
+            string result = (string)methodInfo.Invoke(_fakeLicenceUpdatedSapMessageBuilder, new object[] { licenceUpdatedSapPayloadXml! })!;
+
+            result.Should().NotBeNullOrEmpty();
+            result.Should().NotContain(XmlNameSpace);
         }
     }
 }

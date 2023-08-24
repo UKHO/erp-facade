@@ -15,6 +15,9 @@ namespace UKHO.ERPFacade.API.Helpers
         private const string XpathZAddsRos = $"//*[local-name()='Z_ADDS_ROS']";
         private const string ImOrderNameSpace = "RecordOfSale";
         private const string TransactionType = "CHANGELICENCE";
+        private const string XmlNameSpace = "http://www.w3.org/2001/XMLSchema-instance";
+        private const string XmlNamespacePrefix = "xsi";
+
 
         public LicenceUpdatedSapMessageBuilder(ILogger<LicenceUpdatedSapMessageBuilder> logger,
             IXmlHelper xmlHelper,
@@ -39,7 +42,10 @@ namespace UKHO.ERPFacade.API.Helpers
             _logger.LogInformation(EventIds.CreatingLicenceUpdatedSapPayload.ToEventId(), "Creating licence updated SAP Payload.");
 
             XmlDocument soapXml = _xmlHelper.CreateXmlDocument(sapXmlTemplatePath);
-            string xml = SapXmlPayloadCreation(eventData);
+
+            var sapRecordOfSalePayLoad = SapXmlPayloadCreation(eventData);
+
+            string xml = _xmlHelper.CreateRecordOfSaleSapXmlPayLoad(sapRecordOfSalePayLoad);
 
             string sapXml = RemoveNullFields(xml.Replace(ImOrderNameSpace, ""));
             soapXml.SelectSingleNode(XpathZAddsRos).InnerXml = sapXml.SetXmlClosingTags();
@@ -49,7 +55,7 @@ namespace UKHO.ERPFacade.API.Helpers
             return soapXml;
         }
 
-        private string SapXmlPayloadCreation(RecordOfSaleEventPayLoad eventData)
+        private SapRecordOfSalePayLoad SapXmlPayloadCreation(RecordOfSaleEventPayLoad eventData)
         {
             var sapPayload = new SapRecordOfSalePayLoad
             {
@@ -90,7 +96,7 @@ namespace UKHO.ERPFacade.API.Helpers
                 }
             };
 
-            return _xmlHelper.CreateRecordOfSaleSapXmlPayLoad(sapPayload);
+            return sapPayload;
         }
 
         private string RemoveNullFields(string xml)
@@ -99,7 +105,7 @@ namespace UKHO.ERPFacade.API.Helpers
             xmldoc.LoadXml(xml);
 
             XmlNamespaceManager mgr = new XmlNamespaceManager(xmldoc.NameTable);
-            mgr.AddNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
+            mgr.AddNamespace(XmlNamespacePrefix, XmlNameSpace);
 
             XmlNodeList nullFields = xmldoc.SelectNodes("//*[@xsi:nil='true']", mgr);
 

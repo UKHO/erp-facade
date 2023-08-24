@@ -42,6 +42,9 @@
     <None Update="ERPTestData\RoSPayloadTest.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ERPTestData\SapPayloadWithnullableNameSpace.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
