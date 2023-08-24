@@ -14,7 +14,7 @@ namespace UKHO.ERPFacade.Common.IO
             return xmlDocument;
         }
 
-        public  string CreateRecordOfSaleSapXmlPayLoad<T>(T anyobject)
+        public string CreateRecordOfSaleSapXmlPayLoad<T>(T anyobject)
         {
             var xml = string.Empty;
 

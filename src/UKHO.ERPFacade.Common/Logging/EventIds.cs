@@ -619,14 +619,19 @@ namespace UKHO.ERPFacade.Common.Logging
         UploadedLicenceUpdatedSapXmlPayloadInAzureBlob = 940123,
 
         /// <summary>
-        /// 940124 - Creating Sap Xml payload.
+        /// 940124 - Creating licence updated Sap Xml payload.
         /// </summary>
-        CreatingSapPayload = 940124,
+        CreatingLicenceUpdatedSapPayload = 940124,
 
         /// <summary>
-        /// 940125 - SAP xml payload created.
+        /// 940125 - Licence updated SAP xml payload created.
         /// </summary>
-        CreatedSapPayload = 940125
+        CreatedLicenceUpdatedSapPayload = 940125,
+
+        /// <summary>
+        /// 940126 - Licence updated SAP message xml template does not exist.
+        /// </summary>
+        LicenceUpdatedSapXmlTemplateNotFound = 940126
     }
 
     /// <summary>

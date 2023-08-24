@@ -32,11 +32,11 @@ namespace UKHO.ERPFacade.API.Helpers
 
             if (!_fileSystemHelper.IsFileExists(sapXmlTemplatePath))
             {
-                _logger.LogError(EventIds.SapXmlTemplateNotFound.ToEventId(), "The SAP message xml template does not exist.");
+                _logger.LogError(EventIds.LicenceUpdatedSapXmlTemplateNotFound.ToEventId(), "The licence updated SAP message xml template does not exist.");
                 throw new FileNotFoundException();
             }
 
-            _logger.LogInformation(EventIds.CreatingSapPayload.ToEventId(), "Creating SAP Payload.");
+            _logger.LogInformation(EventIds.CreatingLicenceUpdatedSapPayload.ToEventId(), "Creating licence updated SAP Payload.");
 
             XmlDocument soapXml = _xmlHelper.CreateXmlDocument(sapXmlTemplatePath);
             string xml = SapXmlPayloadCreation(eventData);
@@ -44,7 +44,7 @@ namespace UKHO.ERPFacade.API.Helpers
             string sapXml = RemoveNullFields(xml.Replace(ImOrderNameSpace, ""));
             soapXml.SelectSingleNode(XpathZAddsRos).InnerXml = sapXml.SetXmlClosingTags();
 
-            _logger.LogInformation(EventIds.CreatedSapPayload.ToEventId(), "SAP payload created.");
+            _logger.LogInformation(EventIds.CreatedLicenceUpdatedSapPayload.ToEventId(), "Licence updated SAP payload created.");
 
             return soapXml;
         }
