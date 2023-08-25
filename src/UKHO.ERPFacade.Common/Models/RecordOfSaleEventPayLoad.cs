@@ -59,7 +59,7 @@ namespace UKHO.ERPFacade.Common.Models
         [JsonProperty("shippingCoNumber")]
         public string ShippingCoNumber { get; set; }
 
-        [JsonProperty("ordernumber")]
+        [JsonProperty("orderNumber")]
         public string OrderNumber { get; set; }
 
         [JsonProperty("orderDate")]

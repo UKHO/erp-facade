@@ -189,7 +189,6 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             jsonData.Data.Licence.LicenceType = "1";
             jsonData.Data.Licence.LicenceDuration = 2;
 
-
             var sapReqXml = TestHelper.ReadFileData("ERPTestData\\RoSPayloadTest.xml");
 
             A.CallTo(() => _fakeXmlHelper.CreateRecordOfSaleSapXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
