@@ -26,7 +26,7 @@
             public string transactionType { get; set; }
             public string distributorCustomerNumber { get; set; }
             public string shippingCoNumber { get; set; }
-            public string ordernumber { get; set; }
+            public string orderNumber { get; set; }
             public string orderDate { get; set; }
             public string poref { get; set; }
             public string holdingsExpiryDate { get; set; }

@@ -25,7 +25,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             string updatedRequestBody)
         {
 
-            FMLicenseUpdateXMLHelper.JsonPayload = jsonPayload;
             UpdatedJsonPayload = JsonConvert.DeserializeObject<JsonInputLicenceUpdateHelper>(updatedRequestBody);
 
             XmlDocument xmlDoc = new XmlDocument();
@@ -41,7 +40,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             var reader = new XmlTextReader(ms) { Namespaces = false };
             var serializer = new XmlSerializer(typeof(Z_ADDS_ROS));
             var result = (Z_ADDS_ROS)serializer.Deserialize(reader);
-            JsonInputLicenceUpdateHelper.License licenceUpdtateJsonDataLicense = UpdatedJsonPayload.data.license;
+            JsonInputLicenceUpdateHelper.License licenceJsonFields = UpdatedJsonPayload.data.license;
             Z_ADDS_ROSIM_ORDER licResult = result.IM_ORDER;
 
 
@@ -49,11 +48,11 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             Assert.That(UpdatedJsonPayload.data.correlationId.Equals(licResult.GUID),
                 "GUID in xml is same a corrid as in EES JSON");
 
-            if (licResult.SERVICETYPE.Equals(licenceUpdtateJsonDataLicense.productType))
+            if (licResult.SERVICETYPE.Equals(licenceJsonFields.productType))
             {
                 if (licResult.LICTRANSACTION.Equals("CHANGELICENCE"))
                 {
-                    Assert.True(VerifyChangeLicense(licResult, licenceUpdtateJsonDataLicense));
+                    Assert.True(VerifyChangeLicense(licResult, licenceJsonFields));
 
                 }
             }
@@ -143,7 +142,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         public static async Task<bool> VerifyPresenseOfMandatoryXMLAtrributes(Z_ADDS_ROSIM_ORDER order)
         {
             List<string> ActionAttributesSeq = new List<string>();
-            ActionAttributesSeq = Config.TestConfig.ROSLUXMLList.ToList<string>();
+            ActionAttributesSeq = Config.TestConfig.RosLicenceUpdateXMLList.ToList<string>();
             List<string> CurrentActionAttributes = new List<string>();
             CurrentActionAttributes.Clear();
             Type arrayType = order.GetType();
@@ -152,7 +151,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             {
                 CurrentActionAttributes.Add(property.Name);
             }
-            for (int i = 0; i < 21; i++)
+            for (int i = 0; i < ActionAttributesSeq.Count; i++)
             {
                 if (CurrentActionAttributes[i] != ActionAttributesSeq[i])
                 {

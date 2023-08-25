@@ -14,7 +14,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         private readonly ADAuthTokenProvider _authToken = new();
         private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
         //for local
-        //private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
+       // private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
 
         [SetUp]
         public void Setup()
@@ -47,7 +47,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [TestCase("LU01_ValidInputjson.json", TestName = "WhenValidLUEventInLicenceUpdatedPublishedEventReceivedPostReceivedWithValidToken_ThenWebhookReturns200OkResponse")]
         public async Task WhenValidLUEventInLicenceUpdatedPublishedEventReceivedPostReceivedWithValidToken_ThenWebhookReturns200OkResponse(string payloadFileName)
         {
-            string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.LicenceUpdate, payloadFileName);
+            string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.LicenceUpdatedPayloadTestData, payloadFileName);
             var response = await _LUpdatedWebhookEndpoint.PostLicenceUpdatedWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(false));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
@@ -56,7 +56,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [TestCase("LU01_ValidInputjson.json", TestName = "WhenValidLUEventInLicenceUpdatedPublishedEventReceivedPostReceivedWithInvalidToken_ThenWebhookReturns401UnauthorizedResponse")]
         public async Task WhenValidLUEventInLicenceUpdatedPublishedEventReceivedPostReceivedWithInvalidToken_ThenWebhookReturns401UnauthorizedResponse(string payloadFileName)
         {
-            string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.LicenceUpdate, payloadFileName);
+            string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.LicenceUpdatedPayloadTestData, payloadFileName);
             var response = await _LUpdatedWebhookEndpoint.PostLicenceUpdatedWebhookResponseAsync(filePath, "invalidToken_abcd");
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
         }
@@ -65,7 +65,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [TestCase("LU01_ValidInputjson.json", TestName = "WhenValidLUEventInLicenceUpdatedPublishedEventReceivedPostReceivedWithInvalidToken_ThenWebhookReturns403ForbiddenResponse")]
         public async Task WhenValidLUEventInLicenceUpdatedPublishedEventReceivedPostReceivedWithInvalidToken_ThenWebhookReturns403ForbiddenResponse(string payloadFileName)
         {
-            string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.LicenceUpdate, payloadFileName);
+            string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.LicenceUpdatedPayloadTestData, payloadFileName);
             var response = await _LUpdatedWebhookEndpoint.PostLicenceUpdatedWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(true));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.Forbidden);
         }
@@ -74,7 +74,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [TestCase("LU04_InvalidLUJsonFile.json", TestName = "WhenInValidLUEventInLicenceUpdatedPublishedEventReceivedPostReceived_ThenWebhookReturns400BadRequestResponse")]
         public async Task WhenInValidLUEventInLicenceUpdatedPublishedEventReceivedPostReceived_ThenWebhookReturns400BadRequestResponse(string payloadFileName)
         {
-            string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.LicenceUpdate, payloadFileName);
+            string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.LicenceUpdatedPayloadTestData, payloadFileName);
             var response = await _LUpdatedWebhookEndpoint.PostLicenceUpdatedWebhookResponseAsync("Bad Request", filePath, await _authToken.GetAzureADToken(false));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
         }
@@ -83,7 +83,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [TestCase("LU02_UnSupportedPayloadType.xml", TestName = "WhenInvalidLUEventInLicenceUpdatedPublishedEventReceivedPostReceivedWithInvalidPayloadType_ThenWebhookReturns415UnsupportedMediaResponse")]
         public async Task WhenInvalidLUEventInLicenceUpdatedPublishedEventReceivedPostReceivedWithInvalidPayloadType_ThenWebhookReturns415UnsupportedMediaResponse(string payloadFileName)
         {
-            string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.LicenceUpdate, payloadFileName);
+            string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.LicenceUpdatedPayloadTestData, payloadFileName);
             var response = await _LUpdatedWebhookEndpoint.PostLicenceUpdatedWebhookResponseAsync("Unsupported Media Type", filePath, await _authToken.GetAzureADToken(false));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.UnsupportedMediaType);
         }
@@ -94,8 +94,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         public async Task WhenValidLUEventInLicenceUpdatedPublishedEventReceivedPostReceivedWithValidPayload_ThenWebhookReturns200OkResponse(string payloadJsonFileName)
         {
             Console.WriteLine("Scenario:" + payloadJsonFileName + "\n");
-            string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.LicenceUpdate,  payloadJsonFileName);
-            string generatedXMLFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXMLFolder,Config.TestConfig.LicenceUpdate);
+            string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.LicenceUpdatedPayloadTestData,  payloadJsonFileName);
+            string generatedXMLFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXMLFolder,Config.TestConfig.LicenceUpdatedPayloadTestData);
            RestResponse response = await _LUpdatedWebhookEndpoint.PostLicenceUpdatedResponseAsyncForXML(filePath, generatedXMLFolder, await _authToken.GetAzureADToken(false));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
@@ -103,7 +103,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [TestCase("LU03_InvalidLUJsonFile.json", TestName = "WhenValidLUEventInLicenceUpdatedPublishedEventReceivedPostReceivedWithInvalidPayload_ThenWebhookReturns500InternalServerErrorResponse")]
         public async Task WhenValidLUEventInLicenceUpdatedPublishedEventReceivedPostReceivedWithInvalidPayload_ThenWebhookReturns500InternalServerErrorResponse(string payloadFileName)
         {
-            string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.LicenceUpdate, payloadFileName);
+            string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.LicenceUpdatedPayloadTestData, payloadFileName);
             var response = await _LUpdatedWebhookEndpoint.PostLicenceUpdatedWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(false));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.InternalServerError);
         }
