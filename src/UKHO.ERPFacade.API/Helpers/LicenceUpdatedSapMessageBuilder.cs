@@ -15,8 +15,6 @@ namespace UKHO.ERPFacade.API.Helpers
         private const string XpathZAddsRos = $"//*[local-name()='Z_ADDS_ROS']";
         private const string ImOrderNameSpace = "RecordOfSale";
         private const string TransactionType = "CHANGELICENCE";
-        private const string XmlNameSpace = "http://www.w3.org/2001/XMLSchema-instance";
-        private const string XmlNamespacePrefix = "xsi";
 
 
         public LicenceUpdatedSapMessageBuilder(ILogger<LicenceUpdatedSapMessageBuilder> logger,
@@ -45,10 +43,11 @@ namespace UKHO.ERPFacade.API.Helpers
 
             var sapRecordOfSalePayLoad = SapXmlPayloadCreation(eventData);
 
-            string xml = _xmlHelper.CreateRecordOfSaleSapXmlPayLoad(sapRecordOfSalePayLoad);
+            string xml = _xmlHelper.CreateXmlPayLoad(sapRecordOfSalePayLoad);
 
-            string sapXml = RemoveNullFields(xml.Replace(ImOrderNameSpace, ""));
-            soapXml.SelectSingleNode(XpathZAddsRos).InnerXml = sapXml.SetXmlClosingTags();
+            string sapXml = xml.Replace(ImOrderNameSpace, "");
+           
+            soapXml.SelectSingleNode(XpathZAddsRos).InnerXml = sapXml.RemoveNullFields().SetXmlClosingTags();
 
             _logger.LogInformation(EventIds.CreatedLicenceUpdatedSapPayload.ToEventId(), "Licence updated SAP payload created.");
 
@@ -97,38 +96,6 @@ namespace UKHO.ERPFacade.API.Helpers
             };
 
             return sapPayload;
-        }
-
-        private string RemoveNullFields(string xml)
-        {
-            XmlDocument xmldoc = new();
-            xmldoc.LoadXml(xml);
-
-            XmlNamespaceManager mgr = new XmlNamespaceManager(xmldoc.NameTable);
-            mgr.AddNamespace(XmlNamespacePrefix, XmlNameSpace);
-
-            XmlNodeList nullFields = xmldoc.SelectNodes("//*[@xsi:nil='true']", mgr);
-
-            if (nullFields != null && nullFields.Count > 0)
-            {
-                for (int i = 0; i < nullFields.Count; i++)
-                {
-                    XmlDocumentFragment xmlDocFrag = xmldoc.CreateDocumentFragment();
-                    string newNode = "<" + nullFields[i].Name + "></" + nullFields[i].Name + ">";
-                    xmlDocFrag.InnerXml = newNode;
-
-                    var previousNode = nullFields[i].PreviousSibling;
-                    string Xpath = $"//*[local-name()='{previousNode.Name}']";
-
-                    XmlElement element = (XmlElement)xmldoc.SelectSingleNode(Xpath);
-
-                    nullFields[i].ParentNode.RemoveChild(nullFields[i]);
-
-                    XmlNode parent = element.ParentNode;
-                    parent.InsertAfter(xmlDocFrag, element);
-                }
-            }
-            return xmldoc.InnerXml;
         }
     }
 }

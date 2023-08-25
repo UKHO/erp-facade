@@ -102,7 +102,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
 
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
-            A.CallTo(() => _fakeXmlHelper.CreateRecordOfSaleSapXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
+            A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
 
             var result = _fakeLicenceUpdatedSapMessageBuilder.BuildLicenceUpdatedSapMessageXml(jsonData!, correlationId);
 
@@ -162,7 +162,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             var jsonData = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(licenceUpdatedJsonData);
             var sapReqXml = TestHelper.ReadFileData("ERPTestData\\RoSPayloadTest.xml");
 
-            A.CallTo(() => _fakeXmlHelper.CreateRecordOfSaleSapXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
+            A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
 
             MethodInfo methodInfo = typeof(LicenceUpdatedSapMessageBuilder).GetMethod("SapXmlPayloadCreation", BindingFlags.NonPublic | BindingFlags.Instance)!;
             var result = (SapRecordOfSalePayLoad)methodInfo.Invoke(_fakeLicenceUpdatedSapMessageBuilder, new object[] { jsonData! })!;
@@ -191,7 +191,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
 
             var sapReqXml = TestHelper.ReadFileData("ERPTestData\\RoSPayloadTest.xml");
 
-            A.CallTo(() => _fakeXmlHelper.CreateRecordOfSaleSapXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
+            A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
 
             MethodInfo methodInfo = typeof(LicenceUpdatedSapMessageBuilder).GetMethod("SapXmlPayloadCreation", BindingFlags.NonPublic | BindingFlags.Instance)!;
             var result = (SapRecordOfSalePayLoad)methodInfo.Invoke(_fakeLicenceUpdatedSapMessageBuilder, new object[] { jsonData! })!;
@@ -210,18 +210,6 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             result.PROD.UnitOfSales[0].EndDate.Should().Be("");
             result.PROD.UnitOfSales[0].ReNew.Should().Be("");
             result.PROD.UnitOfSales[0].Repeat.Should().Be("");
-        }
-
-        [Test]
-        public void RemoveNullFieldsTest()
-        {
-            string licenceUpdatedSapPayloadXml = TestHelper.ReadFileData("ERPTestData\\SapPayloadWithnullableNameSpace.xml");
-
-            MethodInfo methodInfo = typeof(LicenceUpdatedSapMessageBuilder).GetMethod("RemoveNullFields", BindingFlags.NonPublic | BindingFlags.Instance)!;
-            string result = (string)methodInfo.Invoke(_fakeLicenceUpdatedSapMessageBuilder, new object[] { licenceUpdatedSapPayloadXml! })!;
-
-            result.Should().NotBeNullOrEmpty();
-            result.Should().NotContain(XmlNameSpace);
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Text;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace UKHO.ERPFacade.Common.IO
 {
@@ -74,6 +75,38 @@ namespace UKHO.ERPFacade.Common.IO
                 emptyElementList[i].InnerText = "";
             }
 
+            return xmldoc.InnerXml;
+        }
+
+        public static string RemoveNullFields(this string xml)
+        {
+            XmlDocument xmldoc = new();
+            xmldoc.LoadXml(xml);
+
+            XmlNamespaceManager mgr = new XmlNamespaceManager(xmldoc.NameTable);
+            mgr.AddNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
+
+            XmlNodeList nullFields = xmldoc.SelectNodes("//*[@xsi:nil='true']", mgr);
+
+            if (nullFields != null && nullFields.Count > 0)
+            {
+                for (int i = 0; i < nullFields.Count; i++)
+                {
+                    XmlDocumentFragment xmlDocFrag = xmldoc.CreateDocumentFragment();
+                    string newNode = "<" + nullFields[i].Name + "></" + nullFields[i].Name + ">";
+                    xmlDocFrag.InnerXml = newNode;
+
+                    var previousNode = nullFields[i].PreviousSibling;
+                    string Xpath = $"//*[local-name()='{previousNode.Name}']";
+
+                    XmlElement element = (XmlElement)xmldoc.SelectSingleNode(Xpath);
+
+                    nullFields[i].ParentNode.RemoveChild(nullFields[i]);
+
+                    XmlNode parent = element.ParentNode;
+                    parent.InsertAfter(xmlDocFrag, element);
+                }
+            }
             return xmldoc.InnerXml;
         }
     }

@@ -44,7 +44,7 @@ namespace UKHO.ERPFacade.API.Controllers
                                  ISapClient sapClient,
                                  ISapMessageBuilder sapMessageBuilder,
                                  IOptions<SapConfiguration> sapConfig,
-                                 ILicenceUpdatedSapMessageBuilder LicenceUpdatedSapMessageBuilder)
+                                 ILicenceUpdatedSapMessageBuilder licenceUpdatedSapMessageBuilder)
         : base(contextAccessor)
         {
             _logger = logger;
@@ -52,7 +52,7 @@ namespace UKHO.ERPFacade.API.Controllers
             _azureBlobEventWriter = azureBlobEventWriter;
             _sapClient = sapClient;
             _sapMessageBuilder = sapMessageBuilder;
-            _licenceUpdatedSapMessageBuilder = LicenceUpdatedSapMessageBuilder;
+            _licenceUpdatedSapMessageBuilder = licenceUpdatedSapMessageBuilder;
             _sapConfig = sapConfig ?? throw new ArgumentNullException(nameof(sapConfig));
         }
 
