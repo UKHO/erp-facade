@@ -20,9 +20,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         private static readonly JsonHelper _jsonHelper;
         private static readonly List<string> AttrNotMatched = new();
 
-        private static string XMLFilePath =
-            "D://UpdatedERP//tests//UKHO.ERPFacade.API.FunctionalTests//ERPFacadeGeneratedXmlFiles//FMLicenseUpdateXMLGenerated//FM-RoS-XMLPayloadUpdateLicense.xml";
-
+      
         public static async Task<bool> CheckXMLAttributes(LUpdatedJsonPayloadHelper jsonPayload, string XMLFilePath,
             string updatedRequestBody)
         {
@@ -59,11 +57,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
                 }
             }
-
-
-
-
-
             await Task.CompletedTask;
             Console.WriteLine("XML has correct data");
             return true;
@@ -160,9 +153,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         return false;
                     }
                 }
-
                 
-
             Console.WriteLine("Mandatory attributes are present in  XML");
                 await Task.CompletedTask;
                 return true;

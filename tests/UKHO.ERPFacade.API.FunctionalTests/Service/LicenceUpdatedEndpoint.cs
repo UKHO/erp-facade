@@ -103,27 +103,20 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             {
                 requestBody = streamReader.ReadToEnd();
             }
-
             generatedCorrelationId = SAPXmlHelper.GenerateRandomCorrelationId();
             requestBody = SAPXmlHelper.UpdateTimeAndCorrIdField(requestBody, generatedCorrelationId);
-
             var request = new RestRequest(LicenceUpdatedRequestEndPoint, Method.Post);
             request.AddHeader("Content-Type", "application/json");
             request.AddHeader("Authorization", "Bearer " + token);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
             RestResponse response = await _client.ExecuteAsync(request);
-
             LUpdatedJsonPayloadHelper jsonPayload = JsonConvert.DeserializeObject<LUpdatedJsonPayloadHelper>(requestBody);
             string correlationId = jsonPayload.data.correlationId;
-
-            //Logic to download XML from container using TraceID from JSON
             string generatedXMLFilePath = _azureBlobStorageHelper.DownloadGeneratedXMLFile(generatedXMLFolder, generatedCorrelationId, "licenceupdatedblobs");
 
-            //Logic to verifyxml
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
-              
-               Assert.That(FMLicenseUpdateXMLHelper.CheckXMLAttributes(jsonPayload, generatedXMLFilePath, requestBody).Result, Is.True, "CheckXMLAttributes Failed");
+             Assert.That(FMLicenseUpdateXMLHelper.CheckXMLAttributes(jsonPayload, generatedXMLFilePath, requestBody).Result, Is.True, "CheckXMLAttributes Failed");
             }
             return response;
         }
