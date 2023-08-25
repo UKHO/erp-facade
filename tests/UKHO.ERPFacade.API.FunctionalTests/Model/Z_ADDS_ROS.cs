@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Model
 {
+
     // NOTE: Generated code may require at least .NET Framework 4.5 or .NET Core/Standard 2.0.
     /// <remarks/>
     [System.SerializableAttribute()]
@@ -112,7 +113,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
 
         private string fLEETField;
 
-        private int uSERSField;
+        private string uSERSField;
 
         private string eNDUSERIDField;
 
@@ -120,7 +121,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
 
         private string lTYPEField;
 
-        private int lICDURField;
+        private string lICDURField;
 
         private string poField;
 
@@ -298,7 +299,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
         }
 
         /// <remarks/>
-        public int USERS
+        public string USERS
         {
             get
             {
@@ -350,7 +351,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
         }
 
         /// <remarks/>
-        public int LICDUR
+        public string LICDUR
         {
             get
             {
@@ -485,7 +486,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
             }
         }
     }
-
 
 
 }

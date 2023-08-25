@@ -104,8 +104,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
                 requestBody = streamReader.ReadToEnd();
             }
 
-           // generatedCorrelationId = SAPXmlHelper.GenerateRandomCorrelationId();
-           // requestBody = SAPXmlHelper.UpdateTimeAndCorrIdField(requestBody, generatedCorrelationId);
+            generatedCorrelationId = SAPXmlHelper.GenerateRandomCorrelationId();
+            requestBody = SAPXmlHelper.UpdateTimeAndCorrIdField(requestBody, generatedCorrelationId);
 
             var request = new RestRequest(LicenceUpdatedRequestEndPoint, Method.Post);
             request.AddHeader("Content-Type", "application/json");
@@ -117,13 +117,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             string correlationId = jsonPayload.data.correlationId;
 
             //Logic to download XML from container using TraceID from JSON
-            string generatedXMLFilePath = _azureBlobStorageHelper.DownloadGeneratedXMLFile(generatedXMLFolder, correlationId, "licenseupdatedblobs");
+            string generatedXMLFilePath = _azureBlobStorageHelper.DownloadGeneratedXMLFile(generatedXMLFolder, generatedCorrelationId, "licenceupdatedblobs");
 
             //Logic to verifyxml
-          //  if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
-              //  Assert.That(SAPXmlHelper.VerifyInitialXMLHeaders(jsonPayload, generatedXMLFilePath), Is.True, "Initial Header Value Not Correct");
-               // Assert.That(SAPXmlHelper.VerifyOrderOfActions(jsonPayload, generatedXMLFilePath), Is.True, "Order of Action Not Correct in XML File");
+              
                Assert.That(FMLicenseUpdateXMLHelper.CheckXMLAttributes(jsonPayload, generatedXMLFilePath, requestBody).Result, Is.True, "CheckXMLAttributes Failed");
             }
             return response;

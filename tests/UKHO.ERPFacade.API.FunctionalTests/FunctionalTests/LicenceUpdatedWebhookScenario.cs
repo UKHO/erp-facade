@@ -93,11 +93,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         public async Task WhenValidLUEventInLicenceUpdatedPublishedEventReceivedPostReceivedWithValidPayload_ThenWebhookReturns200OkResponse(string payloadJsonFileName)
         {
             Console.WriteLine("Scenario:" + payloadJsonFileName + "\n");
-            string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.LicenseUpdate,  payloadJsonFileName);
-            string generatedXMLFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXMLFolder,Config.TestConfig.LicenseUpdate);
-            string generatedXMLFilePath =
-                "D://UpdatedERP//tests//UKHO.ERPFacade.API.FunctionalTests//ERPFacadeGeneratedXmlFiles//FMLicenseUpdateXMLGenerated//FM-RoS-XMLPayloadUpdateLicense.xml";
-            RestResponse response = await _LUpdatedWebhookEndpoint.PostLicenceUpdatedResponseAsyncForXML(filePath, generatedXMLFolder, await _authToken.GetAzureADToken(false));
+            string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.LicenceUpdate,  payloadJsonFileName);
+            string generatedXMLFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXMLFolder,Config.TestConfig.LicenceUpdate);
+           RestResponse response = await _LUpdatedWebhookEndpoint.PostLicenceUpdatedResponseAsyncForXML(filePath, generatedXMLFolder, await _authToken.GetAzureADToken(false));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
     }

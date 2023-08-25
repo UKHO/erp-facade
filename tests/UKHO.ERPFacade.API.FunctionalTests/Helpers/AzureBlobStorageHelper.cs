@@ -131,11 +131,11 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             BlobServiceClient blobServiceClient = new BlobServiceClient(Config.TestConfig.AzureStorageConfiguration.ConnectionString);
 
             BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(parentContainerName + "\\" + blobContainer );
-            BlobClient blobClient = containerClient.GetBlobClient(blobContainer+ "/" + "FM-RoS-XMLPayloadUpdateLicense" + ".xml");
+            BlobClient blobClient = containerClient.GetBlobClient(blobContainer+ "/" + "SapXmlPayload" + ".xml");
             try
             {
                 BlobDownloadInfo blobDownload = blobClient.Download();
-                 fileName = expectedXMLfilePath +  "\\" + blobContainer + "\\"+ "FM-RoS-XMLPayloadUpdateLicense" + ".xml";
+                 fileName = expectedXMLfilePath +  "\\" + blobContainer + "\\"+ "SapXmlPayload" + ".xml";
                Directory.CreateDirectory(Path.GetDirectoryName(fileName));
                using (FileStream downloadFileStream = new(fileName, FileMode.Create))
                 {
