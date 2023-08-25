@@ -17,7 +17,9 @@
         public SharedKeyConfiguration SharedKeyConfiguration { get; set; }
         public string LicenceUpdate { get; set; }
         public string[] ROSLUXMLList { get; set; }
+        public string[] ROSLUProdXMLList { get; set; }
         
+
 
     }
 

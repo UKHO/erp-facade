@@ -161,9 +161,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     }
                 }
 
-            
-            
-                Console.WriteLine("Mandatory attributes are present in  XML");
+                
+
+            Console.WriteLine("Mandatory attributes are present in  XML");
                 await Task.CompletedTask;
                 return true;
              

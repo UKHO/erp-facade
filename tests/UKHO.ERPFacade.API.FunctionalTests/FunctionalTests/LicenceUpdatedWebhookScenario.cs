@@ -90,6 +90,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
         [Test, Order(0)]
         [TestCase("LicenceUpdated.json", TestName = "WhenValidLUEventInLicenceUpdatedPublishedEventReceivedPostReceivedWithValidPayload_ThenWebhookReturns200OkResponse")]
+        [TestCase("LicenceUpdated.json", TestName = "WhenValidLUEventInLicenceUpdatedPublishedEventReceivedPostReceivedWithInvalidPayload_ThenWebhookReturns500InternalServerErrorResponse")]
         public async Task WhenValidLUEventInLicenceUpdatedPublishedEventReceivedPostReceivedWithValidPayload_ThenWebhookReturns200OkResponse(string payloadJsonFileName)
         {
             Console.WriteLine("Scenario:" + payloadJsonFileName + "\n");
