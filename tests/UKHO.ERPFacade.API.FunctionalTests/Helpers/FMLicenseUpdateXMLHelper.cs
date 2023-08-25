@@ -15,18 +15,18 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
     [TestFixture]
     public class FMLicenseUpdateXMLHelper
     {
-        private static LUpdatedJsonPayloadHelper UpdatedJsonPayload { get; set; }
-        private static LUpdatedJsonPayloadHelper JsonPayload { get; set; }
+        private static JsonInputLicenceUpdateHelper UpdatedJsonPayload { get; set; }
+        private static JsonInputLicenceUpdateHelper JsonPayload { get; set; }
         private static readonly JsonHelper _jsonHelper;
         private static readonly List<string> AttrNotMatched = new();
 
       
-        public static async Task<bool> CheckXMLAttributes(LUpdatedJsonPayloadHelper jsonPayload, string XMLFilePath,
+        public static async Task<bool> CheckXMLAttributes(JsonInputLicenceUpdateHelper jsonPayload, string XMLFilePath,
             string updatedRequestBody)
         {
 
             FMLicenseUpdateXMLHelper.JsonPayload = jsonPayload;
-            UpdatedJsonPayload = JsonConvert.DeserializeObject<LUpdatedJsonPayloadHelper>(updatedRequestBody);
+            UpdatedJsonPayload = JsonConvert.DeserializeObject<JsonInputLicenceUpdateHelper>(updatedRequestBody);
 
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.LoadXml(File.ReadAllText(XMLFilePath));
@@ -41,7 +41,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             var reader = new XmlTextReader(ms) { Namespaces = false };
             var serializer = new XmlSerializer(typeof(Z_ADDS_ROS));
             var result = (Z_ADDS_ROS)serializer.Deserialize(reader);
-            LUpdatedJsonPayloadHelper.License licencefeildsJSON = UpdatedJsonPayload.data.license;
+            JsonInputLicenceUpdateHelper.License licenceUpdtateJsonDataLicense = UpdatedJsonPayload.data.license;
             Z_ADDS_ROSIM_ORDER licResult = result.IM_ORDER;
 
 
@@ -49,11 +49,11 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             Assert.That(UpdatedJsonPayload.data.correlationId.Equals(licResult.GUID),
                 "GUID in xml is same a corrid as in EES JSON");
 
-            if (licResult.SERVICETYPE.Equals(licencefeildsJSON.productType))
+            if (licResult.SERVICETYPE.Equals(licenceUpdtateJsonDataLicense.productType))
             {
                 if (licResult.LICTRANSACTION.Equals("CHANGELICENCE"))
                 {
-                    Assert.True(VerifyChangeLicense(licResult, licencefeildsJSON));
+                    Assert.True(VerifyChangeLicense(licResult, licenceUpdtateJsonDataLicense));
 
                 }
             }
@@ -63,7 +63,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         }
 
         private static bool? VerifyChangeLicense(Z_ADDS_ROSIM_ORDER licResult,
-            LUpdatedJsonPayloadHelper.License licencefeildsJSON)
+            JsonInputLicenceUpdateHelper.License licencefeildsJSON)
         {
             if (!licResult.SOLDTOACC.Equals(licencefeildsJSON.distributorCustomerNumber))
                 AttrNotMatched.Add(nameof(licResult.SOLDTOACC));
@@ -94,12 +94,26 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             Z_ADDS_ROSIM_ORDERItem[] items = licResult.PROD;
             VerifyBlankFields(licResult, fieldNames);
             VerifyBlankProductFields(items[0], fieldNamesProduct);
+
+            if (AttrNotMatched.Count == 0)
+            {
+                Console.WriteLine("CHANGELICENCE event XML is correct");
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("CHANGELICENCE event XML is incorrect");
+                Console.WriteLine("Not matching attributes are:");
+                foreach (string attribute in AttrNotMatched)
+                { Console.WriteLine(attribute); }
+                return false;
+            }
             return true;
         }
 
-        private static bool VerifyBlankFields(Z_ADDS_ROSIM_ORDER licResult, string[] fieldNames)
+        private static void VerifyBlankFields(Z_ADDS_ROSIM_ORDER licResult, string[] fieldNames)
         {
-            bool allBlanks = true;
+           
 
             foreach (string field in fieldNames)
             {
@@ -108,12 +122,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     AttrNotMatched.Add(typeof(Z_ADDS_ROSIM_ORDER).GetProperty(field).Name);
             }
 
-            return allBlanks;
+          
         }
 
-        private static bool VerifyBlankProductFields(Z_ADDS_ROSIM_ORDERItem items, string[] fieldNamesProduct)
+        private static void VerifyBlankProductFields(Z_ADDS_ROSIM_ORDERItem items, string[] fieldNamesProduct)
         {
-            bool allBlanks = true;
+            
 
             foreach (string field in fieldNamesProduct)
             {
@@ -123,7 +137,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
             }
 
-            return allBlanks;
+           
         }
 
         public static async Task<bool> VerifyPresenseOfMandatoryXMLAtrributes(Z_ADDS_ROSIM_ORDER order)
@@ -131,28 +145,22 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             List<string> ActionAttributesSeq = new List<string>();
             ActionAttributesSeq = Config.TestConfig.ROSLUXMLList.ToList<string>();
             List<string> CurrentActionAttributes = new List<string>();
-
-            
-            
-                CurrentActionAttributes.Clear();
-                Type arrayType = order.GetType();
-                var properties = arrayType.GetProperties();
-
-                foreach (var property in properties)
+            CurrentActionAttributes.Clear();
+            Type arrayType = order.GetType();
+            var properties = arrayType.GetProperties();
+            foreach (var property in properties)
+            {
+                CurrentActionAttributes.Add(property.Name);
+            }
+            for (int i = 0; i < 21; i++)
+            {
+                if (CurrentActionAttributes[i] != ActionAttributesSeq[i])
                 {
-                    CurrentActionAttributes.Add(property.Name);
+                    Console.WriteLine("First missed Attribute is:" + ActionAttributesSeq[i] +
+                                    " for action number:");
+                    return false;
                 }
-
-
-                for (int i = 0; i < 21; i++)
-                {
-                    if (CurrentActionAttributes[i] != ActionAttributesSeq[i])
-                    {
-                        Console.WriteLine("First missed Attribute is:" + ActionAttributesSeq[i] +
-                                          " for action number:");
-                        return false;
-                    }
-                }
+            }
                 
             Console.WriteLine("Mandatory attributes are present in  XML");
                 await Task.CompletedTask;

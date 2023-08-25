@@ -110,7 +110,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             request.AddHeader("Authorization", "Bearer " + token);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
             RestResponse response = await _client.ExecuteAsync(request);
-            LUpdatedJsonPayloadHelper jsonPayload = JsonConvert.DeserializeObject<LUpdatedJsonPayloadHelper>(requestBody);
+            JsonInputLicenceUpdateHelper jsonPayload = JsonConvert.DeserializeObject<JsonInputLicenceUpdateHelper>(requestBody);
             string correlationId = jsonPayload.data.correlationId;
             string generatedXMLFilePath = _azureBlobStorageHelper.DownloadGeneratedXMLFile(generatedXMLFolder, generatedCorrelationId, "licenceupdatedblobs");
 

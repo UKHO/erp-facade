@@ -113,7 +113,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
 
         private string fLEETField;
 
-        private string uSERSField;
+        private int uSERSField;
 
         private string eNDUSERIDField;
 
@@ -299,7 +299,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
         }
 
         /// <remarks/>
-        public string USERS
+        public int USERS
         {
             get
             {
