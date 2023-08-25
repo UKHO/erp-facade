@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using System.Xml.Serialization;
@@ -13,18 +9,14 @@ using UKHO.ERPFacade.API.FunctionalTests.Configuration;
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
     [TestFixture]
-    public class FMLicenseUpdateXMLHelper
+    public class FmLicenceUpdateXMLHelper
     {
         private static JsonInputLicenceUpdateHelper UpdatedJsonPayload { get; set; }
-        private static JsonInputLicenceUpdateHelper JsonPayload { get; set; }
-        private static readonly JsonHelper _jsonHelper;
         private static readonly List<string> AttrNotMatched = new();
 
-      
         public static async Task<bool> CheckXMLAttributes(JsonInputLicenceUpdateHelper jsonPayload, string XMLFilePath,
             string updatedRequestBody)
         {
-
             UpdatedJsonPayload = JsonConvert.DeserializeObject<JsonInputLicenceUpdateHelper>(updatedRequestBody);
 
             XmlDocument xmlDoc = new XmlDocument();
@@ -43,7 +35,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             JsonInputLicenceUpdateHelper.License licenceJsonFields = UpdatedJsonPayload.data.license;
             Z_ADDS_ROSIM_ORDER licResult = result.IM_ORDER;
 
-
             Assert.True(VerifyPresenseOfMandatoryXMLAtrributes(licResult).Result);
             Assert.That(UpdatedJsonPayload.data.correlationId.Equals(licResult.GUID),
                 "GUID in xml is same a corrid as in EES JSON");
@@ -53,7 +44,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 if (licResult.LICTRANSACTION.Equals("CHANGELICENCE"))
                 {
                     Assert.True(VerifyChangeLicense(licResult, licenceJsonFields));
-
                 }
             }
             await Task.CompletedTask;
@@ -62,31 +52,28 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         }
 
         private static bool? VerifyChangeLicense(Z_ADDS_ROSIM_ORDER licResult,
-            JsonInputLicenceUpdateHelper.License licencefeildsJSON)
+            JsonInputLicenceUpdateHelper.License licenceFieldsJson)
         {
-            if (!licResult.SOLDTOACC.Equals(licencefeildsJSON.distributorCustomerNumber))
+            if (!licResult.SOLDTOACC.Equals(licenceFieldsJson.distributorCustomerNumber))
                 AttrNotMatched.Add(nameof(licResult.SOLDTOACC));
-            if (!licResult.LICENSEEACC.Equals(licencefeildsJSON.shippingCoNumber))
+            if (!licResult.LICENSEEACC.Equals(licenceFieldsJson.shippingCoNumber))
                 AttrNotMatched.Add(nameof(licResult.LICENSEEACC));
-            if (!licResult.LICNO.Equals(licencefeildsJSON.sapId))
+            if (!licResult.LICNO.Equals(licenceFieldsJson.sapId))
                 AttrNotMatched.Add(nameof(licResult.LICNO));
-            if (!licResult.ECDISMANUF.Equals(licencefeildsJSON.upn))
+            if (!licResult.ECDISMANUF.Equals(licenceFieldsJson.upn))
                 AttrNotMatched.Add(nameof(licResult.ECDISMANUF));
-            if (!licResult.VNAME.Equals(licencefeildsJSON.vesselName))
+            if (!licResult.VNAME.Equals(licenceFieldsJson.vesselName))
                 AttrNotMatched.Add(nameof(licResult.VNAME));
-            if (!licResult.IMO.Equals(licencefeildsJSON.imoNumber))
+            if (!licResult.IMO.Equals(licenceFieldsJson.imoNumber))
                 AttrNotMatched.Add(nameof(licResult.IMO));
-            if (!licResult.CALLSIGN.Equals(licencefeildsJSON.callSign))
+            if (!licResult.CALLSIGN.Equals(licenceFieldsJson.callSign))
                 AttrNotMatched.Add(nameof(licResult.CALLSIGN));
-            if (!licResult.FLEET.Equals(licencefeildsJSON.fleetName))
+            if (!licResult.FLEET.Equals(licenceFieldsJson.fleetName))
                 AttrNotMatched.Add(nameof(licResult.FLEET));
-            if (!licResult.ENDUSERID.Equals(licencefeildsJSON.licenseId))
+            if (!licResult.ENDUSERID.Equals(licenceFieldsJson.licenseId))
                 AttrNotMatched.Add(nameof(licResult.ENDUSERID));
-            if (!licResult.USERS.Equals(licencefeildsJSON.numberLicenceUsers))
+            if (!licResult.USERS.Equals(licenceFieldsJson.numberLicenceUsers))
                 AttrNotMatched.Add(nameof(licResult.USERS));
-
-
-
 
             string[] fieldNames = { "STARTDATE", "ENDDATE", "SHOREBASED", "LTYPE", "LICDUR", "PO", "ADSORDNO" };
             string[] fieldNamesProduct = { "ID", "ENDDA", "DURATION", "RENEW", "REPEAT" };
@@ -112,31 +99,20 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
         private static void VerifyBlankFields(Z_ADDS_ROSIM_ORDER licResult, string[] fieldNames)
         {
-           
-
             foreach (string field in fieldNames)
             {
-
                 if (!typeof(Z_ADDS_ROSIM_ORDER).GetProperty(field).GetValue(licResult, null).Equals(""))
                     AttrNotMatched.Add(typeof(Z_ADDS_ROSIM_ORDER).GetProperty(field).Name);
             }
-
-          
         }
 
         private static void VerifyBlankProductFields(Z_ADDS_ROSIM_ORDERItem items, string[] fieldNamesProduct)
         {
-            
-
             foreach (string field in fieldNamesProduct)
             {
-
                 if (!typeof(Z_ADDS_ROSIM_ORDERItem).GetProperty(field).GetValue(items, null).Equals(""))
                     AttrNotMatched.Add(typeof(Z_ADDS_ROSIM_ORDERItem).GetProperty(field).Name);
-
             }
-
-           
         }
 
         public static async Task<bool> VerifyPresenseOfMandatoryXMLAtrributes(Z_ADDS_ROSIM_ORDER order)
@@ -160,12 +136,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     return false;
                 }
             }
-                
+
             Console.WriteLine("Mandatory attributes are present in  XML");
-                await Task.CompletedTask;
-                return true;
-             
-           
+            await Task.CompletedTask;
+            return true;
         }
     }
 }

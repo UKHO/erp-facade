@@ -2,16 +2,15 @@
 {
     public class JsonInputLicenceUpdateHelper
     {
-       
-            public string specversion { get; set; }
-            public string type { get; set; }
-            public string source { get; set; }
-            public string id { get; set; }
-            public string time { get; set; }
-            public string subject { get; set; }
-            public string datacontenttype { get; set; }
-            public Data data { get; set; }
-        
+        public string specversion { get; set; }
+        public string type { get; set; }
+        public string source { get; set; }
+        public string id { get; set; }
+        public string time { get; set; }
+        public string subject { get; set; }
+        public string datacontenttype { get; set; }
+        public Data data { get; set; }
+
 
         public class Data
         {
@@ -51,7 +50,5 @@
             public string renew { get; set; }
             public string repeat { get; set; }
         }
-
     }
-
 }

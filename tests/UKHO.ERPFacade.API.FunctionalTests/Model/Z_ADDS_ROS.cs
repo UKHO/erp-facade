@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace UKHO.ERPFacade.API.FunctionalTests.Model
+﻿namespace UKHO.ERPFacade.API.FunctionalTests.Model
 {
-
     // NOTE: Generated code may require at least .NET Framework 4.5 or .NET Core/Standard 2.0.
     /// <remarks/>
     [System.SerializableAttribute()]
@@ -15,7 +8,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
     [System.Xml.Serialization.XmlRootAttribute(Namespace = "http://schemas.xmlsoap.org/soap/envelope/", IsNullable = false)]
     public partial class Envelope
     {
-
         private EnvelopeBody bodyField;
 
         /// <remarks/>
@@ -38,7 +30,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://schemas.xmlsoap.org/soap/envelope/")]
     public partial class EnvelopeBody
     {
-
         private Z_ADDS_ROS z_ADDS_ROSField;
 
         /// <remarks/>
@@ -63,7 +54,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
     [System.Xml.Serialization.XmlRootAttribute(Namespace = "", IsNullable = false)]
     public partial class Z_ADDS_ROS
     {
-
         private Z_ADDS_ROSIM_ORDER iM_ORDERField;
 
         /// <remarks/>
@@ -86,7 +76,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
     public partial class Z_ADDS_ROSIM_ORDER
     {
-
         private string gUIDField;
 
         private string sERVICETYPEField;
@@ -410,7 +399,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
     public partial class Z_ADDS_ROSIM_ORDERItem
     {
-
         private string idField;
 
         private string eNDDAField;
@@ -486,6 +474,4 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
             }
         }
     }
-
-
 }

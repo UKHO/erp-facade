@@ -6,11 +6,10 @@ using UKHO.ERPFacade.API.FunctionalTests.Configuration;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
-
     public class AzureTableHelper
     {
         private const string ErpFacadeTableName = "encevents";
- 
+
         //Private Methods
         private TableClient GetTableClient(string tableName)
         {
@@ -26,8 +25,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             TableClient tableClient = serviceClient.GetTableClient(tableName);
             return tableClient;
         }
-       
-        public bool CheckResponseDateTime( string correlationId)
+
+        public bool CheckResponseDateTime(string correlationId)
         {
             TableClient tableClient = GetTableClient(ErpFacadeTableName);
             var existingEntity = tableClient.Query<EESEventEntity>(filter: TableClient.CreateQueryFilter($"CorrelationId eq {correlationId}"));
@@ -40,11 +39,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         return true;
                     }
                 }
-                return false;    
+                return false;
             }
             else { return false; }
         }
-
-
     }
 }

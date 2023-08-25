@@ -3,16 +3,13 @@ using UKHO.SAP.MockAPIService.EntityPropertyConverter;
 
 namespace UKHO.SAP.MockAPIService.Models
 {
-    /// <remarks/>
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:sap-com:document:sap:rfc:functions")]
     public partial class Z_ADDS_ROS
     {
-
         private IM_ORDER iM_ORDERField;
 
-        /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 0)]
         public IM_ORDER IM_ORDER
         {
@@ -34,7 +31,6 @@ namespace UKHO.SAP.MockAPIService.Models
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "")]
     public partial class IM_ORDER
     {
-
         private string gUIDField;
 
         private string sERVICETYPEField;
@@ -382,7 +378,6 @@ namespace UKHO.SAP.MockAPIService.Models
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
     public partial class ZSALES_ITEMS
     {
-
         private string idField;
 
         private string eNDDAField;
@@ -455,7 +450,6 @@ namespace UKHO.SAP.MockAPIService.Models
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:sap-com:document:sap:rfc:functions")]
     public partial class Z_ADDS_ROSResponse
     {
-
         private string eX_MESSAGEField;
 
         private string eX_STATUSField;
