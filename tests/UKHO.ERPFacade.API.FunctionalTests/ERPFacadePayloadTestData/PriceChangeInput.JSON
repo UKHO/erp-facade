@@ -14,21 +14,5 @@
     "futurecurr": "USD",
     "reqdate": "20230328",
     "reqtime": "160000"
-  },
-  {
-    "corrid": "",
-    "org": "UKHO",
-    "productname": "AVCSO",
-    "duration": "12",
-    "effectivedate": "20230427",
-    "effectivetime": "101454",
-    "price": "156.00 ",
-    "currency": "USD",
-    "futuredate": "20230527",
-    "futuretime": "000001",
-    "futureprice": "N/A",
-    "futurecurr": "",
-    "reqdate": "20230328",
-    "reqtime": "160000"
   }
 ]
