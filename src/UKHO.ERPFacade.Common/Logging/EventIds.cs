@@ -563,7 +563,6 @@ namespace UKHO.ERPFacade.Common.Logging
         /// </summary>
         UploadedLicenceUpdatedPublishedEventInAzureBlob = 940112,
 
-
         /// <summary>
         /// 940113 - Licence updated published event in added in azure table successfully.
         /// </summary>
@@ -608,6 +607,31 @@ namespace UKHO.ERPFacade.Common.Logging
         /// 940121 - An error occurred while sending licence updated event data to SAP.
         /// </summary>
         ErrorOccurredInSapForLicenceUpdatedPublishedEvent = 940121,
+
+        /// <summary>
+        /// 940122 - Uploading Sap Xml payload for licence updated event in Azure blob.
+        /// </summary>
+        UploadLicenceUpdatedSapXmlPayloadInAzureBlob = 940122,
+
+        /// <summary>
+        /// 940123 - SAP xml payload for licence updated event is uploaded in blob storage successfully.
+        /// </summary>
+        UploadedLicenceUpdatedSapXmlPayloadInAzureBlob = 940123,
+
+        /// <summary>
+        /// 940124 - Creating licence updated Sap Xml payload.
+        /// </summary>
+        CreatingLicenceUpdatedSapPayload = 940124,
+
+        /// <summary>
+        /// 940125 - Licence updated SAP xml payload created.
+        /// </summary>
+        CreatedLicenceUpdatedSapPayload = 940125,
+
+        /// <summary>
+        /// 940126 - Licence updated SAP message xml template does not exist.
+        /// </summary>
+        LicenceUpdatedSapXmlTemplateNotFound = 940126
     }
 
     /// <summary>

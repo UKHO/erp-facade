@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
-using NUnit.Framework.Internal.Execution;
 using UKHO.ERPFacade.API.Filters;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Logging;

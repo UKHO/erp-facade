@@ -76,7 +76,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
                 RestResponse response = await _client.ExecuteAsync(request);
                 return response;
 
-            } else if (scenarioName == "Unsupported Media Type")
+            }
+            else if (scenarioName == "Unsupported Media Type")
             {
                 var request = new RestRequest(RoSWebhookRequestEndPoint, Method.Post);
                 request.AddHeader("Content-Type", "application/xml");

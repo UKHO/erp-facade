@@ -15,6 +15,12 @@
         public string GeneratedProductJsonFolder { get; set; }
         public string GeneratedJSONFolder { get; set; }
         public SharedKeyConfiguration SharedKeyConfiguration { get; set; }
+        public string LicenceUpdatedPayloadTestData { get; set; }
+        public string[] RosLicenceUpdateXMLList { get; set; }
+      
+        
+
+
     }
 
 

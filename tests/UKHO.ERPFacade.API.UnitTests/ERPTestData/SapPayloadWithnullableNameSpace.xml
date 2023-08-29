@@ -1,0 +1,29 @@
+﻿<IM_ORDER xmlns="">
+  <GUID>367ce4a4-1d62-4f56-b359-59e178d77100</GUID>
+  <SERVICETYPE>AVCS</SERVICETYPE>
+  <LICTRANSACTION>CHANGELICENCE</LICTRANSACTION>
+  <SOLDTOACC>9454</SOLDTOACC>
+  <LICENSEEACC>9454</LICENSEEACC>
+  <STARTDATE/>
+  <ENDDATE/>
+  <LICNO>9454</LICNO>
+  <VNAME>Cornelia Maersk</VNAME>
+  <IMO>IMO9245756</IMO>
+  <CALLSIGN>OWWS2</CALLSIGN>
+  <USERS xmlns:p2="http://www.w3.org/2001/XMLSchema-instance" p2:nil="true"/>
+  <ENDUSERID>11870</ENDUSERID>
+  <ECDISMANUF/>
+  <LTYPE/>
+  <LICDUR xmlns:p2="http://www.w3.org/2001/XMLSchema-instance" p2:nil="true"/>
+  <PO/>
+  <ADSORDNO/>
+  <PROD>
+    <item>
+      <ID/>
+      <ENDDA/>
+      <DURATION/>
+      <RENEW/>
+      <REPEAT/>
+    </item>
+  </PROD>
+</IM_ORDER>

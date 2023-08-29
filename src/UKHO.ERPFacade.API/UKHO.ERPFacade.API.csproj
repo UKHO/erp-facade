@@ -54,8 +54,8 @@
     <ProjectReference Include="..\UKHO.ERPFacade.Common\UKHO.ERPFacade.Common.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Update="SapXmlTemplates\ROSRequest.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <None Update="SapXmlTemplates\RosSapRequest.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="SapXmlTemplates\SAPRequest.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

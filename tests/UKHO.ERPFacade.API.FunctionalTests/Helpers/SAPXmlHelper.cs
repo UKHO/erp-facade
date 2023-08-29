@@ -4,11 +4,8 @@ using System.Xml.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
-using NUnit.Framework.Interfaces;
 using UKHO.ERPFacade.API.FunctionalTests.Configuration;
 using UKHO.ERPFacade.API.FunctionalTests.Model;
-using UKHO.ERPFacade.Common.Infrastructure;
-
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {

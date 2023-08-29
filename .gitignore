@@ -383,3 +383,6 @@ terraform_output.json
 /tests/UKHO.ERPFacade.API.FunctionalTests/ERPFacadeGeneratedXmlFiles/367ce4a4-1d62-4f56-b359-59e178d78200.xml
 /tests/UKHO.ERPFacade.API.FunctionalTests/ERPFacadeGeneratedXmlFiles/367ce4a4-1d62-4f56-b359-59e178d77100.xml
 /tests/UKHO.ERPFacade.API.FunctionalTests/ERPFacadeGeneratedXmlFiles
+/src/UKHO.SAP.MockAPIService
+/tests/UKHO.ERPFacade.API.FunctionalTests/ERPFacadePayloadTestData/FMLicenseUpdate
+/tests/UKHO.ERPFacade.API.FunctionalTests/Model/JSONHelperLU.cs

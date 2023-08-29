@@ -1,6 +1,4 @@
-﻿using Azure.Storage.Blobs.Models;
-
-namespace UKHO.ERPFacade.Common.IO.Azure
+﻿namespace UKHO.ERPFacade.Common.IO.Azure
 {
     public interface IAzureBlobEventWriter
     {

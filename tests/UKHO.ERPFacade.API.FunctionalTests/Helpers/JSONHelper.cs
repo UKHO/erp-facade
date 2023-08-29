@@ -42,5 +42,3 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         }
     }
 }
-
-

@@ -4,7 +4,6 @@ using Azure.Core;
 using FakeItEasy;
 using FluentAssertions;
 using LazyCache;
-using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using UKHO.ERPFacade.Common.Infrastructure.Authentication;
 

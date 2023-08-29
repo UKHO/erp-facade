@@ -92,13 +92,16 @@
     <None Update="ERPFacadePayloadTestData\ID36_MoveAndSuspended_With_2UoS_But1_Having_addProductsValue.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPFacadePayloadTestData\LicenceUpdatedPayloadTestData\ID01_ValidLUJsonFile.json">
+    <None Update="ERPFacadePayloadTestData\LicenceUpdatedPayloadTestData\LU01_ValidInput.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPFacadePayloadTestData\LicenceUpdatedPayloadTestData\ID02_UnSupportedPayloadType.xml">
+    <None Update="ERPFacadePayloadTestData\LicenceUpdatedPayloadTestData\LU02_UnSupportedPayloadType.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPFacadePayloadTestData\LicenceUpdatedPayloadTestData\ID03_InvalidLUJsonFile.json">
+    <None Update="ERPFacadePayloadTestData\LicenceUpdatedPayloadTestData\LU04_InvalidLUJsonFile.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\LicenceUpdatedPayloadTestData\LU03_InvalidLUJsonFile.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPFacadePayloadTestData\PC7_PAYSFDuration12Month.JSON">
@@ -276,6 +279,7 @@
 	<ItemGroup>
 	  <None Remove="ERPFacadeGeneratedJSONFiles\default.JSON" />
 	  <None Remove="ERPFacadeGeneratedProductJSON\default.JSON" />
+	  <None Remove="ERPFacadeGeneratedXmlFiles\LicenceUpdate\FM-RoS-XMLPayloadUpdateLicense.xml" />
 	</ItemGroup>
 
 	<ItemGroup>

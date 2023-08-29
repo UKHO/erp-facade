@@ -7,7 +7,6 @@ using Azure.Security.KeyVault.Secrets;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Newtonsoft.Json.Serialization;
 using Serilog;
@@ -186,6 +185,7 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<IJsonHelper, JsonHelper>();
             builder.Services.AddScoped<SharedKeyAuthFilter>();
             builder.Services.AddScoped<IEESClient, EESClient>();
+            builder.Services.AddScoped<ILicenceUpdatedSapMessageBuilder, LicenceUpdatedSapMessageBuilder>();
 
             builder.Services.AddHealthChecks()
                 .AddCheck<SapServiceHealthCheck>("SapServiceHealthCheck")

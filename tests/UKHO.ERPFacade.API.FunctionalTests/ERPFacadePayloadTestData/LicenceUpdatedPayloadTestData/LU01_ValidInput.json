@@ -1,0 +1,42 @@
+{
+    "specversion": "1.0",
+    "type": "uk.gov.ukho.licensing.licenceUpdated.v1",
+    "source": "https://uk.gov.ukho.licensing",
+    "id": "e744fa37-0c9f-4795-adc9-7f42ad8f11c1",
+    "time": "8/23/2023 7:34:28 AM",
+    "subject": "licence update changes that need to go to SAP Record of Sale via ERP Facade",
+    "datacontenttype": "application/json",
+    "data": {
+        "correlationId": "ft-20230822-1d62-4f56-b359-59e178d77100",
+        "license": {
+            "licenseId": "2",
+            "productType": "AVCS",
+            "transactionType": "CHANGELICENCE",
+            "distributorCustomerNumber": "111",
+            "shippingCoNumber": "1",
+            "orderNumber": "",
+            "orderDate": "",
+            "po-ref": "",
+            "holdingsExpiryDate": "2024-59-31",
+            "sapId": "76611K",
+            "vesselName": "Vessel 000002",
+            "imoNumber": "IMO000002",
+            "callSign": "CALL000002",
+            "licenceType": "",
+            "shoreBased": "",
+            "fleetName": "emailnoreply@engineering.ukho.gov.uk",
+            "numberLicenceUsers": 1,
+            "upn": "MARIS",
+            "licenceDuration": 12,
+            "unitsOfSale": [
+                {
+                    "unitName": "",
+                    "endDate": "",
+                    "duration": "",
+                    "renew": "",
+                    "repeat": ""
+                }
+            ]
+        }
+    }
+}

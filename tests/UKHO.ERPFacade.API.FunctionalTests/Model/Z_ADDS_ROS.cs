@@ -1,17 +1,63 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using UKHO.SAP.MockAPIService.EntityPropertyConverter;
-
-namespace UKHO.SAP.MockAPIService.Models
+﻿namespace UKHO.ERPFacade.API.FunctionalTests.Model
 {
+    // NOTE: Generated code may require at least .NET Framework 4.5 or .NET Core/Standard 2.0.
+    /// <remarks/>
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:sap-com:document:sap:rfc:functions")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://schemas.xmlsoap.org/soap/envelope/")]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace = "http://schemas.xmlsoap.org/soap/envelope/", IsNullable = false)]
+    public partial class Envelope
+    {
+        private EnvelopeBody bodyField;
+
+        /// <remarks/>
+        public EnvelopeBody Body
+        {
+            get
+            {
+                return this.bodyField;
+            }
+            set
+            {
+                this.bodyField = value;
+            }
+        }
+    }
+
+    /// <remarks/>
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://schemas.xmlsoap.org/soap/envelope/")]
+    public partial class EnvelopeBody
+    {
+        private Z_ADDS_ROS z_ADDS_ROSField;
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Namespace = "")]
+        public Z_ADDS_ROS Z_ADDS_ROS
+        {
+            get
+            {
+                return this.z_ADDS_ROSField;
+            }
+            set
+            {
+                this.z_ADDS_ROSField = value;
+            }
+        }
+    }
+
+    /// <remarks/>
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace = "", IsNullable = false)]
     public partial class Z_ADDS_ROS
     {
-        private IM_ORDER iM_ORDERField;
+        private Z_ADDS_ROSIM_ORDER iM_ORDERField;
 
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 0)]
-        public IM_ORDER IM_ORDER
+        /// <remarks/>
+        public Z_ADDS_ROSIM_ORDER IM_ORDER
         {
             get
             {
@@ -24,12 +70,11 @@ namespace UKHO.SAP.MockAPIService.Models
         }
     }
 
-    [ExcludeFromCodeCoverage]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.1.0")]
+    /// <remarks/>
     [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "")]
-    public partial class IM_ORDER
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+    public partial class Z_ADDS_ROSIM_ORDER
     {
         private string gUIDField;
 
@@ -57,7 +102,7 @@ namespace UKHO.SAP.MockAPIService.Models
 
         private string fLEETField;
 
-        private string uSERSField;
+        private int uSERSField;
 
         private string eNDUSERIDField;
 
@@ -71,10 +116,9 @@ namespace UKHO.SAP.MockAPIService.Models
 
         private string aDSORDNOField;
 
-        private ZSALES_ITEMS[] pRODField;
+        private Z_ADDS_ROSIM_ORDERItem[] pRODField;
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 0)]
         public string GUID
         {
             get
@@ -88,7 +132,6 @@ namespace UKHO.SAP.MockAPIService.Models
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 1)]
         public string SERVICETYPE
         {
             get
@@ -102,7 +145,6 @@ namespace UKHO.SAP.MockAPIService.Models
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 2)]
         public string LICTRANSACTION
         {
             get
@@ -116,7 +158,6 @@ namespace UKHO.SAP.MockAPIService.Models
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 3)]
         public string SOLDTOACC
         {
             get
@@ -130,7 +171,6 @@ namespace UKHO.SAP.MockAPIService.Models
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 4)]
         public string LICENSEEACC
         {
             get
@@ -144,7 +184,6 @@ namespace UKHO.SAP.MockAPIService.Models
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 5)]
         public string STARTDATE
         {
             get
@@ -158,7 +197,6 @@ namespace UKHO.SAP.MockAPIService.Models
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 6)]
         public string ENDDATE
         {
             get
@@ -172,7 +210,6 @@ namespace UKHO.SAP.MockAPIService.Models
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 7)]
         public string LICNO
         {
             get
@@ -186,7 +223,6 @@ namespace UKHO.SAP.MockAPIService.Models
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 8)]
         public string VNAME
         {
             get
@@ -200,7 +236,6 @@ namespace UKHO.SAP.MockAPIService.Models
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 9)]
         public string IMO
         {
             get
@@ -214,7 +249,6 @@ namespace UKHO.SAP.MockAPIService.Models
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 10)]
         public string CALLSIGN
         {
             get
@@ -228,7 +262,6 @@ namespace UKHO.SAP.MockAPIService.Models
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 11)]
         public string SHOREBASED
         {
             get
@@ -242,7 +275,6 @@ namespace UKHO.SAP.MockAPIService.Models
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 12)]
         public string FLEET
         {
             get
@@ -256,8 +288,7 @@ namespace UKHO.SAP.MockAPIService.Models
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 13)]
-        public string USERS
+        public int USERS
         {
             get
             {
@@ -270,7 +301,6 @@ namespace UKHO.SAP.MockAPIService.Models
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 14)]
         public string ENDUSERID
         {
             get
@@ -284,7 +314,6 @@ namespace UKHO.SAP.MockAPIService.Models
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 15)]
         public string ECDISMANUF
         {
             get
@@ -298,7 +327,6 @@ namespace UKHO.SAP.MockAPIService.Models
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 16)]
         public string LTYPE
         {
             get
@@ -312,7 +340,6 @@ namespace UKHO.SAP.MockAPIService.Models
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 17)]
         public string LICDUR
         {
             get
@@ -326,7 +353,6 @@ namespace UKHO.SAP.MockAPIService.Models
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 18)]
         public string PO
         {
             get
@@ -340,7 +366,6 @@ namespace UKHO.SAP.MockAPIService.Models
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 19)]
         public string ADSORDNO
         {
             get
@@ -354,10 +379,8 @@ namespace UKHO.SAP.MockAPIService.Models
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 20)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("item", Form = System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable = false)]
-        [EntityPropertyConverter(typeof(ZSALES_ITEMS[]))]
-        public ZSALES_ITEMS[] PROD
+        [System.Xml.Serialization.XmlArrayItemAttribute("item", IsNullable = false)]
+        public Z_ADDS_ROSIM_ORDERItem[] PROD
         {
             get
             {
@@ -370,13 +393,11 @@ namespace UKHO.SAP.MockAPIService.Models
         }
     }
 
-    [ExcludeFromCodeCoverage]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.1.0")]
+    /// <remarks/>
     [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    public partial class ZSALES_ITEMS
+    public partial class Z_ADDS_ROSIM_ORDERItem
     {
         private string idField;
 
@@ -386,8 +407,9 @@ namespace UKHO.SAP.MockAPIService.Models
 
         private string rENEWField;
 
+        private string rEPEATField;
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ID", Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 0)]
         public string ID
         {
             get
@@ -401,7 +423,6 @@ namespace UKHO.SAP.MockAPIService.Models
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ENDDA", Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 1)]
         public string ENDDA
         {
             get
@@ -415,7 +436,6 @@ namespace UKHO.SAP.MockAPIService.Models
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("DURATION", Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 2)]
         public string DURATION
         {
             get
@@ -429,7 +449,6 @@ namespace UKHO.SAP.MockAPIService.Models
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("RENEW", Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 3)]
         public string RENEW
         {
             get
@@ -441,44 +460,17 @@ namespace UKHO.SAP.MockAPIService.Models
                 this.rENEWField = value;
             }
         }
-    }
-
-    [ExcludeFromCodeCoverage]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.1.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:sap-com:document:sap:rfc:functions")]
-    public partial class Z_ADDS_ROSResponse
-    {
-        private string eX_MESSAGEField;
-
-        private string eX_STATUSField;
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 0)]
-        public string EX_MESSAGE
+        public string REPEAT
         {
             get
             {
-                return this.eX_MESSAGEField;
+                return this.rEPEATField;
             }
             set
             {
-                this.eX_MESSAGEField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 1)]
-        public string EX_STATUS
-        {
-            get
-            {
-                return this.eX_STATUSField;
-            }
-            set
-            {
-                this.eX_STATUSField = value;
+                this.rEPEATField = value;
             }
         }
     }
