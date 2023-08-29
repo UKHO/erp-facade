@@ -12,7 +12,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
     {
         private readonly RestClient _client;
         private readonly AzureBlobStorageHelper _azureBlobStorageHelper;
-        private readonly RestClientOptions _options;
+        
 
         private const string LicenceUpdatedRequestEndPoint = "/webhook/licenceupdatedpublishedeventreceived";
 
@@ -20,9 +20,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
 
         public LicenceUpdatedEndpoint()
         {
-            _azureBlobStorageHelper = new();
-            _options = new(Config.TestConfig.ErpFacadeConfiguration.BaseUrl);
-            _client = new(_options);
+           _azureBlobStorageHelper = new AzureBlobStorageHelper();
+           RestClientOptions options = new RestClientOptions(Config.TestConfig.ErpFacadeConfiguration.BaseUrl);
+           _client = new RestClient(options);
         }
 
         public async Task<RestResponse> OptionLicenceUpdatedWebhookResponseAsync(string token)
@@ -37,9 +37,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
         {
             string requestBody;
 
-            using (StreamReader streamReader = new StreamReader(payloadFilePath))
+            using (StreamReader streamReader = new (payloadFilePath))
             {
-                requestBody = streamReader.ReadToEnd();
+                requestBody = await streamReader.ReadToEndAsync();
             }
 
             generatedCorrelationId = SAPXmlHelper.GenerateRandomCorrelationId();
@@ -95,7 +95,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             }
         }
 
-        public async Task<RestResponse> PostLicenceUpdatedResponseAsyncForXML(string filePath, string generatedXMLFolder, string token)
+        public async Task<RestResponse> PostLicenceUpdatedResponseAsyncForXML(string filePath, string generatedXmlFolder, string token)
         {
             string requestBody;
 
@@ -111,11 +111,11 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
             RestResponse response = await _client.ExecuteAsync(request);
             JsonInputLicenceUpdateHelper jsonPayload = JsonConvert.DeserializeObject<JsonInputLicenceUpdateHelper>(requestBody);
-            string generatedXMLFilePath = _azureBlobStorageHelper.DownloadGeneratedXMLFile(generatedXMLFolder, generatedCorrelationId, "licenceupdatedblobs");
+            string generatedXmlFilePath = _azureBlobStorageHelper.DownloadGeneratedXMLFile(generatedXmlFolder, generatedCorrelationId, "licenceupdatedblobs");
 
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                Assert.That(FmLicenceUpdateXMLHelper.CheckXMLAttributes(jsonPayload, generatedXMLFilePath, requestBody).Result, Is.True, "CheckXMLAttributes Failed");
+                Assert.That(FmLicenceUpdateXMLHelper.CheckXmlAttributes(jsonPayload, generatedXmlFilePath, requestBody).Result, Is.True, "CheckXMLAttributes Failed");
             }
             return response;
         }

@@ -12,15 +12,15 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
     public class FmLicenceUpdateXMLHelper
     {
         private static JsonInputLicenceUpdateHelper UpdatedJsonPayload { get; set; }
-        private static readonly List<string> AttrNotMatched = new();
+        private static readonly List<string> s_attrNotMatched = new();
 
-        public static async Task<bool> CheckXMLAttributes(JsonInputLicenceUpdateHelper jsonPayload, string XMLFilePath,
+        public static async Task<bool> CheckXmlAttributes(JsonInputLicenceUpdateHelper jsonPayload, string xmlFilePath,
             string updatedRequestBody)
         {
             UpdatedJsonPayload = JsonConvert.DeserializeObject<JsonInputLicenceUpdateHelper>(updatedRequestBody);
 
             XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.LoadXml(File.ReadAllText(XMLFilePath));
+            xmlDoc.LoadXml(File.ReadAllText(xmlFilePath));
 
             while (xmlDoc.DocumentElement.Name == "soap:Envelope" || xmlDoc.DocumentElement.Name == "soap:Body")
             {
@@ -35,7 +35,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             JsonInputLicenceUpdateHelper.License licenceJsonFields = UpdatedJsonPayload.data.license;
             Z_ADDS_ROSIM_ORDER licResult = result.IM_ORDER;
 
-            Assert.True(VerifyPresenseOfMandatoryXMLAtrributes(licResult).Result);
+            Assert.That(VerifyPresenseOfMandatoryXMLAtrributes(licResult).Result,Is.True);
             Assert.That(UpdatedJsonPayload.data.correlationId.Equals(licResult.GUID),
                 "GUID in xml is same a corrid as in EES JSON");
 
@@ -43,7 +43,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             {
                 if (licResult.LICTRANSACTION.Equals("CHANGELICENCE"))
                 {
-                    Assert.True(VerifyChangeLicense(licResult, licenceJsonFields));
+                    Assert.That(VerifyChangeLicense(licResult, licenceJsonFields), Is.True);
                 }
             }
             await Task.CompletedTask;
@@ -55,25 +55,25 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             JsonInputLicenceUpdateHelper.License licenceFieldsJson)
         {
             if (!licResult.SOLDTOACC.Equals(licenceFieldsJson.distributorCustomerNumber))
-                AttrNotMatched.Add(nameof(licResult.SOLDTOACC));
+                s_attrNotMatched.Add(nameof(licResult.SOLDTOACC));
             if (!licResult.LICENSEEACC.Equals(licenceFieldsJson.shippingCoNumber))
-                AttrNotMatched.Add(nameof(licResult.LICENSEEACC));
+                s_attrNotMatched.Add(nameof(licResult.LICENSEEACC));
             if (!licResult.LICNO.Equals(licenceFieldsJson.sapId))
-                AttrNotMatched.Add(nameof(licResult.LICNO));
+                s_attrNotMatched.Add(nameof(licResult.LICNO));
             if (!licResult.ECDISMANUF.Equals(licenceFieldsJson.upn))
-                AttrNotMatched.Add(nameof(licResult.ECDISMANUF));
+                s_attrNotMatched.Add(nameof(licResult.ECDISMANUF));
             if (!licResult.VNAME.Equals(licenceFieldsJson.vesselName))
-                AttrNotMatched.Add(nameof(licResult.VNAME));
+                s_attrNotMatched.Add(nameof(licResult.VNAME));
             if (!licResult.IMO.Equals(licenceFieldsJson.imoNumber))
-                AttrNotMatched.Add(nameof(licResult.IMO));
+                s_attrNotMatched.Add(nameof(licResult.IMO));
             if (!licResult.CALLSIGN.Equals(licenceFieldsJson.callSign))
-                AttrNotMatched.Add(nameof(licResult.CALLSIGN));
+                s_attrNotMatched.Add(nameof(licResult.CALLSIGN));
             if (!licResult.FLEET.Equals(licenceFieldsJson.fleetName))
-                AttrNotMatched.Add(nameof(licResult.FLEET));
+                s_attrNotMatched.Add(nameof(licResult.FLEET));
             if (!licResult.ENDUSERID.Equals(licenceFieldsJson.licenseId))
-                AttrNotMatched.Add(nameof(licResult.ENDUSERID));
+                s_attrNotMatched.Add(nameof(licResult.ENDUSERID));
             if (!licResult.USERS.Equals(licenceFieldsJson.numberLicenceUsers))
-                AttrNotMatched.Add(nameof(licResult.USERS));
+                s_attrNotMatched.Add(nameof(licResult.USERS));
 
             string[] fieldNames = { "STARTDATE", "ENDDATE", "SHOREBASED", "LTYPE", "LICDUR", "PO", "ADSORDNO" };
             string[] fieldNamesProduct = { "ID", "ENDDA", "DURATION", "RENEW", "REPEAT" };
@@ -81,7 +81,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             VerifyBlankFields(licResult, fieldNames);
             VerifyBlankProductFields(items[0], fieldNamesProduct);
 
-            if (AttrNotMatched.Count == 0)
+            if (s_attrNotMatched.Count == 0)
             {
                 Console.WriteLine("CHANGELICENCE event XML is correct");
                 return true;
@@ -90,11 +90,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             {
                 Console.WriteLine("CHANGELICENCE event XML is incorrect");
                 Console.WriteLine("Not matching attributes are:");
-                foreach (string attribute in AttrNotMatched)
+                foreach (string attribute in s_attrNotMatched)
                 { Console.WriteLine(attribute); }
                 return false;
             }
-            return true;
         }
 
         private static void VerifyBlankFields(Z_ADDS_ROSIM_ORDER licResult, string[] fieldNames)
@@ -102,7 +101,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             foreach (string field in fieldNames)
             {
                 if (!typeof(Z_ADDS_ROSIM_ORDER).GetProperty(field).GetValue(licResult, null).Equals(""))
-                    AttrNotMatched.Add(typeof(Z_ADDS_ROSIM_ORDER).GetProperty(field).Name);
+                    s_attrNotMatched.Add(typeof(Z_ADDS_ROSIM_ORDER).GetProperty(field).Name);
             }
         }
 
@@ -111,7 +110,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             foreach (string field in fieldNamesProduct)
             {
                 if (!typeof(Z_ADDS_ROSIM_ORDERItem).GetProperty(field).GetValue(items, null).Equals(""))
-                    AttrNotMatched.Add(typeof(Z_ADDS_ROSIM_ORDERItem).GetProperty(field).Name);
+                    s_attrNotMatched.Add(typeof(Z_ADDS_ROSIM_ORDERItem).GetProperty(field).Name);
             }
         }
 
@@ -122,8 +121,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             List<string> CurrentActionAttributes = new List<string>();
             CurrentActionAttributes.Clear();
             Type arrayType = order.GetType();
-            var properties = arrayType.GetProperties();
-            foreach (var property in properties)
+            System.Reflection.PropertyInfo[] properties = arrayType.GetProperties();
+            foreach (System.Reflection.PropertyInfo property in properties)
             {
                 CurrentActionAttributes.Add(property.Name);
             }
