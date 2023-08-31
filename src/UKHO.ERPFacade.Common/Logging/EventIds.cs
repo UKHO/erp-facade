@@ -647,8 +647,6 @@ namespace UKHO.ERPFacade.Common.Logging
         /// 940129 - The record of sale SAP payload created.
         /// </summary>
         CreatedRecordOfSaleSapPayload = 940129
-
-
     }
 
     /// <summary>

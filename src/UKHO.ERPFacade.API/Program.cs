@@ -186,7 +186,7 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<SharedKeyAuthFilter>();
             builder.Services.AddScoped<IEESClient, EESClient>();
             builder.Services.AddScoped<ILicenceUpdatedSapMessageBuilder, LicenceUpdatedSapMessageBuilder>();
-            builder.Services.AddScoped<IRecordOfSaleEventSapMessageBuilder, RecordOfSaleEventSapMessageBuilder>();
+            builder.Services.AddScoped<IRecordOfSaleSapMessageBuilder, RecordOfSaleSapMessageBuilder>();
 
             builder.Services.AddHealthChecks()
                 .AddCheck<SapServiceHealthCheck>("SapServiceHealthCheck")

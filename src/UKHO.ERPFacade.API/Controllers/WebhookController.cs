@@ -27,7 +27,7 @@ namespace UKHO.ERPFacade.API.Controllers
         private readonly ISapMessageBuilder _sapMessageBuilder;
         private readonly IOptions<SapConfiguration> _sapConfig;
         private readonly ILicenceUpdatedSapMessageBuilder _licenceUpdatedSapMessageBuilder;
-        private readonly IRecordOfSaleEventSapMessageBuilder _recordOfSaleEventPayloadMessageBuilder;
+        private readonly IRecordOfSaleSapMessageBuilder _recordOfSaleSapMessageBuilder;
 
         private const string CorrelationIdKey = "data.correlationId";
         private const string EncEventFileName = "EncPublishingEvent.json";
@@ -35,8 +35,7 @@ namespace UKHO.ERPFacade.API.Controllers
         private const string LicenceUpdatedContainerName = "licenceupdatedblobs";
         private const string LicenceUpdatedFileName = "LicenceUpdatedEvent.json";
         private const string RecordOfSaleContainerName = "recordofsaleblobs";
-        private const string RecordOfSaleEventFileName = "RecordOfSaleEvent.json";
-        //private const string RosXmlFilePath = "SapXmlTemplates\\RosSapRequest.xml";
+        private const string RecordOfSaleFileName = "RecordOfSaleEvent.json";
 
         public WebhookController(IHttpContextAccessor contextAccessor,
                                  ILogger<WebhookController> logger,
@@ -46,7 +45,7 @@ namespace UKHO.ERPFacade.API.Controllers
                                  ISapMessageBuilder sapMessageBuilder,
                                  IOptions<SapConfiguration> sapConfig,
                                  ILicenceUpdatedSapMessageBuilder licenceUpdatedSapMessageBuilder,
-                                 IRecordOfSaleEventSapMessageBuilder recordOfSaleEventPayloadMessageBuilder)
+                                 IRecordOfSaleSapMessageBuilder recordOfSaleSapMessageBuilder)
         : base(contextAccessor)
         {
             _logger = logger;
@@ -55,7 +54,7 @@ namespace UKHO.ERPFacade.API.Controllers
             _sapClient = sapClient;
             _sapMessageBuilder = sapMessageBuilder;
             _licenceUpdatedSapMessageBuilder = licenceUpdatedSapMessageBuilder;
-            _recordOfSaleEventPayloadMessageBuilder = recordOfSaleEventPayloadMessageBuilder;
+            _recordOfSaleSapMessageBuilder = recordOfSaleSapMessageBuilder;
             _sapConfig = sapConfig ?? throw new ArgumentNullException(nameof(sapConfig));
         }
 
@@ -154,17 +153,10 @@ namespace UKHO.ERPFacade.API.Controllers
             await _azureTableReaderWriter.UpsertRecordOfSaleEntity(correlationId);
 
             _logger.LogInformation(EventIds.UploadRecordOfSalePublishedEventInAzureBlob.ToEventId(), "Uploading the received Record of sale published event in blob storage.");
-            await _azureBlobEventWriter.UploadEvent(recordOfSaleEventJson.ToString(), RecordOfSaleContainerName, correlationId + '/' + RecordOfSaleEventFileName);
+            await _azureBlobEventWriter.UploadEvent(recordOfSaleEventJson.ToString(), RecordOfSaleContainerName, correlationId + '/' + RecordOfSaleFileName);
             _logger.LogInformation(EventIds.UploadedRecordOfSalePublishedEventInAzureBlob.ToEventId(), "Record of sale published event is uploaded in blob storage successfully.");
-
-            //string recordOfSalesXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, RosXmlFilePath);
-
-            //XmlDocument rosPayload = new();
-            //rosPayload.Load(recordOfSalesXmlTemplatePath);
-
-            var rosJson = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(recordOfSaleEventJson.ToString());
-
-            XmlDocument sapPayload = _recordOfSaleEventPayloadMessageBuilder.BuildRecordOfSaleEventSapMessageXml(rosJson, correlationId);
+             
+            XmlDocument sapPayload = _recordOfSaleSapMessageBuilder.BuildRecordOfSaleSapMessageXml(JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(recordOfSaleEventJson.ToString()), correlationId);
 
             HttpResponseMessage response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapServiceOperationForRecordOfSale, _sapConfig.Value.SapUsernameForRecordOfSale, _sapConfig.Value.SapPasswordForRecordOfSale);
 

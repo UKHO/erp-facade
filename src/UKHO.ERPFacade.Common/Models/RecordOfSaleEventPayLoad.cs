@@ -7,7 +7,7 @@ namespace UKHO.ERPFacade.Common.Models
     public class RecordOfSaleEventPayLoad
     {
         [JsonProperty("specversion")]
-        public string Specversion { get; set; }
+        public string SpecVersion { get; set; }
 
         [JsonProperty("type")]
         public string Type { get; set; }
@@ -25,7 +25,7 @@ namespace UKHO.ERPFacade.Common.Models
         public string Subject { get; set; }
 
         [JsonProperty("datacontenttype")]
-        public string Datacontenttype { get; set; }
+        public string DataContentType { get; set; }
 
         [JsonProperty("data")]
         public RecordOfSaleData Data { get; set; }
@@ -102,25 +102,6 @@ namespace UKHO.ERPFacade.Common.Models
         public int? LicenceDuration { get; set; }
 
         [JsonProperty("unitsOfSale")]
-        public List<RecordOfSaleUnitOfSale> RecordOfSaleEventUnitOfSale { get; set; }
-    }
-
-    [ExcludeFromCodeCoverage]
-    public class RecordOfSaleUnitOfSale
-    {
-        [JsonProperty("unitName")]
-        public string Id { get; set; }
-
-        [JsonProperty("endDate")]
-        public string EndDate { get; set; }
-
-        [JsonProperty("duration")]
-        public string Duration { get; set; }
-
-        [JsonProperty("renew")]
-        public string ReNew { get; set; }
-
-        [JsonProperty("repeat")]
-        public string Repeat { get; set; }
+        public List<RosUnitOfSale> RosUnitOfSale { get; set; }
     }
 }

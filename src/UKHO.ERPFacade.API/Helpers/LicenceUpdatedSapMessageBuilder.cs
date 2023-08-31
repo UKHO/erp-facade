@@ -14,8 +14,7 @@ namespace UKHO.ERPFacade.API.Helpers
         private const string SapXmlPath = "SapXmlTemplates\\RosSapRequest.xml";
         private const string XpathZAddsRos = $"//*[local-name()='Z_ADDS_ROS']";
         private const string ImOrderNameSpace = "RecordOfSale";
-        private const string TransactionType = "CHANGELICENCE";
-
+        private const string ChangeLicenceType = "CHANGELICENCE";
 
         public LicenceUpdatedSapMessageBuilder(ILogger<LicenceUpdatedSapMessageBuilder> logger,
             IXmlHelper xmlHelper,
@@ -72,12 +71,12 @@ namespace UKHO.ERPFacade.API.Helpers
                 Users = eventData.Data.Licence.NumberLicenceUsers,
                 EndUserId = eventData.Data.Licence.LicenceId,
                 ECDISMANUF = eventData.Data.Licence.Upn,
-                OrderNumber = eventData.Data.Licence.TransactionType == TransactionType ? "" : eventData.Data.Licence.OrderNumber,
-                StartDate = eventData.Data.Licence.TransactionType == TransactionType ? "" : eventData.Data.Licence.OrderDate,
-                PurachaseOrder = eventData.Data.Licence.TransactionType == TransactionType ? "" : eventData.Data.Licence.PoRef,
-                EndDate = eventData.Data.Licence.TransactionType == TransactionType ? "" : eventData.Data.Licence.HoldingsExpiryDate,
-                LicenceType = eventData.Data.Licence.TransactionType == TransactionType ? "" : eventData.Data.Licence.LicenceType,
-                LicenceDuration = eventData.Data.Licence.TransactionType == TransactionType ? null : eventData.Data.Licence.LicenceDuration
+                OrderNumber = eventData.Data.Licence.TransactionType == ChangeLicenceType ? "" : eventData.Data.Licence.OrderNumber,
+                StartDate = eventData.Data.Licence.TransactionType == ChangeLicenceType ? "" : eventData.Data.Licence.OrderDate,
+                PurachaseOrder = eventData.Data.Licence.TransactionType == ChangeLicenceType ? "" : eventData.Data.Licence.PoRef,
+                EndDate = eventData.Data.Licence.TransactionType == ChangeLicenceType ? "" : eventData.Data.Licence.HoldingsExpiryDate,
+                LicenceType = eventData.Data.Licence.TransactionType == ChangeLicenceType ? "" : eventData.Data.Licence.LicenceType,
+                LicenceDuration = eventData.Data.Licence.TransactionType == ChangeLicenceType ? null : eventData.Data.Licence.LicenceDuration
             };
 
             sapPayload.PROD = new PROD()
