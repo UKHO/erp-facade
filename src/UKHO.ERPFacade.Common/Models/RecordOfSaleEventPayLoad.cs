@@ -37,6 +37,9 @@ namespace UKHO.ERPFacade.Common.Models
         [JsonProperty("correlationId")]
         public string CorrelationId { get; set; }
 
+        [JsonProperty("relatedEvents")]
+        public List<string> RelatedEvents { get; set; }
+
         [JsonProperty("recordsOfSale")]
         public RecordOfSale RecordOfSale { get; set; }
     }
