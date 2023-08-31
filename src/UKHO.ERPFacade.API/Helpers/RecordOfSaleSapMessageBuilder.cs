@@ -58,42 +58,47 @@ namespace UKHO.ERPFacade.API.Helpers
             var sapPayload = new SapRecordOfSalePayLoad
             {
                 CorrelationId = eventData.Data.CorrelationId,
-                ServiceType = eventData.Data.RecordOfSale.ProductType,
-                LicTransaction = eventData.Data.RecordOfSale.TransactionType,
-                SoldToAcc = eventData.Data.RecordOfSale.TransactionType == MaintainHoldingsType ? "" : eventData.Data.RecordOfSale.DistributorCustomerNumber,
-                LicenseEacc = eventData.Data.RecordOfSale.TransactionType == MaintainHoldingsType ? "" : eventData.Data.RecordOfSale.ShippingCoNumber,
-                LicenceNumber = eventData.Data.RecordOfSale.SapId,
-                VesselName = eventData.Data.RecordOfSale.TransactionType == MaintainHoldingsType ? "" : eventData.Data.RecordOfSale.VesselName,
-                IMONumber = eventData.Data.RecordOfSale.TransactionType == MaintainHoldingsType ? "" : eventData.Data.RecordOfSale.ImoNumber,
-                CallSign = eventData.Data.RecordOfSale.TransactionType == MaintainHoldingsType ? "" : eventData.Data.RecordOfSale.CallSign,
-                ShoreBased = eventData.Data.RecordOfSale.TransactionType == MaintainHoldingsType ? "" :  eventData.Data.RecordOfSale.ShoreBased,
-                FleetName = eventData.Data.RecordOfSale.TransactionType == MaintainHoldingsType ? "" : eventData.Data.RecordOfSale.FleetName,
-                Users = eventData.Data.RecordOfSale.TransactionType == MaintainHoldingsType ? null : eventData.Data.RecordOfSale.NumberLicenceUsers,
-                EndUserId = eventData.Data.RecordOfSale.TransactionType == MaintainHoldingsType ? "" : eventData.Data.RecordOfSale.LicenceId,
-                ECDISMANUF = eventData.Data.RecordOfSale.TransactionType == MaintainHoldingsType ? "" : eventData.Data.RecordOfSale.Upn,
-                OrderNumber = eventData.Data.RecordOfSale.OrderNumber,
-                StartDate = eventData.Data.RecordOfSale.TransactionType == MaintainHoldingsType ? "" : eventData.Data.RecordOfSale.OrderDate,
-                PurachaseOrder = eventData.Data.RecordOfSale.PoRef,
-                EndDate = eventData.Data.RecordOfSale.TransactionType == MaintainHoldingsType ? "" : eventData.Data.RecordOfSale.HoldingsExpiryDate,
-                LicenceType = eventData.Data.RecordOfSale.TransactionType == MaintainHoldingsType ? "" : eventData.Data.RecordOfSale.LicenceType,
-                LicenceDuration = eventData.Data.RecordOfSale.TransactionType == MaintainHoldingsType ? null : eventData.Data.RecordOfSale.LicenceDuration
+                ServiceType = eventData.Data.RecordsOfSale.ProductType,
+                LicTransaction = eventData.Data.RecordsOfSale.TransactionType,
+                SoldToAcc = eventData.Data.RecordsOfSale.TransactionType == MaintainHoldingsType ? "" : eventData.Data.RecordsOfSale.DistributorCustomerNumber,
+                LicenseEacc = eventData.Data.RecordsOfSale.TransactionType == MaintainHoldingsType ? "" : eventData.Data.RecordsOfSale.ShippingCoNumber,
+                LicenceNumber = eventData.Data.RecordsOfSale.SapId,
+                VesselName = eventData.Data.RecordsOfSale.TransactionType == MaintainHoldingsType ? "" : eventData.Data.RecordsOfSale.VesselName,
+                IMONumber = eventData.Data.RecordsOfSale.TransactionType == MaintainHoldingsType ? "" : eventData.Data.RecordsOfSale.ImoNumber,
+                CallSign = eventData.Data.RecordsOfSale.TransactionType == MaintainHoldingsType ? "" : eventData.Data.RecordsOfSale.CallSign,
+                ShoreBased = eventData.Data.RecordsOfSale.TransactionType == MaintainHoldingsType ? "" :  eventData.Data.RecordsOfSale.ShoreBased,
+                FleetName = eventData.Data.RecordsOfSale.TransactionType == MaintainHoldingsType ? "" : eventData.Data.RecordsOfSale.FleetName,
+                Users = eventData.Data.RecordsOfSale.TransactionType == MaintainHoldingsType ? null : eventData.Data.RecordsOfSale.NumberLicenceUsers,
+                EndUserId = eventData.Data.RecordsOfSale.TransactionType == MaintainHoldingsType ? "" : eventData.Data.RecordsOfSale.LicenceId,
+                ECDISMANUF = eventData.Data.RecordsOfSale.TransactionType == MaintainHoldingsType ? "" : eventData.Data.RecordsOfSale.Upn,
+                OrderNumber = eventData.Data.RecordsOfSale.OrderNumber,
+                StartDate = eventData.Data.RecordsOfSale.TransactionType == MaintainHoldingsType ? "" : eventData.Data.RecordsOfSale.OrderDate,
+                PurachaseOrder = eventData.Data.RecordsOfSale.PoRef,
+                EndDate = eventData.Data.RecordsOfSale.TransactionType == MaintainHoldingsType ? "" : eventData.Data.RecordsOfSale.HoldingsExpiryDate,
+                LicenceType = eventData.Data.RecordsOfSale.TransactionType == MaintainHoldingsType ? "" : eventData.Data.RecordsOfSale.LicenceType,
+                LicenceDuration = eventData.Data.RecordsOfSale.TransactionType == MaintainHoldingsType ? null : eventData.Data.RecordsOfSale.LicenceDuration
             };
 
-            sapPayload.PROD = new PROD()
+            PROD prod = new();
+            List<UnitOfSales> unitOfSaleList = new();
+
+            foreach (var rosUnitOfSale in eventData.Data.RecordsOfSale.RosUnitOfSale)
             {
-                UnitOfSales = new List<UnitOfSales>()
+                UnitOfSales unitOfSales = new()
                 {
-                    new UnitOfSales()
-                    {
-                        Id = eventData.Data.RecordOfSale.RosUnitOfSale[0].Id,
-                        EndDate = eventData.Data.RecordOfSale.RosUnitOfSale[0].EndDate,
-                        Duration = eventData.Data.RecordOfSale.RosUnitOfSale[0].Duration,
-                        ReNew = eventData.Data.RecordOfSale.RosUnitOfSale[0].ReNew,
-                        Repeat = eventData.Data.RecordOfSale.RosUnitOfSale[0].Repeat
-                    }
-                }
-            };
+                    Id = rosUnitOfSale.Id,
+                    EndDate = rosUnitOfSale.EndDate,
+                    Duration = rosUnitOfSale.Duration,
+                    ReNew = rosUnitOfSale.ReNew,
+                    Repeat = rosUnitOfSale.Repeat
+                };
+                 
+                unitOfSaleList.Add(unitOfSales);
+            }
 
+            prod.UnitOfSales = unitOfSaleList;
+            sapPayload.PROD = prod;
+             
             return sapPayload;
         }
     }

@@ -41,11 +41,11 @@ namespace UKHO.ERPFacade.Common.Models
         public List<string> RelatedEvents { get; set; }
 
         [JsonProperty("recordsOfSale")]
-        public RecordOfSale RecordOfSale { get; set; }
+        public RecordsOfSale RecordsOfSale { get; set; }
     }
 
     [ExcludeFromCodeCoverage]
-    public class RecordOfSale
+    public class RecordsOfSale
     {
         [JsonProperty("licenseId")]
         public string LicenceId { get; set; }
