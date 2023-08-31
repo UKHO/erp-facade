@@ -16,7 +16,6 @@ namespace UKHO.ERPFacade.API.Helpers
         private const string ImOrderNameSpace = "RecordOfSale";
         private const string MaintainHoldingsType = "MAINTAINHOLDINGS";
 
-
         public RecordOfSaleSapMessageBuilder(ILogger<RecordOfSaleSapMessageBuilder> logger,
             IXmlHelper xmlHelper,
             IFileSystemHelper fileSystemHelper
@@ -69,7 +68,7 @@ namespace UKHO.ERPFacade.API.Helpers
                 CallSign = eventData.Data.RecordOfSale.TransactionType == MaintainHoldingsType ? "" : eventData.Data.RecordOfSale.CallSign,
                 ShoreBased = eventData.Data.RecordOfSale.TransactionType == MaintainHoldingsType ? "" :  eventData.Data.RecordOfSale.ShoreBased,
                 FleetName = eventData.Data.RecordOfSale.TransactionType == MaintainHoldingsType ? "" : eventData.Data.RecordOfSale.FleetName,
-                Users = eventData.Data.RecordOfSale.TransactionType == MaintainHoldingsType ? 0 : eventData.Data.RecordOfSale.NumberLicenceUsers,
+                Users = eventData.Data.RecordOfSale.TransactionType == MaintainHoldingsType ? null : eventData.Data.RecordOfSale.NumberLicenceUsers,
                 EndUserId = eventData.Data.RecordOfSale.TransactionType == MaintainHoldingsType ? "" : eventData.Data.RecordOfSale.LicenceId,
                 ECDISMANUF = eventData.Data.RecordOfSale.TransactionType == MaintainHoldingsType ? "" : eventData.Data.RecordOfSale.Upn,
                 OrderNumber = eventData.Data.RecordOfSale.OrderNumber,
