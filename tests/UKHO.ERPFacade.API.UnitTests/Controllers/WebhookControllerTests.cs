@@ -460,7 +460,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
 
             A.CallTo(() =>
                     _fakeLicenceUpdatedSapMessageBuilder.BuildLicenceUpdatedSapMessageXml(
-                        A<RecordOfSaleEventPayLoad>.Ignored, A<string>.Ignored))
+                        A<LicenceUpdatedEventPayLoad>.Ignored, A<string>.Ignored))
                 .Returns(xmlDocument);
 
             A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))

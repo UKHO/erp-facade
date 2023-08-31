@@ -27,7 +27,7 @@ namespace UKHO.ERPFacade.API.Helpers
             _fileSystemHelper = fileSystemHelper;
         }
 
-        public XmlDocument BuildLicenceUpdatedSapMessageXml(RecordOfSaleEventPayLoad eventData, string correlationId)
+        public XmlDocument BuildLicenceUpdatedSapMessageXml(LicenceUpdatedEventPayLoad eventData, string correlationId)
         {
             string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, SapXmlPath);
 
@@ -54,7 +54,7 @@ namespace UKHO.ERPFacade.API.Helpers
             return soapXml;
         }
 
-        private SapRecordOfSalePayLoad SapXmlPayloadCreation(RecordOfSaleEventPayLoad eventData)
+        private SapRecordOfSalePayLoad SapXmlPayloadCreation(LicenceUpdatedEventPayLoad eventData)
         {
             var sapPayload = new SapRecordOfSalePayLoad
             {

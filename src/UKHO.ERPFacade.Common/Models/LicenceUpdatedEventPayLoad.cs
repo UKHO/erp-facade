@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 namespace UKHO.ERPFacade.Common.Models
 {
     [ExcludeFromCodeCoverage]
-    public class RecordOfSaleEventPayLoad
+    public class LicenceUpdatedEventPayLoad
     {
         [JsonProperty("specversion")]
         public string Specversion { get; set; }
@@ -28,21 +28,21 @@ namespace UKHO.ERPFacade.Common.Models
         public string Datacontenttype { get; set; }
 
         [JsonProperty("data")]
-        public RecordOfSaleData Data { get; set; }
+        public LicenceData Data { get; set; }
     }
 
     [ExcludeFromCodeCoverage]
-    public class RecordOfSaleData
+    public class LicenceData
     {
         [JsonProperty("correlationId")]
         public string CorrelationId { get; set; }
 
-        [JsonProperty("recordsOfSale")]
-        public RecordOfSale RecordOfSale { get; set; }
+        [JsonProperty("license")]
+        public Licence Licence { get; set; }
     }
 
     [ExcludeFromCodeCoverage]
-    public class RecordOfSale
+    public class Licence
     {
         [JsonProperty("licenseId")]
         public string LicenceId { get; set; }
@@ -102,11 +102,11 @@ namespace UKHO.ERPFacade.Common.Models
         public int? LicenceDuration { get; set; }
 
         [JsonProperty("unitsOfSale")]
-        public List<RecordOfSaleUnitOfSale> RecordOfSaleEventUnitOfSale { get; set; }
+        public List<LicenceUpdatedUnitOfSale> LicenceUpdatedUnitOfSale { get; set; }
     }
 
     [ExcludeFromCodeCoverage]
-    public class RecordOfSaleUnitOfSale
+    public class LicenceUpdatedUnitOfSale
     {
         [JsonProperty("unitName")]
         public string Id { get; set; }

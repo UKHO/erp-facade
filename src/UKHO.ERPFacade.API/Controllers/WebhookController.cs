@@ -27,6 +27,7 @@ namespace UKHO.ERPFacade.API.Controllers
         private readonly ISapMessageBuilder _sapMessageBuilder;
         private readonly IOptions<SapConfiguration> _sapConfig;
         private readonly ILicenceUpdatedSapMessageBuilder _licenceUpdatedSapMessageBuilder;
+        private readonly IRecordOfSaleEventSapMessageBuilder _recordOfSaleEventPayloadMessageBuilder;
 
         private const string CorrelationIdKey = "data.correlationId";
         private const string EncEventFileName = "EncPublishingEvent.json";
@@ -35,7 +36,7 @@ namespace UKHO.ERPFacade.API.Controllers
         private const string LicenceUpdatedFileName = "LicenceUpdatedEvent.json";
         private const string RecordOfSaleContainerName = "recordofsaleblobs";
         private const string RecordOfSaleEventFileName = "RecordOfSaleEvent.json";
-        private const string RosXmlFilePath = "SapXmlTemplates\\RosSapRequest.xml";
+        //private const string RosXmlFilePath = "SapXmlTemplates\\RosSapRequest.xml";
 
         public WebhookController(IHttpContextAccessor contextAccessor,
                                  ILogger<WebhookController> logger,
@@ -44,7 +45,8 @@ namespace UKHO.ERPFacade.API.Controllers
                                  ISapClient sapClient,
                                  ISapMessageBuilder sapMessageBuilder,
                                  IOptions<SapConfiguration> sapConfig,
-                                 ILicenceUpdatedSapMessageBuilder licenceUpdatedSapMessageBuilder)
+                                 ILicenceUpdatedSapMessageBuilder licenceUpdatedSapMessageBuilder,
+                                 IRecordOfSaleEventSapMessageBuilder recordOfSaleEventPayloadMessageBuilder)
         : base(contextAccessor)
         {
             _logger = logger;
@@ -53,6 +55,7 @@ namespace UKHO.ERPFacade.API.Controllers
             _sapClient = sapClient;
             _sapMessageBuilder = sapMessageBuilder;
             _licenceUpdatedSapMessageBuilder = licenceUpdatedSapMessageBuilder;
+            _recordOfSaleEventPayloadMessageBuilder = recordOfSaleEventPayloadMessageBuilder;
             _sapConfig = sapConfig ?? throw new ArgumentNullException(nameof(sapConfig));
         }
 
@@ -154,12 +157,16 @@ namespace UKHO.ERPFacade.API.Controllers
             await _azureBlobEventWriter.UploadEvent(recordOfSaleEventJson.ToString(), RecordOfSaleContainerName, correlationId + '/' + RecordOfSaleEventFileName);
             _logger.LogInformation(EventIds.UploadedRecordOfSalePublishedEventInAzureBlob.ToEventId(), "Record of sale published event is uploaded in blob storage successfully.");
 
-            string recordOfSalesXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, RosXmlFilePath);
+            //string recordOfSalesXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, RosXmlFilePath);
 
-            XmlDocument rosPayload = new();
-            rosPayload.Load(recordOfSalesXmlTemplatePath);
+            //XmlDocument rosPayload = new();
+            //rosPayload.Load(recordOfSalesXmlTemplatePath);
 
-            HttpResponseMessage response = await _sapClient.PostEventData(rosPayload, _sapConfig.Value.SapServiceOperationForRecordOfSale, _sapConfig.Value.SapUsernameForRecordOfSale, _sapConfig.Value.SapPasswordForRecordOfSale);
+            var rosJson = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(recordOfSaleEventJson.ToString());
+
+            XmlDocument sapPayload = _recordOfSaleEventPayloadMessageBuilder.BuildRecordOfSaleEventSapMessageXml(rosJson, correlationId);
+
+            HttpResponseMessage response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapServiceOperationForRecordOfSale, _sapConfig.Value.SapUsernameForRecordOfSale, _sapConfig.Value.SapPasswordForRecordOfSale);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -213,7 +220,7 @@ namespace UKHO.ERPFacade.API.Controllers
             await _azureBlobEventWriter.UploadEvent(licenceUpdatedEventJson.ToString(), LicenceUpdatedContainerName, correlationId + '/' + LicenceUpdatedFileName);
             _logger.LogInformation(EventIds.UploadedLicenceUpdatedPublishedEventInAzureBlob.ToEventId(), "Licence updated  published event is uploaded in blob storage successfully.");
 
-            XmlDocument sapPayload = _licenceUpdatedSapMessageBuilder.BuildLicenceUpdatedSapMessageXml(JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(licenceUpdatedEventJson.ToString()), correlationId);
+            XmlDocument sapPayload = _licenceUpdatedSapMessageBuilder.BuildLicenceUpdatedSapMessageXml(JsonConvert.DeserializeObject<LicenceUpdatedEventPayLoad>(licenceUpdatedEventJson.ToString()), correlationId);
 
             _logger.LogInformation(EventIds.UploadLicenceUpdatedSapXmlPayloadInAzureBlob.ToEventId(), "Uploading the SAP xml payload for licence updated event in blob storage.");
             await _azureBlobEventWriter.UploadEvent(sapPayload.ToIndentedString(), LicenceUpdatedContainerName, correlationId + '/' + SapXmlPayloadFileName);

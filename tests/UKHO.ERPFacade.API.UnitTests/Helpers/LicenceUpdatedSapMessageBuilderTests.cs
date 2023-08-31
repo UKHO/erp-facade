@@ -93,7 +93,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         [Test]
         public void WhenTransactionTypeIsChangeLicence_ThenReturnXMLDocument()
         {
-            var jsonData = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(licenceUpdatedJsonData);
+            var jsonData = JsonConvert.DeserializeObject<LicenceUpdatedEventPayLoad>(licenceUpdatedJsonData);
             var correlationId = "123-abc-456-xyz-333";
             var sapReqXml = TestHelper.ReadFileData("ERPTestData\\RoSPayloadTest.xml");
 
@@ -143,7 +143,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         [Test]
         public void WhenLicenceUpdatedSapXmlTemplateFileNotExist_ThenThrowFileNotFoundException()
         {
-            var jsonData = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(licenceUpdatedJsonData);
+            var jsonData = JsonConvert.DeserializeObject<LicenceUpdatedEventPayLoad>(licenceUpdatedJsonData);
             var correlationId = "123-abc-456-xyz-333";
 
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(false);
@@ -159,7 +159,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         [Test]
         public void WhenTransactionTypeIsChangeLicenceshouldReturns_SomeFieldsEmpty_SapXmlPayloadCreationTests()
         {
-            var jsonData = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(licenceUpdatedJsonData);
+            var jsonData = JsonConvert.DeserializeObject<LicenceUpdatedEventPayLoad>(licenceUpdatedJsonData);
             var sapReqXml = TestHelper.ReadFileData("ERPTestData\\RoSPayloadTest.xml");
 
             A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
@@ -180,7 +180,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         [Test]
         public void WhenTransactionTypeIsNotChangeLicenceShouldNotReturns_SomeFieldsEmpty_SapXmlPayloadCreationTests()
         {
-            var jsonData = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(licenceUpdatedJsonData);
+            var jsonData = JsonConvert.DeserializeObject<LicenceUpdatedEventPayLoad>(licenceUpdatedJsonData);
             jsonData.Data.Licence.TransactionType = "NEWLICENCE";
             jsonData.Data.Licence.OrderNumber = "1232T";
             jsonData.Data.Licence.OrderDate = "2023-7-24";
