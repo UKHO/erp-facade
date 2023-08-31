@@ -38,6 +38,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         private IOptions<SapConfiguration> _fakeSapConfig;
         private WebhookController _fakeWebHookController;
         private ILicenceUpdatedSapMessageBuilder _fakeLicenceUpdatedSapMessageBuilder;
+        private IRecordOfSaleSapMessageBuilder _fakeRecordOfSaleSapMessageBuilder;
 
         [SetUp]
         public void Setup()
@@ -62,7 +63,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
                                                            _fakeSapClient,
                                                            _fakeSapMessageBuilder,
                                                            _fakeSapConfig,
-                                                           _fakeLicenceUpdatedSapMessageBuilder);
+                                                           _fakeLicenceUpdatedSapMessageBuilder,
+                                                           _fakeRecordOfSaleSapMessageBuilder);
         }
 
         [Test]
@@ -243,7 +245,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
                                                            _fakeSapClient,
                                                            _fakeSapMessageBuilder,
                                                            null,
-                                                           _fakeLicenceUpdatedSapMessageBuilder))
+                                                           _fakeLicenceUpdatedSapMessageBuilder,
+                                                           _fakeRecordOfSaleSapMessageBuilder))
              .ParamName
              .Should().Be("sapConfig");
         }
@@ -279,7 +282,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         [Test]
         public async Task WhenValidEventInRecordOfSalePublishedEventReceived_ThenWebhookReturns200OkResponse()
         {
-            var fakeEncEventJson = JObject.Parse(@"{""data"":{""correlationId"":""123""}}");
+            var fakeRosEventJson = JObject.Parse(@"{""data"":{""correlationId"":""123""}}");
 
             A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                 .Returns(new HttpResponseMessage()
@@ -287,9 +290,10 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
                     StatusCode = HttpStatusCode.OK
                 });
 
-            var result = (OkObjectResult)await _fakeWebHookController.RecordOfSalePublishedEventReceived(fakeEncEventJson);
+            var result = (OkObjectResult)await _fakeWebHookController.RecordOfSalePublishedEventReceived(fakeRosEventJson);
 
             A.CallTo(() => _fakeAzureTableReaderWriter.UpsertRecordOfSaleEntity(A<string>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateRecordOfSaleEventStatus(A<string>.Ignored)).MustHaveHappenedOnceExactly();
             A.CallTo(() => _fakeAzureBlobEventWriter.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened(1, Times.Exactly);
 
             result.StatusCode.Should().Be(200);
@@ -313,12 +317,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
              && call.GetArgument<LogLevel>(0) == LogLevel.Information
              && call.GetArgument<EventId>(1) == EventIds.UploadedRecordOfSalePublishedEventInAzureBlob.ToEventId()
              && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Record of sale published event is uploaded in blob storage successfully.").MustHaveHappenedOnceExactly();
-
-            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-             && call.GetArgument<LogLevel>(0) == LogLevel.Information
-             && call.GetArgument<EventId>(1) == EventIds.UploadedRecordOfSalePublishedEventInAzureBlob.ToEventId()
-             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Record of sale published event is uploaded in blob storage successfully.").MustHaveHappenedOnceExactly();
-
+ 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Information
                                                                           && call.GetArgument<EventId>(1) == EventIds.RecordOfSalePublishedEventDataPushedToSap.ToEventId()
@@ -328,9 +327,9 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         [Test]
         public async Task WhenCorrelationIdIsMissingInRecordOfSalePublishedEvent_ThenWebhookReturns400BadRequestResponse()
         {
-            var fakeEncEventJson = JObject.Parse(@"{""data"":{""corId"":""123""}}");
+            var fakeRosEventJson = JObject.Parse(@"{""data"":{""corId"":""123""}}");
 
-            var result = (BadRequestObjectResult)await _fakeWebHookController.RecordOfSalePublishedEventReceived(fakeEncEventJson);
+            var result = (BadRequestObjectResult)await _fakeWebHookController.RecordOfSalePublishedEventReceived(fakeRosEventJson);
 
             result.StatusCode.Should().Be(400);
 
