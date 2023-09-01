@@ -47,7 +47,7 @@ namespace UKHO.ERPFacade.Common.Services
             string xml = _xmlHelper.CreateXmlPayLoad(sapRecordOfSalePayLoad);
 
             string sapXml = xml.Replace(ImOrderNameSpace, "");
-           
+
             soapXml.SelectSingleNode(XpathZAddsRos).InnerXml = sapXml.RemoveNullFields().SetXmlClosingTags();
 
             _logger.LogInformation(EventIds.CreatedRecordOfSaleSapPayload.ToEventId(), "The record of sale SAP payload created.");
@@ -76,7 +76,7 @@ namespace UKHO.ERPFacade.Common.Services
                 StartDate = eventData.Data.RecordsOfSale.TransactionType == MaintainHoldingsType ? "" : eventData.Data.RecordsOfSale.OrderDate,
                 EndDate = eventData.Data.RecordsOfSale.TransactionType == MaintainHoldingsType ? "" : eventData.Data.RecordsOfSale.HoldingsExpiryDate,
                 LicenceType = eventData.Data.RecordsOfSale.TransactionType == MaintainHoldingsType ? "" : eventData.Data.RecordsOfSale.LicenceType,
-                LicenceDuration = eventData.Data.RecordsOfSale.TransactionType == MaintainHoldingsType ? null : eventData.Data.RecordsOfSale.LicenceDuration
+                LicenceDuration = eventData.Data.RecordsOfSale.TransactionType == MaintainHoldingsType ? null : eventData.Data.RecordsOfSale.LicenceDuration,
                 FleetName = (eventData.Data.RecordsOfSale.TransactionType == MaintainHoldingsType ||
                     eventData.Data.RecordsOfSale.TransactionType == NewLicenceType) ? "" : eventData.Data.RecordsOfSale.FleetName,
                 LicenceNumber = eventData.Data.RecordsOfSale.TransactionType == NewLicenceType ? "" : eventData.Data.RecordsOfSale.SapId,
@@ -100,8 +100,8 @@ namespace UKHO.ERPFacade.Common.Services
             }
 
             prod.UnitOfSales = unitOfSaleList;
-            sapPayload.PROD = prod; 
-             
+            sapPayload.PROD = prod;
+
             return sapPayload;
         }
     }
