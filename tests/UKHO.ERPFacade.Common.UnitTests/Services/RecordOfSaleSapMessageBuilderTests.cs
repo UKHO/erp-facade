@@ -8,13 +8,13 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System.Xml;
 using NUnit.Framework;
-using UKHO.ERPFacade.API.Helpers;
-using UKHO.ERPFacade.API.UnitTests.Common;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
+using UKHO.ERPFacade.Common.Services;
+using UKHO.ERPFacade.API.UnitTests.Common;
 
-namespace UKHO.ERPFacade.API.UnitTests.Helpers
+namespace UKHO.ERPFacade.Common.UnitTests.Services
 {
     [TestFixture]
     public class RecordOfSaleSapMessageBuilderTests
