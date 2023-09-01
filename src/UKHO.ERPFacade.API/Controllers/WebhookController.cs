@@ -158,6 +158,10 @@ namespace UKHO.ERPFacade.API.Controllers
              
             XmlDocument sapPayload = _recordOfSaleSapMessageBuilder.BuildRecordOfSaleSapMessageXml(JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(recordOfSaleEventJson.ToString()), correlationId);
 
+            _logger.LogInformation(EventIds.UploadRecordOfSaleSapXmlPayloadInAzureBlob.ToEventId(), "Uploading the SAP xml payload for licence updated event in blob storage.");
+            await _azureBlobEventWriter.UploadEvent(sapPayload.ToIndentedString(), RecordOfSaleContainerName, correlationId + '/' + SapXmlPayloadFileName);
+            _logger.LogInformation(EventIds.UploadedRecordOfSaleSapXmlPayloadInAzureBlob.ToEventId(), "SAP xml payload for licence updated event is uploaded in blob storage successfully.");
+
             HttpResponseMessage response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapServiceOperationForRecordOfSale, _sapConfig.Value.SapUsernameForRecordOfSale, _sapConfig.Value.SapPasswordForRecordOfSale);
 
             if (!response.IsSuccessStatusCode)
