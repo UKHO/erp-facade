@@ -39,7 +39,10 @@
     <None Update="ERPTestData\ActionItemNodeTest.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPTestData\RoSPayloadTest.xml">
+    <None Update="ERPTestData\NewLicencePayloadTest.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPTestData\ChangeLicencePayloadTest.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPTestData\SapPayloadWithnullableNameSpace.xml">
