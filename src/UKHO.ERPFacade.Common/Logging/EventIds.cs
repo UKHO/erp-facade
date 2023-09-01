@@ -646,7 +646,17 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940129 - The record of sale SAP payload created.
         /// </summary>
-        CreatedRecordOfSaleSapPayload = 940129
+        CreatedRecordOfSaleSapPayload = 940129,
+
+        /// <summary>
+        /// 940130 - Uploading Sap Xml payload for record of sale event in Azure blob.
+        /// </summary>
+        UploadRecordOfSaleSapXmlPayloadInAzureBlob = 940130,
+
+        /// <summary>
+        /// 940131 - SAP xml payload for record of sale event is uploaded in blob storage successfully.
+        /// </summary>
+        UploadedRecordOfSaleSapXmlPayloadInAzureBlob = 940131
     }
 
     /// <summary>
