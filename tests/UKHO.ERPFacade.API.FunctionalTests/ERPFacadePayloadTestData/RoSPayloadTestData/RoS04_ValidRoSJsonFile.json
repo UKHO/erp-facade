@@ -36,13 +36,6 @@
                     "duration": "3",
                     "renew": "E",
                     "repeat": "P"
-                },
-                {
-                    "unitName": "GB302409",
-                    "endDate": "2023-12-01",
-                    "duration": "6",
-                    "renew": "E",
-                    "repeat": "P"
                 }
             ]
         }
