@@ -40,6 +40,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         private readonly string XpathEndUserId = $"//*[local-name()='ENDUSERID']";
         private readonly string XpathManuf = $"//*[local-name()='ECDISMANUF']";
         private readonly string XpathLType = $"//*[local-name()='LTYPE']";
+        private readonly string XpathUsers = $"//*[local-name()='USERS']";
+        private readonly string XpathLicDur = $"//*[local-name()='LICDUR']";
 
         private readonly string RosSapXmlFile = @"<?xml version=""1.0"" encoding=""utf-8""?>
 <soap:Envelope xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:soap=""http://schemas.xmlsoap.org/soap/envelope/"">
@@ -85,7 +87,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         private readonly string jsonForNewLicence = @"{""specversion"": ""1.0"",""type"": ""uk.gov.ukho.shop.recordOfSale.v1"",""source"": ""https://uk.gov.ukho.shop"",""id"": ""e744fa37-0c9f-4795-adc9-7f42ad8f11c1"",""time"": ""2023-07-20T10:40:00.000000Z"",""subject"": ""releasability set changes holdings Record of Sale"",""datacontenttype"": ""application/json"",""data"": {""correlationId"": ""123-abc-456-xyz-333"",""relatedEvents"": [""e744fa37-0c9f-4795-adc9-7f42ad8f11c1""],""recordsOfSale"": 
       {""licenseId"": ""2"",""productType"": ""AVCS"",""transactionType"": ""NEWLICENCE"",""distributorCustomerNumber"": ""111"",""shippingCoNumber"": ""1"",""ordernumber"": ""5432796"",""orderDate"": ""2023-06-20"",""po-ref"": ""75277T-Bengang"",""holdingsExpiryDate"": ""2025-06-30"",""sapId"": """",""vesselName"": ""Cornelia Maersk"",""imoNumber"": ""IMO9245756"",""callSign"": ""OWWS2"",""licenceType"": ""02"",""shoreBased"": ""X"",""fleetName"": """",""numberLicenceUsers"": 1,""upn"": ""MARIS"",""licenceDuration"": 12,""unitsOfSale"": [{""unitName"": ""PT111101"",""endDate"": ""2023-10-31"",""duration"": ""3"",""renew"": ""N"",""repeat"": """"},{""unitName"": ""GB302409"",""endDate"": ""2023-12-01"",""duration"": ""6"",""renew"": ""E"",""repeat"": ""P""}]}}}";
 
-        private readonly string jsonForMaintainHoldings = @"{""specversion"":""1.0"",""type"":""uk.gov.ukho.shop.recordOfSale.v1"",""source"":""https://uk.gov.ukho.shop"",""id"":""e744fa37-0c9f-4795-adc9-7f42ad8f11c1"",""time"":""2023-07-20T10:40:00Z"",""subject"":""releasability set changes holdings Record of Sale"",""datacontenttype"":""application/json"",""data"":{""correlationId"":""123-abc-456-xyz-333"",""relatedEvents"":[""e744fa37-0c9f-4795-adc9-7f42ad8f11c1""],""recordsOfSale"":{""licenseId"":"""",""productType"":""AVCS"",""transactionType"":""MAINTAINHOLDINGS"",""distributorCustomerNumber"":"""",""shippingCoNumber"":"""",""ordernumber"":""5432796"",""orderDate"":"""",""po-ref"":""75277T-Bengang"",""holdingsExpiryDate"":"""",""sapId"":""75277T"",""vesselName"":"""",""imoNumber"":"""",""callSign"":"""",""licenceType"":"""",""shoreBased"":"""",""fleetName"":"""",""numberLicenceUsers"":0,""upn"":"""",""licenceDuration"":12,""unitsOfSale"":[{""unitName"":""PT111101"",""endDate"":""2023-10-31"",""duration"":""3"",""renew"":""E"",""repeat"":""P""},{""unitName"":""GB302409"",""endDate"":""2023-12-01"",""duration"":""6"",""renew"":""E"",""repeat"":""P""}]}}}";
+        private readonly string jsonForMaintainHoldings = @"{""specversion"":""1.0"",""type"":""uk.gov.ukho.shop.recordOfSale.v1"",""source"":""https://uk.gov.ukho.shop"",""id"":""e744fa37-0c9f-4795-adc9-7f42ad8f11c1"",""time"":""2023-07-20T10:40:00Z"",""subject"":""releasability set changes holdings Record of Sale"",""datacontenttype"":""application/json"",""data"":{""correlationId"":""123-abc-456-xyz-333"",""relatedEvents"":[""e744fa37-0c9f-4795-adc9-7f42ad8f11c1""],""recordsOfSale"":{""licenseId"":"""",""productType"":""AVCS"",""transactionType"":""MAINTAINHOLDINGS"",""distributorCustomerNumber"":"""",""shippingCoNumber"":"""",""ordernumber"":""5432796"",""orderDate"":"""",""po-ref"":""75277T-Bengang"",""holdingsExpiryDate"":"""",""sapId"":""75277T"",""vesselName"":"""",""imoNumber"":"""",""callSign"":"""",""licenceType"":"""",""shoreBased"":"""",""fleetName"":"""",""numberLicenceUsers"":null,""upn"":"""",""licenceDuration"":null,""unitsOfSale"":[{""unitName"":""PT111101"",""endDate"":""2023-10-31"",""duration"":""3"",""renew"":""E"",""repeat"":""P""},{""unitName"":""GB302409"",""endDate"":""2023-12-01"",""duration"":""6"",""renew"":""E"",""repeat"":""P""}]}}}";
 
         #endregion
 
@@ -209,6 +211,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             var EndUserId = result.SelectSingleNode(XpathEndUserId);
             var Manuf = result.SelectSingleNode(XpathManuf);
             var LType = result.SelectSingleNode(XpathLType);
+            var Users = result.SelectSingleNode(XpathUsers);
+            var LicDur = result.SelectSingleNode(XpathLicDur);
 
             SoldToAcc.InnerXml.Should().BeEmpty();
             LicenseEAcc.InnerXml.Should().BeEmpty();
@@ -222,6 +226,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             EndUserId.InnerXml.Should().BeEmpty();
             Manuf.InnerXml.Should().BeEmpty();
             LType.InnerXml.Should().BeEmpty();
+            Users.InnerXml.Should().BeNullOrEmpty();
+            LicDur.InnerXml.Should().BeNullOrEmpty();
 
             var prodItem = result.SelectSingleNode(XpathProd);
             prodItem.ChildNodes.Count.Should().Be(2);
@@ -263,6 +269,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             result.Users.Should().Be(null);
             result.EndUserId.Should().Be("");
             result.LicenceDuration.Should().Be(null);
+            result.ECDISMANUF.Should().Be("");
+            result.LicenceType.Should().Be("");
             result.PROD.UnitOfSales.Count.Should().Be(2);
         }
     }
