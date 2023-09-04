@@ -35,7 +35,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         private IAzureBlobEventWriter _fakeAzureBlobEventWriter;
         private ISapClient _fakeSapClient;
         private IXmlHelper _fakeXmlHelper;
-        private ISapMessageBuilder _fakeSapMessageBuilder;
+        private IEncContentSapMessageBuilder _fakeEncContentSapMessageBuilder;
         private IOptions<SapConfiguration> _fakeSapConfig;
         private WebhookController _fakeWebHookController;
         private ILicenceUpdatedSapMessageBuilder _fakeLicenceUpdatedSapMessageBuilder;
@@ -50,7 +50,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             _fakeAzureBlobEventWriter = A.Fake<IAzureBlobEventWriter>();
             _fakeSapClient = A.Fake<ISapClient>();
             _fakeXmlHelper = A.Fake<IXmlHelper>();
-            _fakeSapMessageBuilder = A.Fake<ISapMessageBuilder>();
+            _fakeEncContentSapMessageBuilder = A.Fake<IEncContentSapMessageBuilder>();
             _fakeLicenceUpdatedSapMessageBuilder = A.Fake<ILicenceUpdatedSapMessageBuilder>();
             _fakeRecordOfSaleSapMessageBuilder = A.Fake<IRecordOfSaleSapMessageBuilder>();
             _fakeSapConfig = Options.Create(new SapConfiguration()
@@ -63,7 +63,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
                                                            _fakeAzureTableReaderWriter,
                                                            _fakeAzureBlobEventWriter,
                                                            _fakeSapClient,
-                                                           _fakeSapMessageBuilder,
+                                                           _fakeEncContentSapMessageBuilder,
                                                            _fakeSapConfig,
                                                            _fakeLicenceUpdatedSapMessageBuilder,
                                                            _fakeRecordOfSaleSapMessageBuilder);
@@ -245,7 +245,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
                                                            _fakeAzureTableReaderWriter,
                                                            _fakeAzureBlobEventWriter,
                                                            _fakeSapClient,
-                                                           _fakeSapMessageBuilder,
+                                                           _fakeEncContentSapMessageBuilder,
                                                            null,
                                                            _fakeLicenceUpdatedSapMessageBuilder,
                                                            _fakeRecordOfSaleSapMessageBuilder))

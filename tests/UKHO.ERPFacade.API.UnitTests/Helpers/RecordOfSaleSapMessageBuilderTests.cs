@@ -11,10 +11,10 @@ using NUnit.Framework;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
-using UKHO.ERPFacade.Common.Services;
 using UKHO.ERPFacade.API.UnitTests.Common;
+using UKHO.ERPFacade.API.Helpers;
 
-namespace UKHO.ERPFacade.Common.UnitTests.Services
+namespace UKHO.ERPFacade.API.UnitTests.Helpers
 {
     [TestFixture]
     public class RecordOfSaleSapMessageBuilderTests
@@ -164,7 +164,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Services
 
             A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
 
-            MethodInfo methodInfo = typeof(RecordOfSaleSapMessageBuilder).GetMethod("SapXmlPayloadCreation", BindingFlags.NonPublic | BindingFlags.Instance)!;
+            MethodInfo methodInfo = typeof(RecordOfSaleSapMessageBuilder).GetMethod("BuildNewLicencePayload", BindingFlags.NonPublic | BindingFlags.Instance)!;
             var result = (SapRecordOfSalePayLoad)methodInfo.Invoke(_fakeRecordOfSaleSapMessageBuilder, new object[] { jsonData! })!;
 
             result.Should().NotBeNull();
@@ -246,7 +246,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Services
 
             A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
 
-            MethodInfo methodInfo = typeof(RecordOfSaleSapMessageBuilder).GetMethod("SapXmlPayloadCreation", BindingFlags.NonPublic | BindingFlags.Instance)!;
+            MethodInfo methodInfo = typeof(RecordOfSaleSapMessageBuilder).GetMethod("BuildMaintainHoldingsPayload", BindingFlags.NonPublic | BindingFlags.Instance)!;
             var result = (SapRecordOfSalePayLoad)methodInfo.Invoke(_fakeRecordOfSaleSapMessageBuilder, new object[] { jsonData! })!;
 
             result.Should().NotBeNull();

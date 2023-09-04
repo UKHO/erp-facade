@@ -1,7 +1,7 @@
 ﻿using System.Xml;
 using UKHO.ERPFacade.Common.Models;
 
-namespace UKHO.ERPFacade.Common.Services
+namespace UKHO.ERPFacade.API.Helpers
 {
     public interface IRecordOfSaleSapMessageBuilder
     {

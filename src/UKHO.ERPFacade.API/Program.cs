@@ -177,7 +177,7 @@ namespace UKHO.ERPFacade
 
             builder.Services.AddScoped<IAzureTableReaderWriter, AzureTableReaderWriter>();
             builder.Services.AddScoped<IAzureBlobEventWriter, AzureBlobEventWriter>();
-            builder.Services.AddScoped<ISapMessageBuilder, SapMessageBuilder>();
+            builder.Services.AddScoped<IEncContentSapMessageBuilder, EncContentSapMessageBuilder>();
             builder.Services.AddScoped<IXmlHelper, XmlHelper>();
             builder.Services.AddScoped<IFileSystemHelper, FileSystemHelper>();
             builder.Services.AddScoped<IFileSystem, FileSystem>();

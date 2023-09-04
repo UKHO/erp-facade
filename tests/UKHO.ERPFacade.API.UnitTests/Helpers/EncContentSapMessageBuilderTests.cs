@@ -19,14 +19,14 @@ using UKHO.ERPFacade.Common.Models;
 namespace UKHO.ERPFacade.API.UnitTests.Helpers
 {
     [TestFixture]
-    public class SapMessageBuilderTests
+    public class EncContentSapMessageBuilderTests
     {
         private IXmlHelper _fakeXmlHelper;
         private IFileSystemHelper _fakeFileSystemHelper;
         private IOptions<SapActionConfiguration> _fakeSapActionConfig;
-        private ILogger<SapMessageBuilder> _fakeLogger;
+        private ILogger<EncContentSapMessageBuilder> _fakeLogger;
 
-        private SapMessageBuilder _fakeSapMessageBuilder;
+        private EncContentSapMessageBuilder _fakeEncContentSapMessageBuilder;
         private const string XpathActionItems = $"//*[local-name()='ACTIONITEMS']";
         private const string EncCell = "ENC CELL";
 
@@ -63,11 +63,11 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         [SetUp]
         public void Setup()
         {
-            _fakeLogger = A.Fake<ILogger<SapMessageBuilder>>();
+            _fakeLogger = A.Fake<ILogger<EncContentSapMessageBuilder>>();
             _fakeXmlHelper = A.Fake<IXmlHelper>();
             _fakeFileSystemHelper = A.Fake<IFileSystemHelper>();
             _fakeSapActionConfig = Options.Create(InitConfiguration().GetSection("SapActionConfiguration").Get<SapActionConfiguration>())!;
-            _fakeSapMessageBuilder = new SapMessageBuilder(_fakeLogger, _fakeXmlHelper, _fakeFileSystemHelper, _fakeSapActionConfig);
+            _fakeEncContentSapMessageBuilder = new EncContentSapMessageBuilder(_fakeLogger, _fakeXmlHelper, _fakeFileSystemHelper, _fakeSapActionConfig);
         }
 
         private IConfiguration InitConfiguration()
@@ -93,7 +93,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
 
-            var result = _fakeSapMessageBuilder.BuildSapMessageXml(scenarios!, correlationId);
+            var result = _fakeEncContentSapMessageBuilder.BuildSapMessageXml(scenarios!, correlationId);
 
             result.Should().BeOfType<XmlDocument>();
             var actionItem = result.SelectSingleNode(XpathActionItems);
@@ -121,7 +121,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
 
-            var result = _fakeSapMessageBuilder.BuildSapMessageXml(scenarios!, correlationId);
+            var result = _fakeEncContentSapMessageBuilder.BuildSapMessageXml(scenarios!, correlationId);
 
             result.Should().BeOfType<XmlDocument>();
             var actionItem = result.SelectSingleNode(XpathActionItems);
@@ -146,7 +146,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
 
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(false);
 
-            Assert.Throws<FileNotFoundException>(() => _fakeSapMessageBuilder.BuildSapMessageXml(scenarios!, correlationId));
+            Assert.Throws<FileNotFoundException>(() => _fakeEncContentSapMessageBuilder.BuildSapMessageXml(scenarios!, correlationId));
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Error
@@ -166,7 +166,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
 
-            var result = _fakeSapMessageBuilder.BuildSapMessageXml(scenarios!, correlationId);
+            var result = _fakeEncContentSapMessageBuilder.BuildSapMessageXml(scenarios!, correlationId);
 
             result.Should().BeOfType<XmlDocument>();
 
@@ -198,8 +198,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
                 InUnitsOfSale = new List<string>() { "MX545010", "MX509226" }
             };
 
-            MethodInfo methodInfo = typeof(SapMessageBuilder).GetMethod("GetUnitOfSaleForEncCell", BindingFlags.NonPublic | BindingFlags.Instance)!;
-            var result = (UnitOfSale)methodInfo.Invoke(_fakeSapMessageBuilder, new object[] { listOfUnitOfSales, product })!;
+            MethodInfo methodInfo = typeof(EncContentSapMessageBuilder).GetMethod("GetUnitOfSaleForEncCell", BindingFlags.NonPublic | BindingFlags.Instance)!;
+            var result = (UnitOfSale)methodInfo.Invoke(_fakeEncContentSapMessageBuilder, new object[] { listOfUnitOfSales, product })!;
 
             result.UnitName.Should().BeSameAs("MX509226");
         }
@@ -218,8 +218,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
                 InUnitsOfSale = new List<string>() { "MX509226" }
             };
 
-            MethodInfo methodInfo = typeof(SapMessageBuilder).GetMethod("GetUnitOfSaleForEncCell", BindingFlags.NonPublic | BindingFlags.Instance)!;
-            var result = (UnitOfSale)methodInfo.Invoke(_fakeSapMessageBuilder, new object[] { listOfUnitOfSales, product })!;
+            MethodInfo methodInfo = typeof(EncContentSapMessageBuilder).GetMethod("GetUnitOfSaleForEncCell", BindingFlags.NonPublic | BindingFlags.Instance)!;
+            var result = (UnitOfSale)methodInfo.Invoke(_fakeEncContentSapMessageBuilder, new object[] { listOfUnitOfSales, product })!;
 
             result.UnitName.Should().BeSameAs("MX509226");
         }
@@ -231,8 +231,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         [TestCase(null, "")]
         public void GetProdTypeTest(string prodType, string actual)
         {
-            MethodInfo getProdType = typeof(SapMessageBuilder).GetMethod("GetProdType", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
-            string result = (string)getProdType.Invoke(_fakeSapMessageBuilder, new object[] { prodType })!;
+            MethodInfo getProdType = typeof(EncContentSapMessageBuilder).GetMethod("GetProdType", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
+            string result = (string)getProdType.Invoke(_fakeEncContentSapMessageBuilder, new object[] { prodType })!;
 
             Assert.AreEqual(result, actual);
         }
@@ -244,8 +244,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         [TestCase(null, "PRODTYPE1", "")]
         public void GetXmlNodeValueTest(string prodType, string prod, string actual)
         {
-            MethodInfo XmlNodeValue = typeof(SapMessageBuilder).GetMethod("GetXmlNodeValue", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
-            string result = (string)XmlNodeValue.Invoke(_fakeSapMessageBuilder, new object[] { prodType, prod })!;
+            MethodInfo XmlNodeValue = typeof(EncContentSapMessageBuilder).GetMethod("GetXmlNodeValue", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
+            string result = (string)XmlNodeValue.Invoke(_fakeEncContentSapMessageBuilder, new object[] { prodType, prod })!;
 
             Assert.AreEqual(result, actual);
         }
@@ -261,14 +261,14 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             xmlDoc.LoadXml(sapReqXml);
             XmlNode actionItemNode = xmlDoc.SelectSingleNode(XpathActionItems)!;
 
-            MethodInfo xmlPayLoad = typeof(SapMessageBuilder).GetMethod("SortXmlPayload", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
-            var result = (XmlNode)xmlPayLoad.Invoke(_fakeSapMessageBuilder, new object[] { actionItemNode })!;
+            MethodInfo xmlPayLoad = typeof(EncContentSapMessageBuilder).GetMethod("SortXmlPayload", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
+            var result = (XmlNode)xmlPayLoad.Invoke(_fakeEncContentSapMessageBuilder, new object[] { actionItemNode })!;
 
             var firstNode = result.Cast<XmlNode>().FirstOrDefault().InnerText;
             Assert.AreEqual(firstNode, expectedResult);
         }
         [Test]
-        public  void BuildActionTest()
+        public void BuildActionTest()
         {
             var actualXmlElement = @"<ACTIONNUMBER>1</ACTIONNUMBER><ACTION>CREATE ENC CELL</ACTION><PRODUCT>ENC CELL</PRODUCT><PRODTYPE>S57</PRODTYPE><CHILDCELL>US5AK83M</CHILDCELL><PRODUCTNAME>US5AK83M</PRODUCTNAME><CANCELLED></CANCELLED><REPLACEDBY></REPLACEDBY><AGENCY>US</AGENCY><PROVIDER>1</PROVIDER><ENCSIZE>small</ENCSIZE><TITLE>St. Michael Bay</TITLE><EDITIONNO>0</EDITIONNO><UPDATENO>1</UPDATENO><UNITTYPE></UNITTYPE>";
 
@@ -276,19 +276,18 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             XmlDocument soapXml = new();
             soapXml.LoadXml(sapXmlFile);
 
-            MethodInfo GetUnitOfSaleForEncCell = typeof(SapMessageBuilder).GetMethod("GetUnitOfSaleForEncCell", BindingFlags.NonPublic | BindingFlags.Instance)!;
-            var unitOfSale = (UnitOfSale)GetUnitOfSaleForEncCell.Invoke(_fakeSapMessageBuilder, new object[] { scenarios.Data.UnitsOfSales,
+            MethodInfo GetUnitOfSaleForEncCell = typeof(EncContentSapMessageBuilder).GetMethod("GetUnitOfSaleForEncCell", BindingFlags.NonPublic | BindingFlags.Instance)!;
+            var unitOfSale = (UnitOfSale)GetUnitOfSaleForEncCell.Invoke(_fakeEncContentSapMessageBuilder, new object[] { scenarios.Data.UnitsOfSales,
                 scenarios.Data.Products.FirstOrDefault()! })!;
 
             var action = _fakeSapActionConfig.Value.SapActions.Where(x => x.Product == EncCell).FirstOrDefault();
 
-            MethodInfo buildAction = typeof(SapMessageBuilder).GetMethod("BuildAction", BindingFlags.NonPublic| BindingFlags.Static | BindingFlags.Instance)!;
-            var result =(XmlElement)buildAction.Invoke(_fakeSapMessageBuilder, new object[] {soapXml,scenarios.Data.Products.FirstOrDefault()!,
+            MethodInfo buildAction = typeof(EncContentSapMessageBuilder).GetMethod("BuildAction", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
+            var result = (XmlElement)buildAction.Invoke(_fakeEncContentSapMessageBuilder, new object[] {soapXml,scenarios.Data.Products.FirstOrDefault()!,
                 unitOfSale,action!,null,null})!;
 
             result.ChildNodes.Count.Should().Be(15);
             result.InnerXml.Should().Be(actualXmlElement);
-
         }
     }
 }

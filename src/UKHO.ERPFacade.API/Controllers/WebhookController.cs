@@ -12,7 +12,6 @@ using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
-using UKHO.ERPFacade.Common.Services;
 
 namespace UKHO.ERPFacade.API.Controllers
 {
@@ -25,7 +24,7 @@ namespace UKHO.ERPFacade.API.Controllers
         private readonly IAzureTableReaderWriter _azureTableReaderWriter;
         private readonly IAzureBlobEventWriter _azureBlobEventWriter;
         private readonly ISapClient _sapClient;
-        private readonly ISapMessageBuilder _sapMessageBuilder;
+        private readonly IEncContentSapMessageBuilder _encContentSapMessageBuilder;
         private readonly IOptions<SapConfiguration> _sapConfig;
         private readonly ILicenceUpdatedSapMessageBuilder _licenceUpdatedSapMessageBuilder;
         private readonly IRecordOfSaleSapMessageBuilder _recordOfSaleSapMessageBuilder;
@@ -43,7 +42,7 @@ namespace UKHO.ERPFacade.API.Controllers
                                  IAzureTableReaderWriter azureTableReaderWriter,
                                  IAzureBlobEventWriter azureBlobEventWriter,
                                  ISapClient sapClient,
-                                 ISapMessageBuilder sapMessageBuilder,
+                                 IEncContentSapMessageBuilder encContentSapMessageBuilder,
                                  IOptions<SapConfiguration> sapConfig,
                                  ILicenceUpdatedSapMessageBuilder licenceUpdatedSapMessageBuilder,
                                  IRecordOfSaleSapMessageBuilder recordOfSaleSapMessageBuilder)
@@ -53,7 +52,7 @@ namespace UKHO.ERPFacade.API.Controllers
             _azureTableReaderWriter = azureTableReaderWriter;
             _azureBlobEventWriter = azureBlobEventWriter;
             _sapClient = sapClient;
-            _sapMessageBuilder = sapMessageBuilder;
+            _encContentSapMessageBuilder = encContentSapMessageBuilder;
             _licenceUpdatedSapMessageBuilder = licenceUpdatedSapMessageBuilder;
             _recordOfSaleSapMessageBuilder = recordOfSaleSapMessageBuilder;
             _sapConfig = sapConfig ?? throw new ArgumentNullException(nameof(sapConfig));
@@ -98,7 +97,7 @@ namespace UKHO.ERPFacade.API.Controllers
             await _azureBlobEventWriter.UploadEvent(encEventJson.ToString(), correlationId, EncEventFileName);
             _logger.LogInformation(EventIds.UploadedEncContentPublishedEventInAzureBlob.ToEventId(), "ENC content published event is uploaded in blob storage successfully.");
 
-            XmlDocument sapPayload = _sapMessageBuilder.BuildSapMessageXml(JsonConvert.DeserializeObject<EncEventPayload>(encEventJson.ToString()), correlationId);
+            XmlDocument sapPayload = _encContentSapMessageBuilder.BuildSapMessageXml(JsonConvert.DeserializeObject<EncEventPayload>(encEventJson.ToString()), correlationId);
 
             _logger.LogInformation(EventIds.UploadSapXmlPayloadInAzureBlobStarted.ToEventId(), "Uploading the SAP xml payload in blob storage.");
             await _azureBlobEventWriter.UploadEvent(sapPayload.ToIndentedString(), correlationId, SapXmlPayloadFileName);
