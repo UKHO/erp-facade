@@ -110,7 +110,7 @@
 
         private string lTYPEField;
 
-        private string lICDURField;
+        private int lICDURField;
 
         private string poField;
 
@@ -340,7 +340,7 @@
         }
 
         /// <remarks/>
-        public string LICDUR
+        public int LICDUR
         {
             get
             {
