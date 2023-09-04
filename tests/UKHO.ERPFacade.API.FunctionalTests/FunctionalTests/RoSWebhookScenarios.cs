@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
+using RestSharp;
 using UKHO.ERPFacade.API.FunctionalTests.Configuration;
 using UKHO.ERPFacade.API.FunctionalTests.Helpers;
 using UKHO.ERPFacade.API.FunctionalTests.Service;
@@ -11,9 +12,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
     {
         private RoSWebhookEndpoint _RosWebhookEndpoint { get; set; }
         private readonly ADAuthTokenProvider _authToken = new();
-        private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
+        //private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
         //for local
-        //private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
+        private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
 
         [SetUp]
         public void Setup()
@@ -85,6 +86,15 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, "RoSPayloadTestData", payloadFileName);
             var response = await _RosWebhookEndpoint.PostWebhookResponseAsync("Unsupported Media Type", filePath, await _authToken.GetAzureADToken(false));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.UnsupportedMediaType);
+        }
+        [TestCase("RoS04_ValidRoSJsonFile.json", TestName = "WhenValidRoSEventInRecordOfSalePublishedEventReceivedPostReceivedWithValidPayload_ThenWebhookReturns200OkResponse")]
+        public async Task WhenValidRoSEventInRecordOfSalePublishedEventReceivedPostReceivedWithValidPayload_ThenWebhookReturns200OkResponse(string payloadJsonFileName)
+        {
+            Console.WriteLine("Scenario:" + payloadJsonFileName + "\n");
+            string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, "RoSPayloadTestData", payloadJsonFileName);
+            string generatedXmlFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXMLFolder, "RoSPayloadTestData");
+            RestResponse response = await _RosWebhookEndpoint.PostRoSWebhookResponseAsyncForXML(filePath, generatedXmlFolder, await _authToken.GetAzureADToken(false));
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
     }
 }

@@ -1,8 +1,10 @@
-﻿using NUnit.Framework;
+﻿using Newtonsoft.Json;
+using NUnit.Framework;
 using RestSharp;
 using System.Net;
 using UKHO.ERPFacade.API.FunctionalTests.Configuration;
 using UKHO.ERPFacade.API.FunctionalTests.Helpers;
+using UKHO.ERPFacade.API.FunctionalTests.Model;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Service
 {
@@ -91,6 +93,31 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
                 Console.WriteLine("Scenario Not Mentioned");
                 return null;
             }
+        }
+
+        public async Task<RestResponse> PostRoSWebhookResponseAsyncForXML(string filePath, string generatedXmlFolder, string token)
+        {
+            string requestBody;
+
+            using (StreamReader streamReader = new(filePath))
+            {
+                requestBody = streamReader.ReadToEnd();
+            }
+           // generatedCorrelationId = SAPXmlHelper.GenerateRandomCorrelationId();
+           // requestBody = SAPXmlHelper.UpdateTimeAndCorrIdField(requestBody, generatedCorrelationId);
+            var request = new RestRequest(RoSWebhookRequestEndPoint, Method.Post);
+            request.AddHeader("Content-Type", "application/json");
+            request.AddHeader("Authorization", "Bearer " + token);
+            request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
+            RestResponse response = await _client.ExecuteAsync(request);
+            JsonInputRoSWebhookHelper jsonPayload = JsonConvert.DeserializeObject<JsonInputRoSWebhookHelper>(requestBody);
+            string generatedXmlFilePath = _azureBlobStorageHelper.DownloadGeneratedXMLFile(generatedXmlFolder, jsonPayload.data.correlationId, "recordofsaleblobs");
+
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                Assert.That(RoSXMLHelper.CheckXmlAttributes(jsonPayload, generatedXmlFilePath, requestBody).Result, Is.True, "CheckXMLAttributes Failed");
+            }
+            return response;
         }
     }
 }
