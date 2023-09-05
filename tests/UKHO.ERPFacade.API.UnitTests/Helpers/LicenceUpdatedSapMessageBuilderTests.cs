@@ -163,7 +163,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
 
             A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
 
-            MethodInfo methodInfo = typeof(LicenceUpdatedSapMessageBuilder).GetMethod("SapXmlPayloadCreation", BindingFlags.NonPublic | BindingFlags.Instance)!;
+            MethodInfo methodInfo = typeof(LicenceUpdatedSapMessageBuilder).GetMethod("BuildChangeLicencePayload", BindingFlags.NonPublic | BindingFlags.Instance)!;
             var result = (SapRecordOfSalePayLoad)methodInfo.Invoke(_fakeLicenceUpdatedSapMessageBuilder, new object[] { jsonData! })!;
 
             result.Should().NotBeNull();
@@ -175,37 +175,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             result.EndDate.Should().Be("");
             result.LicenceType.Should().Be("");
             result.LicenceDuration.Should().Be(null);
-        }
-        [Test]
-        public void WhenTransactionTypeIsNotChangeLicenceShouldNotReturns_SomeFieldsEmpty_SapXmlPayloadCreationTests()
-        {
-            var jsonData = JsonConvert.DeserializeObject<LicenceUpdatedEventPayLoad>(jsonForChangeLicence);
-            jsonData.Data.Licence.TransactionType = "NEWLICENCE";
-            jsonData.Data.Licence.OrderNumber = "1232T";
-            jsonData.Data.Licence.OrderDate = "2023-7-24";
-            jsonData.Data.Licence.PoRef = "ref-121";
-            jsonData.Data.Licence.HoldingsExpiryDate = "2023-7-24";
-            jsonData.Data.Licence.LicenceType = "1";
-            jsonData.Data.Licence.LicenceDuration = 2;
-
-            var sapReqXml = TestHelper.ReadFileData("ERPTestData\\ChangeLicencePayloadTest.xml");
-
-            A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
-
-            MethodInfo methodInfo = typeof(LicenceUpdatedSapMessageBuilder).GetMethod("SapXmlPayloadCreation", BindingFlags.NonPublic | BindingFlags.Instance)!;
-            var result = (SapRecordOfSalePayLoad)methodInfo.Invoke(_fakeLicenceUpdatedSapMessageBuilder, new object[] { jsonData! })!;
-
-            result.Should().NotBeNull();
-            result.CorrelationId.Should().Be("123-abc-456-xyz-333");
-            result.PROD.UnitOfSales.Count.Should().Be(1);
-            result.OrderNumber.Should().Be(jsonData.Data.Licence.OrderNumber);
-            result.StartDate.Should().Be(jsonData.Data.Licence.OrderDate);
-            result.PurachaseOrder.Should().Be(jsonData.Data.Licence.PoRef);
-            result.EndDate.Should().Be(jsonData.Data.Licence.HoldingsExpiryDate);
-            result.LicenceType.Should().Be(jsonData.Data.Licence.LicenceType);
-            result.LicenceDuration.Should().Be(jsonData.Data.Licence.LicenceDuration);
-            result.PROD.UnitOfSales[0].Duration.Should().Be("");
             result.PROD.UnitOfSales[0].Id.Should().Be("");
+            result.PROD.UnitOfSales[0].Duration.Should().Be("");
             result.PROD.UnitOfSales[0].EndDate.Should().Be("");
             result.PROD.UnitOfSales[0].ReNew.Should().Be("");
             result.PROD.UnitOfSales[0].Repeat.Should().Be("");

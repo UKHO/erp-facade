@@ -22,7 +22,6 @@ using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
-using UKHO.ERPFacade.Common.Services;
 
 namespace UKHO.ERPFacade.API.UnitTests.Controllers
 {

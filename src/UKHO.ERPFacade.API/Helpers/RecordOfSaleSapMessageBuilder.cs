@@ -67,7 +67,7 @@ namespace UKHO.ERPFacade.API.Helpers
 
         private SapRecordOfSalePayLoad BuildNewLicencePayload(RecordOfSaleEventPayLoad eventData)
         {
-            var newLicencepPayload = new SapRecordOfSalePayLoad
+            var newLicencePayload = new SapRecordOfSalePayLoad
             {
                 CorrelationId = eventData.Data.CorrelationId,
                 ServiceType = eventData.Data.RecordsOfSale.ProductType,
@@ -109,9 +109,9 @@ namespace UKHO.ERPFacade.API.Helpers
             }
 
             prod.UnitOfSales = unitOfSaleList;
-            newLicencepPayload.PROD = prod;
+            newLicencePayload.PROD = prod;
 
-            return newLicencepPayload;
+            return newLicencePayload;
         }
 
         private SapRecordOfSalePayLoad BuildMaintainHoldingsPayload(RecordOfSaleEventPayLoad eventData)
