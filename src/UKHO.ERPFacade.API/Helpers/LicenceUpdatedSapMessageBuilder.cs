@@ -44,7 +44,7 @@ namespace UKHO.ERPFacade.API.Helpers
             string xml = _xmlHelper.CreateXmlPayLoad(sapRecordOfSalePayLoad);
 
             string sapXml = xml.Replace(ImOrderNameSpace, "");
-           
+
             soapXml.SelectSingleNode(XpathZAddsRos).InnerXml = sapXml.RemoveNullFields().SetXmlClosingTags();
 
             _logger.LogInformation(EventIds.CreatedLicenceUpdatedSapPayload.ToEventId(), "Licence updated SAP payload created.");
