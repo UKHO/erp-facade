@@ -1,4 +1,6 @@
-﻿namespace UKHO.ERPFacade.API.FunctionalTests.Model
+﻿using Newtonsoft.Json;
+
+namespace UKHO.ERPFacade.API.FunctionalTests.Model
 {
     public class JsonInputRoSWebhookHelper
     {
@@ -30,6 +32,7 @@
             public string shippingCoNumber { get; set; }
             public string ordernumber { get; set; }
             public string orderDate { get; set; }
+            [JsonProperty("po-ref")]
             public string poref { get; set; }
             public string holdingsExpiryDate { get; set; }
             public string sapId { get; set; }
@@ -39,9 +42,9 @@
             public string licenceType { get; set; }
             public string shoreBased { get; set; }
             public string fleetName { get; set; }
-            public int numberLicenceUsers { get; set; }
+            public string numberLicenceUsers { get; set; }
             public string upn { get; set; }
-            public int licenceDuration { get; set; }
+            public string licenceDuration { get; set; }
             public Unitsofsale[] unitsOfSale { get; set; }
         }
 

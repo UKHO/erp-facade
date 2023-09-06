@@ -102,7 +102,7 @@
 
         private string fLEETField;
 
-        private int uSERSField;
+        private string uSERSField;
 
         private string eNDUSERIDField;
 
@@ -110,7 +110,7 @@
 
         private string lTYPEField;
 
-        private int lICDURField;
+        private string lICDURField;
 
         private string poField;
 
@@ -288,7 +288,7 @@
         }
 
         /// <remarks/>
-        public int USERS
+        public string USERS
         {
             get
             {
@@ -340,7 +340,7 @@
         }
 
         /// <remarks/>
-        public int LICDUR
+        public string LICDUR
         {
             get
             {

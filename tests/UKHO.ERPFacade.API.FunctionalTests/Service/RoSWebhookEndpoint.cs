@@ -103,19 +103,17 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             {
                 requestBody = streamReader.ReadToEnd();
             }
-           // generatedCorrelationId = SAPXmlHelper.GenerateRandomCorrelationId();
-           // requestBody = SAPXmlHelper.UpdateTimeAndCorrIdField(requestBody, generatedCorrelationId);
+            generatedCorrelationId = SAPXmlHelper.GenerateRandomCorrelationId();
+            requestBody = SAPXmlHelper.UpdateTimeAndCorrIdField(requestBody, generatedCorrelationId);
             var request = new RestRequest(RoSWebhookRequestEndPoint, Method.Post);
             request.AddHeader("Content-Type", "application/json");
             request.AddHeader("Authorization", "Bearer " + token);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
             RestResponse response = await _client.ExecuteAsync(request);
             JsonInputRoSWebhookHelper jsonPayload = JsonConvert.DeserializeObject<JsonInputRoSWebhookHelper>(requestBody);
-           // string generatedXmlFilePath = _azureBlobStorageHelper.DownloadGeneratedXMLFile(generatedXmlFolder, jsonPayload.data.correlationId, "recordofsaleblobs");
-            string generatedXmlFilePath = "D:\\UpdatedERP\\tests\\UKHO.ERPFacade.API.FunctionalTests\\ERPFacadeGeneratedXmlFiles\\RoSPayloadTestData\\ft-20230902-1d62-4f56-b359-59e178d77100\\SapXmlPayload.xml";
+            string generatedXmlFilePath = _azureBlobStorageHelper.DownloadGeneratedXMLFile(generatedXmlFolder, generatedCorrelationId, "recordofsaleblobs");
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
-               // Assert.That(FmLicenceUpdateXMLHelper.CheckXmlAttributes(jsonPayload, generatedXmlFilePath, requestBody).Result, Is.True, "CheckXMLAttributes Failed");
                Assert.That(RoSXMLHelper.CheckXmlAttributes(jsonPayload, generatedXmlFilePath, requestBody).Result, Is.True, "CheckXMLAttributes Failed");
             }
             return response;

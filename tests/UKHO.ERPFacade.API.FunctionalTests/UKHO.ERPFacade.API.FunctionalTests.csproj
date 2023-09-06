@@ -176,6 +176,9 @@
     <None Update="ERPFacadePayloadTestData\RoSPayloadTestData\ID02_UnSupportedPayloadType.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ERPFacadePayloadTestData\RoSPayloadTestData\RoS05_ValidRoSNewLicence .json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ERPFacadePayloadTestData\RoSPayloadTestData\RoS04_ValidRoSJsonFile.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

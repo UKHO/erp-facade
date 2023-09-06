@@ -87,7 +87,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             var response = await _RosWebhookEndpoint.PostWebhookResponseAsync("Unsupported Media Type", filePath, await _authToken.GetAzureADToken(false));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.UnsupportedMediaType);
         }
+
         [TestCase("RoS04_ValidRoSJsonFile.json", TestName = "WhenValidRoSEventInRecordOfSalePublishedEventReceivedPostReceivedWithValidPayload_ThenWebhookReturns200OkResponse")]
+        [TestCase("RoS05_ValidRoSNewLicence .json", TestName = "WhenValidRoSEventInRecordOfSalePublishedEventReceivedNewLicencePostReceivedWithValidPayload_ThenWebhookReturns200OkResponse")]
         public async Task WhenValidRoSEventInRecordOfSalePublishedEventReceivedPostReceivedWithValidPayload_ThenWebhookReturns200OkResponse(string payloadJsonFileName)
         {
             Console.WriteLine("Scenario:" + payloadJsonFileName + "\n");

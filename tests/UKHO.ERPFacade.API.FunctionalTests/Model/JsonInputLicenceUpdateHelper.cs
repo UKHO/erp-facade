@@ -36,9 +36,9 @@
             public string licenceType { get; set; }
             public string shoreBased { get; set; }
             public string fleetName { get; set; }
-            public int numberLicenceUsers { get; set; }
+            public string numberLicenceUsers { get; set; }
             public string upn { get; set; }
-            public int licenceDuration { get; set; }
+            public string licenceDuration { get; set; }
             public Unitsofsale[] unitsOfSale { get; set; }
         }
 
