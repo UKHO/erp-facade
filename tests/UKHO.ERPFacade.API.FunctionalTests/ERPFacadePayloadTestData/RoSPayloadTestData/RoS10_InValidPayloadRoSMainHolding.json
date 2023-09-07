@@ -1,0 +1,51 @@
+{
+    "specversion": "1.0",
+    "type": "uk.gov.ukho.shop.recordOfSale.v1",
+    "source": "https://uk.gov.ukho.shop",
+    "id": "e744fa37-0c9f-4795-adc9-7f42ad8f11c1",
+    "time": "2023-07-20T10:40:00.000000Z",
+    "subject": "releasability set changes holdings Record of Sale",
+    "datacontenttype": "application/json",
+    "data": {
+        "correlationId": "ft-20230902-1d62-4f56-b359-59e178d77100",
+        "relatedEvents": [ "e744fa37-0c9f-4795-adc9-7f42ad8f11c1" ],
+        "recordsOfSale": {
+            "licenseId": "",
+            "productType": "AVCS",
+            "transactionType": "MAINTAINHOLDINGS",
+            "distributorCustomerNumber": "",
+            "shippingCoNumber": "",
+            "ordernumber": "5432796",
+            "orderDate": "",
+            "po-ref": "75277T-Bengang",
+            "holdingsExpiryDate": "",
+            "sapId": "75277T",
+            "vesselName": "",
+            "imoNumber": "",
+            "callSign": "",
+            "licenceType": "",
+            "shoreBased": "",
+            "fleetName": "",
+            "numberLicenceUsers": "One",
+            "upn": "",
+            "licenceDuration": 6,
+            "unitsOfSale": [
+                {
+                    "unitName": "PT111101",
+                    "endDate": "2023-10-31",
+                    "duration": "3",
+                    "renew": "E",
+                    "repeat": "P"
+                },
+                {
+                    "unitName": "GB302409",
+                    "endDate": "2023-12-01",
+                    "duration": "6",
+                    "renew": "E",
+                    "repeat": "P"
+                }
+            ]
+        }
+
+    }
+}

@@ -14,7 +14,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
 
         //for local
-        // private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
+        //private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
 
         [OneTimeSetUp]
         public void Setup()
@@ -111,8 +111,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             var response = await _priceChange.PostPriceChangeResponse200OKPAYSF12Months(filePath, generatedProductJsonFolder, Config.TestConfig.SharedKeyConfiguration.Key);
             //response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
             Assert.That(response, Is.True, "PAYSF Price Info for 12 months {0} are displayed");
-        }
-
-        
+        } 
     }
 }

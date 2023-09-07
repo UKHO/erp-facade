@@ -10,39 +10,39 @@
         "correlationId": "ft-20230902-1d62-4f56-b359-59e178d77100",
         "relatedEvents": [ "e744fa37-0c9f-4795-adc9-7f42ad8f11c1" ],
         "recordsOfSale": {
-            "licenseId": "",
+            "licenseId": "10455",
             "productType": "AVCS",
-            "transactionType": "MAINTAINHOLDINGS",
-            "distributorCustomerNumber": "",
-            "shippingCoNumber": "",
-            "ordernumber": "5432796",
-            "orderDate": "",
+            "transactionType": "NEWLICENCE",
+            "distributorCustomerNumber": "9016",
+            "shippingCoNumber": "95053006",
+            "ordernumber": "XXL005599004",
+            "orderDate": "24-07-2023",
             "po-ref": "75277T-Bengang",
-            "holdingsExpiryDate": "",
-            "sapId": "75277T",
-            "vesselName": "",
-            "imoNumber": "",
-            "callSign": "",
-            "licenceType": "",
-            "shoreBased": "",
+            "holdingsExpiryDate": "24-07-2024",
+            "sapId": "",
+            "vesselName": "Bengang",
+            "imoNumber": "IMO9406154",
+            "callSign": "A8YL9",
+            "licenceType": "Non-Imo",
+            "shoreBased": "X",
             "fleetName": "",
-            "numberLicenceUsers": 0,
-            "upn": "",
-            "licenceDuration": 12,
+            "numberLicenceUsers": 2,
+            "upn": "Japan Radio Co.",
+            "licenceDuration": "three",
             "unitsOfSale": [
                 {
                     "unitName": "PT111101",
                     "endDate": "2023-10-31",
                     "duration": "3",
                     "renew": "E",
-                    "repeat": "P"
+                    "repeat": ""
                 },
                 {
                     "unitName": "GB302409",
                     "endDate": "2023-12-01",
                     "duration": "6",
                     "renew": "E",
-                    "repeat": "P"
+                    "repeat": ""
                 }
             ]
         }

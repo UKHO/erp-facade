@@ -115,7 +115,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
            // string generatedXmlFilePath = "D:\\UpdatedERP\\tests\\UKHO.ERPFacade.API.FunctionalTests\\ERPFacadeGeneratedXmlFiles\\RoSPayloadTestData\\ft-20230902-1d62-4f56-b359-59e178d77100\\SapXmlPayload.xml";
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                Assert.That(FmLicenceUpdateXMLHelper.CheckXmlAttributes(jsonPayload, generatedXmlFilePath, requestBody).Result, Is.True, "CheckXMLAttributes Failed");
+                Assert.That(LicenceUpdateXMLHelper.CheckXmlAttributes(jsonPayload, generatedXmlFilePath, requestBody).Result, Is.True, "CheckXMLAttributes Failed");
             }
             return response;
         }
