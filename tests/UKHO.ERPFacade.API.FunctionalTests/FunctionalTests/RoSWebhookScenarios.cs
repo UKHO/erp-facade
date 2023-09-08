@@ -88,10 +88,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.UnsupportedMediaType);
         }
 
-        [TestCase("RoS01_ValidRoSMainHolding.json", TestName = "WhenValidRoSEventInRecordOfSalePublishedEventReceivedPostReceivedMainHoldingWithValidPayload_ThenWebhookReturns200OkResponse")]
-        [TestCase("RoS02_ValidRoSMainHolding900UoS.json", TestName = "WhenValidRoSEventInRecordOfSalePublishedEventReceivedMainHoldingPostReceivedWithValidPayload900UoS_ThenWebhookReturns200OkResponse")]
-        [TestCase("RoS03_ValidRoSMainHolding2000UoS.json", TestName = "WhenValidRoSEventInRecordOfSalePublishedEventReceivedMainHoldingPostReceivedWithValidPayload2000UoS_ThenWebhookReturns200OkResponse")]
-        [TestCase("RoS04_ValidRoSMainHolding4000UoS.json", TestName = "WhenValidRoSEventInRecordOfSalePublishedEventReceivedMainHoldingePostReceivedWithValidPayload4000UoS_ThenWebhookReturns200OkResponse")]
+        [TestCase("RoS01_ValidRoSMainHolding.json", TestName = "WhenValidRoSEventInRecordOfSalePublishedEventReceivedPostReceivedMaintainHoldingWithValidPayload_ThenWebhookReturns200OkResponse")]
+        [TestCase("RoS02_ValidRoSMainHolding900UoS.json", TestName = "WhenValidRoSEventInRecordOfSalePublishedEventReceivedMaintainHoldingPostReceivedWithValidPayload900UoS_ThenWebhookReturns200OkResponse")]
+        [TestCase("RoS03_ValidRoSMainHolding2000UoS.json", TestName = "WhenValidRoSEventInRecordOfSalePublishedEventReceivedMaintainHoldingPostReceivedWithValidPayload2000UoS_ThenWebhookReturns200OkResponse")]
+        [TestCase("RoS04_ValidRoSMainHolding4000UoS.json", TestName = "WhenValidRoSEventInRecordOfSalePublishedEventReceivedMaintainHoldingePostReceivedWithValidPayload4000UoS_ThenWebhookReturns200OkResponse")]
         [TestCase("RoS05_ValidRoSNewLicence.json", TestName = "WhenValidRoSEventInRecordOfSalePublishedEventReceivedNewLicencePostReceivedWithValidPayload_ThenWebhookReturns200OkResponse")]
         [TestCase("RoS06_ValidRoSNewLicence900UoS.json", TestName = "WhenValidRoSEventInRecordOfSalePublishedEventReceivedNewLicencePostReceivedWithValidPayload900UoS_ThenWebhookReturns200OkResponse")]
         [TestCase("RoS07_ValidRoSNewLicence2000UoS.json", TestName = "WhenValidRoSEventInRecordOfSalePublishedEventReceivedNewLicencePostReceivedWithValidPayload2000UoS_ThenWebhookReturns200OkResponse")]

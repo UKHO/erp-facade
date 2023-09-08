@@ -131,12 +131,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             VerifyBlankProductFields(items, fieldNamesProduct);
             if (s_attrNotMatched.Count == 0)
             {
-                Console.WriteLine("New Licence event XML is correct");
+                Console.WriteLine("NEWLICENCE event XML is correct");
                 return true;
             }
             else
             {
-                Console.WriteLine("New Licence event XML is incorrect");
+                Console.WriteLine("NEWLICENCE event XML is incorrect");
                 Console.WriteLine("Not matching attributes are:");
                 foreach (string attribute in s_attrNotMatched)
                 { Console.WriteLine(attribute); }
@@ -157,40 +157,38 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         {
             int i = 0;
             foreach (Z_ADDS_ROSIM_ORDERItem prodxml in roSResult)
-                //for (int i=0; i<=unitofsales.Length;i++)
-                {
-                
-                    if (!prodxml.ID.Equals(unitofsales[i].unitName))
+            {
+                if (!prodxml.ID.Equals(unitofsales[i].unitName))
                         s_attrNotMatched.Add(nameof(prodxml.ID));
-                    if (!prodxml.ENDDA.Equals(unitofsales[i].endDate))
+                if (!prodxml.ENDDA.Equals(unitofsales[i].endDate))
                         s_attrNotMatched.Add(nameof(prodxml.ENDDA));
-                    if (!prodxml.DURATION.Equals(unitofsales[i].duration))
+                if (!prodxml.DURATION.Equals(unitofsales[i].duration))
                         s_attrNotMatched.Add(nameof(prodxml.DURATION));
-                    if (!prodxml.RENEW.Equals(unitofsales[i].renew))
+                if (!prodxml.RENEW.Equals(unitofsales[i].renew))
                         s_attrNotMatched.Add(nameof(prodxml.RENEW));
-                   if (!prodxml.REPEAT.Equals(unitofsales[i].repeat))
+                if (!prodxml.REPEAT.Equals(unitofsales[i].repeat))
                         s_attrNotMatched.Add(nameof(prodxml.REPEAT));
                 i++; 
-                }
+            }
                 
             
         }
 
         public static async Task<bool> VerifyPresenseOfMandatoryXMLAtrributes(Z_ADDS_ROSIM_ORDER order)
         {
-            List<string> ActionAttributesSeq = new List<string>();
+            List<string> ActionAttributesSeq = new();
             ActionAttributesSeq = Config.TestConfig.RosLicenceUpdateXMLList.ToList<string>();
-            List<string> CurrentActionAttributes = new List<string>();
-            CurrentActionAttributes.Clear();
+            List<string> currentActionAttributes = new();
+            currentActionAttributes.Clear();
             Type arrayType = order.GetType();
             System.Reflection.PropertyInfo[] properties = arrayType.GetProperties();
             foreach (System.Reflection.PropertyInfo property in properties)
             {
-                CurrentActionAttributes.Add(property.Name);
+                currentActionAttributes.Add(property.Name);
             }
             for (int i = 0; i < ActionAttributesSeq.Count; i++)
             {
-                if (CurrentActionAttributes[i] != ActionAttributesSeq[i])
+                if (currentActionAttributes[i] != ActionAttributesSeq[i])
                 {
                     Console.WriteLine("First missed Attribute is:" + ActionAttributesSeq[i] +
                                     " for Record of sales fields:");
@@ -199,10 +197,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             }
 
 
-            List<string> ActionAttributesSeqProd = new List<string>();
+            List<string> ActionAttributesSeqProd = new();
             ActionAttributesSeqProd = Config.TestConfig.RoSLicenceUpdatedProdXMLList.ToList<string>();
-            List<string> CurrentActionAttributesProd = new List<string>();
-            CurrentActionAttributesProd.Clear();
+            List<string> currentActionAttributesProd = new();
+            currentActionAttributesProd.Clear();
             Z_ADDS_ROSIM_ORDERItem[] items =order.PROD;
             foreach (Z_ADDS_ROSIM_ORDERItem prodorderItem in items) {
 
@@ -210,11 +208,11 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 System.Reflection.PropertyInfo[] propertiesProd = arrayTypeProd.GetProperties();
                 foreach (System.Reflection.PropertyInfo propertyprod in propertiesProd)
                 {
-                    CurrentActionAttributesProd.Add(propertyprod.Name);
+                    currentActionAttributesProd.Add(propertyprod.Name);
                 }
                 for (int i = 0; i < ActionAttributesSeqProd.Count; i++)
                 {
-                    if (CurrentActionAttributesProd[i] != ActionAttributesSeqProd[i])
+                    if (currentActionAttributesProd[i] != ActionAttributesSeqProd[i])
                     {
                         Console.WriteLine("First missed Attribute is:" + ActionAttributesSeqProd[i] +
                                         " for RoS UnitOfSales feild:");
