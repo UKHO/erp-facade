@@ -9,7 +9,7 @@ using UKHO.ERPFacade.API.FunctionalTests.Configuration;
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
     [TestFixture]
-    public class LicenceUpdateXMLHelper
+    public class LicenceUpdateXmlHelper
     {
         private static JsonInputLicenceUpdateHelper UpdatedJsonPayload { get; set; }
         private static readonly List<string> s_attrNotMatched = new();

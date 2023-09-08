@@ -114,7 +114,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             string generatedXmlFilePath = _azureBlobStorageHelper.DownloadGeneratedXMLFile(generatedXmlFolder, generatedCorrelationId, "recordofsaleblobs");
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
-               Assert.That(RoSXMLHelper.CheckXmlAttributes(jsonPayload, generatedXmlFilePath, requestBody).Result, Is.True, "CheckXMLAttributes Failed");
+               Assert.That(RoSXmlHelper.CheckXmlAttributes(jsonPayload, generatedXmlFilePath, requestBody).Result, Is.True, "CheckXMLAttributes Failed");
             }
             return response;
         }

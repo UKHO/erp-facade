@@ -9,7 +9,7 @@ using UKHO.ERPFacade.API.FunctionalTests.Configuration;
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
     [TestFixture]
-    public class RoSXMLHelper
+    public class RoSXmlHelper
     {
         private static JsonInputRoSWebhookHelper UpdatedJsonPayload { get; set; }
         private static readonly List<string> s_attrNotMatched = new();
@@ -131,12 +131,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             VerifyBlankProductFields(items, fieldNamesProduct);
             if (s_attrNotMatched.Count == 0)
             {
-                Console.WriteLine("MAINTAINHOLDINGS event XML is correct");
+                Console.WriteLine("New Licence event XML is correct");
                 return true;
             }
             else
             {
-                Console.WriteLine("MAINTAINHOLDINGS event XML is incorrect");
+                Console.WriteLine("New Licence event XML is incorrect");
                 Console.WriteLine("Not matching attributes are:");
                 foreach (string attribute in s_attrNotMatched)
                 { Console.WriteLine(attribute); }
