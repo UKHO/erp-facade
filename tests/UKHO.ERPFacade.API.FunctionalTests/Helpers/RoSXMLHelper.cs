@@ -11,31 +11,33 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
     [TestFixture]
     public class RoSXmlHelper
     {
-        private static JsonInputRoSWebhookHelper UpdatedJsonPayload { get; set; }
+        private static JsonInputRoSWebhookEvent UpdatedJsonPayload { get; set; }
         private static readonly List<string> s_attrNotMatched = new();
 
-        public static async Task<bool> CheckXmlAttributes(JsonInputRoSWebhookHelper jsonPayload, string xmlFilePath,
+        public static async Task<bool> CheckXmlAttributes(JsonInputRoSWebhookEvent jsonPayload, string xmlFilePath,
             string updatedRequestBody)
         {
-            UpdatedJsonPayload = JsonConvert.DeserializeObject<JsonInputRoSWebhookHelper>(updatedRequestBody);
+            UpdatedJsonPayload = JsonConvert.DeserializeObject<JsonInputRoSWebhookEvent>(updatedRequestBody);
 
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.LoadXml(File.ReadAllText(xmlFilePath));
-
-            while (xmlDoc.DocumentElement.Name == "soap:Envelope" || xmlDoc.DocumentElement.Name == "soap:Body")
+            if (xmlDoc != null!)
             {
-                string tempXmlString = xmlDoc.DocumentElement.InnerXml;
-                xmlDoc.LoadXml(tempXmlString);
+                while (xmlDoc.DocumentElement.Name == "soap:Envelope" || xmlDoc.DocumentElement.Name == "soap:Body")
+                {
+                    string tempXmlString = xmlDoc.DocumentElement.InnerXml;
+                    xmlDoc.LoadXml(tempXmlString);
+                }
             }
 
             var ms = new MemoryStream(Encoding.UTF8.GetBytes(xmlDoc.InnerXml));
             var reader = new XmlTextReader(ms) { Namespaces = false };
             var serializer = new XmlSerializer(typeof(Z_ADDS_ROS));
             var result = (Z_ADDS_ROS)serializer.Deserialize(reader);
-            JsonInputRoSWebhookHelper.Recordsofsale roSJsonFields = UpdatedJsonPayload.data.recordsOfSale;
+            JsonInputRoSWebhookEvent.Recordsofsale roSJsonFields = UpdatedJsonPayload.data.recordsOfSale;
             Z_ADDS_ROSIM_ORDER roSXmlField = result.IM_ORDER;
 
-            Assert.That(VerifyPresenseOfMandatoryXMLAtrributes(roSXmlField).Result,Is.True);
+            Assert.That(VerifyPresenseOfMandatoryXMLAtrributes(roSXmlField).Result, Is.True);
             Assert.That(UpdatedJsonPayload.data.correlationId.Equals(roSXmlField.GUID),
                 "GUID in xml is same a corrid as in EES JSON");
 
@@ -43,7 +45,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             {
                 if (roSXmlField.LICTRANSACTION.Equals("MAINTAINHOLDINGS"))
                 {
-                  Assert.That(VerifyMaintainHolding(roSXmlField, roSJsonFields), Is.True);
+                    Assert.That(VerifyMaintainHolding(roSXmlField, roSJsonFields), Is.True);
                 }
                 if (roSXmlField.LICTRANSACTION.Equals("NEWLICENCE"))
                 {
@@ -56,20 +58,20 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         }
 
         private static bool? VerifyMaintainHolding(Z_ADDS_ROSIM_ORDER roSXmlField,
-            JsonInputRoSWebhookHelper.Recordsofsale roSJsonFields)
+            JsonInputRoSWebhookEvent.Recordsofsale roSJsonFields)
         {
-           
+
             if (!roSXmlField.LICNO.Equals(roSJsonFields.sapId))
                 s_attrNotMatched.Add(nameof(roSXmlField.LICNO));
             if (!roSXmlField.PO.Equals(roSJsonFields.poref))
                 s_attrNotMatched.Add(nameof(roSXmlField.PO));
             if (!roSXmlField.ADSORDNO.Equals(roSJsonFields.ordernumber))
                 s_attrNotMatched.Add(nameof(roSXmlField.ADSORDNO));
-            
+
 
             string[] fieldNames = { "SOLDTOACC", "LICENSEEACC", "STARTDATE", "ENDDATE", "VNAME", "IMO", "CALLSIGN", "SHOREBASED", "FLEET", "USERS", "ENDUSERID", "ECDISMANUF", "LTYPE", "LICDUR" };
             Z_ADDS_ROSIM_ORDERItem[] items = roSXmlField.PROD;
-            JsonInputRoSWebhookHelper.Unitsofsale[] unitofsales = roSJsonFields.unitsOfSale;
+            JsonInputRoSWebhookEvent.Unitsofsale[] unitofsales = roSJsonFields.unitsOfSale;
             VerifyBlankFields(roSXmlField, fieldNames);
             VerifyProductFields(items, unitofsales);
 
@@ -88,7 +90,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             }
         }
         private static bool? VerifyNewLicence(Z_ADDS_ROSIM_ORDER roSXmlField,
-           JsonInputRoSWebhookHelper.Recordsofsale roSJsonFields)
+           JsonInputRoSWebhookEvent.Recordsofsale roSJsonFields)
         {
 
             if (!roSXmlField.SOLDTOACC.Equals(roSJsonFields.distributorCustomerNumber))
@@ -120,12 +122,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             if (!roSXmlField.LICDUR.Equals(roSJsonFields.licenceDuration))
                 s_attrNotMatched.Add(nameof(roSXmlField.LICDUR));
             
-
-
-            string[] fieldNames = { "LICNO","FLEET" };
+            string[] fieldNames = { "LICNO", "FLEET" };
             string[] fieldNamesProduct = { "REPEAT" };
             Z_ADDS_ROSIM_ORDERItem[] items = roSXmlField.PROD;
-            JsonInputRoSWebhookHelper.Unitsofsale[] unitofsales = roSJsonFields.unitsOfSale;
+            JsonInputRoSWebhookEvent.Unitsofsale[] unitofsales = roSJsonFields.unitsOfSale;
             VerifyBlankFields(roSXmlField, fieldNames);
             VerifyProductFields(items, unitofsales);
             VerifyBlankProductFields(items, fieldNamesProduct);
@@ -144,7 +144,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             }
         }
 
-        private static void VerifyBlankFields(Z_ADDS_ROSIM_ORDER roSXmlField, string[] fieldNames)
+        private static void VerifyBlankFields(Z_ADDS_ROSIM_ORDER roSXmlField, IEnumerable<string> fieldNames)
         {
             foreach (string field in fieldNames)
             {
@@ -153,69 +153,58 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             }
         }
 
-        private static void VerifyProductFields(Z_ADDS_ROSIM_ORDERItem[] roSResult, JsonInputRoSWebhookHelper.Unitsofsale[] unitofsales)
+        private static void VerifyProductFields(Z_ADDS_ROSIM_ORDERItem[] roSResult, JsonInputRoSWebhookEvent.Unitsofsale[] unitofsales)
         {
             int i = 0;
             foreach (Z_ADDS_ROSIM_ORDERItem prodxml in roSResult)
             {
                 if (!prodxml.ID.Equals(unitofsales[i].unitName))
-                        s_attrNotMatched.Add(nameof(prodxml.ID));
+                    s_attrNotMatched.Add(nameof(prodxml.ID));
                 if (!prodxml.ENDDA.Equals(unitofsales[i].endDate))
-                        s_attrNotMatched.Add(nameof(prodxml.ENDDA));
+                    s_attrNotMatched.Add(nameof(prodxml.ENDDA));
                 if (!prodxml.DURATION.Equals(unitofsales[i].duration))
-                        s_attrNotMatched.Add(nameof(prodxml.DURATION));
+                    s_attrNotMatched.Add(nameof(prodxml.DURATION));
                 if (!prodxml.RENEW.Equals(unitofsales[i].renew))
-                        s_attrNotMatched.Add(nameof(prodxml.RENEW));
+                    s_attrNotMatched.Add(nameof(prodxml.RENEW));
                 if (!prodxml.REPEAT.Equals(unitofsales[i].repeat))
-                        s_attrNotMatched.Add(nameof(prodxml.REPEAT));
-                i++; 
+                    s_attrNotMatched.Add(nameof(prodxml.REPEAT));
+                i++;
             }
-                
-            
         }
 
         public static async Task<bool> VerifyPresenseOfMandatoryXMLAtrributes(Z_ADDS_ROSIM_ORDER order)
         {
-            List<string> ActionAttributesSeq = new();
-            ActionAttributesSeq = Config.TestConfig.RosLicenceUpdateXMLList.ToList<string>();
+            List<string> actionAttributesSeq = Config.TestConfig.RosLicenceUpdateXMLList.ToList<string>();
             List<string> currentActionAttributes = new();
             currentActionAttributes.Clear();
             Type arrayType = order.GetType();
             System.Reflection.PropertyInfo[] properties = arrayType.GetProperties();
-            foreach (System.Reflection.PropertyInfo property in properties)
+            currentActionAttributes.AddRange(properties.Select(property => property.Name));
+            for (int i = 0; i < actionAttributesSeq.Count; i++)
             {
-                currentActionAttributes.Add(property.Name);
-            }
-            for (int i = 0; i < ActionAttributesSeq.Count; i++)
-            {
-                if (currentActionAttributes[i] != ActionAttributesSeq[i])
+                if (currentActionAttributes[i] != actionAttributesSeq[i])
                 {
-                    Console.WriteLine("First missed Attribute is:" + ActionAttributesSeq[i] +
+                    Console.WriteLine("First missed Attribute is:" + actionAttributesSeq[i] +
                                     " for Record of sales fields:");
                     return false;
                 }
             }
 
-
-            List<string> ActionAttributesSeqProd = new();
-            ActionAttributesSeqProd = Config.TestConfig.RoSLicenceUpdatedProdXMLList.ToList<string>();
+            List<string> actionAttributesSeqProd = Config.TestConfig.RoSLicenceUpdatedProdXMLList.ToList<string>();
             List<string> currentActionAttributesProd = new();
             currentActionAttributesProd.Clear();
-            Z_ADDS_ROSIM_ORDERItem[] items =order.PROD;
-            foreach (Z_ADDS_ROSIM_ORDERItem prodorderItem in items) {
-
+            Z_ADDS_ROSIM_ORDERItem[] items = order.PROD;
+            foreach (Z_ADDS_ROSIM_ORDERItem prodorderItem in items)
+            {
                 Type arrayTypeProd = prodorderItem.GetType();
                 System.Reflection.PropertyInfo[] propertiesProd = arrayTypeProd.GetProperties();
-                foreach (System.Reflection.PropertyInfo propertyprod in propertiesProd)
+                currentActionAttributesProd.AddRange(propertiesProd.Select(property => property.Name));
+                for (int i = 0; i < actionAttributesSeqProd.Count; i++)
                 {
-                    currentActionAttributesProd.Add(propertyprod.Name);
-                }
-                for (int i = 0; i < ActionAttributesSeqProd.Count; i++)
-                {
-                    if (currentActionAttributesProd[i] != ActionAttributesSeqProd[i])
+                    if (currentActionAttributesProd[i] != actionAttributesSeqProd[i])
                     {
-                        Console.WriteLine("First missed Attribute is:" + ActionAttributesSeqProd[i] +
-                                        " for RoS UnitOfSales feild:");
+                        Console.WriteLine("First missed Attribute is:" + actionAttributesSeqProd[i] +
+                                        " for RoS UnitOfSales field:");
                         return false;
                     }
                 }

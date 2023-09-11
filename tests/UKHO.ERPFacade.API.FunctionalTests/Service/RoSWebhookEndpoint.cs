@@ -8,7 +8,7 @@ using UKHO.ERPFacade.API.FunctionalTests.Model;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Service
 {
-    internal class RoSWebhookEndpoint
+    public class RoSWebhookEndpoint
     {
         private readonly RestClient _client;
         private readonly AzureBlobStorageHelper _azureBlobStorageHelper;
@@ -110,11 +110,11 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             request.AddHeader("Authorization", "Bearer " + token);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
             RestResponse response = await _client.ExecuteAsync(request);
-            JsonInputRoSWebhookHelper jsonPayload = JsonConvert.DeserializeObject<JsonInputRoSWebhookHelper>(requestBody);
+            JsonInputRoSWebhookEvent jsonPayload = JsonConvert.DeserializeObject<JsonInputRoSWebhookEvent>(requestBody);
             string generatedXmlFilePath = _azureBlobStorageHelper.DownloadGeneratedXMLFile(generatedXmlFolder, generatedCorrelationId, "recordofsaleblobs");
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
-               Assert.That(RoSXmlHelper.CheckXmlAttributes(jsonPayload, generatedXmlFilePath, requestBody).Result, Is.True, "CheckXMLAttributes Failed");
+                Assert.That(RoSXmlHelper.CheckXmlAttributes(jsonPayload, generatedXmlFilePath, requestBody).Result, Is.True, "CheckXMLAttributes Failed");
             }
             return response;
         }

@@ -2,7 +2,7 @@
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Model
 {
-    public class JsonInputRoSWebhookHelper
+    public class JsonInputRoSWebhookEvent
     {
 
         
