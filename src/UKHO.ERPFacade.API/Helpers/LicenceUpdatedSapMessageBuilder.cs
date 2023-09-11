@@ -14,8 +14,6 @@ namespace UKHO.ERPFacade.API.Helpers
         private const string SapXmlPath = "SapXmlTemplates\\RosSapRequest.xml";
         private const string XpathZAddsRos = $"//*[local-name()='Z_ADDS_ROS']";
         private const string ImOrderNameSpace = "RecordOfSale";
-        private const string TransactionType = "CHANGELICENCE";
-
 
         public LicenceUpdatedSapMessageBuilder(ILogger<LicenceUpdatedSapMessageBuilder> logger,
             IXmlHelper xmlHelper,
@@ -27,7 +25,7 @@ namespace UKHO.ERPFacade.API.Helpers
             _fileSystemHelper = fileSystemHelper;
         }
 
-        public XmlDocument BuildLicenceUpdatedSapMessageXml(RecordOfSaleEventPayLoad eventData, string correlationId)
+        public XmlDocument BuildLicenceUpdatedSapMessageXml(LicenceUpdatedEventPayLoad eventData, string correlationId)
         {
             string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, SapXmlPath);
 
@@ -41,12 +39,12 @@ namespace UKHO.ERPFacade.API.Helpers
 
             XmlDocument soapXml = _xmlHelper.CreateXmlDocument(sapXmlTemplatePath);
 
-            var sapRecordOfSalePayLoad = SapXmlPayloadCreation(eventData);
+            var sapRecordOfSalePayLoad = BuildChangeLicencePayload(eventData);
 
             string xml = _xmlHelper.CreateXmlPayLoad(sapRecordOfSalePayLoad);
 
             string sapXml = xml.Replace(ImOrderNameSpace, "");
-           
+
             soapXml.SelectSingleNode(XpathZAddsRos).InnerXml = sapXml.RemoveNullFields().SetXmlClosingTags();
 
             _logger.LogInformation(EventIds.CreatedLicenceUpdatedSapPayload.ToEventId(), "Licence updated SAP payload created.");
@@ -54,9 +52,9 @@ namespace UKHO.ERPFacade.API.Helpers
             return soapXml;
         }
 
-        private SapRecordOfSalePayLoad SapXmlPayloadCreation(RecordOfSaleEventPayLoad eventData)
+        private SapRecordOfSalePayLoad BuildChangeLicencePayload(LicenceUpdatedEventPayLoad eventData)
         {
-            var sapPayload = new SapRecordOfSalePayLoad
+            var changeLicencePayload = new SapRecordOfSalePayLoad
             {
                 CorrelationId = eventData.Data.CorrelationId,
                 ServiceType = eventData.Data.Licence.ProductType,
@@ -72,30 +70,30 @@ namespace UKHO.ERPFacade.API.Helpers
                 Users = eventData.Data.Licence.NumberLicenceUsers,
                 EndUserId = eventData.Data.Licence.LicenceId,
                 ECDISMANUF = eventData.Data.Licence.Upn,
-                OrderNumber = eventData.Data.Licence.TransactionType == TransactionType ? "" : eventData.Data.Licence.OrderNumber,
-                StartDate = eventData.Data.Licence.TransactionType == TransactionType ? "" : eventData.Data.Licence.OrderDate,
-                PurachaseOrder = eventData.Data.Licence.TransactionType == TransactionType ? "" : eventData.Data.Licence.PoRef,
-                EndDate = eventData.Data.Licence.TransactionType == TransactionType ? "" : eventData.Data.Licence.HoldingsExpiryDate,
-                LicenceType = eventData.Data.Licence.TransactionType == TransactionType ? "" : eventData.Data.Licence.LicenceType,
-                LicenceDuration = eventData.Data.Licence.TransactionType == TransactionType ? null : eventData.Data.Licence.LicenceDuration
+                OrderNumber = string.Empty,
+                StartDate = string.Empty,
+                PurachaseOrder = string.Empty,
+                EndDate = string.Empty,
+                LicenceType = string.Empty,
+                LicenceDuration = null
             };
 
-            sapPayload.PROD = new PROD()
+            changeLicencePayload.PROD = new PROD()
             {
                 UnitOfSales = new List<UnitOfSales>()
                 {
                     new UnitOfSales()
                     {
-                        Id = "",
-                        EndDate = "",
-                        Duration = "",
-                        ReNew = "",
-                        Repeat = ""
+                        Id = string.Empty,
+                        EndDate = string.Empty,
+                        Duration = string.Empty,
+                        ReNew = string.Empty,
+                        Repeat = string.Empty
                     }
                 }
             };
 
-            return sapPayload;
+            return changeLicencePayload;
         }
     }
 }

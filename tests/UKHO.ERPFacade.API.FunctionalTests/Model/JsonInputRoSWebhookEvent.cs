@@ -1,32 +1,38 @@
-﻿namespace UKHO.ERPFacade.API.FunctionalTests.Model
-{
-    public class JsonInputLicenceUpdateHelper
-    {
-        public string specversion { get; set; }
-        public string type { get; set; }
-        public string source { get; set; }
-        public string id { get; set; }
-        public string time { get; set; }
-        public string subject { get; set; }
-        public string datacontenttype { get; set; }
-        public Data data { get; set; }
+﻿using Newtonsoft.Json;
 
+namespace UKHO.ERPFacade.API.FunctionalTests.Model
+{
+    public class JsonInputRoSWebhookEvent
+    {
+
+        
+            public string specversion { get; set; }
+            public string type { get; set; }
+            public string source { get; set; }
+            public string id { get; set; }
+            public DateTime time { get; set; }
+            public string subject { get; set; }
+            public string datacontenttype { get; set; }
+            public Data data { get; set; }
+        
 
         public class Data
         {
             public string correlationId { get; set; }
-            public License license { get; set; }
+            public string[] relatedEvents { get; set; }
+            public Recordsofsale recordsOfSale { get; set; }
         }
 
-        public class License
+        public class Recordsofsale
         {
             public string licenseId { get; set; }
             public string productType { get; set; }
             public string transactionType { get; set; }
             public string distributorCustomerNumber { get; set; }
             public string shippingCoNumber { get; set; }
-            public string orderNumber { get; set; }
+            public string ordernumber { get; set; }
             public string orderDate { get; set; }
+            [JsonProperty("po-ref")]
             public string poref { get; set; }
             public string holdingsExpiryDate { get; set; }
             public string sapId { get; set; }
@@ -50,5 +56,6 @@
             public string renew { get; set; }
             public string repeat { get; set; }
         }
+
     }
 }

@@ -17,8 +17,10 @@
         public SharedKeyConfiguration SharedKeyConfiguration { get; set; }
         public string LicenceUpdatedPayloadTestData { get; set; }
         public string[] RosLicenceUpdateXMLList { get; set; }
-      
-        
+        public string[] RoSLicenceUpdatedProdXMLList { get; set; }
+
+
+
 
 
     }

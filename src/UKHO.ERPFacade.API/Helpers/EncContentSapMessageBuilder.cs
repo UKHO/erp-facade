@@ -6,14 +6,13 @@ using UKHO.ERPFacade.Common.Models;
 
 namespace UKHO.ERPFacade.API.Helpers
 {
-    public class SapMessageBuilder : ISapMessageBuilder
+    public class EncContentSapMessageBuilder : IEncContentSapMessageBuilder
     {
-        private readonly ILogger<SapMessageBuilder> _logger;
+        private readonly ILogger<EncContentSapMessageBuilder> _logger;
         private readonly IXmlHelper _xmlHelper;
         private readonly IFileSystemHelper _fileSystemHelper;
         private readonly IOptions<SapActionConfiguration> _sapActionConfig;
 
-        private const string XmlNameSpaceURI = "urn:sap-com:document:sap:rfc:functions";
         private const string SapXmlPath = "SapXmlTemplates\\SAPRequest.xml";
         private const string XpathImMatInfo = $"//*[local-name()='IM_MATINFO']";
         private const string XpathActionItems = $"//*[local-name()='ACTIONITEMS']";
@@ -36,7 +35,7 @@ namespace UKHO.ERPFacade.API.Helpers
         private const string RecDateFormat = "yyyyMMdd";
         private const string RecTimeFormat = "hhmmss";
 
-        public SapMessageBuilder(ILogger<SapMessageBuilder> logger,
+        public EncContentSapMessageBuilder(ILogger<EncContentSapMessageBuilder> logger,
                                  IXmlHelper xmlHelper,
                                  IFileSystemHelper fileSystemHelper,
                                  IOptions<SapActionConfiguration> sapActionConfig
@@ -121,7 +120,6 @@ namespace UKHO.ERPFacade.API.Helpers
                                 _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
                             }
                             break;
-
                     }
                 }
 
@@ -188,7 +186,6 @@ namespace UKHO.ERPFacade.API.Helpers
                                     IsConditionSatisfied = false;
                                 }
                                 break;
-
                         }
                     }
                 }
@@ -253,7 +250,6 @@ namespace UKHO.ERPFacade.API.Helpers
                                 _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
                             }
                             break;
-
                     }
                 }
             }

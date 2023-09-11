@@ -102,7 +102,7 @@
 
         private string fLEETField;
 
-        private int uSERSField;
+        private string uSERSField;
 
         private string eNDUSERIDField;
 
@@ -288,7 +288,7 @@
         }
 
         /// <remarks/>
-        public int USERS
+        public string USERS
         {
             get
             {

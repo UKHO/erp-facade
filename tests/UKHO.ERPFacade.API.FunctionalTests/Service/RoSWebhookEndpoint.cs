@@ -1,12 +1,14 @@
-﻿using NUnit.Framework;
+﻿using Newtonsoft.Json;
+using NUnit.Framework;
 using RestSharp;
 using System.Net;
 using UKHO.ERPFacade.API.FunctionalTests.Configuration;
 using UKHO.ERPFacade.API.FunctionalTests.Helpers;
+using UKHO.ERPFacade.API.FunctionalTests.Model;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Service
 {
-    internal class RoSWebhookEndpoint
+    public class RoSWebhookEndpoint
     {
         private readonly RestClient _client;
         private readonly AzureBlobStorageHelper _azureBlobStorageHelper;
@@ -91,6 +93,30 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
                 Console.WriteLine("Scenario Not Mentioned");
                 return null;
             }
+        }
+
+        public async Task<RestResponse> PostRoSWebhookResponseAsyncForXML(string filePath, string generatedXmlFolder, string token)
+        {
+            string requestBody;
+
+            using (StreamReader streamReader = new(filePath))
+            {
+                requestBody = streamReader.ReadToEnd();
+            }
+            generatedCorrelationId = SAPXmlHelper.GenerateRandomCorrelationId();
+            requestBody = SAPXmlHelper.UpdateTimeAndCorrIdField(requestBody, generatedCorrelationId);
+            var request = new RestRequest(RoSWebhookRequestEndPoint, Method.Post);
+            request.AddHeader("Content-Type", "application/json");
+            request.AddHeader("Authorization", "Bearer " + token);
+            request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
+            RestResponse response = await _client.ExecuteAsync(request);
+            JsonInputRoSWebhookEvent jsonPayload = JsonConvert.DeserializeObject<JsonInputRoSWebhookEvent>(requestBody);
+            string generatedXmlFilePath = _azureBlobStorageHelper.DownloadGeneratedXMLFile(generatedXmlFolder, generatedCorrelationId, "recordofsaleblobs");
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                Assert.That(RoSXmlHelper.CheckXmlAttributes(jsonPayload, generatedXmlFilePath, requestBody).Result, Is.True, "CheckXMLAttributes Failed");
+            }
+            return response;
         }
     }
 }

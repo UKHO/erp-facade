@@ -112,10 +112,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             RestResponse response = await _client.ExecuteAsync(request);
             JsonInputLicenceUpdateHelper jsonPayload = JsonConvert.DeserializeObject<JsonInputLicenceUpdateHelper>(requestBody);
             string generatedXmlFilePath = _azureBlobStorageHelper.DownloadGeneratedXMLFile(generatedXmlFolder, generatedCorrelationId, "licenceupdatedblobs");
-
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                Assert.That(FmLicenceUpdateXMLHelper.CheckXmlAttributes(jsonPayload, generatedXmlFilePath, requestBody).Result, Is.True, "CheckXMLAttributes Failed");
+                Assert.That(LicenceUpdateXmlHelper.CheckXmlAttributes(jsonPayload, generatedXmlFilePath, requestBody).Result, Is.True, "CheckXMLAttributes Failed");
             }
             return response;
         }

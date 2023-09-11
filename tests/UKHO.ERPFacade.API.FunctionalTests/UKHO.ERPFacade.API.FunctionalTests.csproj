@@ -170,13 +170,40 @@
     <None Update="ERPFacadePayloadTestData\ID32_moveAndSuspended.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPFacadePayloadTestData\RoSPayloadTestData\ID01_GenericJson.json">
+    <None Update="ERPFacadePayloadTestData\RoSPayloadTestData\RoS12_UnSupportedPayloadType.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPFacadePayloadTestData\RoSPayloadTestData\ID02_UnSupportedPayloadType.xml">
+    <None Update="ERPFacadePayloadTestData\RoSPayloadTestData\RoS11_InValidRoSwithNoCorrelationID.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPFacadePayloadTestData\RoSPayloadTestData\ID03_InvalidRoSJsonFile.json">
+    <None Update="ERPFacadePayloadTestData\RoSPayloadTestData\RoS10_InValidPayloadRoSMainHolding.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\RoSPayloadTestData\RoS04_ValidRoSMainHolding4000UoS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\RoSPayloadTestData\RoS03_ValidRoSMainHolding2000UoS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\RoSPayloadTestData\RoS02_ValidRoSMainHolding900UoS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\RoSPayloadTestData\RoS09_InValidPayloadRoSNewLicence.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\RoSPayloadTestData\RoS08_ValidRoSNewLicence4000UoS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\RoSPayloadTestData\RoS07_ValidRoSNewLicence2000UoS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\RoSPayloadTestData\RoS06_ValidRoSNewLicence900UoS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\RoSPayloadTestData\RoS05_ValidRoSNewLicence.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\RoSPayloadTestData\RoS01_ValidRoSMainHolding.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPFacadePayloadTestData\SapMockApiConfigure.xml">

@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 namespace UKHO.ERPFacade.Common.Models
 {
     [ExcludeFromCodeCoverage]
-    public class RecordOfSaleEventPayLoad
+    public class LicenceUpdatedEventPayLoad
     {
         [JsonProperty("specversion")]
         public string SpecVersion { get; set; }
@@ -28,24 +28,21 @@ namespace UKHO.ERPFacade.Common.Models
         public string DataContentType { get; set; }
 
         [JsonProperty("data")]
-        public RecordOfSaleData Data { get; set; }
+        public LicenceData Data { get; set; }
     }
 
     [ExcludeFromCodeCoverage]
-    public class RecordOfSaleData
+    public class LicenceData
     {
         [JsonProperty("correlationId")]
         public string CorrelationId { get; set; }
 
-        [JsonProperty("relatedEvents")]
-        public List<string> RelatedEvents { get; set; }
-
-        [JsonProperty("recordsOfSale")]
-        public RecordsOfSale RecordsOfSale { get; set; }
+        [JsonProperty("license")]
+        public Licence Licence { get; set; }
     }
 
     [ExcludeFromCodeCoverage]
-    public class RecordsOfSale
+    public class Licence
     {
         [JsonProperty("licenseId")]
         public string LicenceId { get; set; }
@@ -106,5 +103,24 @@ namespace UKHO.ERPFacade.Common.Models
 
         [JsonProperty("unitsOfSale")]
         public List<RosUnitOfSale> RosUnitOfSale { get; set; }
+    }
+
+    [ExcludeFromCodeCoverage]
+    public class RosUnitOfSale
+    {
+        [JsonProperty("unitName")]
+        public string Id { get; set; }
+
+        [JsonProperty("endDate")]
+        public string EndDate { get; set; }
+
+        [JsonProperty("duration")]
+        public string Duration { get; set; }
+
+        [JsonProperty("renew")]
+        public string ReNew { get; set; }
+
+        [JsonProperty("repeat")]
+        public string Repeat { get; set; }
     }
 }

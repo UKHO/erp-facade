@@ -631,7 +631,32 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940126 - Licence updated SAP message xml template does not exist.
         /// </summary>
-        LicenceUpdatedSapXmlTemplateNotFound = 940126
+        LicenceUpdatedSapXmlTemplateNotFound = 940126,
+
+        /// <summary>
+        /// 940127 - The record of sale SAP message xml template does not exist.
+        /// </summary>
+        RecordOfSaleSapXmlTemplateNotFound = 940127,
+
+        /// <summary>
+        /// 940128 - Creating the record of sale SAP Payload.
+        /// </summary>
+        CreatingRecordOfSaleSapPayload = 940128,
+
+        /// <summary>
+        /// 940129 - The record of sale SAP payload created.
+        /// </summary>
+        CreatedRecordOfSaleSapPayload = 940129,
+
+        /// <summary>
+        /// 940130 - Uploading Sap Xml payload for record of sale event in Azure blob.
+        /// </summary>
+        UploadRecordOfSaleSapXmlPayloadInAzureBlob = 940130,
+
+        /// <summary>
+        /// 940131 - SAP xml payload for record of sale event is uploaded in blob storage successfully.
+        /// </summary>
+        UploadedRecordOfSaleSapXmlPayloadInAzureBlob = 940131
     }
 
     /// <summary>
