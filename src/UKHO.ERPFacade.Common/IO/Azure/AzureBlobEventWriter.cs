@@ -67,6 +67,23 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             return blobContainerClient.DeleteIfExists();
         }
 
+        public List<string> GetBlobNamesInFolder(string blobContainerName, string corrId)
+        {
+            List<string> blobList = new();
+            BlobContainerClient blobContainerClient = new(_azureStorageConfig.Value.ConnectionString, blobContainerName);
+
+            var blobs = blobContainerClient.GetBlobs(BlobTraits.None, BlobStates.None, corrId);
+
+            foreach (BlobItem blob in blobs)
+            {
+                var blobName = blob.Name.Split("/");
+                var fileName = blobName[1].Split(".");
+                blobList.Add(fileName[0]);
+            }
+
+            return blobList;
+        }
+
         //Private Methods
         private BlobClient GetBlobClient(string containerName, string blobName)
         {

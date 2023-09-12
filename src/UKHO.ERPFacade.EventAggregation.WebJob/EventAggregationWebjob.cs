@@ -17,6 +17,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _aggregationService = aggregationService ?? throw new ArgumentNullException(nameof(aggregationService));
         }
+
         public Task ProcessQueueMessage([QueueTrigger("recordofsaleevents")] QueueMessage message)
         {
             _aggregationService.MergeRecordOfSaleEvents(message);

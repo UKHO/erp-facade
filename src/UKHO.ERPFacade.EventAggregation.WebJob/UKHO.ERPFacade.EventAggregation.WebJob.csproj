@@ -8,6 +8,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="appsettings.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.2.2" />
     <PackageReference Include="Azure.Identity" Version="1.8.2" />
     <PackageReference Include="Microsoft.Azure.WebJobs" Version="3.0.37" />
@@ -25,10 +36,10 @@
   <ItemGroup>
     <ProjectReference Include="..\UKHO.ERPFacade.Common\UKHO.ERPFacade.Common.csproj" />
   </ItemGroup>
-
   <ItemGroup>
-    <Folder Include="Helpers\" />
-    <Folder Include="Services\" />
+    <None Update="SapXmlTemplates\RosSapRequest.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
