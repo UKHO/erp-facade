@@ -25,5 +25,6 @@ namespace UKHO.ERPFacade.Common.IO.Azure
         Task<RecordOfSaleEventEntity> GetRecordOfSaleEntity(string correlationId, string tableName);
         Task UpdateRecordOfSaleEventStatus(string correlationId);
         Task UpdateLicenceUpdatedEventStatus(string correlationId);
+        string GetEntityStatus(string correlationId);
     }
 }

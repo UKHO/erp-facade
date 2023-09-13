@@ -406,6 +406,22 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             }
         }
 
+        public string GetEntityStatus(string correlationId)
+        {
+            string status = string.Empty;
+            ;
+            TableClient tableClient = GetTableClient(RecordOfSaleTableName);
+
+            var entities = tableClient.Query<RecordOfSaleEventEntity>(filter: TableClient.CreateQueryFilter($"CorrelationId eq {correlationId}"), maxPerPage: 1);
+ 
+            foreach (var entity in entities)
+            {
+                status = entity.Status;
+            }
+
+            return status;
+        }
+
         //Private Methods
         private TableClient GetTableClient(string tableName)
         {

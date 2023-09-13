@@ -691,7 +691,12 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940138 - No message found in Azure Queue.
         /// </summary>
-        NoMessageFoundInQueue = 940138
+        NoMessageFoundInQueue = 940138,
+
+        /// <summary>
+        /// 940139 - The record has been completed already.
+        /// </summary>
+        RequestAlreadyCompleted = 940139
     }
 
     /// <summary>
