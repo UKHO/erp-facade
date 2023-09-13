@@ -55,8 +55,9 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Services
                 {
                     foreach (string eventId in message.RelatedEvents)
                     {
-                        string rosEvent = _azureBlobEventWriter.DownloadEvent(message.CorrelationId + '/' + eventId + ".json", RecordOfSaleContainerName);
+                        _logger.LogInformation(EventIds.DownloadRecordOfSaleEventFromAzureBlob.ToEventId(), "Webjob started downloading record of sale events from blob.");
 
+                        string rosEvent = _azureBlobEventWriter.DownloadEvent(message.CorrelationId + '/' + eventId + ".json", RecordOfSaleContainerName);
                         rosEventList.Add(JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(rosEvent));
                     }
 
@@ -77,7 +78,16 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Services
                     _logger.LogInformation(EventIds.RecordOfSalePublishedEventDataPushedToSap.ToEventId(), "The record of sale event data has been sent to SAP successfully. | {StatusCode}", response.StatusCode);
 
                     await _azureTableReaderWriter.UpdateRecordOfSaleEventStatus(message.CorrelationId);
-                } 
+                }
+
+                else
+                {
+                    _logger.LogWarning(EventIds.AllRelatedEventsAreNotPresentInBlob.ToEventId(), "All related events are not present in Azure blob.");
+                }
+            }
+            else
+            {
+                _logger.LogWarning(EventIds.NoMessageFoundInQueue.ToEventId(), "No message found in Queue Message.");
             }
         }
     }

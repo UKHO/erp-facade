@@ -2,6 +2,7 @@
 using Azure.Storage.Queues.Models;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
+using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.EventAggregation.WebJob.Services;
 
 namespace UKHO.ERPFacade.EventAggregation.WebJob
@@ -20,7 +21,9 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob
 
         public Task ProcessQueueMessage([QueueTrigger("recordofsaleevents")] QueueMessage message)
         {
+            _logger.LogInformation(EventIds.WebjobForEventAggregationStarted.ToEventId(), "Webjob started for merging record of sale events.");
             _aggregationService.MergeRecordOfSaleEvents(message);
+            _logger.LogInformation(EventIds.WebjobForEventAggregationCompleted.ToEventId(), "Webjob completed for merging record of sale events.");
 
             return Task.CompletedTask;
         }

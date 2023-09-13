@@ -656,7 +656,42 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940131 - SAP xml payload for record of sale event is uploaded in blob storage successfully.
         /// </summary>
-        UploadedRecordOfSaleSapXmlPayloadInAzureBlob = 940131
+        UploadedRecordOfSaleSapXmlPayloadInAzureBlob = 940131,
+
+        /// <summary>
+        /// 940132 - Adding record of sale event payload in Azure Queue storage.
+        /// </summary>
+        AddMessageToAzureQueue = 940132,
+
+        /// <summary>
+        /// 940133 - Record of sale event payload is added in queue storage successfully.
+        /// </summary>
+        AddedMessageToAzureQueue = 940133,
+
+        /// <summary>
+        /// 940134 - Webjob started for merging record of sale events.
+        /// </summary>
+        WebjobForEventAggregationStarted = 940134,
+
+        /// <summary>
+        /// 940135 - Webjob completed for merging record of sale events.
+        /// </summary>
+        WebjobForEventAggregationCompleted = 940135,
+
+        /// <summary>
+        /// 940136 - Webjob started downloading record of sale events from blob.
+        /// </summary>
+        DownloadRecordOfSaleEventFromAzureBlob = 940136,
+
+        /// <summary>
+        /// 940137 - All related events are not present in Azure blob.
+        /// </summary>
+        AllRelatedEventsAreNotPresentInBlob = 940137,
+
+        /// <summary>
+        /// 940138 - No message found in Azure Queue.
+        /// </summary>
+        NoMessageFoundInQueue = 940138
     }
 
     /// <summary>
