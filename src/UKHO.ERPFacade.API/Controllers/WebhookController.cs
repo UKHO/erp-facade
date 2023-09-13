@@ -23,6 +23,7 @@ namespace UKHO.ERPFacade.API.Controllers
         private readonly ILogger<WebhookController> _logger;
         private readonly IAzureTableReaderWriter _azureTableReaderWriter;
         private readonly IAzureBlobEventWriter _azureBlobEventWriter;
+        private readonly IAzureQueueMessaging _azureQueueMessaging;
         private readonly ISapClient _sapClient;
         private readonly IEncContentSapMessageBuilder _encContentSapMessageBuilder;
         private readonly IOptions<SapConfiguration> _sapConfig;
@@ -40,6 +41,7 @@ namespace UKHO.ERPFacade.API.Controllers
                                  ILogger<WebhookController> logger,
                                  IAzureTableReaderWriter azureTableReaderWriter,
                                  IAzureBlobEventWriter azureBlobEventWriter,
+                                 IAzureQueueMessaging azureQueueMessaging,
                                  ISapClient sapClient,
                                  IEncContentSapMessageBuilder encContentSapMessageBuilder,
                                  IOptions<SapConfiguration> sapConfig,
@@ -49,6 +51,7 @@ namespace UKHO.ERPFacade.API.Controllers
             _logger = logger;
             _azureTableReaderWriter = azureTableReaderWriter;
             _azureBlobEventWriter = azureBlobEventWriter;
+            _azureQueueMessaging = azureQueueMessaging;
             _sapClient = sapClient;
             _encContentSapMessageBuilder = encContentSapMessageBuilder;
             _licenceUpdatedSapMessageBuilder = licenceUpdatedSapMessageBuilder;
@@ -153,6 +156,8 @@ namespace UKHO.ERPFacade.API.Controllers
             _logger.LogInformation(EventIds.UploadRecordOfSalePublishedEventInAzureBlob.ToEventId(), "Uploading the received Record of sale published event in blob storage.");
             await _azureBlobEventWriter.UploadEvent(recordOfSaleEventJson.ToString(), RecordOfSaleContainerName, correlationId + '/' + eventId + ".json");
             _logger.LogInformation(EventIds.UploadedRecordOfSalePublishedEventInAzureBlob.ToEventId(), "Record of sale published event is uploaded in blob storage successfully.");
+
+            await _azureQueueMessaging.SendMessageToQueue(recordOfSaleEventJson);
 
             return new OkObjectResult(StatusCodes.Status200OK);
         }
