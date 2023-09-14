@@ -46,6 +46,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
                 CorrelationId = recordOfSaleEventPayLoad.Data.CorrelationId,
                 Type = recordOfSaleEventPayLoad.Type,
                 EventId = recordOfSaleEventPayLoad.Id,
+                TransactionType = recordOfSaleEventPayLoad.Data.RecordsOfSale.TransactionType,
                 RelatedEvents = recordOfSaleEventPayLoad.Data.RelatedEvents
             };
 

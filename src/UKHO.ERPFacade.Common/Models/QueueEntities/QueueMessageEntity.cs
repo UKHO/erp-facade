@@ -17,5 +17,8 @@ namespace UKHO.ERPFacade.Common.Models.QueueEntities
 
         [JsonProperty("relatedEvents")]
         public List<string> RelatedEvents { get; set; }
+
+        [JsonProperty("transactionType")]
+        public string TransactionType { get; set; }
     }
 }

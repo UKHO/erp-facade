@@ -24,7 +24,6 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Services
         private readonly IOptions<SapConfiguration> _sapConfig;
         private readonly IRecordOfSaleSapMessageBuilder _recordOfSaleSapMessageBuilder;
 
-        private const string RecordOfSaleTableName = "recordofsaleevents";
         private const string RecordOfSaleContainerName = "recordofsaleblobs";
         private const string SapXmlPayloadFileName = "SapXmlPayload.xml";
         private const string IncompleteStatus = "Incomplete";
@@ -55,14 +54,14 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Services
                 {
                     List<string> blob = _azureBlobEventWriter.GetBlobNamesInFolder(RecordOfSaleContainerName, message.CorrelationId);
 
-                    if (blob.All(x => message.RelatedEvents.Contains(x)))
+                    if (message.RelatedEvents.All(x => blob.Contains(x)))
                     {
                         foreach (string eventId in message.RelatedEvents)
                         {
                             _logger.LogInformation(EventIds.DownloadRecordOfSaleEventFromAzureBlob.ToEventId(), "Webjob started downloading record of sale events from blob.");
 
                             string rosEvent = _azureBlobEventWriter.DownloadEvent(message.CorrelationId + '/' + eventId + ".json", RecordOfSaleContainerName);
-                            rosEventList.Add(JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(rosEvent));
+                            rosEventList.Add(JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(rosEvent)!);
                         }
 
                         XmlDocument sapPayload = _recordOfSaleSapMessageBuilder.BuildRecordOfSaleSapMessageXml(rosEventList, message.CorrelationId);
