@@ -233,6 +233,16 @@ stages:
               zipAfterPublish: false
               modifyOutputPath: false
 
+          - task: DotNetCoreCLI@2
+            displayName: "Publish Event Aggregation Webjob"
+            inputs:
+              command: "publish"
+              publishWebProjects: false
+              projects: "**/UKHO.ERPFacade.EventAggregation.WebJob"
+              arguments: "--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/UKHO.ERPFacade.API/App_Data/jobs/continuous/EventAggregationWebJob"
+              zipAfterPublish: false
+              modifyOutputPath: false
+
           - task: ArchiveFiles@2
             displayName: "Zip ERP Service binaries for Webjob"
             inputs:
