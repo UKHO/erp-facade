@@ -687,16 +687,11 @@ namespace UKHO.ERPFacade.Common.Logging
         /// 940137 - All related events are not present in Azure blob.
         /// </summary>
         AllRelatedEventsAreNotPresentInBlob = 940137,
-
+         
         /// <summary>
-        /// 940138 - No message found in Azure Queue.
+        /// 940138 - The record has been completed already.
         /// </summary>
-        NoMessageFoundInQueue = 940138,
-
-        /// <summary>
-        /// 940139 - The record has been completed already.
-        /// </summary>
-        RequestAlreadyCompleted = 940139
+        RequestAlreadyCompleted = 940138
     }
 
     /// <summary>
