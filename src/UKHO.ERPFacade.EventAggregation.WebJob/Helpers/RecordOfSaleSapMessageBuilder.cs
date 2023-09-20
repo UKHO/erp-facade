@@ -200,7 +200,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Helpers
                             EndDate = rosUnitOfSale.EndDate,
                             Duration = rosUnitOfSale.Duration,
                             ReNew = rosUnitOfSale.ReNew,
-                            Repeat = string.Empty
+                            Repeat = rosUnitOfSale.Repeat
                         };
 
                         existingUnitOfSaleList.Add(unitOfSales);

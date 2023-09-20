@@ -10,6 +10,12 @@ using UKHO.ERPFacade.EventAggregation.WebJob.Services;
 using FakeItEasy;
 using FluentAssertions;
 using UKHO.ERPFacade.Common.Logging;
+using Newtonsoft.Json;
+using UKHO.ERPFacade.Common.Models.QueueEntities;
+using System.Net;
+using System.Xml;
+using UKHO.ERPFacade.Common.Exceptions;
+using UKHO.ERPFacade.Common.Models;
 
 namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Services
 {
@@ -48,7 +54,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Services
                 .ParamName
                 .Should().Be("azureTableReaderWriter");
         }
-         
+
         [Test]
         public void Does_Constructor_Throws_ArgumentNullException_When_AzureBlobEventWriter_Paramter_Is_Null()
         {
@@ -73,7 +79,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Services
         }
 
         [Test]
-        public async Task WhenRecordOfSaleEntityStatusIsCompleted_ThenShouldNotMerge()
+        public async Task WhenRecordOfSaleEntityStatusIsComplete_ThenShouldNotMerge()
         {
             string messageText =
                 "{\"type\":\"uk.gov.ukho.shop.recordOfSale.v1\",\"eventId\":\"ad5b0ca4-2668-4345-9699-49d8f2c5a006\",\"correlationId\":\"999ce4a4-1d62-4f56-b359-59e178d77003\",\"relatedEvents\":[\"e744fa37-0c9f-4795-adc9-7f42ad8f005\",\"ad5b0ca4-2668-4345-9699-49d8f2c5a006\"],\"transactionType\":\"NEWLICENCE\"}";
@@ -93,6 +99,152 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Services
             && call.GetArgument<LogLevel>(0) == LogLevel.Warning
             && call.GetArgument<EventId>(1) == EventIds.RequestAlreadyCompleted.ToEventId()
             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "The record has been completed already.").MustHaveHappenedOnceExactly();
+        }
+
+        [Test]
+        public async Task WhenAllRelatedEventsNotFoundInBlob_ThenShouldNotMerge()
+        {
+            string messageText =
+                "{\"type\":\"uk.gov.ukho.shop.recordOfSale.v1\",\"eventId\":\"ad5b0ca4-2668-4345-9699-49d8f2c5a006\",\"correlationId\":\"999ce4a4-1d62-4f56-b359-59e178d77003\",\"relatedEvents\":[\"e744fa37-0c9f-4795-adc9-7f42ad8f005\",\"ad5b0ca4-2668-4345-9699-49d8f2c5a006\"],\"transactionType\":\"NEWLICENCE\"}";
+
+            List<string> blob = new()
+            {
+                "e744fa37-0c9f-4795-adc9-7f42ad8f005"
+            };
+
+            QueueMessage queueMessage = QueuesModelFactory.QueueMessage("12345", "pr1", messageText, 1, DateTimeOffset.UtcNow);
+            QueueMessageEntity message = JsonConvert.DeserializeObject<QueueMessageEntity>(queueMessage.Body.ToString())!;
+
+            A.CallTo(() => _fakeAzureTableReaderWriter.GetEntityStatus(A<string>.Ignored)).Returns("Incomplete");
+            A.CallTo(() => _fakeAzureBlobEventWriter.GetBlobNamesInFolder(A<string>.Ignored, A<string>.Ignored)).Returns(blob);
+
+            await _fakeAggregationService.MergeRecordOfSaleEvents(queueMessage);
+
+            A.CallTo(() => _fakeAzureBlobEventWriter.GetBlobNamesInFolder(A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateRecordOfSaleEventStatus(A<string>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeAzureBlobEventWriter.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+            && call.GetArgument<LogLevel>(0) == LogLevel.Warning
+            && call.GetArgument<EventId>(1) == EventIds.AllRelatedEventsAreNotPresentInBlob.ToEventId()
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "All related events are not present in Azure blob.").MustHaveHappenedOnceExactly();
+        }
+
+        [Test]
+        public void WhenSapDoesNotRespond200Ok_ThenWebJobReturns500InternalServerResponse()
+        {
+            XmlDocument xmlDocument = new();
+
+            string messageText =
+                "{\"type\":\"uk.gov.ukho.shop.recordOfSale.v1\",\"eventId\":\"ad5b0ca4-2668-4345-9699-49d8f2c5a006\",\"correlationId\":\"999ce4a4-1d62-4f56-b359-59e178d77003\",\"relatedEvents\":[\"e744fa37-0c9f-4795-adc9-7f42ad8f005\",\"ad5b0ca4-2668-4345-9699-49d8f2c5a006\"],\"transactionType\":\"NEWLICENCE\"}";
+
+            List<string> blob = new()
+            {
+                "e744fa37-0c9f-4795-adc9-7f42ad8f005", "ad5b0ca4-2668-4345-9699-49d8f2c5a006"
+            };
+
+            QueueMessage queueMessage = QueuesModelFactory.QueueMessage("12345", "pr1", messageText, 1, DateTimeOffset.UtcNow);
+            QueueMessageEntity message = JsonConvert.DeserializeObject<QueueMessageEntity>(queueMessage.Body.ToString())!;
+
+            A.CallTo(() => _fakeAzureTableReaderWriter.GetEntityStatus(A<string>.Ignored)).Returns("Incomplete");
+            A.CallTo(() => _fakeAzureBlobEventWriter.GetBlobNamesInFolder(A<string>.Ignored, A<string>.Ignored)).Returns(blob);
+
+            A.CallTo(() =>
+                    _fakeRecordOfSaleSapMessageBuilder.BuildRecordOfSaleSapMessageXml(
+                        A<List<RecordOfSaleEventPayLoad>>.Ignored, A<string>.Ignored))
+                .Returns(xmlDocument);
+
+            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+                .Returns(new HttpResponseMessage()
+                {
+                    StatusCode = HttpStatusCode.Unauthorized
+                });
+
+            Assert.ThrowsAsync<ERPFacadeException>(() => _fakeAggregationService.MergeRecordOfSaleEvents(queueMessage));
+
+            A.CallTo(() => _fakeAzureBlobEventWriter.GetBlobNamesInFolder(A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceOrMore();
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateRecordOfSaleEventStatus(A<string>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeAzureBlobEventWriter.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceExactly();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+            && call.GetArgument<LogLevel>(0) == LogLevel.Information
+            && call.GetArgument<EventId>(1) == EventIds.DownloadRecordOfSaleEventFromAzureBlob.ToEventId()
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Webjob started downloading record of sale events from blob.").MustHaveHappenedOnceOrMore();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+            && call.GetArgument<LogLevel>(0) == LogLevel.Information
+            && call.GetArgument<EventId>(1) == EventIds.UploadRecordOfSaleSapXmlPayloadInAzureBlob.ToEventId()
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Uploading the SAP xml payload for record of sale event in blob storage.").MustHaveHappenedOnceExactly();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+            && call.GetArgument<LogLevel>(0) == LogLevel.Information
+            && call.GetArgument<EventId>(1) == EventIds.UploadedRecordOfSaleSapXmlPayloadInAzureBlob.ToEventId()
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "SAP xml payload for record of sale event is uploaded in blob storage successfully.").MustHaveHappenedOnceExactly();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+            && call.GetArgument<LogLevel>(0) == LogLevel.Error
+            && call.GetArgument<EventId>(1) == EventIds.ErrorOccurredInSapForRecordOfSalePublishedEvent.ToEventId()
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "An error occurred while sending record of sale event data to SAP. | {StatusCode}").MustHaveHappenedOnceExactly();
+        }
+
+        [Test]
+        public async Task WhenRecordOfSaleEventReceived_ThenShouldMergeEvents()
+        {
+            XmlDocument xmlDocument = new();
+
+            string messageText =
+                "{\"type\":\"uk.gov.ukho.shop.recordOfSale.v1\",\"eventId\":\"ad5b0ca4-2668-4345-9699-49d8f2c5a006\",\"correlationId\":\"999ce4a4-1d62-4f56-b359-59e178d77003\",\"relatedEvents\":[\"e744fa37-0c9f-4795-adc9-7f42ad8f005\",\"ad5b0ca4-2668-4345-9699-49d8f2c5a006\"],\"transactionType\":\"NEWLICENCE\"}";
+
+            List<string> blob = new()
+            {
+                "e744fa37-0c9f-4795-adc9-7f42ad8f005", "ad5b0ca4-2668-4345-9699-49d8f2c5a006"
+            };
+
+            QueueMessage queueMessage = QueuesModelFactory.QueueMessage("12345", "pr1", messageText, 1, DateTimeOffset.UtcNow);
+            QueueMessageEntity message = JsonConvert.DeserializeObject<QueueMessageEntity>(queueMessage.Body.ToString())!;
+
+            A.CallTo(() => _fakeAzureTableReaderWriter.GetEntityStatus(A<string>.Ignored)).Returns("Incomplete");
+            A.CallTo(() => _fakeAzureBlobEventWriter.GetBlobNamesInFolder(A<string>.Ignored, A<string>.Ignored)).Returns(blob);
+
+            A.CallTo(() =>
+                    _fakeRecordOfSaleSapMessageBuilder.BuildRecordOfSaleSapMessageXml(
+                        A<List<RecordOfSaleEventPayLoad>>.Ignored, A<string>.Ignored))
+                .Returns(xmlDocument);
+
+            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+                .Returns(new HttpResponseMessage()
+                {
+                    StatusCode = HttpStatusCode.OK
+                });
+
+            await _fakeAggregationService.MergeRecordOfSaleEvents(queueMessage);
+
+            A.CallTo(() => _fakeAzureBlobEventWriter.GetBlobNamesInFolder(A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceOrMore();
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateRecordOfSaleEventStatus(A<string>.Ignored)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _fakeAzureBlobEventWriter.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceExactly();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+            && call.GetArgument<LogLevel>(0) == LogLevel.Information
+            && call.GetArgument<EventId>(1) == EventIds.DownloadRecordOfSaleEventFromAzureBlob.ToEventId()
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Webjob started downloading record of sale events from blob.").MustHaveHappenedOnceOrMore();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+            && call.GetArgument<LogLevel>(0) == LogLevel.Information
+            && call.GetArgument<EventId>(1) == EventIds.UploadRecordOfSaleSapXmlPayloadInAzureBlob.ToEventId()
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Uploading the SAP xml payload for record of sale event in blob storage.").MustHaveHappenedOnceExactly();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+            && call.GetArgument<LogLevel>(0) == LogLevel.Information
+            && call.GetArgument<EventId>(1) == EventIds.UploadedRecordOfSaleSapXmlPayloadInAzureBlob.ToEventId()
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "SAP xml payload for record of sale event is uploaded in blob storage successfully.").MustHaveHappenedOnceExactly();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+            && call.GetArgument<LogLevel>(0) == LogLevel.Information
+            && call.GetArgument<EventId>(1) == EventIds.RecordOfSalePublishedEventDataPushedToSap.ToEventId()
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "The record of sale event data has been sent to SAP successfully. | {StatusCode}").MustHaveHappenedOnceExactly();
         }
     }
 }
