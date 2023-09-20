@@ -33,7 +33,10 @@ namespace UKHO.ERPFacade.Common.IO.Azure
         //Private Methods
         private QueueClient GetQueueClient(string queueName)
         {
-            QueueClient queueClient = new(_azureStorageConfig.Value.ConnectionString, queueName.ToLower());
+            QueueClient queueClient = new(_azureStorageConfig.Value.ConnectionString, queueName.ToLower(), new QueueClientOptions
+            {
+                MessageEncoding = QueueMessageEncoding.Base64
+            });
             queueClient.CreateIfNotExistsAsync();
 
             return queueClient;
