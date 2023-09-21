@@ -377,6 +377,8 @@ stages:
             value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp'] ]
           - name : "KeyVaultSettings.ServiceUri"
             value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.keyvaulturi'] ]
+          - name :  "AzureWebJobsStorage.ConnectionString"
+            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
         workspace:
           clean: all
         strategy:
@@ -403,6 +405,7 @@ stages:
             value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp'] ]
           - name : mockWebAppResourceGroup
             value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName'] ]
+
         displayName: "Dev Functional Automated Tests"
         workspace:
          clean: all
@@ -468,6 +471,8 @@ stages:
             value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.WEB_APP'] ]
           - name : "KeyVaultSettings.ServiceUri"
             value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.keyvaulturi'] ]
+          - name : "AzureWebJobsStorage.ConnectionString"
+            value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
         workspace:
           clean: all
         strategy:
