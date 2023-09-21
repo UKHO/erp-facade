@@ -47,6 +47,15 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Services
         }
 
         [Test]
+        public void Does_Constructor_Throws_ArgumentNullException_When_Logger_Paramter_Is_Null()
+        {
+            Assert.Throws<ArgumentNullException>(
+                    () => new AggregationService(null!, _fakeAzureTableReaderWriter, _fakeAzureBlobEventWriter, _fakeSapClient, _fakeSapConfig, _fakeRecordOfSaleSapMessageBuilder))
+                .ParamName
+                .Should().Be("logger");
+        }
+
+        [Test]
         public void Does_Constructor_Throws_ArgumentNullException_When_AzureTableReaderWriter_Paramter_Is_Null()
         {
             Assert.Throws<ArgumentNullException>(
@@ -161,7 +170,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Services
                     StatusCode = HttpStatusCode.Unauthorized
                 });
 
-            Assert.ThrowsAsync<ERPFacadeException>(() => _fakeAggregationService.MergeRecordOfSaleEvents(queueMessage));
+            Assert.ThrowsAsync<Exception>(() => _fakeAggregationService.MergeRecordOfSaleEvents(queueMessage));
 
             A.CallTo(() => _fakeAzureBlobEventWriter.GetBlobNamesInFolder(A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceExactly();
             A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceOrMore();
