@@ -95,26 +95,48 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             }
         }
 
-        public async Task<RestResponse> PostRoSWebhookResponseAsyncForXML(string filePath, string generatedXmlFolder, string token)
+        public async Task<RestResponse> PostRoSWebhookResponseAsyncForOtherThanLastEvent(string requestBody, bool isFirstEvent, string token, string generatedCorrelationId)
         {
-            string requestBody;
-
-            using (StreamReader streamReader = new(filePath))
-            {
-                requestBody = streamReader.ReadToEnd();
-            }
-            generatedCorrelationId = SAPXmlHelper.GenerateRandomCorrelationId();
             requestBody = SAPXmlHelper.UpdateTimeAndCorrIdField(requestBody, generatedCorrelationId);
             var request = new RestRequest(RoSWebhookRequestEndPoint, Method.Post);
             request.AddHeader("Content-Type", "application/json");
             request.AddHeader("Authorization", "Bearer " + token);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
             RestResponse response = await _client.ExecuteAsync(request);
-            JsonInputRoSWebhookEvent jsonPayload = JsonConvert.DeserializeObject<JsonInputRoSWebhookEvent>(requestBody);
-            string generatedXmlFilePath = _azureBlobStorageHelper.DownloadGeneratedXMLFile(generatedXmlFolder, generatedCorrelationId, "recordofsaleblobs");
-            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+
+            if (response.StatusCode == HttpStatusCode.OK)
             {
-                Assert.That(RoSXmlHelper.CheckXmlAttributes(jsonPayload, generatedXmlFilePath, requestBody).Result, Is.True, "CheckXMLAttributes Failed");
+                if (isFirstEvent)
+                {
+                    bool isBlobCreated = _azureBlobStorageHelper.VerifyBlobExists("recordofsaleblobs", generatedCorrelationId);
+                    Assert.That(isBlobCreated, Is.True, $"Blob {generatedCorrelationId} not created");
+                }
+                List<string> blobList = _azureBlobStorageHelper.GetBlobNamesInFolder("recordofsaleblobs", generatedCorrelationId);
+                Assert.That(blobList, Does.Not.Contain("SapXmlPayload.xml"), $"All related events are not received yet so XML should not be generated for {generatedCorrelationId}");
+            }
+
+            return response;
+        }
+
+        public async Task<RestResponse> PostRoSWebhookResponseAsyncForLastEvent(string requestBody, List<JsonInputRoSWebhookEvent> listOfEventJsons, int totalUnitOfSale, string generatedXmlFolder, string token, string generatedCorrelationId)
+        {
+            requestBody = SAPXmlHelper.UpdateTimeAndCorrIdField(requestBody, generatedCorrelationId);
+            var request = new RestRequest(RoSWebhookRequestEndPoint, Method.Post);
+            request.AddHeader("Content-Type", "application/json");
+            request.AddHeader("Authorization", "Bearer " + token);
+            request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
+            RestResponse response = await _client.ExecuteAsync(request);
+            
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                //Wait for webjob to execute and generate XML payload.
+                Thread.Sleep(15000);
+
+                List<string> blobList = _azureBlobStorageHelper.GetBlobNamesInFolder("recordofsaleblobs", generatedCorrelationId);
+                Assert.That(blobList, Does.Contain("SapXmlPayload"), $"XML is not generated for {generatedCorrelationId}");
+
+                string generatedXmlFilePath = _azureBlobStorageHelper.DownloadGeneratedXMLFile(generatedXmlFolder, generatedCorrelationId, "recordofsaleblobs");
+                Assert.That(RoSXmlHelper.CheckXmlAttributes(generatedXmlFilePath, requestBody, listOfEventJsons).Result, Is.True, "CheckXMLAttributes Failed");
             }
             return response;
         }
