@@ -379,6 +379,9 @@ stages:
             value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.keyvaulturi'] ]
           - name :  "AzureWebJobsStorage.ConnectionString"
             value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
+          - name :  APPINSIGHTS_INSTRUMENTATIONKEY
+            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.APPINSIGHTS_INSTRUMENTATIONKEY'] ]
+
         workspace:
           clean: all
         strategy:
@@ -473,6 +476,9 @@ stages:
             value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.keyvaulturi'] ]
           - name : "AzureWebJobsStorage.ConnectionString"
             value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
+          - name :  APPINSIGHTS_INSTRUMENTATIONKEY
+            value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.APPINSIGHTS_INSTRUMENTATIONKEY'] ]
+
         workspace:
           clean: all
         strategy:
