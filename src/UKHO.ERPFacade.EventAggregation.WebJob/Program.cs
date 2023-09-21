@@ -4,8 +4,6 @@ using System.Reflection;
 using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
-using Microsoft.ApplicationInsights.Channel;
-using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,7 +24,6 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob
     [ExcludeFromCodeCoverage]
     public static class Program
     {
-        private static readonly InMemoryChannel TelemetryChannel = new();
         private static IConfiguration? ConfigurationBuilder;
         private static readonly string WebJobAssemblyVersion = Assembly.GetExecutingAssembly().GetCustomAttributes<AssemblyFileVersionAttribute>().Single().Version;
 
@@ -80,11 +77,11 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob
 #endif
                  builder.AddConsole();
                  //Add Application Insights if needed (if key exists in settings)
-                 //string instrumentationKey = ConfigurationBuilder["APPINSIGHTS_INSTRUMENTATIONKEY"];
-                 //if (!string.IsNullOrEmpty(instrumentationKey))
-                 //{
-                 //    builder.AddApplicationInsightsWebJobs(o => o.InstrumentationKey = instrumentationKey);
-                 //}
+                 string instrumentationKey = ConfigurationBuilder["APPINSIGHTS_INSTRUMENTATIONKEY"];
+                 if (!string.IsNullOrEmpty(instrumentationKey))
+                 {
+                     builder.AddApplicationInsightsWebJobs(o => o.InstrumentationKey = instrumentationKey);
+                 }
                  EventHubLoggingConfiguration eventhubConfig = ConfigurationBuilder.GetSection("EventHubLoggingConfiguration").Get<EventHubLoggingConfiguration>();
                  if (!string.IsNullOrWhiteSpace(eventhubConfig.ConnectionString))
                  {
@@ -109,15 +106,6 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob
              })
              .ConfigureServices((hostContext, services) =>
              {
-                 services.AddApplicationInsightsTelemetryWorkerService();
-
-                 services.Configure<TelemetryConfiguration>(
-                     (config) =>
-                     {
-                         config.TelemetryChannel = TelemetryChannel;
-                     }
-                 );
-
                  var buildServiceProvider = services.BuildServiceProvider();
                  services.Configure<AzureStorageConfiguration>(ConfigurationBuilder.GetSection("AzureStorageConfiguration"));
                  services.Configure<QueuesOptions>(ConfigurationBuilder.GetSection("QueuesOptions"));

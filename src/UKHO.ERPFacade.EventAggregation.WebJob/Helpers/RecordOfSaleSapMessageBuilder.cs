@@ -36,11 +36,11 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Helpers
 
             if (!_fileSystemHelper.IsFileExists(sapXmlTemplatePath))
             {
-                _logger.LogError(EventIds.RecordOfSaleSapXmlTemplateNotFound.ToEventId(), "The record of sale SAP message xml template does not exist. | _X-Correlation-ID : {_X-Correlation-ID}", correlationId);
+                _logger.LogError(EventIds.RecordOfSaleSapXmlTemplateNotFound.ToEventId(), "The record of sale SAP message xml template does not exist.");
                 throw new FileNotFoundException();
             }
 
-            _logger.LogInformation(EventIds.CreatingRecordOfSaleSapPayload.ToEventId(), "Creating the record of sale SAP Payload. | _X-Correlation-ID : {_X-Correlation-ID}", correlationId);
+            _logger.LogInformation(EventIds.CreatingRecordOfSaleSapPayload.ToEventId(), "Creating the record of sale SAP Payload.");
 
             XmlDocument soapXml = _xmlHelper.CreateXmlDocument(sapXmlTemplatePath);
 
@@ -61,7 +61,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Helpers
 
             soapXml.SelectSingleNode(XpathZAddsRos)!.InnerXml = sapXml.RemoveNullFields().SetXmlClosingTags();
 
-            _logger.LogInformation(EventIds.CreatedRecordOfSaleSapPayload.ToEventId(), "The record of sale SAP payload created. | _X-Correlation-ID : {_X-Correlation-ID}", correlationId);
+            _logger.LogInformation(EventIds.CreatedRecordOfSaleSapPayload.ToEventId(), "The record of sale SAP payload created.");
 
             return soapXml;
         }
