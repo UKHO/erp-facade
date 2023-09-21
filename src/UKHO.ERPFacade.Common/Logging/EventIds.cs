@@ -691,7 +691,12 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940138 - The record has been completed already.
         /// </summary>
-        RequestAlreadyCompleted = 940138
+        RequestAlreadyCompleted = 940138,
+
+        /// <summary>
+        /// 940139 - Exception occured while processing Event aggregation WebJob.
+        /// </summary>
+        UnhandledWebJobException = 940139
     }
 
     /// <summary>

@@ -124,6 +124,24 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
             return false;
         }
+
+        public List<string> GetBlobNamesInFolder(string blobContainerName, string corrId)
+        {
+            List<string> blobList = new();
+            BlobContainerClient blobContainerClient = new(Config.TestConfig.AzureStorageConfiguration.ConnectionString, blobContainerName);
+
+            var blobs = blobContainerClient.GetBlobs(BlobTraits.None, BlobStates.None, corrId);
+
+            foreach (BlobItem blob in blobs)
+            {
+                var blobName = blob.Name.Split("/");
+                var fileName = blobName[1].Split(".");
+                blobList.Add(fileName[0]);
+            }
+
+            return blobList;
+        }
+
         public string DownloadGeneratedXMLFile(string expectedXMLfilePath, string blobContainer, string parentContainerName)
         {
             string fileName = "";
