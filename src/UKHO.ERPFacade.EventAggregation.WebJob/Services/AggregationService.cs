@@ -59,7 +59,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Services
                     {
                         foreach (string eventId in message.RelatedEvents)
                         {
-                            _logger.LogInformation(EventIds.DownloadRecordOfSaleEventFromAzureBlob.ToEventId(), "Webjob started downloading record of sale events from blob.");
+                            _logger.LogInformation(EventIds.DownloadRecordOfSaleEventFromAzureBlob.ToEventId(), "Webjob started downloading record of sale events from blob. | _X-Correlation-ID : {_X-Correlation-ID}", message.CorrelationId);
 
                             string rosEvent = _azureBlobEventWriter.DownloadEvent(message.CorrelationId + '/' + eventId + JsonFileType, RecordOfSaleContainerName);
                             rosEventList.Add(JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(rosEvent)!);
@@ -67,31 +67,31 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Services
 
                         XmlDocument sapPayload = _recordOfSaleSapMessageBuilder.BuildRecordOfSaleSapMessageXml(rosEventList, message.CorrelationId);
 
-                        _logger.LogInformation(EventIds.UploadRecordOfSaleSapXmlPayloadInAzureBlob.ToEventId(), "Uploading the SAP xml payload for record of sale event in blob storage.");
+                        _logger.LogInformation(EventIds.UploadRecordOfSaleSapXmlPayloadInAzureBlob.ToEventId(), "Uploading the SAP xml payload for record of sale event in blob storage. | _X-Correlation-ID : {_X-Correlation-ID}", message.CorrelationId);
                         await _azureBlobEventWriter.UploadEvent(sapPayload.ToIndentedString(), RecordOfSaleContainerName, message.CorrelationId + '/' + SapXmlPayloadFileName);
-                        _logger.LogInformation(EventIds.UploadedRecordOfSaleSapXmlPayloadInAzureBlob.ToEventId(), "SAP xml payload for record of sale event is uploaded in blob storage successfully.");
+                        _logger.LogInformation(EventIds.UploadedRecordOfSaleSapXmlPayloadInAzureBlob.ToEventId(), "SAP xml payload for record of sale event is uploaded in blob storage successfully. | _X-Correlation-ID : {_X-Correlation-ID}", message.CorrelationId);
 
                         HttpResponseMessage response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapServiceOperationForRecordOfSale, _sapConfig.Value.SapUsernameForRecordOfSale, _sapConfig.Value.SapPasswordForRecordOfSale);
 
                         if (!response.IsSuccessStatusCode)
                         {
-                            _logger.LogError(EventIds.ErrorOccurredInSapForRecordOfSalePublishedEvent.ToEventId(), "An error occurred while sending record of sale event data to SAP. | {StatusCode}", response.StatusCode);
+                            _logger.LogError(EventIds.ErrorOccurredInSapForRecordOfSalePublishedEvent.ToEventId(), "An error occurred while sending record of sale event data to SAP. | _X-Correlation-ID : {_X-Correlation-ID} | StatusCode: {StatusCode}", message.CorrelationId, response.StatusCode);
                             throw new ERPFacadeException(EventIds.ErrorOccurredInSapForRecordOfSalePublishedEvent.ToEventId());
                         }
 
-                        _logger.LogInformation(EventIds.RecordOfSalePublishedEventDataPushedToSap.ToEventId(), "The record of sale event data has been sent to SAP successfully. | {StatusCode}", response.StatusCode);
+                        _logger.LogInformation(EventIds.RecordOfSalePublishedEventDataPushedToSap.ToEventId(), "The record of sale event data has been sent to SAP successfully. | _X-Correlation-ID : {_X-Correlation-ID} | StatusCode: {StatusCode}", message.CorrelationId, response.StatusCode);
 
                         await _azureTableReaderWriter.UpdateRecordOfSaleEventStatus(message.CorrelationId);
                     }
 
                     else
                     {
-                        _logger.LogWarning(EventIds.AllRelatedEventsAreNotPresentInBlob.ToEventId(), "All related events are not present in Azure blob.");
+                        _logger.LogWarning(EventIds.AllRelatedEventsAreNotPresentInBlob.ToEventId(), "All related events are not present in Azure blob. | _X-Correlation-ID : {_X-Correlation-ID}", message.CorrelationId);
                     }
                 }
                 else
                 {
-                    _logger.LogWarning(EventIds.RequestAlreadyCompleted.ToEventId(), "The record has been completed already.");
+                    _logger.LogWarning(EventIds.RequestAlreadyCompleted.ToEventId(), "The record has been completed already. | _X-Correlation-ID : {_X-Correlation-ID}", message.CorrelationId);
                 }
             }
             catch (Exception)
