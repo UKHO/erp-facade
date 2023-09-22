@@ -79,12 +79,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob
                                  .CreateLogger(), dispose: true);
 #endif
                  builder.AddConsole();
-                 //Add Application Insights if needed (if key exists in settings)
-                 //string instrumentationKey = ConfigurationBuilder["APPINSIGHTS_INSTRUMENTATIONKEY"];
-                 //if (!string.IsNullOrEmpty(instrumentationKey))
-                 //{
-                 //    builder.AddApplicationInsightsWebJobs(o => o.InstrumentationKey = instrumentationKey);
-                 //}
+
                  EventHubLoggingConfiguration eventhubConfig = ConfigurationBuilder.GetSection("EventHubLoggingConfiguration").Get<EventHubLoggingConfiguration>();
                  if (!string.IsNullOrWhiteSpace(eventhubConfig.ConnectionString))
                  {
