@@ -170,7 +170,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Services
                     StatusCode = HttpStatusCode.Unauthorized
                 });
 
-            Assert.ThrowsAsync<Exception>(() => _fakeAggregationService.MergeRecordOfSaleEvents(queueMessage));
+            Assert.ThrowsAsync<ERPFacadeException>(() => _fakeAggregationService.MergeRecordOfSaleEvents(queueMessage));
 
             A.CallTo(() => _fakeAzureBlobEventWriter.GetBlobNamesInFolder(A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceExactly();
             A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceOrMore();

@@ -21,17 +21,9 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob
 
         public async Task ProcessQueueMessage([QueueTrigger("recordofsaleevents")] QueueMessage message)
         {
-            try
-            {
-                _logger.LogInformation(EventIds.WebjobForEventAggregationStarted.ToEventId(), "Webjob started for merging record of sale events.");
-                await _aggregationService.MergeRecordOfSaleEvents(message);
-                _logger.LogInformation(EventIds.WebjobForEventAggregationCompleted.ToEventId(), "Webjob completed for merging record of sale events.");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(EventIds.UnhandledWebJobException.ToEventId(), ex, "Exception occured while processing Event aggregation WebJob.");
-                throw;
-            }
+            _logger.LogInformation(EventIds.WebjobForEventAggregationStarted.ToEventId(), "Webjob started for merging record of sale events.");
+            await _aggregationService.MergeRecordOfSaleEvents(message);
+            _logger.LogInformation(EventIds.WebjobForEventAggregationCompleted.ToEventId(), "Webjob completed for merging record of sale events.");
         }
     }
 }
