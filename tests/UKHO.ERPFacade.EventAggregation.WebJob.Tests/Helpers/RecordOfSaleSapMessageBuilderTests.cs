@@ -146,12 +146,12 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
             && call.GetArgument<EventId>(1) == EventIds.CreatingRecordOfSaleSapPayload.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Creating the record of sale SAP Payload.").MustHaveHappenedOnceExactly();
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Creating the record of sale SAP Payload. | _X-Correlation-ID : {_X-Correlation-ID}").MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
             && call.GetArgument<EventId>(1) == EventIds.CreatedRecordOfSaleSapPayload.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "The record of sale SAP payload created.").MustHaveHappenedOnceExactly();
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "The record of sale SAP payload created. | _X-Correlation-ID : {_X-Correlation-ID}").MustHaveHappenedOnceExactly();
         }
 
         [Test]
@@ -174,7 +174,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Error
             && call.GetArgument<EventId>(1) == EventIds.RecordOfSaleSapXmlTemplateNotFound.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "The record of sale SAP message xml template does not exist.").MustHaveHappenedOnceExactly();
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "The record of sale SAP message xml template does not exist. | _X-Correlation-ID : {_X-Correlation-ID}").MustHaveHappenedOnceExactly();
         }
 
         [Test]
@@ -270,12 +270,12 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
             && call.GetArgument<EventId>(1) == EventIds.CreatingRecordOfSaleSapPayload.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Creating the record of sale SAP Payload.").MustHaveHappenedOnceExactly();
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Creating the record of sale SAP Payload. | _X-Correlation-ID : {_X-Correlation-ID}").MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
             && call.GetArgument<EventId>(1) == EventIds.CreatedRecordOfSaleSapPayload.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "The record of sale SAP payload created.").MustHaveHappenedOnceExactly();
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "The record of sale SAP payload created. | _X-Correlation-ID : {_X-Correlation-ID}").MustHaveHappenedOnceExactly();
         }
 
         [Test]

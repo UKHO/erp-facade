@@ -27,8 +27,3 @@ output "erp_facade_mock_service_url" {
 output keyvault_uri {
   value = module.key_vault.keyvault_uri
 }
-
-output "instrumentation_key" {
-  value = module.app_insights.instrumentation_key
-  sensitive = true
-}

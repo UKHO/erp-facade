@@ -96,7 +96,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Services
             }
             catch (Exception)
             {
-                throw new Exception();
+                throw new ERPFacadeException(EventIds.UnhandledWebJobException.ToEventId());
             }
         }
     }
