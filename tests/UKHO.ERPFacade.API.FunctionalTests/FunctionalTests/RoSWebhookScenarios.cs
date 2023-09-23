@@ -13,15 +13,19 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
     public class RoSWebhookScenarios
     {
         private RoSWebhookEndpoint _RosWebhookEndpoint { get; set; }
+        private AzureBlobStorageHelper _azureBlobStorageHelper;
+
         private readonly ADAuthTokenProvider _authToken = new();
-        private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
+
+        //private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
         //for local
-        //private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
+        private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
 
         [SetUp]
         public void Setup()
         {
             _RosWebhookEndpoint = new RoSWebhookEndpoint();
+            _azureBlobStorageHelper = new AzureBlobStorageHelper();
         }
 
         [Test(Description = "WhenValidRoSEventInRecordOfSalePublishedEventReceivedOptions_ThenWebhookReturns200OkResponse"), Order(0)]
@@ -119,39 +123,64 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [TestCase("RoS13_ValidFirstPayloadForMerging.json", "RoS13_ValidLastPayloadForMerging.json", TestName = "WhenValidRoSEventsReceivedWithValidPayloadsForMerging_ThenWebhookReturns200OkResponseAndWebJobCreatesXMLPayload")]
         public async Task WhenValidRoSEventsReceivedWithValidPayloadsForMerging_ThenWebhookReturns200OkResponseAndWebJobCreatesXMLPayload(string firstEventPayloadJsonFileName, string lastEventPayloadJsonFileName)
         {
-            List<string> listOfUnitOfSales = new();
-            List<JsonInputRoSWebhookEvent> listOfEventJsons = new();
+            Console.WriteLine("Scenario: Merging ROS Events - " + firstEventPayloadJsonFileName + " & " + lastEventPayloadJsonFileName + "\n");
 
-            Console.WriteLine("Scenario:" + firstEventPayloadJsonFileName + " & " + lastEventPayloadJsonFileName + "\n");
-
+            List<string> fileNames = new() { firstEventPayloadJsonFileName, lastEventPayloadJsonFileName };
             string generatedCorrelationId = SAPXmlHelper.GenerateRandomCorrelationId();
 
-            //First Event 
-            string firstEventPayloadJsonFilePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, "RoSPayloadTestData", firstEventPayloadJsonFileName);
-            string firstEventPayloadJsonRequestBody;
+            string generatedXmlFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXMLFolder, "RoSPayloadTestData");
+            List<JsonInputRoSWebhookEvent> listOfEventJsons = await JsonHelper.GetEventJsonListUsingFileNameAsync(fileNames);
 
-            using (StreamReader streamReader = new(firstEventPayloadJsonFilePath))
-            {
-                firstEventPayloadJsonRequestBody = await streamReader.ReadToEndAsync();
-            }
-            JsonInputRoSWebhookEvent firstEventPayloadJson = JsonConvert.DeserializeObject<JsonInputRoSWebhookEvent>(firstEventPayloadJsonRequestBody);
-            listOfEventJsons.Add(firstEventPayloadJson);
-            RestResponse firstEventResponse = await _RosWebhookEndpoint.PostRoSWebhookResponseAsyncForOtherThanLastEvent(firstEventPayloadJsonRequestBody, true, await _authToken.GetAzureADToken(false), generatedCorrelationId);
+            //Send first event
+            string firstEventPayloadJsonFilePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, "RoSPayloadTestData", firstEventPayloadJsonFileName);
+            RestResponse firstEventResponse = await _RosWebhookEndpoint.PostWebhookResponseAsyncForXML(generatedCorrelationId, firstEventPayloadJsonFilePath, true, false, generatedXmlFolder, null, await _authToken.GetAzureADToken(false));
+
+            //Assert if ROS webhook returns OK
             firstEventResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-            //Last Event
+            //Send last event  - Additionally we need to send list of all json files to compare total unitofsales items with final XML payload
             string lastEventPayloadJsonFilePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, "RoSPayloadTestData", lastEventPayloadJsonFileName);
-            string lastEventPayloadJsonRequestBody;
+            RestResponse lastEventResponse = await _RosWebhookEndpoint.PostWebhookResponseAsyncForXML(generatedCorrelationId, lastEventPayloadJsonFilePath, false, true, generatedXmlFolder, listOfEventJsons, await _authToken.GetAzureADToken(false));
 
-            using (StreamReader streamReader = new(lastEventPayloadJsonFilePath))
-            {
-                lastEventPayloadJsonRequestBody = await streamReader.ReadToEndAsync();
-            }
-            JsonInputRoSWebhookEvent lastEventPayloadJson = JsonConvert.DeserializeObject<JsonInputRoSWebhookEvent>(lastEventPayloadJsonRequestBody);
-            listOfEventJsons.Add(lastEventPayloadJson);
-            string generatedXmlFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXMLFolder, "RoSPayloadTestData");
-            RestResponse response = await _RosWebhookEndpoint.PostRoSWebhookResponseAsyncForLastEvent(lastEventPayloadJsonRequestBody, listOfEventJsons, listOfUnitOfSales.Count, generatedXmlFolder, await _authToken.GetAzureADToken(false), generatedCorrelationId);
-            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+            //Assert if ROS webhook returns OK
+            lastEventResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
+
+        //[TestCase("RoS13_ValidFirstPayloadForMerging.json", TestName = "WhenNotAllValidRoSEventsReceivedWithValidPayloadsForMerging_ThenWebhookReturns200OkResponseAndWebJobDoesNotCreatesXMLPayload")]
+        //public async Task WhenNotAllValidRoSEventsReceivedWithValidPayloadsForMerging_ThenWebhookReturns200OkResponseAndWebJobDoesNotCreatesXMLPayload(string firstEventPayloadJsonFileName)
+        //{
+        //    List<JsonInputRoSWebhookEvent> listOfEventJsons = new();
+
+        //    //Console.WriteLine("Scenario:" + firstEventPayloadJsonFileName + " & " + lastEventPayloadJsonFileName + "\n");
+
+        //    string generatedCorrelationId = SAPXmlHelper.GenerateRandomCorrelationId();
+
+        //    //First Event 
+        //    string firstEventPayloadJsonFilePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, "RoSPayloadTestData", firstEventPayloadJsonFileName);
+        //    string firstEventPayloadJsonRequestBody;
+
+        //    using (StreamReader streamReader = new(firstEventPayloadJsonFilePath))
+        //    {
+        //        firstEventPayloadJsonRequestBody = await streamReader.ReadToEndAsync();
+        //    }
+        //    JsonInputRoSWebhookEvent firstEventPayloadJson = JsonConvert.DeserializeObject<JsonInputRoSWebhookEvent>(firstEventPayloadJsonRequestBody);
+        //    listOfEventJsons.Add(firstEventPayloadJson);
+        //    RestResponse firstEventResponse = await _RosWebhookEndpoint.PostRoSWebhookResponseAsyncForOtherThanLastEvent(firstEventPayloadJsonRequestBody, true, await _authToken.GetAzureADToken(false), generatedCorrelationId);
+        //    firstEventResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
+        //    //Last Event
+        //    string lastEventPayloadJsonFilePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, "RoSPayloadTestData", lastEventPayloadJsonFileName);
+        //    string lastEventPayloadJsonRequestBody;
+
+        //    using (StreamReader streamReader = new(lastEventPayloadJsonFilePath))
+        //    {
+        //        lastEventPayloadJsonRequestBody = await streamReader.ReadToEndAsync();
+        //    }
+        //    JsonInputRoSWebhookEvent lastEventPayloadJson = JsonConvert.DeserializeObject<JsonInputRoSWebhookEvent>(lastEventPayloadJsonRequestBody);
+        //    listOfEventJsons.Add(lastEventPayloadJson);
+        //    string generatedXmlFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXMLFolder, "RoSPayloadTestData");
+        //    RestResponse response = await _RosWebhookEndpoint.PostRoSWebhookResponseAsyncForLastEvent(lastEventPayloadJsonRequestBody, listOfEventJsons, generatedXmlFolder, await _authToken.GetAzureADToken(false), generatedCorrelationId);
+        //    response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        //}
     }
 }

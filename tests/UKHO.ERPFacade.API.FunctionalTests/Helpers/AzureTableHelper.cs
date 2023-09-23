@@ -11,11 +11,11 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         private const string ErpFacadeTableName = "encevents";
 
         //Private Methods
-        private TableClient GetTableClient(string tableName)
+        private static TableClient GetTableClient(string tableName)
         {
             TableServiceClient serviceClient = new(Config.TestConfig.AzureStorageConfiguration.ConnectionString);
             Pageable<TableItem> queryTableResults = serviceClient.Query(filter: $"TableName eq '{tableName}'");
-            var tableExists = queryTableResults.FirstOrDefault(t => t.Name == tableName);
+            TableItem tableExists = queryTableResults.FirstOrDefault(t => t.Name == tableName);
 
             if (tableExists == null)
             {
@@ -26,22 +26,11 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return tableClient;
         }
 
-        public bool CheckResponseDateTime(string correlationId)
+        public static bool CheckResponseDateTime(string correlationId)
         {
             TableClient tableClient = GetTableClient(ErpFacadeTableName);
-            var existingEntity = tableClient.Query<EESEventEntity>(filter: TableClient.CreateQueryFilter($"CorrelationId eq {correlationId}"));
-            if (existingEntity != null)
-            {
-                foreach (var tableitem in existingEntity)
-                {
-                    if (tableitem.ResponseDateTime.HasValue)
-                    {
-                        return true;
-                    }
-                }
-                return false;
-            }
-            else { return false; }
+            Pageable<EESEventEntity> existingEntity = tableClient.Query<EESEventEntity>(filter: TableClient.CreateQueryFilter($"CorrelationId eq {correlationId}"));
+            return existingEntity != null && existingEntity.Any(tableItem => tableItem.ResponseDateTime.HasValue);
         }
     }
 }
