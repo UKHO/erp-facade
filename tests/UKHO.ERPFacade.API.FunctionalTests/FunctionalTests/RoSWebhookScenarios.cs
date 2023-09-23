@@ -13,19 +13,16 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
     public class RoSWebhookScenarios
     {
         private RoSWebhookEndpoint _RosWebhookEndpoint { get; set; }
-        private AzureBlobStorageHelper _azureBlobStorageHelper;
-
         private readonly ADAuthTokenProvider _authToken = new();
 
-        //private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
+        private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
         //for local
-        private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
+        //private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
 
         [SetUp]
         public void Setup()
         {
             _RosWebhookEndpoint = new RoSWebhookEndpoint();
-            _azureBlobStorageHelper = new AzureBlobStorageHelper();
         }
 
         [Test(Description = "WhenValidRoSEventInRecordOfSalePublishedEventReceivedOptions_ThenWebhookReturns200OkResponse"), Order(0)]
