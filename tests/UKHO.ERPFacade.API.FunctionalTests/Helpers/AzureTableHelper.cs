@@ -9,6 +9,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
     public class AzureTableHelper
     {
         private const string ErpFacadeTableName = "encevents";
+        private const string RoSEventsTableName = "recordofsaleevents";
 
         //Private Methods
         private static TableClient GetTableClient(string tableName)
@@ -31,6 +32,13 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             TableClient tableClient = GetTableClient(ErpFacadeTableName);
             Pageable<EESEventEntity> existingEntity = tableClient.Query<EESEventEntity>(filter: TableClient.CreateQueryFilter($"CorrelationId eq {correlationId}"));
             return existingEntity != null && existingEntity.Any(tableItem => tableItem.ResponseDateTime.HasValue);
+        }
+
+        public static string GetSapStatus(string correlationId)
+        {
+            TableClient tableClient = GetTableClient(RoSEventsTableName);
+            Pageable<RecordOfSaleEventEntity> existingEntity = tableClient.Query<RecordOfSaleEventEntity>(filter: TableClient.CreateQueryFilter($"CorrelationId eq {correlationId}"));
+            return existingEntity != null ? existingEntity.FirstOrDefault()?.Status : string.Empty;
         }
     }
 }

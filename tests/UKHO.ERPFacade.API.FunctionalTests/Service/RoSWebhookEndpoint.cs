@@ -97,9 +97,11 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
                     Assert.That(blobList, Does.Contain("SapXmlPayload"), $"XML is not generated for {correlationId} at {DateTime.Now}.");
                     string generatedXmlFilePath = _azureBlobStorageHelper.DownloadGeneratedXMLFile(generatedXmlFolder, correlationId, "recordofsaleblobs");
                     Assert.That(RoSXmlHelper.CheckXmlAttributes(generatedXmlFilePath, requestBody, listOfEventJsons).Result, Is.True, "CheckXMLAttributes Failed");
+                    Assert.That(AzureTableHelper.GetSapStatus(correlationId), Is.EqualTo("Complete"), $"SAP status is Incomplete for {correlationId}");
                     break;
                 case false:
                     Assert.That(blobList, Does.Not.Contain("SapXmlPayload"), $"XML is generated for {correlationId} before we receive all related events.");
+                    Assert.That(AzureTableHelper.GetSapStatus(correlationId), Is.EqualTo("Incomplete"), $"SAP status is Complete for {correlationId}");
                     break;
             }
             return response;
