@@ -22,7 +22,8 @@ namespace UKHO.ERPFacade.Common.HttpClients
         {
             var credentials = "Basic " + Convert.ToBase64String(Encoding.ASCII.GetBytes(username + ":" + password));
 
-            _httpClient.DefaultRequestHeaders.Add("Authorization", credentials);
+            if (_httpClient.DefaultRequestHeaders.Authorization is null)
+                _httpClient.DefaultRequestHeaders.Add("Authorization", credentials);
             _httpClient.DefaultRequestHeaders.Add("Accept", "text/xml");
 
             return await _httpClient.PostAsync($"{endpoint}?op={sapServiceOperation}", new StringContent(sapMessageXml.InnerXml, Encoding.UTF8, "text/xml"));
