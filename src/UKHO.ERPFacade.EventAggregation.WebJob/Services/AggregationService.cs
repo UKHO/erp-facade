@@ -95,7 +95,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.UnhandledWebJobException.ToEventId(), ex,"Exception occured while processing Event Aggregation WebJob.. | _X-Correlation-ID : {_X-Correlation-ID}", message.CorrelationId);
+                _logger.LogError(EventIds.UnhandledWebJobException.ToEventId(), ex,"Exception occured while processing Event Aggregation WebJob. | _X-Correlation-ID : {_X-Correlation-ID}", message.CorrelationId);
                 throw new ERPFacadeException(EventIds.UnhandledWebJobException.ToEventId());
             }
         }

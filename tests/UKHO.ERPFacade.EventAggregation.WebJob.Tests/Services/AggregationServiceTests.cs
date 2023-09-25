@@ -255,5 +255,44 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Services
             && call.GetArgument<EventId>(1) == EventIds.RecordOfSalePublishedEventDataPushedToSap.ToEventId()
             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "The record of sale event data has been sent to SAP successfully. | _X-Correlation-ID : {_X-Correlation-ID} | StatusCode: {StatusCode}").MustHaveHappenedOnceExactly();
         }
+
+        [Test]
+        public void WhenValidateEntityThrowsException_ThenThrowsException()
+        {
+            XmlDocument xmlDocument = new();
+
+            string messageText =
+                "{\"type\":\"uk.gov.ukho.shop.recordOfSale.v1\",\"eventId\":\"ad5b0ca4-2668-4345-9699-49d8f2c5a006\",\"correlationId\":\"999ce4a4-1d62-4f56-b359-59e178d77003\",\"relatedEvents\":[\"e744fa37-0c9f-4795-adc9-7f42ad8f005\",\"ad5b0ca4-2668-4345-9699-49d8f2c5a006\"],\"transactionType\":\"NEWLICENCE\"}";
+
+            List<string> blob = new()
+            {
+                "e744fa37-0c9f-4795-adc9-7f42ad8f005", "ad5b0ca4-2668-4345-9699-49d8f2c5a006"
+            };
+
+            QueueMessage queueMessage = QueuesModelFactory.QueueMessage("12345", "pr1", messageText, 1, DateTimeOffset.UtcNow);
+            QueueMessageEntity message = JsonConvert.DeserializeObject<QueueMessageEntity>(queueMessage.Body.ToString())!;
+
+            A.CallTo(() => _fakeAzureTableReaderWriter.GetEntityStatus(A<string>.Ignored)).Returns("Incomplete");
+            A.CallTo(() => _fakeAzureBlobEventWriter.GetBlobNamesInFolder(A<string>.Ignored, A<string>.Ignored)).Returns(blob);
+
+            A.CallTo(() =>
+                    _fakeRecordOfSaleSapMessageBuilder.BuildRecordOfSaleSapMessageXml(
+                        A<List<RecordOfSaleEventPayLoad>>.Ignored, A<string>.Ignored))
+                .Returns(xmlDocument);
+
+            A.CallTo(() =>
+                    _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored,
+                        A<string>.Ignored))
+                .Throws(new ERPFacadeException(EventIds.UnhandledWebJobException.ToEventId()));
+
+            var ex = Assert.ThrowsAsync<ERPFacadeException>(() => _fakeAggregationService.MergeRecordOfSaleEvents(queueMessage));
+
+            Assert.That(ex.EventId, Is.EqualTo(EventIds.UnhandledWebJobException.ToEventId()));
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+            && call.GetArgument<LogLevel>(0) == LogLevel.Error
+            && call.GetArgument<EventId>(1) == EventIds.UnhandledWebJobException.ToEventId()
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Exception occured while processing Event Aggregation WebJob. | _X-Correlation-ID : {_X-Correlation-ID}").MustHaveHappenedOnceOrMore();
+        }
     }
 }
