@@ -31,13 +31,6 @@
             "licenceDuration": 12,
             "unitsOfSale": [
                 {
-                    "unitName": "PT111101",
-                    "endDate": "2023-10-31",
-                    "duration": "3",
-                    "renew": "N/E/U",
-                    "repeat": ""
-                },
-                {
                     "unitName": "GB302409",
                     "endDate": "2023-12-01",
                     "duration": "6",
