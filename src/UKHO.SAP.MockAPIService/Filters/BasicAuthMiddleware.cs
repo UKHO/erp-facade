@@ -77,10 +77,10 @@ namespace UKHO.SAP.MockAPIService.Filters
 
         private bool IsUserAuthenticated(string username, string password, string contextReqPath)
         {
-            string SapEndpointBaseAddressForEncEvent = _sapConfiguration.Value.SapEndpointBaseAddressForEncEvent;
+            string SapEndpointBaseAddressForEncEvent = _sapConfiguration.Value.SapEndpointForEncEvent;
             string splitSapEndpointBaseAddressForEncEvent = SapEndpointBaseAddressForEncEvent.Substring(SapEndpointBaseAddressForEncEvent.LastIndexOf("/", StringComparison.Ordinal));
 
-            string sapEndpointBaseAddressForRecordOfSale = _sapConfiguration.Value.SapEndpointBaseAddressForRecordOfSale;
+            string sapEndpointBaseAddressForRecordOfSale = _sapConfiguration.Value.SapEndpointForRecordOfSale;
             string splitSapEndpointBaseAddressForRecordOfSale = sapEndpointBaseAddressForRecordOfSale.Substring(sapEndpointBaseAddressForRecordOfSale.LastIndexOf("/", StringComparison.Ordinal));
 
             if (contextReqPath == splitSapEndpointBaseAddressForEncEvent)

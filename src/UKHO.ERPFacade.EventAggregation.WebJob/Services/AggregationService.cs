@@ -70,7 +70,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Services
                         await _azureBlobEventWriter.UploadEvent(sapPayload.ToIndentedString(), RecordOfSaleContainerName, message.CorrelationId + '/' + SapXmlPayloadFileName);
                         _logger.LogInformation(EventIds.UploadedRecordOfSaleSapXmlPayloadInAzureBlob.ToEventId(), "SAP xml payload for record of sale event is uploaded in blob storage successfully. | _X-Correlation-ID : {_X-Correlation-ID}", message.CorrelationId);
 
-                        HttpResponseMessage response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapServiceOperationForRecordOfSale, _sapConfig.Value.SapUsernameForRecordOfSale, _sapConfig.Value.SapPasswordForRecordOfSale);
+                        HttpResponseMessage response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapEndpointForRecordOfSale, _sapConfig.Value.SapServiceOperationForRecordOfSale, _sapConfig.Value.SapUsernameForRecordOfSale, _sapConfig.Value.SapPasswordForRecordOfSale);
 
                         if (!response.IsSuccessStatusCode)
                         {
@@ -95,7 +95,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.UnhandledWebJobException.ToEventId(), ex,"Exception occured while processing Event Aggregation WebJob. | _X-Correlation-ID : {_X-Correlation-ID}", message.CorrelationId);
+                _logger.LogError(EventIds.UnhandledWebJobException.ToEventId(), ex, "Exception occured while processing Event Aggregation WebJob. | _X-Correlation-ID : {_X-Correlation-ID}", message.CorrelationId);
                 throw new ERPFacadeException(EventIds.UnhandledWebJobException.ToEventId());
             }
         }

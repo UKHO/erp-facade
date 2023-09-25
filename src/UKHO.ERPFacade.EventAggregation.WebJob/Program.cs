@@ -129,7 +129,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob
 
                  services.AddHttpClient<ISapClient, SapClient>(c =>
                  {
-                     c.BaseAddress = new Uri(ConfigurationBuilder.GetValue<string>("SapConfiguration:SapEndpointBaseAddressForRecordOfSale"));
+                     c.BaseAddress = new Uri(ConfigurationBuilder.GetValue<string>("SapConfiguration:SapBaseAddress"));
                  });
              })
               .ConfigureWebJobs(b =>

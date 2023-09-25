@@ -18,24 +18,14 @@ namespace UKHO.ERPFacade.Common.HttpClients
             _sapConfig = sapConfig ?? throw new ArgumentNullException(nameof(sapConfig));
         }
 
-        public async Task<HttpResponseMessage> PostEventData(XmlDocument sapMessageXml, string sapServiceOperation, string username, string password)
+        public async Task<HttpResponseMessage> PostEventData(XmlDocument sapMessageXml, string endpoint, string sapServiceOperation, string username, string password)
         {
             var credentials = "Basic " + Convert.ToBase64String(Encoding.ASCII.GetBytes(username + ":" + password));
-
-            if (sapServiceOperation == _sapConfig.Value.SapServiceOperationForEncEvent)
-            {
-                _httpClient.BaseAddress = new Uri(_sapConfig.Value.SapEndpointBaseAddressForEncEvent);
-            }
-
-            if (sapServiceOperation == _sapConfig.Value.SapServiceOperationForRecordOfSale)
-            {
-                _httpClient.BaseAddress = new Uri(_sapConfig.Value.SapEndpointBaseAddressForRecordOfSale);
-            }
 
             _httpClient.DefaultRequestHeaders.Add("Authorization", credentials);
             _httpClient.DefaultRequestHeaders.Add("Accept", "text/xml");
 
-            return await _httpClient.PostAsync($"?op={sapServiceOperation}", new StringContent(sapMessageXml.InnerXml, Encoding.UTF8, "text/xml"));
+            return await _httpClient.PostAsync($"{endpoint}?op={sapServiceOperation}", new StringContent(sapMessageXml.InnerXml, Encoding.UTF8, "text/xml"));
         }
     }
 }

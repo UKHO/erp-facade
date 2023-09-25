@@ -194,7 +194,7 @@ namespace UKHO.ERPFacade
 
             builder.Services.AddHttpClient<ISapClient, SapClient>(c =>
             {
-                c.BaseAddress = new Uri(configuration.GetValue<string>("SapConfiguration:SapEndpointBaseAddressForEncEvent"));
+                c.BaseAddress = new Uri(configuration.GetValue<string>("SapConfiguration:SapBaseAddress"));
             });
 
             var app = builder.Build();

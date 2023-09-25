@@ -164,7 +164,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Services
                         A<List<RecordOfSaleEventPayLoad>>.Ignored, A<string>.Ignored))
                 .Returns(xmlDocument);
 
-            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                 .Returns(new HttpResponseMessage()
                 {
                     StatusCode = HttpStatusCode.Unauthorized
@@ -222,7 +222,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Services
                         A<List<RecordOfSaleEventPayLoad>>.Ignored, A<string>.Ignored))
                 .Returns(xmlDocument);
 
-            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                 .Returns(new HttpResponseMessage()
                 {
                     StatusCode = HttpStatusCode.OK
@@ -281,7 +281,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Services
                 .Returns(xmlDocument);
 
             A.CallTo(() =>
-                    _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored,
+                    _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored,
                         A<string>.Ignored))
                 .Throws(new ERPFacadeException(EventIds.UnhandledWebJobException.ToEventId()));
 

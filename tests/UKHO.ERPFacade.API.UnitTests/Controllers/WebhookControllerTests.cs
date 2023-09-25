@@ -104,7 +104,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             var fakeEncEventJson = JObject.Parse(@"{""data"":{""correlationId"":""123""}}");
 
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(xmlDocument);
-            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                 .Returns(new HttpResponseMessage()
                 {
                     StatusCode = HttpStatusCode.OK
@@ -115,7 +115,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             A.CallTo(() => _fakeAzureTableReaderWriter.UpsertEntity(A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureTableReaderWriter.UpdateRequestTimeEntity(A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureBlobEventWriter.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened(2, Times.Exactly);
-            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, "Z_ADDS_MAT_INFO", A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, "Z_ADDS_MAT_INFO", A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
 
             result.StatusCode.Should().Be(200);
 
@@ -187,7 +187,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             var fakeEncEventJson = JObject.Parse(@"{""data"":{""correlationId"":""123""}}");
 
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(xmlDocument);
-            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                 .Returns(new HttpResponseMessage()
                 {
                     StatusCode = HttpStatusCode.Unauthorized
@@ -284,7 +284,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         public async Task WhenValidEventInRecordOfSalePublishedEventReceived_ThenWebhookReturns200OkResponse()
         {
             var fakeRosEventJson = JObject.Parse(@"{""data"":{""correlationId"":""123""}}");
-             
+
             var result = (OkObjectResult)await _fakeWebHookController.RecordOfSalePublishedEventReceived(fakeRosEventJson);
             result.StatusCode.Should().Be(200);
 
@@ -306,7 +306,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
              && call.GetArgument<LogLevel>(0) == LogLevel.Information
              && call.GetArgument<EventId>(1) == EventIds.UploadRecordOfSalePublishedEventInAzureBlob.ToEventId()
              && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Uploading the received Record of sale published event in blob storage.").MustHaveHappenedOnceExactly();
-             
+
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
             && call.GetArgument<EventId>(1) == EventIds.UploadedRecordOfSalePublishedEventInAzureBlob.ToEventId()
@@ -380,7 +380,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         {
             var fakeLicenceUpdatedEventJson = JObject.Parse(@"{""data"":{""correlationId"":""123""}}");
 
-            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                 .Returns(new HttpResponseMessage()
                 {
                     StatusCode = HttpStatusCode.OK
@@ -466,7 +466,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
                         A<LicenceUpdatedEventPayLoad>.Ignored, A<string>.Ignored))
                 .Returns(xmlDocument);
 
-            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                 .Returns(new HttpResponseMessage()
                 {
                     StatusCode = HttpStatusCode.Unauthorized
