@@ -43,12 +43,11 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Services
 
         public async Task MergeRecordOfSaleEvents(QueueMessage queueMessage)
         {
+            List<RecordOfSaleEventPayLoad> rosEventList = new();
+            QueueMessageEntity message = JsonConvert.DeserializeObject<QueueMessageEntity>(queueMessage.Body.ToString())!;
+
             try
             {
-                List<RecordOfSaleEventPayLoad> rosEventList = new();
-
-                QueueMessageEntity message = JsonConvert.DeserializeObject<QueueMessageEntity>(queueMessage.Body.ToString())!;
-
                 string status = _azureTableReaderWriter.GetEntityStatus(message.CorrelationId);
 
                 if (status == IncompleteStatus)
@@ -94,8 +93,9 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Services
                     _logger.LogWarning(EventIds.RequestAlreadyCompleted.ToEventId(), "The record has been completed already. | _X-Correlation-ID : {_X-Correlation-ID}", message.CorrelationId);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogError(EventIds.UnhandledWebJobException.ToEventId(), ex,"Exception occured while processing Event Aggregation WebJob.. | _X-Correlation-ID : {_X-Correlation-ID}", message.CorrelationId);
                 throw new ERPFacadeException(EventIds.UnhandledWebJobException.ToEventId());
             }
         }
