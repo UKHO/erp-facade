@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 namespace UKHO.ERPFacade.Common.Models.QueueEntities
 {
     [ExcludeFromCodeCoverage]
-    public class QueueMessageEntity
+    public class RecordOfSaleQueueMessageEntity
     {
         [JsonProperty("type")]
         public string Type { get; set; }

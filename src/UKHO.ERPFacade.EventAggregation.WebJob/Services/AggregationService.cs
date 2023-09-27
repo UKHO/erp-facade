@@ -44,7 +44,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Services
         public async Task MergeRecordOfSaleEvents(QueueMessage queueMessage)
         {
             List<RecordOfSaleEventPayLoad> rosEventList = new();
-            QueueMessageEntity message = JsonConvert.DeserializeObject<QueueMessageEntity>(queueMessage.Body.ToString())!;
+            RecordOfSaleQueueMessageEntity message = JsonConvert.DeserializeObject<RecordOfSaleQueueMessageEntity>(queueMessage.Body.ToString())!;
 
             try
             {
@@ -58,7 +58,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Services
                     {
                         foreach (string eventId in message.RelatedEvents)
                         {
-                            _logger.LogInformation(EventIds.DownloadRecordOfSaleEventFromAzureBlob.ToEventId(), "Webjob started downloading record of sale events from blob. | _X-Correlation-ID : {_X-Correlation-ID}", message.CorrelationId);
+                            _logger.LogInformation(EventIds.DownloadRecordOfSaleEventFromAzureBlob.ToEventId(), "Webjob has started downloading record of sale events from blob. | _X-Correlation-ID : {_X-Correlation-ID}", message.CorrelationId);
 
                             string rosEvent = _azureBlobEventWriter.DownloadEvent(message.CorrelationId + '/' + eventId + JsonFileType, RecordOfSaleContainerName);
                             rosEventList.Add(JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(rosEvent)!);
@@ -93,9 +93,9 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Services
                     _logger.LogWarning(EventIds.RequestAlreadyCompleted.ToEventId(), "The record has been completed already. | _X-Correlation-ID : {_X-Correlation-ID}", message.CorrelationId);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                _logger.LogError(EventIds.UnhandledWebJobException.ToEventId(), ex, "Exception occurred while processing Event Aggregation WebJob. | _X-Correlation-ID : {_X-Correlation-ID}", message.CorrelationId);
+                _logger.LogError(EventIds.UnhandledWebJobException.ToEventId(), "Exception occurred while processing Event Aggregation WebJob. | _X-Correlation-ID : {_X-Correlation-ID}", message.CorrelationId);
                 throw new ERPFacadeException(EventIds.UnhandledWebJobException.ToEventId());
             }
         }

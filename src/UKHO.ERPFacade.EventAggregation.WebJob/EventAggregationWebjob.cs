@@ -12,6 +12,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob
     {
         private readonly ILogger<EventAggregationWebjob> _logger;
         private readonly IAggregationService _aggregationService;
+        private const string RecordOfSaleQueueName = "recordofsaleevents";
 
         public EventAggregationWebjob(ILogger<EventAggregationWebjob> logger, IAggregationService aggregationService)
         {
@@ -19,11 +20,11 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob
             _aggregationService = aggregationService ?? throw new ArgumentNullException(nameof(aggregationService));
         }
 
-        public async Task ProcessQueueMessage([QueueTrigger("recordofsaleevents")] QueueMessage message)
+        public async Task ProcessQueueMessage([QueueTrigger(RecordOfSaleQueueName)] QueueMessage message)
         {
-            _logger.LogInformation(EventIds.WebjobForEventAggregationStarted.ToEventId(), "Webjob started for merging record of sale events.");
+            _logger.LogInformation(EventIds.WebjobForEventAggregationStarted.ToEventId(), "Webjob has started to process and merge sliced events.");
             await _aggregationService.MergeRecordOfSaleEvents(message);
-            _logger.LogInformation(EventIds.WebjobForEventAggregationCompleted.ToEventId(), "Webjob completed for merging record of sale events.");
+            _logger.LogInformation(EventIds.WebjobForEventAggregationCompleted.ToEventId(), "Webjob is completed.");
         }
     }
 }

@@ -44,16 +44,12 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Helpers
 
             XmlDocument soapXml = _xmlHelper.CreateXmlDocument(sapXmlTemplatePath);
 
-            switch (eventDataList[0].Data.RecordsOfSale.TransactionType)
+            sapRecordOfSalePayLoad = eventDataList[0].Data.RecordsOfSale.TransactionType switch
             {
-                case NewLicenceType:
-                    sapRecordOfSalePayLoad = BuildNewLicencePayload(eventDataList);
-                    break;
-
-                case MaintainHoldingsType:
-                    sapRecordOfSalePayLoad = BuildMaintainHoldingsPayload(eventDataList);
-                    break;
-            }
+                NewLicenceType => BuildNewLicencePayload(eventDataList),
+                MaintainHoldingsType => BuildMaintainHoldingsPayload(eventDataList),
+                _ => sapRecordOfSalePayLoad
+            };
 
             string xml = _xmlHelper.CreateXmlPayLoad(sapRecordOfSalePayLoad);
 
@@ -96,21 +92,15 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Helpers
                     rosNewLicencePayload.LicenceNumber = string.Empty;
 
                     PROD prod = new();
-                    List<UnitOfSales> unitOfSaleList = new();
-
-                    foreach (var rosUnitOfSale in eventData.Data.RecordsOfSale.RosUnitOfSale)
+                    List<UnitOfSales> unitOfSaleList = eventData.Data.RecordsOfSale.RosUnitOfSale.Select(rosUnitOfSale => new UnitOfSales()
                     {
-                        UnitOfSales unitOfSales = new()
-                        {
-                            Id = rosUnitOfSale.Id,
-                            EndDate = rosUnitOfSale.EndDate,
-                            Duration = rosUnitOfSale.Duration,
-                            ReNew = rosUnitOfSale.ReNew,
-                            Repeat = string.Empty
-                        };
-
-                        unitOfSaleList.Add(unitOfSales);
-                    }
+                        Id = rosUnitOfSale.Id,
+                        EndDate = rosUnitOfSale.EndDate,
+                        Duration = rosUnitOfSale.Duration,
+                        ReNew = rosUnitOfSale.ReNew,
+                        Repeat = string.Empty
+                    })
+                        .ToList();
 
                     prod.UnitOfSales = unitOfSaleList;
                     rosNewLicencePayload.PROD = prod;
@@ -119,20 +109,14 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Helpers
                 else
                 {
                     List<UnitOfSales> existingUnitOfSaleList = rosNewLicencePayload.PROD.UnitOfSales;
-
-                    foreach (var rosUnitOfSale in eventData.Data.RecordsOfSale.RosUnitOfSale)
+                    existingUnitOfSaleList.AddRange(eventData.Data.RecordsOfSale.RosUnitOfSale.Select(rosUnitOfSale => new UnitOfSales()
                     {
-                        UnitOfSales unitOfSales = new()
-                        {
-                            Id = rosUnitOfSale.Id,
-                            EndDate = rosUnitOfSale.EndDate,
-                            Duration = rosUnitOfSale.Duration,
-                            ReNew = rosUnitOfSale.ReNew,
-                            Repeat = string.Empty
-                        };
-
-                        existingUnitOfSaleList.Add(unitOfSales);
-                    }
+                        Id = rosUnitOfSale.Id,
+                        EndDate = rosUnitOfSale.EndDate,
+                        Duration = rosUnitOfSale.Duration,
+                        ReNew = rosUnitOfSale.ReNew,
+                        Repeat = string.Empty
+                    }));
                 }
             }
 
@@ -169,21 +153,15 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Helpers
                     rosMaintainHoldingsPayload.FleetName = string.Empty;
 
                     PROD prod = new();
-                    List<UnitOfSales> unitOfSaleList = new();
-
-                    foreach (var rosUnitOfSale in eventData.Data.RecordsOfSale.RosUnitOfSale)
+                    List<UnitOfSales> unitOfSaleList = eventData.Data.RecordsOfSale.RosUnitOfSale.Select(rosUnitOfSale => new UnitOfSales()
                     {
-                        UnitOfSales unitOfSales = new()
-                        {
-                            Id = rosUnitOfSale.Id,
-                            EndDate = rosUnitOfSale.EndDate,
-                            Duration = rosUnitOfSale.Duration,
-                            ReNew = rosUnitOfSale.ReNew,
-                            Repeat = rosUnitOfSale.Repeat
-                        };
-
-                        unitOfSaleList.Add(unitOfSales);
-                    }
+                        Id = rosUnitOfSale.Id,
+                        EndDate = rosUnitOfSale.EndDate,
+                        Duration = rosUnitOfSale.Duration,
+                        ReNew = rosUnitOfSale.ReNew,
+                        Repeat = rosUnitOfSale.Repeat
+                    })
+                        .ToList();
 
                     prod.UnitOfSales = unitOfSaleList;
                     rosMaintainHoldingsPayload.PROD = prod;
@@ -191,20 +169,14 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Helpers
                 else
                 {
                     List<UnitOfSales> existingUnitOfSaleList = rosMaintainHoldingsPayload.PROD.UnitOfSales;
-
-                    foreach (var rosUnitOfSale in eventData.Data.RecordsOfSale.RosUnitOfSale)
+                    existingUnitOfSaleList.AddRange(eventData.Data.RecordsOfSale.RosUnitOfSale.Select(rosUnitOfSale => new UnitOfSales()
                     {
-                        UnitOfSales unitOfSales = new()
-                        {
-                            Id = rosUnitOfSale.Id,
-                            EndDate = rosUnitOfSale.EndDate,
-                            Duration = rosUnitOfSale.Duration,
-                            ReNew = rosUnitOfSale.ReNew,
-                            Repeat = rosUnitOfSale.Repeat
-                        };
-
-                        existingUnitOfSaleList.Add(unitOfSales);
-                    }
+                        Id = rosUnitOfSale.Id,
+                        EndDate = rosUnitOfSale.EndDate,
+                        Duration = rosUnitOfSale.Duration,
+                        ReNew = rosUnitOfSale.ReNew,
+                        Repeat = rosUnitOfSale.Repeat
+                    }));
                 }
             }
 

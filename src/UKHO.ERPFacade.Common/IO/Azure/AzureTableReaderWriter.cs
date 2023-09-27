@@ -83,7 +83,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
 
             var existingEntity = await GetRecordOfSaleEntity(correlationId, LicenceUpdateTableName);
 
-            if (existingEntity == null)
+            if (existingEntity == null!)
             {
                 RecordOfSaleEventEntity licenceUpdatedEventsEntity = new()
                 {

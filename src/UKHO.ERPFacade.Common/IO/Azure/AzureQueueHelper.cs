@@ -10,17 +10,17 @@ using UKHO.ERPFacade.Common.Models.QueueEntities;
 namespace UKHO.ERPFacade.Common.IO.Azure
 {
     [ExcludeFromCodeCoverage]
-    public class AzureQueueMessaging : IAzureQueueMessaging
+    public class AzureQueueHelper : IAzureQueueHelper
     {
         private readonly IOptions<AzureStorageConfiguration> _azureStorageConfig;
         private const string RecordOfSaleQueueName = "recordofsaleevents";
 
-        public AzureQueueMessaging(IOptions<AzureStorageConfiguration> azureStorageConfig)
+        public AzureQueueHelper(IOptions<AzureStorageConfiguration> azureStorageConfig)
         {
             _azureStorageConfig = azureStorageConfig ?? throw new ArgumentNullException(nameof(azureStorageConfig));
         }
 
-        public async Task SendMessageToQueue(JObject rosEventJson)
+        public async Task AddMessage(JObject rosEventJson)
         {
             var rosEventData = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(rosEventJson.ToString());
             string queueMessage = BuildQueueMessage(rosEventData);
@@ -44,7 +44,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
 
         private string BuildQueueMessage(RecordOfSaleEventPayLoad recordOfSaleEventPayLoad)
         {
-            QueueMessageEntity queueMessageEntity = new()
+            RecordOfSaleQueueMessageEntity recordOfSaleQueueMessageEntity = new()
             {
                 CorrelationId = recordOfSaleEventPayLoad.Data.CorrelationId,
                 Type = recordOfSaleEventPayLoad.Type,
@@ -53,7 +53,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
                 RelatedEvents = recordOfSaleEventPayLoad.Data.RelatedEvents
             };
 
-            string queueMessage = JsonConvert.SerializeObject(queueMessageEntity);
+            string queueMessage = JsonConvert.SerializeObject(recordOfSaleQueueMessageEntity);
             return queueMessage;
         }
     }

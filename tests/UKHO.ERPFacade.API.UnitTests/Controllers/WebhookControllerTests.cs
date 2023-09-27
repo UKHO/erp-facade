@@ -32,7 +32,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         private ILogger<WebhookController> _fakeLogger;
         private IAzureTableReaderWriter _fakeAzureTableReaderWriter;
         private IAzureBlobEventWriter _fakeAzureBlobEventWriter;
-        private IAzureQueueMessaging _fakeAzureQueueMessaging;
+        private IAzureQueueHelper _fakeAzureQueueHelper;
         private ISapClient _fakeSapClient;
         private IXmlHelper _fakeXmlHelper;
         private IEncContentSapMessageBuilder _fakeEncContentSapMessageBuilder;
@@ -47,7 +47,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             _fakeLogger = A.Fake<ILogger<WebhookController>>();
             _fakeAzureTableReaderWriter = A.Fake<IAzureTableReaderWriter>();
             _fakeAzureBlobEventWriter = A.Fake<IAzureBlobEventWriter>();
-            _fakeAzureQueueMessaging = A.Fake<IAzureQueueMessaging>();
+            _fakeAzureQueueHelper = A.Fake<IAzureQueueHelper>();
             _fakeSapClient = A.Fake<ISapClient>();
             _fakeXmlHelper = A.Fake<IXmlHelper>();
             _fakeEncContentSapMessageBuilder = A.Fake<IEncContentSapMessageBuilder>();
@@ -61,7 +61,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
                 _fakeLogger,
                 _fakeAzureTableReaderWriter,
                 _fakeAzureBlobEventWriter,
-                _fakeAzureQueueMessaging,
+                _fakeAzureQueueHelper,
                 _fakeSapClient,
                 _fakeEncContentSapMessageBuilder,
                 _fakeSapConfig,
@@ -243,7 +243,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
                                                            _fakeLogger,
                                                            _fakeAzureTableReaderWriter,
                                                            _fakeAzureBlobEventWriter,
-                                                           _fakeAzureQueueMessaging,
+                                                           _fakeAzureQueueHelper,
                                                            _fakeSapClient,
                                                            _fakeEncContentSapMessageBuilder,
                                                            null,
@@ -290,7 +290,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
 
             A.CallTo(() => _fakeAzureTableReaderWriter.UpsertRecordOfSaleEntity(A<string>.Ignored)).MustHaveHappenedOnceExactly();
             A.CallTo(() => _fakeAzureBlobEventWriter.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceExactly();
-            A.CallTo(() => _fakeAzureQueueMessaging.SendMessageToQueue(fakeRosEventJson)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _fakeAzureQueueHelper.AddMessage(fakeRosEventJson)).MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
              && call.GetArgument<LogLevel>(0) == LogLevel.Information
@@ -334,7 +334,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
 
             A.CallTo(() => _fakeAzureTableReaderWriter.UpsertRecordOfSaleEntity(A<string>.Ignored)).MustNotHaveHappened();
             A.CallTo(() => _fakeAzureBlobEventWriter.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
-            A.CallTo(() => _fakeAzureQueueMessaging.SendMessageToQueue(fakeRosEventJson)).MustNotHaveHappened();
+            A.CallTo(() => _fakeAzureQueueHelper.AddMessage(fakeRosEventJson)).MustNotHaveHappened();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
              && call.GetArgument<LogLevel>(0) == LogLevel.Information
