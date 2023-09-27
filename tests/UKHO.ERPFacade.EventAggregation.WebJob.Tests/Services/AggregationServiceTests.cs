@@ -292,7 +292,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Services
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Error
             && call.GetArgument<EventId>(1) == EventIds.UnhandledWebJobException.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Exception occured while processing Event Aggregation WebJob. | _X-Correlation-ID : {_X-Correlation-ID}").MustHaveHappenedOnceOrMore();
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Exception occurred while processing Event Aggregation WebJob. | _X-Correlation-ID : {_X-Correlation-ID}").MustHaveHappenedOnceOrMore();
         }
     }
 }

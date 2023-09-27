@@ -10,12 +10,10 @@ namespace UKHO.ERPFacade.Common.HttpClients
     public class SapClient : ISapClient
     {
         private readonly HttpClient _httpClient;
-        private readonly IOptions<SapConfiguration> _sapConfig;
 
         public SapClient(HttpClient httpClient, IOptions<SapConfiguration> sapConfig)
         {
             _httpClient = httpClient;
-            _sapConfig = sapConfig ?? throw new ArgumentNullException(nameof(sapConfig));
         }
 
         public async Task<HttpResponseMessage> PostEventData(XmlDocument sapMessageXml, string endpoint, string sapServiceOperation, string username, string password)
