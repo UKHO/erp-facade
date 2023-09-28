@@ -177,6 +177,7 @@ namespace UKHO.ERPFacade
 
             builder.Services.AddScoped<IAzureTableReaderWriter, AzureTableReaderWriter>();
             builder.Services.AddScoped<IAzureBlobEventWriter, AzureBlobEventWriter>();
+            builder.Services.AddScoped<IAzureQueueHelper, AzureQueueHelper>();
             builder.Services.AddScoped<IEncContentSapMessageBuilder, EncContentSapMessageBuilder>();
             builder.Services.AddScoped<IXmlHelper, XmlHelper>();
             builder.Services.AddScoped<IFileSystemHelper, FileSystemHelper>();
@@ -186,7 +187,6 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<SharedKeyAuthFilter>();
             builder.Services.AddScoped<IEESClient, EESClient>();
             builder.Services.AddScoped<ILicenceUpdatedSapMessageBuilder, LicenceUpdatedSapMessageBuilder>();
-            builder.Services.AddScoped<IRecordOfSaleSapMessageBuilder, RecordOfSaleSapMessageBuilder>();
 
             builder.Services.AddHealthChecks()
                 .AddCheck<SapServiceHealthCheck>("SapServiceHealthCheck")
@@ -194,7 +194,7 @@ namespace UKHO.ERPFacade
 
             builder.Services.AddHttpClient<ISapClient, SapClient>(c =>
             {
-                c.BaseAddress = new Uri(configuration.GetValue<string>("SapConfiguration:SapEndpointBaseAddressForEncEvent"));
+                c.BaseAddress = new Uri(configuration.GetValue<string>("SapConfiguration:SapBaseAddress"));
             });
 
             var app = builder.Build();

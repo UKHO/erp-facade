@@ -32,13 +32,13 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         private ILogger<WebhookController> _fakeLogger;
         private IAzureTableReaderWriter _fakeAzureTableReaderWriter;
         private IAzureBlobEventWriter _fakeAzureBlobEventWriter;
+        private IAzureQueueHelper _fakeAzureQueueHelper;
         private ISapClient _fakeSapClient;
         private IXmlHelper _fakeXmlHelper;
         private IEncContentSapMessageBuilder _fakeEncContentSapMessageBuilder;
         private IOptions<SapConfiguration> _fakeSapConfig;
         private WebhookController _fakeWebHookController;
         private ILicenceUpdatedSapMessageBuilder _fakeLicenceUpdatedSapMessageBuilder;
-        private IRecordOfSaleSapMessageBuilder _fakeRecordOfSaleSapMessageBuilder;
 
         [SetUp]
         public void Setup()
@@ -47,25 +47,25 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             _fakeLogger = A.Fake<ILogger<WebhookController>>();
             _fakeAzureTableReaderWriter = A.Fake<IAzureTableReaderWriter>();
             _fakeAzureBlobEventWriter = A.Fake<IAzureBlobEventWriter>();
+            _fakeAzureQueueHelper = A.Fake<IAzureQueueHelper>();
             _fakeSapClient = A.Fake<ISapClient>();
             _fakeXmlHelper = A.Fake<IXmlHelper>();
             _fakeEncContentSapMessageBuilder = A.Fake<IEncContentSapMessageBuilder>();
             _fakeLicenceUpdatedSapMessageBuilder = A.Fake<ILicenceUpdatedSapMessageBuilder>();
-            _fakeRecordOfSaleSapMessageBuilder = A.Fake<IRecordOfSaleSapMessageBuilder>();
             _fakeSapConfig = Options.Create(new SapConfiguration()
             {
                 SapServiceOperationForEncEvent = "Z_ADDS_MAT_INFO"
             });
 
             _fakeWebHookController = new WebhookController(_fakeHttpContextAccessor,
-                                                           _fakeLogger,
-                                                           _fakeAzureTableReaderWriter,
-                                                           _fakeAzureBlobEventWriter,
-                                                           _fakeSapClient,
-                                                           _fakeEncContentSapMessageBuilder,
-                                                           _fakeSapConfig,
-                                                           _fakeLicenceUpdatedSapMessageBuilder,
-                                                           _fakeRecordOfSaleSapMessageBuilder);
+                _fakeLogger,
+                _fakeAzureTableReaderWriter,
+                _fakeAzureBlobEventWriter,
+                _fakeAzureQueueHelper,
+                _fakeSapClient,
+                _fakeEncContentSapMessageBuilder,
+                _fakeSapConfig,
+                _fakeLicenceUpdatedSapMessageBuilder);
         }
 
         [Test]
@@ -104,7 +104,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             var fakeEncEventJson = JObject.Parse(@"{""data"":{""correlationId"":""123""}}");
 
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(xmlDocument);
-            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                 .Returns(new HttpResponseMessage()
                 {
                     StatusCode = HttpStatusCode.OK
@@ -115,7 +115,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             A.CallTo(() => _fakeAzureTableReaderWriter.UpsertEntity(A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureTableReaderWriter.UpdateRequestTimeEntity(A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureBlobEventWriter.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened(2, Times.Exactly);
-            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, "Z_ADDS_MAT_INFO", A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, "Z_ADDS_MAT_INFO", A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
 
             result.StatusCode.Should().Be(200);
 
@@ -187,7 +187,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             var fakeEncEventJson = JObject.Parse(@"{""data"":{""correlationId"":""123""}}");
 
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(xmlDocument);
-            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                 .Returns(new HttpResponseMessage()
                 {
                     StatusCode = HttpStatusCode.Unauthorized
@@ -243,11 +243,11 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
                                                            _fakeLogger,
                                                            _fakeAzureTableReaderWriter,
                                                            _fakeAzureBlobEventWriter,
+                                                           _fakeAzureQueueHelper,
                                                            _fakeSapClient,
                                                            _fakeEncContentSapMessageBuilder,
                                                            null,
-                                                           _fakeLicenceUpdatedSapMessageBuilder,
-                                                           _fakeRecordOfSaleSapMessageBuilder))
+                                                           _fakeLicenceUpdatedSapMessageBuilder))
              .ParamName
              .Should().Be("sapConfig");
         }
@@ -285,19 +285,12 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         {
             var fakeRosEventJson = JObject.Parse(@"{""data"":{""correlationId"":""123""}}");
 
-            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
-                .Returns(new HttpResponseMessage()
-                {
-                    StatusCode = HttpStatusCode.OK
-                });
-
             var result = (OkObjectResult)await _fakeWebHookController.RecordOfSalePublishedEventReceived(fakeRosEventJson);
+            result.StatusCode.Should().Be(200);
 
             A.CallTo(() => _fakeAzureTableReaderWriter.UpsertRecordOfSaleEntity(A<string>.Ignored)).MustHaveHappenedOnceExactly();
-            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateRecordOfSaleEventStatus(A<string>.Ignored)).MustHaveHappenedOnceExactly();
-            A.CallTo(() => _fakeAzureBlobEventWriter.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedTwiceExactly();
-
-            result.StatusCode.Should().Be(200);
+            A.CallTo(() => _fakeAzureBlobEventWriter.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _fakeAzureQueueHelper.AddMessage(fakeRosEventJson)).MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
              && call.GetArgument<LogLevel>(0) == LogLevel.Information
@@ -315,24 +308,19 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
              && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Uploading the received Record of sale published event in blob storage.").MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-             && call.GetArgument<LogLevel>(0) == LogLevel.Information
-             && call.GetArgument<EventId>(1) == EventIds.UploadedRecordOfSalePublishedEventInAzureBlob.ToEventId()
-             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Record of sale published event is uploaded in blob storage successfully.").MustHaveHappenedOnceExactly();
+            && call.GetArgument<LogLevel>(0) == LogLevel.Information
+            && call.GetArgument<EventId>(1) == EventIds.UploadedRecordOfSalePublishedEventInAzureBlob.ToEventId()
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Record of sale published event is uploaded in blob storage successfully.").MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-                && call.GetArgument<LogLevel>(0) == LogLevel.Information
-                && call.GetArgument<EventId>(1) == EventIds.UploadRecordOfSaleSapXmlPayloadInAzureBlob.ToEventId()
-                && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Uploading the SAP xml payload for record of sale event in blob storage.").MustHaveHappenedOnceExactly();
+            && call.GetArgument<LogLevel>(0) == LogLevel.Information
+            && call.GetArgument<EventId>(1) == EventIds.AddMessageToAzureQueue.ToEventId()
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Adding the received Record of sale published event in queue storage.").MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-                && call.GetArgument<LogLevel>(0) == LogLevel.Information
-                && call.GetArgument<EventId>(1) == EventIds.UploadedRecordOfSaleSapXmlPayloadInAzureBlob.ToEventId()
-                && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "SAP xml payload for record of sale event is uploaded in blob storage successfully.").MustHaveHappenedOnceExactly();
-
-            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-                    && call.GetArgument<LogLevel>(0) == LogLevel.Information
-                  && call.GetArgument<EventId>(1) == EventIds.RecordOfSalePublishedEventDataPushedToSap.ToEventId()
-                  && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "The record of sale event data has been sent to SAP successfully. | {StatusCode}").MustHaveHappenedOnceExactly();
+            && call.GetArgument<LogLevel>(0) == LogLevel.Information
+            && call.GetArgument<EventId>(1) == EventIds.AddedMessageToAzureQueue.ToEventId()
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Record of sale published event is added in queue storage successfully.").MustHaveHappenedOnceExactly();
         }
 
         [Test]
@@ -345,8 +333,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             result.StatusCode.Should().Be(400);
 
             A.CallTo(() => _fakeAzureTableReaderWriter.UpsertRecordOfSaleEntity(A<string>.Ignored)).MustNotHaveHappened();
-            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateRecordOfSaleEventStatus(A<string>.Ignored)).MustNotHaveHappened();
             A.CallTo(() => _fakeAzureBlobEventWriter.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeAzureQueueHelper.AddMessage(fakeRosEventJson)).MustNotHaveHappened();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
              && call.GetArgument<LogLevel>(0) == LogLevel.Information
@@ -357,56 +345,6 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
              && call.GetArgument<LogLevel>(0) == LogLevel.Warning
              && call.GetArgument<EventId>(1) == EventIds.CorrelationIdMissingInRecordOfSaleEvent.ToEventId()
              && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "CorrelationId is missing in Record of Sale published event.").MustHaveHappenedOnceExactly();
-        }
-
-        [Test]
-        public void WhenSapDoesNotRespond200Ok_ThenRecordOfSaleWebhookReturns500InternalServerResponse()
-        {
-            XmlDocument xmlDocument = new();
-
-            var fakeRosEventJson = JObject.Parse(@"{""data"":{""correlationId"":""123""}}");
-
-            A.CallTo(() =>
-                    _fakeRecordOfSaleSapMessageBuilder.BuildRecordOfSaleSapMessageXml(
-                        A<RecordOfSaleEventPayLoad>.Ignored, A<string>.Ignored))
-                .Returns(xmlDocument);
-
-            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
-                .Returns(new HttpResponseMessage()
-                {
-                    StatusCode = HttpStatusCode.Unauthorized
-                });
-
-            Assert.ThrowsAsync<ERPFacadeException>(() => _fakeWebHookController.RecordOfSalePublishedEventReceived(fakeRosEventJson));
-
-            A.CallTo(() => _fakeAzureTableReaderWriter.UpsertRecordOfSaleEntity(A<string>.Ignored)).MustHaveHappened();
-            A.CallTo(() => _fakeAzureBlobEventWriter.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
-            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateRecordOfSaleEventStatus(A<string>.Ignored)).MustNotHaveHappened();
-
-            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-             && call.GetArgument<LogLevel>(0) == LogLevel.Information
-             && call.GetArgument<EventId>(1) == EventIds.RecordOfSalePublishedEventReceived.ToEventId()
-             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "ERP Facade webhook has received record of sale event from EES.").MustHaveHappenedOnceExactly();
-
-            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-             && call.GetArgument<LogLevel>(0) == LogLevel.Information
-             && call.GetArgument<EventId>(1) == EventIds.StoreRecordOfSalePublishedEventInAzureTable.ToEventId()
-             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Storing the received Record of sale published event in azure table.").MustHaveHappenedOnceExactly();
-
-            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-             && call.GetArgument<LogLevel>(0) == LogLevel.Information
-             && call.GetArgument<EventId>(1) == EventIds.UploadRecordOfSalePublishedEventInAzureBlob.ToEventId()
-             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Uploading the received Record of sale published event in blob storage.").MustHaveHappenedOnceExactly();
-
-            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-             && call.GetArgument<LogLevel>(0) == LogLevel.Information
-             && call.GetArgument<EventId>(1) == EventIds.UploadedRecordOfSalePublishedEventInAzureBlob.ToEventId()
-             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Record of sale published event is uploaded in blob storage successfully.").MustHaveHappenedOnceExactly();
-
-            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-            && call.GetArgument<LogLevel>(0) == LogLevel.Error
-            && call.GetArgument<EventId>(1) == EventIds.ErrorOccurredInSapForRecordOfSalePublishedEvent.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "An error occurred while sending record of sale event data to SAP. | {StatusCode}").MustHaveHappenedOnceExactly();
         }
 
         [Test]
@@ -442,7 +380,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         {
             var fakeLicenceUpdatedEventJson = JObject.Parse(@"{""data"":{""correlationId"":""123""}}");
 
-            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                 .Returns(new HttpResponseMessage()
                 {
                     StatusCode = HttpStatusCode.OK
@@ -528,7 +466,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
                         A<LicenceUpdatedEventPayLoad>.Ignored, A<string>.Ignored))
                 .Returns(xmlDocument);
 
-            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                 .Returns(new HttpResponseMessage()
                 {
                     StatusCode = HttpStatusCode.Unauthorized

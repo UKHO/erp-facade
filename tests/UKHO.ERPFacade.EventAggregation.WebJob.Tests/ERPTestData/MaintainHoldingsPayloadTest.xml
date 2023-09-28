@@ -17,11 +17,11 @@
   <ECDISMANUF></ECDISMANUF>
   <LTYPE></LTYPE>
   <LICDUR></LICDUR>
-  <PO>75277T-Bengang</PO>
+  <PO>75277T</PO>
   <ADSORDNO>XXL005599004</ADSORDNO>
   <PROD>
     <item>
-      <ID>AU221060</ID>
+      <ID>PT111101</ID>
       <ENDDA>2023-10-31</ENDDA>
       <DURATION>3</DURATION>
       <RENEW>N</RENEW>
@@ -29,6 +29,20 @@
     </item>
     <item>
       <ID>GB302409</ID>
+      <ENDDA>2023-12-01</ENDDA>
+      <DURATION>6</DURATION>
+      <RENEW>E</RENEW>
+      <REPEAT>P</REPEAT>
+    </item>
+    <item>
+      <ID>PT111102</ID>
+      <ENDDA>2023-10-31</ENDDA>
+      <DURATION>3</DURATION>
+      <RENEW>N</RENEW>
+      <REPEAT>P</REPEAT>
+    </item>
+    <item>
+      <ID>GB302408</ID>
       <ENDDA>2023-12-01</ENDDA>
       <DURATION>6</DURATION>
       <RENEW>E</RENEW>

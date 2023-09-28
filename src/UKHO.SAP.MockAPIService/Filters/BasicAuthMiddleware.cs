@@ -77,18 +77,18 @@ namespace UKHO.SAP.MockAPIService.Filters
 
         private bool IsUserAuthenticated(string username, string password, string contextReqPath)
         {
-            string SapEndpointBaseAddressForEncEvent = _sapConfiguration.Value.SapEndpointBaseAddressForEncEvent;
-            string splitSapEndpointBaseAddressForEncEvent = SapEndpointBaseAddressForEncEvent.Substring(SapEndpointBaseAddressForEncEvent.LastIndexOf("/", StringComparison.Ordinal));
+            string sapEndpointForEncEvent = _sapConfiguration.Value.SapEndpointForEncEvent;
+            string splitSapEndpointForEncEvent = sapEndpointForEncEvent.Substring(sapEndpointForEncEvent.LastIndexOf("/", StringComparison.Ordinal));
 
-            string sapEndpointBaseAddressForRecordOfSale = _sapConfiguration.Value.SapEndpointBaseAddressForRecordOfSale;
-            string splitSapEndpointBaseAddressForRecordOfSale = sapEndpointBaseAddressForRecordOfSale.Substring(sapEndpointBaseAddressForRecordOfSale.LastIndexOf("/", StringComparison.Ordinal));
+            string sapEndpointForRecordOfSale = _sapConfiguration.Value.SapEndpointForRecordOfSale;
+            string splitSapEndpointForRecordOfSale = sapEndpointForRecordOfSale.Substring(sapEndpointForRecordOfSale.LastIndexOf("/", StringComparison.Ordinal));
 
-            if (contextReqPath == splitSapEndpointBaseAddressForEncEvent)
+            if (contextReqPath == splitSapEndpointForEncEvent)
             {
                 return username == _sapConfiguration.Value.SapUsernameForEncEvent && password == _sapConfiguration.Value.SapPasswordForEncEvent;
             }
 
-            if (contextReqPath == splitSapEndpointBaseAddressForRecordOfSale)
+            if (contextReqPath == splitSapEndpointForRecordOfSale)
             {
                 return username == _sapConfiguration.Value.SapUsernameForRecordOfSale && password == _sapConfiguration.Value.SapPasswordForRecordOfSale;
             }

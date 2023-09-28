@@ -243,4 +243,10 @@
    ]]></notes>
    <cve>CVE-2023-29326</cve>
 </suppress>
+  <suppress>
+    <notes><![CDATA[
+   file name: Microsoft.Azure.WebJobs.dll
+   ]]></notes>
+    <cve>CVE-2022-29149</cve>
+  </suppress>
 </suppressions>

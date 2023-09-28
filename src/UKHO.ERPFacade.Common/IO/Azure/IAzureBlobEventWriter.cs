@@ -15,5 +15,7 @@
         bool DeleteBlob(string blobName, string blobContainerName);
 
         bool DeleteContainer(string blobContainerName);
+
+        List<string> GetBlobNamesInFolder(string blobContainerName, string corrId);
     }
 }

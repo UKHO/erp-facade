@@ -83,7 +83,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
 
             var existingEntity = await GetRecordOfSaleEntity(correlationId, LicenceUpdateTableName);
 
-            if (existingEntity == null)
+            if (existingEntity == null!)
             {
                 RecordOfSaleEventEntity licenceUpdatedEventsEntity = new()
                 {
@@ -121,33 +121,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             }
             return records.FirstOrDefault();
         }
-
-        public async Task<RecordOfSaleEventEntity> GetRecordOfSaleEventEntity(string correlationId)
-        {
-            IList<RecordOfSaleEventEntity> records = new List<RecordOfSaleEventEntity>();
-            TableClient tableClient = GetTableClient(RecordOfSaleTableName);
-            var entities = tableClient.QueryAsync<RecordOfSaleEventEntity>(filter: TableClient.CreateQueryFilter($"CorrelationId eq {correlationId}"), maxPerPage: 1);
-            await foreach (var entity in entities)
-            {
-                records.Add(entity);
-            }
-            return records.FirstOrDefault();
-        }
-
-        public async Task<RecordOfSaleEventEntity> GetRecordOfSaleLicenceEventEntity(string correlationId)
-        {
-            IList<RecordOfSaleEventEntity> records = new List<RecordOfSaleEventEntity>();
-            TableClient tableClient = GetTableClient(LicenceUpdateTableName);
-            var entities = tableClient.QueryAsync<RecordOfSaleEventEntity>(filter: TableClient.CreateQueryFilter($"CorrelationId eq {correlationId}"), maxPerPage: 1);
-            await foreach (var entity in entities)
-            {
-                records.Add(entity);
-            }
-            return records.FirstOrDefault();
-        }
-
-
-
+ 
         public async Task UpdateRequestTimeEntity(string correlationId)
         {
             TableClient tableClient = GetTableClient(ErpFacadeTableName);
@@ -407,9 +381,9 @@ namespace UKHO.ERPFacade.Common.IO.Azure
         public async Task UpdateRecordOfSaleEventStatus(string correlationId)
         {
             TableClient tableClient = GetTableClient(RecordOfSaleTableName);
-            RecordOfSaleEventEntity existingEntity = await GetRecordOfSaleEventEntity(correlationId);
+            RecordOfSaleEventEntity existingEntity = await GetRecordOfSaleEntity(correlationId, RecordOfSaleTableName);
 
-            if (existingEntity != null)
+            if (existingEntity != null!)
             {
                 existingEntity.Status = Statuses.Complete.ToString();
                 await tableClient.UpdateEntityAsync(existingEntity, ETag.All, TableUpdateMode.Replace);
@@ -421,9 +395,9 @@ namespace UKHO.ERPFacade.Common.IO.Azure
         public async Task UpdateLicenceUpdatedEventStatus(string correlationId)
         {
             TableClient tableClient = GetTableClient(LicenceUpdateTableName);
-            RecordOfSaleEventEntity existingEntity = await GetRecordOfSaleLicenceEventEntity(correlationId);
+            RecordOfSaleEventEntity existingEntity = await GetRecordOfSaleEntity(correlationId, LicenceUpdateTableName);
 
-            if (existingEntity != null)
+            if (existingEntity != null!)
             {
                 existingEntity.Status = Statuses.Complete.ToString();
                 await tableClient.UpdateEntityAsync(existingEntity, ETag.All, TableUpdateMode.Replace);
@@ -432,6 +406,21 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             }
         }
 
+        public string GetEntityStatus(string correlationId)
+        {
+            string status = string.Empty;
+            ;
+            TableClient tableClient = GetTableClient(RecordOfSaleTableName);
+
+            var entities = tableClient.Query<RecordOfSaleEventEntity>(filter: TableClient.CreateQueryFilter($"CorrelationId eq {correlationId}"), maxPerPage: 1);
+ 
+            foreach (var entity in entities)
+            {
+                status = entity.Status;
+            }
+
+            return status;
+        }
 
         //Private Methods
         private TableClient GetTableClient(string tableName)

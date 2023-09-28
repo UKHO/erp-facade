@@ -1,0 +1,50 @@
+{
+    "specversion": "1.0",
+    "type": "uk.gov.ukho.shop.recordOfSale.v1",
+    "source": "https://uk.gov.ukho.shop",
+    "id": "eb551d51-aae1-4c9f-bbba-ba67b54a6c0d",
+    "time": "2023-09-26",
+    "subject": "releasability set changes holdings Record of Sale",
+    "datacontenttype": "application/json",
+    "data": {
+        "correlationId": "ft-20230926-b2f08-be11e-8d42-d48d951",
+        "relatedEvents": [ "eb551d51-aae1-4c9f-bbba-ba67b54a6c0d", "43da9b36-4768-45d5-be88-7cdba1c32ea7" ],
+        "recordsOfSale": {
+            "licenseId": "",
+            "productType": "AVCS",
+            "transactionType": "MAINTAINHOLDINGS",
+            "distributorCustomerNumber": "",
+            "shippingCoNumber": "",
+            "ordernumber": "5432796",
+            "orderDate": "",
+            "po-ref": "75277T-Bengang",
+            "holdingsExpiryDate": "",
+            "sapId": "75277T",
+            "vesselName": "",
+            "imoNumber": "",
+            "callSign": "",
+            "licenceType": "",
+            "shoreBased": "",
+            "fleetName": "",
+            "numberLicenceUsers": 0,
+            "upn": "",
+            "licenceDuration": 12,
+            "unitsOfSale": [
+                {
+                    "unitName": "FR679201",
+                    "endDate": "2023-01-30 00:00:00.000",
+                    "duration": "9",
+                    "renew": "Y",
+                    "repeat": "P"
+                },
+                {
+                    "unitName": "FR679202",
+                    "endDate": "2023-01-30 00:00:00.000",
+                    "duration": "9",
+                    "renew": "Y",
+                    "repeat": "P"
+                }
+            ]
+        }
+    }
+}

@@ -23,38 +23,39 @@ namespace UKHO.ERPFacade.API.Controllers
         private readonly ILogger<WebhookController> _logger;
         private readonly IAzureTableReaderWriter _azureTableReaderWriter;
         private readonly IAzureBlobEventWriter _azureBlobEventWriter;
+        private readonly IAzureQueueHelper _azureQueueHelper;
         private readonly ISapClient _sapClient;
         private readonly IEncContentSapMessageBuilder _encContentSapMessageBuilder;
         private readonly IOptions<SapConfiguration> _sapConfig;
         private readonly ILicenceUpdatedSapMessageBuilder _licenceUpdatedSapMessageBuilder;
-        private readonly IRecordOfSaleSapMessageBuilder _recordOfSaleSapMessageBuilder;
 
+        private const string EventIdKey = "id";
         private const string CorrelationIdKey = "data.correlationId";
         private const string EncEventFileName = "EncPublishingEvent.json";
         private const string SapXmlPayloadFileName = "SapXmlPayload.xml";
         private const string LicenceUpdatedContainerName = "licenceupdatedblobs";
         private const string LicenceUpdatedEventFileName = "LicenceUpdatedEvent.json";
         private const string RecordOfSaleContainerName = "recordofsaleblobs";
-        private const string RecordOfSaleEventFileName = "RecordOfSaleEvent.json";
+        private const string JsonFileType = ".json";
 
         public WebhookController(IHttpContextAccessor contextAccessor,
                                  ILogger<WebhookController> logger,
                                  IAzureTableReaderWriter azureTableReaderWriter,
                                  IAzureBlobEventWriter azureBlobEventWriter,
+                                 IAzureQueueHelper azureQueueHelper,
                                  ISapClient sapClient,
                                  IEncContentSapMessageBuilder encContentSapMessageBuilder,
                                  IOptions<SapConfiguration> sapConfig,
-                                 ILicenceUpdatedSapMessageBuilder licenceUpdatedSapMessageBuilder,
-                                 IRecordOfSaleSapMessageBuilder recordOfSaleSapMessageBuilder)
+                                 ILicenceUpdatedSapMessageBuilder licenceUpdatedSapMessageBuilder)
         : base(contextAccessor)
         {
             _logger = logger;
             _azureTableReaderWriter = azureTableReaderWriter;
             _azureBlobEventWriter = azureBlobEventWriter;
+            _azureQueueHelper = azureQueueHelper;
             _sapClient = sapClient;
             _encContentSapMessageBuilder = encContentSapMessageBuilder;
             _licenceUpdatedSapMessageBuilder = licenceUpdatedSapMessageBuilder;
-            _recordOfSaleSapMessageBuilder = recordOfSaleSapMessageBuilder;
             _sapConfig = sapConfig ?? throw new ArgumentNullException(nameof(sapConfig));
         }
 
@@ -103,7 +104,7 @@ namespace UKHO.ERPFacade.API.Controllers
             await _azureBlobEventWriter.UploadEvent(sapPayload.ToIndentedString(), correlationId, SapXmlPayloadFileName);
             _logger.LogInformation(EventIds.UploadSapXmlPayloadInAzureBlobCompleted.ToEventId(), "SAP xml payload is uploaded in blob storage successfully.");
 
-            HttpResponseMessage response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapServiceOperationForEncEvent, _sapConfig.Value.SapUsernameForEncEvent, _sapConfig.Value.SapPasswordForEncEvent);
+            HttpResponseMessage response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapEndpointForEncEvent, _sapConfig.Value.SapServiceOperationForEncEvent, _sapConfig.Value.SapUsernameForEncEvent, _sapConfig.Value.SapPasswordForEncEvent);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -142,6 +143,7 @@ namespace UKHO.ERPFacade.API.Controllers
             _logger.LogInformation(EventIds.RecordOfSalePublishedEventReceived.ToEventId(), "ERP Facade webhook has received record of sale event from EES.");
 
             string correlationId = recordOfSaleEventJson.SelectToken(CorrelationIdKey)?.Value<string>();
+            string eventId = recordOfSaleEventJson.SelectToken(EventIdKey)?.Value<string>();
 
             if (string.IsNullOrEmpty(correlationId))
             {
@@ -153,26 +155,12 @@ namespace UKHO.ERPFacade.API.Controllers
             await _azureTableReaderWriter.UpsertRecordOfSaleEntity(correlationId);
 
             _logger.LogInformation(EventIds.UploadRecordOfSalePublishedEventInAzureBlob.ToEventId(), "Uploading the received Record of sale published event in blob storage.");
-            await _azureBlobEventWriter.UploadEvent(recordOfSaleEventJson.ToString(), RecordOfSaleContainerName, correlationId + '/' + RecordOfSaleEventFileName);
+            await _azureBlobEventWriter.UploadEvent(recordOfSaleEventJson.ToString(), RecordOfSaleContainerName, correlationId + '/' + eventId + JsonFileType);
             _logger.LogInformation(EventIds.UploadedRecordOfSalePublishedEventInAzureBlob.ToEventId(), "Record of sale published event is uploaded in blob storage successfully.");
 
-            XmlDocument sapPayload = _recordOfSaleSapMessageBuilder.BuildRecordOfSaleSapMessageXml(JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(recordOfSaleEventJson.ToString()), correlationId);
-
-            _logger.LogInformation(EventIds.UploadRecordOfSaleSapXmlPayloadInAzureBlob.ToEventId(), "Uploading the SAP xml payload for record of sale event in blob storage.");
-            await _azureBlobEventWriter.UploadEvent(sapPayload.ToIndentedString(), RecordOfSaleContainerName, correlationId + '/' + SapXmlPayloadFileName);
-            _logger.LogInformation(EventIds.UploadedRecordOfSaleSapXmlPayloadInAzureBlob.ToEventId(), "SAP xml payload for record of sale event is uploaded in blob storage successfully.");
-
-            HttpResponseMessage response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapServiceOperationForRecordOfSale, _sapConfig.Value.SapUsernameForRecordOfSale, _sapConfig.Value.SapPasswordForRecordOfSale);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                _logger.LogError(EventIds.ErrorOccurredInSapForRecordOfSalePublishedEvent.ToEventId(), "An error occurred while sending record of sale event data to SAP. | {StatusCode}", response.StatusCode);
-                throw new ERPFacadeException(EventIds.ErrorOccurredInSapForRecordOfSalePublishedEvent.ToEventId());
-            }
-
-            _logger.LogInformation(EventIds.RecordOfSalePublishedEventDataPushedToSap.ToEventId(), "The record of sale event data has been sent to SAP successfully. | {StatusCode}", response.StatusCode);
-
-            await _azureTableReaderWriter.UpdateRecordOfSaleEventStatus(correlationId);
+            _logger.LogInformation(EventIds.AddMessageToAzureQueue.ToEventId(), "Adding the received Record of sale published event in queue storage.");
+            await _azureQueueHelper.AddMessage(recordOfSaleEventJson);
+            _logger.LogInformation(EventIds.AddedMessageToAzureQueue.ToEventId(), "Record of sale published event is added in queue storage successfully.");
 
             return new OkObjectResult(StatusCodes.Status200OK);
         }
@@ -222,7 +210,7 @@ namespace UKHO.ERPFacade.API.Controllers
             await _azureBlobEventWriter.UploadEvent(sapPayload.ToIndentedString(), LicenceUpdatedContainerName, correlationId + '/' + SapXmlPayloadFileName);
             _logger.LogInformation(EventIds.UploadedLicenceUpdatedSapXmlPayloadInAzureBlob.ToEventId(), "SAP xml payload for licence updated event is uploaded in blob storage successfully.");
 
-            HttpResponseMessage response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapServiceOperationForRecordOfSale, _sapConfig.Value.SapUsernameForRecordOfSale, _sapConfig.Value.SapPasswordForRecordOfSale);
+            HttpResponseMessage response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapEndpointForRecordOfSale, _sapConfig.Value.SapServiceOperationForRecordOfSale, _sapConfig.Value.SapUsernameForRecordOfSale, _sapConfig.Value.SapPasswordForRecordOfSale);
 
             if (!response.IsSuccessStatusCode)
             {

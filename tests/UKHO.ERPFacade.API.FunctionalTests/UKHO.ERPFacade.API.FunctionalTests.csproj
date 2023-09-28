@@ -170,6 +170,12 @@
     <None Update="ERPFacadePayloadTestData\ID32_moveAndSuspended.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ERPFacadePayloadTestData\RoSPayloadTestData\RoS13_ValidLastPayloadForMerging.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\RoSPayloadTestData\RoS13_ValidFirstPayloadForMerging.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ERPFacadePayloadTestData\RoSPayloadTestData\RoS12_UnSupportedPayloadType.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

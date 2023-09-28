@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using RestSharp;
 using System.Net;
 using UKHO.ERPFacade.API.FunctionalTests.Configuration;
@@ -12,17 +11,16 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
     {
         private readonly RestClient _client;
         private readonly AzureBlobStorageHelper _azureBlobStorageHelper;
-        private readonly RestClientOptions _options;
 
         private const string RoSWebhookRequestEndPoint = "/webhook/recordofsalepublishedeventreceived";
-
         public static string generatedCorrelationId = string.Empty;
 
         public RoSWebhookEndpoint()
         {
-            _azureBlobStorageHelper = new();
-            _options = new(Config.TestConfig.ErpFacadeConfiguration.BaseUrl);
-            _client = new(_options);
+            RestClientOptions options = new(Config.TestConfig.ErpFacadeConfiguration.BaseUrl);
+
+            _client = new RestClient(options);
+            _azureBlobStorageHelper = new AzureBlobStorageHelper();
         }
 
         public async Task<RestResponse> OptionRosWebhookResponseAsync(string token)
@@ -60,63 +58,88 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             return response;
         }
 
-        public async Task<RestResponse> PostWebhookResponseAsync(string scenarioName, string payloadFilePath, string token)
+        public async Task<RestResponse> PostWebhookResponseAsyncForXML(string correlationId, string payloadFilePath, bool isFirstEvent, bool isLastEvent, string generatedXmlFolder, List<JsonInputRoSWebhookEvent> listOfEventJsons, string token)
         {
             string requestBody;
 
-            using (StreamReader streamReader = new StreamReader(payloadFilePath))
+            using (StreamReader streamReader = new(payloadFilePath))
             {
-                requestBody = streamReader.ReadToEnd();
+                requestBody = await streamReader.ReadToEndAsync();
             }
 
-            if (scenarioName == "Bad Request")
-            {
-                var request = new RestRequest(RoSWebhookRequestEndPoint, Method.Post);
-                request.AddHeader("Content-Type", "application/json");
-                request.AddHeader("Authorization", "Bearer " + token);
-                request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
-                RestResponse response = await _client.ExecuteAsync(request);
-                return response;
+            requestBody = SAPXmlHelper.UpdateTimeAndCorrIdField(requestBody, correlationId);
 
-            }
-            else if (scenarioName == "Unsupported Media Type")
-            {
-                var request = new RestRequest(RoSWebhookRequestEndPoint, Method.Post);
-                request.AddHeader("Content-Type", "application/xml");
-                request.AddHeader("Authorization", "Bearer " + token);
-                request.AddParameter("application/xml", requestBody, ParameterType.RequestBody);
-                RestResponse response = await _client.ExecuteAsync(request);
-                return response;
-            }
-            else
-            {
-                Console.WriteLine("Scenario Not Mentioned");
-                return null;
-            }
-        }
-
-        public async Task<RestResponse> PostRoSWebhookResponseAsyncForXML(string filePath, string generatedXmlFolder, string token)
-        {
-            string requestBody;
-
-            using (StreamReader streamReader = new(filePath))
-            {
-                requestBody = streamReader.ReadToEnd();
-            }
-            generatedCorrelationId = SAPXmlHelper.GenerateRandomCorrelationId();
-            requestBody = SAPXmlHelper.UpdateTimeAndCorrIdField(requestBody, generatedCorrelationId);
             var request = new RestRequest(RoSWebhookRequestEndPoint, Method.Post);
             request.AddHeader("Content-Type", "application/json");
             request.AddHeader("Authorization", "Bearer " + token);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
             RestResponse response = await _client.ExecuteAsync(request);
-            JsonInputRoSWebhookEvent jsonPayload = JsonConvert.DeserializeObject<JsonInputRoSWebhookEvent>(requestBody);
-            string generatedXmlFilePath = _azureBlobStorageHelper.DownloadGeneratedXMLFile(generatedXmlFolder, generatedCorrelationId, "recordofsaleblobs");
-            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+
+            if (response.StatusCode != HttpStatusCode.OK)
             {
-                Assert.That(RoSXmlHelper.CheckXmlAttributes(jsonPayload, generatedXmlFilePath, requestBody).Result, Is.True, "CheckXMLAttributes Failed");
+                return response;
+            }
+
+            if (isFirstEvent)
+            {
+                bool isBlobCreated = _azureBlobStorageHelper.VerifyBlobExists("recordofsaleblobs", correlationId);
+                Assert.That(isBlobCreated, Is.True, $"Blob for {correlationId} not created");
+            }
+
+            //If it is a last event, then wait for 30 seconds for webjob to complete its execution.
+            Thread.Sleep(30000);
+
+            List<string> blobList = _azureBlobStorageHelper.GetBlobNamesInFolder("recordofsaleblobs", correlationId);
+
+            switch (isLastEvent)
+            {
+                case true:
+                    Assert.That(blobList, Does.Contain("SapXmlPayload"), $"XML is not generated for {correlationId} at {DateTime.Now}.");
+                    string generatedXmlFilePath = _azureBlobStorageHelper.DownloadGeneratedXMLFile(generatedXmlFolder, correlationId, "recordofsaleblobs");
+                    Assert.That(RoSXmlHelper.CheckXmlAttributes(generatedXmlFilePath, requestBody, listOfEventJsons).Result, Is.True, "CheckXMLAttributes Failed");
+                    Assert.That(AzureTableHelper.GetSapStatus(correlationId), Is.EqualTo("Complete"), $"SAP status is Incomplete for {correlationId}");
+                    break;
+                case false:
+                    Assert.That(blobList, Does.Not.Contain("SapXmlPayload"), $"XML is generated for {correlationId} before we receive all related events.");
+                    Assert.That(AzureTableHelper.GetSapStatus(correlationId), Is.EqualTo("Incomplete"), $"SAP status is Complete for {correlationId}");
+                    break;
             }
             return response;
+        }
+
+        public async Task<RestResponse> PostWebhookResponseAsync(string scenarioName, string payloadFilePath, string token)
+        {
+            string requestBody;
+
+            using (StreamReader streamReader = new(payloadFilePath))
+            {
+                requestBody = await streamReader.ReadToEndAsync();
+            }
+
+            switch (scenarioName)
+            {
+                case "Bad Request":
+                    {
+                        var request = new RestRequest(RoSWebhookRequestEndPoint, Method.Post);
+                        request.AddHeader("Content-Type", "application/json");
+                        request.AddHeader("Authorization", "Bearer " + token);
+                        request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
+                        RestResponse response = await _client.ExecuteAsync(request);
+                        return response;
+                    }
+                case "Unsupported Media Type":
+                    {
+                        var request = new RestRequest(RoSWebhookRequestEndPoint, Method.Post);
+                        request.AddHeader("Content-Type", "application/xml");
+                        request.AddHeader("Authorization", "Bearer " + token);
+                        request.AddParameter("application/xml", requestBody, ParameterType.RequestBody);
+                        RestResponse response = await _client.ExecuteAsync(request);
+                        return response;
+                    }
+                default:
+                    Console.WriteLine("Scenario Not Mentioned");
+                    return null;
+            }
         }
     }
 }
