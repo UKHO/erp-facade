@@ -48,6 +48,8 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Services
 
             try
             {
+                _logger.LogInformation(EventIds.MessageDequeueCount.ToEventId(), "Dequeue Count : {DequeueCount} | _X-Correlation-ID : {_X-Correlation-ID} | EventID : {EventID}", queueMessage.DequeueCount.ToString(), message.CorrelationId, message.EventId);
+
                 string status = _azureTableReaderWriter.GetEntityStatus(message.CorrelationId);
 
                 if (status == IncompleteStatus)
