@@ -89,20 +89,18 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
                 Assert.That(isBlobCreated, Is.True, $"Blob for {correlationId} not created");
             }
 
-            DateTime startTime = DateTime.UtcNow;
-
-            //10minutes polling after every 30 seconds to check if xml payload is generated during webjob execution.
             blobList = _azureBlobStorageHelper.GetBlobNamesInFolder(recordOfSalesContainerName, correlationId);
-
-            while (!blobList.Contains("SapXmlPayload") && DateTime.UtcNow - startTime < TimeSpan.FromMinutes(10))
-            {
-                blobList = _azureBlobStorageHelper.GetBlobNamesInFolder(recordOfSalesContainerName, correlationId);
-                await Task.Delay(30000);
-            }
 
             switch (isLastEvent)
             {
                 case true:
+                    DateTime startTime = DateTime.UtcNow;
+                    //10minutes polling after every 30 seconds to check if xml payload is generated during webjob execution.
+                    while (!blobList.Contains("SapXmlPayload") && DateTime.UtcNow - startTime < TimeSpan.FromMinutes(10))
+                    {
+                        blobList = _azureBlobStorageHelper.GetBlobNamesInFolder(recordOfSalesContainerName, correlationId);
+                        await Task.Delay(30000);
+                    }
                     Assert.That(blobList, Does.Contain("SapXmlPayload"), $"XML is not generated for {correlationId} at {DateTime.Now}.");
                     string generatedXmlFilePath = _azureBlobStorageHelper.DownloadGeneratedXMLFile(generatedXmlFolder, correlationId, "recordofsaleblobs");
                     Assert.That(RoSXmlHelper.CheckXmlAttributes(generatedXmlFilePath, requestBody, listOfEventJsons).Result, Is.True, "CheckXMLAttributes Failed");
