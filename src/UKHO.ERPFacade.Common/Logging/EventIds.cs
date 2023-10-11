@@ -696,7 +696,12 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940139 - Exception occured while processing Event aggregation WebJob.
         /// </summary>
-        UnhandledWebJobException = 940139
+        UnhandledWebJobException = 940139,
+
+        /// <summary>
+        /// 940140 - Dequeue count of message.
+        /// </summary>
+        MessageDequeueCount = 140
     }
 
     /// <summary>
