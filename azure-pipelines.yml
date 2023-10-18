@@ -9,7 +9,7 @@ parameters:
   - name: vNext
     displayName: "Run the vNext Path"
     type: boolean
-    default: false
+    default: true
 
 trigger:
   - main
@@ -70,7 +70,7 @@ stages:
     dependsOn:
     - QADeploy
     - E2EDeplot
-    condition: or(succeeded('QADeploy'), and(eq('${{ parameters.vNext }}', true), succeeded('E2EDeploy'))
+    condition: or(succeeded('QADeploy'), and(eq('${{ parameters.vNext }}', true), succeeded('E2EDeploy')))
     jobs:
       - job:
         steps:
