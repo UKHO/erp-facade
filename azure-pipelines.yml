@@ -36,6 +36,12 @@ variables:
     value: "Private Link Deployments (ENG)"
     
 stages:
+  - stage: Coverity
+    jobs: 
+      - job: 
+        steps: 
+          - script: echo Coverity scanner
+
   - stage: DevDeploy
     jobs:
       - job:
