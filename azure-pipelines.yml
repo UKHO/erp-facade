@@ -44,7 +44,7 @@ stages:
     
   - stage: QADeploy
     dependsOn: DevDeploy
-    condition: and(succeeded(), eq(parameters.vNext, false))
+    condition: and(succeeded(), eq('${{ parameters.vNext }}', false))
     jobs:
       - job:
         steps:
@@ -52,7 +52,7 @@ stages:
     
   - stage: IATDeploy
     dependsOn: DevDeploy
-    condition: and(succeeded(), eq(parameters.vNext, true))
+    condition: and(succeeded(), eq('${{ parameters.vNext }}', true))
     jobs:
       - job:
         steps:
@@ -60,7 +60,7 @@ stages:
     
   - stage: E2EDeplot
     dependsOn: IATDeploy
-    condition: eq(parameters.vNext, true))
+    condition: eq('${{ parameters.vNext }}', true))
     jobs:
       - job:
         steps:
@@ -70,7 +70,7 @@ stages:
     dependsOn:
     - QADeploy
     - E2EDeplot
-    condition: or(succeeded('QADeploy'), and(eq(parameters.vNext, true), succeeded('E2EDeploy'))
+    condition: or(succeeded('QADeploy'), and(eq('${{ parameters.vNext }}', true), succeeded('E2EDeploy'))
     jobs:
       - job:
         steps:
