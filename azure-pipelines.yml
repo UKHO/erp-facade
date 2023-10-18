@@ -60,7 +60,7 @@ stages:
     
   - stage: E2EDeplot
     dependsOn: IATDeploy
-    condition: eq('${{ parameters.vNext }}', true))
+    condition: eq('${{ parameters.vNext }}', true)
     jobs:
       - job:
         steps:
