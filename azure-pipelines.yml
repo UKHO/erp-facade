@@ -39,21 +39,33 @@ stages:
   - stage: DevDeploy
     condition: []
     jobs:
+      - job:
+        steps:
+        - script: echo Dev deployed
     
   - stage: QADeploy
     dependsOn: DevDeploy
     condition: and(succeeded(), eq(parameters.vNext, false))
     jobs:
+      - job:
+        steps:
+        - script: echo QA deployed
     
   - stage: IATDeploy
     dependsOn: DevDeploy
     condition: and(succeeded(), eq(parameters.vNext, true))
     jobs:
+      - job:
+        steps:
+        - script: echo IAT deployed
     
   - stage: E2EDeplot
     dependsOn: IATDeploy
     condition: eq(parameters.vNext, true))
     jobs:
+      - job:
+        steps:
+        - script: echo E2E deployed
     
   - stage: Live
     dependsOn:
@@ -61,3 +73,7 @@ stages:
     - E2EDeplot
     condition: or(succeeded('QADeploy'), and(eq(parameters.vNext, true), succeeded('E2EDeploy'))
     jobs:
+      - job:
+        steps:
+        - script: echo Live deployed
+    
