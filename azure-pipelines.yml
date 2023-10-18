@@ -58,7 +58,7 @@ stages:
         steps:
         - script: echo IAT deployed
     
-  - stage: E2EDeplot
+  - stage: E2EDeploy
     dependsOn: IATDeploy
     condition: and(succeeded(), eq('${{ parameters.vNext }}', true))
     jobs:
