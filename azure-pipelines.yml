@@ -466,7 +466,6 @@ stages:
 
   - stage: QAdeploy
     dependsOn: Devdeploy
-    condition: and(succeeded('DevDeploy'), eq(variables.vNext, false))
     displayName: "QAdeploy (inc terraform, webapp deploy)"
     variables:
       - group: "ERP-Facade-QA"
@@ -494,7 +493,7 @@ stages:
         value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
       - name: "SapMockConfiguration.BaseUrl"
         value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
-    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
+    condition: and(succeeded(), eq(variables.vNext, false), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
     jobs:
       - deployment: QADeployTerraform
         displayName: "Qa - Deploy Terraform"
