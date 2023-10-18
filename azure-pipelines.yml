@@ -547,16 +547,11 @@ stages:
         steps:
           - template: Deployment/templates/continuous-testing.yml
             parameters:
-              AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
-              
--   stage: IATDeploy
-    dependsOn: Devdeploy
-    condition: and(succeeded('DevDeploy'), eq(variables.vNext, true))
-    displayName: "IATDeploy (inc terraform, webapp deploy)"           
+              AzureSubscription: "ERP-Facade-Dev-A.011.05.12"              -    
 
     stage: E2EDeploy
-    dependsOn: IATDeploy
-    condition: and(succeeded('IATDeploy'), eq(variables.vNext, true))
+    dependsOn: Devdeploy
+    condition: and(succeeded(), eq(variables.vNext, true))
     displayName: "IATDeploy (inc terraform, webapp deploy)"
 
   - stage: Livedeploy
