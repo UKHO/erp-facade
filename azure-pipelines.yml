@@ -69,7 +69,7 @@ stages:
   - stage: Live
     dependsOn:
     - QADeploy
-    - E2EDeplot
+    - E2EDeploy
     condition: or(succeeded('QADeploy'), and(eq('${{ parameters.vNext }}', true), succeeded('E2EDeploy')))
     jobs:
       - job:
