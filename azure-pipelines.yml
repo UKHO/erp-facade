@@ -34,25 +34,30 @@ variables:
     value: "Tiberius"
   - name: DeploymentPoolPE
     value: "Private Link Deployments (ENG)"
-
-stages:
-    stage: DevDeploy
-    condition: []
     
-    stage: QADeploy
+stages:
+  - stage: DevDeploy
+    condition: []
+    jobs:
+    
+  - stage: QADeploy
     dependsOn: DevDeploy
     condition: and(succeeded(), eq(parameters.vNext, false))
+    jobs:
     
-    stage: IATDeploy
+  - stage: IATDeploy
     dependsOn: DevDeploy
     condition: and(succeeded(), eq(parameters.vNext, true))
+    jobs:
     
-    stage: E2EDeplot
+  - stage: E2EDeplot
     dependsOn: IATDeploy
     condition: eq(parameters.vNext, true))
+    jobs:
     
-    stage: Live
+  - stage: Live
     dependsOn:
-        QADeploy
-        E2EDeplot
+    - QADeploy
+    - E2EDeplot
     condition: or(succeeded('QADeploy'), and(eq(parameters.vNext, true), succeeded('E2EDeploy'))
+    jobs:
