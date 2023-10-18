@@ -43,6 +43,7 @@ stages:
           - script: echo Coverity scanner
 
   - stage: DevDeploy
+    dependsOn: []
     jobs:
       - job:
         steps:
