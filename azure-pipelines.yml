@@ -570,7 +570,7 @@ stages:
     dependsOn: 
       - QADeploy
       - E2EDeploy
-    condition: or(succeeded('QADeploy'), and(eq('${{ parameters.vNext }}', true), succeeded('E2EDeploy')), , or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
+    condition: or(succeeded('QADeploy'), and(eq('${{ parameters.vNext }}', true), succeeded('E2EDeploy')), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
     variables:
       - group: "ERP-Facade-Live"
       - group: "Erp-Live"
