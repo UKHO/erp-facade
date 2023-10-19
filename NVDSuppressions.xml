@@ -236,17 +236,24 @@
 		</notes>
 		<cve>CVE-2022-34716</cve>
 	</suppress>
-<suppress>
-   <notes><![CDATA[
-   file name: Microsoft.NETCore.Platforms:3.1.0
-   this vulnerability has occured due to Improper Control of Generation of Code
-   ]]></notes>
-   <cve>CVE-2023-29326</cve>
+	<suppress>
+	   <notes><![CDATA[
+	   file name: Microsoft.NETCore.Platforms:3.1.0
+	   this vulnerability has occured due to Improper Control of Generation of Code
+	   ]]></notes>
+	   <cve>CVE-2023-29326</cve>
+	</suppress>
+	<suppress>
+		<notes><![CDATA[
+		file name: Microsoft.Azure.WebJobs.dll
+		]]></notes>
+		<cve>CVE-2022-29149</cve>
+	</suppress>
+	<suppress>
+	   <notes><![CDATA[
+	   file name: Azure.Identity:1.8.2
+	   ]]></notes>
+		<packageUrl regex="true">^pkg:nuget/Azure\.Identity@.*$</packageUrl>
+		<cve>CVE-2023-36414</cve>
 </suppress>
-  <suppress>
-    <notes><![CDATA[
-   file name: Microsoft.Azure.WebJobs.dll
-   ]]></notes>
-    <cve>CVE-2022-29149</cve>
-  </suppress>
 </suppressions>

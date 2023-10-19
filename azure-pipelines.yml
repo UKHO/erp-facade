@@ -9,7 +9,7 @@ parameters:
   - name: vNext
     displayName: "Run the vNext Path"
     type: boolean
-    default: false
+    default: true
 
 trigger:
   - main
