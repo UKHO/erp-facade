@@ -464,6 +464,22 @@ stages:
             parameters:
               AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
 
+  - stage: IATDeploy
+    dependsOn: DevDeploy
+    condition: and(succeeded(), eq('${{ parameters.vNext }}', true))
+    jobs:
+      - job:
+        steps:
+        - script: echo IAT deployed
+    
+  - stage: E2EDeploy
+    dependsOn: IATDeploy
+    condition: and(succeeded(), eq('${{ parameters.vNext }}', true))
+    jobs:
+      - job:
+        steps:
+        - script: echo E2E deployed
+
   - stage: QAdeploy
     dependsOn: DevDeploy
     displayName: "QAdeploy (inc terraform, webapp deploy)"
@@ -548,22 +564,6 @@ stages:
           - template: Deployment/templates/continuous-testing.yml
             parameters:
               AzureSubscription: "ERP-Facade-Dev-A.011.05.12"              
-
-  - stage: IATDeploy
-    dependsOn: DevDeploy
-    condition: and(succeeded(), eq('${{ parameters.vNext }}', true))
-    jobs:
-      - job:
-        steps:
-        - script: echo IAT deployed
-    
-  - stage: E2EDeploy
-    dependsOn: IATDeploy
-    condition: and(succeeded(), eq('${{ parameters.vNext }}', true))
-    jobs:
-      - job:
-        steps:
-        - script: echo E2E deployed
 
   - stage: LiveDeploy
     displayName: "LiveDeploy (inc terraform, webapp deploy)"
