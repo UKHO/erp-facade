@@ -35,9 +35,8 @@ variables:
   - name: DeploymentPoolPE
     value: "Private Link Deployments (ENG)"
 
-stages:
-  - stage: Stryker_Mutator
-    displayName: "Stryker Mutator"
+  - stage: PERFORM_DEPENDENCYCHECK_DOTNETBUILD_DOTNETTEST_AND_PUBLISH
+    displayName: "Build (DependencyChecker, Dotnet Build & Restore , Dotnet Test and Publish Artifact )"
     dependsOn: []
     jobs:
       - job: Stryker
@@ -67,11 +66,6 @@ stages:
             displayName: 'Publish Strkyer Mutator Report'
             inputs:
               reportPattern: '**/mutation-report.html'
-
-  - stage: PERFORM_DEPENDENCYCHECK_DOTNETBUILD_DOTNETTEST_AND_PUBLISH
-    displayName: "Build (DependencyChecker, Dotnet Build & Restore , Dotnet Test and Publish Artifact )"
-    dependsOn: []
-    jobs:
       - job: Dependencychecker
         workspace:
           clean: all
