@@ -547,7 +547,7 @@ stages:
         steps:
           - template: Deployment/templates/continuous-testing.yml
             parameters:
-              AzureSubscription: "ERP-Facade-Dev-A.011.05.12"              -    
+              AzureSubscription: "ERP-Facade-Dev-A.011.05.12"              
 
   - stage: IATDeploy
     dependsOn: DevDeploy
