@@ -35,6 +35,7 @@ variables:
   - name: DeploymentPoolPE
     value: "Private Link Deployments (ENG)"
 
+stages:
   - stage: PERFORM_DEPENDENCYCHECK_DOTNETBUILD_DOTNETTEST_AND_PUBLISH
     displayName: "Build (DependencyChecker, Dotnet Build & Restore , Dotnet Test and Publish Artifact )"
     jobs:
