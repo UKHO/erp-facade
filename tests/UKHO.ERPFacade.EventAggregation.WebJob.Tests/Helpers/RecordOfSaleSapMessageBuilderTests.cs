@@ -318,6 +318,8 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
             result.ECDISMANUF.Should().Be("");
             result.LicenceType.Should().Be("");
             result.PROD.UnitOfSales.Count.Should().Be(4);
+            result.PROD.UnitOfSales[0].Repeat.Should().Be("P");
+            result.PROD.UnitOfSales[2].Repeat.Should().Be("P");
         }
 
         [Test]
