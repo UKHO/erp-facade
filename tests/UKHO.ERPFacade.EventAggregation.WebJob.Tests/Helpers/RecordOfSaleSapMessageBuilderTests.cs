@@ -10,7 +10,6 @@ using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.EventAggregation.WebJob.Helpers;
 using UKHO.ERPFacade.API.UnitTests.Common;
 using FluentAssertions;
-using System.Security.Policy;
 
 namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
 {
