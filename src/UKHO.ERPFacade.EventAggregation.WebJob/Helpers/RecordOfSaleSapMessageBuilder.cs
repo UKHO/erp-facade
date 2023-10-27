@@ -17,6 +17,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Helpers
         private const string ImOrderNameSpace = "RecordOfSale";
         private const string MaintainHoldingsType = "MAINTAINHOLDINGS";
         private const string NewLicenceType = "NEWLICENCE";
+        private const string MigrateExistingLicenceType = "MIGRATEEXISTINGLICENCE";
 
         public RecordOfSaleSapMessageBuilder(ILogger<RecordOfSaleSapMessageBuilder> logger,
             IXmlHelper xmlHelper,
@@ -48,6 +49,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Helpers
             {
                 NewLicenceType => BuildNewLicencePayload(eventDataList),
                 MaintainHoldingsType => BuildMaintainHoldingsPayload(eventDataList),
+                MigrateExistingLicenceType => BuildMigrateExistingLicencePayload(eventDataList),
                 _ => sapRecordOfSalePayLoad
             };
 
@@ -83,7 +85,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Helpers
                     rosNewLicencePayload.ShoreBased = eventData.Data.RecordsOfSale.ShoreBased;
                     rosNewLicencePayload.Users = eventData.Data.RecordsOfSale.NumberLicenceUsers;
                     rosNewLicencePayload.EndUserId = eventData.Data.RecordsOfSale.LicenceId;
-                    rosNewLicencePayload.ECDISMANUF = eventData.Data.RecordsOfSale.Upn;
+                    rosNewLicencePayload.ECDISMANUF = eventData.Data.RecordsOfSale.EcdisManuf;
                     rosNewLicencePayload.StartDate = eventData.Data.RecordsOfSale.OrderDate;
                     rosNewLicencePayload.EndDate = eventData.Data.RecordsOfSale.HoldingsExpiryDate;
                     rosNewLicencePayload.LicenceType = eventData.Data.RecordsOfSale.LicenceType;
@@ -124,6 +126,66 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Helpers
         }
 
         private SapRecordOfSalePayLoad BuildMaintainHoldingsPayload(List<RecordOfSaleEventPayLoad> eventDataList)
+        {
+            SapRecordOfSalePayLoad rosMaintainHoldingsPayload = new();
+
+            foreach (var eventData in eventDataList)
+            {
+                if (rosMaintainHoldingsPayload.PROD == null!)
+                {
+                    rosMaintainHoldingsPayload.CorrelationId = eventData.Data.CorrelationId;
+                    rosMaintainHoldingsPayload.ServiceType = eventData.Data.RecordsOfSale.ProductType;
+                    rosMaintainHoldingsPayload.LicTransaction = eventData.Data.RecordsOfSale.TransactionType;
+                    rosMaintainHoldingsPayload.OrderNumber = eventData.Data.RecordsOfSale.OrderNumber;
+                    rosMaintainHoldingsPayload.PurachaseOrder = eventData.Data.RecordsOfSale.PoRef;
+                    rosMaintainHoldingsPayload.LicenceNumber = eventData.Data.RecordsOfSale.SapId;
+                    rosMaintainHoldingsPayload.SoldToAcc = string.Empty;
+                    rosMaintainHoldingsPayload.LicenseEacc = string.Empty;
+                    rosMaintainHoldingsPayload.VesselName = string.Empty;
+                    rosMaintainHoldingsPayload.IMONumber = string.Empty;
+                    rosMaintainHoldingsPayload.CallSign = string.Empty;
+                    rosMaintainHoldingsPayload.ShoreBased = string.Empty;
+                    rosMaintainHoldingsPayload.Users = null;
+                    rosMaintainHoldingsPayload.EndUserId = string.Empty;
+                    rosMaintainHoldingsPayload.ECDISMANUF = string.Empty;
+                    rosMaintainHoldingsPayload.StartDate = string.Empty;
+                    rosMaintainHoldingsPayload.EndDate = string.Empty;
+                    rosMaintainHoldingsPayload.LicenceType = string.Empty;
+                    rosMaintainHoldingsPayload.LicenceDuration = null;
+                    rosMaintainHoldingsPayload.FleetName = string.Empty;
+
+                    PROD prod = new();
+                    List<UnitOfSales> unitOfSaleList = eventData.Data.RecordsOfSale.RosUnitOfSale.Select(rosUnitOfSale => new UnitOfSales()
+                    {
+                        Id = rosUnitOfSale.Id,
+                        EndDate = rosUnitOfSale.EndDate,
+                        Duration = rosUnitOfSale.Duration,
+                        ReNew = rosUnitOfSale.ReNew,
+                        Repeat = rosUnitOfSale.Repeat
+                    })
+                        .ToList();
+
+                    prod.UnitOfSales = unitOfSaleList;
+                    rosMaintainHoldingsPayload.PROD = prod;
+                }
+                else
+                {
+                    List<UnitOfSales> existingUnitOfSaleList = rosMaintainHoldingsPayload.PROD.UnitOfSales;
+                    existingUnitOfSaleList.AddRange(eventData.Data.RecordsOfSale.RosUnitOfSale.Select(rosUnitOfSale => new UnitOfSales()
+                    {
+                        Id = rosUnitOfSale.Id,
+                        EndDate = rosUnitOfSale.EndDate,
+                        Duration = rosUnitOfSale.Duration,
+                        ReNew = rosUnitOfSale.ReNew,
+                        Repeat = rosUnitOfSale.Repeat
+                    }));
+                }
+            }
+
+            return rosMaintainHoldingsPayload;
+        }
+
+        private SapRecordOfSalePayLoad BuildMigrateExistingLicencePayload(List<RecordOfSaleEventPayLoad> eventDataList)
         {
             SapRecordOfSalePayLoad rosMaintainHoldingsPayload = new();
 

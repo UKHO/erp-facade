@@ -41,6 +41,9 @@
     <None Update="ERPTestData\MaintainHoldingsPayloadTest.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="ERPTestData\MigrateExistingLicencePayloadTest.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ERPTestData\NewLicencePayloadTest.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
