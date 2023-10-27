@@ -187,32 +187,32 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Helpers
 
         private SapRecordOfSalePayLoad BuildMigrateNewLicencePayload(List<RecordOfSaleEventPayLoad> eventDataList)
         {
-            SapRecordOfSalePayLoad rosNewLicencePayload = new();
+            SapRecordOfSalePayLoad rosMigrateNewLicencePayload = new();
 
             foreach (var eventData in eventDataList)
             {
-                if (rosNewLicencePayload.PROD == null!)
+                if (rosMigrateNewLicencePayload.PROD == null!)
                 {
-                    rosNewLicencePayload.CorrelationId = eventData.Data.CorrelationId;
-                    rosNewLicencePayload.ServiceType = eventData.Data.RecordsOfSale.ProductType;
-                    rosNewLicencePayload.LicTransaction = eventData.Data.RecordsOfSale.TransactionType;
-                    rosNewLicencePayload.OrderNumber = eventData.Data.RecordsOfSale.OrderNumber;
-                    rosNewLicencePayload.PurachaseOrder = eventData.Data.RecordsOfSale.PoRef;
-                    rosNewLicencePayload.SoldToAcc = eventData.Data.RecordsOfSale.DistributorCustomerNumber;
-                    rosNewLicencePayload.LicenseEacc = eventData.Data.RecordsOfSale.ShippingCoNumber;
-                    rosNewLicencePayload.VesselName = eventData.Data.RecordsOfSale.VesselName;
-                    rosNewLicencePayload.IMONumber = eventData.Data.RecordsOfSale.ImoNumber;
-                    rosNewLicencePayload.CallSign = eventData.Data.RecordsOfSale.CallSign;
-                    rosNewLicencePayload.ShoreBased = eventData.Data.RecordsOfSale.ShoreBased;
-                    rosNewLicencePayload.Users = eventData.Data.RecordsOfSale.NumberLicenceUsers;
-                    rosNewLicencePayload.EndUserId = eventData.Data.RecordsOfSale.LicenceId;
-                    rosNewLicencePayload.ECDISMANUF = eventData.Data.RecordsOfSale.EcdisManuf;
-                    rosNewLicencePayload.StartDate = eventData.Data.RecordsOfSale.OrderDate;
-                    rosNewLicencePayload.EndDate = eventData.Data.RecordsOfSale.HoldingsExpiryDate;
-                    rosNewLicencePayload.LicenceType = eventData.Data.RecordsOfSale.LicenceType;
-                    rosNewLicencePayload.LicenceDuration = eventData.Data.RecordsOfSale.LicenceDuration;
-                    rosNewLicencePayload.FleetName = string.Empty;
-                    rosNewLicencePayload.LicenceNumber = string.Empty;
+                    rosMigrateNewLicencePayload.CorrelationId = eventData.Data.CorrelationId;
+                    rosMigrateNewLicencePayload.ServiceType = eventData.Data.RecordsOfSale.ProductType;
+                    rosMigrateNewLicencePayload.LicTransaction = eventData.Data.RecordsOfSale.TransactionType;
+                    rosMigrateNewLicencePayload.OrderNumber = eventData.Data.RecordsOfSale.OrderNumber;
+                    rosMigrateNewLicencePayload.PurachaseOrder = eventData.Data.RecordsOfSale.PoRef;
+                    rosMigrateNewLicencePayload.SoldToAcc = eventData.Data.RecordsOfSale.DistributorCustomerNumber;
+                    rosMigrateNewLicencePayload.LicenseEacc = eventData.Data.RecordsOfSale.ShippingCoNumber;
+                    rosMigrateNewLicencePayload.VesselName = eventData.Data.RecordsOfSale.VesselName;
+                    rosMigrateNewLicencePayload.IMONumber = eventData.Data.RecordsOfSale.ImoNumber;
+                    rosMigrateNewLicencePayload.CallSign = eventData.Data.RecordsOfSale.CallSign;
+                    rosMigrateNewLicencePayload.ShoreBased = eventData.Data.RecordsOfSale.ShoreBased;
+                    rosMigrateNewLicencePayload.Users = eventData.Data.RecordsOfSale.NumberLicenceUsers;
+                    rosMigrateNewLicencePayload.EndUserId = eventData.Data.RecordsOfSale.LicenceId;
+                    rosMigrateNewLicencePayload.ECDISMANUF = eventData.Data.RecordsOfSale.EcdisManuf;
+                    rosMigrateNewLicencePayload.StartDate = eventData.Data.RecordsOfSale.OrderDate;
+                    rosMigrateNewLicencePayload.EndDate = eventData.Data.RecordsOfSale.HoldingsExpiryDate;
+                    rosMigrateNewLicencePayload.LicenceType = eventData.Data.RecordsOfSale.LicenceType;
+                    rosMigrateNewLicencePayload.LicenceDuration = eventData.Data.RecordsOfSale.LicenceDuration;
+                    rosMigrateNewLicencePayload.FleetName = string.Empty;
+                    rosMigrateNewLicencePayload.LicenceNumber = string.Empty;
 
                     PROD prod = new();
                     List<UnitOfSales> unitOfSaleList = eventData.Data.RecordsOfSale.RosUnitOfSale.Select(rosUnitOfSale => new UnitOfSales()
@@ -226,12 +226,12 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Helpers
                         .ToList();
 
                     prod.UnitOfSales = unitOfSaleList;
-                    rosNewLicencePayload.PROD = prod;
+                    rosMigrateNewLicencePayload.PROD = prod;
                 }
 
                 else
                 {
-                    List<UnitOfSales> existingUnitOfSaleList = rosNewLicencePayload.PROD.UnitOfSales;
+                    List<UnitOfSales> existingUnitOfSaleList = rosMigrateNewLicencePayload.PROD.UnitOfSales;
                     existingUnitOfSaleList.AddRange(eventData.Data.RecordsOfSale.RosUnitOfSale.Select(rosUnitOfSale => new UnitOfSales()
                     {
                         Id = rosUnitOfSale.Id,
@@ -243,7 +243,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Helpers
                 }
             }
 
-            return rosNewLicencePayload;
+            return rosMigrateNewLicencePayload;
         }
     }
 }
