@@ -69,7 +69,7 @@ namespace UKHO.ERPFacade.API.Helpers
                 FleetName = eventData.Data.Licence.FleetName,
                 Users = eventData.Data.Licence.NumberLicenceUsers,
                 EndUserId = eventData.Data.Licence.LicenceId,
-                ECDISMANUF = eventData.Data.Licence.Upn,
+                ECDISMANUF = eventData.Data.Licence.EcdisManuf,
                 OrderNumber = string.Empty,
                 StartDate = string.Empty,
                 PurachaseOrder = string.Empty,
