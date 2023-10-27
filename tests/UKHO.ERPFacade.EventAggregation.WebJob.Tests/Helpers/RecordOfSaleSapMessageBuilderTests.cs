@@ -379,6 +379,9 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
             prodItem.ChildNodes.Count.Should().Be(4);
             prodItem.ChildNodes[0].ChildNodes.Count.Should().Be(5);
 
+            var repeat = result.SelectSingleNode(XpathRepeat);
+            repeat.InnerXml.Should().BeEmpty();
+
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
             && call.GetArgument<EventId>(1) == EventIds.CreatingRecordOfSaleSapPayload.ToEventId()
@@ -425,6 +428,8 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
             result.ECDISMANUF.Should().Be("");
             result.LicenceType.Should().Be("");
             result.PROD.UnitOfSales.Count.Should().Be(4);
+            result.PROD.UnitOfSales[0].Repeat.Should().Be("");
+            result.PROD.UnitOfSales[2].Repeat.Should().Be("");
         }
     }
 }
