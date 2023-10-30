@@ -85,7 +85,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Helpers
                     rosNewLicencePayload.ShoreBased = eventData.Data.RecordsOfSale.ShoreBased;
                     rosNewLicencePayload.Users = eventData.Data.RecordsOfSale.NumberLicenceUsers;
                     rosNewLicencePayload.EndUserId = eventData.Data.RecordsOfSale.LicenceId;
-                    rosNewLicencePayload.ECDISMANUF = eventData.Data.RecordsOfSale.EcdisManuf;
+                    rosNewLicencePayload.ECDISMANUF = eventData.Data.RecordsOfSale.EcdisManufacturerId;
                     rosNewLicencePayload.StartDate = eventData.Data.RecordsOfSale.OrderDate;
                     rosNewLicencePayload.EndDate = eventData.Data.RecordsOfSale.HoldingsExpiryDate;
                     rosNewLicencePayload.LicenceType = eventData.Data.RecordsOfSale.LicenceType;
@@ -206,7 +206,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Helpers
                     rosMigrateNewLicencePayload.ShoreBased = eventData.Data.RecordsOfSale.ShoreBased;
                     rosMigrateNewLicencePayload.Users = eventData.Data.RecordsOfSale.NumberLicenceUsers;
                     rosMigrateNewLicencePayload.EndUserId = eventData.Data.RecordsOfSale.LicenceId;
-                    rosMigrateNewLicencePayload.ECDISMANUF = eventData.Data.RecordsOfSale.EcdisManuf;
+                    rosMigrateNewLicencePayload.ECDISMANUF = eventData.Data.RecordsOfSale.EcdisManufacturerId;
                     rosMigrateNewLicencePayload.StartDate = eventData.Data.RecordsOfSale.OrderDate;
                     rosMigrateNewLicencePayload.EndDate = eventData.Data.RecordsOfSale.HoldingsExpiryDate;
                     rosMigrateNewLicencePayload.LicenceType = eventData.Data.RecordsOfSale.LicenceType;

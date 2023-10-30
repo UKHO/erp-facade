@@ -98,8 +98,8 @@ namespace UKHO.ERPFacade.Common.Models
         [JsonProperty("numberLicenceUsers")]
         public int? NumberLicenceUsers { get; set; }
 
-        [JsonProperty("ecdisManuf")]
-        public string EcdisManuf { get; set; }
+        [JsonProperty("ecdisManufacturerId")]
+        public string EcdisManufacturerId { get; set; }
 
         [JsonProperty("licenceDuration")]
         public int? LicenceDuration { get; set; }
