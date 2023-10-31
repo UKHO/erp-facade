@@ -85,7 +85,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Helpers
                     rosNewLicencePayload.ShoreBased = eventData.Data.RecordsOfSale.ShoreBased;
                     rosNewLicencePayload.Users = eventData.Data.RecordsOfSale.NumberLicenceUsers;
                     rosNewLicencePayload.EndUserId = eventData.Data.RecordsOfSale.LicenceId;
-                    rosNewLicencePayload.ECDISMANUF = eventData.Data.RecordsOfSale.EcdisManufacturerId;
+                    rosNewLicencePayload.ECDISMANUF = eventData.Data.RecordsOfSale.EcdisManufacturerName;
                     rosNewLicencePayload.StartDate = eventData.Data.RecordsOfSale.OrderDate;
                     rosNewLicencePayload.EndDate = eventData.Data.RecordsOfSale.HoldingsExpiryDate;
                     rosNewLicencePayload.LicenceType = eventData.Data.RecordsOfSale.LicenceType;
