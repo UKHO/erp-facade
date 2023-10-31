@@ -17,7 +17,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Helpers
         private const string ImOrderNameSpace = "RecordOfSale";
         private const string MaintainHoldingsType = "MAINTAINHOLDINGS";
         private const string NewLicenceType = "NEWLICENCE";
-        private const string MigrateNewLicenseType = "MIGRATENEWLICENCE";
+        private const string MigrateNewLicenceType = "MIGRATENEWLICENCE";
 
         public RecordOfSaleSapMessageBuilder(ILogger<RecordOfSaleSapMessageBuilder> logger,
             IXmlHelper xmlHelper,
@@ -49,7 +49,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Helpers
             {
                 NewLicenceType => BuildNewLicencePayload(eventDataList),
                 MaintainHoldingsType => BuildMaintainHoldingsPayload(eventDataList),
-                MigrateNewLicenseType => BuildMigrateNewLicencePayload(eventDataList),
+                MigrateNewLicenceType => BuildMigrateNewLicencePayload(eventDataList),
                 _ => sapRecordOfSalePayLoad
             };
 
@@ -107,7 +107,6 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Helpers
                     prod.UnitOfSales = unitOfSaleList;
                     rosNewLicencePayload.PROD = prod;
                 }
-
                 else
                 {
                     List<UnitOfSales> existingUnitOfSaleList = rosNewLicencePayload.PROD.UnitOfSales;
@@ -228,7 +227,6 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Helpers
                     prod.UnitOfSales = unitOfSaleList;
                     rosMigrateNewLicencePayload.PROD = prod;
                 }
-
                 else
                 {
                     List<UnitOfSales> existingUnitOfSaleList = rosMigrateNewLicencePayload.PROD.UnitOfSales;
