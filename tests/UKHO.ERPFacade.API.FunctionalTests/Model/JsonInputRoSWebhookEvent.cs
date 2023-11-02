@@ -43,7 +43,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
             public string shoreBased { get; set; }
             public string fleetName { get; set; }
             public string numberLicenceUsers { get; set; }
-            public string upn { get; set; }
+            public string ecdisManufacturerName { get; set; }
             public string licenceDuration { get; set; }
             public Unitsofsale[] unitsOfSale { get; set; }
         }

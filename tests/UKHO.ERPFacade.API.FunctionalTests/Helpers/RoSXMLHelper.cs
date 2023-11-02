@@ -58,6 +58,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     case "NEWLICENCE":
                         Assert.That(VerifyNewLicence(rosXmlPayload, roSJsonFields, listOfEventJsons), Is.True);
                         break;
+                    case "MIGRATENEWLICENCE":
+                        Assert.That(VerifyMigrateNewLicence(rosXmlPayload, roSJsonFields, listOfEventJsons), Is.True);
+                        break;
+                    
                 }
             }
             await Task.CompletedTask;
@@ -120,7 +124,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 s_attrNotMatched.Add(nameof(rosXmlPayload.USERS));
             if (!rosXmlPayload.ENDUSERID.Equals(roSJsonPayload.licenseId))
                 s_attrNotMatched.Add(nameof(rosXmlPayload.ENDUSERID));
-            if (!rosXmlPayload.ECDISMANUF.Equals(roSJsonPayload.upn))
+            if (!rosXmlPayload.ECDISMANUF.Equals(roSJsonPayload.ecdisManufacturerName))
                 s_attrNotMatched.Add(nameof(rosXmlPayload.ECDISMANUF));
             if (!rosXmlPayload.LTYPE.Equals(roSJsonPayload.licenceType))
                 s_attrNotMatched.Add(nameof(rosXmlPayload.LTYPE));
@@ -149,6 +153,59 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 return false;
             }
         }
+
+        private static bool? VerifyMigrateNewLicence(Z_ADDS_ROSIM_ORDER rosXmlPayload, JsonInputRoSWebhookEvent.Recordsofsale roSJsonPayload, List<JsonInputRoSWebhookEvent> listOfEventJsons)
+        {
+            if (!rosXmlPayload.SOLDTOACC.Equals(roSJsonPayload.distributorCustomerNumber))
+                s_attrNotMatched.Add(nameof(rosXmlPayload.SOLDTOACC));
+            if (!rosXmlPayload.LICENSEEACC.Equals(roSJsonPayload.shippingCoNumber))
+                s_attrNotMatched.Add(nameof(rosXmlPayload.LICENSEEACC));
+            if (!rosXmlPayload.STARTDATE.Equals(roSJsonPayload.orderDate))
+                s_attrNotMatched.Add(nameof(rosXmlPayload.STARTDATE));
+            if (!rosXmlPayload.ENDDATE.Equals(roSJsonPayload.holdingsExpiryDate))
+                s_attrNotMatched.Add(nameof(rosXmlPayload.ENDDATE));
+            if (!rosXmlPayload.VNAME.Equals(roSJsonPayload.vesselName))
+                s_attrNotMatched.Add(nameof(rosXmlPayload.VNAME));
+            if (!rosXmlPayload.IMO.Equals(roSJsonPayload.imoNumber))
+                s_attrNotMatched.Add(nameof(rosXmlPayload.IMO));
+            if (!rosXmlPayload.CALLSIGN.Equals(roSJsonPayload.callSign))
+                s_attrNotMatched.Add(nameof(rosXmlPayload.CALLSIGN));
+            if (!rosXmlPayload.SHOREBASED.Equals(roSJsonPayload.shoreBased))
+                s_attrNotMatched.Add(nameof(rosXmlPayload.SHOREBASED));
+            if (!rosXmlPayload.USERS.Equals(roSJsonPayload.numberLicenceUsers))
+                s_attrNotMatched.Add(nameof(rosXmlPayload.USERS));
+            if (!rosXmlPayload.ENDUSERID.Equals(roSJsonPayload.licenseId))
+                s_attrNotMatched.Add(nameof(rosXmlPayload.ENDUSERID));
+            if (!rosXmlPayload.ECDISMANUF.Equals(roSJsonPayload.ecdisManufacturerName))
+                s_attrNotMatched.Add(nameof(rosXmlPayload.ECDISMANUF));
+            if (!rosXmlPayload.LTYPE.Equals(roSJsonPayload.licenceType))
+                s_attrNotMatched.Add(nameof(rosXmlPayload.LTYPE));
+            if (!rosXmlPayload.LICDUR.Equals(roSJsonPayload.licenceDuration))
+                s_attrNotMatched.Add(nameof(rosXmlPayload.LICDUR));
+
+            List<string> blankFieldNames = new() { "LICNO", "FLEET" };
+            List<string> blankProductFieldNames = new() { "REPEAT" };
+            Z_ADDS_ROSIM_ORDERItem[] xmlUnitOfSaleItems = rosXmlPayload.PROD;
+            List<JsonInputRoSWebhookEvent.Unitsofsale> jsonUnitOfSalesItems = listOfEventJsons.SelectMany(eventJson => eventJson.data.recordsOfSale.unitsOfSale).ToList();
+
+            VerifyBlankFields(rosXmlPayload, blankFieldNames);
+            VerifyProductFields(xmlUnitOfSaleItems, jsonUnitOfSalesItems);
+            VerifyBlankProductFields(xmlUnitOfSaleItems, blankProductFieldNames);
+
+            if (s_attrNotMatched.Count == 0)
+            {
+                Console.WriteLine("NEWLICENCE event XML is correct");
+                return true;
+            }
+            {
+                Console.WriteLine("NEWLICENCE event XML is incorrect");
+                Console.WriteLine("Not matching attributes are:");
+                foreach (string attribute in s_attrNotMatched)
+                { Console.WriteLine(attribute); }
+                return false;
+            }
+        }
+
 
         private static void VerifyBlankFields(Z_ADDS_ROSIM_ORDER rosXmlPayload, IEnumerable<string> blankFieldNames)
         {
