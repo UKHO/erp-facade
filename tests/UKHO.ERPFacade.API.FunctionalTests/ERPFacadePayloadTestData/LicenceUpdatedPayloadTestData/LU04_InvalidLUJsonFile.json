@@ -9,25 +9,34 @@
     "data": {
         "correlationId": "",
         "license": {
-            "licenseId": 11870,
-            "licenseGUID": "FC795DF6-8D8D-47E4-860F-5A4A6C1B0BEC",
+            "licenseId": "2",
             "productType": "AVCS",
             "transactionType": "CHANGELICENCE",
-            "distributorCustomerNumber": 9454,
-            "shippingCoNumber": 9454,
-            "orderNumber": 5432796,
-            "orderDate": "2023-06-20 08:55:28.553",
+            "distributorCustomerNumber": "111",
+            "shippingCoNumber": "1",
+            "orderNumber": "",
+            "orderDate": "",
             "po-ref": "",
-            "holdingsExpiryDate": "",
-            "sapId": 9454,
-            "vesselName": "Cornelia Maersk",
-            "imoNumber": "IMO9245756",
-            "callSign": "OWWS2",
-            "licenceType": "IMO Vessel",
-            "licenceTypeID": 1,
-            "fleetName": "",
-            "numberLicenceUsers": "",
-            "upn": "send ECDISMANUFACTURER"
+            "holdingsExpiryDate": "2024-59-31",
+            "sapId": "76611K",
+            "vesselName": "Vessel 000002",
+            "imoNumber": "IMO000002",
+            "callSign": "CALL000002",
+            "licenceType": "",
+            "shoreBased": "",
+            "fleetName": "emailnoreply@engineering.ukho.gov.uk",
+            "numberLicenceUsers": 1,
+            "ecdisManufacturerName": "MARIS",
+            "licenceDuration": 12,
+            "unitsOfSale": [
+                {
+                    "unitName": "",
+                    "endDate": "",
+                    "duration": "",
+                    "renew": "",
+                    "repeat": ""
+                }
+            ]
         }
     }
 }

@@ -58,6 +58,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     case "NEWLICENCE":
                         Assert.That(VerifyNewLicence(rosXmlPayload, roSJsonFields, listOfEventJsons), Is.True);
                         break;
+                    case "MIGRATEEXISTINGLICENCE":
+                        Assert.That(VerifyMigrateExistingLicence(rosXmlPayload, roSJsonFields, listOfEventJsons), Is.True);
+                        break;
                 }
             }
             await Task.CompletedTask;
@@ -120,7 +123,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 s_attrNotMatched.Add(nameof(rosXmlPayload.USERS));
             if (!rosXmlPayload.ENDUSERID.Equals(roSJsonPayload.licenseId))
                 s_attrNotMatched.Add(nameof(rosXmlPayload.ENDUSERID));
-            if (!rosXmlPayload.ECDISMANUF.Equals(roSJsonPayload.upn))
+            if (!rosXmlPayload.ECDISMANUF.Equals(roSJsonPayload.ecdisManufacturerName))
                 s_attrNotMatched.Add(nameof(rosXmlPayload.ECDISMANUF));
             if (!rosXmlPayload.LTYPE.Equals(roSJsonPayload.licenceType))
                 s_attrNotMatched.Add(nameof(rosXmlPayload.LTYPE));
@@ -150,6 +153,36 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             }
         }
 
+
+        private static bool? VerifyMigrateExistingLicence(Z_ADDS_ROSIM_ORDER rosXmlPayload, JsonInputRoSWebhookEvent.Recordsofsale roSJsonPayload, IEnumerable<JsonInputRoSWebhookEvent> listOfEventJsons)
+        {
+            if (!rosXmlPayload.LICNO.Equals(roSJsonPayload.sapId))
+                s_attrNotMatched.Add(nameof(rosXmlPayload.LICNO));
+            if (!rosXmlPayload.PO.Equals(roSJsonPayload.poref))
+                s_attrNotMatched.Add(nameof(rosXmlPayload.PO));
+            if (!rosXmlPayload.ADSORDNO.Equals(roSJsonPayload.ordernumber))
+                s_attrNotMatched.Add(nameof(rosXmlPayload.ADSORDNO));
+
+            string[] fieldNames = { "SOLDTOACC", "LICENSEEACC", "STARTDATE", "ENDDATE", "VNAME", "IMO", "CALLSIGN", "SHOREBASED", "FLEET", "USERS", "ENDUSERID", "ECDISMANUF", "LTYPE", "LICDUR" };
+            Z_ADDS_ROSIM_ORDERItem[] xmlUnitOfSaleItems = rosXmlPayload.PROD;
+            List<JsonInputRoSWebhookEvent.Unitsofsale> jsonUnitOfSalesItems = listOfEventJsons.SelectMany(eventJson => eventJson.data.recordsOfSale.unitsOfSale).ToList();
+
+            VerifyBlankFields(rosXmlPayload, fieldNames);
+            VerifyProductFields(xmlUnitOfSaleItems, jsonUnitOfSalesItems);
+
+            if (s_attrNotMatched.Count == 0)
+            {
+                Console.WriteLine("MAINTAINHOLDINGS event XML is correct");
+                return true;
+            }
+            {
+                Console.WriteLine("MAINTAINHOLDINGS event XML is incorrect");
+                Console.WriteLine("Not matching attributes are:");
+                foreach (string attribute in s_attrNotMatched)
+                { Console.WriteLine(attribute); }
+                return false;
+            }
+        }
         private static void VerifyBlankFields(Z_ADDS_ROSIM_ORDER rosXmlPayload, IEnumerable<string> blankFieldNames)
         {
             foreach (string field in blankFieldNames)
