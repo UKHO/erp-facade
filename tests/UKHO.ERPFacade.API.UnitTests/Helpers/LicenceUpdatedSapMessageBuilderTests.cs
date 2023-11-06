@@ -92,7 +92,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         [Test]
         public void WhenTransactionTypeIsChangeLicence_ThenReturnXMLDocument()
         {
-            var jsonData = JsonConvert.DeserializeObject<LicenceUpdatedEventPayLoad>(changeLicencePayload);
+            var changeLicencePayloadJson = JsonConvert.DeserializeObject<LicenceUpdatedEventPayLoad>(changeLicencePayload);
             var correlationId = "123-abc-456-xyz-333";
             var sapReqXml = TestHelper.ReadFileData("ERPTestData\\ChangeLicencePayloadTest.xml");
 
@@ -103,7 +103,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
             A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
 
-            var result = _fakeLicenceUpdatedSapMessageBuilder.BuildLicenceUpdatedSapMessageXml(jsonData!, correlationId);
+            var result = _fakeLicenceUpdatedSapMessageBuilder.BuildLicenceUpdatedSapMessageXml(changeLicencePayloadJson!, correlationId);
 
             result.Should().BeOfType<XmlDocument>();
 
@@ -142,12 +142,12 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         [Test]
         public void WhenLicenceUpdatedSapXmlTemplateFileNotExist_ThenThrowFileNotFoundException()
         {
-            var jsonData = JsonConvert.DeserializeObject<LicenceUpdatedEventPayLoad>(changeLicencePayload);
+            var changeLicencePayloadJson = JsonConvert.DeserializeObject<LicenceUpdatedEventPayLoad>(changeLicencePayload);
             var correlationId = "123-abc-456-xyz-333";
 
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(false);
 
-            Assert.Throws<FileNotFoundException>(() => _fakeLicenceUpdatedSapMessageBuilder.BuildLicenceUpdatedSapMessageXml(jsonData!, correlationId));
+            Assert.Throws<FileNotFoundException>(() => _fakeLicenceUpdatedSapMessageBuilder.BuildLicenceUpdatedSapMessageXml(changeLicencePayloadJson!, correlationId));
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Error
@@ -156,15 +156,15 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         }
 
         [Test]
-        public void WhenTransactionTypeIsChangeLicenceshouldReturns_SomeFieldsEmpty_SapXmlPayloadCreationTests()
+        public void WhenTransactionTypeIsChangeLicence_ThenReturns_SapXmlPayloadWithSomeEmptyFields()
         {
-            var jsonData = JsonConvert.DeserializeObject<LicenceUpdatedEventPayLoad>(changeLicencePayload);
+            var changeLicencePayloadJson = JsonConvert.DeserializeObject<LicenceUpdatedEventPayLoad>(changeLicencePayload);
             var sapReqXml = TestHelper.ReadFileData("ERPTestData\\ChangeLicencePayloadTest.xml");
 
             A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
 
             MethodInfo methodInfo = typeof(LicenceUpdatedSapMessageBuilder).GetMethod("BuildChangeLicencePayload", BindingFlags.NonPublic | BindingFlags.Instance)!;
-            var result = (SapRecordOfSalePayLoad)methodInfo.Invoke(_fakeLicenceUpdatedSapMessageBuilder, new object[] { jsonData! })!;
+            var result = (SapRecordOfSalePayLoad)methodInfo.Invoke(_fakeLicenceUpdatedSapMessageBuilder, new object[] { changeLicencePayloadJson! })!;
 
             result.Should().NotBeNull();
             result.CorrelationId.Should().Be("123-abc-456-xyz-333");

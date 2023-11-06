@@ -34,19 +34,5 @@
       <RENEW>N</RENEW>
       <REPEAT></REPEAT>
     </item>
-    <item>
-      <ID>PT111102</ID>
-      <ENDDA>2023-10-31</ENDDA>
-      <DURATION>3</DURATION>
-      <RENEW>N</RENEW>
-      <REPEAT></REPEAT>
-    </item>
-    <item>
-      <ID>GB302408</ID>
-      <ENDDA>2023-12-01</ENDDA>
-      <DURATION>6</DURATION>
-      <RENEW>N</RENEW>
-      <REPEAT></REPEAT>
-    </item>
   </PROD>
 </IM_ORDER>

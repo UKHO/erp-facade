@@ -91,7 +91,6 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
         private readonly string maintainHoldingPayloadForMerging = @"{""specversion"":""1.0"",""type"":""uk.gov.ukho.shop.recordOfSale.v1"",""source"":""https://uk.gov.ukho.shop"",""id"":""e744fa37-0c9f-4795-adc9-7f42ad8f1234"",""time"":""2023-07-20T10:40:00Z"",""subject"":""releasability set changes holdings Record of Sale"",""datacontenttype"":""application/json"",""data"":{""correlationId"":""123-abc-456-xyz-333"",""relatedEvents"":[""e744fa37-0c9f-4795-adc9-7f42ad8f11c1"", ""e744fa37-0c9f-4795-adc9-7f42ad8f1234""],""recordsOfSale"":{""licenseId"":"""",""productType"":""AVCS"",""transactionType"":""MAINTAINHOLDINGS"",""distributorCustomerNumber"":"""",""shippingCoNumber"":"""",""ordernumber"":""5432796"",""orderDate"":"""",""po-ref"":""75277T"",""holdingsExpiryDate"":"""",""sapId"":""75277T"",""vesselName"":"""",""imoNumber"":"""",""callSign"":"""",""licenceType"":"""",""shoreBased"":"""",""fleetName"":"""",""numberLicenceUsers"":null,""ecdisManufacturerName"":"""",""licenceDuration"":null,""unitsOfSale"":[{""unitName"":""PT111102"",""endDate"":""2023-10-31"",""duration"":""3"",""renew"":""E"",""repeat"":""P""},{""unitName"":""GB302408"",""endDate"":""2023-12-01"",""duration"":""6"",""renew"":""E"",""repeat"":""P""}]}}}";
 
         private readonly string migrateExistingLicencePayload = @"{""specversion"":""1.0"",""type"":""uk.gov.ukho.shop.recordOfSale.v1"",""source"":""https://uk.gov.ukho.shop"",""id"":""e744fa37-0c9f-4795-adc9-7f42ad8f11c1"",""time"":""2023-07-20T10:40:00Z"",""subject"":""releasability set changes holdings Record of Sale"",""datacontenttype"":""application/json"",""data"":{""correlationId"":""123-abc-456-xyz-333"",""relatedEvents"":[""e744fa37-0c9f-4795-adc9-7f42ad8f11c1"", ""e744fa37-0c9f-4795-adc9-7f42ad8f1234""],""recordsOfSale"":{""licenseId"":"""",""productType"":""AVCS"",""transactionType"":""MIGRATEEXISTINGLICENCE"",""distributorCustomerNumber"":"""",""shippingCoNumber"":"""",""ordernumber"":""XXL005456375"",""orderDate"":"""",""po-ref"":""75277T-Bengang"",""holdingsExpiryDate"":"""",""sapId"":""75277T"",""vesselName"":"""",""imoNumber"":"""",""callSign"":"""",""licenceType"":"""",""shoreBased"":"""",""fleetName"":"""",""numberLicenceUsers"":null,""ecdisManufacturerName"":"""",""licenceDuration"":null,""unitsOfSale"":[{""unitName"":""PT111101"",""endDate"":""2023-10-31"",""duration"":""3"",""renew"":""N"",""repeat"":""""},{""unitName"":""GB302409"",""endDate"":""2023-12-01"",""duration"":""6"",""renew"":""N"",""repeat"":""""}]}}}";
-        private readonly string migrateExistingLicenceForMerging = @"{""specversion"":""1.0"",""type"":""uk.gov.ukho.shop.recordOfSale.v1"",""source"":""https://uk.gov.ukho.shop"",""id"":""e744fa37-0c9f-4795-adc9-7f42ad8f1234"",""time"":""2023-07-20T10:40:00Z"",""subject"":""releasability set changes holdings Record of Sale"",""datacontenttype"":""application/json"",""data"":{""correlationId"":""123-abc-456-xyz-333"",""relatedEvents"":[""e744fa37-0c9f-4795-adc9-7f42ad8f11c1"", ""e744fa37-0c9f-4795-adc9-7f42ad8f1234""],""recordsOfSale"":{""licenseId"":"""",""productType"":""AVCS"",""transactionType"":""MIGRATEEXISTINGLICENCE"",""distributorCustomerNumber"":"""",""shippingCoNumber"":"""",""ordernumber"":""XXL005456375"",""orderDate"":"""",""po-ref"":""75277T-Bengang"",""holdingsExpiryDate"":"""",""sapId"":""75277T"",""vesselName"":"""",""imoNumber"":"""",""callSign"":"""",""licenceType"":"""",""shoreBased"":"""",""fleetName"":"""",""numberLicenceUsers"":null,""ecdisManufacturerName"":"""",""licenceDuration"":null,""unitsOfSale"":[{""unitName"":""PT111102"",""endDate"":""2023-10-31"",""duration"":""3"",""renew"":""N"",""repeat"":""""},{""unitName"":""GB302408"",""endDate"":""2023-12-01"",""duration"":""6"",""renew"":""N"",""repeat"":""""}]}}}";
         #endregion
 
         [SetUp]
@@ -106,12 +105,12 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
         [Test]
         public void WhenTransactionTypeIsNewLicence_ThenReturnXMLDocument()
         {
-            var jsonData1 = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(newLicencePayload);
-            var jsonData2 = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(newLicencePayloadForMerging);
+            var newLicencePayloadJson = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(newLicencePayload);
+            var newLicencePayloadJsonForMerging = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(newLicencePayloadForMerging);
 
             List<RecordOfSaleEventPayLoad> rosNewLicenceData = new()
             {
-                jsonData1!, jsonData2!
+                newLicencePayloadJson!, newLicencePayloadJsonForMerging!
             };
 
             string correlationId = "123-abc-456-xyz-333";
@@ -158,12 +157,12 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
         [Test]
         public void WhenRecordOfSaleSapXmlTemplateFileNotExist_ThenThrowFileNotFoundException()
         {
-            var jsonData1 = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(newLicencePayload);
-            var jsonData2 = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(newLicencePayloadForMerging);
+            var newLicencePayloadJson = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(newLicencePayload);
+            var newLicencePayloadJsonForMerging = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(newLicencePayloadForMerging);
 
             List<RecordOfSaleEventPayLoad> rosNewLicenceData = new()
             {
-                jsonData1!, jsonData2!
+                newLicencePayloadJson!, newLicencePayloadJsonForMerging!
             };
 
             string correlationId = "123-abc-456-xyz-333";
@@ -179,14 +178,14 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
         }
 
         [Test]
-        public void WhenTransactionTypeIsNewLicence_ThenReturns_SomeFieldsEmptyInSapXmlPayloadCreationTests()
+        public void WhenTransactionTypeIsNewLicence_ThenReturns_SapXmlPayloadWithSomeEmptyFields()
         {
-            var jsonData1 = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(newLicencePayload);
-            var jsonData2 = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(newLicencePayloadForMerging);
+            var newLicencePayloadJson = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(newLicencePayload);
+            var newLicencePayloadJsonForMerging = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(newLicencePayloadForMerging);
 
             List<RecordOfSaleEventPayLoad> rosNewLicenceData = new()
             {
-                jsonData1!, jsonData2!
+                newLicencePayloadJson!, newLicencePayloadJsonForMerging!
             };
 
             string sapReqXml = TestHelper.ReadFileData("ERPTestData\\NewLicencePayloadTest.xml");
@@ -208,12 +207,12 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
         [Test]
         public void WhenTransactionTypeIsMaintainHoldings_ThenReturnXMLDocument()
         {
-            var jsonData1 = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(maintainHoldingPayload);
-            var jsonData2 = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(maintainHoldingPayloadForMerging);
+            var maintainHoldingsPayloadJson = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(maintainHoldingPayload);
+            var maintainHoldingsPayloadJsonForMerging = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(maintainHoldingPayloadForMerging);
 
             List<RecordOfSaleEventPayLoad> rosMaintainHoldingsData = new()
             {
-                jsonData1!, jsonData2!
+                maintainHoldingsPayloadJson!, maintainHoldingsPayloadJsonForMerging!
             };
 
             string correlationId = "123-abc-456-xyz-333";
@@ -280,14 +279,14 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
         }
 
         [Test]
-        public void WhenTransactionTypeIsMaintainHoldings_ThenReturns_SomeFieldsEmptyInSapXmlPayloadCreationTests()
+        public void WhenTransactionTypeIsMaintainHoldings_ThenReturns_SapXmlPayloadWithSomeEmptyFields()
         {
-            var jsonData1 = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(maintainHoldingPayload);
-            var jsonData2 = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(maintainHoldingPayloadForMerging);
+            var maintainHoldingsPayloadJson = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(maintainHoldingPayload);
+            var maintainHoldingsPayloadJsonForMerging = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(maintainHoldingPayloadForMerging);
 
             List<RecordOfSaleEventPayLoad> rosMaintainHoldingsData = new()
             {
-                jsonData1!, jsonData2!
+                maintainHoldingsPayloadJson!, maintainHoldingsPayloadJsonForMerging!
             };
 
             string sapReqXml = TestHelper.ReadFileData("ERPTestData\\MaintainHoldingsPayloadTest.xml");
@@ -319,12 +318,11 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
         [Test]
         public void WhenTransactionTypeIsMigrateExistingLicence_ThenReturnXMLDocument()
         {
-            var jsonData1 = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(migrateExistingLicencePayload);
-            var jsonData2 = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(migrateExistingLicenceForMerging);
+            var migrateExistingLicencePayloadJson = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(migrateExistingLicencePayload);
 
             List<RecordOfSaleEventPayLoad> rosMigrateExistingLicenceData = new()
             {
-                jsonData1!, jsonData2!
+                migrateExistingLicencePayloadJson!
             };
 
             string correlationId = "123-abc-456-xyz-333";
@@ -376,7 +374,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
             LicDur.InnerXml.Should().BeNullOrEmpty();
 
             var prodItem = result.SelectSingleNode(XpathProd);
-            prodItem.ChildNodes.Count.Should().Be(4);
+            prodItem.ChildNodes.Count.Should().Be(2);
             prodItem.ChildNodes[0].ChildNodes.Count.Should().Be(5);
 
             var repeat = result.SelectSingleNode(XpathRepeat);
@@ -394,14 +392,13 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
         }
 
         [Test]
-        public void WhenTransactionTypeIsMigrateExistingLicence_ThenReturns_SomeFieldsEmptyInSapXmlPayloadCreationTests()
+        public void WhenTransactionTypeIsMigrateExistingLicence_ThenReturns_SapXmlPayloadWithSomeEmptyFields()
         {
-            var jsonData1 = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(migrateExistingLicencePayload);
-            var jsonData2 = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(migrateExistingLicenceForMerging);
+            var migrateExistingLicencePayloadJson = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(migrateExistingLicencePayload);
 
             List<RecordOfSaleEventPayLoad> rosMigrateExistingLicenceData = new()
             {
-                jsonData1!, jsonData2!
+                migrateExistingLicencePayloadJson!
             };
 
             string sapReqXml = TestHelper.ReadFileData("ERPTestData\\MigrateExistingLicencePayloadTest.xml");
@@ -427,9 +424,8 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
             result.LicenceDuration.Should().Be(null);
             result.ECDISMANUF.Should().Be("");
             result.LicenceType.Should().Be("");
-            result.PROD.UnitOfSales.Count.Should().Be(4);
+            result.PROD.UnitOfSales.Count.Should().Be(2);
             result.PROD.UnitOfSales[0].Repeat.Should().Be("");
-            result.PROD.UnitOfSales[2].Repeat.Should().Be("");
         }
     }
 }
