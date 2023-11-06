@@ -74,7 +74,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
 
         #region Data
 
-        private readonly string jsonForChangeLicence = @"{""specversion"": ""1.0"",""type"": ""uk.gov.ukho.licensing.licenceUpdated.v1"",""source"": ""https://uk.gov.ukho.licensing"",""id"": ""e744fa37-0c9f-4795-adc9-7f42ad8f11c1"",""time"": ""8/23/2023 7:34:28 AM"",""subject"": ""licence update changes that need to go to SAP Record of Sale via ERP Facade"",""datacontenttype"": ""application/json"",""data"": {""correlationId"": ""123-abc-456-xyz-333"",""license"": {
+        private readonly string changeLicencePayload = @"{""specversion"": ""1.0"",""type"": ""uk.gov.ukho.licensing.licenceUpdated.v1"",""source"": ""https://uk.gov.ukho.licensing"",""id"": ""e744fa37-0c9f-4795-adc9-7f42ad8f11c1"",""time"": ""8/23/2023 7:34:28 AM"",""subject"": ""licence update changes that need to go to SAP Record of Sale via ERP Facade"",""datacontenttype"": ""application/json"",""data"": {""correlationId"": ""123-abc-456-xyz-333"",""license"": {
       ""licenseId"": ""2"",""productType"": ""AVCS"",""transactionType"": ""CHANGELICENCE"",""distributorCustomerNumber"": ""111"",""shippingCoNumber"": ""1"",""ordernumber"": """",""orderDate"": """",""po-ref"": """",""holdingsExpiryDate"": ""2024-59-31"",""sapId"": ""76611K"",""vesselName"": ""Vessel 000002"",""imoNumber"": ""IMO000002"",""callSign"": ""CALL000002"",""licenceType"": """",""shoreBased"": """",""fleetName"": ""emailnoreply@engineering.ukho.gov.uk"",""numberLicenceUsers"": 1,""upn"": ""MARIS"",""licenceDuration"": 12,
       ""unitsOfSale"": [{""unitName"": """",""endDate"": """",""duration"": """",""renew"": """",""repeat"": """"}]}}}";
 
@@ -92,7 +92,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         [Test]
         public void WhenTransactionTypeIsChangeLicence_ThenReturnXMLDocument()
         {
-            var jsonData = JsonConvert.DeserializeObject<LicenceUpdatedEventPayLoad>(jsonForChangeLicence);
+            var jsonData = JsonConvert.DeserializeObject<LicenceUpdatedEventPayLoad>(changeLicencePayload);
             var correlationId = "123-abc-456-xyz-333";
             var sapReqXml = TestHelper.ReadFileData("ERPTestData\\ChangeLicencePayloadTest.xml");
 
@@ -142,7 +142,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         [Test]
         public void WhenLicenceUpdatedSapXmlTemplateFileNotExist_ThenThrowFileNotFoundException()
         {
-            var jsonData = JsonConvert.DeserializeObject<LicenceUpdatedEventPayLoad>(jsonForChangeLicence);
+            var jsonData = JsonConvert.DeserializeObject<LicenceUpdatedEventPayLoad>(changeLicencePayload);
             var correlationId = "123-abc-456-xyz-333";
 
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(false);
@@ -158,7 +158,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         [Test]
         public void WhenTransactionTypeIsChangeLicenceshouldReturns_SomeFieldsEmpty_SapXmlPayloadCreationTests()
         {
-            var jsonData = JsonConvert.DeserializeObject<LicenceUpdatedEventPayLoad>(jsonForChangeLicence);
+            var jsonData = JsonConvert.DeserializeObject<LicenceUpdatedEventPayLoad>(changeLicencePayload);
             var sapReqXml = TestHelper.ReadFileData("ERPTestData\\ChangeLicencePayloadTest.xml");
 
             A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);

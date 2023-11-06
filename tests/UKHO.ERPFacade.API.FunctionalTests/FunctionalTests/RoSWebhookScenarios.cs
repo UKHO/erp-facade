@@ -73,7 +73,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         }
 
         [Test, Order(2)]
-        [TestCase("LTC05_InValidLTCwithNoCorrelationID.json", TestName = "WhenValidRoSEventPublishedEventReceivedInLTCMigrateExistingLicencePostReceivedWithInvalidPayload_ThenWebhookReturns400BadRequestResponse")]
+        [TestCase("LTC05_InValidLTCwithNoCorrelationID.json", TestName = "WhenValidRoSMigrateExistingLicencePublishedEventReceivedWithInvalidPayload_ThenWebhookReturns400BadRequestResponse")]
         [TestCase("RoS11_InValidRoSwithNoCorrelationID.json", TestName = "WhenInValidRoSEventInRecordOfSalePublishedEventPostReceived_ThenWebhookReturns400BadRequestResponse")]
         public async Task WhenInValidRoSEventInRecordOfSalePublishedEventPostReceived_ThenWebhookReturns400BadRequestResponse(string payloadFileName)
         {
@@ -106,7 +106,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             RestResponse response = await _RosWebhookEndpoint.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(false));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
-        [TestCase("LTC06_InvalidRoSMigrateExistingLicence.json", TestName = "WhenValidRoSEventPublishedEventReceivedInLTCMigrateExistingLicencePostReceivedWithInvalidPayload_ThenWebhookReturns500InternalServerError")]
+        [TestCase("LTC06_InvalidRoSMigrateExistingLicence.json", TestName = "WhenValidRoSMigrateExistingLicencePublishedEventReceivedWithInvalidPayload_ThenWebhookReturns500InternalServerError")]
         [TestCase("RoS09_InValidPayloadRoSNewLicence.json", TestName = "WhenInvalidRoSEventInRecordOfSalePublishedEventPostReceivedWithInvalidPayloadForNewLicense_ThenWebhookReturns500InternalServerError")]
         [TestCase("RoS10_InValidPayloadRoSMainHolding.json", TestName = "WhenInvalidRoSEventInRecordOfSalePublishedEventPostReceivedWithInvalidPayloadForManintainHolding_ThenWebhookReturns500InternalServerError")]
         public async Task WhenInvalidRoSEventInRecordOfSalePublishedEventPostReceivedWithInvalidPayload_ThenWebhookReturns500InternalServerError(string payloadJsonFileName)
@@ -141,9 +141,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             lastEventResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
 
-        [TestCase("LTC04_RoSMigrateExistingLicence.json", TestName = "WhenValidRoSEventPublishedEventReceivedInLTCMigrateExitingLicencePostReceivedWithValidPayload_ThenWebhookReturns200OkResponse")]
+        [TestCase("LTC04_RoSMigrateExistingLicence.json", TestName = "WhenValidRoSMigrateExistingLicencePublishedEventReceivedWithValidPayload_ThenWebhookReturns200OkResponse")]
 
-        public async Task WhenValidRoSEventPublishedEventReceivedInLTCMigrateExistingLicencePostReceivedWithValidPayload_ThenWebhookReturns200OkResponse(string firstEventPayloadJsonFileName)
+        public async Task WhenValidRoSMigrateExistingLicencePublishedEventReceivedWithValidPayload_ThenWebhookReturns200OkResponse(string firstEventPayloadJsonFileName)
         {
             Console.WriteLine("Scenario: Merging ROS Events - " + firstEventPayloadJsonFileName + " & " + "\n");
 
