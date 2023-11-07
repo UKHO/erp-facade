@@ -27,7 +27,7 @@
             "licenceTypeID": 1,
             "fleetName": "",
             "numberLicenceUsers": "",
-            "upn": "send ECDISMANUFACTURER"
+            "ecdisManufacturerName": "send ECDISMANUFACTURER"
         }
     }
 }

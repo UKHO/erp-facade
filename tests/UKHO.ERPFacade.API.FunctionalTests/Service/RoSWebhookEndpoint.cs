@@ -5,6 +5,7 @@ using Microsoft.Identity.Client;
 using UKHO.ERPFacade.API.FunctionalTests.Configuration;
 using UKHO.ERPFacade.API.FunctionalTests.Helpers;
 using UKHO.ERPFacade.API.FunctionalTests.Model;
+using Newtonsoft.Json;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Service
 {

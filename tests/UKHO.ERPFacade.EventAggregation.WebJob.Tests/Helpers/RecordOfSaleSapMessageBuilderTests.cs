@@ -83,13 +83,16 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
 
         #region Data
 
-        private readonly string jsonForNewLicence1 = @"{""specversion"": ""1.0"",""type"": ""uk.gov.ukho.shop.recordOfSale.v1"",""source"": ""https://uk.gov.ukho.shop"",""id"": ""e744fa37-0c9f-4795-adc9-7f42ad8f11c1"",""time"": ""2023-07-20T10:40:00.000000Z"",""subject"": ""releasability set changes holdings Record of Sale"",""datacontenttype"": ""application/json"",""data"": {""correlationId"": ""123-abc-456-xyz-333"",""relatedEvents"": [""e744fa37-0c9f-4795-adc9-7f42ad8f11c1"", ""e744fa37-0c9f-4795-adc9-7f42ad8f1234""],""recordsOfSale"": 
-      {""licenseId"": ""2"",""productType"": ""AVCS"",""transactionType"": ""NEWLICENCE"",""distributorCustomerNumber"": ""111"",""shippingCoNumber"": ""1"",""ordernumber"": ""5432796"",""orderDate"": ""2023-06-20"",""po-ref"": ""75277T"",""holdingsExpiryDate"": ""2025-06-30"",""sapId"": """",""vesselName"": ""Cornelia Maersk"",""imoNumber"": ""IMO9245756"",""callSign"": ""OWWS2"",""licenceType"": ""02"",""shoreBased"": ""X"",""fleetName"": """",""numberLicenceUsers"": 1,""upn"": ""MARIS"",""licenceDuration"": 12,""unitsOfSale"": [{""unitName"": ""PT111101"",""endDate"": ""2023-10-31"",""duration"": ""3"",""renew"": ""N"",""repeat"": """"},{""unitName"": ""GB302409"",""endDate"": ""2023-12-01"",""duration"": ""6"",""renew"": ""N"",""repeat"": """"}]}}}";
-        private readonly string jsonForNewLicence2 = @"{""specversion"": ""1.0"",""type"": ""uk.gov.ukho.shop.recordOfSale.v1"",""source"": ""https://uk.gov.ukho.shop"",""id"": ""e744fa37-0c9f-4795-adc9-7f42ad8f1234"",""time"": ""2023-07-20T10:40:00.000000Z"",""subject"": ""releasability set changes holdings Record of Sale"",""datacontenttype"": ""application/json"",""data"": {""correlationId"": ""123-abc-456-xyz-333"",""relatedEvents"": [""e744fa37-0c9f-4795-adc9-7f42ad8f11c1""],""recordsOfSale"": 
-      {""licenseId"": ""2"",""productType"": ""AVCS"",""transactionType"": ""NEWLICENCE"",""distributorCustomerNumber"": ""111"",""shippingCoNumber"": ""1"",""ordernumber"": ""5432796"",""orderDate"": ""2023-06-20"",""po-ref"": ""75277T"",""holdingsExpiryDate"": ""2025-06-30"",""sapId"": """",""vesselName"": ""Cornelia Maersk"",""imoNumber"": ""IMO9245756"",""callSign"": ""OWWS2"",""licenceType"": ""02"",""shoreBased"": ""X"",""fleetName"": """",""numberLicenceUsers"": 1,""upn"": ""MARIS"",""licenceDuration"": 12,""unitsOfSale"": [{""unitName"": ""PT111102"",""endDate"": ""2023-10-31"",""duration"": ""3"",""renew"": ""N"",""repeat"": """"},{""unitName"": ""GB302408"",""endDate"": ""2023-12-01"",""duration"": ""6"",""renew"": ""N"",""repeat"": """"}]}}}";
+        private readonly string newLicencePayload = @"{""specversion"": ""1.0"",""type"": ""uk.gov.ukho.shop.recordOfSale.v1"",""source"": ""https://uk.gov.ukho.shop"",""id"": ""e744fa37-0c9f-4795-adc9-7f42ad8f11c1"",""time"": ""2023-07-20T10:40:00.000000Z"",""subject"": ""releasability set changes holdings Record of Sale"",""datacontenttype"": ""application/json"",""data"": {""correlationId"": ""123-abc-456-xyz-333"",""relatedEvents"": [""e744fa37-0c9f-4795-adc9-7f42ad8f11c1"", ""e744fa37-0c9f-4795-adc9-7f42ad8f1234""],""recordsOfSale"": 
+            {""licenseId"": ""2"",""productType"": ""AVCS"",""transactionType"": ""NEWLICENCE"",""distributorCustomerNumber"": ""111"",""shippingCoNumber"": ""1"",""ordernumber"": ""5432796"",""orderDate"": ""2023-06-20"",""po-ref"": ""75277T"",""holdingsExpiryDate"": ""2025-06-30"",""sapId"": """",""vesselName"": ""Cornelia Maersk"",""imoNumber"": ""IMO9245756"",""callSign"": ""OWWS2"",""licenceType"": ""02"",""shoreBased"": ""X"",""fleetName"": """",""numberLicenceUsers"": 1,""ecdisManuf"": ""MARIS"",""licenceDuration"": 12,""unitsOfSale"": [{""unitName"": ""PT111101"",""endDate"": ""2023-10-31"",""duration"": ""3"",""renew"": ""N"",""repeat"": """"},{""unitName"": ""GB302409"",""endDate"": ""2023-12-01"",""duration"": ""6"",""renew"": ""N"",""repeat"": """"}]}}}";
+        private readonly string newLicencePayloadForMerging = @"{""specversion"": ""1.0"",""type"": ""uk.gov.ukho.shop.recordOfSale.v1"",""source"": ""https://uk.gov.ukho.shop"",""id"": ""e744fa37-0c9f-4795-adc9-7f42ad8f1234"",""time"": ""2023-07-20T10:40:00.000000Z"",""subject"": ""releasability set changes holdings Record of Sale"",""datacontenttype"": ""application/json"",""data"": {""correlationId"": ""123-abc-456-xyz-333"",""relatedEvents"": [""e744fa37-0c9f-4795-adc9-7f42ad8f11c1""],""recordsOfSale"": 
+            {""licenseId"": ""2"",""productType"": ""AVCS"",""transactionType"": ""NEWLICENCE"",""distributorCustomerNumber"": ""111"",""shippingCoNumber"": ""1"",""ordernumber"": ""5432796"",""orderDate"": ""2023-06-20"",""po-ref"": ""75277T"",""holdingsExpiryDate"": ""2025-06-30"",""sapId"": """",""vesselName"": ""Cornelia Maersk"",""imoNumber"": ""IMO9245756"",""callSign"": ""OWWS2"",""licenceType"": ""02"",""shoreBased"": ""X"",""fleetName"": """",""numberLicenceUsers"": 1,""ecdisManuf"": ""MARIS"",""licenceDuration"": 12,""unitsOfSale"": [{""unitName"": ""PT111102"",""endDate"": ""2023-10-31"",""duration"": ""3"",""renew"": ""N"",""repeat"": """"},{""unitName"": ""GB302408"",""endDate"": ""2023-12-01"",""duration"": ""6"",""renew"": ""N"",""repeat"": """"}]}}}";
 
-        private readonly string jsonForMaintainHoldings1 = @"{""specversion"":""1.0"",""type"":""uk.gov.ukho.shop.recordOfSale.v1"",""source"":""https://uk.gov.ukho.shop"",""id"":""e744fa37-0c9f-4795-adc9-7f42ad8f11c1"",""time"":""2023-07-20T10:40:00Z"",""subject"":""releasability set changes holdings Record of Sale"",""datacontenttype"":""application/json"",""data"":{""correlationId"":""123-abc-456-xyz-333"",""relatedEvents"":[""e744fa37-0c9f-4795-adc9-7f42ad8f11c1"", ""e744fa37-0c9f-4795-adc9-7f42ad8f1234""],""recordsOfSale"":{""licenseId"":"""",""productType"":""AVCS"",""transactionType"":""MAINTAINHOLDINGS"",""distributorCustomerNumber"":"""",""shippingCoNumber"":"""",""ordernumber"":""5432796"",""orderDate"":"""",""po-ref"":""75277T"",""holdingsExpiryDate"":"""",""sapId"":""75277T"",""vesselName"":"""",""imoNumber"":"""",""callSign"":"""",""licenceType"":"""",""shoreBased"":"""",""fleetName"":"""",""numberLicenceUsers"":null,""upn"":"""",""licenceDuration"":null,""unitsOfSale"":[{""unitName"":""PT111101"",""endDate"":""2023-10-31"",""duration"":""3"",""renew"":""E"",""repeat"":""P""},{""unitName"":""GB302409"",""endDate"":""2023-12-01"",""duration"":""6"",""renew"":""E"",""repeat"":""P""}]}}}";
-        private readonly string jsonForMaintainHoldings2 = @"{""specversion"":""1.0"",""type"":""uk.gov.ukho.shop.recordOfSale.v1"",""source"":""https://uk.gov.ukho.shop"",""id"":""e744fa37-0c9f-4795-adc9-7f42ad8f1234"",""time"":""2023-07-20T10:40:00Z"",""subject"":""releasability set changes holdings Record of Sale"",""datacontenttype"":""application/json"",""data"":{""correlationId"":""123-abc-456-xyz-333"",""relatedEvents"":[""e744fa37-0c9f-4795-adc9-7f42ad8f11c1"", ""e744fa37-0c9f-4795-adc9-7f42ad8f1234""],""recordsOfSale"":{""licenseId"":"""",""productType"":""AVCS"",""transactionType"":""MAINTAINHOLDINGS"",""distributorCustomerNumber"":"""",""shippingCoNumber"":"""",""ordernumber"":""5432796"",""orderDate"":"""",""po-ref"":""75277T"",""holdingsExpiryDate"":"""",""sapId"":""75277T"",""vesselName"":"""",""imoNumber"":"""",""callSign"":"""",""licenceType"":"""",""shoreBased"":"""",""fleetName"":"""",""numberLicenceUsers"":null,""upn"":"""",""licenceDuration"":null,""unitsOfSale"":[{""unitName"":""PT111102"",""endDate"":""2023-10-31"",""duration"":""3"",""renew"":""E"",""repeat"":""P""},{""unitName"":""GB302408"",""endDate"":""2023-12-01"",""duration"":""6"",""renew"":""E"",""repeat"":""P""}]}}}";
+        private readonly string maintainHoldingsPayload = @"{""specversion"":""1.0"",""type"":""uk.gov.ukho.shop.recordOfSale.v1"",""source"":""https://uk.gov.ukho.shop"",""id"":""e744fa37-0c9f-4795-adc9-7f42ad8f11c1"",""time"":""2023-07-20T10:40:00Z"",""subject"":""releasability set changes holdings Record of Sale"",""datacontenttype"":""application/json"",""data"":{""correlationId"":""123-abc-456-xyz-333"",""relatedEvents"":[""e744fa37-0c9f-4795-adc9-7f42ad8f11c1"", ""e744fa37-0c9f-4795-adc9-7f42ad8f1234""],""recordsOfSale"":{""licenseId"":"""",""productType"":""AVCS"",""transactionType"":""MAINTAINHOLDINGS"",""distributorCustomerNumber"":"""",""shippingCoNumber"":"""",""ordernumber"":""5432796"",""orderDate"":"""",""po-ref"":""75277T"",""holdingsExpiryDate"":"""",""sapId"":""75277T"",""vesselName"":"""",""imoNumber"":"""",""callSign"":"""",""licenceType"":"""",""shoreBased"":"""",""fleetName"":"""",""numberLicenceUsers"":null,""ecdisManuf"":"""",""licenceDuration"":null,""unitsOfSale"":[{""unitName"":""PT111101"",""endDate"":""2023-10-31"",""duration"":""3"",""renew"":""E"",""repeat"":""P""},{""unitName"":""GB302409"",""endDate"":""2023-12-01"",""duration"":""6"",""renew"":""E"",""repeat"":""P""}]}}}";
+        private readonly string maintainHoldingsPayloadForMerging = @"{""specversion"":""1.0"",""type"":""uk.gov.ukho.shop.recordOfSale.v1"",""source"":""https://uk.gov.ukho.shop"",""id"":""e744fa37-0c9f-4795-adc9-7f42ad8f1234"",""time"":""2023-07-20T10:40:00Z"",""subject"":""releasability set changes holdings Record of Sale"",""datacontenttype"":""application/json"",""data"":{""correlationId"":""123-abc-456-xyz-333"",""relatedEvents"":[""e744fa37-0c9f-4795-adc9-7f42ad8f11c1"", ""e744fa37-0c9f-4795-adc9-7f42ad8f1234""],""recordsOfSale"":{""licenseId"":"""",""productType"":""AVCS"",""transactionType"":""MAINTAINHOLDINGS"",""distributorCustomerNumber"":"""",""shippingCoNumber"":"""",""ordernumber"":""5432796"",""orderDate"":"""",""po-ref"":""75277T"",""holdingsExpiryDate"":"""",""sapId"":""75277T"",""vesselName"":"""",""imoNumber"":"""",""callSign"":"""",""licenceType"":"""",""shoreBased"":"""",""fleetName"":"""",""numberLicenceUsers"":null,""ecdisManuf"":"""",""licenceDuration"":null,""unitsOfSale"":[{""unitName"":""PT111102"",""endDate"":""2023-10-31"",""duration"":""3"",""renew"":""E"",""repeat"":""P""},{""unitName"":""GB302408"",""endDate"":""2023-12-01"",""duration"":""6"",""renew"":""E"",""repeat"":""P""}]}}}";
+
+        private readonly string migrateNewLicencePayload = @"{""specversion"": ""1.0"",""type"": ""uk.gov.ukho.shop.recordOfSale.v1"",""source"": ""https://uk.gov.ukho.shop"",""id"": ""e744fa37-0c9f-4795-adc9-7f42ad8f11c1"",""time"": ""2023-07-20T10:40:00.000000Z"",""subject"": ""releasability set changes holdings Record of Sale"",""datacontenttype"": ""application/json"",""data"": {""correlationId"": ""123-abc-456-xyz-333"",""relatedEvents"": [""e744fa37-0c9f-4795-adc9-7f42ad8f11c1"", ""e744fa37-0c9f-4795-adc9-7f42ad8f1234""],""recordsOfSale"": 
+            {""licenseId"": ""2"",""productType"": ""AVCS"",""transactionType"": ""MIGRATENEWLICENCE"",""distributorCustomerNumber"": ""111"",""shippingCoNumber"": ""1"",""ordernumber"": ""XXL005456375"",""orderDate"": ""2023-06-20"",""po-ref"": ""75277T-Bengang"",""holdingsExpiryDate"": ""2025-06-30"",""sapId"": """",""vesselName"": ""Cornelia Maersk"",""imoNumber"": ""IMO9245756"",""callSign"": ""OWWS2"",""licenceType"": ""02"",""shoreBased"": ""X"",""fleetName"": """",""numberLicenceUsers"": 1,""ecdisManuf"": ""MARIS"",""licenceDuration"": 12,""unitsOfSale"": [{""unitName"": ""PT111101"",""endDate"": ""2023-10-31"",""duration"": ""3"",""renew"": ""N"",""repeat"": """"},{""unitName"": ""GB302409"",""endDate"": ""2023-12-01"",""duration"": ""6"",""renew"": ""N"",""repeat"": """"}]}}}";
 
         #endregion
 
@@ -105,12 +108,12 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
         [Test]
         public void WhenTransactionTypeIsNewLicence_ThenReturnXMLDocument()
         {
-            var jsonData1 = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(jsonForNewLicence1);
-            var jsonData2 = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(jsonForNewLicence2);
+            var newLicencePayloadJson = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(newLicencePayload);
+            var newLicencePayloadJsonForMerging = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(newLicencePayloadForMerging);
 
             List<RecordOfSaleEventPayLoad> rosNewLicenceData = new()
             {
-                jsonData1!, jsonData2!
+                newLicencePayloadJson!, newLicencePayloadJsonForMerging!
             };
 
             string correlationId = "123-abc-456-xyz-333";
@@ -157,12 +160,12 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
         [Test]
         public void WhenRecordOfSaleSapXmlTemplateFileNotExist_ThenThrowFileNotFoundException()
         {
-            var jsonData1 = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(jsonForNewLicence1);
-            var jsonData2 = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(jsonForNewLicence2);
+            var newLicencePayloadJson = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(newLicencePayload);
+            var newLicencePayloadJsonForMerging = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(newLicencePayloadForMerging);
 
             List<RecordOfSaleEventPayLoad> rosNewLicenceData = new()
             {
-                jsonData1!, jsonData2!
+                newLicencePayloadJson!, newLicencePayloadJsonForMerging!
             };
 
             string correlationId = "123-abc-456-xyz-333";
@@ -178,14 +181,14 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
         }
 
         [Test]
-        public void WhenTransactionTypeIsNewLicence_ThenReturns_SomeFieldsEmptyInSapXmlPayloadCreationTests()
+        public void WhenTransactionTypeIsNewLicence_ThenReturns_SapXmlPayloadWithSomeEmptyFields()
         {
-            var jsonData1 = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(jsonForNewLicence1);
-            var jsonData2 = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(jsonForNewLicence2);
+            var newLicencePayloadJson = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(newLicencePayload);
+            var newLicencePayloadJsonForMerging = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(newLicencePayloadForMerging);
 
             List<RecordOfSaleEventPayLoad> rosNewLicenceData = new()
             {
-                jsonData1!, jsonData2!
+                newLicencePayloadJson!, newLicencePayloadJsonForMerging!
             };
 
             string sapReqXml = TestHelper.ReadFileData("ERPTestData\\NewLicencePayloadTest.xml");
@@ -207,12 +210,12 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
         [Test]
         public void WhenTransactionTypeIsMaintainHoldings_ThenReturnXMLDocument()
         {
-            var jsonData1 = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(jsonForMaintainHoldings1);
-            var jsonData2 = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(jsonForMaintainHoldings2);
+            var maintainHoldingsPayloadJson = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(maintainHoldingsPayload);
+            var maintainHoldingsPayloadJsonForMerging = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(maintainHoldingsPayloadForMerging);
 
             List<RecordOfSaleEventPayLoad> rosMaintainHoldingsData = new()
             {
-                jsonData1!, jsonData2!
+                maintainHoldingsPayloadJson!, maintainHoldingsPayloadJsonForMerging!
             };
 
             string correlationId = "123-abc-456-xyz-333";
@@ -279,14 +282,14 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
         }
 
         [Test]
-        public void WhenTransactionTypeIsMaintainHoldings_ThenReturns_SomeFieldsEmptyInSapXmlPayloadCreationTests()
+        public void WhenTransactionTypeIsMaintainHoldings_ThenReturns_SapXmlPayloadWithSomeEmptyFields()
         {
-            var jsonData1 = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(jsonForMaintainHoldings1);
-            var jsonData2 = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(jsonForMaintainHoldings2);
+            var maintainHoldingsPayloadJson = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(maintainHoldingsPayload);
+            var maintainHoldingsPayloadJsonForMerging = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(maintainHoldingsPayloadForMerging);
 
             List<RecordOfSaleEventPayLoad> rosMaintainHoldingsData = new()
             {
-                jsonData1!, jsonData2!
+                maintainHoldingsPayloadJson!, maintainHoldingsPayloadJsonForMerging!
             };
 
             string sapReqXml = TestHelper.ReadFileData("ERPTestData\\MaintainHoldingsPayloadTest.xml");
@@ -313,6 +316,84 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
             result.ECDISMANUF.Should().Be("");
             result.LicenceType.Should().Be("");
             result.PROD.UnitOfSales.Count.Should().Be(4);
+            result.PROD.UnitOfSales[0].Repeat.Should().Be("P");
+            result.PROD.UnitOfSales[2].Repeat.Should().Be("P");
+        }
+
+        [Test]
+        public void WhenTransactionTypeIsMigrateNewLicence_ThenReturnXMLDocument()
+        {
+            var migrateNewLicencePayloadJson = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(migrateNewLicencePayload);
+
+            List<RecordOfSaleEventPayLoad> rosMigrateNewLicenceData = new()
+            {
+                migrateNewLicencePayloadJson!
+            };
+
+            string correlationId = "123-abc-456-xyz-333";
+            string sapReqXml = TestHelper.ReadFileData("ERPTestData\\MigrateNewLicencePayloadTest.xml");
+
+            XmlDocument soapXml = new();
+            soapXml.LoadXml(RosSapXmlFile);
+
+            A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
+            A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
+            A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
+
+            var result = _fakeRecordOfSaleSapMessageBuilder.BuildRecordOfSaleSapMessageXml(rosMigrateNewLicenceData, correlationId);
+
+            result.Should().BeOfType<XmlDocument>();
+
+            var actionItem = result.SelectSingleNode(XpathZAddsRos);
+            actionItem.ChildNodes.Count.Should().Be(1);
+            actionItem.ChildNodes[0].ChildNodes.Count.Should().Be(21);
+
+            var licNo = result.SelectSingleNode(XpathLicNo);
+            var fleet = result.SelectSingleNode(XpathFleet);
+            licNo.InnerXml.Should().BeEmpty();
+            fleet.InnerXml.Should().BeEmpty();
+
+            var prodItem = result.SelectSingleNode(XpathProd);
+            prodItem.ChildNodes.Count.Should().Be(2);
+            prodItem.ChildNodes[0].ChildNodes.Count.Should().Be(5);
+
+            var repeat = result.SelectSingleNode(XpathRepeat);
+            repeat.InnerXml.Should().BeEmpty();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+            && call.GetArgument<LogLevel>(0) == LogLevel.Information
+            && call.GetArgument<EventId>(1) == EventIds.CreatingRecordOfSaleSapPayload.ToEventId()
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Creating the record of sale SAP Payload. | _X-Correlation-ID : {_X-Correlation-ID}").MustHaveHappenedOnceExactly();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+            && call.GetArgument<LogLevel>(0) == LogLevel.Information
+            && call.GetArgument<EventId>(1) == EventIds.CreatedRecordOfSaleSapPayload.ToEventId()
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "The record of sale SAP payload created. | _X-Correlation-ID : {_X-Correlation-ID}").MustHaveHappenedOnceExactly();
+        }
+
+        [Test]
+        public void WhenTransactionTypeIsMigrateNewLicence_ThenReturns_SapXmlPayloadWithSomeEmptyFields()
+        {
+            var migrateNewLicencePayloadJson = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(migrateNewLicencePayload);
+
+            List<RecordOfSaleEventPayLoad> rosMigrateNewLicenceData = new()
+            {
+                migrateNewLicencePayloadJson!
+            };
+
+            string sapReqXml = TestHelper.ReadFileData("ERPTestData\\MigrateNewLicencePayloadTest.xml");
+
+            A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
+
+            MethodInfo methodInfo = typeof(RecordOfSaleSapMessageBuilder).GetMethod("BuildMigrateNewLicencePayload", BindingFlags.NonPublic | BindingFlags.Instance)!;
+            var result = (SapRecordOfSalePayLoad)methodInfo.Invoke(_fakeRecordOfSaleSapMessageBuilder, new object[] { rosMigrateNewLicenceData })!;
+
+            result.Should().NotBeNull();
+            result.CorrelationId.Should().Be("123-abc-456-xyz-333");
+            result.PROD.UnitOfSales.Count.Should().Be(2);
+            result.LicenceNumber.Should().Be("");
+            result.FleetName.Should().Be("");
+            result.PROD.UnitOfSales[0].Repeat.Should().Be("");
         }
     }
 }

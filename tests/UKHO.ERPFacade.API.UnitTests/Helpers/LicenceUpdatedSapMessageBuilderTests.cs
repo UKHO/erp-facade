@@ -74,8 +74,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
 
         #region Data
 
-        private readonly string jsonForChangeLicence = @"{""specversion"": ""1.0"",""type"": ""uk.gov.ukho.licensing.licenceUpdated.v1"",""source"": ""https://uk.gov.ukho.licensing"",""id"": ""e744fa37-0c9f-4795-adc9-7f42ad8f11c1"",""time"": ""8/23/2023 7:34:28 AM"",""subject"": ""licence update changes that need to go to SAP Record of Sale via ERP Facade"",""datacontenttype"": ""application/json"",""data"": {""correlationId"": ""123-abc-456-xyz-333"",""license"": {
-      ""licenseId"": ""2"",""productType"": ""AVCS"",""transactionType"": ""CHANGELICENCE"",""distributorCustomerNumber"": ""111"",""shippingCoNumber"": ""1"",""ordernumber"": """",""orderDate"": """",""po-ref"": """",""holdingsExpiryDate"": ""2024-59-31"",""sapId"": ""76611K"",""vesselName"": ""Vessel 000002"",""imoNumber"": ""IMO000002"",""callSign"": ""CALL000002"",""licenceType"": """",""shoreBased"": """",""fleetName"": ""emailnoreply@engineering.ukho.gov.uk"",""numberLicenceUsers"": 1,""upn"": ""MARIS"",""licenceDuration"": 12,
+        private readonly string changeLicencePayload = @"{""specversion"": ""1.0"",""type"": ""uk.gov.ukho.licensing.licenceUpdated.v1"",""source"": ""https://uk.gov.ukho.licensing"",""id"": ""e744fa37-0c9f-4795-adc9-7f42ad8f11c1"",""time"": ""8/23/2023 7:34:28 AM"",""subject"": ""licence update changes that need to go to SAP Record of Sale via ERP Facade"",""datacontenttype"": ""application/json"",""data"": {""correlationId"": ""123-abc-456-xyz-333"",""license"": {
+      ""licenseId"": ""2"",""productType"": ""AVCS"",""transactionType"": ""CHANGELICENCE"",""distributorCustomerNumber"": ""111"",""shippingCoNumber"": ""1"",""ordernumber"": """",""orderDate"": """",""po-ref"": """",""holdingsExpiryDate"": ""2024-59-31"",""sapId"": ""76611K"",""vesselName"": ""Vessel 000002"",""imoNumber"": ""IMO000002"",""callSign"": ""CALL000002"",""licenceType"": """",""shoreBased"": """",""fleetName"": ""emailnoreply@engineering.ukho.gov.uk"",""numberLicenceUsers"": 1,""ecdisManufacturerName"": ""MARIS"",""licenceDuration"": 12,
       ""unitsOfSale"": [{""unitName"": """",""endDate"": """",""duration"": """",""renew"": """",""repeat"": """"}]}}}";
 
         #endregion
@@ -92,7 +92,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         [Test]
         public void WhenTransactionTypeIsChangeLicence_ThenReturnXMLDocument()
         {
-            var jsonData = JsonConvert.DeserializeObject<LicenceUpdatedEventPayLoad>(jsonForChangeLicence);
+            var changeLicencePayloadJson = JsonConvert.DeserializeObject<LicenceUpdatedEventPayLoad>(changeLicencePayload);
             var correlationId = "123-abc-456-xyz-333";
             var sapReqXml = TestHelper.ReadFileData("ERPTestData\\ChangeLicencePayloadTest.xml");
 
@@ -103,7 +103,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
             A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
 
-            var result = _fakeLicenceUpdatedSapMessageBuilder.BuildLicenceUpdatedSapMessageXml(jsonData!, correlationId);
+            var result = _fakeLicenceUpdatedSapMessageBuilder.BuildLicenceUpdatedSapMessageXml(changeLicencePayloadJson!, correlationId);
 
             result.Should().BeOfType<XmlDocument>();
 
@@ -142,12 +142,12 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         [Test]
         public void WhenLicenceUpdatedSapXmlTemplateFileNotExist_ThenThrowFileNotFoundException()
         {
-            var jsonData = JsonConvert.DeserializeObject<LicenceUpdatedEventPayLoad>(jsonForChangeLicence);
+            var changeLicencePayloadJson = JsonConvert.DeserializeObject<LicenceUpdatedEventPayLoad>(changeLicencePayload);
             var correlationId = "123-abc-456-xyz-333";
 
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(false);
 
-            Assert.Throws<FileNotFoundException>(() => _fakeLicenceUpdatedSapMessageBuilder.BuildLicenceUpdatedSapMessageXml(jsonData!, correlationId));
+            Assert.Throws<FileNotFoundException>(() => _fakeLicenceUpdatedSapMessageBuilder.BuildLicenceUpdatedSapMessageXml(changeLicencePayloadJson!, correlationId));
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Error
@@ -156,15 +156,15 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         }
 
         [Test]
-        public void WhenTransactionTypeIsChangeLicenceshouldReturns_SomeFieldsEmpty_SapXmlPayloadCreationTests()
+        public void WhenTransactionTypeIsChangeLicence_ThenReturns_SapXmlPayloadWithSomeEmptyFields()
         {
-            var jsonData = JsonConvert.DeserializeObject<LicenceUpdatedEventPayLoad>(jsonForChangeLicence);
+            var changeLicencePayloadJson = JsonConvert.DeserializeObject<LicenceUpdatedEventPayLoad>(changeLicencePayload);
             var sapReqXml = TestHelper.ReadFileData("ERPTestData\\ChangeLicencePayloadTest.xml");
 
             A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
 
             MethodInfo methodInfo = typeof(LicenceUpdatedSapMessageBuilder).GetMethod("BuildChangeLicencePayload", BindingFlags.NonPublic | BindingFlags.Instance)!;
-            var result = (SapRecordOfSalePayLoad)methodInfo.Invoke(_fakeLicenceUpdatedSapMessageBuilder, new object[] { jsonData! })!;
+            var result = (SapRecordOfSalePayLoad)methodInfo.Invoke(_fakeLicenceUpdatedSapMessageBuilder, new object[] { changeLicencePayloadJson! })!;
 
             result.Should().NotBeNull();
             result.CorrelationId.Should().Be("123-abc-456-xyz-333");
