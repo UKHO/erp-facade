@@ -60,7 +60,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 s_attrNotMatched.Add(nameof(licResult.LICENSEEACC));
             if (!licResult.LICNO.Equals(licenceFieldsJson.sapId))
                 s_attrNotMatched.Add(nameof(licResult.LICNO));
-            if (!licResult.ECDISMANUF.Equals(licenceFieldsJson.upn))
+            if (!licResult.ECDISMANUF.Equals(licenceFieldsJson.ecdisManufacturerName))
                 s_attrNotMatched.Add(nameof(licResult.ECDISMANUF));
             if (!licResult.VNAME.Equals(licenceFieldsJson.vesselName))
                 s_attrNotMatched.Add(nameof(licResult.VNAME));

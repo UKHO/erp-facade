@@ -170,6 +170,15 @@
     <None Update="ERPFacadePayloadTestData\ID32_moveAndSuspended.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ERPFacadePayloadTestData\RoSPayloadTestData\LTC03_InValidLTCwithNoCorrelationID.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\RoSPayloadTestData\LTC02_InvalidRoSMigrateNewLicence.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\RoSPayloadTestData\LTC01_RoSMigrateNewLicence.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ERPFacadePayloadTestData\RoSPayloadTestData\LTC06_InvalidRoSMigrateExistingLicence.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -250,19 +250,15 @@
     <cve>CVE-2022-29149</cve>
   </suppress>
   <suppress>
-    <notes>
-      <![CDATA[
+    <notes><![CDATA[
    file name: Azure.Identity.dll
-   ]]>
-    </notes>
+   ]]></notes>
     <cve>CVE-2023-36415</cve>
   </suppress>
   <suppress>
-    <notes>
-      <![CDATA[
+    <notes><![CDATA[
    file name: Azure.Identity:1.10.3
-   ]]>
-    </notes>
+   ]]></notes>
     <cve>CVE-2023-36415</cve>
   </suppress>
 </suppressions>
