@@ -11,7 +11,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
     [TestFixture]
     public class RoSWebhookScenarios
     {
-        private RoSWebhookEndpoint _RosWebhookEndpoint { get; set; }
+        private RoSWebhookEndpoint RosWebhookEndpoint { get; set; }
         private readonly ADAuthTokenProvider _authToken = new();
 
         private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
@@ -21,27 +21,27 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [SetUp]
         public void Setup()
         {
-            _RosWebhookEndpoint = new RoSWebhookEndpoint();
+            RosWebhookEndpoint = new RoSWebhookEndpoint();
         }
 
         [Test(Description = "WhenValidRoSEventInRecordOfSalePublishedEventReceivedOptions_ThenWebhookReturns200OkResponse"), Order(0)]
         public async Task WhenValidRoSEventInRecordOfSalePublishedEventReceivedOptions_ThenWebhookReturns200OkResponse()
         {
-            var response = await _RosWebhookEndpoint.OptionRosWebhookResponseAsync(await _authToken.GetAzureADToken(false));
+            var response = await RosWebhookEndpoint.OptionRosWebhookResponseAsync(await _authToken.GetAzureADToken(false));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
 
         [Test(Description = "WhenValidRoSEventInRecordOfSalePublishedEventOptionsReceivedWithInvalidToken_ThenWebhookReturns401UnauthorizedResponse"), Order(1)]
         public async Task WhenValidRoSEventInRecordOfSalePublishedEventOptionsReceivedWithInvalidToken_ThenWebhookReturns401UnauthorizedResponse()
         {
-            var response = await _RosWebhookEndpoint.OptionRosWebhookResponseAsync("invalidToken_q234");
+            var response = await RosWebhookEndpoint.OptionRosWebhookResponseAsync("invalidToken_q234");
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
         }
 
         [Test(Description = "WhenValidRoSEventInRecordOfSalePublishedEventOptionsReceivedWithNoRole_ThenWebhookReturns403ForbiddenResponse"), Order(3)]
         public async Task WhenValidRoSEventInRecordOfSalePublishedEventOptionsReceivedWithNoRole_ThenWebhookReturns403ForbiddenResponse()
         {
-            var response = await _RosWebhookEndpoint.OptionRosWebhookResponseAsync(await _authToken.GetAzureADToken(true));
+            var response = await RosWebhookEndpoint.OptionRosWebhookResponseAsync(await _authToken.GetAzureADToken(true));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.Forbidden);
         }
 
@@ -50,7 +50,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         public async Task WhenValidRoSEventInRecordOfSalePublishedEventPostReceivedWithValidToken_ThenWebhookReturns200OkResponse(string payloadFileName)
         {
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, "RoSPayloadTestData", payloadFileName);
-            var response = await _RosWebhookEndpoint.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(false));
+            var response = await RosWebhookEndpoint.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(false));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
 
@@ -59,7 +59,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         public async Task WhenValidRoSEventInRecordOfSalePublishedEventPostReceivedWithInvalidToken_ThenWebhookReturns401UnauthorizedResponse(string payloadFileName)
         {
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, "RoSPayloadTestData", payloadFileName);
-            var response = await _RosWebhookEndpoint.PostWebhookResponseAsync(filePath, "invalidToken_abcd");
+            var response = await RosWebhookEndpoint.PostWebhookResponseAsync(filePath, "invalidToken_abcd");
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
         }
 
@@ -68,17 +68,18 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         public async Task WhenValidRoSEventInRecordOfSalePublishedEventPostReceivedWithInvalidToken_ThenWebhookReturns403ForbiddenResponse(string payloadFileName)
         {
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, "RoSPayloadTestData", payloadFileName);
-            var response = await _RosWebhookEndpoint.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(true));
+            var response = await RosWebhookEndpoint.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(true));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.Forbidden);
         }
 
         [Test, Order(2)]
         [TestCase("LTC03_InValidLTCwithNoCorrelationID.json", TestName = "WhenValidRoSMigrateNewLicencePublishedEventReceivedWithInvalidPayload_ThenWebhookReturns400BadRequestResponse")]
+        [TestCase("LTC05_InValidLTCwithNoCorrelationID.json", TestName = "WhenValidRoSMigrateExistingLicencePublishedEventReceivedWithInvalidPayload_ThenWebhookReturns400BadRequestResponse")]
         [TestCase("RoS11_InValidRoSwithNoCorrelationID.json", TestName = "WhenInValidRoSEventInRecordOfSalePublishedEventPostReceived_ThenWebhookReturns400BadRequestResponse")]
         public async Task WhenInValidRoSEventInRecordOfSalePublishedEventPostReceived_ThenWebhookReturns400BadRequestResponse(string payloadFileName)
         {
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, "RoSPayloadTestData", payloadFileName);
-            var response = await _RosWebhookEndpoint.PostWebhookResponseAsync("Bad Request", filePath, await _authToken.GetAzureADToken(false));
+            var response = await RosWebhookEndpoint.PostWebhookResponseAsync("Bad Request", filePath, await _authToken.GetAzureADToken(false));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
         }
 
@@ -87,7 +88,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         public async Task WhenInvalidRoSEventInRecordOfSalePublishedEventPostReceivedWithInvalidPayloadType_ThenWebhookReturns415UnsupportedMediaResponse(string payloadFileName)
         {
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, "RoSPayloadTestData", payloadFileName);
-            var response = await _RosWebhookEndpoint.PostWebhookResponseAsync("Unsupported Media Type", filePath, await _authToken.GetAzureADToken(false));
+            var response = await RosWebhookEndpoint.PostWebhookResponseAsync("Unsupported Media Type", filePath, await _authToken.GetAzureADToken(false));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.UnsupportedMediaType);
         }
 
@@ -103,17 +104,19 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         {
             Console.WriteLine("Scenario:" + payloadJsonFileName + "\n");
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, "RoSPayloadTestData", payloadJsonFileName);
-            RestResponse response = await _RosWebhookEndpoint.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(false));
+            RestResponse response = await RosWebhookEndpoint.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(false));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
+
         [TestCase("LTC02_InvalidRoSMigrateNewLicence.json", TestName = "WhenValidRoSMigrateNewLicencePublishedEventReceivedWithInvalidPayload_ThenWebhookReturns500InternalServerError")]
+        [TestCase("LTC06_InvalidRoSMigrateExistingLicence.json", TestName = "WhenValidRoSMigrateExistingLicencePublishedEventReceivedWithInvalidPayload_ThenWebhookReturns500InternalServerError")]
         [TestCase("RoS09_InValidPayloadRoSNewLicence.json", TestName = "WhenInvalidRoSEventInRecordOfSalePublishedEventPostReceivedWithInvalidPayloadForNewLicense_ThenWebhookReturns500InternalServerError")]
         [TestCase("RoS10_InValidPayloadRoSMainHolding.json", TestName = "WhenInvalidRoSEventInRecordOfSalePublishedEventPostReceivedWithInvalidPayloadForManintainHolding_ThenWebhookReturns500InternalServerError")]
         public async Task WhenInvalidRoSEventInRecordOfSalePublishedEventPostReceivedWithInvalidPayload_ThenWebhookReturns500InternalServerError(string payloadJsonFileName)
         {
             Console.WriteLine("Scenario:" + payloadJsonFileName + "\n");
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, "RoSPayloadTestData", payloadJsonFileName);
-            RestResponse response = await _RosWebhookEndpoint.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(false));
+            RestResponse response = await RosWebhookEndpoint.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(false));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.InternalServerError);
         }
        
@@ -128,22 +131,22 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
             //Send first event
             string firstEventPayloadJsonFilePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, "RoSPayloadTestData", firstEventPayloadJsonFileName);
-            RestResponse firstEventResponse = await _RosWebhookEndpoint.PostWebhookResponseAsyncForXML(generatedCorrelationId, firstEventPayloadJsonFilePath, true, false, generatedXmlFolder, null, await _authToken.GetAzureADToken(false));
+            RestResponse firstEventResponse = await RosWebhookEndpoint.PostWebhookResponseAsyncForXML(generatedCorrelationId, firstEventPayloadJsonFilePath, true, false, generatedXmlFolder, null, await _authToken.GetAzureADToken(false));
 
             //Assert if ROS webhook returns OK
             firstEventResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
             //Send last event  - Additionally we need to send list of all json files to compare total unitofsales items with final XML payload
             string lastEventPayloadJsonFilePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, "RoSPayloadTestData", lastEventPayloadJsonFileName);
-            RestResponse lastEventResponse = await _RosWebhookEndpoint.PostWebhookResponseAsyncForXML(generatedCorrelationId, lastEventPayloadJsonFilePath, false, true, generatedXmlFolder, listOfEventJsons, await _authToken.GetAzureADToken(false));
+            RestResponse lastEventResponse = await RosWebhookEndpoint.PostWebhookResponseAsyncForXML(generatedCorrelationId, lastEventPayloadJsonFilePath, false, true, generatedXmlFolder, listOfEventJsons, await _authToken.GetAzureADToken(false));
 
             //Assert if ROS webhook returns OK
             lastEventResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
 
         [TestCase("LTC01_RoSMigrateNewLicence.json", TestName = "WhenValidRoSMigrateNewLicencePublishedEventReceivedWithValidPayload_ThenWebhookReturns200OkResponse")]
-       
-        public async Task WhenValidRoSMigrateNewLicencePublishedEventReceivedWithValidPayload_ThenWebhookReturns200OkResponse( string firstEventPayloadJsonFileName)
+        [TestCase("LTC04_RoSMigrateExistingLicence.json", TestName = "WhenValidRoSMigrateExistingLicencePublishedEventReceivedWithValidPayload_ThenWebhookReturns200OkResponse")]
+        public async Task WhenValidRoSMigrateLicencePublishedEventReceivedWithValidPayload_ThenWebhookReturns200OkResponse( string firstEventPayloadJsonFileName)
         {
             Console.WriteLine("Scenario: Merging ROS Events - " + firstEventPayloadJsonFileName + " & " + "\n");
 
@@ -151,9 +154,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             string generatedXmlFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXMLFolder, "RoSPayloadTestData");
             List<JsonInputRoSWebhookEvent> listOfEventJsons2 = await JsonHelper.GetEventJsonListUsingFileNameAsync(new List<string> { firstEventPayloadJsonFileName });
             string firstEventPayloadJsonFilePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, "RoSPayloadTestData", firstEventPayloadJsonFileName);
-            RestResponse firstEventResponse = await _RosWebhookEndpoint.PostWebhookResponseAsyncForXML(generatedCorrelationId, firstEventPayloadJsonFilePath, true, true, generatedXmlFolder, listOfEventJsons2, await _authToken.GetAzureADToken(false));
+            RestResponse firstEventResponse = await RosWebhookEndpoint.PostWebhookResponseAsyncForXML(generatedCorrelationId, firstEventPayloadJsonFilePath, true, true, generatedXmlFolder, listOfEventJsons2, await _authToken.GetAzureADToken(false));
             firstEventResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-
         }
     }
 }

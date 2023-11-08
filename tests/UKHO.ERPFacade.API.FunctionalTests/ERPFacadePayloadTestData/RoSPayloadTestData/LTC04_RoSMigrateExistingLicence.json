@@ -1,0 +1,50 @@
+{
+  "specversion": "1.0",
+  "type": "uk.gov.ukho.shop.recordOfSale.v1",
+  "source": "https://fleetmanager.ukho.gov.uk",
+  "id": "e744fa37-0c9f-4795-adc9-7f42ad8f11c1",
+  "time": "2023-07-20T10:40:00.000000Z",
+  "subject": "Licence ID: 10044 | Order Number: XXL005456375",
+  "datacontenttype": "application/json",
+  "data": {
+    "correlationId": "699ce4a4-1d62-4f56-b359-59e178d77100",
+    "relatedEvents": ["e744fa37-0c9f-4795-adc9-7f42ad8f11c1"],
+    "recordsOfSale": {
+        "licenseId": "",
+        "productType": "AVCS",
+        "transactionType": "MIGRATEEXISTINGLICENCE",
+        "distributorCustomerNumber": "",
+        "shippingCoNumber": "",
+        "ordernumber": "XXL005456375",
+        "orderDate": "",
+        "po-ref": "75277T-Bengang",
+        "holdingsExpiryDate": "",
+        "sapId": "75277T",
+        "vesselName": "",
+        "imoNumber": "",
+        "callSign": "",
+        "licenceType": "",
+        "shoreBased": "",
+        "fleetName": "",
+        "numberLicenceUsers": 0,
+        "ecdisManufacturerName": "",
+        "licenceDuration": 0,
+        "unitsOfSale": [
+            {
+                "unitName": "PT111101",
+                "endDate": "2023-10-31",
+                "duration": "12",
+                "renew": "N",
+                "repeat": ""
+            },
+            {
+                "unitName": "GB302409",
+                "endDate": "2023-12-01",
+                "duration": "6",
+                "renew": "N",
+                "repeat": ""
+            }
+        ]
+    }    
+  }
+}

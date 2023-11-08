@@ -12,11 +12,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
     {
         private readonly RestClient _client;
         private readonly AzureBlobStorageHelper _azureBlobStorageHelper;
-        
 
         private const string LicenceUpdatedRequestEndPoint = "/webhook/licenceupdatedpublishedeventreceived";
 
-        public static string generatedCorrelationId = string.Empty;
+        public static string GeneratedCorrelationId = string.Empty;
 
         public LicenceUpdatedEndpoint()
         {
@@ -42,8 +41,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
                 requestBody = await streamReader.ReadToEndAsync();
             }
 
-            generatedCorrelationId = SAPXmlHelper.GenerateRandomCorrelationId();
-            requestBody = SAPXmlHelper.UpdateTimeAndCorrIdField(requestBody, generatedCorrelationId);
+            GeneratedCorrelationId = SAPXmlHelper.GenerateRandomCorrelationId();
+            requestBody = SAPXmlHelper.UpdateTimeAndCorrIdField(requestBody, GeneratedCorrelationId);
 
             var request = new RestRequest(LicenceUpdatedRequestEndPoint, Method.Post);
             request.AddHeader("Content-Type", "application/json");
@@ -53,8 +52,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                bool isBlobCreated = _azureBlobStorageHelper.VerifyBlobExists("licenceupdatedblobs", generatedCorrelationId);
-                Assert.That(isBlobCreated, Is.True, $"Blob {generatedCorrelationId} not created in licenceupdatedblobs");
+                bool isBlobCreated = _azureBlobStorageHelper.VerifyBlobExists("licenceupdatedblobs", GeneratedCorrelationId);
+                Assert.That(isBlobCreated, Is.True, $"Blob {GeneratedCorrelationId} not created in licenceupdatedblobs");
             }
 
             return response;
@@ -103,15 +102,15 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             {
                 requestBody = streamReader.ReadToEnd();
             }
-            generatedCorrelationId = SAPXmlHelper.GenerateRandomCorrelationId();
-            requestBody = SAPXmlHelper.UpdateTimeAndCorrIdField(requestBody, generatedCorrelationId);
+            GeneratedCorrelationId = SAPXmlHelper.GenerateRandomCorrelationId();
+            requestBody = SAPXmlHelper.UpdateTimeAndCorrIdField(requestBody, GeneratedCorrelationId);
             var request = new RestRequest(LicenceUpdatedRequestEndPoint, Method.Post);
             request.AddHeader("Content-Type", "application/json");
             request.AddHeader("Authorization", "Bearer " + token);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
             RestResponse response = await _client.ExecuteAsync(request);
             JsonInputLicenceUpdateHelper jsonPayload = JsonConvert.DeserializeObject<JsonInputLicenceUpdateHelper>(requestBody);
-            string generatedXmlFilePath = _azureBlobStorageHelper.DownloadGeneratedXMLFile(generatedXmlFolder, generatedCorrelationId, "licenceupdatedblobs");
+            string generatedXmlFilePath = _azureBlobStorageHelper.DownloadGeneratedXMLFile(generatedXmlFolder, GeneratedCorrelationId, "licenceupdatedblobs");
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 Assert.That(LicenceUpdateXmlHelper.CheckXmlAttributes(jsonPayload, generatedXmlFilePath, requestBody).Result, Is.True, "CheckXMLAttributes Failed");
