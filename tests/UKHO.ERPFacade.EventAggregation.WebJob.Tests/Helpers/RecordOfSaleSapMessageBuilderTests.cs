@@ -1,15 +1,14 @@
-﻿using FakeItEasy;
+﻿using System.Reflection;
+using System.Xml;
+using FakeItEasy;
+using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using System.Reflection;
-using System.Xml;
 using NUnit.Framework;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.EventAggregation.WebJob.Helpers;
-using UKHO.ERPFacade.API.UnitTests.Common;
-using FluentAssertions;
 
 namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
 {
@@ -106,6 +105,8 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
             _fakeRecordOfSaleSapMessageBuilder = new RecordOfSaleSapMessageBuilder(_fakeLogger, _fakeXmlHelper, _fakeFileSystemHelper);
         }
 
+        private static string ReadFileData(string fileName) => File.ReadAllText(fileName);
+
         [Test]
         public void WhenTransactionTypeIsNewLicence_ThenReturnXMLDocument()
         {
@@ -118,7 +119,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
             };
 
             string correlationId = "123-abc-456-xyz-333";
-            string sapReqXml = TestHelper.ReadFileData("ERPTestData\\NewLicencePayloadTest.xml");
+            string sapReqXml = ReadFileData("ERPTestData\\NewLicencePayloadTest.xml");
 
             XmlDocument soapXml = new();
             soapXml.LoadXml(RosSapXmlFile);
@@ -192,7 +193,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
                 newLicencePayloadJson!, newLicencePayloadJsonForMerging!
             };
 
-            string sapReqXml = TestHelper.ReadFileData("ERPTestData\\NewLicencePayloadTest.xml");
+            string sapReqXml = ReadFileData("ERPTestData\\NewLicencePayloadTest.xml");
 
             A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
 
@@ -220,7 +221,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
             };
 
             string correlationId = "123-abc-456-xyz-333";
-            string sapReqXml = TestHelper.ReadFileData("ERPTestData\\MaintainHoldingsPayloadTest.xml");
+            string sapReqXml = ReadFileData("ERPTestData\\MaintainHoldingsPayloadTest.xml");
 
             XmlDocument soapXml = new();
             soapXml.LoadXml(RosSapXmlFile);
@@ -293,7 +294,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
                 maintainHoldingsPayloadJson!, maintainHoldingsPayloadJsonForMerging!
             };
 
-            string sapReqXml = TestHelper.ReadFileData("ERPTestData\\MaintainHoldingsPayloadTest.xml");
+            string sapReqXml = ReadFileData("ERPTestData\\MaintainHoldingsPayloadTest.xml");
 
             A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
 
@@ -332,7 +333,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
             };
 
             string correlationId = "123-abc-456-xyz-333";
-            string sapReqXml = TestHelper.ReadFileData("ERPTestData\\MigrateNewLicencePayloadTest.xml");
+            string sapReqXml = ReadFileData("ERPTestData\\MigrateNewLicencePayloadTest.xml");
 
             XmlDocument soapXml = new();
             soapXml.LoadXml(RosSapXmlFile);
@@ -382,7 +383,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
                 migrateNewLicencePayloadJson!
             };
 
-            string sapReqXml = TestHelper.ReadFileData("ERPTestData\\MigrateNewLicencePayloadTest.xml");
+            string sapReqXml = ReadFileData("ERPTestData\\MigrateNewLicencePayloadTest.xml");
 
             A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
 
@@ -408,7 +409,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
             };
 
             string correlationId = "123-abc-456-xyz-333";
-            string sapReqXml = TestHelper.ReadFileData("ERPTestData\\MigrateExistingLicencePayloadTest.xml");
+            string sapReqXml = ReadFileData("ERPTestData\\MigrateExistingLicencePayloadTest.xml");
 
             XmlDocument soapXml = new();
             soapXml.LoadXml(RosSapXmlFile);
@@ -483,7 +484,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
                 migrateExistingLicencePayloadJson!
             };
 
-            string sapReqXml = TestHelper.ReadFileData("ERPTestData\\MigrateExistingLicencePayloadTest.xml");
+            string sapReqXml = ReadFileData("ERPTestData\\MigrateExistingLicencePayloadTest.xml");
 
             A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
 
