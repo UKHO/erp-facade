@@ -31,7 +31,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\UKHO.ERPFacade.Common\UKHO.ERPFacade.Common.csproj" />
     <ProjectReference Include="..\..\src\UKHO.ERPFacade.Monitoring.WebJob\UKHO.ERPFacade.Monitoring.WebJob.csproj" />
   </ItemGroup>
 

@@ -32,7 +32,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\UKHO.ERPFacade.API\UKHO.ERPFacade.API.csproj" />
-    <ProjectReference Include="..\..\src\UKHO.ERPFacade.Common\UKHO.ERPFacade.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>
