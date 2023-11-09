@@ -30,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\UKHO.ERPFacade.API.UnitTests\UKHO.ERPFacade.API.UnitTests.csproj" />
+    <ProjectReference Include="..\..\src\UKHO.ERPFacade.Common\UKHO.ERPFacade.Common.csproj" />
   </ItemGroup>
 
 </Project>
