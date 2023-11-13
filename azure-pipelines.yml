@@ -443,8 +443,7 @@ stages:
     
   - stage: E2EDeploy
     dependsOn: IATDeploy
-    displayName: "E2Edeploy (inc terraform, webapp deploy)"
-    condition: and(succeeded(), eq('${{ parameters.vNext }}', true))
+    displayName: "E2Edeploy (inc terraform, webapp deploy)"    
     variables:
       - group: "ERP-Facade-E2E"
       - group: "Erp-E2E"
@@ -471,7 +470,7 @@ stages:
         value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
       - name: "SapMockConfiguration.BaseUrl"
         value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
-    condition: and(succeeded(), eq('${{ parameters.vNext }}', false), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
+    condition: and(succeeded(), eq('${{ parameters.vNext }}', true), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
 
     jobs:
       - deployment: E2EDeployTerraform
