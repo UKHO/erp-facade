@@ -29,7 +29,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
         private HttpClient _fakeHttpClient;
         private EnterpriseEventServiceConfiguration _fakeErpPublishEventSource;
         private ILogger<EnterpriseEventServiceEventPublisher> _fakeLogger;
-
+        
         [SetUp]
         public void Setup()
         {
@@ -51,6 +51,13 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.EventService.EventProvi
             A.CallTo(() => _fakeHttpClientFactory.CreateClient(EnterpriseEventServiceEventPublisher.EventServiceClientName)).Returns(_fakeHttpClient);
 
             _fakeEnterpriseEventServiceEventPublisher = new EnterpriseEventServiceEventPublisher(_fakeLogger, _fakeHttpClientFactory, _optionsWrapper);
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            _fakeHttpClientMessageHandler.Dispose();
+            _fakeHttpClient.Dispose();
         }
 
         [Test]

@@ -42,9 +42,11 @@ namespace UKHO.ERPFacade.Common.UnitTests.Infrastructure.ConfigurationTests
         }
 
         [TearDown]
-        public void Teardown()
+        public void TearDown()
         {
             _fakeWireMockServer.Stop();
+            _fakeWireMockServer.Dispose();
+            _serviceProvider.Dispose();
         }
 
         [TestCase(HttpStatusCode.InternalServerError)]
