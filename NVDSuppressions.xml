@@ -192,18 +192,6 @@
 	<suppress>
 		<notes>
 			<![CDATA[
-   file name: System.Security.Cryptography.X509Certificates:4.1.0
-   This part of .NetCoreApp. Either waiting on fix through .net sdk to fix, or update to .net core 8 when available.
-   file name: System.Security.Cryptography.X509Certificates:4.3.0
-   This CVE applies to . NET Core 1.0, 1.1, and 2.0 allow an unauthenticated attacker to remotely cause a denial of service attack against
-   a . NET Core web application by improperly parsing certificate data.Either waiting on fix through .net sdk to fix, or update to .net core 8 when available
-   ]]>
-		</notes>
-		<cve>CVE-2017-11770</cve>
-	</suppress>
-	<suppress>
-		<notes>
-			<![CDATA[
    file name: System.Security.Cryptography.Xml:4.7.0
    vulnerability: Buffer overflow and spoofing Affects .Net 3.1 .Net 5.0 and <= .Net 6.0.8 Currently running Net 6.0.13,  sdk 6.0.405
    ]]>
