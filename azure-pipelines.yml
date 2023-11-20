@@ -5,7 +5,12 @@ parameters:
     displayName: "Continue even if resources are getting destroyed"
     type: boolean
     default: false
-
+    
+  - name: vNext
+    displayName: "Run the vNext Path"
+    type: boolean
+    default: true
+    
 trigger:
   - main
   - release/*
@@ -31,38 +36,6 @@ variables:
     value: "Private Link Deployments (ENG)"
 
 stages:
-  - stage: Stryker_Mutator
-    displayName: "Stryker Mutator"
-    dependsOn: []
-    jobs:
-      - job: Stryker
-        workspace:
-          clean: all
-        steps:
-          - task: UseDotNet@2
-            displayName: 'Use .NET 6.0.x sdk'
-            inputs:
-              packageType: sdk
-              useGlobalJson: true
-              workingDirectory: '$(Build.SourcesDirectory)'
-          - task: DotNetCoreCLI@2
-            displayName: "Install Stryker"
-            inputs:
-              command: custom
-              custom: tool
-              arguments: install dotnet-stryker --tool-path $(Agent.BuildDirectory)/tools
-          - task: Powershell@2
-            displayName: "Run Stryker"
-            inputs:
-              workingDirectory: '$(Build.SourcesDirectory)'
-              targetType: 'inline'
-              pwsh: true
-              script: $(Agent.BuildDirectory)/tools/dotnet-stryker
-          - task: PublishMutationReport@0
-            displayName: 'Publish Strkyer Mutator Report'
-            inputs:
-              reportPattern: '**/mutation-report.html'
-
   - stage: PERFORM_DEPENDENCYCHECK_DOTNETBUILD_DOTNETTEST_AND_PUBLISH
     displayName: "Build (DependencyChecker, Dotnet Build & Restore , Dotnet Test and Publish Artifact )"
     dependsOn: []
@@ -369,8 +342,8 @@ stages:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)\MockSAPService'
               ArtifactName: UKHOMockSAPService
 
-  - stage: Devdeploy
-    displayName: "Devdeploy (inc terraform, webapp deploy)"
+  - stage: DevDeploy
+    displayName: "DevDeploy (inc terraform, webapp deploy)"
     variables:
       - group: "ERP-Facade-Dev"
       - group: "Erp-Dev"
@@ -459,8 +432,87 @@ stages:
             parameters:
               AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
 
+  - stage: IATDeploy
+    dependsOn: DevDeploy
+    displayName: "IATdeploy (inc terraform, webapp deploy)"
+    condition: and(succeeded(), eq('${{ parameters.vNext }}', true))
+    jobs:
+      - job:
+        steps:
+        - script: echo IAT deployed
+    
+  - stage: E2EDeploy
+    dependsOn: IATDeploy
+    displayName: "E2Edeploy (inc terraform, webapp deploy)"    
+    variables:
+      - group: "ERP-Facade-E2E"
+      - group: "Erp-E2E"
+      - group: "ERP-FACADE-E2E-KV"
+      - name: "AzureADConfiguration.TenantId"
+        value: $(AzureADConfigurationTenantId)
+      - name: "AzureADConfiguration.ClientId"
+        value: $(AzureADConfigurationClientId)
+      - name: "AzureADConfiguration.AutoTestClientId"
+        value: $(AzureADConfigurationAutoTestClientId)
+      - name: "AzureADConfiguration.ClientSecret"
+        value: $(AzureADConfigurationClientSecret)
+      - name: "AzureADConfiguration.AutoTestClientIdNoRole"
+        value: $(AzureADConfigurationAutoTestClientIdNoRole)
+      - name: "AzureADConfiguration.ClientSecretNoRole"
+        value: $(AzureADConfigurationClientSecretNoRole)
+      - name: "EnterpriseEventServiceConfiguration.ClientId"
+        value: $(EnterpriseEventServiceConfigurationClientId)
+      - name: "SharedKeyConfiguration.Key"
+        value: $(SharedKeyConfigurationKey)
+      - name: mockWebAppName
+        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
+      - name: mockWebAppResourceGroup
+        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
+      - name: "SapMockConfiguration.BaseUrl"
+        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
+    condition: and(succeeded(), eq('${{ parameters.vNext }}', true), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
+
+    jobs:
+      - deployment: E2EDeployTerraform
+        displayName: "E2e - Deploy Terraform"
+        environment: "ERP-E2E"
+        pool: $(DeploymentPool)
+        container: ${{variables.Container}}
+        workspace:
+          clean: all
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - template: Deployment/templates/continuous-deployment.yml
+                  parameters:
+                    ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
+                    AzureSubscription: "ERP-Facade-E2E-A.011.08"
+
+      - deployment: E2EDeployApp
+        dependsOn: E2EDeployTerraform
+        displayName: "E2e - Deploy Dotnet App"
+        environment: "ERP-E2E"
+        pool: $(DeploymentPoolPE)
+        variables:
+          - name : WEB_APP_NAME
+            value : $[ dependencies.E2EDeployTerraform.outputs['E2EDeployTerraform.TerraformDeploy.WEB_APP'] ]
+          - name : "KeyVaultSettings.ServiceUri"
+            value : $[ dependencies.E2EDeployTerraform.outputs['E2EDeployTerraform.TerraformDeploy.keyvaulturi'] ]
+          - name : "AzureWebJobsStorage.ConnectionString"
+            value : $[ dependencies.E2EDeployTerraform.outputs['E2EDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
+        workspace:
+          clean: all
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - template: Deployment/templates/continuous-deployment-app.yml
+                  parameters:
+                    AzureSubscription: "ERP-Facade-vNext-E2E-A.011.08"            
+
   - stage: QAdeploy
-    dependsOn: Devdeploy
+    dependsOn: DevDeploy
     displayName: "QAdeploy (inc terraform, webapp deploy)"
     variables:
       - group: "ERP-Facade-QA"
@@ -483,12 +535,12 @@ stages:
       - name: "SharedKeyConfiguration.Key"
         value: $(SharedKeyConfigurationKey)
       - name: mockWebAppName
-        value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
+        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup
-        value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
+        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
       - name: "SapMockConfiguration.BaseUrl"
-        value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
-    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
+        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
+    condition: and(succeeded(), eq('${{ parameters.vNext }}', false), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
     jobs:
       - deployment: QADeployTerraform
         displayName: "Qa - Deploy Terraform"
@@ -542,10 +594,14 @@ stages:
         steps:
           - template: Deployment/templates/continuous-testing.yml
             parameters:
-              AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
+              AzureSubscription: "ERP-Facade-Dev-A.011.05.12"              
 
-  - stage: Livedeploy
-    displayName: "Livedeploy (inc terraform, webapp deploy)"
+  - stage: LiveDeploy
+    displayName: "LiveDeploy (inc terraform, webapp deploy)"
+    dependsOn: 
+      - QADeploy
+      - E2EDeploy
+    condition: or(succeeded('QADeploy'), and(eq('${{ parameters.vNext }}', true), succeeded('E2EDeploy')), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
     variables:
       - group: "ERP-Facade-Live"
       - group: "Erp-Live"
@@ -557,7 +613,6 @@ stages:
         value: $(EnterpriseEventServiceConfigurationClientId)
       - name: "SharedKeyConfiguration.Key"
         value: $(SharedKeyConfigurationKey)
-    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
     jobs:
       - deployment: LiveDeployTerraform
         displayName: "Live - Deploy Terraform"
