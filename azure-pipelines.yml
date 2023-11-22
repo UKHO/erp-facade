@@ -470,7 +470,7 @@ stages:
         value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
       - name: "SapMockConfiguration.BaseUrl"
         value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
-    condition: and(succeeded(), eq('${{ parameters.vNext }}', true), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
+    condition: and(succeeded(), eq('${{ parameters.vNext }}', true))
 
     jobs:
       - deployment: E2EDeployTerraform
