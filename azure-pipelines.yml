@@ -10,6 +10,11 @@ parameters:
     displayName: "Run the vNext Path"
     type: boolean
     default: true
+
+  - name: DisableDependencyCheck
+    displayName: "Disable OWASP dependency checking"
+    type: boolean
+    default: true
     
 trigger:
   - main
@@ -41,6 +46,7 @@ stages:
     dependsOn: []
     jobs:
       - job: Dependencychecker
+        condition: eq('${{ parameters.DisableDependencyCheck }}', false)
         workspace:
           clean: all
         displayName: "Dependencychecker"
