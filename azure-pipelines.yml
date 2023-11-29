@@ -24,7 +24,7 @@ variables:
   - name: Container
     value: "ukhydrographicoffice/terraform-azure-powershell-unzip:1.4.4"
   - name: DeploymentPool
-    value: "UKHO Ubuntu 1804"
+    value: "Mare Nectaris"
   - name: DeploymentPoolFT
     value: "Tiberius"
   - name: DeploymentPoolPE
