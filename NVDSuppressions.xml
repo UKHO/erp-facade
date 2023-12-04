@@ -239,4 +239,13 @@
     <packageUrl regex="true">^pkg:generic/dotnet\-getdocument@.*$</packageUrl>
     <cve>CVE-2023-44487</cve>
   </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Various Azure.
+   Refers to Azure CLI.
+   ]]>
+    </notes>
+    <cve>CVE-2023-36052</cve>
+  </suppress>
 </suppressions>
