@@ -72,6 +72,7 @@ stages:
             displayName: 'Publish Strkyer Mutator Report'
             inputs:
               reportPattern: '**/mutation-report.html'
+
       - job: Dependencychecker
         condition: eq('${{ parameters.DisableDependencyCheck }}', false)
         workspace:
