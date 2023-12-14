@@ -48,7 +48,7 @@ The incremental development of the ERP Facade will be split into 3 outcomes.
 
 * Publish the bulkPriceChange event(s) to the EES. 
 
-* Log successful Outbound2 Trace IDs to the Authority’s Enterprise logging service. 
+* Log successful Outbound2 Trace IDs to the Authority’s Enterprise logging service.  
 
 
 
