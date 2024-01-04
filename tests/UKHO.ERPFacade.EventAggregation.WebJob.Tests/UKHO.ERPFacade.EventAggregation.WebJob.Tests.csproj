@@ -38,6 +38,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="ERPTestData\ConvertLicencePayloadTest.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="ERPTestData\MaintainHoldingsPayloadTest.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

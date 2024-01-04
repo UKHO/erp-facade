@@ -94,6 +94,9 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
             {""licenseId"": ""2"",""productType"": ""AVCS"",""transactionType"": ""MIGRATENEWLICENCE"",""distributorCustomerNumber"": ""111"",""shippingCoNumber"": ""1"",""ordernumber"": ""XXL005456375"",""orderDate"": ""2023-06-20"",""po-ref"": ""75277T-Bengang"",""holdingsExpiryDate"": ""2025-06-30"",""sapId"": """",""vesselName"": ""Cornelia Maersk"",""imoNumber"": ""IMO9245756"",""callSign"": ""OWWS2"",""licenceType"": ""02"",""shoreBased"": ""X"",""fleetName"": """",""numberLicenceUsers"": 1,""ecdisManufacturerName"": ""MARIS"",""licenceDuration"": 12,""unitsOfSale"": [{""unitName"": ""PT111101"",""endDate"": ""2023-10-31"",""duration"": ""3"",""renew"": ""N"",""repeat"": """"},{""unitName"": ""GB302409"",""endDate"": ""2023-12-01"",""duration"": ""6"",""renew"": ""N"",""repeat"": """"}]}}}";
 
         private readonly string migrateExistingLicencePayload = @"{""specversion"":""1.0"",""type"":""uk.gov.ukho.shop.recordOfSale.v1"",""source"":""https://uk.gov.ukho.shop"",""id"":""e744fa37-0c9f-4795-adc9-7f42ad8f11c1"",""time"":""2023-07-20T10:40:00Z"",""subject"":""releasability set changes holdings Record of Sale"",""datacontenttype"":""application/json"",""data"":{""correlationId"":""123-abc-456-xyz-333"",""relatedEvents"":[""e744fa37-0c9f-4795-adc9-7f42ad8f11c1"", ""e744fa37-0c9f-4795-adc9-7f42ad8f1234""],""recordsOfSale"":{""licenseId"":"""",""productType"":""AVCS"",""transactionType"":""MIGRATEEXISTINGLICENCE"",""distributorCustomerNumber"":"""",""shippingCoNumber"":"""",""ordernumber"":""XXL005456375"",""orderDate"":"""",""po-ref"":""75277T-Bengang"",""holdingsExpiryDate"":"""",""sapId"":""75277T"",""vesselName"":"""",""imoNumber"":"""",""callSign"":"""",""licenceType"":"""",""shoreBased"":"""",""fleetName"":"""",""numberLicenceUsers"":null,""ecdisManufacturerNameacturerName"":"""",""licenceDuration"":null,""unitsOfSale"":[{""unitName"":""PT111101"",""endDate"":""2023-10-31"",""duration"":""3"",""renew"":""N"",""repeat"":""""},{""unitName"":""GB302409"",""endDate"":""2023-12-01"",""duration"":""6"",""renew"":""N"",""repeat"":""""}]}}}";
+
+        private readonly string convertLicencePayload = @"{""specversion"":""1.0"",""type"":""uk.gov.ukho.shop.recordOfSale.v1"",""source"":""https://uk.gov.ukho.shop"",""id"":""e744fa37-0c9f-4795-adc9-7f42ad8f11c1"",""time"":""2023-07-20T10:40:00Z"",""subject"":""releasability set changes holdings Record of Sale"",""datacontenttype"":""application/json"",""data"":{""correlationId"":""123-abc-456-xyz-333"",""relatedEvents"":[""e744fa37-0c9f-4795-adc9-7f42ad8f11c1"", ""e744fa37-0c9f-4795-adc9-7f42ad8f1234""],""recordsOfSale"":{""licenseId"":"""",""productType"":""AVCS"",""transactionType"":""CONVERTLICENCE"",""distributorCustomerNumber"":"""",""shippingCoNumber"":"""",""ordernumber"":""XXL005456375"",""orderDate"":"""",""po-ref"":""75277T-Bengang"",""holdingsExpiryDate"":"""",""sapId"":""75277T"",""vesselName"":"""",""imoNumber"":"""",""callSign"":"""",""licenceType"":""1"",""shoreBased"":"""",""fleetName"":"""",""numberLicenceUsers"":null,""ecdisManufacturerNameacturerName"":"""",""licenceDuration"":12,""unitsOfSale"":[{""unitName"":""PT111101"",""endDate"":""2023-10-31"",""duration"":""3"",""renew"":""N"",""repeat"":""""},{""unitName"":""GB302409"",""endDate"":""2023-12-01"",""duration"":""6"",""renew"":""N"",""repeat"":""""}]}}}";
+
         #endregion
 
         [SetUp]
@@ -507,6 +510,119 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
             result.LicenceDuration.Should().Be(null);
             result.ECDISMANUF.Should().Be("");
             result.LicenceType.Should().Be("");
+            result.PROD.UnitOfSales.Count.Should().Be(2);
+            result.PROD.UnitOfSales[0].Repeat.Should().Be("");
+        }
+
+        [Test]
+        public void WhenTransactionTypeIsConvertLicence_ThenReturnXMLDocument()
+        {
+            RecordOfSaleEventPayLoad? convertLicencePayloadJson = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(convertLicencePayload);
+
+            List<RecordOfSaleEventPayLoad> rosConvertLicenceData = new()
+            {
+                convertLicencePayloadJson!
+            };
+
+            const string correlationId = "123-abc-456-xyz-333";
+            string sapReqXml = ReadFileData("ERPTestData\\ConvertLicencePayloadTest.xml");
+
+            XmlDocument soapXml = new();
+            soapXml.LoadXml(RosSapXmlFile);
+
+            A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
+            A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
+            A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
+
+            XmlDocument result = _fakeRecordOfSaleSapMessageBuilder.BuildRecordOfSaleSapMessageXml(rosConvertLicenceData, correlationId);
+
+            result.Should().BeOfType<XmlDocument>();
+
+            XmlNode? actionItem = result.SelectSingleNode(XpathZAddsRos);
+            actionItem.ChildNodes.Count.Should().Be(1);
+            actionItem.ChildNodes[0].ChildNodes.Count.Should().Be(21);
+
+            XmlNode? soldToAcc = result.SelectSingleNode(XpathSoldToAcc);
+            XmlNode? licenseEAcc = result.SelectSingleNode(XpathLicenseEAcc);
+            XmlNode? startDate = result.SelectSingleNode(XpathStartDate);
+            XmlNode? endDate = result.SelectSingleNode(XpathEndDate);
+            XmlNode? vName = result.SelectSingleNode(XpathVName);
+            XmlNode? imo = result.SelectSingleNode(XpathImo);
+            XmlNode? callSign = result.SelectSingleNode(XpathCallSign);
+            XmlNode? shoreBased = result.SelectSingleNode(XpathshoreBased);
+            XmlNode? fleet = result.SelectSingleNode(XpathFleet);
+            XmlNode? endUserId = result.SelectSingleNode(XpathEndUserId);
+            XmlNode? manuf = result.SelectSingleNode(XpathManuf);
+            XmlNode? lType = result.SelectSingleNode(XpathLType);
+            XmlNode? users = result.SelectSingleNode(XpathUsers);
+            XmlNode? licDur = result.SelectSingleNode(XpathLicDur);
+
+            soldToAcc.InnerXml.Should().BeEmpty();
+            licenseEAcc.InnerXml.Should().BeEmpty();
+            startDate.InnerXml.Should().BeEmpty();
+            endDate.InnerXml.Should().BeEmpty();
+            vName.InnerXml.Should().BeEmpty();
+            imo.InnerXml.Should().BeEmpty();
+            callSign.InnerXml.Should().BeEmpty();
+            shoreBased.InnerXml.Should().BeEmpty();
+            fleet.InnerXml.Should().BeEmpty();
+            endUserId.InnerXml.Should().BeEmpty();
+            manuf.InnerXml.Should().BeEmpty();
+            lType.InnerXml.Should().Be("1");
+            users.InnerXml.Should().BeNullOrEmpty();
+            licDur.InnerXml.Should().Be("12");
+
+            XmlNode? prodItem = result.SelectSingleNode(XpathProd);
+            prodItem.ChildNodes.Count.Should().Be(4);
+            prodItem.ChildNodes[0].ChildNodes.Count.Should().Be(5);
+
+            XmlNode? repeat = result.SelectSingleNode(XpathRepeat);
+            repeat.InnerXml.Should().BeEmpty();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+            && call.GetArgument<LogLevel>(0) == LogLevel.Information
+            && call.GetArgument<EventId>(1) == EventIds.CreatingRecordOfSaleSapPayload.ToEventId()
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Creating the record of sale SAP Payload. | _X-Correlation-ID : {_X-Correlation-ID}").MustHaveHappenedOnceExactly();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+            && call.GetArgument<LogLevel>(0) == LogLevel.Information
+            && call.GetArgument<EventId>(1) == EventIds.CreatedRecordOfSaleSapPayload.ToEventId()
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "The record of sale SAP payload created. | _X-Correlation-ID : {_X-Correlation-ID}").MustHaveHappenedOnceExactly();
+        }
+
+        [Test]
+        public void WhenTransactionTypeIsConvertLicence_ThenReturns_SapXmlPayloadWithSomeEmptyFields()
+        {
+            RecordOfSaleEventPayLoad? convertLicencePayloadJson = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(convertLicencePayload);
+
+            List<RecordOfSaleEventPayLoad> rosConvertLicenceData = new()
+            {
+                convertLicencePayloadJson!
+            };
+
+            string sapReqXml = ReadFileData("ERPTestData\\ConvertLicencePayloadTest.xml");
+
+            A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
+
+            MethodInfo methodInfo = typeof(RecordOfSaleSapMessageBuilder).GetMethod("BuildConvertLicencePayload", BindingFlags.NonPublic | BindingFlags.Instance)!;
+            var result = (SapRecordOfSalePayLoad)methodInfo.Invoke(_fakeRecordOfSaleSapMessageBuilder, new object[] { rosConvertLicenceData })!;
+
+            result.Should().NotBeNull();
+            result.CorrelationId.Should().Be("123-abc-456-xyz-333");
+            result.SoldToAcc.Should().Be("");
+            result.LicenseEacc.Should().Be("");
+            result.StartDate.Should().Be("");
+            result.EndDate.Should().Be("");
+            result.VesselName.Should().Be("");
+            result.IMONumber.Should().Be("");
+            result.CallSign.Should().Be("");
+            result.ShoreBased.Should().Be("");
+            result.FleetName.Should().Be("");
+            result.Users.Should().Be(null);
+            result.EndUserId.Should().Be("");
+            result.LicenceDuration.Should().Be(12);
+            result.ECDISMANUF.Should().Be("");
+            result.LicenceType.Should().Be("1");
             result.PROD.UnitOfSales.Count.Should().Be(2);
             result.PROD.UnitOfSales[0].Repeat.Should().Be("");
         }
