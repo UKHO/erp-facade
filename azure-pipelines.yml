@@ -511,7 +511,7 @@ stages:
                 - template: Deployment/templates/continuous-deployment.yml
                   parameters:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
-                    AzureSubscription: "ERP-Facade-QA-A.011.05.12"
+                    AzureSubscription: "ERP-Facade-vNext-IAT-A.011.08"
 
       - deployment: IATDeployApp
         dependsOn: IATDeployTerraform
@@ -520,11 +520,11 @@ stages:
         pool: $(DeploymentPoolPE)
         variables:
           - name : WEB_APP_NAME
-            value : $[ dependencies.IATDeployTerraform.outputs['QADeployTerraform.TerraformDeploy.WEB_APP'] ]
+            value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.WEB_APP'] ]
           - name : "KeyVaultSettings.ServiceUri"
-            value : $[ dependencies.IATDeployTerraform.outputs['QADeployTerraform.TerraformDeploy.keyvaulturi'] ]
+            value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.keyvaulturi'] ]
           - name : "AzureWebJobsStorage.ConnectionString"
-            value : $[ dependencies.IATDeployTerraform.outputs['QADeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
+            value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
         workspace:
           clean: all
         strategy:
