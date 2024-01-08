@@ -312,7 +312,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Helpers
         {
             SapRecordOfSalePayLoad rosConvertLicencePayload = new();
 
-            foreach (RecordOfSaleEventPayLoad eventData in eventDataList)
+            foreach (var eventData in eventDataList)
             {
                 if (rosConvertLicencePayload.PROD == null!)
                 {
