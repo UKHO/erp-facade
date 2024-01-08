@@ -95,7 +95,8 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
 
         private readonly string migrateExistingLicencePayload = @"{""specversion"":""1.0"",""type"":""uk.gov.ukho.shop.recordOfSale.v1"",""source"":""https://uk.gov.ukho.shop"",""id"":""e744fa37-0c9f-4795-adc9-7f42ad8f11c1"",""time"":""2023-07-20T10:40:00Z"",""subject"":""releasability set changes holdings Record of Sale"",""datacontenttype"":""application/json"",""data"":{""correlationId"":""123-abc-456-xyz-333"",""relatedEvents"":[""e744fa37-0c9f-4795-adc9-7f42ad8f11c1"", ""e744fa37-0c9f-4795-adc9-7f42ad8f1234""],""recordsOfSale"":{""licenseId"":"""",""productType"":""AVCS"",""transactionType"":""MIGRATEEXISTINGLICENCE"",""distributorCustomerNumber"":"""",""shippingCoNumber"":"""",""ordernumber"":""XXL005456375"",""orderDate"":"""",""po-ref"":""75277T-Bengang"",""holdingsExpiryDate"":"""",""sapId"":""75277T"",""vesselName"":"""",""imoNumber"":"""",""callSign"":"""",""licenceType"":"""",""shoreBased"":"""",""fleetName"":"""",""numberLicenceUsers"":null,""ecdisManufacturerNameacturerName"":"""",""licenceDuration"":null,""unitsOfSale"":[{""unitName"":""PT111101"",""endDate"":""2023-10-31"",""duration"":""3"",""renew"":""N"",""repeat"":""""},{""unitName"":""GB302409"",""endDate"":""2023-12-01"",""duration"":""6"",""renew"":""N"",""repeat"":""""}]}}}";
 
-        private readonly string convertLicencePayload = @"{""specversion"":""1.0"",""type"":""uk.gov.ukho.shop.recordOfSale.v1"",""source"":""https://uk.gov.ukho.shop"",""id"":""e744fa37-0c9f-4795-adc9-7f42ad8f11c1"",""time"":""2023-07-20T10:40:00Z"",""subject"":""releasability set changes holdings Record of Sale"",""datacontenttype"":""application/json"",""data"":{""correlationId"":""123-abc-456-xyz-333"",""relatedEvents"":[""e744fa37-0c9f-4795-adc9-7f42ad8f11c1"", ""e744fa37-0c9f-4795-adc9-7f42ad8f1234""],""recordsOfSale"":{""licenseId"":"""",""productType"":""AVCS"",""transactionType"":""CONVERTLICENCE"",""distributorCustomerNumber"":"""",""shippingCoNumber"":"""",""ordernumber"":""XXL005456375"",""orderDate"":"""",""po-ref"":""75277T-Bengang"",""holdingsExpiryDate"":"""",""sapId"":""75277T"",""vesselName"":"""",""imoNumber"":"""",""callSign"":"""",""licenceType"":""1"",""shoreBased"":"""",""fleetName"":"""",""numberLicenceUsers"":null,""ecdisManufacturerNameacturerName"":"""",""licenceDuration"":12,""unitsOfSale"":[{""unitName"":""PT111101"",""endDate"":""2023-10-31"",""duration"":""3"",""renew"":""N"",""repeat"":""""},{""unitName"":""GB302409"",""endDate"":""2023-12-01"",""duration"":""6"",""renew"":""N"",""repeat"":""""}]}}}";
+        private readonly string convertLicencePayload = @"{""specversion"":""1.0"",""type"":""uk.gov.ukho.shop.recordOfSale.v1"",""source"":""https://uk.gov.ukho.shop"",""id"":""e744fa37-0c9f-4795-adc9-7f42ad8f11c1"",""time"":""2023-07-20T10:40:00Z"",""subject"":""releasability set changes holdings Record of Sale"",""datacontenttype"":""application/json"",""data"":{""correlationId"":""123-abc-456-xyz-333"",""relatedEvents"":[""e744fa37-0c9f-4795-adc9-7f42ad8f11c1"", ""e744fa37-0c9f-4795-adc9-7f42ad8f1234""],""recordsOfSale"":{""licenseId"":"""",""productType"":""AVCS"",""transactionType"":""CONVERTLICENCE"",""distributorCustomerNumber"":"""",""shippingCoNumber"":"""",""ordernumber"":""5432796"",""orderDate"":"""",""po-ref"":""75277T"",""holdingsExpiryDate"":"""",""sapId"":""75277T"",""vesselName"":"""",""imoNumber"":"""",""callSign"":"""",""licenceType"":""1"",""shoreBased"":"""",""fleetName"":"""",""numberLicenceUsers"":null,""ecdisManufacturerName"":"""",""licenceDuration"":""12"",""unitsOfSale"":[{""unitName"":""PT111101"",""endDate"":""2023-10-31"",""duration"":""3"",""renew"":""N"",""repeat"":""""},{""unitName"":""GB302409"",""endDate"":""2023-12-01"",""duration"":""6"",""renew"":""N"",""repeat"":""""}]}}}";
+        private readonly string convertLicencePayloadForMerging = @"{""specversion"":""1.0"",""type"":""uk.gov.ukho.shop.recordOfSale.v1"",""source"":""https://uk.gov.ukho.shop"",""id"":""e744fa37-0c9f-4795-adc9-7f42ad8f1234"",""time"":""2023-07-20T10:40:00Z"",""subject"":""releasability set changes holdings Record of Sale"",""datacontenttype"":""application/json"",""data"":{""correlationId"":""123-abc-456-xyz-333"",""relatedEvents"":[""e744fa37-0c9f-4795-adc9-7f42ad8f11c1"", ""e744fa37-0c9f-4795-adc9-7f42ad8f1234""],""recordsOfSale"":{""licenseId"":"""",""productType"":""AVCS"",""transactionType"":""CONVERTLICENCE"",""distributorCustomerNumber"":"""",""shippingCoNumber"":"""",""ordernumber"":""5432796"",""orderDate"":"""",""po-ref"":""75277T"",""holdingsExpiryDate"":"""",""sapId"":""75277T"",""vesselName"":"""",""imoNumber"":"""",""callSign"":"""",""licenceType"":""1"",""shoreBased"":"""",""fleetName"":"""",""numberLicenceUsers"":null,""ecdisManufacturerName"":"""",""licenceDuration"":""12"",""unitsOfSale"":[{""unitName"":""PT111102"",""endDate"":""2023-10-31"",""duration"":""3"",""renew"":""N"",""repeat"":""""},{""unitName"":""GB302408"",""endDate"":""2023-12-01"",""duration"":""6"",""renew"":""N"",""repeat"":""""}]}}}";
 
         #endregion
 
@@ -516,12 +517,14 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
 
         [Test]
         public void WhenTransactionTypeIsConvertLicence_ThenReturnXMLDocument()
-        {
+        { 
             var convertLicencePayloadJson = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(convertLicencePayload);
+            var convertLicencePayloadJsonForMerging = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(convertLicencePayloadForMerging);
 
             List<RecordOfSaleEventPayLoad> rosConvertLicenceData = new()
             {
-                convertLicencePayloadJson!
+                convertLicencePayloadJson!,
+                convertLicencePayloadJsonForMerging!
             };
 
             const string correlationId = "123-abc-456-xyz-333";
@@ -542,35 +545,35 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
             actionItem.ChildNodes.Count.Should().Be(1);
             actionItem.ChildNodes[0].ChildNodes.Count.Should().Be(21);
 
-            var SoldToAcc = result.SelectSingleNode(XpathSoldToAcc);
-            var LicenseEAcc = result.SelectSingleNode(XpathLicenseEAcc);
-            var StartDate = result.SelectSingleNode(XpathStartDate);
-            var EndDate = result.SelectSingleNode(XpathEndDate);
-            var VName = result.SelectSingleNode(XpathVName);
-            var Imo = result.SelectSingleNode(XpathImo);
-            var CallSign = result.SelectSingleNode(XpathCallSign);
-            var ShoreBased = result.SelectSingleNode(XpathshoreBased);
-            var Fleet = result.SelectSingleNode(XpathFleet);
-            var EndUserId = result.SelectSingleNode(XpathEndUserId);
-            var Manuf = result.SelectSingleNode(XpathManuf);
-            var LType = result.SelectSingleNode(XpathLType);
-            var Users = result.SelectSingleNode(XpathUsers);
-            var LicDur = result.SelectSingleNode(XpathLicDur);
+            var soldToAcc = result.SelectSingleNode(XpathSoldToAcc);
+            var licenseEAcc = result.SelectSingleNode(XpathLicenseEAcc);
+            var startDate = result.SelectSingleNode(XpathStartDate);
+            var endDate = result.SelectSingleNode(XpathEndDate);
+            var vName = result.SelectSingleNode(XpathVName);
+            var imo = result.SelectSingleNode(XpathImo);
+            var callSign = result.SelectSingleNode(XpathCallSign);
+            var shoreBased = result.SelectSingleNode(XpathshoreBased);
+            var fleet = result.SelectSingleNode(XpathFleet);
+            var endUserId = result.SelectSingleNode(XpathEndUserId);
+            var manuf = result.SelectSingleNode(XpathManuf);
+            var lType = result.SelectSingleNode(XpathLType);
+            var users = result.SelectSingleNode(XpathUsers);
+            var licDur = result.SelectSingleNode(XpathLicDur);
 
-            SoldToAcc.InnerXml.Should().BeEmpty();
-            LicenseEAcc.InnerXml.Should().BeEmpty();
-            StartDate.InnerXml.Should().BeEmpty();
-            EndDate.InnerXml.Should().BeEmpty();
-            VName.InnerXml.Should().BeEmpty();
-            Imo.InnerXml.Should().BeEmpty();
-            CallSign.InnerXml.Should().BeEmpty();
-            ShoreBased.InnerXml.Should().BeEmpty();
-            Fleet.InnerXml.Should().BeEmpty();
-            EndUserId.InnerXml.Should().BeEmpty();
-            Manuf.InnerXml.Should().BeEmpty();
-            LType.InnerXml.Should().Be("1");
-            Users.InnerXml.Should().BeNullOrEmpty();
-            LicDur.InnerXml.Should().Be("12");
+            soldToAcc.InnerXml.Should().BeEmpty();
+            licenseEAcc.InnerXml.Should().BeEmpty();
+            startDate.InnerXml.Should().BeEmpty();
+            endDate.InnerXml.Should().BeEmpty();
+            vName.InnerXml.Should().BeEmpty();
+            imo.InnerXml.Should().BeEmpty();
+            callSign.InnerXml.Should().BeEmpty();
+            shoreBased.InnerXml.Should().BeEmpty();
+            fleet.InnerXml.Should().BeEmpty();
+            endUserId.InnerXml.Should().BeEmpty();
+            manuf.InnerXml.Should().BeEmpty();
+            lType.InnerXml.Should().Be("1");
+            users.InnerXml.Should().BeNullOrEmpty();
+            licDur.InnerXml.Should().Be("12");
 
             var prodItem = result.SelectSingleNode(XpathProd);
             prodItem.ChildNodes.Count.Should().Be(4);
@@ -594,10 +597,12 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
         public void WhenTransactionTypeIsConvertLicence_ThenReturns_SapXmlPayloadWithSomeEmptyFields()
         {
             var convertLicencePayloadJson = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(convertLicencePayload);
+            var convertLicencePayloadJsonForMerging = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(convertLicencePayloadForMerging);
 
             List<RecordOfSaleEventPayLoad> rosConvertLicenceData = new()
             {
-                convertLicencePayloadJson!
+                convertLicencePayloadJson!,
+                convertLicencePayloadJsonForMerging!
             };
 
             string sapReqXml = ReadFileData("ERPTestData\\ConvertLicencePayloadTest.xml");
@@ -623,7 +628,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
             result.LicenceDuration.Should().Be(12);
             result.ECDISMANUF.Should().Be("");
             result.LicenceType.Should().Be("1");
-            result.PROD.UnitOfSales.Count.Should().Be(2);
+            result.PROD.UnitOfSales.Count.Should().Be(4);
             result.PROD.UnitOfSales[0].Repeat.Should().Be("");
         }
     }
