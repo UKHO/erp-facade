@@ -517,7 +517,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
         [Test]
         public void WhenTransactionTypeIsConvertLicence_ThenReturnXMLDocument()
         {
-            RecordOfSaleEventPayLoad? convertLicencePayloadJson = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(convertLicencePayload);
+            var convertLicencePayloadJson = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(convertLicencePayload);
 
             List<RecordOfSaleEventPayLoad> rosConvertLicenceData = new()
             {
@@ -534,49 +534,49 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
             A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
 
-            XmlDocument result = _fakeRecordOfSaleSapMessageBuilder.BuildRecordOfSaleSapMessageXml(rosConvertLicenceData, correlationId);
+            var result = _fakeRecordOfSaleSapMessageBuilder.BuildRecordOfSaleSapMessageXml(rosConvertLicenceData, correlationId);
 
             result.Should().BeOfType<XmlDocument>();
 
-            XmlNode? actionItem = result.SelectSingleNode(XpathZAddsRos);
+            var actionItem = result.SelectSingleNode(XpathZAddsRos);
             actionItem.ChildNodes.Count.Should().Be(1);
             actionItem.ChildNodes[0].ChildNodes.Count.Should().Be(21);
 
-            XmlNode? soldToAcc = result.SelectSingleNode(XpathSoldToAcc);
-            XmlNode? licenseEAcc = result.SelectSingleNode(XpathLicenseEAcc);
-            XmlNode? startDate = result.SelectSingleNode(XpathStartDate);
-            XmlNode? endDate = result.SelectSingleNode(XpathEndDate);
-            XmlNode? vName = result.SelectSingleNode(XpathVName);
-            XmlNode? imo = result.SelectSingleNode(XpathImo);
-            XmlNode? callSign = result.SelectSingleNode(XpathCallSign);
-            XmlNode? shoreBased = result.SelectSingleNode(XpathshoreBased);
-            XmlNode? fleet = result.SelectSingleNode(XpathFleet);
-            XmlNode? endUserId = result.SelectSingleNode(XpathEndUserId);
-            XmlNode? manuf = result.SelectSingleNode(XpathManuf);
-            XmlNode? lType = result.SelectSingleNode(XpathLType);
-            XmlNode? users = result.SelectSingleNode(XpathUsers);
-            XmlNode? licDur = result.SelectSingleNode(XpathLicDur);
+            var SoldToAcc = result.SelectSingleNode(XpathSoldToAcc);
+            var LicenseEAcc = result.SelectSingleNode(XpathLicenseEAcc);
+            var StartDate = result.SelectSingleNode(XpathStartDate);
+            var EndDate = result.SelectSingleNode(XpathEndDate);
+            var VName = result.SelectSingleNode(XpathVName);
+            var Imo = result.SelectSingleNode(XpathImo);
+            var CallSign = result.SelectSingleNode(XpathCallSign);
+            var ShoreBased = result.SelectSingleNode(XpathshoreBased);
+            var Fleet = result.SelectSingleNode(XpathFleet);
+            var EndUserId = result.SelectSingleNode(XpathEndUserId);
+            var Manuf = result.SelectSingleNode(XpathManuf);
+            var LType = result.SelectSingleNode(XpathLType);
+            var Users = result.SelectSingleNode(XpathUsers);
+            var LicDur = result.SelectSingleNode(XpathLicDur);
 
-            soldToAcc.InnerXml.Should().BeEmpty();
-            licenseEAcc.InnerXml.Should().BeEmpty();
-            startDate.InnerXml.Should().BeEmpty();
-            endDate.InnerXml.Should().BeEmpty();
-            vName.InnerXml.Should().BeEmpty();
-            imo.InnerXml.Should().BeEmpty();
-            callSign.InnerXml.Should().BeEmpty();
-            shoreBased.InnerXml.Should().BeEmpty();
-            fleet.InnerXml.Should().BeEmpty();
-            endUserId.InnerXml.Should().BeEmpty();
-            manuf.InnerXml.Should().BeEmpty();
-            lType.InnerXml.Should().Be("1");
-            users.InnerXml.Should().BeNullOrEmpty();
-            licDur.InnerXml.Should().Be("12");
+            SoldToAcc.InnerXml.Should().BeEmpty();
+            LicenseEAcc.InnerXml.Should().BeEmpty();
+            StartDate.InnerXml.Should().BeEmpty();
+            EndDate.InnerXml.Should().BeEmpty();
+            VName.InnerXml.Should().BeEmpty();
+            Imo.InnerXml.Should().BeEmpty();
+            CallSign.InnerXml.Should().BeEmpty();
+            ShoreBased.InnerXml.Should().BeEmpty();
+            Fleet.InnerXml.Should().BeEmpty();
+            EndUserId.InnerXml.Should().BeEmpty();
+            Manuf.InnerXml.Should().BeEmpty();
+            LType.InnerXml.Should().Be("1");
+            Users.InnerXml.Should().BeNullOrEmpty();
+            LicDur.InnerXml.Should().Be("12");
 
-            XmlNode? prodItem = result.SelectSingleNode(XpathProd);
+            var prodItem = result.SelectSingleNode(XpathProd);
             prodItem.ChildNodes.Count.Should().Be(4);
             prodItem.ChildNodes[0].ChildNodes.Count.Should().Be(5);
 
-            XmlNode? repeat = result.SelectSingleNode(XpathRepeat);
+            var repeat = result.SelectSingleNode(XpathRepeat);
             repeat.InnerXml.Should().BeEmpty();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
@@ -593,7 +593,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
         [Test]
         public void WhenTransactionTypeIsConvertLicence_ThenReturns_SapXmlPayloadWithSomeEmptyFields()
         {
-            RecordOfSaleEventPayLoad? convertLicencePayloadJson = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(convertLicencePayload);
+            var convertLicencePayloadJson = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(convertLicencePayload);
 
             List<RecordOfSaleEventPayLoad> rosConvertLicenceData = new()
             {
