@@ -40,46 +40,6 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
         private readonly string XpathLicDur = $"//*[local-name()='LICDUR']";
         private readonly string XpathRepeat = $"//*[local-name()='REPEAT']";
 
-//        private readonly string RosSapXmlFile = @"<?xml version=""1.0"" encoding=""utf-8""?>
-//<soap:Envelope xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:soap=""http://schemas.xmlsoap.org/soap/envelope/"">
-//  <soap:Body>
-//    <Z_ADDS_ROS xmlns=""urn:sap-com:document:sap:rfc:functions"">
-//      <IM_ORDER xmlns="""">
-//        <GUID></GUID>
-//        <SERVICETYPE></SERVICETYPE>
-//        <LICTRANSACTION></LICTRANSACTION>
-//        <SOLDTOACC></SOLDTOACC>
-//        <LICENSEEACC></LICENSEEACC>
-//        <STARTDATE></STARTDATE>
-//        <ENDDATE></ENDDATE>
-//        <LICNO></LICNO>
-//        <VNAME></VNAME>
-//        <IMO></IMO>
-//        <CALLSIGN></CALLSIGN>
-//        <SHOREBASED></SHOREBASED>
-//        <FLEET></FLEET>
-//        <USERS></USERS>
-//        <ENDUSERID></ENDUSERID>
-//        <ECDISMANUF></ECDISMANUF>
-//        <LTYPE></LTYPE>
-//        <LICDUR></LICDUR>
-//        <PO></PO>
-//        <ADSORDNO></ADSORDNO>
-//        <PROD>
-//          <item>
-//            <ID></ID>
-//            <ENDDA></ENDDA>
-//            <DURATION></DURATION>
-//            <RENEW></RENEW>
-//            <REPEAT></REPEAT>
-//          </item>
-//        </PROD>
-//      </IM_ORDER>
-//    </Z_ADDS_ROS>
-//  </soap:Body>
-//</soap:Envelope>
-//";
-
         #region Data
 
         private readonly string newLicencePayload = @"{""specversion"": ""1.0"",""type"": ""uk.gov.ukho.shop.recordOfSale.v1"",""source"": ""https://uk.gov.ukho.shop"",""id"": ""e744fa37-0c9f-4795-adc9-7f42ad8f11c1"",""time"": ""2023-07-20T10:40:00.000000Z"",""subject"": ""releasability set changes holdings Record of Sale"",""datacontenttype"": ""application/json"",""data"": {""correlationId"": ""123-abc-456-xyz-333"",""relatedEvents"": [""e744fa37-0c9f-4795-adc9-7f42ad8f11c1"", ""e744fa37-0c9f-4795-adc9-7f42ad8f1234""],""recordsOfSale"": 
@@ -113,8 +73,6 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
             _fakeRecordOfSaleSapMessageBuilder = new RecordOfSaleSapMessageBuilder(_fakeLogger, _fakeXmlHelper, _fakeFileSystemHelper);
         }
 
-        //private static string ReadFileData(string fileName) => File.ReadAllText(fileName);
-
         [Test]
         public void WhenTransactionTypeIsNewLicence_ThenReturnXMLDocument()
         {
@@ -126,16 +84,10 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
                 newLicencePayloadJson!, newLicencePayloadJsonForMerging!
             };
 
-            string correlationId = "123-abc-456-xyz-333";
-            //string sapReqXml = ReadFileData("ERPTestData\\NewLicencePayloadTest.xml");
-
-            //XmlDocument soapXml = new();
-            //soapXml.LoadXml(RosSapXmlFile);
+            const string correlationId = "123-abc-456-xyz-333";
 
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
-            //A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
-            //A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
-
+           
             var result = _fakeRecordOfSaleSapMessageBuilder.BuildRecordOfSaleSapMessageXml(rosNewLicenceData, correlationId);
 
             result.Should().BeOfType<XmlDocument>();
@@ -153,8 +105,6 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
             prodItem.ChildNodes.Count.Should().Be(4);
             prodItem.ChildNodes[0].ChildNodes.Count.Should().Be(5);
 
-
-          //need to check names of products
             var repeat = result.SelectSingleNode(XpathRepeat);
             repeat.InnerXml.Should().BeEmpty();
 
@@ -180,7 +130,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
                 newLicencePayloadJson!, newLicencePayloadJsonForMerging!
             };
 
-            string correlationId = "123-abc-456-xyz-333";
+            const string correlationId = "123-abc-456-xyz-333";
 
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(false);
 
@@ -202,10 +152,6 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
             {
                 newLicencePayloadJson!, newLicencePayloadJsonForMerging!
             };
-
-            // sapReqXml = ReadFileData("ERPTestData\\NewLicencePayloadTest.xml");
-
-            //A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
 
             MethodInfo methodInfo = typeof(RecordOfSaleSapMessageBuilder).GetMethod("BuildNewLicencePayload", BindingFlags.NonPublic | BindingFlags.Instance)!;
             var result = (SapRecordOfSalePayLoad)methodInfo.Invoke(_fakeRecordOfSaleSapMessageBuilder, new object[] { rosNewLicenceData })!;
@@ -232,16 +178,10 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
                 maintainHoldingsPayloadJson!, maintainHoldingsPayloadJsonForMerging!
             };
 
-            string correlationId = "123-abc-456-xyz-333";
-            //string sapReqXml = ReadFileData("ERPTestData\\MaintainHoldingsPayloadTest.xml");
-
-            //XmlDocument soapXml = new();
-            //soapXml.LoadXml(RosSapXmlFile);
+            const string correlationId = "123-abc-456-xyz-333";
 
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
-            //A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
-            //A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
-
+          
             var result = _fakeRecordOfSaleSapMessageBuilder.BuildRecordOfSaleSapMessageXml(rosMaintainHoldingsData, correlationId);
 
             result.Should().BeOfType<XmlDocument>();
@@ -250,35 +190,35 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
             actionItem.ChildNodes.Count.Should().Be(1);
             actionItem.ChildNodes[0].ChildNodes.Count.Should().Be(21);
 
-            var SoldToAcc = result.SelectSingleNode(XpathSoldToAcc);
-            var LicenseEAcc = result.SelectSingleNode(XpathLicenseEAcc);
-            var StartDate = result.SelectSingleNode(XpathStartDate);
-            var EndDate = result.SelectSingleNode(XpathEndDate);
-            var VName = result.SelectSingleNode(XpathVName);
-            var Imo = result.SelectSingleNode(XpathImo);
-            var CallSign = result.SelectSingleNode(XpathCallSign);
-            var ShoreBased = result.SelectSingleNode(XpathshoreBased);
-            var Fleet = result.SelectSingleNode(XpathFleet);
-            var EndUserId = result.SelectSingleNode(XpathEndUserId);
-            var Manuf = result.SelectSingleNode(XpathManuf);
-            var LType = result.SelectSingleNode(XpathLType);
-            var Users = result.SelectSingleNode(XpathUsers);
-            var LicDur = result.SelectSingleNode(XpathLicDur);
+            var soldToAcc = result.SelectSingleNode(XpathSoldToAcc);
+            var licenseEAcc = result.SelectSingleNode(XpathLicenseEAcc);
+            var startDate = result.SelectSingleNode(XpathStartDate);
+            var endDate = result.SelectSingleNode(XpathEndDate);
+            var vName = result.SelectSingleNode(XpathVName);
+            var imo = result.SelectSingleNode(XpathImo);
+            var callSign = result.SelectSingleNode(XpathCallSign);
+            var shoreBased = result.SelectSingleNode(XpathshoreBased);
+            var fleet = result.SelectSingleNode(XpathFleet);
+            var endUserId = result.SelectSingleNode(XpathEndUserId);
+            var manuf = result.SelectSingleNode(XpathManuf);
+            var lType = result.SelectSingleNode(XpathLType);
+            var users = result.SelectSingleNode(XpathUsers);
+            var licDur = result.SelectSingleNode(XpathLicDur);
 
-            SoldToAcc.InnerXml.Should().BeEmpty();
-            LicenseEAcc.InnerXml.Should().BeEmpty();
-            StartDate.InnerXml.Should().BeEmpty();
-            EndDate.InnerXml.Should().BeEmpty();
-            VName.InnerXml.Should().BeEmpty();
-            Imo.InnerXml.Should().BeEmpty();
-            CallSign.InnerXml.Should().BeEmpty();
-            ShoreBased.InnerXml.Should().BeEmpty();
-            Fleet.InnerXml.Should().BeEmpty();
-            EndUserId.InnerXml.Should().BeEmpty();
-            Manuf.InnerXml.Should().BeEmpty();
-            LType.InnerXml.Should().BeEmpty();
-            Users.InnerXml.Should().BeNullOrEmpty();
-            LicDur.InnerXml.Should().BeNullOrEmpty();
+            soldToAcc.InnerXml.Should().BeEmpty();
+            licenseEAcc.InnerXml.Should().BeEmpty();
+            startDate.InnerXml.Should().BeEmpty();
+            endDate.InnerXml.Should().BeEmpty();
+            vName.InnerXml.Should().BeEmpty();
+            imo.InnerXml.Should().BeEmpty();
+            callSign.InnerXml.Should().BeEmpty();
+            shoreBased.InnerXml.Should().BeEmpty();
+            fleet.InnerXml.Should().BeEmpty();
+            endUserId.InnerXml.Should().BeEmpty();
+            manuf.InnerXml.Should().BeEmpty();
+            lType.InnerXml.Should().BeEmpty();
+            users.InnerXml.Should().BeNullOrEmpty();
+            licDur.InnerXml.Should().BeNullOrEmpty();
 
             var prodItem = result.SelectSingleNode(XpathProd);
             prodItem.ChildNodes.Count.Should().Be(4);
@@ -305,10 +245,6 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
             {
                 maintainHoldingsPayloadJson!, maintainHoldingsPayloadJsonForMerging!
             };
-
-            //string sapReqXml = ReadFileData("ERPTestData\\MaintainHoldingsPayloadTest.xml");
-
-            //A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
 
             MethodInfo methodInfo = typeof(RecordOfSaleSapMessageBuilder).GetMethod("BuildMaintainHoldingsPayload", BindingFlags.NonPublic | BindingFlags.Instance)!;
             var result = (SapRecordOfSalePayLoad)methodInfo.Invoke(_fakeRecordOfSaleSapMessageBuilder, new object[] { rosMaintainHoldingsData })!;
@@ -340,23 +276,17 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
         public void WhenTransactionTypeIsMigrateNewLicence_ThenReturnXMLDocument()
         {
             var migrateNewLicencePayloadJson = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(migrateNewLicencePayload);
-            var migrateNewLicencePayloadForMergingJson = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(migrateNewLicencePayloadForMerging);
+            var migrateNewLicencePayloadJsonForMerging = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(migrateNewLicencePayloadForMerging);
 
             List<RecordOfSaleEventPayLoad> rosMigrateNewLicenceData = new()
             {
-                migrateNewLicencePayloadJson!,migrateNewLicencePayloadForMergingJson!
+                migrateNewLicencePayloadJson!, migrateNewLicencePayloadJsonForMerging!
             };
 
-            string correlationId = "123-abc-456-xyz-333";
-            //string sapReqXml = ReadFileData("ERPTestData\\MigrateNewLicencePayloadTest.xml");
-
-            //XmlDocument soapXml = new();
-            //soapXml.LoadXml(RosSapXmlFile);
-
+            const string correlationId = "123-abc-456-xyz-333";
+           
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
-            //A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
-            //A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
-
+           
             var result = _fakeRecordOfSaleSapMessageBuilder.BuildRecordOfSaleSapMessageXml(rosMigrateNewLicenceData, correlationId);
 
             result.Should().BeOfType<XmlDocument>();
@@ -392,16 +322,12 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
         public void WhenTransactionTypeIsMigrateNewLicence_ThenReturns_SapXmlPayloadWithSomeEmptyFields()
         {
             var migrateNewLicencePayloadJson = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(migrateNewLicencePayload);
-            var migrateNewLicencePayloadForMergingJson = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(migrateNewLicencePayloadForMerging);
+            var migrateNewLicencePayloadJsonForMerging = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(migrateNewLicencePayloadForMerging);
 
             List<RecordOfSaleEventPayLoad> rosMigrateNewLicenceData = new()
             {
-                migrateNewLicencePayloadJson!,migrateNewLicencePayloadForMergingJson!
+                migrateNewLicencePayloadJson!, migrateNewLicencePayloadJsonForMerging!
             };
-
-            //string sapReqXml = ReadFileData("ERPTestData\\MigrateNewLicencePayloadTest.xml");
-
-            //A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
 
             MethodInfo methodInfo = typeof(RecordOfSaleSapMessageBuilder).GetMethod("BuildMigrateNewLicencePayload", BindingFlags.NonPublic | BindingFlags.Instance)!;
             var result = (SapRecordOfSalePayLoad)methodInfo.Invoke(_fakeRecordOfSaleSapMessageBuilder, new object[] { rosMigrateNewLicenceData })!;
@@ -421,23 +347,17 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
         public void WhenTransactionTypeIsMigrateExistingLicence_ThenReturnXMLDocument()
         {
             var migrateExistingLicencePayloadJson = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(migrateExistingLicencePayload);
-            var migrateExistingLicencePayloadForMergingJson = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(migrateExistingLicencePayloadForMerging);
+            var migrateExistingLicencePayloadJsonForMerging = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(migrateExistingLicencePayloadForMerging);
 
             List<RecordOfSaleEventPayLoad> rosMigrateExistingLicenceData = new()
             {
-                migrateExistingLicencePayloadJson!,migrateExistingLicencePayloadForMergingJson!
+                migrateExistingLicencePayloadJson!, migrateExistingLicencePayloadJsonForMerging!
             };
 
-            string correlationId = "123-abc-456-xyz-333";
-            //string sapReqXml = ReadFileData("ERPTestData\\MigrateExistingLicencePayloadTest.xml");
-
-            //XmlDocument soapXml = new();
-            //soapXml.LoadXml(RosSapXmlFile);
-
+            const string correlationId = "123-abc-456-xyz-333";
+            
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
-            //A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
-            //A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
-
+            
             var result = _fakeRecordOfSaleSapMessageBuilder.BuildRecordOfSaleSapMessageXml(rosMigrateExistingLicenceData, correlationId);
 
             result.Should().BeOfType<XmlDocument>();
@@ -446,35 +366,35 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
             actionItem.ChildNodes.Count.Should().Be(1);
             actionItem.ChildNodes[0].ChildNodes.Count.Should().Be(21);
 
-            var SoldToAcc = result.SelectSingleNode(XpathSoldToAcc);
-            var LicenseEAcc = result.SelectSingleNode(XpathLicenseEAcc);
-            var StartDate = result.SelectSingleNode(XpathStartDate);
-            var EndDate = result.SelectSingleNode(XpathEndDate);
-            var VName = result.SelectSingleNode(XpathVName);
-            var Imo = result.SelectSingleNode(XpathImo);
-            var CallSign = result.SelectSingleNode(XpathCallSign);
-            var ShoreBased = result.SelectSingleNode(XpathshoreBased);
-            var Fleet = result.SelectSingleNode(XpathFleet);
-            var EndUserId = result.SelectSingleNode(XpathEndUserId);
-            var Manuf = result.SelectSingleNode(XpathManuf);
-            var LType = result.SelectSingleNode(XpathLType);
-            var Users = result.SelectSingleNode(XpathUsers);
-            var LicDur = result.SelectSingleNode(XpathLicDur);
+            var soldToAcc = result.SelectSingleNode(XpathSoldToAcc);
+            var licenseEAcc = result.SelectSingleNode(XpathLicenseEAcc);
+            var startDate = result.SelectSingleNode(XpathStartDate);
+            var endDate = result.SelectSingleNode(XpathEndDate);
+            var vName = result.SelectSingleNode(XpathVName);
+            var imo = result.SelectSingleNode(XpathImo);
+            var callSign = result.SelectSingleNode(XpathCallSign);
+            var shoreBased = result.SelectSingleNode(XpathshoreBased);
+            var fleet = result.SelectSingleNode(XpathFleet);
+            var endUserId = result.SelectSingleNode(XpathEndUserId);
+            var manuf = result.SelectSingleNode(XpathManuf);
+            var lType = result.SelectSingleNode(XpathLType);
+            var users = result.SelectSingleNode(XpathUsers);
+            var licDur = result.SelectSingleNode(XpathLicDur);
 
-            SoldToAcc.InnerXml.Should().BeEmpty();
-            LicenseEAcc.InnerXml.Should().BeEmpty();
-            StartDate.InnerXml.Should().BeEmpty();
-            EndDate.InnerXml.Should().BeEmpty();
-            VName.InnerXml.Should().BeEmpty();
-            Imo.InnerXml.Should().BeEmpty();
-            CallSign.InnerXml.Should().BeEmpty();
-            ShoreBased.InnerXml.Should().BeEmpty();
-            Fleet.InnerXml.Should().BeEmpty();
-            EndUserId.InnerXml.Should().BeEmpty();
-            Manuf.InnerXml.Should().BeEmpty();
-            LType.InnerXml.Should().BeEmpty();
-            Users.InnerXml.Should().BeNullOrEmpty();
-            LicDur.InnerXml.Should().BeNullOrEmpty();
+            soldToAcc.InnerXml.Should().BeEmpty();
+            licenseEAcc.InnerXml.Should().BeEmpty();
+            startDate.InnerXml.Should().BeEmpty();
+            endDate.InnerXml.Should().BeEmpty();
+            vName.InnerXml.Should().BeEmpty();
+            imo.InnerXml.Should().BeEmpty();
+            callSign.InnerXml.Should().BeEmpty();
+            shoreBased.InnerXml.Should().BeEmpty();
+            fleet.InnerXml.Should().BeEmpty();
+            endUserId.InnerXml.Should().BeEmpty();
+            manuf.InnerXml.Should().BeEmpty();
+            lType.InnerXml.Should().BeEmpty();
+            users.InnerXml.Should().BeNullOrEmpty();
+            licDur.InnerXml.Should().BeNullOrEmpty();
 
             var prodItem = result.SelectSingleNode(XpathProd);
             prodItem.ChildNodes.Count.Should().Be(4);
@@ -498,16 +418,12 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
         public void WhenTransactionTypeIsMigrateExistingLicence_ThenReturns_SapXmlPayloadWithSomeEmptyFields()
         {
             var migrateExistingLicencePayloadJson = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(migrateExistingLicencePayload);
-            var migrateExistingLicencePayloadForMergingJson = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(migrateExistingLicencePayloadForMerging);
+            var migrateExistingLicencePayloadJsonForMerging = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(migrateExistingLicencePayloadForMerging);
 
             List<RecordOfSaleEventPayLoad> rosMigrateExistingLicenceData = new()
             {
-                migrateExistingLicencePayloadJson!,migrateExistingLicencePayloadForMergingJson!
+                migrateExistingLicencePayloadJson!, migrateExistingLicencePayloadJsonForMerging!
             };
-
-            //string sapReqXml = ReadFileData("ERPTestData\\MigrateExistingLicencePayloadTest.xml");
-
-            //A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
 
             MethodInfo methodInfo = typeof(RecordOfSaleSapMessageBuilder).GetMethod("BuildMigrateExistingLicencePayload", BindingFlags.NonPublic | BindingFlags.Instance)!;
             var result = (SapRecordOfSalePayLoad)methodInfo.Invoke(_fakeRecordOfSaleSapMessageBuilder, new object[] { rosMigrateExistingLicenceData })!;
@@ -543,21 +459,13 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
 
             List<RecordOfSaleEventPayLoad> rosConvertLicenceData = new()
             {
-                convertLicencePayloadJson!,
-                convertLicencePayloadJsonForMerging!
+                convertLicencePayloadJson!, convertLicencePayloadJsonForMerging!
             };
 
             const string correlationId = "123-abc-456-xyz-333";
-            //string sapReqXml = ReadFileData("ERPTestData\\ConvertLicencePayloadTest.xml");
-
-            //XmlDocument soapXml = new();
-            //soapXml.LoadXml(RosSapXmlFile);
-
+           
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
-            //A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
-            //A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
-
-
+            
             var result = _fakeRecordOfSaleSapMessageBuilder.BuildRecordOfSaleSapMessageXml(rosConvertLicenceData, correlationId);
 
             result.Should().BeOfType<XmlDocument>();
@@ -622,13 +530,8 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
 
             List<RecordOfSaleEventPayLoad> rosConvertLicenceData = new()
             {
-                convertLicencePayloadJson!,
-                convertLicencePayloadJsonForMerging!
+                convertLicencePayloadJson!, convertLicencePayloadJsonForMerging!
             };
-
-            //string sapReqXml = ReadFileData("ERPTestData\\ConvertLicencePayloadTest.xml");
-
-            //A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
 
             MethodInfo methodInfo = typeof(RecordOfSaleSapMessageBuilder).GetMethod("BuildConvertLicencePayload", BindingFlags.NonPublic | BindingFlags.Instance)!;
             var result = (SapRecordOfSalePayLoad)methodInfo.Invoke(_fakeRecordOfSaleSapMessageBuilder, new object[] { rosConvertLicenceData })!;
