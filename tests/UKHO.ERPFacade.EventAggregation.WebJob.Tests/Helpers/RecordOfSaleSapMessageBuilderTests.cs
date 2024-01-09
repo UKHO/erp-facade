@@ -84,7 +84,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
 
         private readonly string newLicencePayload = @"{""specversion"": ""1.0"",""type"": ""uk.gov.ukho.shop.recordOfSale.v1"",""source"": ""https://uk.gov.ukho.shop"",""id"": ""e744fa37-0c9f-4795-adc9-7f42ad8f11c1"",""time"": ""2023-07-20T10:40:00.000000Z"",""subject"": ""releasability set changes holdings Record of Sale"",""datacontenttype"": ""application/json"",""data"": {""correlationId"": ""123-abc-456-xyz-333"",""relatedEvents"": [""e744fa37-0c9f-4795-adc9-7f42ad8f11c1"", ""e744fa37-0c9f-4795-adc9-7f42ad8f1234""],""recordsOfSale"": 
             {""licenseId"": ""2"",""productType"": ""AVCS"",""transactionType"": ""NEWLICENCE"",""distributorCustomerNumber"": ""111"",""shippingCoNumber"": ""1"",""ordernumber"": ""5432796"",""orderDate"": ""2023-06-20"",""po-ref"": ""75277T"",""holdingsExpiryDate"": ""2025-06-30"",""sapId"": """",""vesselName"": ""Cornelia Maersk"",""imoNumber"": ""IMO9245756"",""callSign"": ""OWWS2"",""licenceType"": ""02"",""shoreBased"": ""X"",""fleetName"": """",""numberLicenceUsers"": 1,""ecdisManufacturerName"": ""MARIS"",""licenceDuration"": 12,""unitsOfSale"": [{""unitName"": ""PT111101"",""endDate"": ""2023-10-31"",""duration"": ""3"",""renew"": ""N"",""repeat"": """"},{""unitName"": ""GB302409"",""endDate"": ""2023-12-01"",""duration"": ""6"",""renew"": ""N"",""repeat"": """"}]}}}";
-        private readonly string newLicencePayloadForMerging = @"{""specversion"": ""1.0"",""type"": ""uk.gov.ukho.shop.recordOfSale.v1"",""source"": ""https://uk.gov.ukho.shop"",""id"": ""e744fa37-0c9f-4795-adc9-7f42ad8f1234"",""time"": ""2023-07-20T10:40:00.000000Z"",""subject"": ""releasability set changes holdings Record of Sale"",""datacontenttype"": ""application/json"",""data"": {""correlationId"": ""123-abc-456-xyz-333"",""relatedEvents"": [""e744fa37-0c9f-4795-adc9-7f42ad8f11c1""],""recordsOfSale"": 
+        private readonly string newLicencePayloadForMerging = @"{""specversion"": ""1.0"",""type"": ""uk.gov.ukho.shop.recordOfSale.v1"",""source"": ""https://uk.gov.ukho.shop"",""id"": ""e744fa37-0c9f-4795-adc9-7f42ad8f1234"",""time"": ""2023-07-20T10:40:00.000000Z"",""subject"": ""releasability set changes holdings Record of Sale"",""datacontenttype"": ""application/json"",""data"": {""correlationId"": ""123-abc-456-xyz-333"",""relatedEvents"": [""e744fa37-0c9f-4795-adc9-7f42ad8f11c1"", ""e744fa37-0c9f-4795-adc9-7f42ad8f1234""],""recordsOfSale"": 
             {""licenseId"": ""2"",""productType"": ""AVCS"",""transactionType"": ""NEWLICENCE"",""distributorCustomerNumber"": ""111"",""shippingCoNumber"": ""1"",""ordernumber"": ""5432796"",""orderDate"": ""2023-06-20"",""po-ref"": ""75277T"",""holdingsExpiryDate"": ""2025-06-30"",""sapId"": """",""vesselName"": ""Cornelia Maersk"",""imoNumber"": ""IMO9245756"",""callSign"": ""OWWS2"",""licenceType"": ""02"",""shoreBased"": ""X"",""fleetName"": """",""numberLicenceUsers"": 1,""ecdisManufacturerName"": ""MARIS"",""licenceDuration"": 12,""unitsOfSale"": [{""unitName"": ""PT111102"",""endDate"": ""2023-10-31"",""duration"": ""3"",""renew"": ""N"",""repeat"": """"},{""unitName"": ""GB302408"",""endDate"": ""2023-12-01"",""duration"": ""6"",""renew"": ""N"",""repeat"": """"}]}}}";
 
         private readonly string maintainHoldingsPayload = @"{""specversion"":""1.0"",""type"":""uk.gov.ukho.shop.recordOfSale.v1"",""source"":""https://uk.gov.ukho.shop"",""id"":""e744fa37-0c9f-4795-adc9-7f42ad8f11c1"",""time"":""2023-07-20T10:40:00Z"",""subject"":""releasability set changes holdings Record of Sale"",""datacontenttype"":""application/json"",""data"":{""correlationId"":""123-abc-456-xyz-333"",""relatedEvents"":[""e744fa37-0c9f-4795-adc9-7f42ad8f11c1"", ""e744fa37-0c9f-4795-adc9-7f42ad8f1234""],""recordsOfSale"":{""licenseId"":"""",""productType"":""AVCS"",""transactionType"":""MAINTAINHOLDINGS"",""distributorCustomerNumber"":"""",""shippingCoNumber"":"""",""ordernumber"":""5432796"",""orderDate"":"""",""po-ref"":""75277T"",""holdingsExpiryDate"":"""",""sapId"":""75277T"",""vesselName"":"""",""imoNumber"":"""",""callSign"":"""",""licenceType"":"""",""shoreBased"":"""",""fleetName"":"""",""numberLicenceUsers"":null,""ecdisManufacturerName"":"""",""licenceDuration"":null,""unitsOfSale"":[{""unitName"":""PT111101"",""endDate"":""2023-10-31"",""duration"":""3"",""renew"":""E"",""repeat"":""P""},{""unitName"":""GB302409"",""endDate"":""2023-12-01"",""duration"":""6"",""renew"":""E"",""repeat"":""P""}]}}}";
@@ -109,7 +109,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
             _fakeRecordOfSaleSapMessageBuilder = new RecordOfSaleSapMessageBuilder(_fakeLogger, _fakeXmlHelper, _fakeFileSystemHelper);
         }
 
-        private static string ReadFileData(string fileName) => File.ReadAllText(fileName);
+        //private static string ReadFileData(string fileName) => File.ReadAllText(fileName);
 
         [Test]
         public void WhenTransactionTypeIsNewLicence_ThenReturnXMLDocument()
@@ -123,14 +123,14 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
             };
 
             string correlationId = "123-abc-456-xyz-333";
-            string sapReqXml = ReadFileData("ERPTestData\\NewLicencePayloadTest.xml");
+            //string sapReqXml = ReadFileData("ERPTestData\\NewLicencePayloadTest.xml");
 
             XmlDocument soapXml = new();
             soapXml.LoadXml(RosSapXmlFile);
 
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
-            A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
-            A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
+            //A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
+            //A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
 
             var result = _fakeRecordOfSaleSapMessageBuilder.BuildRecordOfSaleSapMessageXml(rosNewLicenceData, correlationId);
 
@@ -197,9 +197,9 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
                 newLicencePayloadJson!, newLicencePayloadJsonForMerging!
             };
 
-            string sapReqXml = ReadFileData("ERPTestData\\NewLicencePayloadTest.xml");
+            // sapReqXml = ReadFileData("ERPTestData\\NewLicencePayloadTest.xml");
 
-            A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
+            //A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
 
             MethodInfo methodInfo = typeof(RecordOfSaleSapMessageBuilder).GetMethod("BuildNewLicencePayload", BindingFlags.NonPublic | BindingFlags.Instance)!;
             var result = (SapRecordOfSalePayLoad)methodInfo.Invoke(_fakeRecordOfSaleSapMessageBuilder, new object[] { rosNewLicenceData })!;
@@ -210,7 +210,9 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
             result.LicenceNumber.Should().Be("");
             result.FleetName.Should().Be("");
             result.PROD.UnitOfSales[0].Repeat.Should().Be("");
+            result.PROD.UnitOfSales[1].Repeat.Should().Be("");
             result.PROD.UnitOfSales[2].Repeat.Should().Be("");
+            result.PROD.UnitOfSales[3].Repeat.Should().Be("");
         }
 
         [Test]
@@ -225,14 +227,14 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
             };
 
             string correlationId = "123-abc-456-xyz-333";
-            string sapReqXml = ReadFileData("ERPTestData\\MaintainHoldingsPayloadTest.xml");
+            //string sapReqXml = ReadFileData("ERPTestData\\MaintainHoldingsPayloadTest.xml");
 
             XmlDocument soapXml = new();
             soapXml.LoadXml(RosSapXmlFile);
 
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
-            A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
-            A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
+            //A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
+            //A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
 
             var result = _fakeRecordOfSaleSapMessageBuilder.BuildRecordOfSaleSapMessageXml(rosMaintainHoldingsData, correlationId);
 
@@ -298,9 +300,9 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
                 maintainHoldingsPayloadJson!, maintainHoldingsPayloadJsonForMerging!
             };
 
-            string sapReqXml = ReadFileData("ERPTestData\\MaintainHoldingsPayloadTest.xml");
+            //string sapReqXml = ReadFileData("ERPTestData\\MaintainHoldingsPayloadTest.xml");
 
-            A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
+            //A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
 
             MethodInfo methodInfo = typeof(RecordOfSaleSapMessageBuilder).GetMethod("BuildMaintainHoldingsPayload", BindingFlags.NonPublic | BindingFlags.Instance)!;
             var result = (SapRecordOfSalePayLoad)methodInfo.Invoke(_fakeRecordOfSaleSapMessageBuilder, new object[] { rosMaintainHoldingsData })!;
@@ -323,7 +325,9 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
             result.LicenceType.Should().Be("");
             result.PROD.UnitOfSales.Count.Should().Be(4);
             result.PROD.UnitOfSales[0].Repeat.Should().Be("P");
+            result.PROD.UnitOfSales[1].Repeat.Should().Be("P");
             result.PROD.UnitOfSales[2].Repeat.Should().Be("P");
+            result.PROD.UnitOfSales[3].Repeat.Should().Be("P");
         }
 
         [Test]
@@ -337,14 +341,14 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
             };
 
             string correlationId = "123-abc-456-xyz-333";
-            string sapReqXml = ReadFileData("ERPTestData\\MigrateNewLicencePayloadTest.xml");
+            //string sapReqXml = ReadFileData("ERPTestData\\MigrateNewLicencePayloadTest.xml");
 
             XmlDocument soapXml = new();
             soapXml.LoadXml(RosSapXmlFile);
 
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
-            A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
-            A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
+            //A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
+            //A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
 
             var result = _fakeRecordOfSaleSapMessageBuilder.BuildRecordOfSaleSapMessageXml(rosMigrateNewLicenceData, correlationId);
 
@@ -387,9 +391,9 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
                 migrateNewLicencePayloadJson!
             };
 
-            string sapReqXml = ReadFileData("ERPTestData\\MigrateNewLicencePayloadTest.xml");
+            //string sapReqXml = ReadFileData("ERPTestData\\MigrateNewLicencePayloadTest.xml");
 
-            A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
+            //A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
 
             MethodInfo methodInfo = typeof(RecordOfSaleSapMessageBuilder).GetMethod("BuildMigrateNewLicencePayload", BindingFlags.NonPublic | BindingFlags.Instance)!;
             var result = (SapRecordOfSalePayLoad)methodInfo.Invoke(_fakeRecordOfSaleSapMessageBuilder, new object[] { rosMigrateNewLicenceData })!;
@@ -400,6 +404,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
             result.LicenceNumber.Should().Be("");
             result.FleetName.Should().Be("");
             result.PROD.UnitOfSales[0].Repeat.Should().Be("");
+            result.PROD.UnitOfSales[1].Repeat.Should().Be("");
         }
 
         [Test]
@@ -413,14 +418,14 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
             };
 
             string correlationId = "123-abc-456-xyz-333";
-            string sapReqXml = ReadFileData("ERPTestData\\MigrateExistingLicencePayloadTest.xml");
+            //string sapReqXml = ReadFileData("ERPTestData\\MigrateExistingLicencePayloadTest.xml");
 
             XmlDocument soapXml = new();
             soapXml.LoadXml(RosSapXmlFile);
 
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
-            A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
-            A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
+            //A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
+            //A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
 
             var result = _fakeRecordOfSaleSapMessageBuilder.BuildRecordOfSaleSapMessageXml(rosMigrateExistingLicenceData, correlationId);
 
@@ -488,9 +493,9 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
                 migrateExistingLicencePayloadJson!
             };
 
-            string sapReqXml = ReadFileData("ERPTestData\\MigrateExistingLicencePayloadTest.xml");
+            //string sapReqXml = ReadFileData("ERPTestData\\MigrateExistingLicencePayloadTest.xml");
 
-            A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
+            //A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
 
             MethodInfo methodInfo = typeof(RecordOfSaleSapMessageBuilder).GetMethod("BuildMigrateExistingLicencePayload", BindingFlags.NonPublic | BindingFlags.Instance)!;
             var result = (SapRecordOfSalePayLoad)methodInfo.Invoke(_fakeRecordOfSaleSapMessageBuilder, new object[] { rosMigrateExistingLicenceData })!;
@@ -513,6 +518,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
             result.LicenceType.Should().Be("");
             result.PROD.UnitOfSales.Count.Should().Be(2);
             result.PROD.UnitOfSales[0].Repeat.Should().Be("");
+            result.PROD.UnitOfSales[1].Repeat.Should().Be("");
         }
 
         [Test]
@@ -606,9 +612,9 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
                 convertLicencePayloadJsonForMerging!
             };
 
-            string sapReqXml = ReadFileData("ERPTestData\\ConvertLicencePayloadTest.xml");
+            //string sapReqXml = ReadFileData("ERPTestData\\ConvertLicencePayloadTest.xml");
 
-            A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
+            //A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
 
             MethodInfo methodInfo = typeof(RecordOfSaleSapMessageBuilder).GetMethod("BuildConvertLicencePayload", BindingFlags.NonPublic | BindingFlags.Instance)!;
             var result = (SapRecordOfSalePayLoad)methodInfo.Invoke(_fakeRecordOfSaleSapMessageBuilder, new object[] { rosConvertLicenceData })!;
@@ -631,6 +637,9 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
             result.LicenceType.Should().Be("1");
             result.PROD.UnitOfSales.Count.Should().Be(4);
             result.PROD.UnitOfSales[0].Repeat.Should().Be("");
+            result.PROD.UnitOfSales[1].Repeat.Should().Be("");
+            result.PROD.UnitOfSales[2].Repeat.Should().Be("");
+            result.PROD.UnitOfSales[3].Repeat.Should().Be("");
         }
     }
 }
