@@ -37,22 +37,4 @@
     <ProjectReference Include="..\..\src\UKHO.ERPFacade.EventAggregation.WebJob\UKHO.ERPFacade.EventAggregation.WebJob.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="ERPTestData\ConvertLicencePayloadTest.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="ERPTestData\MaintainHoldingsPayloadTest.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="ERPTestData\MigrateNewLicencePayloadTest.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ERPTestData\MigrateExistingLicencePayloadTest.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ERPTestData\NewLicencePayloadTest.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>
