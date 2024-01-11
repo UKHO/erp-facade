@@ -188,7 +188,7 @@
     <None Update="ERPFacadePayloadTestData\RoSPayloadTestData\LTC08_InvalidRoSConvertTrialToFullLicence.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPFacadePayloadTestData\RoSPayloadTestData\LTC09_InValidLTCwithNoCorrelationID.json">
+    <None Update="ERPFacadePayloadTestData\RoSPayloadTestData\LTC09_InvalidLTCwithNoCorrelationID.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPFacadePayloadTestData\RoSPayloadTestData\RoS13_ValidLastPayloadForMerging.json">

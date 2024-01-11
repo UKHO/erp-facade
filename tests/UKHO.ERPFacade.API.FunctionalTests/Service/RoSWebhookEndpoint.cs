@@ -14,7 +14,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
         private readonly AzureBlobStorageHelper _azureBlobStorageHelper;
         private const string RoSWebhookRequestEndPoint = "/webhook/recordofsalepublishedeventreceived";
         public static string GeneratedCorrelationId = string.Empty;
-        public static string RecordOfSalesContainerName = "recordofsaleblobs";
+        public const string RecordOfSalesContainerName = "recordofsaleblobs";
 
         public RoSWebhookEndpoint()
         {

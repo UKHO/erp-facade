@@ -75,7 +75,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [Test, Order(2)]
         [TestCase("LTC03_InValidLTCwithNoCorrelationID.json", TestName = "WhenValidRoSMigrateNewLicencePublishedEventReceivedWithInvalidPayload_ThenWebhookReturns400BadRequestResponse")]
         [TestCase("LTC05_InValidLTCwithNoCorrelationID.json", TestName = "WhenValidRoSMigrateExistingLicencePublishedEventReceivedWithInvalidPayload_ThenWebhookReturns400BadRequestResponse")]
-        [TestCase("LTC09_InValidLTCwithNoCorrelationID.json", TestName = "WhenValidRoSConvertTrialToFullLicencePublishedEventReceivedWithInvalidPayload_ThenWebhookReturns400BadRequestResponse")]
+        [TestCase("LTC09_InvalidLTCwithNoCorrelationID.json", TestName = "WhenValidRoSConvertTrialToFullLicencePublishedEventReceivedWithInvalidPayload_ThenWebhookReturns400BadRequestResponse")]
         [TestCase("RoS11_InValidRoSwithNoCorrelationID.json", TestName = "WhenInValidRoSEventInRecordOfSalePublishedEventPostReceived_ThenWebhookReturns400BadRequestResponse")]
         public async Task WhenInValidRoSEventInRecordOfSalePublishedEventPostReceived_ThenWebhookReturns400BadRequestResponse(string payloadFileName)
         {
