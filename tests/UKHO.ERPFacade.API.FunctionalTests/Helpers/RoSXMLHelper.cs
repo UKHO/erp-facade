@@ -250,7 +250,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 s_attrNotMatched.Add(nameof(rosXmlPayload.LTYPE));
             if (!rosXmlPayload.LICDUR.Equals(roSJsonPayload.licenceDuration))
                 s_attrNotMatched.Add(nameof(rosXmlPayload.LICDUR));
-
             if (!rosXmlPayload.PO.Equals(roSJsonPayload.poref))
                 s_attrNotMatched.Add(nameof(rosXmlPayload.PO));
             if (!rosXmlPayload.ADSORDNO.Equals(roSJsonPayload.ordernumber))

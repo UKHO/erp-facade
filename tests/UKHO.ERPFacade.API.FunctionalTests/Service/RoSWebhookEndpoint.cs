@@ -1,7 +1,6 @@
 ﻿using NUnit.Framework;
 using RestSharp;
 using System.Net;
-using Microsoft.Identity.Client;
 using UKHO.ERPFacade.API.FunctionalTests.Configuration;
 using UKHO.ERPFacade.API.FunctionalTests.Helpers;
 using UKHO.ERPFacade.API.FunctionalTests.Model;
@@ -13,10 +12,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
     {
         private readonly RestClient _client;
         private readonly AzureBlobStorageHelper _azureBlobStorageHelper;
-
         private const string RoSWebhookRequestEndPoint = "/webhook/recordofsalepublishedeventreceived";
-        public static string generatedCorrelationId = string.Empty;
-        public static string recordOfSalesContainerName = "recordofsaleblobs";
+        public static string GeneratedCorrelationId = string.Empty;
+        public static string RecordOfSalesContainerName = "recordofsaleblobs";
 
         public RoSWebhookEndpoint()
         {
@@ -43,8 +41,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
                 requestBody = streamReader.ReadToEnd();
             }
 
-            generatedCorrelationId = SAPXmlHelper.GenerateRandomCorrelationId();
-            requestBody = SAPXmlHelper.UpdateTimeAndCorrIdField(requestBody, generatedCorrelationId);
+            GeneratedCorrelationId = SAPXmlHelper.GenerateRandomCorrelationId();
+            requestBody = SAPXmlHelper.UpdateTimeAndCorrIdField(requestBody, GeneratedCorrelationId);
 
             var request = new RestRequest(RoSWebhookRequestEndPoint, Method.Post);
             request.AddHeader("Content-Type", "application/json");
@@ -54,14 +52,14 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                bool isBlobCreated = _azureBlobStorageHelper.VerifyBlobExists(recordOfSalesContainerName, generatedCorrelationId);
-                Assert.That(isBlobCreated, Is.True, $"Blob {generatedCorrelationId} not created");
+                bool isBlobCreated = _azureBlobStorageHelper.VerifyBlobExists(RecordOfSalesContainerName, GeneratedCorrelationId);
+                Assert.That(isBlobCreated, Is.True, $"Blob {GeneratedCorrelationId} not created");
             }
 
             return response;
         }
 
-        public async Task<RestResponse> PostWebhookResponseAsyncForXML(string correlationId, string payloadFilePath, bool isFirstEvent, bool isLastEvent, string generatedXmlFolder, List<JsonInputRoSWebhookEvent> listOfEventJsons, string token)
+        public async Task<RestResponse> PostWebhookResponseAsyncForXml(string correlationId, string payloadFilePath, bool isFirstEvent, bool isLastEvent, string generatedXmlFolder, List<JsonInputRoSWebhookEvent> listOfEventJsons, string token)
         {
             string requestBody;
             List<string> blobList = new();
@@ -86,11 +84,11 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
 
             if (isFirstEvent)
             {
-                bool isBlobCreated = _azureBlobStorageHelper.VerifyBlobExists(recordOfSalesContainerName, correlationId);
+                bool isBlobCreated = _azureBlobStorageHelper.VerifyBlobExists(RecordOfSalesContainerName, correlationId);
                 Assert.That(isBlobCreated, Is.True, $"Blob for {correlationId} not created");
             }
 
-            blobList = _azureBlobStorageHelper.GetBlobNamesInFolder(recordOfSalesContainerName, correlationId);
+            blobList = _azureBlobStorageHelper.GetBlobNamesInFolder(RecordOfSalesContainerName, correlationId);
 
             switch (isLastEvent)
             {
@@ -99,7 +97,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
                     //10minutes polling after every 30 seconds to check if xml payload is generated during webjob execution.
                     while (!blobList.Contains("SapXmlPayload") && DateTime.UtcNow - startTime < TimeSpan.FromMinutes(10))
                     {
-                        blobList = _azureBlobStorageHelper.GetBlobNamesInFolder(recordOfSalesContainerName, correlationId);
+                        blobList = _azureBlobStorageHelper.GetBlobNamesInFolder(RecordOfSalesContainerName, correlationId);
                         await Task.Delay(30000);
                     }
                     Assert.That(blobList, Does.Contain("SapXmlPayload"), $"XML is not generated for {correlationId} at {DateTime.Now}.");

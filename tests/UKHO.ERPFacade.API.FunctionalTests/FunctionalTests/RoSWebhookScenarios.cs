@@ -133,14 +133,14 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
             //Send first event
             string firstEventPayloadJsonFilePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, "RoSPayloadTestData", firstEventPayloadJsonFileName);
-            RestResponse firstEventResponse = await RosWebhookEndpoint.PostWebhookResponseAsyncForXML(generatedCorrelationId, firstEventPayloadJsonFilePath, true, false, generatedXmlFolder, null, await _authToken.GetAzureADToken(false));
+            RestResponse firstEventResponse = await RosWebhookEndpoint.PostWebhookResponseAsyncForXml(generatedCorrelationId, firstEventPayloadJsonFilePath, true, false, generatedXmlFolder, null, await _authToken.GetAzureADToken(false));
 
             //Assert if ROS webhook returns OK
             firstEventResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
             //Send last event  - Additionally we need to send list of all json files to compare total unitofsales items with final XML payload
             string lastEventPayloadJsonFilePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, "RoSPayloadTestData", lastEventPayloadJsonFileName);
-            RestResponse lastEventResponse = await RosWebhookEndpoint.PostWebhookResponseAsyncForXML(generatedCorrelationId, lastEventPayloadJsonFilePath, false, true, generatedXmlFolder, listOfEventJsons, await _authToken.GetAzureADToken(false));
+            RestResponse lastEventResponse = await RosWebhookEndpoint.PostWebhookResponseAsyncForXml(generatedCorrelationId, lastEventPayloadJsonFilePath, false, true, generatedXmlFolder, listOfEventJsons, await _authToken.GetAzureADToken(false));
 
             //Assert if ROS webhook returns OK
             lastEventResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
@@ -157,7 +157,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             string generatedXmlFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXMLFolder, "RoSPayloadTestData");
             List<JsonInputRoSWebhookEvent> listOfEventJsons2 = await JsonHelper.GetEventJsonListUsingFileNameAsync(new List<string> { firstEventPayloadJsonFileName });
             string firstEventPayloadJsonFilePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, "RoSPayloadTestData", firstEventPayloadJsonFileName);
-            RestResponse firstEventResponse = await RosWebhookEndpoint.PostWebhookResponseAsyncForXML(generatedCorrelationId, firstEventPayloadJsonFilePath, true, true, generatedXmlFolder, listOfEventJsons2, await _authToken.GetAzureADToken(false));
+            RestResponse firstEventResponse = await RosWebhookEndpoint.PostWebhookResponseAsyncForXml(generatedCorrelationId, firstEventPayloadJsonFilePath, true, true, generatedXmlFolder, listOfEventJsons2, await _authToken.GetAzureADToken(false));
             firstEventResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
     }
