@@ -10,7 +10,7 @@ using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.EventAggregation.WebJob.Helpers;
 
-namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Helpers
+namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Helpers
 {
     [TestFixture]
     public class RecordOfSaleSapMessageBuilderTests
