@@ -1,0 +1,52 @@
+{
+    "specversion": "1.0",
+    "type": "uk.gov.ukho.shop.recordOfSale.v1",
+    "source": "https://fleetmanager.ukho.gov.uk",
+    "id": "953807cd-75b5-4169-8ca0-8091d4b416b8",
+    "time": "01/09/2024 12:35:03",
+    "subject": "XXL000003070",
+    "datacontenttype": "application/json",
+    "data": {
+        "correlationId": "59291a8d-b24b-4ed1-b4d7-e0440ecd331e",
+        "relatedEvents": [
+            "953807cd-75b5-4169-8ca0-8091d4b416b8"
+        ],
+        "recordsOfSale": {
+            "licenseId": "",
+            "productType": "AVCS",
+            "transactionType": "CONVERTLICENCE",
+            "distributorCustomerNumber": "",
+            "shippingCoNumber": "",
+            "orderNumber": "XXL000003070",
+            "orderDate": "",
+            "po-ref": "75277T-Bengang",
+            "holdingsExpiryDate": "",
+            "sapId": "75277T",
+            "vesselName": "",
+            "imoNumber": "",
+            "callSign": "",
+            "licenceType": "1",
+            "shoreBased": "",
+            "fleetName": "",
+            "numberLicenceUsers": 0,
+            "ecdisManufacturerName": "",
+            "licenceDuration": 12,
+            "unitsOfSale": [
+                {
+                    "unitName": "LTC20231",
+                    "endDate": "2025-01-31",
+                    "duration": "12",
+                    "renew": "N",
+                    "repeat": ""
+                },
+                {
+                    "unitName": "LTC20232",
+                    "endDate": "2025-01-31",
+                    "duration": "12",
+                    "renew": "N",
+                    "repeat": ""
+                }
+            ]
+        }
+    }
+}

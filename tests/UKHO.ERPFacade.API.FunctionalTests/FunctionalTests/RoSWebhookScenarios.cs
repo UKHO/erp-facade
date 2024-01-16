@@ -75,6 +75,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [Test, Order(2)]
         [TestCase("LTC03_InValidLTCwithNoCorrelationID.json", TestName = "WhenValidRoSMigrateNewLicencePublishedEventReceivedWithInvalidPayload_ThenWebhookReturns400BadRequestResponse")]
         [TestCase("LTC05_InValidLTCwithNoCorrelationID.json", TestName = "WhenValidRoSMigrateExistingLicencePublishedEventReceivedWithInvalidPayload_ThenWebhookReturns400BadRequestResponse")]
+        [TestCase("LTC09_InvalidLTCwithNoCorrelationID.json", TestName = "WhenValidRoSConvertTrialToFullLicencePublishedEventReceivedWithInvalidPayload_ThenWebhookReturns400BadRequestResponse")]
         [TestCase("RoS11_InValidRoSwithNoCorrelationID.json", TestName = "WhenInValidRoSEventInRecordOfSalePublishedEventPostReceived_ThenWebhookReturns400BadRequestResponse")]
         public async Task WhenInValidRoSEventInRecordOfSalePublishedEventPostReceived_ThenWebhookReturns400BadRequestResponse(string payloadFileName)
         {
@@ -110,6 +111,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
         [TestCase("LTC02_InvalidRoSMigrateNewLicence.json", TestName = "WhenValidRoSMigrateNewLicencePublishedEventReceivedWithInvalidPayload_ThenWebhookReturns500InternalServerError")]
         [TestCase("LTC06_InvalidRoSMigrateExistingLicence.json", TestName = "WhenValidRoSMigrateExistingLicencePublishedEventReceivedWithInvalidPayload_ThenWebhookReturns500InternalServerError")]
+        [TestCase("LTC08_InvalidRoSConvertTrialToFullLicence.json", TestName = "WhenValidRoSConvertTrialToFullNewLicencePublishedEventReceivedWithInvalidPayload_ThenWebhookReturns500InternalServerError")]
         [TestCase("RoS09_InValidPayloadRoSNewLicence.json", TestName = "WhenInvalidRoSEventInRecordOfSalePublishedEventPostReceivedWithInvalidPayloadForNewLicense_ThenWebhookReturns500InternalServerError")]
         [TestCase("RoS10_InValidPayloadRoSMainHolding.json", TestName = "WhenInvalidRoSEventInRecordOfSalePublishedEventPostReceivedWithInvalidPayloadForManintainHolding_ThenWebhookReturns500InternalServerError")]
         public async Task WhenInvalidRoSEventInRecordOfSalePublishedEventPostReceivedWithInvalidPayload_ThenWebhookReturns500InternalServerError(string payloadJsonFileName)
@@ -131,14 +133,14 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
             //Send first event
             string firstEventPayloadJsonFilePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, "RoSPayloadTestData", firstEventPayloadJsonFileName);
-            RestResponse firstEventResponse = await RosWebhookEndpoint.PostWebhookResponseAsyncForXML(generatedCorrelationId, firstEventPayloadJsonFilePath, true, false, generatedXmlFolder, null, await _authToken.GetAzureADToken(false));
+            RestResponse firstEventResponse = await RosWebhookEndpoint.PostWebhookResponseAsyncForXml(generatedCorrelationId, firstEventPayloadJsonFilePath, true, false, generatedXmlFolder, null, await _authToken.GetAzureADToken(false));
 
             //Assert if ROS webhook returns OK
             firstEventResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
             //Send last event  - Additionally we need to send list of all json files to compare total unitofsales items with final XML payload
             string lastEventPayloadJsonFilePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, "RoSPayloadTestData", lastEventPayloadJsonFileName);
-            RestResponse lastEventResponse = await RosWebhookEndpoint.PostWebhookResponseAsyncForXML(generatedCorrelationId, lastEventPayloadJsonFilePath, false, true, generatedXmlFolder, listOfEventJsons, await _authToken.GetAzureADToken(false));
+            RestResponse lastEventResponse = await RosWebhookEndpoint.PostWebhookResponseAsyncForXml(generatedCorrelationId, lastEventPayloadJsonFilePath, false, true, generatedXmlFolder, listOfEventJsons, await _authToken.GetAzureADToken(false));
 
             //Assert if ROS webhook returns OK
             lastEventResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
@@ -146,6 +148,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
         [TestCase("LTC01_RoSMigrateNewLicence.json", TestName = "WhenValidRoSMigrateNewLicencePublishedEventReceivedWithValidPayload_ThenWebhookReturns200OkResponse")]
         [TestCase("LTC04_RoSMigrateExistingLicence.json", TestName = "WhenValidRoSMigrateExistingLicencePublishedEventReceivedWithValidPayload_ThenWebhookReturns200OkResponse")]
+        [TestCase("LTC07_RoSConvertTrialToFullLicence.json", TestName = "WhenValidRoSConvertTrialToFullLicencePublishedEventReceivedWithValidPayload_ThenWebhookReturns200OkResponse")]
         public async Task WhenValidRoSMigrateLicencePublishedEventReceivedWithValidPayload_ThenWebhookReturns200OkResponse( string firstEventPayloadJsonFileName)
         {
             Console.WriteLine("Scenario: Merging ROS Events - " + firstEventPayloadJsonFileName + " & " + "\n");
@@ -154,7 +157,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             string generatedXmlFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXMLFolder, "RoSPayloadTestData");
             List<JsonInputRoSWebhookEvent> listOfEventJsons2 = await JsonHelper.GetEventJsonListUsingFileNameAsync(new List<string> { firstEventPayloadJsonFileName });
             string firstEventPayloadJsonFilePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, "RoSPayloadTestData", firstEventPayloadJsonFileName);
-            RestResponse firstEventResponse = await RosWebhookEndpoint.PostWebhookResponseAsyncForXML(generatedCorrelationId, firstEventPayloadJsonFilePath, true, true, generatedXmlFolder, listOfEventJsons2, await _authToken.GetAzureADToken(false));
+            RestResponse firstEventResponse = await RosWebhookEndpoint.PostWebhookResponseAsyncForXml(generatedCorrelationId, firstEventPayloadJsonFilePath, true, true, generatedXmlFolder, listOfEventJsons2, await _authToken.GetAzureADToken(false));
             firstEventResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
     }

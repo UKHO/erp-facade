@@ -17,7 +17,7 @@ using System.Xml;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Models;
 
-namespace UKHO.ERPFacade.EventAggregation.WebJob.Tests.Services
+namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Services
 {
     [TestFixture]
     public class AggregationServiceTests

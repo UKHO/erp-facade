@@ -19,6 +19,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Helpers
         private const string NewLicenceType = "NEWLICENCE";
         private const string MigrateNewLicenceType = "MIGRATENEWLICENCE";
         private const string MigrateExistingLicenceType = "MIGRATEEXISTINGLICENCE";
+        private const string ConvertLicenceType = "CONVERTLICENCE";
 
         public RecordOfSaleSapMessageBuilder(ILogger<RecordOfSaleSapMessageBuilder> logger,
             IXmlHelper xmlHelper,
@@ -52,6 +53,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Helpers
                 MaintainHoldingsType => BuildMaintainHoldingsPayload(eventDataList),
                 MigrateNewLicenceType => BuildMigrateNewLicencePayload(eventDataList),
                 MigrateExistingLicenceType => BuildMigrateExistingLicencePayload(eventDataList),
+                ConvertLicenceType => BuildConvertLicencePayload(eventDataList),
                 _ => sapRecordOfSalePayLoad
             };
 
@@ -304,6 +306,66 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Helpers
             }
 
             return rosMigrateExistingLicencePayload;
+        }
+
+        private SapRecordOfSalePayLoad BuildConvertLicencePayload(List<RecordOfSaleEventPayLoad> eventDataList)
+        {
+            SapRecordOfSalePayLoad rosConvertLicencePayload = new();
+
+            foreach (var eventData in eventDataList)
+            {
+                if (rosConvertLicencePayload.PROD == null!)
+                {
+                    rosConvertLicencePayload.CorrelationId = eventData.Data.CorrelationId;
+                    rosConvertLicencePayload.ServiceType = eventData.Data.RecordsOfSale.ProductType;
+                    rosConvertLicencePayload.LicTransaction = eventData.Data.RecordsOfSale.TransactionType;
+                    rosConvertLicencePayload.OrderNumber = eventData.Data.RecordsOfSale.OrderNumber;
+                    rosConvertLicencePayload.PurachaseOrder = eventData.Data.RecordsOfSale.PoRef;
+                    rosConvertLicencePayload.LicenceNumber = eventData.Data.RecordsOfSale.SapId;
+                    rosConvertLicencePayload.SoldToAcc = string.Empty;
+                    rosConvertLicencePayload.LicenseEacc = string.Empty;
+                    rosConvertLicencePayload.VesselName = string.Empty;
+                    rosConvertLicencePayload.IMONumber = string.Empty;
+                    rosConvertLicencePayload.CallSign = string.Empty;
+                    rosConvertLicencePayload.ShoreBased = string.Empty;
+                    rosConvertLicencePayload.Users = null;
+                    rosConvertLicencePayload.EndUserId = string.Empty;
+                    rosConvertLicencePayload.ECDISMANUF = string.Empty;
+                    rosConvertLicencePayload.StartDate = string.Empty;
+                    rosConvertLicencePayload.EndDate = string.Empty;
+                    rosConvertLicencePayload.LicenceType = eventData.Data.RecordsOfSale.LicenceType; 
+                    rosConvertLicencePayload.LicenceDuration = eventData.Data.RecordsOfSale.LicenceDuration; 
+                    rosConvertLicencePayload.FleetName = string.Empty;
+
+                    PROD prod = new();
+                    List<UnitOfSales> unitOfSaleList = eventData.Data.RecordsOfSale.RosUnitOfSale.Select(rosUnitOfSale => new UnitOfSales()
+                    {
+                        Id = rosUnitOfSale.Id,
+                        EndDate = rosUnitOfSale.EndDate,
+                        Duration = rosUnitOfSale.Duration,
+                        ReNew = rosUnitOfSale.ReNew,
+                        Repeat = rosUnitOfSale.Repeat
+                    })
+                        .ToList();
+
+                    prod.UnitOfSales = unitOfSaleList;
+                    rosConvertLicencePayload.PROD = prod;
+                }
+                else
+                {
+                    List<UnitOfSales> existingUnitOfSaleList = rosConvertLicencePayload.PROD.UnitOfSales;
+                    existingUnitOfSaleList.AddRange(eventData.Data.RecordsOfSale.RosUnitOfSale.Select(rosUnitOfSale => new UnitOfSales()
+                    {
+                        Id = rosUnitOfSale.Id,
+                        EndDate = rosUnitOfSale.EndDate,
+                        Duration = rosUnitOfSale.Duration,
+                        ReNew = rosUnitOfSale.ReNew,
+                        Repeat = rosUnitOfSale.Repeat
+                    }));
+                }
+            }
+
+            return rosConvertLicencePayload;
         }
     }
 }

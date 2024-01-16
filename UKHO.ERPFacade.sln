@@ -36,7 +36,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UKHO.ERPFacade.CleanUp.WebJ
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UKHO.ERPFacade.EventAggregation.WebJob", "src\UKHO.ERPFacade.EventAggregation.WebJob\UKHO.ERPFacade.EventAggregation.WebJob.csproj", "{F82F8E74-51BA-41A9-95C1-48AE58938959}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UKHO.ERPFacade.EventAggregation.WebJob.Tests", "tests\UKHO.ERPFacade.EventAggregation.WebJob.Tests\UKHO.ERPFacade.EventAggregation.WebJob.Tests.csproj", "{860140C0-E6FA-41E6-86D3-BB49D5D25EDA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UKHO.ERPFacade.EventAggregation.WebJob.UnitTests", "tests\UKHO.ERPFacade.EventAggregation.WebJob.UnitTests\UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.csproj", "{860140C0-E6FA-41E6-86D3-BB49D5D25EDA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
