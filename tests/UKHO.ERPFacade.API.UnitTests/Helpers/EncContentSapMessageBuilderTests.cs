@@ -234,7 +234,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             MethodInfo getProdType = typeof(EncContentSapMessageBuilder).GetMethod("GetProdType", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
             string result = (string)getProdType.Invoke(_fakeEncContentSapMessageBuilder, new object[] { prodType })!;
 
-            Assert.AreEqual(result, actual);
+            Assert.That(actual, Is.EqualTo(result));
         }
 
         [Test]
@@ -247,7 +247,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             MethodInfo XmlNodeValue = typeof(EncContentSapMessageBuilder).GetMethod("GetXmlNodeValue", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
             string result = (string)XmlNodeValue.Invoke(_fakeEncContentSapMessageBuilder, new object[] { prodType, prod })!;
 
-            Assert.AreEqual(result, actual);
+            Assert.That(actual, Is.EqualTo(result));
         }
 
         [Test]
@@ -265,7 +265,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             var result = (XmlNode)xmlPayLoad.Invoke(_fakeEncContentSapMessageBuilder, new object[] { actionItemNode })!;
 
             var firstNode = result.Cast<XmlNode>().FirstOrDefault().InnerText;
-            Assert.AreEqual(firstNode, expectedResult);
+            Assert.That(expectedResult, Is.EqualTo(firstNode));
         }
         [Test]
         public void BuildActionTest()

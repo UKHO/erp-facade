@@ -39,32 +39,32 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             var serializer = new XmlSerializer(typeof(Z_ADDS_MAT_INFO));
             var result = (Z_ADDS_MAT_INFO)serializer.Deserialize(reader);
 
-            Assert.True(VerifyPresenseOfMandatoryXMLAtrributes(result.IM_MATINFO.ACTIONITEMS).Result);
+            Assert.That(VerifyPresenseOfMandatoryXMLAtrributes(result.IM_MATINFO.ACTIONITEMS).Result);
 
             ActionCounter = 1;
             ChangeENCCell.Clear();
             foreach (ZMAT_ACTIONITEMS item in result.IM_MATINFO.ACTIONITEMS)
             {
                 if (item.ACTION == "CREATE ENC CELL")
-                    Assert.True(VerifyCreateENCCell(item.CHILDCELL, item));
+                    Assert.That(VerifyCreateENCCell(item.CHILDCELL, item));
                 else if (item.ACTION == "CREATE AVCS UNIT OF SALE")
-                    Assert.True(VerifyCreateAVCSUnitOfSale(item.PRODUCTNAME, item));
+                    Assert.That(VerifyCreateAVCSUnitOfSale(item.PRODUCTNAME, item));
                 else if (item.ACTION == "ASSIGN CELL TO AVCS UNIT OF SALE")
-                    Assert.True(VerifyAssignCellToAVCSUnitOfSale(item.CHILDCELL, item.PRODUCTNAME, item));
+                    Assert.That(VerifyAssignCellToAVCSUnitOfSale(item.CHILDCELL, item.PRODUCTNAME, item));
                 else if (item.ACTION == "REPLACED WITH ENC CELL")
-                    Assert.True(VerifyReplaceWithENCCell(item.CHILDCELL, item.REPLACEDBY, item));
+                    Assert.That(VerifyReplaceWithENCCell(item.CHILDCELL, item.REPLACEDBY, item) ?? false);
                 else if (item.ACTION == "REMOVE ENC CELL FROM AVCS UNIT OF SALE")
-                    Assert.True(VerifyRemoveENCCellFromAVCSUnitOFSale(item.CHILDCELL, item.PRODUCTNAME, item));
+                    Assert.That(VerifyRemoveENCCellFromAVCSUnitOFSale(item.CHILDCELL, item.PRODUCTNAME, item) ?? false);
                 else if (item.ACTION == "CANCEL ENC CELL")
-                    Assert.True(VerifyCancelENCCell(item.CHILDCELL, item.PRODUCTNAME, item));
+                    Assert.That(VerifyCancelENCCell(item.CHILDCELL, item.PRODUCTNAME, item) ?? false);
                 else if (item.ACTION == "CANCEL AVCS UNIT OF SALE")
-                    Assert.True(VerifyCancelToAVCSUnitOfSale(item.PRODUCTNAME, item));
+                    Assert.That(VerifyCancelToAVCSUnitOfSale(item.PRODUCTNAME, item) ?? false);
                 else if (item.ACTION == "CHANGE ENC CELL")
-                    Assert.True(VerifyChangeENCCell(item.CHILDCELL, item));
+                    Assert.That(VerifyChangeENCCell(item.CHILDCELL, item) ?? false);
                 else if (item.ACTION == "CHANGE AVCS UNIT OF SALE")
-                    Assert.True(VerifyChangeAVCSUnitOfSale(item.PRODUCTNAME, item));
+                    Assert.That(VerifyChangeAVCSUnitOfSale(item.PRODUCTNAME, item) ?? false);
                 else if (item.ACTION == "UPDATE ENC CELL EDITION UPDATE NUMBER")
-                    Assert.True(VerifyUpdateAVCSUnitOfSale(item.CHILDCELL, item));
+                    Assert.That(VerifyUpdateAVCSUnitOfSale(item.CHILDCELL, item) ?? false);
                 ActionCounter++;
             }
 
