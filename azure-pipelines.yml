@@ -341,6 +341,7 @@ stages:
         workspace:
           clean: all
         dependsOn: BuildAndPublishMockService
+        condition: false
         steps:
           - task: UseDotNet@2
             displayName: 'Use .NET 8.0.x sdk'
