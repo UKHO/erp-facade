@@ -5,17 +5,7 @@ parameters:
     displayName: "Continue even if resources are getting destroyed"
     type: boolean
     default: false
-   
-  - name: vNext
-    displayName: "Run the vNext Path"
-    type: boolean
-    default: true
 
-  - name: DisableDependencyCheck
-    displayName: "Disable OWASP dependency checking"
-    type: boolean
-    default: false
-    
 trigger:
   - main
   - release/*
@@ -41,12 +31,43 @@ variables:
     value: "Private Link Deployments (ENG)"
 
 stages:
-   - stage: PERFORM_DEPENDENCYCHECK_DOTNETBUILD_DOTNETTEST_AND_PUBLISH
+  - stage: Stryker_Mutator
+    displayName: "Stryker Mutator"
+    dependsOn: []
+    jobs:
+      - job: Stryker
+        workspace:
+          clean: all
+        steps:
+          - task: UseDotNet@2
+            displayName: 'Use .NET 6.0.x sdk'
+            inputs:
+              packageType: sdk
+              useGlobalJson: true
+              workingDirectory: '$(Build.SourcesDirectory)'
+          - task: DotNetCoreCLI@2
+            displayName: "Install Stryker"
+            inputs:
+              command: custom
+              custom: tool
+              arguments: install dotnet-stryker --tool-path $(Agent.BuildDirectory)/tools
+          - task: Powershell@2
+            displayName: "Run Stryker"
+            inputs:
+              workingDirectory: '$(Build.SourcesDirectory)'
+              targetType: 'inline'
+              pwsh: true
+              script: $(Agent.BuildDirectory)/tools/dotnet-stryker
+          - task: PublishMutationReport@0
+            displayName: 'Publish Strkyer Mutator Report'
+            inputs:
+              reportPattern: '**/mutation-report.html'
+
+  - stage: PERFORM_DEPENDENCYCHECK_DOTNETBUILD_DOTNETTEST_AND_PUBLISH
     displayName: "Build (DependencyChecker, Dotnet Build & Restore , Dotnet Test and Publish Artifact )"
     dependsOn: []
     jobs:
       - job: Dependencychecker
-        condition: eq('${{ parameters.DisableDependencyCheck }}', false)
         workspace:
           clean: all
         displayName: "Dependencychecker"
@@ -348,35 +369,6 @@ stages:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)\MockSAPService'
               ArtifactName: UKHOMockSAPService
 
-      - job: Stryker
-        workspace:
-          clean: all
-        dependsOn: BuildAndPublishMockService
-        steps:
-          - task: UseDotNet@2
-            displayName: 'Use .NET 6.0.x sdk'
-            inputs:
-              packageType: sdk
-              useGlobalJson: true
-              workingDirectory: '$(Build.SourcesDirectory)'
-          - task: DotNetCoreCLI@2
-            displayName: "Install Stryker"
-            inputs:
-              command: custom
-              custom: tool
-              arguments: install dotnet-stryker --tool-path $(Agent.BuildDirectory)/tools
-          - task: Powershell@2
-            displayName: "Run Stryker"
-            inputs:
-              workingDirectory: '$(Build.SourcesDirectory)'
-              targetType: 'inline'
-              pwsh: true
-              script: $(Agent.BuildDirectory)/tools/dotnet-stryker
-          - task: PublishMutationReport@0
-            displayName: 'Publish Strkyer Mutator Report'
-            inputs:
-              reportPattern: '**/mutation-report.html'
-
   - stage: Devdeploy
     displayName: "Devdeploy (inc terraform, webapp deploy)"
     variables:
@@ -466,161 +458,6 @@ stages:
           - template: Deployment/templates/continuous-testing.yml
             parameters:
               AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
-
-  - stage: IATDeploy
-    dependsOn: DevDeploy
-    displayName: "IATdeploy (inc terraform, webapp deploy)"
-    condition: and(succeeded(), eq('${{ parameters.vNext }}', true))
-    variables:
-      - group: "ERP-Facade-IAT"
-      - group: "Erp-IAT"
-      - group: "ERP-FACADE-IAT-KV"
-      - name: "AzureADConfiguration.TenantId"
-        value: $(AzureADConfigurationTenantId)
-      - name: "AzureADConfiguration.ClientId"
-        value: $(AzureADConfigurationClientId)
-      - name: "AzureADConfiguration.AutoTestClientId"
-        value: $(AzureADConfigurationAutoTestClientId)
-      - name: "AzureADConfiguration.ClientSecret"
-        value: $(AzureADConfigurationClientSecret)
-      - name: "AzureADConfiguration.AutoTestClientIdNoRole"
-        value: $(AzureADConfigurationAutoTestClientIdNoRole)
-      - name: "AzureADConfiguration.ClientSecretNoRole"
-        value: $(AzureADConfigurationClientSecretNoRole)
-      - name: "EnterpriseEventServiceConfiguration.ClientId"
-        value: $(EnterpriseEventServiceConfigurationClientId)
-      - name: "SharedKeyConfiguration.Key"
-        value: $(SharedKeyConfigurationKey)
-      - name: mockWebAppName
-        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
-      - name: mockWebAppResourceGroup
-        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
-      - name: "SapMockConfiguration.BaseUrl"
-        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
-    jobs:
-      - deployment: IATDeployTerraform
-        displayName: "IAT - Deploy Terraform"
-        environment: "ERP-IAT"
-        pool: $(DeploymentPool)
-        container: ${{variables.Container}}
-        workspace:
-          clean: all
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - template: Deployment/templates/continuous-deployment.yml
-                  parameters:
-                    ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
-                    AzureSubscription: "ERP-Facade-QA-A.011.05.12"
-
-      - deployment: IATDeployApp
-        dependsOn: IATDeployTerraform
-        displayName: "IAT - Deploy Dotnet App"
-        environment: "ERP-IAT"
-        pool: $(DeploymentPoolPE)
-        variables:
-          - name : WEB_APP_NAME
-            value : $[ dependencies.IATDeployTerraform.outputs['QADeployTerraform.TerraformDeploy.WEB_APP'] ]
-          - name : "KeyVaultSettings.ServiceUri"
-            value : $[ dependencies.IATDeployTerraform.outputs['QADeployTerraform.TerraformDeploy.keyvaulturi'] ]
-          - name : "AzureWebJobsStorage.ConnectionString"
-            value : $[ dependencies.IATDeployTerraform.outputs['QADeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
-        workspace:
-          clean: all
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - template: Deployment/templates/continuous-deployment-app.yml
-                  parameters:
-                    AzureSubscription: "ERP-Facade-vNext-IAT-A.011.08"
-
-      - job: FunctionalTests
-        dependsOn:
-        - IATDeployTerraform
-        - IATDeployApp
-        pool: $(WindowsPool)
-        variables:
-          - name : AzureStorageConfiguration.ConnectionString
-            value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
-        displayName: "IAT Functional Automated Tests"
-        workspace:
-         clean: all
-        steps:
-          - template: Deployment/templates/continuous-testing.yml
-            parameters:
-              AzureSubscription: "ERP-Facade-Dev-A.011.05.12"              
-    
-  - stage: E2EDeploy
-    dependsOn: IATDeploy
-    displayName: "E2Edeploy (inc terraform, webapp deploy)"    
-    variables:
-      - group: "ERP-Facade-E2E"
-      - group: "Erp-E2E"
-      - group: "ERP-FACADE-E2E-KV"
-      - name: "AzureADConfiguration.TenantId"
-        value: $(AzureADConfigurationTenantId)
-      - name: "AzureADConfiguration.ClientId"
-        value: $(AzureADConfigurationClientId)
-      - name: "AzureADConfiguration.AutoTestClientId"
-        value: $(AzureADConfigurationAutoTestClientId)
-      - name: "AzureADConfiguration.ClientSecret"
-        value: $(AzureADConfigurationClientSecret)
-      - name: "AzureADConfiguration.AutoTestClientIdNoRole"
-        value: $(AzureADConfigurationAutoTestClientIdNoRole)
-      - name: "AzureADConfiguration.ClientSecretNoRole"
-        value: $(AzureADConfigurationClientSecretNoRole)
-      - name: "EnterpriseEventServiceConfiguration.ClientId"
-        value: $(EnterpriseEventServiceConfigurationClientId)
-      - name: "SharedKeyConfiguration.Key"
-        value: $(SharedKeyConfigurationKey)
-      - name: mockWebAppName
-        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
-      - name: mockWebAppResourceGroup
-        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
-      - name: "SapMockConfiguration.BaseUrl"
-        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
-    condition: and(succeeded(), eq('${{ parameters.vNext }}', true))
-
-    jobs:
-      - deployment: E2EDeployTerraform
-        displayName: "E2e - Deploy Terraform"
-        environment: "ERP-E2E"
-        pool: $(DeploymentPool)
-        container: ${{variables.Container}}
-        workspace:
-          clean: all
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - template: Deployment/templates/continuous-deployment.yml
-                  parameters:
-                    ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
-                    AzureSubscription: "ERP-Facade-E2E-A.011.08"
-
-      - deployment: E2EDeployApp
-        dependsOn: E2EDeployTerraform
-        displayName: "E2e - Deploy Dotnet App"
-        environment: "ERP-E2E"
-        pool: $(DeploymentPoolPE)
-        variables:
-          - name : WEB_APP_NAME
-            value : $[ dependencies.E2EDeployTerraform.outputs['E2EDeployTerraform.TerraformDeploy.WEB_APP'] ]
-          - name : "KeyVaultSettings.ServiceUri"
-            value : $[ dependencies.E2EDeployTerraform.outputs['E2EDeployTerraform.TerraformDeploy.keyvaulturi'] ]
-          - name : "AzureWebJobsStorage.ConnectionString"
-            value : $[ dependencies.E2EDeployTerraform.outputs['E2EDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
-        workspace:
-          clean: all
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - template: Deployment/templates/continuous-deployment-app.yml
-                  parameters:
-                    AzureSubscription: "ERP-Facade-vNext-E2E-A.011.08"            
 
   - stage: QAdeploy
     dependsOn: Devdeploy
