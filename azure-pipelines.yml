@@ -15,6 +15,11 @@ parameters:
     displayName: "Disable OWASP dependency checking"
     type: boolean
     default: false
+
+  - name: RunStryker
+    displayName: "Run Stryker test mutation"
+    type: boolean
+    default: false
     
 trigger:
   - main
@@ -46,6 +51,7 @@ stages:
     dependsOn: []
     jobs:
       - job: Dependencychecker
+        condition: eq('${{ parameters.DisableDependencyCheck }}', false)      
         workspace:
           clean: all
         displayName: "Dependencychecker"
@@ -348,6 +354,7 @@ stages:
               ArtifactName: UKHOMockSAPService
               
       - job: Stryker
+        condition: eq('${{ parameters.RunStryker }}', true)      
         workspace:
           clean: all
         dependsOn: BuildAndPublishMockService
