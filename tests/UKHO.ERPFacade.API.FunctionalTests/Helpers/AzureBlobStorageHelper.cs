@@ -64,6 +64,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             try
             {
                 BlobServiceClient blobServiceClient = new(Config.TestConfig.AzureStorageConfiguration.ConnectionString);
+
+                Console.Out.WriteLine($"Getting pricechangeblobs container from connection: {Config.TestConfig.AzureStorageConfiguration.ConnectionString}");
+
                 BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient("pricechangeblobs");
 
                 // List all the directories
