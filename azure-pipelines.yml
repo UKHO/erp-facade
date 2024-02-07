@@ -405,6 +405,14 @@ stages:
         value: $(AzureADConfigurationClientId)
       - name: "SharedKeyConfiguration.Key"
         value: $(SharedKeyConfigurationKey)
+      - name: "ElasticAPM.ApiKey"
+        value: $(elasticAPM-ApiKey)
+      - name: "ElasticAPM.Environment"
+        value: $(elasticAPM-Environment)
+      - name: "ElasticAPM.ServerURL"
+        value: $(elasticAPM-ServerURL)
+      - name: "ElasticAPM.ServiceName"
+        value: $(elasticAPM-ServiceName)        
     jobs:
       - deployment: DevDeployTerraform
         displayName: "Dev - Deploy Terraform"
@@ -497,6 +505,14 @@ stages:
         value: $(EnterpriseEventServiceConfigurationClientId)
       - name: "SharedKeyConfiguration.Key"
         value: $(SharedKeyConfigurationKey)
+      - name: "ElasticAPM.ApiKey"
+        value: $(elasticAPM-ApiKey)
+      - name: "ElasticAPM.Environment"
+        value: $(elasticAPM-Environment)
+      - name: "ElasticAPM.ServerURL"
+        value: $(elasticAPM-ServerURL)
+      - name: "ElasticAPM.ServiceName"
+        value: $(elasticAPM-ServiceName)        
       - name: mockWebAppName
         value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup
@@ -581,6 +597,14 @@ stages:
         value: $(EnterpriseEventServiceConfigurationClientId)
       - name: "SharedKeyConfiguration.Key"
         value: $(SharedKeyConfigurationKey)
+      - name: "ElasticAPM.ApiKey"
+        value: $(elasticAPM-ApiKey)
+      - name: "ElasticAPM.Environment"
+        value: $(elasticAPM-Environment)
+      - name: "ElasticAPM.ServerURL"
+        value: $(elasticAPM-ServerURL)
+      - name: "ElasticAPM.ServiceName"
+        value: $(elasticAPM-ServiceName)        
       - name: mockWebAppName
         value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup
@@ -651,6 +675,14 @@ stages:
         value: $(EnterpriseEventServiceConfigurationClientId)
       - name: "SharedKeyConfiguration.Key"
         value: $(SharedKeyConfigurationKey)
+      - name: "ElasticAPM.ApiKey"
+        value: $(elasticAPM-ApiKey)
+      - name: "ElasticAPM.Environment"
+        value: $(elasticAPM-Environment)
+      - name: "ElasticAPM.ServerURL"
+        value: $(elasticAPM-ServerURL)
+      - name: "ElasticAPM.ServiceName"
+        value: $(elasticAPM-ServiceName)        
       - name: mockWebAppName
         value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup
