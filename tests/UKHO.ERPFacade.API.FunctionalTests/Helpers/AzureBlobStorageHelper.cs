@@ -69,7 +69,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 
                 BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient("pricechangeblobs");
 
-                Console.Out.WriteLine($"Looking for {blobContainer} correlation id in {containerClient.Uri}");
+                Console.Out.WriteLine($"Looking for {blobContainer} correlation id in {containerClient.Uri} at {DateTimeOffset.UtcNow}");
 
                 // List all the directories
                 await foreach (BlobHierarchyItem blobHierarchyItem in containerClient.GetBlobsByHierarchyAsync(prefix: blobContainer + "/", delimiter: "/"))
