@@ -53,7 +53,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
                 string responseHeaderCorrelationId = GetResponseHeaderCorrelationId(response);
                 List<string> uniqueProductFromInputPayload = GetProductListFromInputPayload(filePath);
 
-                List<string> uniqueProductFromAzureStorage = AzureBlobStorageHelper.GetProductListFromBlobContainerAsync(responseHeaderCorrelationId).Result;
+                List<string> uniqueProductFromAzureStorage = await AzureBlobStorageHelper.GetProductListFromBlobContainerAsync(responseHeaderCorrelationId);
 
                 Assert.That(uniqueProductFromInputPayload.Count.Equals(uniqueProductFromAzureStorage.Count), Is.True, $"Slicing is not correct: uniqueProductFromInputPayload has count {uniqueProductFromInputPayload.Count}, uniqueProductFromAzureStorage has count {uniqueProductFromAzureStorage.Count}");
 
@@ -65,7 +65,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
                     JsonOutputPriceChangeHelper deserializedProductOutput = GetDeserializedProductJson(generatedProductJsonFile);
                     string correlationId = deserializedProductOutput.data.correlationId;
 
-                    Assert.That(correlationId.Equals(responseHeaderCorrelationId), Is.True, "response header corerelationId is same as generated product correlation id");
+                    Assert.That(correlationId.Equals(responseHeaderCorrelationId), Is.True, "response header correlationId is same as generated product correlation id");
                     unitsOfSalePricesData[] data = deserializedProductOutput.data.unitsOfSalePrices;
 
                     EffectiveDatesPerProductPC effectiveDate = new();
