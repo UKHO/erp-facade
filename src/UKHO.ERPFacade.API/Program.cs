@@ -212,7 +212,7 @@ namespace UKHO.ERPFacade
 
             app.UseAuthentication();
 
-            //app.UseElasticApm(configuration);
+            app.UseElasticApm(configuration);
 
             app.Run();
         }

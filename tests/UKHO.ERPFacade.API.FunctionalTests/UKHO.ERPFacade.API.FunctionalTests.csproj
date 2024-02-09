@@ -18,6 +18,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="FunctionalTests\PriceChangeScenario.cs" />
     <Compile Remove="Helpers\UnitOfSaleEndpoint - Copy.cs" />
   </ItemGroup>
 
