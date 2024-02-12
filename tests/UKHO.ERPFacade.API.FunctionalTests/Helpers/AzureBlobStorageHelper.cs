@@ -64,11 +64,18 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             try
             {
                 BlobServiceClient blobServiceClient = new(Config.TestConfig.AzureStorageConfiguration.ConnectionString);
+
+                Console.Out.WriteLine($"Getting pricechangeblobs container from connection: {Config.TestConfig.AzureStorageConfiguration.ConnectionString}");
+                
                 BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient("pricechangeblobs");
+
+                Console.Out.WriteLine($"Looking for {blobContainer} correlation id in {containerClient.Uri} at {DateTimeOffset.UtcNow}");
 
                 // List all the directories
                 await foreach (BlobHierarchyItem blobHierarchyItem in containerClient.GetBlobsByHierarchyAsync(prefix: blobContainer + "/", delimiter: "/"))
                 {
+                    Console.Out.WriteLine($"Blob {blobHierarchyItem.Blob.Name} IsPrefix:{blobHierarchyItem.IsPrefix} Prefix:{blobHierarchyItem.Prefix}");
+
                     if (blobHierarchyItem.IsPrefix)
                     {
                         string str = blobHierarchyItem.Prefix;

@@ -53,9 +53,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
                 string responseHeaderCorrelationId = GetResponseHeaderCorrelationId(response);
                 List<string> uniqueProductFromInputPayload = GetProductListFromInputPayload(filePath);
 
-                List<string> uniqueProductFromAzureStorage = AzureBlobStorageHelper.GetProductListFromBlobContainerAsync(responseHeaderCorrelationId).Result;
+                List<string> uniqueProductFromAzureStorage = await AzureBlobStorageHelper.GetProductListFromBlobContainerAsync(responseHeaderCorrelationId);
 
-                Assert.That(uniqueProductFromInputPayload.Count.Equals(uniqueProductFromAzureStorage.Count), Is.True, "Slicing is not correct");
+                Assert.That(uniqueProductFromInputPayload.Count.Equals(uniqueProductFromAzureStorage.Count), Is.True, $"Slicing is not correct: uniqueProductFromInputPayload has count {uniqueProductFromInputPayload.Count}, uniqueProductFromAzureStorage has count {uniqueProductFromAzureStorage.Count}");
 
                 foreach (string products in uniqueProductFromAzureStorage)
                 {
@@ -65,7 +65,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
                     JsonOutputPriceChangeHelper deserializedProductOutput = GetDeserializedProductJson(generatedProductJsonFile);
                     string correlationId = deserializedProductOutput.data.correlationId;
 
-                    Assert.That(correlationId.Equals(responseHeaderCorrelationId), Is.True, "response header corerelationId is same as generated product correlation id");
+                    Assert.That(correlationId.Equals(responseHeaderCorrelationId), Is.True, "response header correlationId is same as generated product correlation id");
                     unitsOfSalePricesData[] data = deserializedProductOutput.data.unitsOfSalePrices;
 
                     EffectiveDatesPerProductPC effectiveDate = new();
@@ -198,7 +198,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
                 responseHeadercorrelationID = GetResponseHeaderCorrelationId(response);
                 _uniquePdtFromInputPayload = GetProductListFromInputPayload(filePath);
                 List<string> UniquePdtFromAzureStorage = _azureBlobStorageHelper.GetProductListFromBlobContainerAsync(responseHeadercorrelationID).Result;
-                Assert.That(_uniquePdtFromInputPayload.Count.Equals(UniquePdtFromAzureStorage.Count), Is.True, "Slicing is not correct");
+                Assert.That(_uniquePdtFromInputPayload.Count.Equals(UniquePdtFromAzureStorage.Count), Is.True, $"Slicing is not correct: _uniquePdtFromInputPayload has count {_uniquePdtFromInputPayload.Count}, UniquePdtFromAzureStorage has count {UniquePdtFromAzureStorage.Count}");
                 foreach (string products in UniquePdtFromAzureStorage)
                 {
                     string generatedProductJsonFile = AzureBlobStorageHelper.DownloadJsonFromAzureBlob(generatedProductJsonFolder, responseHeadercorrelationID, products, "ProductChange");
