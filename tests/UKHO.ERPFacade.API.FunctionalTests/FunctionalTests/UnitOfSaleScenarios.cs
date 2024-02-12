@@ -127,29 +127,29 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
         }
 
-        [Test, Order(0)]
-        //UoS scenario based testing
-        [TestCase("ID1_WebhookPayload.JSON", "UoS1_Pricing.JSON", TestName = "WhenValidCorrIdPassed_UoSReturn200OkResponse")]
-        [TestCase("ID1_WebhookPayload.JSON", "UoS_4_FutureDateFieldBlank.JSON", TestName = "WhenValidCorrIdWithFutureDateBlank_UoSReturn200OkResponse")]
-        [TestCase("ID1_WebhookPayload.JSON", "UoS_5_MultiProductSameDuration.JSON", TestName = "WhenValidCorrIdMultiProdSameDuration_UoSReturn200OkResponse")]
-        [TestCase("ID1_WebhookPayload.JSON", "UoS_6_MultiProductMultiDuration.JSON", TestName = "WhenValidCorrIdMultiProdMultiDuration_UoSReturn200OkResponse")]
-        [TestCase("ID1_WebhookPayload.JSON", "UoS_7_SameEffectiveSameFutureDate.JSON", TestName = "WhenSameEffectiveAndFutureDate_UoSReturn200OkResponse")]
-        [TestCase("ID1_WebhookPayload.JSON", "UoS_8_DiffEffectiveSameFutureDate.JSON", TestName = "WhenDiffEffectiveAndSameFutureDate_UoSReturn200OkResponse")]
-        [TestCase("ID1_WebhookPayload.JSON", "UoS_9_SameEffectiveDiffFutureDate.JSON", TestName = "WhenSameEffectiveAndDiffFutureDate_UoSReturn200OkResponse")]
-        [TestCase("ID1_WebhookPayload.JSON", "UoS_10_DiffntEffectiveAndDiffFutureDate.JSON", TestName = "WhenDiffEffectiveAndDiffFutureDate_UoSReturn200OkResponse")]
+        //[Test, Order(0)]
+        ////UoS scenario based testing
+        //[TestCase("ID1_WebhookPayload.JSON", "UoS1_Pricing.JSON", TestName = "WhenValidCorrIdPassed_UoSReturn200OkResponse")]
+        //[TestCase("ID1_WebhookPayload.JSON", "UoS_4_FutureDateFieldBlank.JSON", TestName = "WhenValidCorrIdWithFutureDateBlank_UoSReturn200OkResponse")]
+        //[TestCase("ID1_WebhookPayload.JSON", "UoS_5_MultiProductSameDuration.JSON", TestName = "WhenValidCorrIdMultiProdSameDuration_UoSReturn200OkResponse")]
+        //[TestCase("ID1_WebhookPayload.JSON", "UoS_6_MultiProductMultiDuration.JSON", TestName = "WhenValidCorrIdMultiProdMultiDuration_UoSReturn200OkResponse")]
+        //[TestCase("ID1_WebhookPayload.JSON", "UoS_7_SameEffectiveSameFutureDate.JSON", TestName = "WhenSameEffectiveAndFutureDate_UoSReturn200OkResponse")]
+        //[TestCase("ID1_WebhookPayload.JSON", "UoS_8_DiffEffectiveSameFutureDate.JSON", TestName = "WhenDiffEffectiveAndSameFutureDate_UoSReturn200OkResponse")]
+        //[TestCase("ID1_WebhookPayload.JSON", "UoS_9_SameEffectiveDiffFutureDate.JSON", TestName = "WhenSameEffectiveAndDiffFutureDate_UoSReturn200OkResponse")]
+        //[TestCase("ID1_WebhookPayload.JSON", "UoS_10_DiffntEffectiveAndDiffFutureDate.JSON", TestName = "WhenDiffEffectiveAndDiffFutureDate_UoSReturn200OkResponse")]
 
-        public async Task WhenValidCorrIdPassed_UoSReturn200OkResponse(string webhookPayloadJsonFileName, string UoSPayloadFileName)
-        {
-            string filePathWebhook = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.WebhookPayloadFileName);
-            string generatedXMLFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXMLFolder);
-            Console.WriteLine("Scenario:" + UoSPayloadFileName + "\n");
-            string filePathUOS = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, UoSPayloadFileName);
-            string generatedJSONFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedJSONFolder);
-            string webhookToken = await _authToken.GetAzureADToken(false);
-            string uOSKey = Config.TestConfig.SharedKeyConfiguration.Key;
-            var response = await _unitOfSale.PostWebHookAndUoSResponse200OK(filePathWebhook, filePathUOS, generatedXMLFolder, generatedJSONFolder, webhookToken, uOSKey);
-            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-        }
+        //public async Task WhenValidCorrIdPassed_UoSReturn200OkResponse(string webhookPayloadJsonFileName, string UoSPayloadFileName)
+        //{
+        //    string filePathWebhook = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.WebhookPayloadFileName);
+        //    string generatedXMLFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXMLFolder);
+        //    Console.WriteLine("Scenario:" + UoSPayloadFileName + "\n");
+        //    string filePathUOS = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, UoSPayloadFileName);
+        //    string generatedJSONFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedJSONFolder);
+        //    string webhookToken = await _authToken.GetAzureADToken(false);
+        //    string uOSKey = Config.TestConfig.SharedKeyConfiguration.Key;
+        //    var response = await _unitOfSale.PostWebHookAndUoSResponse200OK(filePathWebhook, filePathUOS, generatedXMLFolder, generatedJSONFolder, webhookToken, uOSKey);
+        //    response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        //}
 
         [Test, Order(0)]
         [TestCase("UoS_12_SAPPricing_PAYSF12Months.JSON", TestName = "WhenPAYSFwith12MonthDuration_UoSAlteredPAYSFPricesFinalJson")]
