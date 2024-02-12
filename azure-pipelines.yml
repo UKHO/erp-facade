@@ -37,7 +37,7 @@ variables:
   - name: WindowsPool
     value: "NautilusBuild"
   - name: Container
-    value: "ukhydrographicoffice/terraform-azure-powershell-unzip:1.4.4"
+    value: "ukhydrographicoffice/terraform-azure-powershell-unzip:1.7.2"
   - name: DeploymentPool
     value: "UKHO Ubuntu 1804"
   - name: DeploymentPoolFT
@@ -769,4 +769,3 @@ stages:
         displayName: Post Deployment Actions
         steps:
           - template: Deployment/templates/retain-pipeline.yml
- 
