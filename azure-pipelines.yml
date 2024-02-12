@@ -250,7 +250,7 @@ stages:
               packagesDirectory: '$(Build.SourcesDirectory)\UKHO.SAP.MockSAPService\packages'
 
           - task: DotNetCoreCLI@2
-            displayName: "Build Mock Service Project"
+            displayName: "Build Mock Service Projects"
             inputs:
               command: "build"
               projects: |
