@@ -37,10 +37,26 @@ namespace UKHO.ERPFacade.Common.Models
         [JsonProperty("correlationId")]
         public string CorrelationId { get; set; }
 
+        [JsonProperty("ukhoWeekNumber")]
+        public UkhoWeekNumber UkhoWeekNumber { get; set; }
+
         [JsonProperty("products")]
         public List<Product> Products { get; set; }
 
         [JsonProperty("unitsOfSale")]
         public List<UnitOfSale> UnitsOfSales { get; set; }
+    }
+
+    [ExcludeFromCodeCoverage]
+    public class UkhoWeekNumber
+    {
+        [JsonProperty("year")]
+        public int Year { get; set; }
+
+        [JsonProperty("week")]
+        public int Week { get; set; }
+
+        [JsonProperty("currentWeekAlphaCorrection")]
+        public bool CurrentWeekAlphaCorrection { get; set; }
     }
 }
