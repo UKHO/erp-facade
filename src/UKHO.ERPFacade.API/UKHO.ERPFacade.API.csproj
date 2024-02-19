@@ -48,7 +48,6 @@
     <PackageReference Include="Serilog.Extensions.Logging.File" Version="3.0.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-    <PackageReference Include="UKHO.WeekNumberUtils" Version="1.5.22270.11" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\UKHO.ERPFacade.Common\UKHO.ERPFacade.Common.csproj" />
