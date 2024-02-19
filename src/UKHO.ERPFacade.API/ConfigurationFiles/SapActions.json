@@ -203,13 +203,20 @@
             "XmlNodeName": "UPDATENO",
             "SortingOrder": 11
           },
-          {
-            "IsRequired": true,
-            "Section": "UnitOfSale",
-            "JsonPropertyName": "UnitType",
-            "XmlNodeName": "UNITTYPE",
-            "SortingOrder": 12
-          }
+            {
+                "IsRequired": true,
+                "Section": "UnitOfSale",
+                "JsonPropertyName": "UnitType",
+                "XmlNodeName": "UNITTYPE",
+                "SortingOrder": 12
+            },
+            {
+                "IsRequired": true,
+                "Section": "UkhoWeekNumber",
+                "JsonPropertyName": "",
+                "XmlNodeName": "VALIDFROM",
+                "SortingOrder": 14
+            }
         ]
       },
       {
@@ -300,13 +307,20 @@
             "XmlNodeName": "UPDATENO",
             "SortingOrder": 11
           },
-          {
-            "IsRequired": false,
-            "Section": "UnitOfSale",
-            "JsonPropertyName": "UnitType",
-            "XmlNodeName": "UNITTYPE",
-            "SortingOrder": 12
-          }
+            {
+                "IsRequired": false,
+                "Section": "UnitOfSale",
+                "JsonPropertyName": "UnitType",
+                "XmlNodeName": "UNITTYPE",
+                "SortingOrder": 12
+            },
+            {
+                "IsRequired": true,
+                "Section": "UkhoWeekNumber",
+                "JsonPropertyName": "",
+                "XmlNodeName": "VALIDFROM",
+                "SortingOrder": 14
+            }
         ]
       },
       {
