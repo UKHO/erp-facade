@@ -15,6 +15,7 @@ using UKHO.ERPFacade.API.UnitTests.Common;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
+using UKHO.ERPFacade.Common.Permit_Decryption;
 
 namespace UKHO.ERPFacade.API.UnitTests.Helpers
 {
@@ -25,6 +26,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         private IFileSystemHelper _fakeFileSystemHelper;
         private IOptions<SapActionConfiguration> _fakeSapActionConfig;
         private ILogger<EncContentSapMessageBuilder> _fakeLogger;
+        private IPermitDecryption _fakePermitDecryption;
 
         private EncContentSapMessageBuilder _fakeEncContentSapMessageBuilder;
         private const string XpathActionItems = $"//*[local-name()='ACTIONITEMS']";
@@ -67,7 +69,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             _fakeXmlHelper = A.Fake<IXmlHelper>();
             _fakeFileSystemHelper = A.Fake<IFileSystemHelper>();
             _fakeSapActionConfig = Options.Create(InitConfiguration().GetSection("SapActionConfiguration").Get<SapActionConfiguration>())!;
-            _fakeEncContentSapMessageBuilder = new EncContentSapMessageBuilder(_fakeLogger, _fakeXmlHelper, _fakeFileSystemHelper, _fakeSapActionConfig);
+            _fakeEncContentSapMessageBuilder = new EncContentSapMessageBuilder(_fakeLogger, _fakeXmlHelper, _fakeFileSystemHelper, _fakeSapActionConfig, _fakePermitDecryption);
         }
 
         private IConfiguration InitConfiguration()
