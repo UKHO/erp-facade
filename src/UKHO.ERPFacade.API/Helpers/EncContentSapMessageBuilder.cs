@@ -13,7 +13,7 @@ namespace UKHO.ERPFacade.API.Helpers
         private readonly IXmlHelper _xmlHelper;
         private readonly IFileSystemHelper _fileSystemHelper;
         private readonly IOptions<SapActionConfiguration> _sapActionConfig;
-        private readonly IWeekDetailsProvider _weekDetailsProvider;
+        private static IWeekDetailsProvider s_weekDetailsProvider;
 
         private const string SapXmlPath = "SapXmlTemplates\\SAPRequest.xml";
         private const string XpathImMatInfo = $"//*[local-name()='IM_MATINFO']";
@@ -36,6 +36,8 @@ namespace UKHO.ERPFacade.API.Helpers
         private const string AvcsUnit = "AVCS UNIT";
         private const string RecDateFormat = "yyyyMMdd";
         private const string RecTimeFormat = "hhmmss";
+        private const string UkhoWeekNumberSection = "UkhoWeekNumber";
+        private const string ValidFrom = "VALIDFROM";
 
         public EncContentSapMessageBuilder(ILogger<EncContentSapMessageBuilder> logger,
                                  IXmlHelper xmlHelper,
@@ -48,7 +50,7 @@ namespace UKHO.ERPFacade.API.Helpers
             _xmlHelper = xmlHelper;
             _fileSystemHelper = fileSystemHelper;
             _sapActionConfig = sapActionConfig;
-            _weekDetailsProvider = weekDetailsProvider;
+            s_weekDetailsProvider = weekDetailsProvider;
         }
 
         /// <summary>
@@ -67,6 +69,8 @@ namespace UKHO.ERPFacade.API.Helpers
                 _logger.LogError(EventIds.SapXmlTemplateNotFound.ToEventId(), "The SAP message xml template does not exist.");
                 throw new FileNotFoundException();
             }
+
+            var ukhoWeekNumber = eventData.Data.UkhoWeekNumber;
 
             XmlDocument soapXml = _xmlHelper.CreateXmlDocument(sapXmlTemplatePath);
 
@@ -108,7 +112,7 @@ namespace UKHO.ERPFacade.API.Helpers
 
                             if (IsConditionSatisfied)
                             {
-                                actionNode = BuildAction(soapXml, product, unitOfSale, action);
+                                actionNode = BuildAction(soapXml, product, unitOfSale, action, ukhoWeekNumber);
                                 actionItemNode.AppendChild(actionNode);
                                 _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
                                 IsConditionSatisfied = false;
@@ -119,7 +123,7 @@ namespace UKHO.ERPFacade.API.Helpers
                             var unitOfSaleReplace = GetUnitOfSaleForEncCell(eventData.Data.UnitsOfSales, product);
                             foreach (var replacedProduct in product.ReplacedBy)
                             {
-                                actionNode = BuildAction(soapXml, product, unitOfSaleReplace, action, null, replacedProduct);
+                                actionNode = BuildAction(soapXml, product, unitOfSaleReplace, action, ukhoWeekNumber, null, replacedProduct);
                                 actionItemNode.AppendChild(actionNode);
                                 _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
                             }
@@ -156,7 +160,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                 }
                                 if (IsConditionSatisfied)
                                 {
-                                    actionNode = BuildAction(soapXml, product, unitofSale, action);
+                                    actionNode = BuildAction(soapXml, product, unitofSale, action, ukhoWeekNumber);
                                     actionItemNode.AppendChild(actionNode);
                                     _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
 
@@ -183,7 +187,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                 }
                                 if (IsConditionSatisfied)
                                 {
-                                    actionNode = BuildAction(soapXml, product, unitofSale, action);
+                                    actionNode = BuildAction(soapXml, product, unitofSale, action, ukhoWeekNumber);
                                     actionItemNode.AppendChild(actionNode);
                                     _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
 
@@ -225,7 +229,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                 var product = eventData.Data.Products.Where(x => x.InUnitsOfSale.Contains(unitOfSale.UnitName)
                                               && unitOfSale.UnitOfSaleType == UnitSaleType).FirstOrDefault();
 
-                                actionNode = BuildAction(soapXml, product, unitOfSale, action);
+                                actionNode = BuildAction(soapXml, product, unitOfSale, action, ukhoWeekNumber);
                                 actionItemNode.AppendChild(actionNode);
                                 _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
 
@@ -238,7 +242,7 @@ namespace UKHO.ERPFacade.API.Helpers
                             {
                                 var product = eventData.Data.Products.Where(x => x.ProductName == addProduct).FirstOrDefault();
 
-                                actionNode = BuildAction(soapXml, product, unitOfSale, action, addProduct);
+                                actionNode = BuildAction(soapXml, product, unitOfSale, action, ukhoWeekNumber, addProduct);
                                 actionItemNode.AppendChild(actionNode);
                                 _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
                             }
@@ -249,7 +253,7 @@ namespace UKHO.ERPFacade.API.Helpers
                             {
                                 var product = eventData.Data.Products.Where(x => x.ProductName == removeProduct).FirstOrDefault();
 
-                                actionNode = BuildAction(soapXml, product, unitOfSale, action);
+                                actionNode = BuildAction(soapXml, product, unitOfSale, action, ukhoWeekNumber);
                                 actionItemNode.AppendChild(actionNode);
                                 _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
                             }
@@ -275,7 +279,7 @@ namespace UKHO.ERPFacade.API.Helpers
             return soapXml;
         }
 
-        private static XmlElement BuildAction(XmlDocument soapXml, Product product, UnitOfSale unitOfSale, SapAction action, string childCell = null, string replacedByProduct = null)
+        private static XmlElement BuildAction(XmlDocument soapXml, Product product, UnitOfSale unitOfSale, SapAction action, UkhoWeekNumber ukhoWeekNumber, string childCell = null, string replacedByProduct = null)
         {
             XmlElement itemNode = soapXml.CreateElement(Item);
 
@@ -343,12 +347,41 @@ namespace UKHO.ERPFacade.API.Helpers
                 }
                 actionAttributeList.Add((node.SortingOrder, itemSubNode));
             }
+
+            foreach (var node in action.Attributes.Where(x => x.Section == UkhoWeekNumberSection))
+            {
+                XmlElement itemSubNode = soapXml.CreateElement(node.XmlNodeName);
+
+                if (node.IsRequired)
+                {
+                    if (ukhoWeekNumber != null)
+                    {
+                        if (node.XmlNodeName == ValidFrom)
+                        {
+                            string thursdayDate = s_weekDetailsProvider.GetThursdayDateOfWeek(
+                                ukhoWeekNumber.Year, ukhoWeekNumber.Week);
+                            itemSubNode.InnerText = GetXmlNodeValue(thursdayDate);
+                        }
+                    }
+                    else
+                    {
+                        itemSubNode.InnerText = string.Empty;
+                    }
+                }
+                else
+                {
+                    itemSubNode.InnerText = string.Empty;
+                }
+                actionAttributeList.Add((node.SortingOrder, itemSubNode));
+            }
+
             var sortedActionAttributeList = actionAttributeList.OrderBy(x => x.sortingOrder).ToList();
 
             foreach (var itemAttribute in sortedActionAttributeList)
             {
                 itemNode.AppendChild(itemAttribute.itemNode);
             }
+
             return itemNode;
         }
 
