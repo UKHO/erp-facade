@@ -15,6 +15,7 @@ using UKHO.ERPFacade.API.UnitTests.Common;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
+using UKHO.ERPFacade.Common.Providers;
 
 namespace UKHO.ERPFacade.API.UnitTests.Helpers
 {
@@ -25,6 +26,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         private IFileSystemHelper _fakeFileSystemHelper;
         private IOptions<SapActionConfiguration> _fakeSapActionConfig;
         private ILogger<EncContentSapMessageBuilder> _fakeLogger;
+        private IWeekDetailsProvider _fakeWeekDetailsProvider;
 
         private EncContentSapMessageBuilder _fakeEncContentSapMessageBuilder;
         private const string XpathActionItems = $"//*[local-name()='ACTIONITEMS']";
@@ -67,7 +69,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             _fakeXmlHelper = A.Fake<IXmlHelper>();
             _fakeFileSystemHelper = A.Fake<IFileSystemHelper>();
             _fakeSapActionConfig = Options.Create(InitConfiguration().GetSection("SapActionConfiguration").Get<SapActionConfiguration>())!;
-            _fakeEncContentSapMessageBuilder = new EncContentSapMessageBuilder(_fakeLogger, _fakeXmlHelper, _fakeFileSystemHelper, _fakeSapActionConfig);
+            _fakeWeekDetailsProvider = A.Fake<IWeekDetailsProvider>();
+            _fakeEncContentSapMessageBuilder = new EncContentSapMessageBuilder(_fakeLogger, _fakeXmlHelper, _fakeFileSystemHelper, _fakeSapActionConfig, _fakeWeekDetailsProvider);
         }
 
         private IConfiguration InitConfiguration()
@@ -270,7 +273,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         [Test]
         public void BuildActionTest()
         {
-            var actualXmlElement = @"<ACTIONNUMBER>1</ACTIONNUMBER><ACTION>CREATE ENC CELL</ACTION><PRODUCT>ENC CELL</PRODUCT><PRODTYPE>S57</PRODTYPE><CHILDCELL>US5AK83M</CHILDCELL><PRODUCTNAME>US5AK83M</PRODUCTNAME><CANCELLED></CANCELLED><REPLACEDBY></REPLACEDBY><AGENCY>US</AGENCY><PROVIDER>1</PROVIDER><ENCSIZE>small</ENCSIZE><TITLE>St. Michael Bay</TITLE><EDITIONNO>0</EDITIONNO><UPDATENO>1</UPDATENO><UNITTYPE></UNITTYPE>";
+            var actualXmlElement = @"<ACTIONNUMBER>1</ACTIONNUMBER><ACTION>CREATE ENC CELL</ACTION><PRODUCT>ENC CELL</PRODUCT><PRODTYPE>S57</PRODTYPE><CHILDCELL>US5AK83M</CHILDCELL><PRODUCTNAME>US5AK83M</PRODUCTNAME><CANCELLED></CANCELLED><REPLACEDBY></REPLACEDBY><AGENCY>US</AGENCY><PROVIDER>1</PROVIDER><ENCSIZE>small</ENCSIZE><TITLE>St. Michael Bay</TITLE><EDITIONNO>0</EDITIONNO><UPDATENO>1</UPDATENO><UNITTYPE></UNITTYPE><WEEKNO></WEEKNO><VALIDFROM></VALIDFROM><CORRECTION></CORRECTION>";
 
             var scenarios = JsonConvert.DeserializeObject<EncEventPayload>(scenariosDataCancelReplaceCell);
             XmlDocument soapXml = new();
@@ -284,9 +287,9 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
 
             MethodInfo buildAction = typeof(EncContentSapMessageBuilder).GetMethod("BuildAction", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
             var result = (XmlElement)buildAction.Invoke(_fakeEncContentSapMessageBuilder, new object[] {soapXml,scenarios.Data.Products.FirstOrDefault()!,
-                unitOfSale,action!,null,null})!;
+                unitOfSale,action!,null,null,null})!;
 
-            result.ChildNodes.Count.Should().Be(15);
+            result.ChildNodes.Count.Should().Be(18);
             result.InnerXml.Should().Be(actualXmlElement);
         }
     }
