@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
+using UKHO.ERPFacade.Common.Providers;
 
 namespace UKHO.ERPFacade.API.Helpers
 {
@@ -12,6 +13,7 @@ namespace UKHO.ERPFacade.API.Helpers
         private readonly IXmlHelper _xmlHelper;
         private readonly IFileSystemHelper _fileSystemHelper;
         private readonly IOptions<SapActionConfiguration> _sapActionConfig;
+        private readonly IWeekDetailsProvider _weekDetailsProvider;
 
         private const string SapXmlPath = "SapXmlTemplates\\SAPRequest.xml";
         private const string XpathImMatInfo = $"//*[local-name()='IM_MATINFO']";
@@ -38,13 +40,15 @@ namespace UKHO.ERPFacade.API.Helpers
         public EncContentSapMessageBuilder(ILogger<EncContentSapMessageBuilder> logger,
                                  IXmlHelper xmlHelper,
                                  IFileSystemHelper fileSystemHelper,
-                                 IOptions<SapActionConfiguration> sapActionConfig
+                                 IOptions<SapActionConfiguration> sapActionConfig,
+                                 IWeekDetailsProvider weekDetailsProvider
                                  )
         {
             _logger = logger;
             _xmlHelper = xmlHelper;
             _fileSystemHelper = fileSystemHelper;
             _sapActionConfig = sapActionConfig;
+            _weekDetailsProvider = weekDetailsProvider;
         }
 
         /// <summary>
