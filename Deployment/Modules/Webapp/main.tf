@@ -15,27 +15,56 @@ resource "azurerm_windows_web_app" "webapp_service" {
   tags                = var.tags
 
   site_config {
-     application_stack {    
-     current_stack = "dotnet"
-     dotnet_version = "v6.0"
+    application_stack {    
+      current_stack  = "dotnet"
+      dotnet_version = "v6.0"
     }
     always_on  = true
     ftps_state = "Disabled"
-
   }
      
   app_settings = var.app_settings
 
   identity {
     type = "SystemAssigned"
-    }
+  }
 
   lifecycle {
     ignore_changes = [ virtual_network_subnet_id ]
-   }
+  }
 
   https_only = true
+}
+
+resource "azurerm_app_service_slot" "staging" {
+  name                = "staging"
+  app_service_name    = azurerm_app_service.webapp_service.name
+  location            = azurerm_app_service.webapp_service.location
+  resource_group_name = azurerm_app_service.webapp_service.resource_group_name
+  service_plan_id     = azurerm_app_service.webapp_service.service_plan_id
+  tags                = azurerm_app_service.webapp_service.tags
+
+  site_config {
+    application_stack {    
+      current_stack  = "dotnet"
+      dotnet_version = "v6.0"
+    }
+    always_on  = true
+    ftps_state = "Disabled"
   }
+     
+  app_settings = azurerm_app_service.webapp_service.app_settings
+
+  identity {
+    type = "SystemAssigned"
+  }
+
+  lifecycle {
+    ignore_changes = [ virtual_network_subnet_id ]
+  }
+
+  https_only = azurerm_app_service.webapp_service.https_only
+}
 
 resource "azurerm_windows_web_app" "mock_webapp_service" {
   count               = var.env_name == "dev" ? 1 : 0
@@ -46,25 +75,30 @@ resource "azurerm_windows_web_app" "mock_webapp_service" {
   tags                = var.tags
 
   site_config {
-      application_stack {    
-      current_stack = "dotnet"
+    application_stack {    
+      current_stack  = "dotnet"
       dotnet_version = "v6.0"
     }
     always_on  = true
     ftps_state = "Disabled"
-
-    }
+  }
      
   app_settings = var.mock_app_settings
 
   identity {
     type = "SystemAssigned"
-    }
+  }
 
   https_only = true
-   }
+}
 
 resource "azurerm_app_service_virtual_network_swift_connection" "webapp_vnet_integration" {
   app_service_id = azurerm_windows_web_app.webapp_service.id
   subnet_id      = var.subnet_id
+}
+
+resource "azurerm_app_service_slot_virtual_network_swift_connection" "slot_vnet_integration" {
+  app_service_id = azurerm_windows_web_app.webapp_service.id
+  subnet_id      = var.subnet_id
+  slot_name      = azurerm_app_service_slot.staging.name
 }
