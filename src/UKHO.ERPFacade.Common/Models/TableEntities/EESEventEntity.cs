@@ -16,12 +16,7 @@ namespace UKHO.ERPFacade.Common.Models.TableEntities
         public string CorrelationId { get; set; } = default!;     
 
         public DateTime? RequestDateTime { get; set; } = default!;
-
-        public DateTime? ResponseDateTime { get; set; } = default!;
-
-        public bool? IsNotified { get; set; }
-        public DateTime? PublishDateTime { get; set; } = default!;
-
+        
         public ETag ETag { get; set; } = default!;
     }
 }
