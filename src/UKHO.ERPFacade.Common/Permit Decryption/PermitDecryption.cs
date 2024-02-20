@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 using UKHO.ERPFacade.Common.Models;
 
 namespace UKHO.ERPFacade.Common.Permit_Decryption
@@ -12,6 +9,8 @@ namespace UKHO.ERPFacade.Common.Permit_Decryption
     {
         public PermitKey GetPermitKeys(string permit)
         {
+            if (string.IsNullOrEmpty(permit)) return null;
+
             var hardwareIds = GetHardwareIds();
             byte[] firstCellKey = null;
             byte[] secondCellKey = null;
