@@ -38,6 +38,8 @@ namespace UKHO.ERPFacade.API.Helpers
         private const string RecTimeFormat = "hhmmss";
         private const string UkhoWeekNumberSection = "UkhoWeekNumber";
         private const string ValidFrom = "VALIDFROM";
+        private const string WeekNo = "WEEKNO";
+        private const string Correction = "CORRECTION";
 
         public EncContentSapMessageBuilder(ILogger<EncContentSapMessageBuilder> logger,
                                  IXmlHelper xmlHelper,
@@ -356,11 +358,22 @@ namespace UKHO.ERPFacade.API.Helpers
                 {
                     if (ukhoWeekNumber != null)
                     {
-                        if (node.XmlNodeName == ValidFrom)
+                        switch (node.XmlNodeName)
                         {
-                            string thursdayDate = s_weekDetailsProvider.GetThursdayDateOfWeek(
+                            case ValidFrom:
+                                string thursdayDate = s_weekDetailsProvider.GetThursdayDateOfWeek(
                                 ukhoWeekNumber.Year, ukhoWeekNumber.Week);
-                            itemSubNode.InnerText = GetXmlNodeValue(thursdayDate);
+                                itemSubNode.InnerText = GetXmlNodeValue(thursdayDate);
+                                break;
+
+                            case WeekNo:
+                                string weekData = GetUkhoWeekNumberData(ukhoWeekNumber);
+                                itemSubNode.InnerText = GetXmlNodeValue(weekData);
+                                break;
+
+                            case Correction:
+                                itemSubNode.InnerText = ukhoWeekNumber.CurrentWeekAlphaCorrection ? GetXmlNodeValue("Y") : GetXmlNodeValue("N");
+                                break;
                         }
                     }
                     else
@@ -470,6 +483,14 @@ namespace UKHO.ERPFacade.API.Helpers
                 }
             }
             return unitOfSale!;
+        }
+
+        private static string GetUkhoWeekNumberData(UkhoWeekNumber ukhoWeekNumber)
+        {
+            var validWeek = string.Format("{0:00}", ukhoWeekNumber.Week);
+            var concatination = string.Join("", ukhoWeekNumber.Year, validWeek);
+          
+            return concatination;
         }
     }
 }
