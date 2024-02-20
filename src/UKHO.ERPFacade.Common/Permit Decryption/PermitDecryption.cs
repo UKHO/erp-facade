@@ -1,14 +1,20 @@
-﻿
-using System.Globalization;
-
+﻿using System.Globalization;
+using Microsoft.Extensions.Configuration;
 using UKHO.ERPFacade.Common.Models;
 
 namespace UKHO.ERPFacade.Common.Permit_Decryption
 {
     public class PermitDecryption : IPermitDecryption
     {
+        private readonly IConfiguration _config;
+
+        public PermitDecryption(IConfiguration config)
+        {
+            _config = config;
+        }
         public PermitKey GetPermitKeys(string permit)
         {
+          
             if (string.IsNullOrEmpty(permit)) return null;
 
             var hardwareIds = GetHardwareIds();
@@ -28,10 +34,10 @@ namespace UKHO.ERPFacade.Common.Permit_Decryption
 
         private byte[] GetHardwareIds()
         {
-            var mdsHardwareIdList = "6F, B6, 65, 9C, 7E".Split(',').ToList();
+            var permitHardwareIds = _config.GetValue<string>("PermitDecryptionHardwareId").Split(',').ToList();
             var i = 0;
             var hardwareIds = new byte[6];
-            foreach (var hardwareId in mdsHardwareIdList)
+            foreach (var hardwareId in permitHardwareIds)
             {
                 hardwareIds[i++] = byte.Parse(hardwareId.Trim(), NumberStyles.AllowHexSpecifier);
             }

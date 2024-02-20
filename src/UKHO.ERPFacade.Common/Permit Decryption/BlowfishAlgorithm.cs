@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace UKHO.ERPFacade.Common.Permit_Decryption
 {
     public class BlowfishAlgorithm: IBlowfishAlgorithm
@@ -286,10 +281,6 @@ namespace UKHO.ERPFacade.Common.Permit_Decryption
 
             Byte[] Work = new Byte[4];
             for (i = 0; i < _P.Length; i++)
-            //{	Work.byte.zero = passwd[(j++)%len];
-            //	Work.byte.one = passwd[(j++)%len];
-            //	Work.byte.two = passwd[(j++)%len];
-            //	Work.byte.three = passwd[(j++)%len];
             {
                 Work[0] = passwd[(j++) % len];
                 Work[1] = passwd[(j++) % len];
@@ -313,12 +304,12 @@ namespace UKHO.ERPFacade.Common.Permit_Decryption
                 }
 
         }
-        //###############################################
+       
         UInt32 F(UInt32 x)
         {
             return (((_S[0, (x >> 24) & 0xFF] + _S[1, (x >> 16) & 0xFF]) ^ _S[2, (x >> 8) & 0xFF]) + _S[3, x & 0xFF]);
         }
-        //###############################################
+   
         void BF_En(ref UInt32 x1, ref UInt32 x2)
         {
             UInt32 w1 = x1, w2 = x2;
@@ -337,7 +328,7 @@ namespace UKHO.ERPFacade.Common.Permit_Decryption
             x1 = w2;
             x2 = w1;
         }
-        //###############################################
+    
         void BF_De(ref UInt32 x1, ref UInt32 x2)
         {
             UInt32 w1 = x1, w2 = x2;
