@@ -175,6 +175,15 @@ namespace UKHO.SAP.MockAPIService.Models
 
         private string uNITTYPEField;
 
+        private string wEEKNOField;
+
+        private string vALIDFROMField;
+
+        private string cORRECTIONField;
+
+        private string aCTIVEKEYField;
+
+        private string nEXTKEYField;
 
         /// <remarks/>
         [System.Xml.Serialization.XmlElement("ACTIONNUMBER", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
@@ -383,6 +392,76 @@ namespace UKHO.SAP.MockAPIService.Models
             set
             {
                 this.uNITTYPEField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElement("WEEKNO", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string WEEKNO
+        {
+            get
+            {
+                return this.wEEKNOField;
+            }
+            set
+            {
+                this.wEEKNOField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElement("VALIDFROM", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string VALIDFROM
+        {
+            get
+            {
+                return this.vALIDFROMField;
+            }
+            set
+            {
+                this.vALIDFROMField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElement("CORRECTION", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string CORRECTION
+        {
+            get
+            {
+                return this.cORRECTIONField;
+            }
+            set
+            {
+                this.cORRECTIONField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElement("ACTIVEKEY", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string ACTIVEKEY
+        {
+            get
+            {
+                return this.aCTIVEKEYField;
+            }
+            set
+            {
+                this.aCTIVEKEYField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElement("NEXTKEY", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string NEXTKEY
+        {
+            get
+            {
+                return this.nEXTKEYField;
+            }
+            set
+            {
+                this.nEXTKEYField = value;
             }
         }
     }
