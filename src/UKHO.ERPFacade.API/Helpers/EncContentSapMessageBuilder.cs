@@ -36,7 +36,6 @@ namespace UKHO.ERPFacade.API.Helpers
         private const string AvcsUnit = "AVCS UNIT";
         private const string RecDateFormat = "yyyyMMdd";
         private const string RecTimeFormat = "hhmmss";
-        private const string PermitSection = "PermitSection";
         private const string ActiveKey = "ACTIVEKEY";
         private const string NextKey = "NEXTKEY";
 
@@ -111,7 +110,7 @@ namespace UKHO.ERPFacade.API.Helpers
 
                             if (IsConditionSatisfied)
                             {
-                                actionNode = BuildAction(soapXml, product, unitOfSale, action, null, null, (action.ActionNumber == 1 || action.ActionNumber == 7) ? _permitDecryption.GetPermitKeys(product.Permit) : null);
+                                actionNode = BuildAction(soapXml, product, unitOfSale, action, _permitDecryption, null, null);
                                 actionItemNode.AppendChild(actionNode);
                                 _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
                                 IsConditionSatisfied = false;
@@ -122,7 +121,7 @@ namespace UKHO.ERPFacade.API.Helpers
                             var unitOfSaleReplace = GetUnitOfSaleForEncCell(eventData.Data.UnitsOfSales, product);
                             foreach (var replacedProduct in product.ReplacedBy)
                             {
-                                actionNode = BuildAction(soapXml, product, unitOfSaleReplace, action, null, replacedProduct);
+                                actionNode = BuildAction(soapXml, product, unitOfSaleReplace, action, _permitDecryption, null, replacedProduct);
                                 actionItemNode.AppendChild(actionNode);
                                 _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
                             }
@@ -159,7 +158,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                 }
                                 if (IsConditionSatisfied)
                                 {
-                                    actionNode = BuildAction(soapXml, product, unitofSale, action);
+                                    actionNode = BuildAction(soapXml, product, unitofSale, action, _permitDecryption);
                                     actionItemNode.AppendChild(actionNode);
                                     _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
 
@@ -186,7 +185,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                 }
                                 if (IsConditionSatisfied)
                                 {
-                                    actionNode = BuildAction(soapXml, product, unitofSale, action);
+                                    actionNode = BuildAction(soapXml, product, unitofSale, action, _permitDecryption);
                                     actionItemNode.AppendChild(actionNode);
                                     _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
 
@@ -228,7 +227,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                 var product = eventData.Data.Products.Where(x => x.InUnitsOfSale.Contains(unitOfSale.UnitName)
                                               && unitOfSale.UnitOfSaleType == UnitSaleType).FirstOrDefault();
 
-                                actionNode = BuildAction(soapXml, product, unitOfSale, action, null, null);
+                                actionNode = BuildAction(soapXml, product, unitOfSale, action, _permitDecryption, null, null);
                                 actionItemNode.AppendChild(actionNode);
                                 _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
 
@@ -241,7 +240,7 @@ namespace UKHO.ERPFacade.API.Helpers
                             {
                                 var product = eventData.Data.Products.Where(x => x.ProductName == addProduct).FirstOrDefault();
 
-                                actionNode = BuildAction(soapXml, product, unitOfSale, action, addProduct, null);
+                                actionNode = BuildAction(soapXml, product, unitOfSale, action, _permitDecryption, addProduct, null);
                                 actionItemNode.AppendChild(actionNode);
                                 _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
                             }
@@ -252,7 +251,7 @@ namespace UKHO.ERPFacade.API.Helpers
                             {
                                 var product = eventData.Data.Products.Where(x => x.ProductName == removeProduct).FirstOrDefault();
 
-                                actionNode = BuildAction(soapXml, product, unitOfSale, action);
+                                actionNode = BuildAction(soapXml, product, unitOfSale, action, _permitDecryption);
                                 actionItemNode.AppendChild(actionNode);
                                 _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
                             }
@@ -278,7 +277,7 @@ namespace UKHO.ERPFacade.API.Helpers
             return soapXml;
         }
 
-        private static XmlElement BuildAction(XmlDocument soapXml, Product product, UnitOfSale unitOfSale, SapAction action, string childCell = null, string replacedByProduct = null, PermitKey permitKey = null)
+        private static XmlElement BuildAction(XmlDocument soapXml, Product product, UnitOfSale unitOfSale, SapAction action, IPermitDecryption permitDecryption, string childCell = null, string replacedByProduct = null)
         {
             XmlElement itemNode = soapXml.CreateElement(Item);
 
@@ -297,6 +296,8 @@ namespace UKHO.ERPFacade.API.Helpers
 
             List<(int sortingOrder, XmlElement itemNode)> actionAttributeList = new();
 
+            PermitKey? permitKey = action.ActionNumber == 1 || (action.ActionNumber == 7 && product.Status.StatusName == "New Edition") ? permitDecryption.GetPermitKeys(product.Permit) : null;
+
             foreach (var node in action.Attributes.Where(x => x.Section == ProductSection))
             {
                 XmlElement itemSubNode = soapXml.CreateElement(node.XmlNodeName);
@@ -310,6 +311,22 @@ namespace UKHO.ERPFacade.API.Helpers
                     else if (node.XmlNodeName == ChildCell && childCell != null)
                     {
                         itemSubNode.InnerText = GetXmlNodeValue(childCell.ToString());
+                    }
+                    if (node.XmlNodeName == ActiveKey)
+                    {
+                        itemSubNode.InnerText = string.Empty;
+                        if (permitKey != null && !string.IsNullOrEmpty(permitKey.ActiveKey))
+                        {
+                            itemSubNode.InnerText = permitKey.ActiveKey;
+                        }
+                    }
+                    else if (node.XmlNodeName == NextKey)
+                    {
+                        itemSubNode.InnerText = string.Empty;
+                        if (permitKey != null && !string.IsNullOrEmpty(permitKey.NextKey))
+                        {
+                            itemSubNode.InnerText = permitKey.NextKey;
+                        }
                     }
                     else
                     {
@@ -346,37 +363,7 @@ namespace UKHO.ERPFacade.API.Helpers
                 }
                 actionAttributeList.Add((node.SortingOrder, itemSubNode));
             }
-            foreach (var node in action.Attributes.Where(x => x.Section == PermitSection))
-            {
-                XmlElement itemSubNode = soapXml.CreateElement(node.XmlNodeName);
 
-                if (node.IsRequired)
-                {
-                    if (node.XmlNodeName == ActiveKey)
-                    {
-                        if (permitKey == null || string.IsNullOrEmpty(permitKey.ActiveKey))
-                        {
-                            itemSubNode.InnerText = string.Empty;
-                        }
-                        else
-                        {
-                            itemSubNode.InnerText = permitKey.ActiveKey;
-                        }
-                    }
-                    if (node.XmlNodeName == NextKey)
-                    {
-                        if (permitKey == null || string.IsNullOrEmpty(permitKey.NextKey))
-                        {
-                            itemSubNode.InnerText = string.Empty;
-                        }
-                        else
-                        {
-                            itemSubNode.InnerText = permitKey.NextKey;
-                        }
-                    }
-                }
-                actionAttributeList.Add((node.SortingOrder, itemSubNode));
-            }
             var sortedActionAttributeList = actionAttributeList.OrderBy(x => x.sortingOrder).ToList();
 
             foreach (var itemAttribute in sortedActionAttributeList)
