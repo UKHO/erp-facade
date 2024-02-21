@@ -3,6 +3,17 @@ using System.Runtime.Caching;
 
 namespace UKHO.ERPFacade.Common.Permit_Decryption
 {
+    public interface IBFFactory
+    {
+        /// <summary>
+        /// Gets the specified key.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="cachingOptions"></param>
+        /// <returns></returns>
+        IBlowfishAlgorithm Get(byte[] key, CachingOptions cachingOptions = CachingOptions.Cache);
+    }
+
     [ExcludeFromCodeCoverage]
     public class BFFactory : IBFFactory
     {
@@ -15,7 +26,7 @@ namespace UKHO.ERPFacade.Common.Permit_Decryption
         /// <returns></returns>
         public IBlowfishAlgorithm Get(byte[] key, CachingOptions cachingOptions = CachingOptions.Cache)
         {
-            var lazy = new Lazy<BlowfishAlgorithm>(() => new BlowfishAlgorithm(key));
+            var lazy = new Lazy<BFAlg>(() => new BFAlg(key));
 
             if (cachingOptions == CachingOptions.NoCache)
                 return lazy.Value;
@@ -24,7 +35,7 @@ namespace UKHO.ERPFacade.Common.Permit_Decryption
 
             var cacheKey = "BFAlg" + ToHex(key);
             var cacheObject = Cache.AddOrGetExisting(cacheKey, lazy, policy) ?? lazy;
-            return ((Lazy<BlowfishAlgorithm>)cacheObject).Value;
+            return ((Lazy<BFAlg>)cacheObject).Value;
         }
 
         private static string ToHex(byte[] data)
@@ -42,6 +53,12 @@ namespace UKHO.ERPFacade.Common.Permit_Decryption
             }
             return new string(c);
         }
+    }
+
+    public enum CachingOptions
+    {
+        NoCache,
+        Cache
     }
 }
 

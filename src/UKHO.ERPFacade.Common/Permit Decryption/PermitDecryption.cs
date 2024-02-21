@@ -26,7 +26,7 @@ namespace UKHO.ERPFacade.Common.Permit_Decryption
                 byte[] firstCellKey = null;
                 byte[] secondCellKey = null;
 
-                S63Cryption.GetEncKeysFromPermit(permit, hardwareIds, ref firstCellKey, ref secondCellKey);
+                S63Crypt.GetEncKeysFromPermit(permit, hardwareIds, ref firstCellKey, ref secondCellKey);
 
                 var keys = new PermitKey
                 {
@@ -36,11 +36,11 @@ namespace UKHO.ERPFacade.Common.Permit_Decryption
                 return keys;
             }catch (Exception ex)
             {
-                _logger.LogInformation(EventIds.PermitdecryptionException.ToEventId(), "An error occurred while decrypting the permit string", ex.Message);
-                throw new ERPFacadeException(EventIds.PermitdecryptionException.ToEventId());
+                _logger.LogInformation(EventIds.PermitDecryptionException.ToEventId(), "An error occurred while decrypting the permit string", ex.Message);
+                return null;
             }
         }
-        
+     
 
         private byte[] GetHardwareIds()
         {
