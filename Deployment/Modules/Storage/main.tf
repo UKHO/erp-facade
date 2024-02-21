@@ -27,6 +27,6 @@ resource "azurerm_role_assignment" "storage_data_contributor_role" {
 
 resource "azurerm_role_assignment" "storage_data_contributor_role_slot" {
   scope                = azurerm_storage_account.storage.id
-  role_definition_name = "SStorage Blob Data Contributor"
+  role_definition_name = "Storage Blob Data Contributor"
   principal_id         = var.slot_principal_id
 }
