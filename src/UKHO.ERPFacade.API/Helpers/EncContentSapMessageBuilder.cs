@@ -356,7 +356,7 @@ namespace UKHO.ERPFacade.API.Helpers
 
                 if (node.IsRequired)
                 {
-                    if (ukhoWeekNumber != null)
+                    if (IsValidWeekNumber(ukhoWeekNumber))
                     {
                         switch (node.XmlNodeName)
                         {
@@ -487,10 +487,28 @@ namespace UKHO.ERPFacade.API.Helpers
 
         private static string GetUkhoWeekNumberData(UkhoWeekNumber ukhoWeekNumber)
         {
-            var validWeek = string.Format("{0:00}", ukhoWeekNumber.Week);
+            var validWeek = ukhoWeekNumber.Week.ToString("D2");
             var concatedString = string.Join("", ukhoWeekNumber.Year, validWeek);
-          
+
             return concatedString;
+        }
+
+        private static bool IsValidWeekNumber(UkhoWeekNumber ukhoWeekNumber)
+        {
+            bool isValid = true;
+
+            if (ukhoWeekNumber == null!)
+            {
+                isValid = false;
+            }
+
+            if (ukhoWeekNumber.Week <= 0 || ukhoWeekNumber.Week > 53 || ukhoWeekNumber.Year == 0 ||
+                ukhoWeekNumber.Year < 1900 || ukhoWeekNumber.Year > 9999)
+            {
+                isValid = false;
+            }
+
+            return isValid;
         }
     }
 }
