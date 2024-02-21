@@ -292,5 +292,22 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             result.ChildNodes.Count.Should().Be(18);
             result.InnerXml.Should().Be(actualXmlElement);
         }
+
+        [Test]
+        [TestCase("202403", 3, 2024)]
+        [TestCase("202512", 12, 2025)]
+        public void GetUkhoWeekNumberDataTest(string expectedResult, int week, int year)
+        {
+            UkhoWeekNumber ukhoWeekNumber = new UkhoWeekNumber()
+            {
+                Year = year,
+                Week = week
+            };
+
+            MethodInfo getUkhoWeekNumber = typeof(EncContentSapMessageBuilder).GetMethod("GetUkhoWeekNumberData", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
+            string result = (string)getUkhoWeekNumber.Invoke(_fakeEncContentSapMessageBuilder, new object[] { ukhoWeekNumber })!;
+
+            Assert.That(expectedResult, Is.EqualTo(result));
+        }
     }
 }

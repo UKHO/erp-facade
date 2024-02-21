@@ -488,9 +488,9 @@ namespace UKHO.ERPFacade.API.Helpers
         private static string GetUkhoWeekNumberData(UkhoWeekNumber ukhoWeekNumber)
         {
             var validWeek = string.Format("{0:00}", ukhoWeekNumber.Week);
-            var concatination = string.Join("", ukhoWeekNumber.Year, validWeek);
+            var concatedString = string.Join("", ukhoWeekNumber.Year, validWeek);
           
-            return concatination;
+            return concatedString;
         }
     }
 }
