@@ -1,5 +1,5 @@
 ﻿
-namespace UKHO.ERPFacade.Common.Permit_Decryption
+namespace UKHO.ERPFacade.Common.PermitDecryption
 {
     public interface IBlowfishAlgorithm
     {

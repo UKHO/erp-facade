@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Caching;
 
-namespace UKHO.ERPFacade.Common.Permit_Decryption
+namespace UKHO.ERPFacade.Common.PermitDecryption
 {
     public interface IBFFactory
     {

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
-using UKHO.ERPFacade.Common.Permit_Decryption;
+using UKHO.ERPFacade.Common.PermitDecryption;
 using Microsoft.Extensions.Configuration;
 using System.IO;
 using System.Xml;
@@ -18,16 +18,16 @@ namespace UKHO.ERPFacade.Common.UnitTests.Permit_Decryption
     [TestFixture]
     public class PermitDecryptionTests
     {
-        private ILogger<PermitDecryption> _fakeLogger;
+        private ILogger<PermitDecryption.PermitDecryption> _fakeLogger;
         private  IConfiguration _config;
-        private PermitDecryption _fakePermitDecryption;
+        private PermitDecryption.PermitDecryption _fakePermitDecryption;
 
         [SetUp]
         public void Setup()
         {
-            _fakeLogger = A.Fake<ILogger<PermitDecryption>>();
+            _fakeLogger = A.Fake<ILogger<PermitDecryption.PermitDecryption>>();
             _config = InitConfiguration();
-            _fakePermitDecryption = new PermitDecryption(_config,_fakeLogger);
+            _fakePermitDecryption = new PermitDecryption.PermitDecryption(_config,_fakeLogger);
         }
 
         private IConfiguration InitConfiguration()

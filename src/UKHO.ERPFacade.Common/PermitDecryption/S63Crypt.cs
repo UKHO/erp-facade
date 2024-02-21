@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Text;
 
-namespace UKHO.ERPFacade.Common.Permit_Decryption
+namespace UKHO.ERPFacade.Common.PermitDecryption
 {
     [ExcludeFromCodeCoverage]
     public static class S63Crypt

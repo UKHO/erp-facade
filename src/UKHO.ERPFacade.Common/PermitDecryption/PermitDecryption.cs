@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
 
-namespace UKHO.ERPFacade.Common.Permit_Decryption
+namespace UKHO.ERPFacade.Common.PermitDecryption
 {
     public class PermitDecryption : IPermitDecryption
     {

@@ -1,7 +1,7 @@
 ﻿
 using System.Diagnostics.CodeAnalysis;
 
-namespace UKHO.ERPFacade.Common.Permit_Decryption
+namespace UKHO.ERPFacade.Common.PermitDecryption
 {
     [ExcludeFromCodeCoverage]
     public class BFAlg: IBlowfishAlgorithm

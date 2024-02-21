@@ -3,7 +3,7 @@ using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
-using UKHO.ERPFacade.Common.Permit_Decryption;
+using UKHO.ERPFacade.Common.PermitDecryption;
 
 namespace UKHO.ERPFacade.API.Helpers
 {
