@@ -38,6 +38,7 @@ namespace UKHO.ERPFacade.API.Helpers
         private const string RecTimeFormat = "hhmmss";
         private const string ActiveKey = "ACTIVEKEY";
         private const string NextKey = "NEXTKEY";
+        private const string ProductStatusNewEdition = "New Edition";
 
         public EncContentSapMessageBuilder(ILogger<EncContentSapMessageBuilder> logger,
                                  IXmlHelper xmlHelper,
@@ -296,7 +297,7 @@ namespace UKHO.ERPFacade.API.Helpers
 
             List<(int sortingOrder, XmlElement itemNode)> actionAttributeList = new();
 
-            PermitKey? permitKey = action.ActionNumber == 1 || (action.ActionNumber == 7 && product.Status.StatusName == "New Edition") ? s_permitDecryption.GetPermitKeys(product.Permit) : null;
+            PermitKey? permitKey = action.ActionNumber == 1 || (action.ActionNumber == 7 && product.Status.StatusName == ProductStatusNewEdition) ? s_permitDecryption.GetPermitKeys(product.Permit) : null;
 
             foreach (var node in action.Attributes.Where(x => x.Section == ProductSection))
             {
