@@ -13,7 +13,7 @@ namespace UKHO.ERPFacade.API.Helpers
         private readonly IXmlHelper _xmlHelper;
         private readonly IFileSystemHelper _fileSystemHelper;
         private readonly IOptions<SapActionConfiguration> _sapActionConfig;
-        private readonly IPermitDecryption _permitDecryption;
+        private static IPermitDecryption s_permitDecryption;
 
         private const string SapXmlPath = "SapXmlTemplates\\SAPRequest.xml";
         private const string XpathImMatInfo = $"//*[local-name()='IM_MATINFO']";
@@ -50,7 +50,7 @@ namespace UKHO.ERPFacade.API.Helpers
             _xmlHelper = xmlHelper;
             _fileSystemHelper = fileSystemHelper;
             _sapActionConfig = sapActionConfig;
-            _permitDecryption = permitDecryption;
+            s_permitDecryption = permitDecryption;
         }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace UKHO.ERPFacade.API.Helpers
 
                             if (IsConditionSatisfied)
                             {
-                                actionNode = BuildAction(soapXml, product, unitOfSale, action, _permitDecryption, null, null);
+                                actionNode = BuildAction(soapXml, product, unitOfSale, action, null, null);
                                 actionItemNode.AppendChild(actionNode);
                                 _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
                                 IsConditionSatisfied = false;
@@ -121,7 +121,7 @@ namespace UKHO.ERPFacade.API.Helpers
                             var unitOfSaleReplace = GetUnitOfSaleForEncCell(eventData.Data.UnitsOfSales, product);
                             foreach (var replacedProduct in product.ReplacedBy)
                             {
-                                actionNode = BuildAction(soapXml, product, unitOfSaleReplace, action, _permitDecryption, null, replacedProduct);
+                                actionNode = BuildAction(soapXml, product, unitOfSaleReplace, action, null, replacedProduct);
                                 actionItemNode.AppendChild(actionNode);
                                 _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
                             }
@@ -158,7 +158,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                 }
                                 if (IsConditionSatisfied)
                                 {
-                                    actionNode = BuildAction(soapXml, product, unitofSale, action, _permitDecryption);
+                                    actionNode = BuildAction(soapXml, product, unitofSale, action);
                                     actionItemNode.AppendChild(actionNode);
                                     _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
 
@@ -185,7 +185,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                 }
                                 if (IsConditionSatisfied)
                                 {
-                                    actionNode = BuildAction(soapXml, product, unitofSale, action, _permitDecryption);
+                                    actionNode = BuildAction(soapXml, product, unitofSale, action);
                                     actionItemNode.AppendChild(actionNode);
                                     _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
 
@@ -227,7 +227,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                 var product = eventData.Data.Products.Where(x => x.InUnitsOfSale.Contains(unitOfSale.UnitName)
                                               && unitOfSale.UnitOfSaleType == UnitSaleType).FirstOrDefault();
 
-                                actionNode = BuildAction(soapXml, product, unitOfSale, action, _permitDecryption, null, null);
+                                actionNode = BuildAction(soapXml, product, unitOfSale, action, null, null);
                                 actionItemNode.AppendChild(actionNode);
                                 _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
 
@@ -240,7 +240,7 @@ namespace UKHO.ERPFacade.API.Helpers
                             {
                                 var product = eventData.Data.Products.Where(x => x.ProductName == addProduct).FirstOrDefault();
 
-                                actionNode = BuildAction(soapXml, product, unitOfSale, action, _permitDecryption, addProduct, null);
+                                actionNode = BuildAction(soapXml, product, unitOfSale, action, addProduct, null);
                                 actionItemNode.AppendChild(actionNode);
                                 _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
                             }
@@ -251,7 +251,7 @@ namespace UKHO.ERPFacade.API.Helpers
                             {
                                 var product = eventData.Data.Products.Where(x => x.ProductName == removeProduct).FirstOrDefault();
 
-                                actionNode = BuildAction(soapXml, product, unitOfSale, action, _permitDecryption);
+                                actionNode = BuildAction(soapXml, product, unitOfSale, action);
                                 actionItemNode.AppendChild(actionNode);
                                 _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
                             }
@@ -277,7 +277,7 @@ namespace UKHO.ERPFacade.API.Helpers
             return soapXml;
         }
 
-        private static XmlElement BuildAction(XmlDocument soapXml, Product product, UnitOfSale unitOfSale, SapAction action, IPermitDecryption permitDecryption, string childCell = null, string replacedByProduct = null)
+        private static XmlElement BuildAction(XmlDocument soapXml, Product product, UnitOfSale unitOfSale, SapAction action, string childCell = null, string replacedByProduct = null)
         {
             XmlElement itemNode = soapXml.CreateElement(Item);
 
@@ -296,7 +296,7 @@ namespace UKHO.ERPFacade.API.Helpers
 
             List<(int sortingOrder, XmlElement itemNode)> actionAttributeList = new();
 
-            PermitKey? permitKey = action.ActionNumber == 1 || (action.ActionNumber == 7 && product.Status.StatusName == "New Edition") ? permitDecryption.GetPermitKeys(product.Permit) : null;
+            PermitKey? permitKey = action.ActionNumber == 1 || (action.ActionNumber == 7 && product.Status.StatusName == "New Edition") ? s_permitDecryption.GetPermitKeys(product.Permit) : null;
 
             foreach (var node in action.Attributes.Where(x => x.Section == ProductSection))
             {
@@ -312,7 +312,7 @@ namespace UKHO.ERPFacade.API.Helpers
                     {
                         itemSubNode.InnerText = GetXmlNodeValue(childCell.ToString());
                     }
-                    if (node.XmlNodeName == ActiveKey)
+                    else if (node.XmlNodeName == ActiveKey)
                     {
                         itemSubNode.InnerText = string.Empty;
                         if (permitKey != null && !string.IsNullOrEmpty(permitKey.ActiveKey))
