@@ -5,7 +5,7 @@ using System.Text;
 namespace UKHO.ERPFacade.Common.Permit_Decryption
 {
     [ExcludeFromCodeCoverage]
-    public static class S63Cryption
+    public static class S63Crypt
     {
         public enum CryptResult { HWIDFmtErr = 0, CRCErr = 1, Ok = 2 };
 

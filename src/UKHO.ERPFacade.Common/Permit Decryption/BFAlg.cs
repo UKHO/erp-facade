@@ -4,12 +4,12 @@ using System.Diagnostics.CodeAnalysis;
 namespace UKHO.ERPFacade.Common.Permit_Decryption
 {
     [ExcludeFromCodeCoverage]
-    public class BlowfishAlgorithm: IBlowfishAlgorithm
+    public class BFAlg: IBlowfishAlgorithm
     {
         UInt32[] _P;
         UInt32[,] _S;
 
-        public BlowfishAlgorithm(Byte[] passwd)
+        public BFAlg(Byte[] passwd)
         {
             _P = new UInt32[18]{
             0x243f6a88, 0x85a308d3, 0x13198a2e, 0x03707344,
@@ -284,12 +284,16 @@ namespace UKHO.ERPFacade.Common.Permit_Decryption
 
             Byte[] Work = new Byte[4];
             for (i = 0; i < _P.Length; i++)
+            //{	Work.byte.zero = passwd[(j++)%len];
+            //	Work.byte.one = passwd[(j++)%len];
+            //	Work.byte.two = passwd[(j++)%len];
+            //	Work.byte.three = passwd[(j++)%len];
             {
                 Work[0] = passwd[(j++) % len];
                 Work[1] = passwd[(j++) % len];
                 Work[2] = passwd[(j++) % len];
                 Work[3] = passwd[(j++) % len];
-                _P[i] ^= S63Cryption.Byte2Dword(Work, 0);
+                _P[i] ^= S63Crypt.Byte2Dword(Work, 0);
             }
             for (i = 0; i < _P.Length; i += 2)
             {
@@ -307,12 +311,12 @@ namespace UKHO.ERPFacade.Common.Permit_Decryption
                 }
 
         }
-       
+        //###############################################
         UInt32 F(UInt32 x)
         {
             return (((_S[0, (x >> 24) & 0xFF] + _S[1, (x >> 16) & 0xFF]) ^ _S[2, (x >> 8) & 0xFF]) + _S[3, x & 0xFF]);
         }
-   
+        //###############################################
         void BF_En(ref UInt32 x1, ref UInt32 x2)
         {
             UInt32 w1 = x1, w2 = x2;
@@ -331,7 +335,7 @@ namespace UKHO.ERPFacade.Common.Permit_Decryption
             x1 = w2;
             x2 = w1;
         }
-    
+        //###############################################
         void BF_De(ref UInt32 x1, ref UInt32 x2)
         {
             UInt32 w1 = x1, w2 = x2;
@@ -362,11 +366,11 @@ namespace UKHO.ERPFacade.Common.Permit_Decryption
 
             for (int i = 0; i < buf.Length; i += 8)
             {
-                UInt32 word0 = S63Cryption.Byte2Dword(buf, i);
-                UInt32 word1 = S63Cryption.Byte2Dword(buf, i + 4);
+                UInt32 word0 = S63Crypt.Byte2Dword(buf, i);
+                UInt32 word1 = S63Crypt.Byte2Dword(buf, i + 4);
                 BF_En(ref word0, ref word1);
-                S63Cryption.Dword2Byte(word0, buf, i);
-                S63Cryption.Dword2Byte(word1, buf, i + 4);
+                S63Crypt.Dword2Byte(word0, buf, i);
+                S63Crypt.Dword2Byte(word1, buf, i + 4);
             }
             return true;
         }
@@ -381,11 +385,11 @@ namespace UKHO.ERPFacade.Common.Permit_Decryption
 
             for (int i = 0; i < buf.Length; i += 8)
             {
-                UInt32 word0 = S63Cryption.Byte2Dword(buf, i);
-                UInt32 word1 = S63Cryption.Byte2Dword(buf, i + 4);
+                UInt32 word0 = S63Crypt.Byte2Dword(buf, i);
+                UInt32 word1 = S63Crypt.Byte2Dword(buf, i + 4);
                 BF_De(ref word0, ref word1);
-                S63Cryption.Dword2Byte(word0, buf, i);
-                S63Cryption.Dword2Byte(word1, buf, i + 4);
+                S63Crypt.Dword2Byte(word0, buf, i);
+                S63Crypt.Dword2Byte(word1, buf, i + 4);
             }
             return true;
         }
