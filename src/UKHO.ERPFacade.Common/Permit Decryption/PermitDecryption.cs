@@ -22,7 +22,7 @@ namespace UKHO.ERPFacade.Common.Permit_Decryption
             if (string.IsNullOrEmpty(permit)) return null;
             try
             {
-                var hardwareIds = GetHardwareIds();
+                byte[] hardwareIds = GetHardwareIds();
                 byte[] firstCellKey = null;
                 byte[] secondCellKey = null;
 
@@ -37,7 +37,7 @@ namespace UKHO.ERPFacade.Common.Permit_Decryption
             }
             catch (Exception ex)
             {
-                _logger.LogInformation(EventIds.PermitDecryptionException.ToEventId(), Convert.ToString("An error occurred while decrypting the permit string."), ex.Message);
+                _logger.LogInformation(EventIds.PermitDecryptionException.ToEventId(), ex, "An error occurred while decrypting the permit string.");
                 return null;
             }
         }
