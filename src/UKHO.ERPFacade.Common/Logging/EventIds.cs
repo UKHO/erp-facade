@@ -701,7 +701,12 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940140 - Dequeue count of message.
         /// </summary>
-        MessageDequeueCount = 140
+        MessageDequeueCount = 940140,
+
+        /// <summary>
+        /// 940141 - Invalid UkhoWeekNumber field in enccontentpublished event from EES.
+        /// </summary>
+        InvalidUkhoWeekNumber = 940141
     }
 
     /// <summary>
