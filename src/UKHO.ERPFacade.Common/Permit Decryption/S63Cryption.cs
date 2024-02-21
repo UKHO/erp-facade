@@ -1,8 +1,10 @@
-﻿using System.Globalization;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Text;
 
 namespace UKHO.ERPFacade.Common.Permit_Decryption
 {
+    [ExcludeFromCodeCoverage]
     public static class S63Cryption
     {
         public enum CryptResult { HWIDFmtErr = 0, CRCErr = 1, Ok = 2 };

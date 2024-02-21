@@ -1,7 +1,9 @@
-﻿using System.Runtime.Caching;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Runtime.Caching;
 
 namespace UKHO.ERPFacade.Common.Permit_Decryption
 {
+    [ExcludeFromCodeCoverage]
     public class BFFactory : IBFFactory
     {
         private static readonly ObjectCache Cache =MemoryCache.Default;

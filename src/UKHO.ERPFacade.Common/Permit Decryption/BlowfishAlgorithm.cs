@@ -1,6 +1,9 @@
 ﻿
+using System.Diagnostics.CodeAnalysis;
+
 namespace UKHO.ERPFacade.Common.Permit_Decryption
 {
+    [ExcludeFromCodeCoverage]
     public class BlowfishAlgorithm: IBlowfishAlgorithm
     {
         UInt32[] _P;

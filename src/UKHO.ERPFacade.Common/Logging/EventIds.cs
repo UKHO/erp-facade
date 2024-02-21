@@ -701,7 +701,13 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940140 - Dequeue count of message.
         /// </summary>
-        MessageDequeueCount = 140
+        MessageDequeueCount = 140,
+
+        /// <summary>
+        /// 940140 - Exception occured while decrypting the permit string.
+        /// </summary>
+        PermitdecryptionException = 940140
+
     }
 
     /// <summary>
