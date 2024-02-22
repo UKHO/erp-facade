@@ -25,6 +25,10 @@ resource "azurerm_windows_web_app" "webapp_service" {
      
   app_settings = var.app_settings
 
+  sticky_settings = {
+    app_setting_names = [ "WEBJOBS_STOPPED" ]
+  }
+
   identity {
     type = "SystemAssigned"
   }
@@ -50,7 +54,7 @@ resource "azurerm_windows_web_app_slot" "staging" {
     ftps_state = "Disabled"
   }
      
-  app_settings = azurerm_windows_web_app.webapp_service.app_settings
+  app_settings = merge(azurerm_windows_web_app.webapp_service.app_settings, { "WEBJOBS_STOPPED" = "1" })
 
   identity {
     type = "SystemAssigned"
