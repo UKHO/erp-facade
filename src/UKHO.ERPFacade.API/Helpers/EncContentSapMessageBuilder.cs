@@ -99,7 +99,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                 foreach (var conditions in rules.Conditions)
                                 {
                                     object jsonFieldValue = CommonHelper.ParseXmlNode(conditions.AttributeName, product, product.GetType());
-                                    if (jsonFieldValue != null && IsValidValue(jsonFieldValue.ToString(), conditions.AttributeValue))
+                                    if (jsonFieldValue != null! && IsValidValue(jsonFieldValue.ToString(), conditions.AttributeValue))
                                     {
                                         IsConditionSatisfied = true;
                                     }
@@ -149,7 +149,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                     foreach (var conditions in rules.Conditions)
                                     {
                                         object jsonFieldValue = CommonHelper.ParseXmlNode(conditions.AttributeName, unitofSale, unitofSale.GetType());
-                                        if (jsonFieldValue != null && IsValidValue(jsonFieldValue.ToString(), conditions.AttributeValue))
+                                        if (jsonFieldValue != null! && IsValidValue(jsonFieldValue.ToString(), conditions.AttributeValue))
                                         {
                                             IsConditionSatisfied = true;
                                         }
@@ -176,7 +176,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                     foreach (var conditions in rules.Conditions)
                                     {
                                         object jsonFieldValue = CommonHelper.ParseXmlNode(conditions.AttributeName, product, product.GetType());
-                                        if (jsonFieldValue != null && IsValidValue(jsonFieldValue.ToString(), conditions.AttributeValue))
+                                        if (jsonFieldValue != null! && IsValidValue(jsonFieldValue.ToString(), conditions.AttributeValue))
                                         {
                                             IsConditionSatisfied = true;
                                         }
@@ -488,15 +488,15 @@ namespace UKHO.ERPFacade.API.Helpers
 
         private static string GetUkhoWeekNumberData(UkhoWeekNumber ukhoWeekNumber)
         {
-            var validWeek = ukhoWeekNumber.Week.ToString("D2");
-            var concatedString = string.Join("", ukhoWeekNumber.Year, validWeek);
+            string validWeek = ukhoWeekNumber.Week.ToString("D2");
+            string concatedString = string.Join("", ukhoWeekNumber.Year, validWeek);
 
             return concatedString;
         }
 
         private static bool IsValidWeekNumber(UkhoWeekNumber ukhoWeekNumber)
         {
-            bool isValid = !(ukhoWeekNumber == null!);
+            bool isValid = ukhoWeekNumber != null!;
             if (!isValid) return isValid;
 
             if (ukhoWeekNumber.Week <= 0 || ukhoWeekNumber.Week > 53 || ukhoWeekNumber.Year == 0 ||
