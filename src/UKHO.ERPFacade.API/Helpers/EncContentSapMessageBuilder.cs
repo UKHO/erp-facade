@@ -228,7 +228,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                 var product = eventData.Data.Products.Where(x => x.InUnitsOfSale.Contains(unitOfSale.UnitName)
                                               && unitOfSale.UnitOfSaleType == UnitSaleType).FirstOrDefault();
 
-                                actionNode = BuildAction(soapXml, product, unitOfSale, action, null, null);
+                                actionNode = BuildAction(soapXml, product, unitOfSale, action);
                                 actionItemNode.AppendChild(actionNode);
                                 _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
 

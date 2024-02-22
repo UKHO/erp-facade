@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics.CodeAnalysis;
+
 
 namespace UKHO.ERPFacade.Common.Configuration
 {
+    [ExcludeFromCodeCoverage]
     public class PermitConfiguration
     {
         public string PermitDecryptionHardwareId { get; set; } = string.Empty;
