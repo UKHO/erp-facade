@@ -378,7 +378,7 @@ namespace UKHO.ERPFacade.API.Helpers
                     }
                     else
                     {
-                        s_logger.LogError(EventIds.InvalidUkhoWeekNumber.ToEventId(), "Invalid UkhoWeekNumber field in enccontentpublished event from EES.");
+                        s_logger.LogError(EventIds.InvalidUkhoWeekNumber.ToEventId(), "Invalid UkhoWeekNumber field received in enccontentpublished event.");
                         itemSubNode.InnerText = string.Empty;
                     }
                 }
@@ -496,9 +496,8 @@ namespace UKHO.ERPFacade.API.Helpers
 
         private static bool IsValidWeekNumber(UkhoWeekNumber ukhoWeekNumber)
         {
-            bool isValid = true;
-
-            if (ukhoWeekNumber == null!) isValid = false;
+            bool isValid = !(ukhoWeekNumber == null!);
+            if (!isValid) return isValid;
 
             if (ukhoWeekNumber.Week <= 0 || ukhoWeekNumber.Week > 53 || ukhoWeekNumber.Year == 0 ||
                 ukhoWeekNumber.Year < 1900 || ukhoWeekNumber.Year > 9999) isValid = false;
