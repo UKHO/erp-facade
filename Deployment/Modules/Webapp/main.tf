@@ -36,13 +36,13 @@ resource "azurerm_windows_web_app" "webapp_service" {
   https_only = true
 }
 
-resource "azurerm_app_service_slot" "staging" {
+resource "azurerm_windows_web_app_slot" "staging" {
   name                = "staging"
-  app_service_name    = azurerm_app_service.webapp_service.name
-  location            = azurerm_app_service.webapp_service.location
-  resource_group_name = azurerm_app_service.webapp_service.resource_group_name
-  service_plan_id     = azurerm_app_service.webapp_service.service_plan_id
-  tags                = azurerm_app_service.webapp_service.tags
+  app_service_name    = azurerm_windows_web_app.webapp_service.name
+  location            = azurerm_windows_web_app.webapp_service.location
+  resource_group_name = azurerm_windows_web_app.webapp_service.resource_group_name
+  service_plan_id     = azurerm_windows_web_app.webapp_service.service_plan_id
+  tags                = azurerm_windows_web_app.webapp_service.tags
 
   site_config {
     application_stack {    
@@ -53,7 +53,7 @@ resource "azurerm_app_service_slot" "staging" {
     ftps_state = "Disabled"
   }
      
-  app_settings = azurerm_app_service.webapp_service.app_settings
+  app_settings = azurerm_windows_web_app.webapp_service.app_settings
 
   identity {
     type = "SystemAssigned"
@@ -63,7 +63,7 @@ resource "azurerm_app_service_slot" "staging" {
     ignore_changes = [ virtual_network_subnet_id ]
   }
 
-  https_only = azurerm_app_service.webapp_service.https_only
+  https_only = azurerm_windows_web_app.webapp_service.https_only
 }
 
 resource "azurerm_windows_web_app" "mock_webapp_service" {
@@ -100,5 +100,5 @@ resource "azurerm_app_service_virtual_network_swift_connection" "webapp_vnet_int
 resource "azurerm_app_service_slot_virtual_network_swift_connection" "slot_vnet_integration" {
   app_service_id = azurerm_windows_web_app.webapp_service.id
   subnet_id      = var.subnet_id
-  slot_name      = azurerm_app_service_slot.staging.name
+  slot_name      = azurerm_windows_web_app_slot.staging.name
 }
