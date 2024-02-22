@@ -1,6 +1,8 @@
 ﻿using System.Globalization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
 
@@ -8,12 +10,12 @@ namespace UKHO.ERPFacade.Common.PermitDecryption
 {
     public class PermitDecryption : IPermitDecryption
     {
-        private readonly IConfiguration _config;
         private readonly ILogger<PermitDecryption> _logger;
+        private readonly IOptions<PermitConfiguration> _permitConfiguration;
 
-        public PermitDecryption(IConfiguration config, ILogger<PermitDecryption> logger)
+        public PermitDecryption(IConfiguration config, ILogger<PermitDecryption> logger, IOptions<PermitConfiguration> permitConfiguration)
         {
-            _config = config;
+            _permitConfiguration = permitConfiguration ?? throw new ArgumentNullException(nameof(permitConfiguration));
             _logger = logger;
         }
 
@@ -44,7 +46,7 @@ namespace UKHO.ERPFacade.Common.PermitDecryption
 
         private byte[] GetHardwareIds()
         {
-            var permitHardwareIds = _config.GetValue<string>("PermitDecryptionHardwareId").Split(',').ToList();
+            var permitHardwareIds = _permitConfiguration.Value.PermitDecryptionHardwareId.Split(',').ToList();  //_config.GetValue<string>("PermitDecryptionHardwareId").Split(',').ToList();
             int i = 0;
             byte[] hardwareIds = new byte[6];
             foreach (string? hardwareId in permitHardwareIds)
