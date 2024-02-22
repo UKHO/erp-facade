@@ -488,8 +488,8 @@ namespace UKHO.ERPFacade.API.Helpers
 
         private static string GetUkhoWeekNumberData(UkhoWeekNumber ukhoWeekNumber)
         {
-            string validWeek = ukhoWeekNumber.Week.ToString("D2");
-            string concatedString = string.Join("", ukhoWeekNumber.Year, validWeek);
+            var validWeek = ukhoWeekNumber.Week.ToString("D2");
+            var concatedString = string.Join("", ukhoWeekNumber.Year, validWeek);
 
             return concatedString;
         }
@@ -499,8 +499,7 @@ namespace UKHO.ERPFacade.API.Helpers
             bool isValid = ukhoWeekNumber != null!;
             if (!isValid) return isValid;
 
-            if (ukhoWeekNumber.Week <= 0 || ukhoWeekNumber.Week > 53 || ukhoWeekNumber.Year == 0 ||
-                ukhoWeekNumber.Year < 1900 || ukhoWeekNumber.Year > 9999) isValid = false;
+            if (ukhoWeekNumber.Week == 0 || ukhoWeekNumber.Year == 0) isValid = false;
 
             return isValid;
         }

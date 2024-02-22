@@ -299,7 +299,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         [TestCase("202512", 12, 2025)]
         public void GetUkhoWeekNumberDataTest(string expectedResult, int week, int year)
         {
-            UkhoWeekNumber ukhoWeekNumber = new UkhoWeekNumber()
+            UkhoWeekNumber ukhoWeekNumber = new()
             {
                 Year = year,
                 Week = week
@@ -307,6 +307,23 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
 
             MethodInfo getUkhoWeekNumber = typeof(EncContentSapMessageBuilder).GetMethod("GetUkhoWeekNumberData", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
             string result = (string)getUkhoWeekNumber.Invoke(_fakeEncContentSapMessageBuilder, new object[] { ukhoWeekNumber })!;
+
+            Assert.That(expectedResult, Is.EqualTo(result));
+        }
+
+        [Test]
+        [TestCase(0, 0, false)]
+        [TestCase(52, 0, false)]
+        [TestCase(0, 2023, false)]
+        public void ValidWeekNumberTest_WhenInvalidUkhoWeekNumberIsPassed(int validWeek, int validYear, bool expectedResult)
+        {
+            UkhoWeekNumber ukhoWeekNumber = new()
+            {
+                Year = validYear,
+                Week = validWeek
+            };
+            MethodInfo isValidWeekNumber = typeof(EncContentSapMessageBuilder).GetMethod("IsValidWeekNumber", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
+            bool result = (bool)isValidWeekNumber.Invoke(_fakeEncContentSapMessageBuilder, new object[] { ukhoWeekNumber })!;
 
             Assert.That(expectedResult, Is.EqualTo(result));
         }
