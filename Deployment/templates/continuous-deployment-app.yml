@@ -37,24 +37,21 @@ steps:
       fileType: 'json'
       targetFiles: '**/appsettings.json'
 
-  - task: PowerShell@2
-    displayName: "Install Azure CLI"
-    inputs:
-      targetType: 'inline'
-      script: |
-          $ProgressPreference = 'SilentlyContinue'
-          Invoke-WebRequest -Uri https://aka.ms/installazurecliwindowsx64 -OutFile .\AzureCLI.msi
-          Start-Process msiexec.exe -Wait -ArgumentList '/I AzureCLI.msi /quiet'
-          Remove-Item .\AzureCLI.msi
-
-  - task: AzureCLI@2
+  - task: AzureAppServiceSettings@1
     displayName: "Staging slot sticky appsettings"
     inputs:
-      azureSubscription: "${{ parameters.AzureSubscription }}"
-      scriptType: pscore
-      scriptLocation: inlineScript
-      inlineScript: |
-        az webapp config appsettings set --resource-group $(ResourceGroup) --name $(WEB_APP_NAME) --slot $(WEB_APP_SLOT_NAME) --slot-settings WEBJOBS_STOPPED=1
+      azureSubscription: ${{ parameters.AzureSubscription }}
+      appName: $(WEB_APP_NAME)
+      resourceGroupName: $(ResourceGroup)
+      slotName: $(WEB_APP_SLOT_NAME)
+      appSettings: |
+        [
+          {
+            "name": "WEBJOBS_STOPPED",
+            "value": "1",
+            "slotSetting": true
+          }
+        ]
 
   - task: AzureWebApp@1
     displayName: "Azure App Deploy: Staging slot"
