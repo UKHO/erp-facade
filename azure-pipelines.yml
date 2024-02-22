@@ -438,6 +438,8 @@ stages:
             value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.keyvaulturi'] ]
           - name :  "AzureWebJobsStorage.ConnectionString"
             value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
+          - name : ResourceGroup
+            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.ResourceGroup'] ]
           - name : WEB_APP_SLOT_NAME
             value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME'] ]
           - name : WEB_APP_SLOT_HOST_NAME
@@ -536,6 +538,8 @@ stages:
             value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.keyvaulturi'] ]
           - name : "AzureWebJobsStorage.ConnectionString"
             value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
+          - name : ResourceGroup
+            value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.ResourceGroup'] ]
           - name : WEB_APP_SLOT_NAME
             value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME'] ]
           - name : WEB_APP_SLOT_HOST_NAME
@@ -626,6 +630,8 @@ stages:
             value : $[ dependencies.E2EDeployTerraform.outputs['E2EDeployTerraform.TerraformDeploy.keyvaulturi'] ]
           - name : "AzureWebJobsStorage.ConnectionString"
             value : $[ dependencies.E2EDeployTerraform.outputs['E2EDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
+          - name : ResourceGroup
+            value : $[ dependencies.E2EDeployTerraform.outputs['E2EDeployTerraform.TerraformDeploy.ResourceGroup'] ]
           - name : WEB_APP_SLOT_NAME
             value : $[ dependencies.E2EDeployTerraform.outputs['E2EDeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME'] ]
           - name : WEB_APP_SLOT_HOST_NAME
@@ -699,6 +705,8 @@ stages:
             value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.keyvaulturi'] ]
           - name : "AzureWebJobsStorage.ConnectionString"
             value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
+          - name : ResourceGroup
+            value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.ResourceGroup'] ]
           - name : WEB_APP_SLOT_NAME
             value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME'] ]
           - name : WEB_APP_SLOT_HOST_NAME
@@ -768,6 +776,8 @@ stages:
         variables:
           - name : WEB_APP_NAME
             value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.WEB_APP'] ]
+          - name : ResourceGroup
+            value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.ResourceGroup'] ]
           - name : WEB_APP_SLOT_NAME
             value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME'] ]
           - name : WEB_APP_SLOT_HOST_NAME
