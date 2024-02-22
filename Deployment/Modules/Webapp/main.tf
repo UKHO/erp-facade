@@ -38,10 +38,7 @@ resource "azurerm_windows_web_app" "webapp_service" {
 
 resource "azurerm_windows_web_app_slot" "staging" {
   name                = "staging"
-  app_service_name    = azurerm_windows_web_app.webapp_service.name
-  location            = azurerm_windows_web_app.webapp_service.location
-  resource_group_name = azurerm_windows_web_app.webapp_service.resource_group_name
-  service_plan_id     = azurerm_windows_web_app.webapp_service.service_plan_id
+  app_service_id      = azurerm_windows_web_app.webapp_service.id
   tags                = azurerm_windows_web_app.webapp_service.tags
 
   site_config {

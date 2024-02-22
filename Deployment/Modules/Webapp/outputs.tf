@@ -15,19 +15,19 @@ output "webapp_name" {
 }
 
 output "slot_object_id" {
-  value = azurerm_app_service_slot.staging.identity.0.principal_id
+  value = azurerm_windows_web_app_slot.staging.identity.0.principal_id
 }
 
 output "slot_tenant_id" {
-  value = azurerm_app_service_slot.staging.identity.0.tenant_id
+  value = azurerm_windows_web_app_slot.staging.identity.0.tenant_id
 }
 
 output "slot_default_site_hostname" {
-  value = azurerm_app_service_slot.staging.default_hostname
+  value = azurerm_windows_web_app_slot.staging.default_hostname
 }
 
 output "slot_name" {
-  value = azurerm_app_service_slot.staging.name
+  value = azurerm_windows_web_app_slot.staging.name
 }
 
 output "mock_web_app_object_id" {
