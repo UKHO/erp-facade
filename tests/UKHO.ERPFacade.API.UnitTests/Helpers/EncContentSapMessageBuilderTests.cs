@@ -69,6 +69,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             _fakeXmlHelper = A.Fake<IXmlHelper>();
             _fakeFileSystemHelper = A.Fake<IFileSystemHelper>();
             _fakeSapActionConfig = Options.Create(InitConfiguration().GetSection("SapActionConfiguration").Get<SapActionConfiguration>())!;
+            _fakePermitDecryption = A.Fake<IPermitDecryption>();
             _fakeEncContentSapMessageBuilder = new EncContentSapMessageBuilder(_fakeLogger, _fakeXmlHelper, _fakeFileSystemHelper, _fakeSapActionConfig, _fakePermitDecryption);
         }
 
@@ -88,12 +89,14 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         {
             var scenarios = JsonConvert.DeserializeObject<EncEventPayload>(scenariosDataCancelReplaceCell);
             var correlationId = "367ce4a4-1d62-4f56-b359-59e178d77100";
+            var permitKeys = new PermitKey { ActiveKey = "D9F7832D87", NextKey = "D9F7832D88" };
 
             XmlDocument soapXml = new();
             soapXml.LoadXml(sapXmlFile);
 
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
+            A.CallTo(() => _fakePermitDecryption.GetPermitKeys(A<string>.Ignored)).Returns(permitKeys);
 
             var result = _fakeEncContentSapMessageBuilder.BuildSapMessageXml(scenarios!, correlationId);
 
@@ -272,11 +275,13 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         [Test]
         public void BuildActionTest()
         {
-            var actualXmlElement = @"<ACTIONNUMBER>1</ACTIONNUMBER><ACTION>CREATE ENC CELL</ACTION><PRODUCT>ENC CELL</PRODUCT><PRODTYPE>S57</PRODTYPE><CHILDCELL>US5AK83M</CHILDCELL><PRODUCTNAME>US5AK83M</PRODUCTNAME><CANCELLED></CANCELLED><REPLACEDBY></REPLACEDBY><AGENCY>US</AGENCY><PROVIDER>1</PROVIDER><ENCSIZE>small</ENCSIZE><TITLE>St. Michael Bay</TITLE><EDITIONNO>0</EDITIONNO><UPDATENO>1</UPDATENO><UNITTYPE></UNITTYPE>";
+            var actualXmlElement = @"<ACTIONNUMBER>1</ACTIONNUMBER><ACTION>CREATE ENC CELL</ACTION><PRODUCT>ENC CELL</PRODUCT><PRODTYPE>S57</PRODTYPE><CHILDCELL>US5AK83M</CHILDCELL><PRODUCTNAME>US5AK83M</PRODUCTNAME><CANCELLED></CANCELLED><REPLACEDBY></REPLACEDBY><AGENCY>US</AGENCY><PROVIDER>1</PROVIDER><ENCSIZE>small</ENCSIZE><TITLE>St. Michael Bay</TITLE><EDITIONNO>0</EDITIONNO><UPDATENO>1</UPDATENO><UNITTYPE></UNITTYPE><ACTIVEKEY>D9F7832D87</ACTIVEKEY><NEXTKEY>D9F7832D88</NEXTKEY>";
+            var permitKeys = new PermitKey { ActiveKey = "D9F7832D87", NextKey = "D9F7832D88" };
 
             var scenarios = JsonConvert.DeserializeObject<EncEventPayload>(scenariosDataCancelReplaceCell);
             XmlDocument soapXml = new();
             soapXml.LoadXml(sapXmlFile);
+            A.CallTo(() => _fakePermitDecryption.GetPermitKeys(A<string>.Ignored)).Returns(permitKeys);
 
             MethodInfo GetUnitOfSaleForEncCell = typeof(EncContentSapMessageBuilder).GetMethod("GetUnitOfSaleForEncCell", BindingFlags.NonPublic | BindingFlags.Instance)!;
             var unitOfSale = (UnitOfSale)GetUnitOfSaleForEncCell.Invoke(_fakeEncContentSapMessageBuilder, new object[] { scenarios.Data.UnitsOfSales,
@@ -288,7 +293,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             var result = (XmlElement)buildAction.Invoke(_fakeEncContentSapMessageBuilder, new object[] {soapXml,scenarios.Data.Products.FirstOrDefault()!,
                 unitOfSale,action!,null,null})!;
 
-            result.ChildNodes.Count.Should().Be(15);
+            result.ChildNodes.Count.Should().Be(17);
             result.InnerXml.Should().Be(actualXmlElement);
         }
     }
