@@ -176,6 +176,16 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
 
         private string uNITTYPEField;
 
+        private string aCTIVEKEYField;
+
+        private string nEXTKEYField;
+
+        private int wEEKNOField;
+
+        private int vALIDFROMField;
+
+        private string cORRECTIONField;
+
 
         /// <remarks/>
         [System.Xml.Serialization.XmlElement("ACTIONNUMBER", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
@@ -384,6 +394,62 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
             set
             {
                 this.uNITTYPEField = value;
+            }
+        }
+
+        public string ACTIVEKEY
+        {
+            get
+            {
+                return this.aCTIVEKEYField;
+            }
+            set
+            {
+                this.aCTIVEKEYField = value;
+            }
+        }
+        public string NEXTKEY
+        {
+            get
+            {
+                return this.nEXTKEYField;
+            }
+            set
+            {
+                this.nEXTKEYField = value;
+            }
+        }
+        public int WEEKNO
+        {
+            get
+            {
+                return this.wEEKNOField;
+            }
+            set
+            {
+                this.wEEKNOField = value;
+            }
+        }
+        public int VALIDFROM
+        {
+            get
+            {
+                return this.vALIDFROMField;
+            }
+            set
+            {
+                this.vALIDFROMField = value;
+            }
+        }
+        public string CORRECTION
+        {
+            get
+            {
+                return this.cORRECTIONField;
+            }
+            set
+            {
+                this.cORRECTIONField = value;
             }
         }
     }
