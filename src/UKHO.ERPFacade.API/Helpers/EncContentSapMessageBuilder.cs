@@ -111,7 +111,7 @@ namespace UKHO.ERPFacade.API.Helpers
 
                             if (IsConditionSatisfied)
                             {
-                                actionNode = BuildAction(soapXml, product, unitOfSale, action, null, null);
+                                actionNode = BuildAction(soapXml, product, unitOfSale, action);
                                 actionItemNode.AppendChild(actionNode);
                                 _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
                                 IsConditionSatisfied = false;
@@ -241,7 +241,7 @@ namespace UKHO.ERPFacade.API.Helpers
                             {
                                 var product = eventData.Data.Products.Where(x => x.ProductName == addProduct).FirstOrDefault();
 
-                                actionNode = BuildAction(soapXml, product, unitOfSale, action, addProduct, null);
+                                actionNode = BuildAction(soapXml, product, unitOfSale, action, addProduct);
                                 actionItemNode.AppendChild(actionNode);
                                 _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
                             }

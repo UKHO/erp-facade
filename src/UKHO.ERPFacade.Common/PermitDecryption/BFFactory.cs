@@ -17,7 +17,7 @@ namespace UKHO.ERPFacade.Common.PermitDecryption
     [ExcludeFromCodeCoverage]
     public class BFFactory : IBFFactory
     {
-        private static readonly ObjectCache Cache =MemoryCache.Default;
+        private static readonly ObjectCache Cache = MemoryCache.Default;
         /// <summary>
         /// Gets the specified key.
         /// </summary>
