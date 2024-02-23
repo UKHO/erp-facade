@@ -40,6 +40,8 @@ namespace UKHO.ERPFacade.API.Helpers
         private const string ValidFrom = "VALIDFROM";
         private const string WeekNo = "WEEKNO";
         private const string Correction = "CORRECTION";
+        private const string IsCorrectionTrue = "Y";
+        private const string IsCorrectionFalse = "N";
 
         public EncContentSapMessageBuilder(ILogger<EncContentSapMessageBuilder> logger,
                                  IXmlHelper xmlHelper,
@@ -372,7 +374,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                 break;
 
                             case Correction:
-                                itemSubNode.InnerText = ukhoWeekNumber.CurrentWeekAlphaCorrection ? GetXmlNodeValue("Y") : GetXmlNodeValue("N");
+                                itemSubNode.InnerText = ukhoWeekNumber.CurrentWeekAlphaCorrection ? GetXmlNodeValue(IsCorrectionTrue) : GetXmlNodeValue(IsCorrectionFalse);
                                 break;
                         }
                     }
@@ -489,9 +491,9 @@ namespace UKHO.ERPFacade.API.Helpers
         private static string GetUkhoWeekNumberData(UkhoWeekNumber ukhoWeekNumber)
         {
             var validWeek = ukhoWeekNumber.Week.ToString("D2");
-            var concatedString = string.Join("", ukhoWeekNumber.Year, validWeek);
+            var weekNumber = string.Join("", ukhoWeekNumber.Year, validWeek);
 
-            return concatedString;
+            return weekNumber;
         }
 
         private static bool IsValidWeekNumber(UkhoWeekNumber ukhoWeekNumber)
