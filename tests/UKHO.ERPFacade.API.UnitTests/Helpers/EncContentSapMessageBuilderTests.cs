@@ -31,6 +31,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         private EncContentSapMessageBuilder _fakeEncContentSapMessageBuilder;
         private const string XpathActionItems = $"//*[local-name()='ACTIONITEMS']";
         private const string EncCell = "ENC CELL";
+        private const string XpathCorrection = $"//*[local-name()='CORRECTION']";
+        private const string XpathProductName = $"//*[local-name()='PRODUCTNAME']";
 
         private readonly string sapXmlFile = @"<?xml version=""1.0"" encoding=""utf-8""?>
 <soap:Envelope xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:soap=""http://schemas.xmlsoap.org/soap/envelope/"">
@@ -206,6 +208,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             var result = (UnitOfSale)methodInfo.Invoke(_fakeEncContentSapMessageBuilder, new object[] { listOfUnitOfSales, product })!;
 
             result.UnitName.Should().BeSameAs("MX509226");
+            listOfUnitOfSales.Count.Should().Be(2);
         }
 
         [Test]
@@ -271,8 +274,9 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             var firstNode = result.Cast<XmlNode>().FirstOrDefault().InnerText;
             Assert.That(expectedResult, Is.EqualTo(firstNode));
         }
+
         [Test]
-        public void BuildActionTest()
+        public void BuildActionTestWhenUkhoWeekNumberIsNull()
         {
             var actualXmlElement = @"<ACTIONNUMBER>1</ACTIONNUMBER><ACTION>CREATE ENC CELL</ACTION><PRODUCT>ENC CELL</PRODUCT><PRODTYPE>S57</PRODTYPE><CHILDCELL>US5AK83M</CHILDCELL><PRODUCTNAME>US5AK83M</PRODUCTNAME><CANCELLED></CANCELLED><REPLACEDBY></REPLACEDBY><AGENCY>US</AGENCY><PROVIDER>1</PROVIDER><ENCSIZE>small</ENCSIZE><TITLE>St. Michael Bay</TITLE><EDITIONNO>0</EDITIONNO><UPDATENO>1</UPDATENO><UNITTYPE></UNITTYPE><WEEKNO></WEEKNO><VALIDFROM></VALIDFROM><CORRECTION></CORRECTION>";
 
@@ -292,6 +296,10 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
 
             result.ChildNodes.Count.Should().Be(18);
             result.InnerXml.Should().Be(actualXmlElement);
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+            && call.GetArgument<LogLevel>(0) == LogLevel.Error
+            && call.GetArgument<EventId>(1) == EventIds.InvalidUkhoWeekNumber.ToEventId()
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Invalid UkhoWeekNumber field received in enccontentpublished event.").MustHaveHappened();
         }
 
         [Test]
@@ -299,7 +307,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         [TestCase("202512", 12, 2025)]
         public void GetUkhoWeekNumberDataTest(string expectedResult, int week, int year)
         {
-            UkhoWeekNumber ukhoWeekNumber = new UkhoWeekNumber()
+            UkhoWeekNumber ukhoWeekNumber = new()
             {
                 Year = year,
                 Week = week
@@ -307,6 +315,49 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
 
             MethodInfo getUkhoWeekNumber = typeof(EncContentSapMessageBuilder).GetMethod("GetUkhoWeekNumberData", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
             string result = (string)getUkhoWeekNumber.Invoke(_fakeEncContentSapMessageBuilder, new object[] { ukhoWeekNumber })!;
+
+            Assert.That(expectedResult, Is.EqualTo(result));
+        }
+
+        [Test]
+        public void BuildActionTestWhenValidUkhoWeekNumberIsPassed()
+        {
+            var scenarios = JsonConvert.DeserializeObject<EncEventPayload>(scenariosDataCancelReplaceCell);
+
+            XmlDocument soapXml = new();
+            soapXml.LoadXml(sapXmlFile);
+
+            A.CallTo(() => _fakeWeekDetailsProvider.GetThursdayDateOfWeek(A<int>.Ignored, A<int>.Ignored)).Returns("20240118");
+
+            var action = _fakeSapActionConfig.Value.SapActions.Where(x => x.Product == EncCell).FirstOrDefault();
+
+            MethodInfo buildAction = typeof(EncContentSapMessageBuilder).GetMethod("BuildAction", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
+            var result = (XmlElement)buildAction.Invoke(_fakeEncContentSapMessageBuilder, new object[] {soapXml,scenarios.Data.Products.FirstOrDefault()!,
+                null,action!,scenarios.Data.UkhoWeekNumber,null,null})!;
+
+            result.ChildNodes.Count.Should().Be(18);
+
+            var correction = result.SelectSingleNode(XpathCorrection);
+            correction.InnerXml.Should().Be("N");
+
+            var productName = result.SelectSingleNode(XpathProductName);
+            productName.InnerXml.Should().BeEmpty();
+        }
+
+        [Test]
+        [TestCase(0, 0, false)]
+        [TestCase(52, 0, false)]
+        [TestCase(0, 2023, false)]
+        public void ValidWeekNumberTest_WhenInvalidUkhoWeekNumberIsPassed(int validWeek, int validYear, bool expectedResult)
+        {
+            UkhoWeekNumber ukhoWeekNumber = new()
+            {
+                Year = validYear,
+                Week = validWeek
+            };
+
+            MethodInfo isValidWeekNumber = typeof(EncContentSapMessageBuilder).GetMethod("IsValidWeekNumber", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
+            bool result = (bool)isValidWeekNumber.Invoke(_fakeEncContentSapMessageBuilder, new object[] { ukhoWeekNumber })!;
 
             Assert.That(expectedResult, Is.EqualTo(result));
         }
