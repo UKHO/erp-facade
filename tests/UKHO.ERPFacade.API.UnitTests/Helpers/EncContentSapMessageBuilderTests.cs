@@ -32,7 +32,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         private const string XpathActionItems = $"//*[local-name()='ACTIONITEMS']";
         private const string EncCell = "ENC CELL";
         private const string XpathCorrection = $"//*[local-name()='CORRECTION']";
-        private const string XpathProductName = $"//*[local-name()='PRODUCTNAME']";
+        private const string XpathWeekNo = $"//*[local-name()='WEEKNO']";
+        private const string XpathValidFrom = $"//*[local-name()='VALIDFROM']";
 
         private readonly string sapXmlFile = @"<?xml version=""1.0"" encoding=""utf-8""?>
 <soap:Envelope xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:soap=""http://schemas.xmlsoap.org/soap/envelope/"">
@@ -276,7 +277,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         }
 
         [Test]
-        public void BuildActionTestWhenUkhoWeekNumberIsNull()
+        public void BuildActionTest()
         {
             var actualXmlElement = @"<ACTIONNUMBER>1</ACTIONNUMBER><ACTION>CREATE ENC CELL</ACTION><PRODUCT>ENC CELL</PRODUCT><PRODTYPE>S57</PRODTYPE><CHILDCELL>US5AK83M</CHILDCELL><PRODUCTNAME>US5AK83M</PRODUCTNAME><CANCELLED></CANCELLED><REPLACEDBY></REPLACEDBY><AGENCY>US</AGENCY><PROVIDER>1</PROVIDER><ENCSIZE>small</ENCSIZE><TITLE>St. Michael Bay</TITLE><EDITIONNO>0</EDITIONNO><UPDATENO>1</UPDATENO><UNITTYPE></UNITTYPE><WEEKNO></WEEKNO><VALIDFROM></VALIDFROM><CORRECTION></CORRECTION>";
 
@@ -284,11 +285,11 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             XmlDocument soapXml = new();
             soapXml.LoadXml(sapXmlFile);
 
-            MethodInfo GetUnitOfSaleForEncCell = typeof(EncContentSapMessageBuilder).GetMethod("GetUnitOfSaleForEncCell", BindingFlags.NonPublic | BindingFlags.Instance)!;
-            var unitOfSale = (UnitOfSale)GetUnitOfSaleForEncCell.Invoke(_fakeEncContentSapMessageBuilder, new object[] { scenarios.Data.UnitsOfSales,
+            MethodInfo getUnitOfSaleForEncCell = typeof(EncContentSapMessageBuilder).GetMethod("GetUnitOfSaleForEncCell", BindingFlags.NonPublic | BindingFlags.Instance)!;
+            var unitOfSale = (UnitOfSale)getUnitOfSaleForEncCell.Invoke(_fakeEncContentSapMessageBuilder, new object[] { scenarios.Data.UnitsOfSales,
                 scenarios.Data.Products.FirstOrDefault()! })!;
 
-            var action = _fakeSapActionConfig.Value.SapActions.Where(x => x.Product == EncCell).FirstOrDefault();
+            var action = _fakeSapActionConfig.Value.SapActions.FirstOrDefault(x => x.Product == EncCell);
 
             MethodInfo buildAction = typeof(EncContentSapMessageBuilder).GetMethod("BuildAction", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
             var result = (XmlElement)buildAction.Invoke(_fakeEncContentSapMessageBuilder, new object[] {soapXml,scenarios.Data.Products.FirstOrDefault()!,
@@ -296,6 +297,64 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
 
             result.ChildNodes.Count.Should().Be(18);
             result.InnerXml.Should().Be(actualXmlElement);
+        }
+
+        [Test]
+        public void WhenValidUkhoWeekNumberIsPassed_ThenReturnsXmlPayloadWithNodeValues()
+        {
+            var scenarios = JsonConvert.DeserializeObject<EncEventPayload>(scenariosDataCancelReplaceCell);
+
+            XmlDocument soapXml = new();
+            soapXml.LoadXml(sapXmlFile);
+
+            A.CallTo(() => _fakeWeekDetailsProvider.GetThursdayDateOfWeek(A<int>.Ignored, A<int>.Ignored)).Returns("20240118");
+
+            MethodInfo getUnitOfSaleForEncCell = typeof(EncContentSapMessageBuilder).GetMethod("GetUnitOfSaleForEncCell", BindingFlags.NonPublic | BindingFlags.Instance)!;
+            var unitOfSale = (UnitOfSale)getUnitOfSaleForEncCell.Invoke(_fakeEncContentSapMessageBuilder, new object[] { scenarios.Data.UnitsOfSales,
+                scenarios.Data.Products.FirstOrDefault()! })!;
+
+            var action = _fakeSapActionConfig.Value.SapActions.FirstOrDefault(x => x.Product == EncCell);
+
+            MethodInfo buildAction = typeof(EncContentSapMessageBuilder).GetMethod("BuildAction", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
+            var result = (XmlElement)buildAction.Invoke(_fakeEncContentSapMessageBuilder, new object[] {soapXml,scenarios.Data.Products.FirstOrDefault()!,
+                unitOfSale,action!,scenarios.Data.UkhoWeekNumber,null,null})!;
+
+            result.ChildNodes.Count.Should().Be(18);
+            var correction = result.SelectSingleNode(XpathCorrection);
+            var weekNo = result.SelectSingleNode(XpathWeekNo);
+            var validFrom = result.SelectSingleNode(XpathValidFrom);
+            correction.InnerXml.Should().Be("N");
+            weekNo.InnerXml.Should().Be("202403");
+            validFrom.InnerXml.Should().Be("20240118");
+        }
+
+        [Test]
+        public void WhenUkhoWeekNumberIsNullOrNodeRequiredIsFalse_ThenReturnsXmlPayloadWithEmptyNodes()
+        {
+            var scenarios = JsonConvert.DeserializeObject<EncEventPayload>(scenariosDataCancelReplaceCell);
+
+            XmlDocument soapXml = new();
+            soapXml.LoadXml(sapXmlFile);
+
+            MethodInfo getUnitOfSaleForEncCell = typeof(EncContentSapMessageBuilder).GetMethod("GetUnitOfSaleForEncCell", BindingFlags.NonPublic | BindingFlags.Instance)!;
+            var unitOfSale = (UnitOfSale)getUnitOfSaleForEncCell.Invoke(_fakeEncContentSapMessageBuilder, new object[] { scenarios.Data.UnitsOfSales,
+                scenarios.Data.Products.FirstOrDefault()! })!;
+
+            var action = _fakeSapActionConfig.Value.SapActions.FirstOrDefault(x => x.Product == EncCell);
+            action.Attributes.LastOrDefault().IsRequired = false;
+
+            MethodInfo buildAction = typeof(EncContentSapMessageBuilder).GetMethod("BuildAction", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
+            var result = (XmlElement)buildAction.Invoke(_fakeEncContentSapMessageBuilder, new object[] {soapXml,scenarios.Data.Products.FirstOrDefault()!,
+                unitOfSale,action!,null,null,null})!;
+
+            result.ChildNodes.Count.Should().Be(18);
+            var correction = result.SelectSingleNode(XpathCorrection);
+            var weekNo = result.SelectSingleNode(XpathWeekNo);
+            var validFrom = result.SelectSingleNode(XpathValidFrom);
+            correction.InnerXml.Should().BeEmpty();
+            weekNo.InnerXml.Should().BeEmpty();
+            validFrom.InnerXml.Should().BeEmpty();
+
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Error
             && call.GetArgument<EventId>(1) == EventIds.InvalidUkhoWeekNumber.ToEventId()
@@ -317,31 +376,6 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             string result = (string)getUkhoWeekNumber.Invoke(_fakeEncContentSapMessageBuilder, new object[] { ukhoWeekNumber })!;
 
             Assert.That(expectedResult, Is.EqualTo(result));
-        }
-
-        [Test]
-        public void BuildActionTestWhenValidUkhoWeekNumberIsPassed()
-        {
-            var scenarios = JsonConvert.DeserializeObject<EncEventPayload>(scenariosDataCancelReplaceCell);
-
-            XmlDocument soapXml = new();
-            soapXml.LoadXml(sapXmlFile);
-
-            A.CallTo(() => _fakeWeekDetailsProvider.GetThursdayDateOfWeek(A<int>.Ignored, A<int>.Ignored)).Returns("20240118");
-
-            var action = _fakeSapActionConfig.Value.SapActions.Where(x => x.Product == EncCell).FirstOrDefault();
-
-            MethodInfo buildAction = typeof(EncContentSapMessageBuilder).GetMethod("BuildAction", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
-            var result = (XmlElement)buildAction.Invoke(_fakeEncContentSapMessageBuilder, new object[] {soapXml,scenarios.Data.Products.FirstOrDefault()!,
-                null,action!,scenarios.Data.UkhoWeekNumber,null,null})!;
-
-            result.ChildNodes.Count.Should().Be(18);
-
-            var correction = result.SelectSingleNode(XpathCorrection);
-            correction.InnerXml.Should().Be("N");
-
-            var productName = result.SelectSingleNode(XpathProductName);
-            productName.InnerXml.Should().BeEmpty();
         }
 
         [Test]
