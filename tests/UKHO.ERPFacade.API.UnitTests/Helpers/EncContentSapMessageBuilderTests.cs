@@ -31,6 +31,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         private EncContentSapMessageBuilder _fakeEncContentSapMessageBuilder;
         private const string XpathActionItems = $"//*[local-name()='ACTIONITEMS']";
         private const string EncCell = "ENC CELL";
+        private const string XpathProductName = $"//*[local-name()='PRODUCTNAME']";
         private const string XpathCorrection = $"//*[local-name()='CORRECTION']";
         private const string XpathWeekNo = $"//*[local-name()='WEEKNO']";
         private const string XpathValidFrom = $"//*[local-name()='VALIDFROM']";
@@ -106,13 +107,13 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             var actionItem = result.SelectSingleNode(XpathActionItems);
             actionItem.ChildNodes.Count.Should().Be(17);
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-            && call.GetArgument<LogLevel>(0) == LogLevel.Information
+                                                && call.GetArgument<LogLevel>(0) == LogLevel.Information
             && call.GetArgument<EventId>(1) == EventIds.BuildingSapActionStarted.ToEventId()
             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Building SAP actions.").MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-            && call.GetArgument<LogLevel>(0) == LogLevel.Information
-            && call.GetArgument<EventId>(1) == EventIds.SapActionCreated.ToEventId()
+                                                && call.GetArgument<LogLevel>(0) == LogLevel.Information
+                                                && call.GetArgument<EventId>(1) == EventIds.SapActionCreated.ToEventId()
             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "SAP action {ActionName} created.").MustHaveHappened(17, Times.Exactly);
         }
 
@@ -135,13 +136,13 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             actionItem.ChildNodes.Count.Should().Be(7);
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-            && call.GetArgument<LogLevel>(0) == LogLevel.Information
+                                                && call.GetArgument<LogLevel>(0) == LogLevel.Information
             && call.GetArgument<EventId>(1) == EventIds.BuildingSapActionStarted.ToEventId()
             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Building SAP actions.").MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-            && call.GetArgument<LogLevel>(0) == LogLevel.Information
-            && call.GetArgument<EventId>(1) == EventIds.SapActionCreated.ToEventId()
+                                                && call.GetArgument<LogLevel>(0) == LogLevel.Information
+                                                && call.GetArgument<EventId>(1) == EventIds.SapActionCreated.ToEventId()
             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "SAP action {ActionName} created.").MustHaveHappened(7, Times.Exactly);
         }
 
@@ -156,7 +157,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             Assert.Throws<FileNotFoundException>(() => _fakeEncContentSapMessageBuilder.BuildSapMessageXml(scenarios!, correlationId));
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-            && call.GetArgument<LogLevel>(0) == LogLevel.Error
+                                                && call.GetArgument<LogLevel>(0) == LogLevel.Error
             && call.GetArgument<EventId>(1) == EventIds.SapXmlTemplateNotFound.ToEventId()
             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "The SAP message xml template does not exist.").MustHaveHappenedOnceExactly();
         }
@@ -178,13 +179,13 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             result.Should().BeOfType<XmlDocument>();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-            && call.GetArgument<LogLevel>(0) == LogLevel.Information
+                                                && call.GetArgument<LogLevel>(0) == LogLevel.Information
             && call.GetArgument<EventId>(1) == EventIds.BuildingSapActionStarted.ToEventId()
             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Building SAP actions.").MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-            && call.GetArgument<LogLevel>(0) == LogLevel.Information
-            && call.GetArgument<EventId>(1) == EventIds.SapActionCreated.ToEventId()
+                                                && call.GetArgument<LogLevel>(0) == LogLevel.Information
+                                                && call.GetArgument<EventId>(1) == EventIds.SapActionCreated.ToEventId()
             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "SAP action {ActionName} created.").MustHaveHappened(1, Times.Exactly);
         }
 
@@ -217,7 +218,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         {
             var listOfUnitOfSales = new List<UnitOfSale>()
             {
-                 new UnitOfSale() { UnitName = "MX509226", Title = "Title1", UnitOfSaleType = "unit" },
+                new UnitOfSale() { UnitName = "MX509226", Title = "Title1", UnitOfSaleType = "unit" },
             };
 
             var product = new Product()
@@ -297,6 +298,27 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
 
             result.ChildNodes.Count.Should().Be(18);
             result.InnerXml.Should().Be(actualXmlElement);
+        }
+
+        [Test]
+        public void WhenUnitOfSaleIsNull_ThenReturnsXmlPayloadWithEmptyNode()
+        {
+            var scenarios = JsonConvert.DeserializeObject<EncEventPayload>(scenariosDataCancelReplaceCell);
+
+            XmlDocument soapXml = new();
+            soapXml.LoadXml(sapXmlFile);
+
+            A.CallTo(() => _fakeWeekDetailsProvider.GetThursdayDateOfWeek(A<int>.Ignored, A<int>.Ignored)).Returns("20240118");
+
+            var action = _fakeSapActionConfig.Value.SapActions.FirstOrDefault(x => x.Product == EncCell);
+
+            MethodInfo buildAction = typeof(EncContentSapMessageBuilder).GetMethod("BuildAction", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
+            var result = (XmlElement)buildAction.Invoke(_fakeEncContentSapMessageBuilder, new object[] {soapXml,scenarios.Data.Products.FirstOrDefault()!,
+                null,action!,null,null,null})!;
+
+            result.ChildNodes.Count.Should().Be(18);
+            var productName = result.SelectSingleNode(XpathProductName);
+            productName.InnerXml.Should().BeEmpty();
         }
 
         [Test]
