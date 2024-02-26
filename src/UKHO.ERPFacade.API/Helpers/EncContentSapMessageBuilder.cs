@@ -9,11 +9,11 @@ namespace UKHO.ERPFacade.API.Helpers
 {
     public class EncContentSapMessageBuilder : IEncContentSapMessageBuilder
     {
-        private static ILogger<EncContentSapMessageBuilder> s_logger;
+        private readonly ILogger<EncContentSapMessageBuilder> _logger;
         private readonly IXmlHelper _xmlHelper;
         private readonly IFileSystemHelper _fileSystemHelper;
         private readonly IOptions<SapActionConfiguration> _sapActionConfig;
-        private static IWeekDetailsProvider s_weekDetailsProvider;
+        private readonly IWeekDetailsProvider _weekDetailsProvider;
 
         private const string SapXmlPath = "SapXmlTemplates\\SAPRequest.xml";
         private const string XpathImMatInfo = $"//*[local-name()='IM_MATINFO']";
@@ -50,11 +50,11 @@ namespace UKHO.ERPFacade.API.Helpers
                                  IWeekDetailsProvider weekDetailsProvider
                                  )
         {
-            s_logger = logger;
+            _logger = logger;
             _xmlHelper = xmlHelper;
             _fileSystemHelper = fileSystemHelper;
             _sapActionConfig = sapActionConfig;
-            s_weekDetailsProvider = weekDetailsProvider;
+            _weekDetailsProvider = weekDetailsProvider;
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace UKHO.ERPFacade.API.Helpers
             //Check whether template file exists or not
             if (!_fileSystemHelper.IsFileExists(sapXmlTemplatePath))
             {
-                s_logger.LogError(EventIds.SapXmlTemplateNotFound.ToEventId(), "The SAP message xml template does not exist.");
+                _logger.LogError(EventIds.SapXmlTemplateNotFound.ToEventId(), "The SAP message xml template does not exist.");
                 throw new FileNotFoundException();
             }
 
@@ -82,7 +82,7 @@ namespace UKHO.ERPFacade.API.Helpers
             XmlNode actionItemNode = soapXml.SelectSingleNode(XpathActionItems);
 
             bool IsConditionSatisfied = false;
-            s_logger.LogInformation(EventIds.BuildingSapActionStarted.ToEventId(), "Building SAP actions.");
+            _logger.LogInformation(EventIds.BuildingSapActionStarted.ToEventId(), "Building SAP actions.");
             foreach (var product in eventData.Data.Products)
             {
                 //Actions for ENC CELL
@@ -118,7 +118,7 @@ namespace UKHO.ERPFacade.API.Helpers
                             {
                                 actionNode = BuildAction(soapXml, product, unitOfSale, action, ukhoWeekNumber);
                                 actionItemNode.AppendChild(actionNode);
-                                s_logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
+                                _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
                                 IsConditionSatisfied = false;
                             }
                             break;
@@ -129,7 +129,7 @@ namespace UKHO.ERPFacade.API.Helpers
                             {
                                 actionNode = BuildAction(soapXml, product, unitOfSaleReplace, action, ukhoWeekNumber, null, replacedProduct);
                                 actionItemNode.AppendChild(actionNode);
-                                s_logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
+                                _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
                             }
                             break;
                     }
@@ -166,7 +166,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                 {
                                     actionNode = BuildAction(soapXml, product, unitofSale, action, ukhoWeekNumber);
                                     actionItemNode.AppendChild(actionNode);
-                                    s_logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
+                                    _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
 
                                     IsConditionSatisfied = false;
                                 }
@@ -193,7 +193,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                 {
                                     actionNode = BuildAction(soapXml, product, unitofSale, action, ukhoWeekNumber);
                                     actionItemNode.AppendChild(actionNode);
-                                    s_logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
+                                    _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
 
                                     IsConditionSatisfied = false;
                                 }
@@ -235,7 +235,7 @@ namespace UKHO.ERPFacade.API.Helpers
 
                                 actionNode = BuildAction(soapXml, product, unitOfSale, action, ukhoWeekNumber);
                                 actionItemNode.AppendChild(actionNode);
-                                s_logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
+                                _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
 
                                 IsConditionSatisfied = false;
                             }
@@ -248,7 +248,7 @@ namespace UKHO.ERPFacade.API.Helpers
 
                                 actionNode = BuildAction(soapXml, product, unitOfSale, action, ukhoWeekNumber, addProduct);
                                 actionItemNode.AppendChild(actionNode);
-                                s_logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
+                                _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
                             }
                             break;
 
@@ -259,7 +259,7 @@ namespace UKHO.ERPFacade.API.Helpers
 
                                 actionNode = BuildAction(soapXml, product, unitOfSale, action, ukhoWeekNumber);
                                 actionItemNode.AppendChild(actionNode);
-                                s_logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
+                                _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
                             }
                             break;
                     }
@@ -283,7 +283,7 @@ namespace UKHO.ERPFacade.API.Helpers
             return soapXml;
         }
 
-        private static XmlElement BuildAction(XmlDocument soapXml, Product product, UnitOfSale unitOfSale, SapAction action, UkhoWeekNumber ukhoWeekNumber, string childCell = null, string replacedByProduct = null)
+        private XmlElement BuildAction(XmlDocument soapXml, Product product, UnitOfSale unitOfSale, SapAction action, UkhoWeekNumber ukhoWeekNumber, string childCell = null, string replacedByProduct = null)
         {
             XmlElement itemNode = soapXml.CreateElement(Item);
 
@@ -363,7 +363,7 @@ namespace UKHO.ERPFacade.API.Helpers
                         switch (node.XmlNodeName)
                         {
                             case ValidFrom:
-                                string thursdayDate = s_weekDetailsProvider.GetThursdayDateOfWeek(
+                                string thursdayDate = _weekDetailsProvider.GetThursdayDateOfWeek(
                                 ukhoWeekNumber.Year, ukhoWeekNumber.Week);
                                 itemSubNode.InnerText = GetXmlNodeValue(thursdayDate);
                                 break;
@@ -380,7 +380,7 @@ namespace UKHO.ERPFacade.API.Helpers
                     }
                     else
                     {
-                        s_logger.LogError(EventIds.InvalidUkhoWeekNumber.ToEventId(), "Invalid UkhoWeekNumber field received in enccontentpublished event.");
+                        _logger.LogError(EventIds.InvalidUkhoWeekNumber.ToEventId(), "Invalid UkhoWeekNumber field received in enccontentpublished event.");
                         itemSubNode.InnerText = string.Empty;
                     }
                 }
@@ -401,7 +401,7 @@ namespace UKHO.ERPFacade.API.Helpers
             return itemNode;
         }
 
-        private static XmlNode SortXmlPayload(XmlNode actionItemNode)
+        private XmlNode SortXmlPayload(XmlNode actionItemNode)
         {
             List<XmlNode> actionItemList = new();
             int sequenceNumber = 1;
@@ -426,7 +426,7 @@ namespace UKHO.ERPFacade.API.Helpers
             return actionItemNode;
         }
 
-        private static string GetXmlNodeValue(string fieldValue, string xmlNodeName = null)
+        private string GetXmlNodeValue(string fieldValue, string xmlNodeName = null)
         {
             if (!string.IsNullOrWhiteSpace(fieldValue))
             {
@@ -440,7 +440,7 @@ namespace UKHO.ERPFacade.API.Helpers
             return string.Empty;
         }
 
-        private static string GetProdType(string prodType)
+        private string GetProdType(string prodType)
         {
             if (!string.IsNullOrEmpty(prodType))
             {
@@ -488,7 +488,7 @@ namespace UKHO.ERPFacade.API.Helpers
             return unitOfSale!;
         }
 
-        private static string GetUkhoWeekNumberData(UkhoWeekNumber ukhoWeekNumber)
+        private string GetUkhoWeekNumberData(UkhoWeekNumber ukhoWeekNumber)
         {
             var validWeek = ukhoWeekNumber.Week.ToString("D2");
             var weekNumber = string.Join("", ukhoWeekNumber.Year, validWeek);
@@ -496,7 +496,7 @@ namespace UKHO.ERPFacade.API.Helpers
             return weekNumber;
         }
 
-        private static bool IsValidWeekNumber(UkhoWeekNumber ukhoWeekNumber)
+        private bool IsValidWeekNumber(UkhoWeekNumber ukhoWeekNumber)
         {
             bool isValid = ukhoWeekNumber != null!;
             if (!isValid) return isValid;
