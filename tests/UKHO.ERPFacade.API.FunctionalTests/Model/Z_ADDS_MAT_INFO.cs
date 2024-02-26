@@ -3,7 +3,6 @@ using UKHO.ERPFacade.API.FunctionalTests.Model.EntityPropertyConverter;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Model
 {
-
     [ExcludeFromCodeCoverage]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.1.0")]
     [System.SerializableAttribute()]
@@ -12,7 +11,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:sap-com:document:sap:rfc:functions")]
     public partial class Z_ADDS_MAT_INFO
     {
-
         private IM_MATINFO iM_MATINFOField;
 
         /// <remarks/>
@@ -37,7 +35,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "")]
     public partial class IM_MATINFO
     {
-
         private string cORRIDField;
 
         private string nOOFACTIONSField;
@@ -145,7 +142,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
     public partial class ZMAT_ACTIONITEMS
     {
-
         private string aCTIONNUMBERField;
 
         private string aCTIONField;
@@ -475,7 +471,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:sap-com:document:sap:rfc:functions")]
     public partial class Z_ADDS_MAT_INFOResponse
     {
-
         private string eX_MESSAGEField;
 
         private string eX_STATUSField;
@@ -507,6 +502,5 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
                 this.eX_STATUSField = value;
             }
         }
-
     }
 }

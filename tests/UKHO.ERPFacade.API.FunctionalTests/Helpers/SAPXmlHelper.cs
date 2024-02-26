@@ -656,7 +656,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         return false;
                     }
                 }
-
             }
             if (ZMAT_ACTIONITEMS.Length > 0)
             {
@@ -715,7 +714,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     productInfo.ProviderCode = product.ProviderCode;
                     productInfo.Title = product.Title;
                 }
-
             }
             return productInfo;
         }
@@ -1027,7 +1025,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 UpdateActionList(count, "7.  UPDATE ENC CELL EDITION UPDATE NUMBER");
                 Console.WriteLine("Total no. of ENC Cell Edition Update Number: " + count);
             }
-
             return count;
         }
 
