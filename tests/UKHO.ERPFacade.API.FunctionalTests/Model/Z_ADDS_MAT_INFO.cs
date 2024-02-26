@@ -180,9 +180,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
 
         private string nEXTKEYField;
 
-        private int wEEKNOField;
+        private string wEEKNOField;
 
-        private int vALIDFROMField;
+        private string vALIDFROMField;
 
         private string cORRECTIONField;
 
@@ -397,6 +397,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
             }
         }
 
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElement("ACTIVEKEY", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string ACTIVEKEY
         {
             get
@@ -408,6 +410,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
                 this.aCTIVEKEYField = value;
             }
         }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElement("NEXTKEY", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string NEXTKEY
         {
             get
@@ -419,7 +424,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
                 this.nEXTKEYField = value;
             }
         }
-        public int WEEKNO
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElement("WEEKNO", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string WEEKNO
         {
             get
             {
@@ -430,7 +438,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
                 this.wEEKNOField = value;
             }
         }
-        public int VALIDFROM
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElement("VALIDFROM", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string VALIDFROM
         {
             get
             {
@@ -441,6 +452,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
                 this.vALIDFROMField = value;
             }
         }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElement("CORRECTION", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string CORRECTION
         {
             get
