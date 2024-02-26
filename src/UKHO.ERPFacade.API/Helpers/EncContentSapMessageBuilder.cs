@@ -13,7 +13,7 @@ namespace UKHO.ERPFacade.API.Helpers
         private readonly IXmlHelper _xmlHelper;
         private readonly IFileSystemHelper _fileSystemHelper;
         private readonly IOptions<SapActionConfiguration> _sapActionConfig;
-        private static IPermitDecryption s_permitDecryption;
+        private readonly IPermitDecryption s_permitDecryption;
 
         private const string SapXmlPath = "SapXmlTemplates\\SAPRequest.xml";
         private const string XpathImMatInfo = $"//*[local-name()='IM_MATINFO']";
@@ -278,7 +278,7 @@ namespace UKHO.ERPFacade.API.Helpers
             return soapXml;
         }
 
-        private static XmlElement BuildAction(XmlDocument soapXml, Product product, UnitOfSale unitOfSale, SapAction action, string childCell = null, string replacedByProduct = null)
+        private XmlElement BuildAction(XmlDocument soapXml, Product product, UnitOfSale unitOfSale, SapAction action, string childCell = null, string replacedByProduct = null)
         {
             XmlElement itemNode = soapXml.CreateElement(Item);
 
