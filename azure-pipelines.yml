@@ -9,7 +9,7 @@ parameters:
   - name: vNext
     displayName: "Run the vNext Path"
     type: boolean
-    default: true
+    default: false
 
   - name: DisableDependencyCheck
     displayName: "Disable OWASP dependency checking"
