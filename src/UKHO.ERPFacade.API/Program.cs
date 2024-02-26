@@ -4,7 +4,7 @@ using System.Reflection;
 using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
-
+using Elastic.Apm.AspNetCore;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -214,7 +214,7 @@ namespace UKHO.ERPFacade
 
             app.UseAuthentication();
 
-            
+            app.UseElasticApm(configuration);
 
             app.Run();
         }
