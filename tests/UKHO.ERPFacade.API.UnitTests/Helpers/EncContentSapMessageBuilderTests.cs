@@ -351,7 +351,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             var listOfUnitOfSales = new List<UnitOfSale>()
             {
                  new UnitOfSale() { UnitName = "MX545010", Title = "Title1", UnitOfSaleType = "unit",
-                    CompositionChanges = new CompositionChanges { AddProducts = new List<string>(){  } } },
+                    CompositionChanges = new CompositionChanges { AddProducts = new List<string>() } },
                 new UnitOfSale() { UnitName = "MX509226", Title = "Title2", UnitOfSaleType = "unit",
                     CompositionChanges = new CompositionChanges { AddProducts = new List<string>(){ "MX545010" } } }
             };
@@ -418,12 +418,12 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         public void SortXmlPayloadTest()
         {
             string expectedResult = "1CREATE ENC CELLENC CELLS57US4AK6NTUS4AK6NTUS1mediumNorton Sound - Alaska82";
-            string XpathActionItems = $"//*[local-name()='ACTIONITEMS']";
+            string xpathActionItems = $"//*[local-name()='ACTIONITEMS']";
             var sapReqXml = TestHelper.ReadFileData("ERPTestData\\ActionItemNodeTest.xml");
 
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.LoadXml(sapReqXml);
-            XmlNode actionItemNode = xmlDoc.SelectSingleNode(XpathActionItems)!;
+            XmlNode actionItemNode = xmlDoc.SelectSingleNode(xpathActionItems)!;
 
             MethodInfo xmlPayLoad = typeof(EncContentSapMessageBuilder).GetMethod("SortXmlPayload", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
             var result = (XmlNode)xmlPayLoad.Invoke(_fakeEncContentSapMessageBuilder, new object[] { actionItemNode })!;
