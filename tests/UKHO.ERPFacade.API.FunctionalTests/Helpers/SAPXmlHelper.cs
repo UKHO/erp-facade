@@ -19,8 +19,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         private static JsonPayloadHelper UpdatedJsonPayload { get; set; }
         public static List<string> ListFromJson = new();
         public static List<string> ActionsListFromXml = new();
-        private static readonly string weekNoTag = "202403";
-        private static readonly string validFromTag = "20240118";
+        private static readonly string weekNoTag = Config.TestConfig.WeekNoTag;
+        private static readonly string validFromTag = Config.TestConfig.ValidFromTag;
 
         public static async Task<bool> CheckXMLAttributes(JsonPayloadHelper jsonPayload, string XMLFilePath, string updatedRequestBody, string correctionTag)
         {
