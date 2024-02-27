@@ -21,6 +21,10 @@ variable "webapp_principal_id" {
   type  = string
 }
 
+variable "slot_principal_id" {
+  type  = string
+}
+
 variable "container_name" {
   type = string
 }
