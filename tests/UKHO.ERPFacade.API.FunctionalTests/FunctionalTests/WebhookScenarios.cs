@@ -15,7 +15,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
         //for local
         //private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
-        
+
         [SetUp]
         public void Setup()
         {
@@ -54,9 +54,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         }
 
         [Test, Order(1)]
-        //New Cell        
+        //New Cell
         [TestCase("ID3_1NewCellScenario.JSON", "Y", TestName = "WhenICallTheWebhookWithOneNewCellScenario_ThenWebhookReturns200Response")]
-        [TestCase("ID4_2NewCellScenario.JSON", "Y", TestName = "WhenICallTheWebhookWithTwoNewCellScenario_ThenWebhookReturns200Response")]
+        [TestCase("ID4_2NewCellScenario.JSON", "N", TestName = "WhenICallTheWebhookWithTwoNewCellScenario_ThenWebhookReturns200Response")]
         [TestCase("ID5_1NewCellWoNewAVCSUnit.JSON", "Y", TestName = "WhenICallTheWebhookWithOneNewCellScenarioWithourAVCSUoS_ThenWebhookReturns200Response")]
 
         //Cancel & Replace
@@ -85,7 +85,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
         //New Edition
         [TestCase("ID20_newEditionAdditionalCoverageV_01.JSON", "N", TestName = "WhenICallTheWebhookWithNewEditionAdditionalCoverageV01PayloadFile_ThenWebhookReturns200Response")]
-        
+
         //V0.3S
         [TestCase("ID21_cancelAndReplaceV_03.JSON", "N", TestName = "WhenICallTheWebhookWithCancelAndReplaceV03PayloadFile_ThenWebhookReturns200Response")]
         [TestCase("ID22_Cell_Moves_Unit_and_New_CellV_03.JSON", "N", TestName = "WhenICallTheWebhookWithCellMoveAndNewCellV03PayloadFile_ThenWebhookReturns200Response")]

@@ -12,7 +12,7 @@
         "ukhoWeekNumber": {
             "year": 2024,
             "week": 3,
-            "currentWeekAlphaCorrection": true
+            "currentWeekAlphaCorrection": false
         },
         "products": [
             {

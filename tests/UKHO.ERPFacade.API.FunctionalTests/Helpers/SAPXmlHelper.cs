@@ -19,8 +19,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         private static JsonPayloadHelper UpdatedJsonPayload { get; set; }
         public static List<string> ListFromJson = new();
         public static List<string> ActionsListFromXml = new();
-        private static string weekNoTag = "202403";
-        private static string validFromTag = "20240118";
+        private static readonly string weekNoTag = "202403";
+        private static readonly string validFromTag = "20240118";
 
         public static async Task<bool> CheckXMLAttributes(JsonPayloadHelper jsonPayload, string XMLFilePath, string updatedRequestBody, string correctionTag)
         {
@@ -48,10 +48,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             foreach (ZMAT_ACTIONITEMS item in result.IM_MATINFO.ACTIONITEMS)
             {
                 if (item.ACTION == "CREATE ENC CELL")
-                    Assert.That(VerifyCreateENCCell(item.CHILDCELL, item, correctionTag));                                                               
-                else if (item.ACTION == "CREATE AVCS UNIT OF SALE")                    
-                    Assert.That(VerifyCreateAVCSUnitOfSale(item.PRODUCTNAME, item, correctionTag));                   
-                else if (item.ACTION == "ASSIGN CELL TO AVCS UNIT OF SALE")                    
+                    Assert.That(VerifyCreateENCCell(item.CHILDCELL, item, correctionTag));
+                else if (item.ACTION == "CREATE AVCS UNIT OF SALE")
+                    Assert.That(VerifyCreateAVCSUnitOfSale(item.PRODUCTNAME, item, correctionTag));
+                else if (item.ACTION == "ASSIGN CELL TO AVCS UNIT OF SALE")
                     Assert.That(VerifyAssignCellToAVCSUnitOfSale(item.CHILDCELL, item.PRODUCTNAME, item, correctionTag));
                 else if (item.ACTION == "REPLACED WITH ENC CELL")
                     Assert.That(VerifyReplaceWithENCCell(item.CHILDCELL, item.REPLACEDBY, item) ?? false);
@@ -457,14 +457,14 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                             AttrNotMatched.Add(nameof(item.PRODUCT));
                         if (!item.PRODTYPE.Equals((GetProductInfo(unitOfSale.CompositionChanges.AddProducts)).ProductType))
                             AttrNotMatched.Add(nameof(item.PRODTYPE));
+                        //xmlAttributes[4] & [5] are skipped as already checked
+                        //Checking blanks
                         if (!item.WEEKNO.Equals(weekNoTag))
                             AttrNotMatched.Add(nameof(item.WEEKNO));
                         if (!item.VALIDFROM.Equals(validFromTag))
                             AttrNotMatched.Add(nameof(item.VALIDFROM));
                         if (!item.CORRECTION.Equals(correctionTag))
                             AttrNotMatched.Add(nameof(item.CORRECTION));
-                        //xmlAttributes[4] & [5] are skipped as already checked
-                        //Checking blanks
                         string[] fieldNames = { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE" };
                         VerifyBlankFields(item, fieldNames);
 
@@ -599,7 +599,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             Console.WriteLine("JSON doesn't have corresponding product.");
             return false;
         }
-       
+
         private static bool VerifyBlankFields(ZMAT_ACTIONITEMS item, string[] fieldNames)
         {
             bool allBlanks = true;
