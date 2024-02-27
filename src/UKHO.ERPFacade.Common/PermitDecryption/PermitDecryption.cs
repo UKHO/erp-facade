@@ -40,7 +40,7 @@ namespace UKHO.ERPFacade.Common.PermitDecryption
             }
             catch (Exception ex)
             {
-                _logger.LogInformation(EventIds.PermitDecryptionException.ToEventId(), ex, "An error occurred while decrypting the permit string.");
+                _logger.LogError(EventIds.PermitDecryptionException.ToEventId(), ex, "An error occurred while decrypting the permit string.");
                 return null;
             }
         }

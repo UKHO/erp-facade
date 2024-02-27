@@ -31,8 +31,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         private EncContentSapMessageBuilder _fakeEncContentSapMessageBuilder;
         private const string XpathActionItems = $"//*[local-name()='ACTIONITEMS']";
         private const string EncCell = "ENC CELL";
-        private readonly string XpathActiveKey = $"//*[local-name()='ACTIVEKEY']";
-        private readonly string XpathNextKey = $"//*[local-name()='NEXTKEY']";
+        private const string XpathActiveKey = $"//*[local-name()='ACTIVEKEY']";
+        private const string XpathNextKey = $"//*[local-name()='NEXTKEY']";
 
         private readonly string sapXmlFile = @"<?xml version=""1.0"" encoding=""utf-8""?>
 <soap:Envelope xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:soap=""http://schemas.xmlsoap.org/soap/envelope/"">
@@ -442,8 +442,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             soapXml.LoadXml(sapXmlFile);
             A.CallTo(() => _fakePermitDecryption.GetPermitKeys(A<string>.Ignored)).Returns(permitKeys);
 
-            MethodInfo GetUnitOfSaleForEncCell = typeof(EncContentSapMessageBuilder).GetMethod("GetUnitOfSaleForEncCell", BindingFlags.NonPublic | BindingFlags.Instance)!;
-            var unitOfSale = (UnitOfSale)GetUnitOfSaleForEncCell.Invoke(_fakeEncContentSapMessageBuilder, new object[] { scenarios.Data.UnitsOfSales,
+            MethodInfo getUnitOfSaleForEncCell = typeof(EncContentSapMessageBuilder).GetMethod("GetUnitOfSaleForEncCell", BindingFlags.NonPublic | BindingFlags.Instance)!;
+            var unitOfSale = (UnitOfSale)getUnitOfSaleForEncCell.Invoke(_fakeEncContentSapMessageBuilder, new object[] { scenarios.Data.UnitsOfSales,
                 scenarios.Data.Products.FirstOrDefault()! })!;
 
             var action = _fakeSapActionConfig.Value.SapActions.Where(x => x.Product == EncCell).FirstOrDefault();

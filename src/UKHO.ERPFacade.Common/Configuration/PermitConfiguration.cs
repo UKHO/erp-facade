@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-
 namespace UKHO.ERPFacade.Common.Configuration
 {
     [ExcludeFromCodeCoverage]
