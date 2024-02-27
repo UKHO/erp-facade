@@ -40,10 +40,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             {
                 requestBody = streamReader.ReadToEnd();
             }
-
             generatedCorrelationId = SAPXmlHelper.GenerateRandomCorrelationId();
             requestBody = SAPXmlHelper.UpdateTimeAndCorrIdField(requestBody, generatedCorrelationId);
-
             var request = new RestRequest(WebhookRequestEndPoint, Method.Post);
             request.AddHeader("Content-Type", "application/json");
             request.AddHeader("Authorization", "Bearer " + token);
@@ -53,7 +51,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             return response;
         }
 
-        public async Task<RestResponse> PostWebhookResponseAsyncForXML(string filePath, string generatedXMLFolder, string token)
+        public async Task<RestResponse> PostWebhookResponseAsyncForXML(string filePath, string generatedXMLFolder, string token,string permitState="permitString")
         {
             string requestBody;
 
@@ -61,9 +59,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             {
                 requestBody = streamReader.ReadToEnd();
             }
-
             generatedCorrelationId = SAPXmlHelper.GenerateRandomCorrelationId();
             requestBody = SAPXmlHelper.UpdateTimeAndCorrIdField(requestBody, generatedCorrelationId);
+            requestBody = SAPXmlHelper.UpdatePermitField(requestBody, permitState);
 
             var request = new RestRequest(WebhookRequestEndPoint, Method.Post);
             request.AddHeader("Content-Type", "application/json");
@@ -76,15 +74,17 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
 
             //Logic to download XML from container using TraceID from JSON
             string generatedXMLFilePath = _azureBlobStorageHelper.DownloadGeneratedXML(generatedXMLFolder, correlationId);
-
+            
             //Logic to verifyxml
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 Assert.That(SAPXmlHelper.VerifyInitialXMLHeaders(jsonPayload, generatedXMLFilePath), Is.True ,"Initial Header Value Not Correct");
                 Assert.That(SAPXmlHelper.VerifyOrderOfActions(jsonPayload, generatedXMLFilePath), Is.True, "Order of Action Not Correct in XML File");
-                Assert.That(SAPXmlHelper.CheckXMLAttributes(jsonPayload, generatedXMLFilePath, requestBody).Result, Is.True, "CheckXMLAttributes Failed");
+                Assert.That(SAPXmlHelper.CheckXMLAttributes(jsonPayload, generatedXMLFilePath, requestBody, permitState).Result, Is.True, "CheckXMLAttributes Failed");
             }
             return response;
         }
+
+
     }
 }

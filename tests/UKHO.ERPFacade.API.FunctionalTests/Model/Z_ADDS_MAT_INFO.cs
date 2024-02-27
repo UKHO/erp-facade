@@ -176,6 +176,16 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
 
         private string uNITTYPEField;
 
+        private string aCTIVEKEYField;
+
+        private string nEXTKEYField;
+
+        private int wEEKNOField;
+
+        private int vALIDFROMField;
+
+        private string cORRECTIONField;
+
 
         /// <remarks/>
         [System.Xml.Serialization.XmlElement("ACTIONNUMBER", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
@@ -386,6 +396,68 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
                 this.uNITTYPEField = value;
             }
         }
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElement("ACTIVEKEY", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string ACTIVEKEY
+        {
+            get
+            {
+                return this.aCTIVEKEYField;
+            }
+            set
+            {
+                this.aCTIVEKEYField = value;
+            }
+        }
+        [System.Xml.Serialization.XmlElement("NEXTKEY", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string NEXTKEY
+        {
+            get
+            {
+                return this.nEXTKEYField;
+            }
+            set
+            {
+                this.nEXTKEYField = value;
+            }
+        }
+        [System.Xml.Serialization.XmlElement("WEEKNO", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public int WEEKNO
+        {
+            get
+            {
+                return this.wEEKNOField;
+            }
+            set
+            {
+                this.wEEKNOField = value;
+            }
+        }
+        [System.Xml.Serialization.XmlElement("VALIDFROM", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public int VALIDFROM
+        {
+            get
+            {
+                return this.vALIDFROMField;
+            }
+            set
+            {
+                this.vALIDFROMField = value;
+            }
+        }
+        [System.Xml.Serialization.XmlElement("CORRECTION", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string CORRECTION
+        {
+            get
+            {
+                return this.cORRECTIONField;
+            }
+            set
+            {
+                this.cORRECTIONField = value;
+            }
+        }
+
     }
 
     [ExcludeFromCodeCoverage]

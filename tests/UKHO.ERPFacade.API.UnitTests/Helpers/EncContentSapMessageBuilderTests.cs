@@ -27,8 +27,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         private IOptions<SapActionConfiguration> _fakeSapActionConfig;
         private ILogger<EncContentSapMessageBuilder> _fakeLogger;
         private IPermitDecryption _fakePermitDecryption;
-
         private EncContentSapMessageBuilder _fakeEncContentSapMessageBuilder;
+
         private const string XpathActionItems = $"//*[local-name()='ACTIONITEMS']";
         private const string EncCell = "ENC CELL";
         private const string XpathActiveKey = $"//*[local-name()='ACTIVEKEY']";
