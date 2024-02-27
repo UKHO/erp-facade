@@ -15,7 +15,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
         //for local
         //private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
-        
+
         [SetUp]
         public void Setup()
         {
@@ -55,8 +55,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
         [Test, Order(1)]
         //New Cell
-        [TestCase("ID3_1NewCellScenario.JSON", TestName = "WhenICallTheWebhookWithOneNewCellScenario_ThenWebhookReturns200Response")]
-        [TestCase("ID4_2NewCellScenario.JSON", TestName = "WhenICallTheWebhookWithTwoNewCellScenario_ThenWebhookReturns200Response")]
+        [TestCase("ID3_1NewCellScenario.JSON", "SamePermitKey", TestName = "WhenICallTheWebhookWithOneNewCellScenario_ThenWebhookReturns200Response")]
+        [TestCase("ID4_2NewCellScenario.JSON","DifferentPermitKey", TestName = "WhenICallTheWebhookWithTwoNewCellScenario_ThenWebhookReturns200Response")]
         [TestCase("ID5_1NewCellWoNewAVCSUnit.JSON", TestName = "WhenICallTheWebhookWithOneNewCellScenarioWithourAVCSUoS_ThenWebhookReturns200Response")]
 
         //Cancel & Replace
@@ -69,9 +69,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
         //Update
         [TestCase("ID10_UpdateSimple.JSON", TestName = "WhenICallTheWebhookWithSimpleUpdateScenarioHavingOneCellWithStatusNameAsUpdate_ThenWebhookReturns200Response")]
-        [TestCase("ID11_updateOneCellWithNewEditionStatus.JSON", TestName = "WhenICallTheWebhookWithSimpleUpdateScenarioHavingOneCellWithStatusNameAsNewEdition_ThenWebhookReturns200Response")]
+        [TestCase("ID11_updateOneCellWithNewEditionStatus.JSON", "SamePermitKey", TestName = "WhenICallTheWebhookWithSimpleUpdateScenarioHavingOneCellWithStatusNameAsNewEdition_ThenWebhookReturns200Response")]
         [TestCase("ID12_updateOneCellWithReIssueStatus.JSON", TestName = "WhenICallTheWebhookWithSimpleUpdateScenarioHavingOneCellStatusNameAsReIssue_ThenWebhookReturns200Response")]
-        [TestCase("ID13_updateTwoCellsWithDifferentStatusName.JSON", TestName = "WhenICallTheWebhookWithSimpleUpdateScenarioHavingTwoCellsWithDifferentStatusName_ThenWebhookReturns200Response")]
+        [TestCase("ID13_updateTwoCellsWithDifferentStatusName.JSON", "DifferentPermitKey",TestName = "WhenICallTheWebhookWithSimpleUpdateScenarioHavingTwoCellsWithDifferentStatusName_ThenWebhookReturns200Response")]
 
         //Move Cell
         [TestCase("ID14_moveOneCell.JSON", TestName = "WhenICallTheWebhookWithSimpleMoveCellScenario_ThenWebhookReturns200Response")]
@@ -113,12 +113,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         // Rule change for create avcs unit of sale (having multiple products in addProducts)
         [TestCase("ID37_CreateUoSHavingMultipleItemsInAddProducts.JSON", TestName = "WhenICallTheWebhookWithMoveAndNewCellScenarioWhereUoSHasMultipleValuesInAddProducts_ThenWebhookReturns200Response")]
 
-        public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponse1(string payloadJsonFileName)
+        public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponse1(string payloadJsonFileName,string permitState= "permitString")
         {
             Console.WriteLine("Scenario:" + payloadJsonFileName + "\n");
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, payloadJsonFileName);
             string generatedXMLFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXMLFolder);
-            RestResponse response = await _webhook.PostWebhookResponseAsyncForXML(filePath, generatedXMLFolder, await _authToken.GetAzureADToken(false));
+            RestResponse response = await _webhook.PostWebhookResponseAsyncForXML(filePath, generatedXMLFolder, await _authToken.GetAzureADToken(false), permitState);
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
     }

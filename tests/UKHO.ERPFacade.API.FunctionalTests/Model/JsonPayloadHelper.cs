@@ -34,12 +34,26 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
         [JsonProperty("correlationId")]
         public string correlationId { get; set; }
 
+        [JsonProperty("ukhoWeekNumber")]
+        public UkhoWeekNumber ukhoWeekNumber { get; set; }
+
         [JsonProperty("products")]
         public Product[] Products { get; set; }
 
         [JsonProperty("unitsOfSale")]
         public UnitOfSale[] UnitsOfSales { get; set; }
         
+    }
+    public class UkhoWeekNumber
+    {
+        [JsonProperty("year")]
+        public int year { get; set; }
+
+        [JsonProperty("week")]
+        public int week { get; set; }
+
+        [JsonProperty("currentWeekAlphaCorrection")]
+        public bool currentWeekAlphaCorrection { get; set; }
     }
 
     public class Product
