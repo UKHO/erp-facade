@@ -32,6 +32,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.IO.Abstractions" Version="19.2.91" />
     <PackageReference Include="UKHO.Logging.EventHubLogProvider" Version="1.23242.1" />
+    <PackageReference Include="UKHO.WeekNumberUtils" Version="1.5.22270.11" />
   </ItemGroup>
 
 </Project>

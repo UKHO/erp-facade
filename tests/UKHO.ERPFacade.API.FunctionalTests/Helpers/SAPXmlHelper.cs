@@ -19,8 +19,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         private static JsonPayloadHelper UpdatedJsonPayload { get; set; }
         public static List<string> ListFromJson = new();
         public static List<string> ActionsListFromXml = new();
+        private static readonly string weekNoTag = Config.TestConfig.WeekNoTag;
+        private static readonly string validFromTag = Config.TestConfig.ValidFromTag;
 
-        public static async Task<bool> CheckXMLAttributes(JsonPayloadHelper jsonPayload, string XMLFilePath, string updatedRequestBody)
+        public static async Task<bool> CheckXMLAttributes(JsonPayloadHelper jsonPayload, string XMLFilePath, string updatedRequestBody, string correctionTag)
         {
             SAPXmlHelper.JsonPayload = jsonPayload;
             UpdatedJsonPayload = JsonConvert.DeserializeObject<JsonPayloadHelper>(updatedRequestBody);
@@ -46,11 +48,11 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             foreach (ZMAT_ACTIONITEMS item in result.IM_MATINFO.ACTIONITEMS)
             {
                 if (item.ACTION == "CREATE ENC CELL")
-                    Assert.That(VerifyCreateENCCell(item.CHILDCELL, item));
+                    Assert.That(VerifyCreateENCCell(item.CHILDCELL, item, correctionTag));
                 else if (item.ACTION == "CREATE AVCS UNIT OF SALE")
-                    Assert.That(VerifyCreateAVCSUnitOfSale(item.PRODUCTNAME, item));
+                    Assert.That(VerifyCreateAVCSUnitOfSale(item.PRODUCTNAME, item, correctionTag));
                 else if (item.ACTION == "ASSIGN CELL TO AVCS UNIT OF SALE")
-                    Assert.That(VerifyAssignCellToAVCSUnitOfSale(item.CHILDCELL, item.PRODUCTNAME, item));
+                    Assert.That(VerifyAssignCellToAVCSUnitOfSale(item.CHILDCELL, item.PRODUCTNAME, item, correctionTag));
                 else if (item.ACTION == "REPLACED WITH ENC CELL")
                     Assert.That(VerifyReplaceWithENCCell(item.CHILDCELL, item.REPLACEDBY, item) ?? false);
                 else if (item.ACTION == "REMOVE ENC CELL FROM AVCS UNIT OF SALE")
@@ -438,7 +440,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return false;
         }
 
-        private static bool VerifyAssignCellToAVCSUnitOfSale(string childCell, string productName, ZMAT_ACTIONITEMS item)
+        private static bool VerifyAssignCellToAVCSUnitOfSale(string childCell, string productName, ZMAT_ACTIONITEMS item, string correctionTag)
         {
             Console.WriteLine("Action#:" + ActionCounter + ".AVCSUnitOfSale:" + productName);
             foreach (UnitOfSale unitOfSale in JsonPayload.Data.UnitsOfSales)
@@ -457,6 +459,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                             AttrNotMatched.Add(nameof(item.PRODTYPE));
                         //xmlAttributes[4] & [5] are skipped as already checked
                         //Checking blanks
+                        if (!item.WEEKNO.Equals(weekNoTag))
+                            AttrNotMatched.Add(nameof(item.WEEKNO));
+                        if (!item.VALIDFROM.Equals(validFromTag))
+                            AttrNotMatched.Add(nameof(item.VALIDFROM));
+                        if (!item.CORRECTION.Equals(correctionTag))
+                            AttrNotMatched.Add(nameof(item.CORRECTION));
                         string[] fieldNames = { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE" };
                         VerifyBlankFields(item, fieldNames);
 
@@ -480,7 +488,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return false;
         }
 
-        private static bool VerifyCreateAVCSUnitOfSale(string productName, ZMAT_ACTIONITEMS item)
+        private static bool VerifyCreateAVCSUnitOfSale(string productName, ZMAT_ACTIONITEMS item, string correctionTag)
         {
             Console.WriteLine("Action#:" + ActionCounter + ".UnitOfSale:" + productName);
             foreach (UnitOfSale unitOfSale in JsonPayload.Data.UnitsOfSales)
@@ -505,6 +513,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         AttrNotMatched.Add(nameof(item.TITLE));
                     if (!item.UNITTYPE.Equals(unitOfSale.UnitType))
                         AttrNotMatched.Add(nameof(item.UNITTYPE));
+                    if (!item.WEEKNO.Equals(weekNoTag))
+                        AttrNotMatched.Add(nameof(item.WEEKNO));
+                    if (!item.VALIDFROM.Equals(validFromTag))
+                        AttrNotMatched.Add(nameof(item.VALIDFROM));
+                    if (!item.CORRECTION.Equals(correctionTag))
+                        AttrNotMatched.Add(nameof(item.CORRECTION));
 
                     //Checking blanks
                     string[] fieldNames = { "CANCELLED", "REPLACEDBY", "EDITIONNO", "UPDATENO" };
@@ -529,7 +543,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return false;
         }
 
-        private static bool VerifyCreateENCCell(string childCell, ZMAT_ACTIONITEMS item)
+        private static bool VerifyCreateENCCell(string childCell, ZMAT_ACTIONITEMS item, string correctionTag)
         {
             Console.WriteLine("Action#:" + ActionCounter + ".Childcell:" + childCell);
             foreach (Product product in JsonPayload.Data.Products)
@@ -557,6 +571,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         AttrNotMatched.Add(nameof(item.EDITIONNO));
                     if (!item.UPDATENO.Equals(product.UpdateNumber))
                         AttrNotMatched.Add(nameof(item.UPDATENO));
+                    if (!item.WEEKNO.Equals(weekNoTag))
+                        AttrNotMatched.Add(nameof(item.WEEKNO));
+                    if (!item.VALIDFROM.Equals(validFromTag))
+                        AttrNotMatched.Add(nameof(item.VALIDFROM));
+                    if (!item.CORRECTION.Equals(correctionTag))
+                        AttrNotMatched.Add(nameof(item.CORRECTION));
                     //Checking blanks
                     string[] fieldNames = { "CANCELLED", "REPLACEDBY", "UNITTYPE" };
                     VerifyBlankFields(item, fieldNames);
@@ -636,7 +656,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         return false;
                     }
                 }
-
             }
             if (ZMAT_ACTIONITEMS.Length > 0)
             {
@@ -695,7 +714,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     productInfo.ProviderCode = product.ProviderCode;
                     productInfo.Title = product.Title;
                 }
-
             }
             return productInfo;
         }
@@ -1007,7 +1025,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 UpdateActionList(count, "7.  UPDATE ENC CELL EDITION UPDATE NUMBER");
                 Console.WriteLine("Total no. of ENC Cell Edition Update Number: " + count);
             }
-
             return count;
         }
 

@@ -9,6 +9,11 @@
     "datacontenttype": "application/json",
     "data": {
         "correlationId": "dhegtq-1321131-213114f",
+        "ukhoWeekNumber": {
+            "year": 2024,
+            "week": 3,
+            "currentWeekAlphaCorrection": false
+        },
         "products": [
             {
                 "productType": "ENC S57",
@@ -186,7 +191,7 @@
                     "removeProducts": []
                 }
             },
-			{
+            {
                 "unitName": "TEMP901",
                 "title": "TEMP901 UoS With No addProducts",
                 "unitType": "AVCS Units Coastal",
