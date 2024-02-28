@@ -20,8 +20,9 @@
         public string[] RoSLicenceUpdatedProdXMLList { get; set; }
         public string WeekNoTag { get; set; }
         public string ValidFromTag { get; set; }
+        public PermitWithSameKey PermitWithSameKey { get; set; }
+        public PermitWithDifferentKey PermitWithDifferentKey { get; set; }
     }
-
 
     public class AzureADconfiguration
     {
@@ -57,4 +58,17 @@
         public string Key { get; set; }
     }
 
+    public class PermitWithSameKey
+    {
+        public string Permit { get; set; }
+        public string ACTIVEKEY { get; set; }
+        public string NEXTKEY { get; set; }
+    }
+
+    public class PermitWithDifferentKey
+    {
+        public string Permit { get; set; }
+        public string ACTIVEKEY { get; set; }
+        public string NEXTKEY { get; set; }
+    }
 }
