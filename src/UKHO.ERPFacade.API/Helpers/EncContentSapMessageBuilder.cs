@@ -4,6 +4,7 @@ using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Providers;
+using UKHO.ERPFacade.Common.PermitDecryption;
 
 namespace UKHO.ERPFacade.API.Helpers
 {
@@ -14,6 +15,7 @@ namespace UKHO.ERPFacade.API.Helpers
         private readonly IFileSystemHelper _fileSystemHelper;
         private readonly IOptions<SapActionConfiguration> _sapActionConfig;
         private readonly IWeekDetailsProvider _weekDetailsProvider;
+        private readonly IPermitDecryption _permitDecryption;
 
         private const string SapXmlPath = "SapXmlTemplates\\SAPRequest.xml";
         private const string XpathImMatInfo = $"//*[local-name()='IM_MATINFO']";
@@ -42,12 +44,16 @@ namespace UKHO.ERPFacade.API.Helpers
         private const string Correction = "CORRECTION";
         private const string IsCorrectionTrue = "Y";
         private const string IsCorrectionFalse = "N";
+        private const string ActiveKey = "ACTIVEKEY";
+        private const string NextKey = "NEXTKEY";
+        private const string ProductStatusNewEdition = "New Edition";
 
         public EncContentSapMessageBuilder(ILogger<EncContentSapMessageBuilder> logger,
                                  IXmlHelper xmlHelper,
                                  IFileSystemHelper fileSystemHelper,
                                  IOptions<SapActionConfiguration> sapActionConfig,
-                                 IWeekDetailsProvider weekDetailsProvider
+                                 IWeekDetailsProvider weekDetailsProvider,
+                                 IPermitDecryption permitDecryption
                                  )
         {
             _logger = logger;
@@ -55,6 +61,7 @@ namespace UKHO.ERPFacade.API.Helpers
             _fileSystemHelper = fileSystemHelper;
             _sapActionConfig = sapActionConfig;
             _weekDetailsProvider = weekDetailsProvider;
+            _permitDecryption = permitDecryption;
         }
 
         /// <summary>
@@ -302,6 +309,8 @@ namespace UKHO.ERPFacade.API.Helpers
 
             List<(int sortingOrder, XmlElement itemNode)> actionAttributeList = new();
 
+            PermitKey? permitKey = action.ActionNumber == 1 || (action.ActionNumber == 7 && product.Status.StatusName == ProductStatusNewEdition) ? _permitDecryption.GetPermitKeys(product.Permit) : null;
+
             foreach (var node in action.Attributes.Where(x => x.Section == ProductSection))
             {
                 XmlElement itemSubNode = soapXml.CreateElement(node.XmlNodeName);
@@ -315,6 +324,22 @@ namespace UKHO.ERPFacade.API.Helpers
                     else if (node.XmlNodeName == ChildCell && childCell != null)
                     {
                         itemSubNode.InnerText = GetXmlNodeValue(childCell.ToString());
+                    }
+                    else if (node.XmlNodeName == ActiveKey)
+                    {
+                        itemSubNode.InnerText = string.Empty;
+                        if (permitKey != null && !string.IsNullOrEmpty(permitKey.ActiveKey))
+                        {
+                            itemSubNode.InnerText = permitKey.ActiveKey;
+                        }
+                    }
+                    else if (node.XmlNodeName == NextKey)
+                    {
+                        itemSubNode.InnerText = string.Empty;
+                        if (permitKey != null && !string.IsNullOrEmpty(permitKey.NextKey))
+                        {
+                            itemSubNode.InnerText = permitKey.NextKey;
+                        }
                     }
                     else
                     {
