@@ -104,7 +104,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     if (!item.UNITTYPE.Equals(GetUoSInfo(productName).UnitType))
                         AttrNotMatched.Add(nameof(item.UNITTYPE));
                     //Checking blanks
-                    string[] fieldNames = { "CANCELLED", "REPLACEDBY", "EDITIONNO", "UPDATENO" };
+                    string[] fieldNames = { "CANCELLED", "REPLACEDBY", "EDITIONNO", "UPDATENO" , "ACTIVEKEY", "NEXTKEY" };
                     VerifyBlankFields(item, fieldNames);
 
                     if (AttrNotMatched.Count == 0)
@@ -266,7 +266,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     if (!item.UPDATENO.Equals(product.UpdateNumber))
                         AttrNotMatched.Add(nameof(item.UPDATENO));
                     //Checking blanks
-                    string[] fieldNames = { "CANCELLED", "REPLACEDBY", "UNITTYPE" };
+                    string[] fieldNames = { "CANCELLED", "REPLACEDBY", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
                     VerifyBlankFields(item, fieldNames);
 
                     if (AttrNotMatched.Count == 0)
@@ -306,7 +306,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         AttrNotMatched.Add(nameof(item.PRODTYPE));
 
                     //Checking blanks
-                    string[] fieldNames = { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE" };
+                    string[] fieldNames = { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE" , "ACTIVEKEY", "NEXTKEY" };
                     VerifyBlankFields(item, fieldNames);
 
                     if (AttrNotMatched.Count == 0)
@@ -347,7 +347,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         AttrNotMatched.Add(nameof(item.PRODUCTNAME));
 
                     //Checking blanks
-                    string[] fieldNames = { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE" };
+                    string[] fieldNames = { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE" , "ACTIVEKEY", "NEXTKEY" };
                     VerifyBlankFields(item, fieldNames);
 
                     if (AttrNotMatched.Count == 0)
@@ -388,7 +388,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                             AttrNotMatched.Add(nameof(item.PRODTYPE));
                         //xmlAttributes[4] & [5] are skipped as already checked
                         //Checking blanks
-                        string[] fieldNames = { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE" };
+                        string[] fieldNames = { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
                         VerifyBlankFields(item, fieldNames);
 
                         if (AttrNotMatched.Count == 0)
@@ -430,7 +430,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!item.PRODUCTNAME.Equals(GetUoSName(childCell))))
                         AttrNotMatched.Add(nameof(item.PRODUCTNAME));
                     //Checking blanks
-                    string[] fieldNames = { "CANCELLED", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE" };
+                    string[] fieldNames = { "CANCELLED", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE","ACTIVEKEY", "NEXTKEY" };
                     VerifyBlankFields(item, fieldNames);
 
                     if (AttrNotMatched.Count == 0)
@@ -701,7 +701,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 }
 
 
-                for (int i = 0; i < 15; i++)
+                for (int i = 0; i < 20; i++)
                 {
                     if (CurrentActionAttributes[i] != ActionAttributesSeq[i])
                     {
