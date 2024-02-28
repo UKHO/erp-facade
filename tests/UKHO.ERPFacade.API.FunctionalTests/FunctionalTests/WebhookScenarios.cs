@@ -55,8 +55,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
         [Test, Order(1)]
         //New Cell
-        [TestCase("ID3_1NewCellScenario.JSON", "Y", TestName = "WhenICallTheWebhookWithOneNewCellScenario_ThenWebhookReturns200Response")]
-        [TestCase("ID4_2NewCellScenario.JSON", "N", TestName = "WhenICallTheWebhookWithTwoNewCellScenario_ThenWebhookReturns200Response")]
+        [TestCase("ID3_1NewCellScenario.JSON", "Y", "SamePermitKey", TestName = "WhenICallTheWebhookWithOneNewCellScenario_ThenWebhookReturns200Response")]
+        [TestCase("ID4_2NewCellScenario.JSON", "N", "DifferentPermitKey", TestName = "WhenICallTheWebhookWithTwoNewCellScenario_ThenWebhookReturns200Response")]
         [TestCase("ID5_1NewCellWoNewAVCSUnit.JSON", "Y", TestName = "WhenICallTheWebhookWithOneNewCellScenarioWithourAVCSUoS_ThenWebhookReturns200Response")]
 
         //Cancel & Replace
@@ -69,9 +69,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
         //Update
         [TestCase("ID10_UpdateSimple.JSON", "N", TestName = "WhenICallTheWebhookWithSimpleUpdateScenarioHavingOneCellWithStatusNameAsUpdate_ThenWebhookReturns200Response")]
-        [TestCase("ID11_updateOneCellWithNewEditionStatus.JSON", "N", TestName = "WhenICallTheWebhookWithSimpleUpdateScenarioHavingOneCellWithStatusNameAsNewEdition_ThenWebhookReturns200Response")]
+        [TestCase("ID11_updateOneCellWithNewEditionStatus.JSON", "N", "SamePermitKey", TestName = "WhenICallTheWebhookWithSimpleUpdateScenarioHavingOneCellWithStatusNameAsNewEdition_ThenWebhookReturns200Response")]
         [TestCase("ID12_updateOneCellWithReIssueStatus.JSON", "N", TestName = "WhenICallTheWebhookWithSimpleUpdateScenarioHavingOneCellStatusNameAsReIssue_ThenWebhookReturns200Response")]
-        [TestCase("ID13_updateTwoCellsWithDifferentStatusName.JSON", "N", TestName = "WhenICallTheWebhookWithSimpleUpdateScenarioHavingTwoCellsWithDifferentStatusName_ThenWebhookReturns200Response")]
+        [TestCase("ID13_updateTwoCellsWithDifferentStatusName.JSON", "N", "DifferentPermitKey", TestName = "WhenICallTheWebhookWithSimpleUpdateScenarioHavingTwoCellsWithDifferentStatusName_ThenWebhookReturns200Response")]
 
         //Move Cell
         [TestCase("ID14_moveOneCell.JSON", "N", TestName = "WhenICallTheWebhookWithSimpleMoveCellScenario_ThenWebhookReturns200Response")]
@@ -113,12 +113,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         // Rule change for create avcs unit of sale (having multiple products in addProducts)
         [TestCase("ID37_CreateUoSHavingMultipleItemsInAddProducts.JSON", "N", TestName = "WhenICallTheWebhookWithMoveAndNewCellScenarioWhereUoSHasMultipleValuesInAddProducts_ThenWebhookReturns200Response")]
 
-        public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponse1(string payloadJsonFileName, string correctionTag)
+        public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponse1(string payloadJsonFileName, string correctionTag, string permitState = "permitString")
         {
             Console.WriteLine("Scenario:" + payloadJsonFileName + "\n");
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, payloadJsonFileName);
             string generatedXMLFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXMLFolder);
-            RestResponse response = await _webhook.PostWebhookResponseAsyncForXML(filePath, generatedXMLFolder, await _authToken.GetAzureADToken(false), correctionTag);
+            RestResponse response = await _webhook.PostWebhookResponseAsyncForXML(filePath, generatedXMLFolder, await _authToken.GetAzureADToken(false), correctionTag, permitState);
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
     }
