@@ -1,12 +1,12 @@
 {
-  "specversion": "1.0",
-  "type": "uk.gov.ukho.encpublishing.enccontentpublished.v2",
-  "source": "https://encpublishing.ukho.gov.uk",
-  "id": "2f03a25f-28b3-46ea-b009-5943250a9a41",
-  "time": "2023-05-29T12:08:03.4880776Z",
-  "_COMMENT": "A comma separated list of products",
-  "subject": "US5AK83M,US4AK6NU,MX545010,TXM450",
-  "datacontenttype": "application/json",
+    "specversion": "1.0",
+    "type": "uk.gov.ukho.encpublishing.enccontentpublished.v2.1",
+    "source": "https://encpublishing.ukho.gov.uk",
+    "id": "2f03a25f-28b3-46ea-b009-5943250a9a41",
+    "time": "2023-05-29T12:08:03.4880776Z",
+    "_COMMENT": "A comma separated list of products",
+    "subject": "US5AK83M,US4AK6NU,MX545010,TXM450",
+    "datacontenttype": "application/json",
     "data": {
         "correlationId": "367ce4a4-1d62-4f56-b359-mix29001",
         "ukhoWeekNumber": {
