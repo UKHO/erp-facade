@@ -704,9 +704,14 @@ namespace UKHO.ERPFacade.Common.Logging
         MessageDequeueCount = 940140,
 
         /// <summary>
+        /// 940141 - Invalid UkhoWeekNumber field in enccontentpublished event from EES.
+        /// </summary>
+        InvalidUkhoWeekNumber = 940141,
+
+        /// <summary>
         /// 940141 - Exception occured while decrypting the permit string.
         /// </summary>
-        PermitDecryptionException = 940141
+        PermitDecryptionException = 940142
 
     }
 

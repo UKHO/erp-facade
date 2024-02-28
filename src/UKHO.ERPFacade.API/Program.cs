@@ -20,6 +20,7 @@ using UKHO.ERPFacade.Common.Infrastructure;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Models;
+using UKHO.ERPFacade.Common.Providers;
 using UKHO.ERPFacade.Common.PermitDecryption;
 using UKHO.ERPFacade.Common.Services;
 using UKHO.Logging.EventHubLogProvider;
@@ -190,6 +191,7 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<SharedKeyAuthFilter>();
             builder.Services.AddScoped<IEESClient, EESClient>();
             builder.Services.AddScoped<ILicenceUpdatedSapMessageBuilder, LicenceUpdatedSapMessageBuilder>();
+            builder.Services.AddScoped<IWeekDetailsProvider, WeekDetailsProvider>();
             builder.Services.AddScoped<IPermitDecryption, PermitDecryption>();
 
             builder.Services.AddHealthChecks()

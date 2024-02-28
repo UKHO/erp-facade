@@ -3,7 +3,6 @@ using UKHO.ERPFacade.API.FunctionalTests.Model.EntityPropertyConverter;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Model
 {
-
     [ExcludeFromCodeCoverage]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.1.0")]
     [System.SerializableAttribute()]
@@ -12,7 +11,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:sap-com:document:sap:rfc:functions")]
     public partial class Z_ADDS_MAT_INFO
     {
-
         private IM_MATINFO iM_MATINFOField;
 
         /// <remarks/>
@@ -37,7 +35,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "")]
     public partial class IM_MATINFO
     {
-
         private string cORRIDField;
 
         private string nOOFACTIONSField;
@@ -145,7 +142,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
     public partial class ZMAT_ACTIONITEMS
     {
-
         private string aCTIONNUMBERField;
 
         private string aCTIONField;
@@ -180,9 +176,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
 
         private string nEXTKEYField;
 
-        private int wEEKNOField;
+        private string wEEKNOField;
 
-        private int vALIDFROMField;
+        private string vALIDFROMField;
 
         private string cORRECTIONField;
 
@@ -396,6 +392,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
                 this.uNITTYPEField = value;
             }
         }
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElement("ACTIVEKEY", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string ACTIVEKEY
@@ -409,6 +406,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
                 this.aCTIVEKEYField = value;
             }
         }
+
+        /// <remarks/>
         [System.Xml.Serialization.XmlElement("NEXTKEY", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string NEXTKEY
         {
@@ -421,8 +420,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
                 this.nEXTKEYField = value;
             }
         }
+
+        /// <remarks/>
         [System.Xml.Serialization.XmlElement("WEEKNO", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public int WEEKNO
+        public string WEEKNO
         {
             get
             {
@@ -433,8 +434,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
                 this.wEEKNOField = value;
             }
         }
+
+        /// <remarks/>
         [System.Xml.Serialization.XmlElement("VALIDFROM", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public int VALIDFROM
+        public string VALIDFROM
         {
             get
             {
@@ -445,6 +448,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
                 this.vALIDFROMField = value;
             }
         }
+
+        /// <remarks/>
         [System.Xml.Serialization.XmlElement("CORRECTION", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string CORRECTION
         {
@@ -457,7 +462,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
                 this.cORRECTIONField = value;
             }
         }
-
     }
 
     [ExcludeFromCodeCoverage]
@@ -467,7 +471,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:sap-com:document:sap:rfc:functions")]
     public partial class Z_ADDS_MAT_INFOResponse
     {
-
         private string eX_MESSAGEField;
 
         private string eX_STATUSField;
@@ -499,6 +502,5 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
                 this.eX_STATUSField = value;
             }
         }
-
     }
 }

@@ -51,7 +51,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             return response;
         }
 
-        public async Task<RestResponse> PostWebhookResponseAsyncForXML(string filePath, string generatedXMLFolder, string token,string permitState="permitString")
+        public async Task<RestResponse> PostWebhookResponseAsyncForXML(string filePath, string generatedXMLFolder, string token, string correctionTag = "N", string permitState = "permitString")
         {
             string requestBody;
 
@@ -80,7 +80,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             {
                 Assert.That(SAPXmlHelper.VerifyInitialXMLHeaders(jsonPayload, generatedXMLFilePath), Is.True ,"Initial Header Value Not Correct");
                 Assert.That(SAPXmlHelper.VerifyOrderOfActions(jsonPayload, generatedXMLFilePath), Is.True, "Order of Action Not Correct in XML File");
-                Assert.That(SAPXmlHelper.CheckXMLAttributes(jsonPayload, generatedXMLFilePath, requestBody, permitState).Result, Is.True, "CheckXMLAttributes Failed");
+                Assert.That(SAPXmlHelper.CheckXMLAttributes(jsonPayload, generatedXMLFilePath, requestBody, correctionTag, permitState).Result, Is.True, "CheckXMLAttributes Failed");
             }
             return response;
         }

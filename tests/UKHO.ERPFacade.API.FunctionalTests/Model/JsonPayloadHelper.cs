@@ -35,7 +35,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
         public string correlationId { get; set; }
 
         [JsonProperty("ukhoWeekNumber")]
-        public UkhoWeekNumber ukhoWeekNumber { get; set; }
+        public  UkhoWeekNumber ukhoWeekNumber { get; set; }
 
         [JsonProperty("products")]
         public Product[] Products { get; set; }
@@ -44,6 +44,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
         public UnitOfSale[] UnitsOfSales { get; set; }
         
     }
+
     public class UkhoWeekNumber
     {
         [JsonProperty("year")]

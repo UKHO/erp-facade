@@ -18,6 +18,8 @@
         public string LicenceUpdatedPayloadTestData { get; set; }
         public string[] RosLicenceUpdateXMLList { get; set; }
         public string[] RoSLicenceUpdatedProdXMLList { get; set; }
+        public string WeekNoTag { get; set; }
+        public string ValidFromTag { get; set; }
         public PermitWithSameKey PermitWithSameKey { get; set; }
         public PermitWithDifferentKey PermitWithDifferentKey { get; set; }       
     }
