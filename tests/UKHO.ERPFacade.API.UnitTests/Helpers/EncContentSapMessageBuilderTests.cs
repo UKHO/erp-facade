@@ -175,7 +175,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         {
             var scenarios = JsonConvert.DeserializeObject<EncEventPayload>(ScenariosDataCreateEncCell);
             var correlationId = "367ce4a4-1d62-4f56-b359-59e178d77100";
-            var permitKeys = new PermitKey { ActiveKey = "", NextKey = "" };
+            var permitKeys = new PermitKey { ActiveKey = "firstkey", NextKey = "nextkey" };
 
             XmlDocument soapXml = new();
             soapXml.LoadXml(SapXmlFile);
@@ -191,10 +191,10 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             actionItem.ChildNodes.Count.Should().Be(17);
 
             var activeKey = result.SelectSingleNode(XpathActiveKey);
-            activeKey.InnerText.Should().Be("");
+            activeKey.InnerText.Should().Be("firstkey");
 
             var nextKey = result.SelectSingleNode(XpathNextKey);
-            nextKey.InnerText.Should().Be("");
+            nextKey.InnerText.Should().Be("nextkey");
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Information
@@ -212,7 +212,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         {
             var scenarios = JsonConvert.DeserializeObject<EncEventPayload>(ScenariosDataUpdateEncCellForNewEdition);
             var correlationId = "367ce4a4-1d62-4f56-b359-59e178d77100";
-            var permitKeys = new PermitKey { ActiveKey = "", NextKey = "" };
+            var permitKeys = new PermitKey { ActiveKey = "activekey", NextKey = "nextkey" };
 
             XmlDocument soapXml = new();
             soapXml.LoadXml(SapXmlFile);
@@ -228,10 +228,10 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             actionItem.ChildNodes.Count.Should().Be(3);
 
             var activeKey = result.SelectSingleNode(XpathActiveKey);
-            activeKey.InnerText.Should().Be("");
+            activeKey.InnerText.Should().Be("activekey");
 
             var nextKey = result.SelectSingleNode(XpathNextKey);
-            nextKey.InnerText.Should().Be("");
+            nextKey.InnerText.Should().Be("nextkey");
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
