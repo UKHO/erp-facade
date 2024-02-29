@@ -614,39 +614,21 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         private static bool VerifyDecryptedPermit(string childCell, ZMAT_ACTIONITEMS item, string permitState)
         {
             Console.WriteLine("Action#:" + ActionCounter + ".Childcell:" + childCell);
-            foreach (Product product in JsonPayload.Data.Products)
+
+            if (permitState.Contains("Same"))
             {
-                AttrNotMatched.Clear();
-                if (permitState.Contains("Same"))
-                {
 
-                    if (!item.ACTIVEKEY.Equals(Config.TestConfig.PermitWithSameKey.ACTIVEKEY))
-                        AttrNotMatched.Add(nameof(item.ACTIVEKEY));
-                    if (!item.NEXTKEY.Equals(Config.TestConfig.PermitWithSameKey.NEXTKEY))
-                        AttrNotMatched.Add(nameof(item.NEXTKEY));
-                }
-                else if (permitState.Contains("Different"))
-                {
-                    if (!item.ACTIVEKEY.Equals(Config.TestConfig.PermitWithDifferentKey.ACTIVEKEY))
-                        AttrNotMatched.Add(nameof(item.ACTIVEKEY));
-                    if (!item.NEXTKEY.Equals(Config.TestConfig.PermitWithDifferentKey.NEXTKEY))
-                        AttrNotMatched.Add(nameof(item.NEXTKEY));
-                }
-
-                if (AttrNotMatched.Count == 0)
-                {
-                    Console.WriteLine("CREATE ENC CELL Action's ACTIVEKEY and NEXTKEY Data is correct");
-                    return true;
-                }
-                else
-                {
-                    Console.WriteLine("CREATE ENC CELL Action's ACTIVEKEY and NEXTKEY Data is incorrect");
-                    Console.WriteLine("Not matching attributes are:");
-                    foreach (string attribute in AttrNotMatched)
-                    { Console.WriteLine(attribute); }
-                    return false;
-                }
-
+                if (!item.ACTIVEKEY.Equals(Config.TestConfig.PermitWithSameKey.ACTIVEKEY))
+                    AttrNotMatched.Add(nameof(item.ACTIVEKEY));
+                if (!item.NEXTKEY.Equals(Config.TestConfig.PermitWithSameKey.NEXTKEY))
+                    AttrNotMatched.Add(nameof(item.NEXTKEY));
+            }
+            else if (permitState.Contains("Different"))
+            {
+                if (!item.ACTIVEKEY.Equals(Config.TestConfig.PermitWithDifferentKey.ACTIVEKEY))
+                    AttrNotMatched.Add(nameof(item.ACTIVEKEY));
+                if (!item.NEXTKEY.Equals(Config.TestConfig.PermitWithDifferentKey.NEXTKEY))
+                    AttrNotMatched.Add(nameof(item.NEXTKEY));
             }
             return true;
         }
@@ -1231,6 +1213,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 var products = jsonObj["data"]["products"];
                 foreach (var product in products)
                 {
+                    Assert.That(Config.TestConfig.PermitWithSameKey.Permit != "","Permit String is empty");
                     product["permit"] = Config.TestConfig.PermitWithSameKey.Permit;
                 }
             }
@@ -1239,6 +1222,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 var products = jsonObj["data"]["products"];
                 foreach (var product in products)
                 {
+                    Assert.That(Config.TestConfig.PermitWithDifferentKey.Permit!= "", "Permit String is empty");
                     product["permit"] = Config.TestConfig.PermitWithDifferentKey.Permit;
                 }
             }
