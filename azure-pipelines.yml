@@ -407,6 +407,18 @@ stages:
         value: $(SharedKeyConfigurationKey)
       - name: "PermitConfiguration.PermitDecryptionHardwareId"
         value: $(PermitDecryptionHardwareId)
+      - name: "PermitWithSameKey.Permit"
+        value: $(PermitWithSameKeyPermit)
+	    - name: "PermitWithSameKey.ACTIVEKEY"
+        value: $(PermitWithSameKeyACTIVEKEY)
+	    - name: "PermitWithSameKey.NEXTKEY"
+        value: $(PermitWithSameKeyNEXTKEY)
+	    - name: "PermitWithDifferentKey.Permit"
+        value: $(PermitWithDifferentKeyPermit)
+	    - name: "PermitWithDifferentKey.ACTIVEKEY"
+        value: $(PermitWithDifferentKeyACTIVEKEY)
+	    - name: "PermitWithDifferentKey.NEXTKEY"
+        value: $(PermitWithDifferentKeyNEXTKEY)
     jobs:
       - deployment: DevDeployTerraform
         displayName: "Dev - Deploy Terraform"
@@ -679,6 +691,18 @@ stages:
         value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
       - name: "PermitConfiguration.PermitDecryptionHardwareId"
         value: $(PermitDecryptionHardwareId)
+      - name: "PermitWithSameKey.Permit"
+        value: $(PermitWithSameKeyPermit)
+	    - name: "PermitWithSameKey.ACTIVEKEY"
+        value: $(PermitWithSameKeyACTIVEKEY)
+	    - name: "PermitWithSameKey.NEXTKEY"
+        value: $(PermitWithSameKeyNEXTKEY)
+	    - name: "PermitWithDifferentKey.Permit"
+        value: $(PermitWithDifferentKeyPermit)
+	    - name: "PermitWithDifferentKey.ACTIVEKEY"
+        value: $(PermitWithDifferentKeyACTIVEKEY)
+	    - name: "PermitWithDifferentKey.NEXTKEY"
+        value: $(PermitWithDifferentKeyNEXTKEY)
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
 
     jobs:
