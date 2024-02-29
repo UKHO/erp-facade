@@ -10,6 +10,11 @@
     "datacontenttype": "application/json",
     "data": {
         "correlationId": "367999a4-1d92-4f56-b449-230518reissue002",
+        "ukhoWeekNumber": {
+            "year": 2024,
+            "week": 3,
+            "currentWeekAlphaCorrection": true
+        },
         "products": [
             {
                 "productType": "ENC S57",

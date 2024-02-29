@@ -9,6 +9,11 @@
     "datacontenttype": "application/json",
     "data": {
         "correlationId": "abcs-cor0012-newedition-20101",
+        "ukhoWeekNumber": {
+            "year": 2024,
+            "week": 3,
+            "currentWeekAlphaCorrection": true
+        },
         "products": [
             {
                 "productType": "ENC S57",
