@@ -3,12 +3,12 @@
 namespace UKHO.ERPFacade.Common.PermitDecryption
 {
     [ExcludeFromCodeCoverage]
-    public class BFAlg : IBlowfishAlgorithm
+    public class BlowfishAlgorithm : IBlowfishAlgorithm
     {
         UInt32[] _P;
         UInt32[,] _S;
 
-        public BFAlg(Byte[] passwd)
+        public BlowfishAlgorithm(Byte[] passwd)
         {
             _P = new UInt32[18]{
             0x243f6a88, 0x85a308d3, 0x13198a2e, 0x03707344,

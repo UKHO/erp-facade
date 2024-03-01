@@ -61,7 +61,7 @@ namespace UKHO.ERPFacade.Common.PermitDecryption
             bcrc32[4] = bcrc32[5] = bcrc32[6] = bcrc32[7] = 0x04;   //padding for Blowfish
 
             //--- encrypt CRC32 by Blowfish alghorithm -------------------
-            var bf = (new BFFactory()).Get(hwId, CachingOptions.Cache);
+            var bf = (new BlowfishFactory()).Get(hwId, CachingOptions.Cache);
             bf.Encrypt(bcrc32);
 
             //convert the result of crc encryption to hexadecimal string presentation
