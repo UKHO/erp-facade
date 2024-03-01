@@ -121,6 +121,20 @@
                         "JsonPropertyName": "CurrentWeekAlphaCorrection",
                         "XmlNodeName": "CORRECTION",
                         "SortingOrder": 15
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "Product",
+                        "JsonPropertyName": "Permit",
+                        "XmlNodeName": "ACTIVEKEY",
+                        "SortingOrder": 16
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "Product",
+                        "JsonPropertyName": "Permit",
+                        "XmlNodeName": "NEXTKEY",
+                        "SortingOrder": 17
                     }
                 ]
             },
@@ -244,6 +258,20 @@
                         "JsonPropertyName": "CurrentWeekAlphaCorrection",
                         "XmlNodeName": "CORRECTION",
                         "SortingOrder": 15
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "Permit",
+                        "XmlNodeName": "ACTIVEKEY",
+                        "SortingOrder": 16
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "Permit",
+                        "XmlNodeName": "NEXTKEY",
+                        "SortingOrder": 17
                     }
                 ]
             },
@@ -362,6 +390,20 @@
                         "JsonPropertyName": "CurrentWeekAlphaCorrection",
                         "XmlNodeName": "CORRECTION",
                         "SortingOrder": 15
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "Permit",
+                        "XmlNodeName": "ACTIVEKEY",
+                        "SortingOrder": 16
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "Permit",
+                        "XmlNodeName": "NEXTKEY",
+                        "SortingOrder": 17
                     }
                 ]
             },
@@ -459,6 +501,20 @@
                         "JsonPropertyName": "UnitType",
                         "XmlNodeName": "UNITTYPE",
                         "SortingOrder": 12
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "Permit",
+                        "XmlNodeName": "ACTIVEKEY",
+                        "SortingOrder": 16
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "Permit",
+                        "XmlNodeName": "NEXTKEY",
+                        "SortingOrder": 17
                     }
                 ]
             },
@@ -561,6 +617,20 @@
                         "JsonPropertyName": "UnitType",
                         "XmlNodeName": "UNITTYPE",
                         "SortingOrder": 12
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "Permit",
+                        "XmlNodeName": "ACTIVEKEY",
+                        "SortingOrder": 16
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "Permit",
+                        "XmlNodeName": "NEXTKEY",
+                        "SortingOrder": 17
                     }
                 ]
             },
@@ -663,6 +733,20 @@
                         "JsonPropertyName": "UnitType",
                         "XmlNodeName": "UNITTYPE",
                         "SortingOrder": 12
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "Permit",
+                        "XmlNodeName": "ACTIVEKEY",
+                        "SortingOrder": 16
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "Permit",
+                        "XmlNodeName": "NEXTKEY",
+                        "SortingOrder": 17
                     }
                 ]
             },
@@ -784,6 +868,20 @@
                         "JsonPropertyName": "UnitType",
                         "XmlNodeName": "UNITTYPE",
                         "SortingOrder": 12
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "Product",
+                        "JsonPropertyName": "Permit",
+                        "XmlNodeName": "ACTIVEKEY",
+                        "SortingOrder": 16
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "Product",
+                        "JsonPropertyName": "Permit",
+                        "XmlNodeName": "NEXTKEY",
+                        "SortingOrder": 17
                     }
                 ]
             },
@@ -881,6 +979,20 @@
                         "JsonPropertyName": "UnitType",
                         "XmlNodeName": "UNITTYPE",
                         "SortingOrder": 12
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "Permit",
+                        "XmlNodeName": "ACTIVEKEY",
+                        "SortingOrder": 16
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "Permit",
+                        "XmlNodeName": "NEXTKEY",
+                        "SortingOrder": 17
                     }
                 ]
             },
@@ -983,6 +1095,20 @@
                         "JsonPropertyName": "UnitType",
                         "XmlNodeName": "UNITTYPE",
                         "SortingOrder": 12
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "Permit",
+                        "XmlNodeName": "ACTIVEKEY",
+                        "SortingOrder": 16
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "Permit",
+                        "XmlNodeName": "NEXTKEY",
+                        "SortingOrder": 17
                     }
                 ]
             },
@@ -1085,6 +1211,20 @@
                         "JsonPropertyName": "UnitType",
                         "XmlNodeName": "UNITTYPE",
                         "SortingOrder": 12
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "Permit",
+                        "XmlNodeName": "ACTIVEKEY",
+                        "SortingOrder": 16
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "Permit",
+                        "XmlNodeName": "NEXTKEY",
+                        "SortingOrder": 17
                     }
                 ]
             }

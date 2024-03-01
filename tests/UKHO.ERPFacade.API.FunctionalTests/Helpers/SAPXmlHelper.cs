@@ -1,4 +1,5 @@
 ﻿using System.Text;
+
 using System.Xml;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
@@ -22,7 +23,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         private static readonly string weekNoTag = Config.TestConfig.WeekNoTag;
         private static readonly string validFromTag = Config.TestConfig.ValidFromTag;
 
-        public static async Task<bool> CheckXMLAttributes(JsonPayloadHelper jsonPayload, string XMLFilePath, string updatedRequestBody, string correctionTag)
+        public static async Task<bool> CheckXMLAttributes(JsonPayloadHelper jsonPayload, string XMLFilePath, string updatedRequestBody, string correctionTag, string permitState)
         {
             SAPXmlHelper.JsonPayload = jsonPayload;
             UpdatedJsonPayload = JsonConvert.DeserializeObject<JsonPayloadHelper>(updatedRequestBody);
@@ -48,7 +49,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             foreach (ZMAT_ACTIONITEMS item in result.IM_MATINFO.ACTIONITEMS)
             {
                 if (item.ACTION == "CREATE ENC CELL")
-                    Assert.That(VerifyCreateENCCell(item.CHILDCELL, item, correctionTag));
+                    Assert.That(VerifyCreateENCCell(item.CHILDCELL, item, correctionTag, permitState));
                 else if (item.ACTION == "CREATE AVCS UNIT OF SALE")
                     Assert.That(VerifyCreateAVCSUnitOfSale(item.PRODUCTNAME, item, correctionTag));
                 else if (item.ACTION == "ASSIGN CELL TO AVCS UNIT OF SALE")
@@ -66,7 +67,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 else if (item.ACTION == "CHANGE AVCS UNIT OF SALE")
                     Assert.That(VerifyChangeAVCSUnitOfSale(item.PRODUCTNAME, item) ?? false);
                 else if (item.ACTION == "UPDATE ENC CELL EDITION UPDATE NUMBER")
-                    Assert.That(VerifyUpdateAVCSUnitOfSale(item.CHILDCELL, item) ?? false);
+                    Assert.That(VerifyUpdateAVCSUnitOfSale(item.CHILDCELL, item, permitState) ?? false);
                 ActionCounter++;
             }
 
@@ -103,8 +104,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     if (!item.UNITTYPE.Equals(GetUoSInfo(productName).UnitType))
                         AttrNotMatched.Add(nameof(item.UNITTYPE));
                     //Checking blanks
-                    string[] fieldNames = { "CANCELLED", "REPLACEDBY", "EDITIONNO", "UPDATENO" };
-                    VerifyBlankFields(item, fieldNames);
+                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "EDITIONNO", "UPDATENO", "ACTIVEKEY", "NEXTKEY" };
+                    VerifyBlankFields(item, blankFieldNames);
 
                     if (AttrNotMatched.Count == 0)
                     {
@@ -129,7 +130,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return false;
         }
 
-        private static bool? VerifyUpdateAVCSUnitOfSale(string childCell, ZMAT_ACTIONITEMS item)
+        private static bool? VerifyUpdateAVCSUnitOfSale(string childCell, ZMAT_ACTIONITEMS item, string permitState)
         {
             Console.WriteLine("Action#:" + ActionCounter + ".Childcell:" + childCell);
             foreach (Product product in JsonPayload.Data.Products)
@@ -160,9 +161,18 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         AttrNotMatched.Add(nameof(item.EDITIONNO));
                     if (!item.UPDATENO.Equals(product.UpdateNumber))
                         AttrNotMatched.Add(nameof(item.UPDATENO));
+                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "UNITTYPE" };
+                    if (product.Status.StatusName.Contains("New Edition"))
+                    {
+                        Assert.That(VerifyDecryptedPermit(item.CHILDCELL, item, permitState));
+                    }
+                    else if (product.Status.StatusName.Contains("Update") || product.Status.StatusName.Contains("Re-issue"))
+                    {
+                        blankFieldNames.Add("ACTIVEKEY");
+                        blankFieldNames.Add("NEXTKEY");
+                    }
                     //Checking blanks
-                    string[] fieldNames = { "CANCELLED", "REPLACEDBY", "UNITTYPE" };
-                    VerifyBlankFields(item, fieldNames);
+                    VerifyBlankFields(item, blankFieldNames);
 
                     if (AttrNotMatched.Count == 0)
                     {
@@ -203,8 +213,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     if (!item.UPDATENO.Equals(product.UpdateNumber))
                         AttrNotMatched.Add(nameof(item.UPDATENO));
                     //Checking blanks
-                    string[] fieldNames = { "CANCELLED", "REPLACEDBY", "UNITTYPE" };
-                    VerifyBlankFields(item, fieldNames);
+                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "UNITTYPE" };
+                    VerifyBlankFields(item, blankFieldNames);
 
                     if (AttrNotMatched.Count == 0)
                     {
@@ -254,8 +264,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     if (!item.UPDATENO.Equals(product.UpdateNumber))
                         AttrNotMatched.Add(nameof(item.UPDATENO));
                     //Checking blanks
-                    string[] fieldNames = { "CANCELLED", "REPLACEDBY", "UNITTYPE" };
-                    VerifyBlankFields(item, fieldNames);
+                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
+                    VerifyBlankFields(item, blankFieldNames);
 
                     if (AttrNotMatched.Count == 0)
                     {
@@ -294,8 +304,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         AttrNotMatched.Add(nameof(item.PRODTYPE));
 
                     //Checking blanks
-                    string[] fieldNames = { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE" };
-                    VerifyBlankFields(item, fieldNames);
+                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
+                    VerifyBlankFields(item, blankFieldNames);
 
                     if (AttrNotMatched.Count == 0)
                     {
@@ -335,8 +345,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         AttrNotMatched.Add(nameof(item.PRODUCTNAME));
 
                     //Checking blanks
-                    string[] fieldNames = { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE" };
-                    VerifyBlankFields(item, fieldNames);
+                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
+                    VerifyBlankFields(item, blankFieldNames);
 
                     if (AttrNotMatched.Count == 0)
                     {
@@ -376,8 +386,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                             AttrNotMatched.Add(nameof(item.PRODTYPE));
                         //xmlAttributes[4] & [5] are skipped as already checked
                         //Checking blanks
-                        string[] fieldNames = { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE" };
-                        VerifyBlankFields(item, fieldNames);
+                        List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
+                        VerifyBlankFields(item, blankFieldNames);
 
                         if (AttrNotMatched.Count == 0)
                         {
@@ -418,8 +428,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!item.PRODUCTNAME.Equals(GetUoSName(childCell))))
                         AttrNotMatched.Add(nameof(item.PRODUCTNAME));
                     //Checking blanks
-                    string[] fieldNames = { "CANCELLED", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE" };
-                    VerifyBlankFields(item, fieldNames);
+                    List<string> blankFieldNames = new List<string> { "CANCELLED", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
+                    VerifyBlankFields(item, blankFieldNames);
 
                     if (AttrNotMatched.Count == 0)
                     {
@@ -465,8 +475,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                             AttrNotMatched.Add(nameof(item.VALIDFROM));
                         if (!item.CORRECTION.Equals(correctionTag))
                             AttrNotMatched.Add(nameof(item.CORRECTION));
-                        string[] fieldNames = { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE" };
-                        VerifyBlankFields(item, fieldNames);
+                        List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
+                        VerifyBlankFields(item, blankFieldNames);
 
                         if (AttrNotMatched.Count == 0)
                         {
@@ -521,8 +531,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         AttrNotMatched.Add(nameof(item.CORRECTION));
 
                     //Checking blanks
-                    string[] fieldNames = { "CANCELLED", "REPLACEDBY", "EDITIONNO", "UPDATENO" };
-                    VerifyBlankFields(item, fieldNames);
+                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "EDITIONNO", "UPDATENO", "ACTIVEKEY", "NEXTKEY" };
+                    VerifyBlankFields(item, blankFieldNames);
 
                     if (AttrNotMatched.Count == 0)
                     {
@@ -543,7 +553,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return false;
         }
 
-        private static bool VerifyCreateENCCell(string childCell, ZMAT_ACTIONITEMS item, string correctionTag)
+        private static bool VerifyCreateENCCell(string childCell, ZMAT_ACTIONITEMS item, string correctionTag, string permitState)
         {
             Console.WriteLine("Action#:" + ActionCounter + ".Childcell:" + childCell);
             foreach (Product product in JsonPayload.Data.Products)
@@ -577,9 +587,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         AttrNotMatched.Add(nameof(item.VALIDFROM));
                     if (!item.CORRECTION.Equals(correctionTag))
                         AttrNotMatched.Add(nameof(item.CORRECTION));
+                    Assert.That(VerifyDecryptedPermit(item.CHILDCELL, item, permitState));
                     //Checking blanks
-                    string[] fieldNames = { "CANCELLED", "REPLACEDBY", "UNITTYPE" };
-                    VerifyBlankFields(item, fieldNames);
+                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "UNITTYPE" };
+                    VerifyBlankFields(item, blankFieldNames);
 
                     if (AttrNotMatched.Count == 0)
                     {
@@ -597,10 +608,32 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 }
             }
             Console.WriteLine("JSON doesn't have corresponding product.");
-            return false;
+            return true;
         }
 
-        private static bool VerifyBlankFields(ZMAT_ACTIONITEMS item, string[] fieldNames)
+        private static bool VerifyDecryptedPermit(string childCell, ZMAT_ACTIONITEMS item, string permitState)
+        {
+            Console.WriteLine("Action#:" + ActionCounter + ".Childcell:" + childCell);
+
+            if (permitState.Contains("Same"))
+            {
+
+                if (!item.ACTIVEKEY.Equals(Config.TestConfig.PermitWithSameKey.ACTIVEKEY))
+                    AttrNotMatched.Add(nameof(item.ACTIVEKEY));
+                if (!item.NEXTKEY.Equals(Config.TestConfig.PermitWithSameKey.NEXTKEY))
+                    AttrNotMatched.Add(nameof(item.NEXTKEY));
+            }
+            else if (permitState.Contains("Different"))
+            {
+                if (!item.ACTIVEKEY.Equals(Config.TestConfig.PermitWithDifferentKey.ACTIVEKEY))
+                    AttrNotMatched.Add(nameof(item.ACTIVEKEY));
+                if (!item.NEXTKEY.Equals(Config.TestConfig.PermitWithDifferentKey.NEXTKEY))
+                    AttrNotMatched.Add(nameof(item.NEXTKEY));
+            }
+            return true;
+        }
+
+        private static bool VerifyBlankFields(ZMAT_ACTIONITEMS item, List<string> fieldNames)
         {
             bool allBlanks = true;
 
@@ -641,18 +674,16 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 CurrentActionAttributes.Clear();
                 Type arrayType = item.GetType();
                 var properties = arrayType.GetProperties();
-
                 foreach (var property in properties)
                 {
                     CurrentActionAttributes.Add(property.Name);
                 }
-
-
                 for (int i = 0; i < 15; i++)
                 {
                     if (CurrentActionAttributes[i] != ActionAttributesSeq[i])
                     {
-                        Console.WriteLine("First missed Attribute is:" + ActionAttributesSeq[i] + " for action number:" + item.ACTIONNUMBER);
+                        Console.WriteLine("First missed Attribute is:" + ActionAttributesSeq[i] +
+                                          " for action number:" + item.ACTIONNUMBER);
                         return false;
                     }
                 }
@@ -663,8 +694,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 await Task.CompletedTask;
                 return true;
             }
-            else
-                return false;
+            return false;
         }
 
         private static UoSProductInfo GetFirstProductsInfoHavingUoS(string unitOfSalesName)
@@ -1173,6 +1203,38 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 Console.WriteLine("Product object is null");
                 return null;
             }
+        }
+
+        public static string UpdatePermitField(string requestBody, string permitState)
+        {
+            JObject jsonObj = JObject.Parse(requestBody);
+            if (permitState.Contains("Same"))
+            {
+                var products = jsonObj["data"]["products"];
+                foreach (var product in products)
+                {
+                    Assert.That(Config.TestConfig.PermitWithSameKey.Permit != "","Permit String is empty");
+                    product["permit"] = Config.TestConfig.PermitWithSameKey.Permit;
+                }
+            }
+            else if (permitState.Contains("Different"))
+            {
+                var products = jsonObj["data"]["products"];
+                foreach (var product in products)
+                {
+                    Assert.That(Config.TestConfig.PermitWithDifferentKey.Permit!= "", "Permit String is empty");
+                    product["permit"] = Config.TestConfig.PermitWithDifferentKey.Permit;
+                }
+            }
+            else
+            {
+                var products = jsonObj["data"]["products"];
+                foreach (var product in products)
+                {
+                    product["permit"] = "permitString";
+                }
+            }
+            return jsonObj.ToString();
         }
     }
 }
