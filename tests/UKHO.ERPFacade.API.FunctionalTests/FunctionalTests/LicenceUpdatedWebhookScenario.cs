@@ -7,6 +7,7 @@ using UKHO.ERPFacade.API.FunctionalTests.Service;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 {
+    [Ignore("It was originally built for ADDS Increment 3")]
     [TestFixture]
     public class LicenceUpdatedWebhookScenario
     {
