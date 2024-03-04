@@ -687,7 +687,7 @@ namespace UKHO.ERPFacade.Common.Logging
         /// 940137 - All related events are not present in Azure blob.
         /// </summary>
         AllRelatedEventsAreNotPresentInBlob = 940137,
-         
+
         /// <summary>
         /// 940138 - The record has been completed already.
         /// </summary>
@@ -701,7 +701,18 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940140 - Dequeue count of message.
         /// </summary>
-        MessageDequeueCount = 140
+        MessageDequeueCount = 940140,
+
+        /// <summary>
+        /// 940141 - Invalid UkhoWeekNumber field in enccontentpublished event from EES.
+        /// </summary>
+        InvalidUkhoWeekNumber = 940141,
+
+        /// <summary>
+        /// 940141 - Exception occured while decrypting the permit string.
+        /// </summary>
+        PermitDecryptionException = 940142
+
     }
 
     /// <summary>

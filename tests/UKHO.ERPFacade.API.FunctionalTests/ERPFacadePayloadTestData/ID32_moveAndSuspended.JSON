@@ -1,6 +1,6 @@
 {
     "specversion": "1.0",
-    "type": "uk.gov.ukho.encpublishing.enccontentpublished.v2",
+    "type": "uk.gov.ukho.encpublishing.enccontentpublished.v2.1",
     "source": "https://encpublishing.ukho.gov.uk",
     "id": "2f03a25f-28b3-46ea-b009-5943250a9a41",
     "time": "2023-05-18T12:08:03.4880776Z",
@@ -9,6 +9,11 @@
     "datacontenttype": "application/json",
     "data": {
         "correlationId": "367ce4a4-ddd1-4f56-b359-69e178d87810",
+        "ukhoWeekNumber": {
+            "year": 2024,
+            "week": 3,
+            "currentWeekAlphaCorrection": false
+        },
         "products": [
             {
                 "productType": "ENC S57",

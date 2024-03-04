@@ -1,541 +1,546 @@
 {
-  "_COMMENT": "Updated 05/04/23 MK - new attributes added: isNewUnitOfSale; contentChange; unitOfSaleType, unitSize",
-  "specversion": "1.0",
-  "type": "uk.gov.ukho.encpublishing.enccontentpublished.v2",
-  "source": "https://encpublishing.ukho.gov.uk",
-  "id": "2f03a25f-28b3-46ea-b009-5943250a9a41",
-  "time": "2023-05-18T12:08:03.4880776Z",
-  "_COMMENT": "A comma separated list of products",
-  "subject": "UK45TRI, SD3401P",
-  "datacontenttype": "application/json",
-  "data": {
-    "correlationId": "367ce4a4-1fff-4f56-b359-230518multiupdate002",
-    "products": [
-      {
-        "productType": "ENC S57",
-        "dataSetName": "UK45TRI.001",
-        "productName": "UK45TRI",
-        "title": "Some Title",
-        "scale": 90000,
-        "usageBand": 1,
-        "editionNumber": 4,
-        "updateNumber": 2,
-        "mayAffectHoldings": false,
-        "contentChange": true,
-        "permit": "permitString",
-        "providerCode": "1",
-        "providerName": "ICE",
-        "_COMMENT": "provider code and descrption are n-1 mapping",
-        "_ENUM": [
-          "ICE",
-          "ICE_GB",
-          "ICE_UK",
-          "PRIMAR",
-          "VAR Unique",
-          "VAR"
-        ],
-
-        "size": "mdeium",
-        "_COMMENT": " size code not included as will be mapped in SAP",
-        "_ENUM": [
-          "large",
-          "medium",
-          "small"
-        ],
-        "agency": "US",
-        "bundle": [
-          {
-            "bundleType": "DVD",
-            "_ENUM": [
-              "DVD"
-            ],
-            "location": "M2;B1"
-          }
-        ],
-        "status": {
-          "statusName": "New Edition",
-          "_ENUM": [
-            "New Edition",
-            "Re-issue",
-            "Update",
-            "Cancellation Update",
-            "Withdrawn",
-            "Suspended"
-          ],
-          "statusDate": "2020-07-16T19:20:30.45+01:00",
-          "isNewCell": false,
-          "_COMMENT": "A cell new to the service"
+    "_COMMENT": "Updated 05/04/23 MK - new attributes added: isNewUnitOfSale; contentChange; unitOfSaleType, unitSize",
+    "specversion": "1.0",
+    "type": "uk.gov.ukho.encpublishing.enccontentpublished.v2.1",
+    "source": "https://encpublishing.ukho.gov.uk",
+    "id": "2f03a25f-28b3-46ea-b009-5943250a9a41",
+    "time": "2023-05-18T12:08:03.4880776Z",
+    "_COMMENT": "A comma separated list of products",
+    "subject": "UK45TRI, SD3401P",
+    "datacontenttype": "application/json",
+    "data": {
+        "correlationId": "367ce4a4-1fff-4f56-b359-230518multiupdate002",
+        "ukhoWeekNumber": {
+            "year": 2024,
+            "week": 3,
+            "currentWeekAlphaCorrection": false
         },
-        "replaces": [
-        ],
-        "replacedBy": [],
-        "additionalCoverage": [],
-        "geographicLimit": {
-          "boundingBox": {
-            "northLimit": 24.146815,
-            "southLimit": 22.581615,
-            "eastLimit": 120.349635,
-            "westLimit": 119.39142
-          },
-          "polygons": [
+        "products": [
             {
-              "polygon": [
-                {
-                  "latitude": 24,
-                  "longitude": 121.5
+                "productType": "ENC S57",
+                "dataSetName": "UK45TRI.001",
+                "productName": "UK45TRI",
+                "title": "Some Title",
+                "scale": 90000,
+                "usageBand": 1,
+                "editionNumber": 4,
+                "updateNumber": 2,
+                "mayAffectHoldings": false,
+                "contentChange": true,
+                "permit": "permitString",
+                "providerCode": "1",
+                "providerName": "ICE",
+                "_COMMENT": "provider code and descrption are n-1 mapping",
+                "_ENUM": [
+                    "ICE",
+                    "ICE_GB",
+                    "ICE_UK",
+                    "PRIMAR",
+                    "VAR Unique",
+                    "VAR"
+                ],
+
+                "size": "mdeium",
+                "_COMMENT": " size code not included as will be mapped in SAP",
+                "_ENUM": [
+                    "large",
+                    "medium",
+                    "small"
+                ],
+                "agency": "US",
+                "bundle": [
+                    {
+                        "bundleType": "DVD",
+                        "_ENUM": [
+                            "DVD"
+                        ],
+                        "location": "M2;B1"
+                    }
+                ],
+                "status": {
+                    "statusName": "New Edition",
+                    "_ENUM": [
+                        "New Edition",
+                        "Re-issue",
+                        "Update",
+                        "Cancellation Update",
+                        "Withdrawn",
+                        "Suspended"
+                    ],
+                    "statusDate": "2020-07-16T19:20:30.45+01:00",
+                    "isNewCell": false,
+                    "_COMMENT": "A cell new to the service"
                 },
-                {
-                  "latitude": 121,
-                  "longitude": 56
+                "replaces": [
+                ],
+                "replacedBy": [],
+                "additionalCoverage": [],
+                "geographicLimit": {
+                    "boundingBox": {
+                        "northLimit": 24.146815,
+                        "southLimit": 22.581615,
+                        "eastLimit": 120.349635,
+                        "westLimit": 119.39142
+                    },
+                    "polygons": [
+                        {
+                            "polygon": [
+                                {
+                                    "latitude": 24,
+                                    "longitude": 121.5
+                                },
+                                {
+                                    "latitude": 121,
+                                    "longitude": 56
+                                },
+                                {
+                                    "latitude": 45,
+                                    "longitude": 78
+                                },
+                                {
+                                    "latitude": 119,
+                                    "longitude": 121.5
+                                }
+                            ]
+                        },
+                        {
+                            "polygon": [
+                                {
+                                    "latitude": 24,
+                                    "longitude": 121.5
+                                },
+                                {
+                                    "latitude": 121,
+                                    "longitude": 56
+                                },
+                                {
+                                    "latitude": 45,
+                                    "longitude": 78
+                                },
+                                {
+                                    "latitude": 119,
+                                    "longitude": 121.5
+                                }
+                            ]
+                        }
+                    ]
                 },
-                {
-                  "latitude": 45,
-                  "longitude": 78
+                "_COMMENT": "The units of sale in which product is included, including any 1-1 unit",
+                "inUnitsOfSale": [
+                    "UK45TRI",
+                    "AVCSO",
+                    "PAYSF"
+                ],
+                "s63": {
+                    "name": "GB302409.001",
+                    "hash": "5160204288db0a543850da177ec637b71ed55946e7f3843e6180b1906ee4f4ea",
+                    "location": "8198201e-78ce-4af8-9145-ad68ba0472e2",
+                    "fileSize": "4500",
+                    "compression": true,
+                    "s57Crc": "5C06E104"
                 },
-                {
-                  "latitude": 119,
-                  "longitude": 121.5
-                }
-              ]
+                "signature": {
+                    "name": "GB302409.001",
+                    "hash": "fd0c9e5f95c0b664a1a27c2ff98812c648ebd113b117f5639f74536c397fbac9",
+                    "location": "0ecf2f38-a876-4d77-bd0e-0d901d3a0e73",
+                    "fileSize": "2500"
+                },
+                "ancillaryFiles": [
+                    {
+                        "name": "GB123_04.TXT",
+                        "hash": "d030b93ad8a0801e6955e4f52599f6200d01310155882a1b80eec78c9b93662b",
+                        "location": "2a29932e-dcb8-4e3a-b8a2-b3cfc335ede5",
+                        "fileSize": "1240"
+                    },
+                    {
+                        "name": "GB125_01.TXT",
+                        "hash": "bb8042082bd1d37236801837585fa0df5e96097fb8d2281b41888af2b23ceb0b",
+                        "location": "1ad0f9c3-8c93-495a-99a1-06a36410faa9",
+                        "fileSize": "1360"
+                    },
+                    {
+                        "name": "GB162_01.TXT",
+                        "hash": "81470666f387a9035f6b33f59fb9bbf0872e9c296fecee58c4e919d6a1d87ab6",
+                        "location": "eb443aad-394c-4eb0-b391-415a261605a1",
+                        "fileSize": "1360"
+                    }
+                ]
             },
             {
-              "polygon": [
-                {
-                  "latitude": 24,
-                  "longitude": 121.5
-                },
-                {
-                  "latitude": 121,
-                  "longitude": 56
-                },
-                {
-                  "latitude": 45,
-                  "longitude": 78
-                },
-                {
-                  "latitude": 119,
-                  "longitude": 121.5
-                }
-              ]
-            }
-          ]
-        },
-        "_COMMENT": "The units of sale in which product is included, including any 1-1 unit",
-        "inUnitsOfSale": [
-          "UK45TRI",
-          "AVCSO",
-          "PAYSF"
-        ],
-        "s63": {
-          "name": "GB302409.001",
-          "hash": "5160204288db0a543850da177ec637b71ed55946e7f3843e6180b1906ee4f4ea",
-          "location": "8198201e-78ce-4af8-9145-ad68ba0472e2",
-          "fileSize": "4500",
-          "compression": true,
-          "s57Crc": "5C06E104"
-        },
-        "signature": {
-          "name": "GB302409.001",
-          "hash": "fd0c9e5f95c0b664a1a27c2ff98812c648ebd113b117f5639f74536c397fbac9",
-          "location": "0ecf2f38-a876-4d77-bd0e-0d901d3a0e73",
-          "fileSize": "2500"
-        },
-        "ancillaryFiles": [
-          {
-            "name": "GB123_04.TXT",
-            "hash": "d030b93ad8a0801e6955e4f52599f6200d01310155882a1b80eec78c9b93662b",
-            "location": "2a29932e-dcb8-4e3a-b8a2-b3cfc335ede5",
-            "fileSize": "1240"
-          },
-          {
-            "name": "GB125_01.TXT",
-            "hash": "bb8042082bd1d37236801837585fa0df5e96097fb8d2281b41888af2b23ceb0b",
-            "location": "1ad0f9c3-8c93-495a-99a1-06a36410faa9",
-            "fileSize": "1360"
-          },
-          {
-            "name": "GB162_01.TXT",
-            "hash": "81470666f387a9035f6b33f59fb9bbf0872e9c296fecee58c4e919d6a1d87ab6",
-            "location": "eb443aad-394c-4eb0-b391-415a261605a1",
-            "fileSize": "1360"
-          }
-        ]
-      },
-      {
-        "productType": "ENC S57",
-        "dataSetName": "SD3401P.001",
-        "productName": "SD3401P",
-        "title": "SAUDI ARENA",
-        "scale": 90000,
-        "usageBand": 1,
-        "editionNumber": 4,
-        "updateNumber": 2,
-        "mayAffectHoldings": false,
-        "contentChange": true,
-        "permit": "permitString",
-        "providerCode": "1",
-        "providerName": "ICE",
-        "_COMMENT": "provider code and descrption are n-1 mapping",
-        "_ENUM": [
-          "ICE",
-          "ICE_GB",
-          "ICE_UK",
-          "PRIMAR",
-          "VAR Unique",
-          "VAR"
-        ],
+                "productType": "ENC S57",
+                "dataSetName": "SD3401P.001",
+                "productName": "SD3401P",
+                "title": "SAUDI ARENA",
+                "scale": 90000,
+                "usageBand": 1,
+                "editionNumber": 4,
+                "updateNumber": 2,
+                "mayAffectHoldings": false,
+                "contentChange": true,
+                "permit": "permitString",
+                "providerCode": "1",
+                "providerName": "ICE",
+                "_COMMENT": "provider code and descrption are n-1 mapping",
+                "_ENUM": [
+                    "ICE",
+                    "ICE_GB",
+                    "ICE_UK",
+                    "PRIMAR",
+                    "VAR Unique",
+                    "VAR"
+                ],
 
-        "size": "mdeium",
-        "_COMMENT": " size code not included as will be mapped in SAP",
-        "_ENUM": [
-          "large",
-          "medium",
-          "small"
+                "size": "mdeium",
+                "_COMMENT": " size code not included as will be mapped in SAP",
+                "_ENUM": [
+                    "large",
+                    "medium",
+                    "small"
+                ],
+                "agency": "USA",
+                "bundle": [
+                    {
+                        "bundleType": "DVD",
+                        "_ENUM": [
+                            "DVD"
+                        ],
+                        "location": "M2;B1"
+                    }
+                ],
+                "status": {
+                    "statusName": "Update",
+                    "_ENUM": [
+                        "New Edition",
+                        "Re-issue",
+                        "Update",
+                        "Cancellation Update",
+                        "Withdrawn",
+                        "Suspended"
+                    ],
+                    "statusDate": "2020-07-16T19:20:30.45+01:00",
+                    "isNewCell": false,
+                    "_COMMENT": "A cell new to the service"
+                },
+                "replaces": [
+                ],
+                "replacedBy": [],
+                "additionalCoverage": [],
+                "geographicLimit": {
+                    "boundingBox": {
+                        "northLimit": 24.146815,
+                        "southLimit": 22.581615,
+                        "eastLimit": 120.349635,
+                        "westLimit": 119.39142
+                    },
+                    "polygons": [
+                        {
+                            "polygon": [
+                                {
+                                    "latitude": 24,
+                                    "longitude": 121.5
+                                },
+                                {
+                                    "latitude": 121,
+                                    "longitude": 56
+                                },
+                                {
+                                    "latitude": 45,
+                                    "longitude": 78
+                                },
+                                {
+                                    "latitude": 119,
+                                    "longitude": 121.5
+                                }
+                            ]
+                        },
+                        {
+                            "polygon": [
+                                {
+                                    "latitude": 24,
+                                    "longitude": 121.5
+                                },
+                                {
+                                    "latitude": 121,
+                                    "longitude": 56
+                                },
+                                {
+                                    "latitude": 45,
+                                    "longitude": 78
+                                },
+                                {
+                                    "latitude": 119,
+                                    "longitude": 121.5
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "_COMMENT": "The units of sale in which product is included, including any 1-1 unit",
+                "inUnitsOfSale": [
+                    "SD3401P",
+                    "AVCSO",
+                    "PAYSF"
+                ],
+                "s63": {
+                    "name": "GB302409.001",
+                    "hash": "5160204288db0a543850da177ec637b71ed55946e7f3843e6180b1906ee4f4ea",
+                    "location": "8198201e-78ce-4af8-9145-ad68ba0472e2",
+                    "fileSize": "4500",
+                    "compression": true,
+                    "s57Crc": "5C06E104"
+                },
+                "signature": {
+                    "name": "GB302409.001",
+                    "hash": "fd0c9e5f95c0b664a1a27c2ff98812c648ebd113b117f5639f74536c397fbac9",
+                    "location": "0ecf2f38-a876-4d77-bd0e-0d901d3a0e73",
+                    "fileSize": "2500"
+                },
+                "ancillaryFiles": [
+                    {
+                        "name": "GB123_04.TXT",
+                        "hash": "d030b93ad8a0801e6955e4f52599f6200d01310155882a1b80eec78c9b93662b",
+                        "location": "2a29932e-dcb8-4e3a-b8a2-b3cfc335ede5",
+                        "fileSize": "1240"
+                    },
+                    {
+                        "name": "GB125_01.TXT",
+                        "hash": "bb8042082bd1d37236801837585fa0df5e96097fb8d2281b41888af2b23ceb0b",
+                        "location": "1ad0f9c3-8c93-495a-99a1-06a36410faa9",
+                        "fileSize": "1360"
+                    },
+                    {
+                        "name": "GB162_01.TXT",
+                        "hash": "81470666f387a9035f6b33f59fb9bbf0872e9c296fecee58c4e919d6a1d87ab6",
+                        "location": "eb443aad-394c-4eb0-b391-415a261605a1",
+                        "fileSize": "1360"
+                    }
+                ]
+            }
         ],
-        "agency": "USA",
-        "bundle": [
-          {
-            "bundleType": "DVD",
-            "_ENUM": [
-              "DVD"
-            ],
-            "location": "M2;B1"
-          }
-        ],
-        "status": {
-          "statusName": "Update",
-          "_ENUM": [
-            "New Edition",
-            "Re-issue",
-            "Update",
-            "Cancellation Update",
-            "Withdrawn",
-            "Suspended"
-          ],
-          "statusDate": "2020-07-16T19:20:30.45+01:00",
-          "isNewCell": false,
-          "_COMMENT": "A cell new to the service"
-        },
-        "replaces": [
-        ],
-        "replacedBy": [],
-        "additionalCoverage": [],
-        "geographicLimit": {
-          "boundingBox": {
-            "northLimit": 24.146815,
-            "southLimit": 22.581615,
-            "eastLimit": 120.349635,
-            "westLimit": 119.39142
-          },
-          "polygons": [
+        "_COMMENT": "All units will be included, including Cancelled Cell units",
+        "unitsOfSale": [
             {
-              "polygon": [
-                {
-                  "latitude": 24,
-                  "longitude": 121.5
+                "unitName": "UK45TRI",
+                "title": "Unit Title",
+                "unitOfSaleType": "unit",
+                "_ENUM": [
+                    "unit",
+                    "folio"
+                ],
+                "unitSize": "medium",
+                "_COMMENT": " size code not included as will be mapped in SAP",
+                "_ENUM": [
+                    "large",
+                    "medium",
+                    "small"
+                ],
+                "unitType": "AVCS Units Coastal",
+                "_ENUM": [
+                    "AVCS Units Overview",
+                    "AVCS Units General",
+                    "AVCS Units Coastal",
+                    "AVCS Units Approach",
+                    "AVCS Units Harbour",
+                    "AVCS Units Berthing"
+                ],
+                "status": "ForSale",
+                "_ENUM": [
+                    "ForSale",
+                    "NotForSale"
+                ],
+                "isNewUnitOfSale": false,
+                "_COMMENT": "BoundingBox or polygon or both or neither",
+                "geographicLimit": {
+                    "boundingBox": {
+                        "northLimit": 24.146815,
+                        "southLimit": 22.581615,
+                        "eastLimit": 120.349635,
+                        "westLimit": 119.39142
+                    },
+                    "polygons": []
                 },
-                {
-                  "latitude": 121,
-                  "longitude": 56
-                },
-                {
-                  "latitude": 45,
-                  "longitude": 78
-                },
-                {
-                  "latitude": 119,
-                  "longitude": 121.5
+                "compositionChanges": {
+                    "addProducts": [],
+                    "removeProducts": []
                 }
-              ]
             },
             {
-              "polygon": [
-                {
-                  "latitude": 24,
-                  "longitude": 121.5
+                "unitName": "SD3401P",
+                "title": "SAUDI ARENA",
+                "unitOfSaleType": "unit",
+                "_ENUM": [
+                    "unit",
+                    "folio"
+                ],
+                "unitSize": "medium",
+                "_COMMENT": " size code not included as will be mapped in SAP",
+                "_ENUM": [
+                    "large",
+                    "medium",
+                    "small"
+                ],
+                "unitType": "AVCS Units Coastal",
+                "_ENUM": [
+                    "AVCS Units Overview",
+                    "AVCS Units General",
+                    "AVCS Units Coastal",
+                    "AVCS Units Approach",
+                    "AVCS Units Harbour",
+                    "AVCS Units Berthing"
+                ],
+                "status": "ForSale",
+                "_ENUM": [
+                    "ForSale",
+                    "NotForSale"
+                ],
+                "isNewUnitOfSale": false,
+                "_COMMENT": "BoundingBox or polygon or both or neither",
+                "geographicLimit": {
+                    "boundingBox": {
+                        "northLimit": 24.146815,
+                        "southLimit": 22.581615,
+                        "eastLimit": 120.349635,
+                        "westLimit": 119.39142
+                    },
+                    "polygons": []
                 },
-                {
-                  "latitude": 121,
-                  "longitude": 56
-                },
-                {
-                  "latitude": 45,
-                  "longitude": 78
-                },
-                {
-                  "latitude": 119,
-                  "longitude": 121.5
+                "compositionChanges": {
+                    "addProducts": [],
+                    "removeProducts": []
                 }
-              ]
+            },
+            {
+                "unitName": "AVCSO",
+                "title": "Title",
+                "unitOfSaleType": "folio",
+                "_ENUM": [
+                    "unit",
+                    "folio"
+                ],
+                "unitSize": "large",
+                "_COMMENT": " size code not included as will be mapped in SAP",
+                "_ENUM": [
+                    "large",
+                    "medium",
+                    "small"
+                ],
+                "unitType": "AVCS Units Coastal",
+                "_ENUM": [
+                    "AVCS Units Overview",
+                    "AVCS Units General",
+                    "AVCS Units Coastal",
+                    "AVCS Units Approach",
+                    "AVCS Units Harbour",
+                    "AVCS Units Berthing"
+                ],
+                "status": "ForSale",
+                "isNewUnitOfSale": false,
+                "geographicLimit": {
+                    "boundingBox": {},
+                    "polygons": [
+                        {
+                            "polygon": [
+                                {
+                                    "latitude": 22.57515,
+                                    "longitude": 120.21948
+                                },
+                                {
+                                    "latitude": 22.64326,
+                                    "longitude": 120
+                                },
+                                {
+                                    "latitude": 22.57154,
+                                    "longitude": 120
+                                },
+                                {
+                                    "latitude": 22.57515,
+                                    "longitude": 121.21948
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "compositionChanges": {
+                    "addProducts": [
+
+                    ],
+                    "removeProducts": [
+
+                    ]
+                }
+            },
+            {
+                "unitName": "PAYSF",
+                "title": "World Folio",
+                "unitOfSaleType": "folio",
+                "_ENUM": [
+                    "unit",
+                    "folio"
+                ],
+                "unitSize": "large",
+                "_COMMENT": " size code not included as will be mapped in SAP",
+                "_ENUM": [
+                    "large",
+                    "medium",
+                    "small"
+                ],
+                "unitType": "AVCS Units Coastal",
+                "_ENUM": [
+                    "AVCS Units Overview",
+                    "AVCS Units General",
+                    "AVCS Units Coastal",
+                    "AVCS Units Approach",
+                    "AVCS Units Harbour",
+                    "AVCS Units Berthing"
+                ],
+                "status": "ForSale",
+                "isNewUnitOfSale": false,
+                "geographicLimit": {
+                    "boundingBox": {},
+                    "polygons": [
+                        {
+                            "polygon": [
+                                {
+                                    "latitude": 89,
+                                    "longitude": -179.995
+                                },
+                                {
+                                    "latitude": 89,
+                                    "longitude": 0
+                                },
+                                {
+                                    "latitude": 89,
+                                    "longitude": 179.995
+                                },
+                                {
+                                    "latitude": -89,
+                                    "longitude": 179.995
+                                },
+                                {
+                                    "latitude": -89,
+                                    "longitude": 0
+                                },
+                                {
+                                    "latitude": -89,
+                                    "longitude": -179.995
+                                },
+                                {
+                                    "latitude": 89,
+                                    "longitude": -179.995
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "compositionChanges": {
+                    "addProducts": [
+
+                    ],
+                    "removeProducts": [
+
+                    ]
+                }
             }
-          ]
-        },
-        "_COMMENT": "The units of sale in which product is included, including any 1-1 unit",
-        "inUnitsOfSale": [
-          "SD3401P",
-          "AVCSO",
-          "PAYSF"
-        ],
-        "s63": {
-          "name": "GB302409.001",
-          "hash": "5160204288db0a543850da177ec637b71ed55946e7f3843e6180b1906ee4f4ea",
-          "location": "8198201e-78ce-4af8-9145-ad68ba0472e2",
-          "fileSize": "4500",
-          "compression": true,
-          "s57Crc": "5C06E104"
-        },
-        "signature": {
-          "name": "GB302409.001",
-          "hash": "fd0c9e5f95c0b664a1a27c2ff98812c648ebd113b117f5639f74536c397fbac9",
-          "location": "0ecf2f38-a876-4d77-bd0e-0d901d3a0e73",
-          "fileSize": "2500"
-        },
-        "ancillaryFiles": [
-          {
-            "name": "GB123_04.TXT",
-            "hash": "d030b93ad8a0801e6955e4f52599f6200d01310155882a1b80eec78c9b93662b",
-            "location": "2a29932e-dcb8-4e3a-b8a2-b3cfc335ede5",
-            "fileSize": "1240"
-          },
-          {
-            "name": "GB125_01.TXT",
-            "hash": "bb8042082bd1d37236801837585fa0df5e96097fb8d2281b41888af2b23ceb0b",
-            "location": "1ad0f9c3-8c93-495a-99a1-06a36410faa9",
-            "fileSize": "1360"
-          },
-          {
-            "name": "GB162_01.TXT",
-            "hash": "81470666f387a9035f6b33f59fb9bbf0872e9c296fecee58c4e919d6a1d87ab6",
-            "location": "eb443aad-394c-4eb0-b391-415a261605a1",
-            "fileSize": "1360"
-          }
         ]
-      }
-    ],
-    "_COMMENT": "All units will be included, including Cancelled Cell units",
-    "unitsOfSale": [
-      {
-        "unitName": "UK45TRI",
-        "title": "Unit Title",
-        "unitOfSaleType": "unit",
-        "_ENUM": [
-          "unit",
-          "folio"
-        ],
-        "unitSize": "medium",
-        "_COMMENT": " size code not included as will be mapped in SAP",
-        "_ENUM": [
-          "large",
-          "medium",
-          "small"
-        ],
-        "unitType": "AVCS Units Coastal",
-        "_ENUM": [
-          "AVCS Units Overview",
-          "AVCS Units General",
-          "AVCS Units Coastal",
-          "AVCS Units Approach",
-          "AVCS Units Harbour",
-          "AVCS Units Berthing"
-        ],
-        "status": "ForSale",
-        "_ENUM": [
-          "ForSale",
-          "NotForSale"
-        ],
-        "isNewUnitOfSale": false,
-        "_COMMENT": "BoundingBox or polygon or both or neither",
-        "geographicLimit": {
-          "boundingBox": {
-            "northLimit": 24.146815,
-            "southLimit": 22.581615,
-            "eastLimit": 120.349635,
-            "westLimit": 119.39142
-          },
-          "polygons": []
-        },
-        "compositionChanges": {
-          "addProducts": [],
-          "removeProducts": []
-        }
-      },
-      {
-        "unitName": "SD3401P",
-        "title": "SAUDI ARENA",
-        "unitOfSaleType": "unit",
-        "_ENUM": [
-          "unit",
-          "folio"
-        ],
-        "unitSize": "medium",
-        "_COMMENT": " size code not included as will be mapped in SAP",
-        "_ENUM": [
-          "large",
-          "medium",
-          "small"
-        ],
-        "unitType": "AVCS Units Coastal",
-        "_ENUM": [
-          "AVCS Units Overview",
-          "AVCS Units General",
-          "AVCS Units Coastal",
-          "AVCS Units Approach",
-          "AVCS Units Harbour",
-          "AVCS Units Berthing"
-        ],
-        "status": "ForSale",
-        "_ENUM": [
-          "ForSale",
-          "NotForSale"
-        ],
-        "isNewUnitOfSale": false,
-        "_COMMENT": "BoundingBox or polygon or both or neither",
-        "geographicLimit": {
-          "boundingBox": {
-            "northLimit": 24.146815,
-            "southLimit": 22.581615,
-            "eastLimit": 120.349635,
-            "westLimit": 119.39142
-          },
-          "polygons": []
-        },
-        "compositionChanges": {
-          "addProducts": [],
-          "removeProducts": []
-        }
-      },
-      {
-        "unitName": "AVCSO",
-        "title": "Title",
-        "unitOfSaleType": "folio",
-        "_ENUM": [
-          "unit",
-          "folio"
-        ],
-        "unitSize": "large",
-        "_COMMENT": " size code not included as will be mapped in SAP",
-        "_ENUM": [
-          "large",
-          "medium",
-          "small"
-        ],
-        "unitType": "AVCS Units Coastal",
-        "_ENUM": [
-          "AVCS Units Overview",
-          "AVCS Units General",
-          "AVCS Units Coastal",
-          "AVCS Units Approach",
-          "AVCS Units Harbour",
-          "AVCS Units Berthing"
-        ],
-        "status": "ForSale",
-        "isNewUnitOfSale": false,
-        "geographicLimit": {
-          "boundingBox": {},
-          "polygons": [
-            {
-              "polygon": [
-                {
-                  "latitude": 22.57515,
-                  "longitude": 120.21948
-                },
-                {
-                  "latitude": 22.64326,
-                  "longitude": 120
-                },
-                {
-                  "latitude": 22.57154,
-                  "longitude": 120
-                },
-                {
-                  "latitude": 22.57515,
-                  "longitude": 121.21948
-                }
-              ]
-            }
-          ]
-        },
-        "compositionChanges": {
-          "addProducts": [
-
-          ],
-          "removeProducts": [
-
-          ]
-        }
-      },
-      {
-        "unitName": "PAYSF",
-        "title": "World Folio",
-        "unitOfSaleType": "folio",
-        "_ENUM": [
-          "unit",
-          "folio"
-        ],
-        "unitSize": "large",
-        "_COMMENT": " size code not included as will be mapped in SAP",
-        "_ENUM": [
-          "large",
-          "medium",
-          "small"
-        ],
-        "unitType": "AVCS Units Coastal",
-        "_ENUM": [
-          "AVCS Units Overview",
-          "AVCS Units General",
-          "AVCS Units Coastal",
-          "AVCS Units Approach",
-          "AVCS Units Harbour",
-          "AVCS Units Berthing"
-        ],
-        "status": "ForSale",
-        "isNewUnitOfSale": false,
-        "geographicLimit": {
-          "boundingBox": {},
-          "polygons": [
-            {
-              "polygon": [
-                {
-                  "latitude": 89,
-                  "longitude": -179.995
-                },
-                {
-                  "latitude": 89,
-                  "longitude": 0
-                },
-                {
-                  "latitude": 89,
-                  "longitude": 179.995
-                },
-                {
-                  "latitude": -89,
-                  "longitude": 179.995
-                },
-                {
-                  "latitude": -89,
-                  "longitude": 0
-                },
-                {
-                  "latitude": -89,
-                  "longitude": -179.995
-                },
-                {
-                  "latitude": 89,
-                  "longitude": -179.995
-                }
-              ]
-            }
-          ]
-        },
-        "compositionChanges": {
-          "addProducts": [
-
-          ],
-          "removeProducts": [
-
-          ]
-        }
-      }
-    ]
-  }
+    }
 }

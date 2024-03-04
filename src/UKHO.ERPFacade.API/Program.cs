@@ -19,6 +19,9 @@ using UKHO.ERPFacade.Common.HttpClients;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Models;
+using UKHO.ERPFacade.Common.Providers;
+using UKHO.ERPFacade.Common.PermitDecryption;
+using UKHO.ERPFacade.Common.Services;
 using UKHO.Logging.EventHubLogProvider;
 
 namespace UKHO.ERPFacade
@@ -166,7 +169,8 @@ namespace UKHO.ERPFacade
             builder.Services.Configure<SapConfiguration>(configuration.GetSection("SapConfiguration"));
             builder.Services.Configure<SapActionConfiguration>(configuration.GetSection("SapActionConfiguration"));
             sapActionConfiguration = configuration.GetSection("SapActionConfiguration").Get<SapActionConfiguration>()!;
-            builder.Services.Configure<EESHealthCheckEnvironmentConfiguration>(configuration.GetSection("EESHealthCheckEnvironmentConfiguration"));                       
+            builder.Services.Configure<EESHealthCheckEnvironmentConfiguration>(configuration.GetSection("EESHealthCheckEnvironmentConfiguration"));
+            builder.Services.Configure<PermitConfiguration>(configuration.GetSection("PermitConfiguration"));
 
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -179,6 +183,8 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<IFileSystem, FileSystem>();            
             builder.Services.AddScoped<IEESClient, EESClient>();
             builder.Services.AddScoped<ILicenceUpdatedSapMessageBuilder, LicenceUpdatedSapMessageBuilder>();
+            builder.Services.AddScoped<IWeekDetailsProvider, WeekDetailsProvider>();
+            builder.Services.AddScoped<IPermitDecryption, PermitDecryption>();
 
             builder.Services.AddHealthChecks()
                 .AddCheck<SapServiceHealthCheck>("SapServiceHealthCheck")

@@ -9,7 +9,7 @@ parameters:
   - name: vNext
     displayName: "Run the vNext Path"
     type: boolean
-    default: true
+    default: false
 
   - name: DisableDependencyCheck
     displayName: "Disable OWASP dependency checking"
@@ -405,6 +405,20 @@ stages:
         value: $(AzureADConfigurationClientId)
       - name: "SharedKeyConfiguration.Key"
         value: $(SharedKeyConfigurationKey)
+      - name: "PermitConfiguration.PermitDecryptionHardwareId"
+        value: $(PermitDecryptionHardwareId)
+      - name: "PermitWithSameKey.Permit"
+        value: $(PermitWithSameKeyPermit)
+      - name: "PermitWithSameKey.ACTIVEKEY"
+        value: $(PermitWithSameKeyACTIVEKEY)
+      - name: "PermitWithSameKey.NEXTKEY"
+        value: $(PermitWithSameKeyNEXTKEY)
+      - name: "PermitWithDifferentKey.Permit"
+        value: $(PermitWithDifferentKeyPermit)
+      - name: "PermitWithDifferentKey.ACTIVEKEY"
+        value: $(PermitWithDifferentKeyACTIVEKEY)
+      - name: "PermitWithDifferentKey.NEXTKEY"
+        value: $(PermitWithDifferentKeyNEXTKEY)
     jobs:
       - deployment: DevDeployTerraform
         displayName: "Dev - Deploy Terraform"
@@ -438,6 +452,12 @@ stages:
             value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.keyvaulturi'] ]
           - name :  "AzureWebJobsStorage.ConnectionString"
             value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
+          - name : ResourceGroup
+            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.ResourceGroup'] ]
+          - name : WEB_APP_SLOT_NAME
+            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME'] ]
+          - name : WEB_APP_SLOT_HOST_NAME
+            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME'] ]
         workspace:
           clean: all
         strategy:
@@ -532,6 +552,12 @@ stages:
             value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.keyvaulturi'] ]
           - name : "AzureWebJobsStorage.ConnectionString"
             value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
+          - name : ResourceGroup
+            value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.ResourceGroup'] ]
+          - name : WEB_APP_SLOT_NAME
+            value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME'] ]
+          - name : WEB_APP_SLOT_HOST_NAME
+            value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME'] ]
         workspace:
           clean: all
         strategy:
@@ -618,6 +644,12 @@ stages:
             value : $[ dependencies.E2EDeployTerraform.outputs['E2EDeployTerraform.TerraformDeploy.keyvaulturi'] ]
           - name : "AzureWebJobsStorage.ConnectionString"
             value : $[ dependencies.E2EDeployTerraform.outputs['E2EDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
+          - name : ResourceGroup
+            value : $[ dependencies.E2EDeployTerraform.outputs['E2EDeployTerraform.TerraformDeploy.ResourceGroup'] ]
+          - name : WEB_APP_SLOT_NAME
+            value : $[ dependencies.E2EDeployTerraform.outputs['E2EDeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME'] ]
+          - name : WEB_APP_SLOT_HOST_NAME
+            value : $[ dependencies.E2EDeployTerraform.outputs['E2EDeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME'] ]
         workspace:
           clean: all
         strategy:
@@ -657,7 +689,22 @@ stages:
         value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
       - name: "SapMockConfiguration.BaseUrl"
         value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
+      - name: "PermitConfiguration.PermitDecryptionHardwareId"
+        value: $(PermitDecryptionHardwareId)
+      - name: "PermitWithSameKey.Permit"
+        value: $(PermitWithSameKeyPermit)
+      - name: "PermitWithSameKey.ACTIVEKEY"
+        value: $(PermitWithSameKeyACTIVEKEY)
+      - name: "PermitWithSameKey.NEXTKEY"
+        value: $(PermitWithSameKeyNEXTKEY)
+      - name: "PermitWithDifferentKey.Permit"
+        value: $(PermitWithDifferentKeyPermit)
+      - name: "PermitWithDifferentKey.ACTIVEKEY"
+        value: $(PermitWithDifferentKeyACTIVEKEY)
+      - name: "PermitWithDifferentKey.NEXTKEY"
+        value: $(PermitWithDifferentKeyNEXTKEY)
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
+
     jobs:
       - deployment: QADeployTerraform
         displayName: "Qa - Deploy Terraform"
@@ -687,6 +734,12 @@ stages:
             value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.keyvaulturi'] ]
           - name : "AzureWebJobsStorage.ConnectionString"
             value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
+          - name : ResourceGroup
+            value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.ResourceGroup'] ]
+          - name : WEB_APP_SLOT_NAME
+            value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME'] ]
+          - name : WEB_APP_SLOT_HOST_NAME
+            value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME'] ]
         workspace:
           clean: all
         strategy:
@@ -752,6 +805,12 @@ stages:
         variables:
           - name : WEB_APP_NAME
             value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.WEB_APP'] ]
+          - name : ResourceGroup
+            value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.ResourceGroup'] ]
+          - name : WEB_APP_SLOT_NAME
+            value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME'] ]
+          - name : WEB_APP_SLOT_HOST_NAME
+            value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME'] ]
         workspace:
           clean: all
         strategy:
