@@ -9,12 +9,6 @@
         public AzureADconfiguration AzureADConfiguration { get; set; }
         public AzureStorageConfiguration AzureStorageConfiguration { get; set; }
         public string[] XMLActionList { get; set; }
-        public string UoSPayloadFileName { get; set; }
-        public string PriceChangePayloadFileName { get; set; }
-        public string ERPFacadeGeneratedProductJSON { get; set; }
-        public string GeneratedProductJsonFolder { get; set; }
-        public string GeneratedJSONFolder { get; set; }
-        public SharedKeyConfiguration SharedKeyConfiguration { get; set; }
         public string LicenceUpdatedPayloadTestData { get; set; }
         public string[] RosLicenceUpdateXMLList { get; set; }
         public string[] RoSLicenceUpdatedProdXMLList { get; set; }
@@ -53,11 +47,7 @@
         public string ConnectionString { get; set; }
     }
 
-    public class SharedKeyConfiguration
-    {
-        public string Key { get; set; }
-    }
-
+    
     public class PermitWithSameKey
     {
         public string Permit { get; set; }

@@ -54,9 +54,6 @@
     <None Update="appsettings.local.overrides.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="ERPFacadeGeneratedProductJSON\we123s-sds3-df333-d3d.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="ERPFacadeGeneratedXmlFiles\we123s-sds3-df333-d3d.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -315,19 +312,6 @@
     </None>    
   </ItemGroup>
 
-
-  <ItemGroup>
-    <Content Include="ERPFacadeGeneratedJSONFiles\**">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-	<ItemGroup>
-		<Content Include="ERPFacadeGeneratedProductJSON\**">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
-	</ItemGroup>
-
 	<ItemGroup>
 		<Content Include="ERPFacadeGeneratedXmlFiles\**">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -335,18 +319,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Remove="ERPFacadeGeneratedJSONFiles\default.JSON" />
-	  <None Remove="ERPFacadeGeneratedProductJSON\default.JSON" />
 	  <None Remove="ERPFacadeGeneratedXmlFiles\LicenceUpdate\FM-RoS-XMLPayloadUpdateLicense.xml" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Content Update="ERPFacadeGeneratedJSONFiles\default.JSON">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	  <Content Update="ERPFacadeGeneratedProductJSON\default.JSON">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
 	  <Content Update="ERPFacadeGeneratedXmlFiles\default.xml">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>
