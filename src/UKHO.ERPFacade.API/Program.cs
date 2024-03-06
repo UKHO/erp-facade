@@ -21,7 +21,6 @@ using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Providers;
 using UKHO.ERPFacade.Common.PermitDecryption;
-using UKHO.ERPFacade.Common.Services;
 using UKHO.Logging.EventHubLogProvider;
 
 namespace UKHO.ERPFacade
