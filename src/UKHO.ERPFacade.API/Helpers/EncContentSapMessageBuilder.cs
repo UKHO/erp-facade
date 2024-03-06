@@ -95,14 +95,15 @@ namespace UKHO.ERPFacade.API.Helpers
                 //Actions for ENC CELL
                 foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == EncCell))
                 {
+                    var unitOfSale = GetUnitOfSaleForEncCell(eventData.Data.UnitsOfSales, product);
+
                     XmlElement actionNode;
                     switch (action.ActionNumber)
                     {
                         case 1:
-                        case 5:
-                        case 7:
-                        case 9:
-                            var unitOfSale = GetUnitOfSaleForEncCell(eventData.Data.UnitsOfSales, product);
+                        case 6:
+                        case 8:
+                        case 10:
                             foreach (var rules in action.Rules)
                             {
                                 foreach (var conditions in rules.Conditions)
@@ -131,10 +132,18 @@ namespace UKHO.ERPFacade.API.Helpers
                             break;
 
                         case 4:
-                            var unitOfSaleReplace = GetUnitOfSaleForEncCell(eventData.Data.UnitsOfSales, product);
                             foreach (var replacedProduct in product.ReplacedBy)
                             {
-                                actionNode = BuildAction(soapXml, product, unitOfSaleReplace, action, ukhoWeekNumber, null, replacedProduct);
+                                actionNode = BuildAction(soapXml, product, unitOfSale, action, ukhoWeekNumber, null, replacedProduct);
+                                actionItemNode.AppendChild(actionNode);
+                                _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
+                            }
+                            break;
+
+                        case 5:
+                            foreach (var additionalCoverageProduct in product.AdditionalCoverage)
+                            {
+                                actionNode = BuildAction(soapXml, product, unitOfSale, action, ukhoWeekNumber, null, additionalCoverageProduct);
                                 actionItemNode.AppendChild(actionNode);
                                 _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
                             }
@@ -152,7 +161,7 @@ namespace UKHO.ERPFacade.API.Helpers
                         XmlElement actionNode;
                         switch (action.ActionNumber)
                         {
-                            case 10:
+                            case 11:
                                 foreach (var rules in action.Rules)
                                 {
                                     foreach (var conditions in rules.Conditions)
@@ -179,7 +188,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                 }
                                 break;
 
-                            case 6:
+                            case 7:
                                 foreach (var rules in action.Rules)
                                 {
                                     foreach (var conditions in rules.Conditions)
@@ -259,7 +268,7 @@ namespace UKHO.ERPFacade.API.Helpers
                             }
                             break;
 
-                        case 8:
+                        case 9:
                             foreach (var removeProduct in unitOfSale.CompositionChanges.RemoveProducts)
                             {
                                 var product = eventData.Data.Products.Where(x => x.ProductName == removeProduct).FirstOrDefault();
@@ -290,7 +299,7 @@ namespace UKHO.ERPFacade.API.Helpers
             return soapXml;
         }
 
-        private XmlElement BuildAction(XmlDocument soapXml, Product product, UnitOfSale unitOfSale, SapAction action, UkhoWeekNumber ukhoWeekNumber, string childCell = null, string replacedByProduct = null)
+        private XmlElement BuildAction(XmlDocument soapXml, Product product, UnitOfSale unitOfSale, SapAction action, UkhoWeekNumber ukhoWeekNumber, string childCell = null, string replacedByOrAddCoverageProduct = null)
         {
             XmlElement itemNode = soapXml.CreateElement(Item);
 
@@ -309,7 +318,7 @@ namespace UKHO.ERPFacade.API.Helpers
 
             List<(int sortingOrder, XmlElement itemNode)> actionAttributeList = new();
 
-            PermitKey? permitKey = action.ActionNumber == 1 || (action.ActionNumber == 7 && product.Status.StatusName == ProductStatusNewEdition) ? _permitDecryption.GetPermitKeys(product.Permit) : null;
+            PermitKey? permitKey = action.ActionNumber == 1 || (action.ActionNumber == 8 && product.Status.StatusName == ProductStatusNewEdition) ? _permitDecryption.GetPermitKeys(product.Permit) : null;
 
             foreach (var node in action.Attributes.Where(x => x.Section == ProductSection))
             {
@@ -317,9 +326,9 @@ namespace UKHO.ERPFacade.API.Helpers
 
                 if (node.IsRequired)
                 {
-                    if (node.XmlNodeName == ReplacedBy && replacedByProduct != null)
+                    if (node.XmlNodeName == ReplacedBy && replacedByOrAddCoverageProduct != null)
                     {
-                        itemSubNode.InnerText = GetXmlNodeValue(replacedByProduct.ToString());
+                        itemSubNode.InnerText = GetXmlNodeValue(replacedByOrAddCoverageProduct.ToString());
                     }
                     else if (node.XmlNodeName == ChildCell && childCell != null)
                     {
