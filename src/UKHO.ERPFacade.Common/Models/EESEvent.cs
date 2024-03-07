@@ -141,9 +141,6 @@ namespace UKHO.ERPFacade.Common.Models
     {
         [JsonProperty("boundingBox")]
         public BoundingBox BoundingBox { get; set; }
-
-        [JsonProperty("polygons")]
-        public List<Polygons> Polygons { get; set; }
     }
 
     [ExcludeFromCodeCoverage]
@@ -160,23 +157,6 @@ namespace UKHO.ERPFacade.Common.Models
 
         [JsonProperty("westLimit")]
         public double WestLimit { get; set; }
-    }
-
-    [ExcludeFromCodeCoverage]
-    public class Polygons
-    {
-        [JsonProperty("polygon")]
-        public List<Polygon> Polygon { get; set; }
-    }
-
-    [ExcludeFromCodeCoverage]
-    public class Polygon
-    {
-        [JsonProperty("latitude")]
-        public double Latitude { get; set; }
-
-        [JsonProperty("longitude")]
-        public double Longitude { get; set; }
     }
 
     [ExcludeFromCodeCoverage]
