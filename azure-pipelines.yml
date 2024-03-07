@@ -187,26 +187,6 @@ stages:
               zipAfterPublish: false
               modifyOutputPath: false
 
-          # - task: DotNetCoreCLI@2
-          #   displayName: "Publish ERPFacadeMonitoringWebjob Code"
-          #   inputs:
-          #     command: "publish"
-          #     publishWebProjects: false
-          #     projects: "**/UKHO.ERPFacade.Monitoring.WebJob.csproj"
-          #     arguments: "--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/UKHO.ERPFacade.API/App_Data/jobs/continuous/ERPFacadeMonitoringWebjob"
-          #     zipAfterPublish: false
-          #     modifyOutputPath: false
-          
-          # - task: DotNetCoreCLI@2
-          #   displayName: "Publish PriceChangeEventWebJob"
-          #   inputs:
-          #     command: "publish"
-          #     publishWebProjects: false
-          #     projects: "**/UKHO.ERPFacade.PublishPriceChange.WebJob.csproj"
-          #     arguments: "--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/UKHO.ERPFacade.API/App_Data/jobs/continuous/PriceChangeEventWebJob"
-          #     zipAfterPublish: false
-          #     modifyOutputPath: false
-
           - task: DotNetCoreCLI@2
             displayName: "Publish Cleanup Webjob"
             inputs:
@@ -401,10 +381,6 @@ stages:
         value: $(AzureADConfigurationAutoTestClientIdNoRole)
       - name: "AzureADConfiguration.ClientSecretNoRole"
         value: $(AzureADConfigurationClientSecretNoRole)
-      # - name: "EnterpriseEventServiceConfiguration.ClientId"
-      #   value: $(AzureADConfigurationClientId)
-      # - name: "SharedKeyConfiguration.Key"
-      #   value: $(SharedKeyConfigurationKey)
       - name: "PermitConfiguration.PermitDecryptionHardwareId"
         value: $(PermitDecryptionHardwareId)
       - name: "PermitWithSameKey.Permit"
@@ -679,10 +655,6 @@ stages:
         value: $(AzureADConfigurationAutoTestClientIdNoRole)
       - name: "AzureADConfiguration.ClientSecretNoRole"
         value: $(AzureADConfigurationClientSecretNoRole)
-      # - name: "EnterpriseEventServiceConfiguration.ClientId"
-      #   value: $(EnterpriseEventServiceConfigurationClientId)
-      # - name: "SharedKeyConfiguration.Key"
-      #   value: $(SharedKeyConfigurationKey)
       - name: mockWebAppName
         value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup
