@@ -12,8 +12,7 @@ steps:
           echo "##vso[task.setvariable variable=SapConfiguration.SapUsernameForEncEvent]$(SapUsernameForEncEvent)"
           echo "##vso[task.setvariable variable=SapConfiguration.SapUsernameForRecordOfSale]$(SapUsernameForRecordOfSale)"
           echo "##vso[task.setvariable variable=SapConfiguration.SapPasswordForRecordOfSale]$(SapPasswordForRecordOfSale)"
-          echo "az --version"
-
+          
   - task: FileTransform@1
     displayName: "File Transform: Mock Service Application Settings"
     condition: and(succeeded(), eq(variables['Environment.Name'], 'ERP-Dev'))
@@ -39,14 +38,21 @@ steps:
       targetFiles: '**/appsettings.json'
 
   - task: AzureCLI@2
+    displayName: "To get version of azure cli"
+    inputs:
+      azureSubscription: "ERP-Facade-Dev-A.011.05.12"
+      scriptType: 'bash'
+      scriptLocation: 'inlineScript'
+      inlineScript: 'az --version'
+
+  - task: AzureCLI@2
     displayName: "Stop Event Aggregator Webjob"
     inputs:
       azureSubscription: "ERP-Facade-Dev-A.011.05.12"
-      Script: az --version
       scriptType: 'pscore'
       scriptLocation: 'inlineScript'
       inlineScript: 'Get-AzWebAppContinuousWebJob -ResourceGroupName $(ResourceGroup) -AppName $(WEB_APP_NAME) -Name EventAggregationWebJob | Stop-AzWebAppContinuousWebJob'
-  
+
   - task: AzureWebApp@1
     displayName: "Azure App Deploy: Staging slot"
     inputs:
