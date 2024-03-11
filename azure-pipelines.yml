@@ -55,7 +55,13 @@ stages:
         workspace:
           clean: all
         displayName: "Dependencychecker"
+        pool: DeploymentPoolPE
         steps:
+          - task: CmdLine@2
+            inputs:
+              script: |
+                hostname
+                a version
           - task: UseDotNet@2
             displayName: 'Use .NET 6.0.x sdk'
             inputs:
@@ -96,7 +102,7 @@ stages:
               inlineScript: |
                 param($ReportLocation)
                 Invoke-VulnerabilityCheck -ReportLocation $ReportLocation
-
+     
       - job: UnitTestsAndCodeCoverage
         workspace:
           clean: all
