@@ -41,8 +41,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
                 requestBody = await streamReader.ReadToEndAsync();
             }
 
-            GeneratedCorrelationId = SAPXmlHelper.GenerateRandomCorrelationId();
-            requestBody = SAPXmlHelper.UpdateTimeAndCorrIdField(requestBody, GeneratedCorrelationId);
+            GeneratedCorrelationId = SapXmlHelper.GenerateRandomCorrelationId();
+            requestBody = SapXmlHelper.UpdateTimeAndCorrIdField(requestBody, GeneratedCorrelationId);
 
             var request = new RestRequest(LicenceUpdatedRequestEndPoint, Method.Post);
             request.AddHeader("Content-Type", "application/json");
@@ -102,8 +102,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             {
                 requestBody = streamReader.ReadToEnd();
             }
-            GeneratedCorrelationId = SAPXmlHelper.GenerateRandomCorrelationId();
-            requestBody = SAPXmlHelper.UpdateTimeAndCorrIdField(requestBody, GeneratedCorrelationId);
+            GeneratedCorrelationId = SapXmlHelper.GenerateRandomCorrelationId();
+            requestBody = SapXmlHelper.UpdateTimeAndCorrIdField(requestBody, GeneratedCorrelationId);
             var request = new RestRequest(LicenceUpdatedRequestEndPoint, Method.Post);
             request.AddHeader("Content-Type", "application/json");
             request.AddHeader("Authorization", "Bearer " + token);
@@ -113,7 +113,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             string generatedXmlFilePath = _azureBlobStorageHelper.DownloadGeneratedXMLFile(generatedXmlFolder, GeneratedCorrelationId, "licenceupdatedblobs");
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                Assert.That(LicenceUpdateXmlHelper.CheckXmlAttributes(jsonPayload, generatedXmlFilePath, requestBody).Result, Is.True, "CheckXMLAttributes Failed");
+                Assert.That(LicenceUpdateXmlHelper.CheckXmlAttributes(jsonPayload, generatedXmlFilePath, requestBody).Result, Is.True, "CheckXmlAttributes Failed");
             }
             return response;
         }

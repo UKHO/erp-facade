@@ -127,7 +127,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         {
             Console.WriteLine("Scenario: Merging ROS Events - " + firstEventPayloadJsonFileName + " & " + lastEventPayloadJsonFileName + "\n");
 
-            string generatedCorrelationId = SAPXmlHelper.GenerateRandomCorrelationId();
+            string generatedCorrelationId = SapXmlHelper.GenerateRandomCorrelationId();
             string generatedXmlFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXMLFolder, "RoSPayloadTestData");
             List<JsonInputRoSWebhookEvent> listOfEventJsons = await JsonHelper.GetEventJsonListUsingFileNameAsync(new List<string> { firstEventPayloadJsonFileName, lastEventPayloadJsonFileName });
 
@@ -153,7 +153,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         {
             Console.WriteLine("Scenario: Merging ROS Events - " + firstEventPayloadJsonFileName + " & " + "\n");
 
-            string generatedCorrelationId = SAPXmlHelper.GenerateRandomCorrelationId();
+            string generatedCorrelationId = SapXmlHelper.GenerateRandomCorrelationId();
             string generatedXmlFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXMLFolder, "RoSPayloadTestData");
             List<JsonInputRoSWebhookEvent> listOfEventJsons2 = await JsonHelper.GetEventJsonListUsingFileNameAsync(new List<string> { firstEventPayloadJsonFileName });
             string firstEventPayloadJsonFilePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, "RoSPayloadTestData", firstEventPayloadJsonFileName);

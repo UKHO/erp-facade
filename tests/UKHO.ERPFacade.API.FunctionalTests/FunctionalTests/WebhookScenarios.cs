@@ -102,7 +102,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [TestCase("ID29_simpleWithdrawnScenario.JSON", "N", TestName = "WhenICallTheWebhookWithSimpleWithdrawnScenario_ThenWebhookReturns200Response")]
         [TestCase("ID30_Suspend_and_WithdrawV01.JSON", "N", TestName = "WhenICallTheWebhookWithSuspendedAndWithdrawnScenario_ThenWebhookReturns200Response")]
         [TestCase("ID31_metadataAndSuspended.JSON", "N", TestName = "WhenICallTheWebhookWithMetadataAndSuspendedMixScenario_ThenWebhookReturns200Response")]
-        [TestCase("ID32_moveAndSuspended.JSON", "N", TestName = "WhenICallTheWebhookWithMovedataAndSuspendedMixScenario_ThenWebhookReturns200Response")]
+        [TestCase("ID32_moveAndSuspended.JSON", "N", TestName = "WhenICallTheWebhookWithMoveDataAndSuspendedMixScenario_ThenWebhookReturns200Response")]
 
         //Rule change unitType & addProducts
         [TestCase("ID33_NewCell_With2UoS_But_only1_having_addProduct.JSON", "N", TestName = "WhenICallTheWebhookWithNewCellScenarioWithMultipleUoSHavingUnitOfSalesTypeUnitButOnly1HavingValueInAddProducts_ThenWebhookReturns200Response")]
@@ -117,8 +117,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         {
             Console.WriteLine("Scenario:" + payloadJsonFileName + "\n");
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, payloadJsonFileName);
-            string generatedXMLFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXMLFolder);
-            RestResponse response = await _webhook.PostWebhookResponseAsyncForXML(filePath, generatedXMLFolder, await _authToken.GetAzureADToken(false), correctionTag, permitState);
+            string generatedXmlFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXMLFolder);
+            RestResponse response = await _webhook.PostWebhookResponseAsyncForXml(filePath, generatedXmlFolder, await _authToken.GetAzureADToken(false), correctionTag, permitState);
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
     }

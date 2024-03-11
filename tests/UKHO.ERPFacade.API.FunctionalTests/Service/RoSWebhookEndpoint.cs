@@ -41,8 +41,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
                 requestBody = streamReader.ReadToEnd();
             }
 
-            GeneratedCorrelationId = SAPXmlHelper.GenerateRandomCorrelationId();
-            requestBody = SAPXmlHelper.UpdateTimeAndCorrIdField(requestBody, GeneratedCorrelationId);
+            GeneratedCorrelationId = SapXmlHelper.GenerateRandomCorrelationId();
+            requestBody = SapXmlHelper.UpdateTimeAndCorrIdField(requestBody, GeneratedCorrelationId);
 
             var request = new RestRequest(RoSWebhookRequestEndPoint, Method.Post);
             request.AddHeader("Content-Type", "application/json");
@@ -69,7 +69,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
                 requestBody = await streamReader.ReadToEndAsync();
             }
 
-            requestBody = SAPXmlHelper.UpdateTimeAndCorrIdField(requestBody, correlationId);
+            requestBody = SapXmlHelper.UpdateTimeAndCorrIdField(requestBody, correlationId);
 
             var request = new RestRequest(RoSWebhookRequestEndPoint, Method.Post);
             request.AddHeader("Content-Type", "application/json");
@@ -102,7 +102,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
                     }
                     Assert.That(blobList, Does.Contain("SapXmlPayload"), $"XML is not generated for {correlationId} at {DateTime.Now}.");
                     string generatedXmlFilePath = _azureBlobStorageHelper.DownloadGeneratedXMLFile(generatedXmlFolder, correlationId, "recordofsaleblobs");
-                    Assert.That(RoSXmlHelper.CheckXmlAttributes(generatedXmlFilePath, requestBody, listOfEventJsons).Result, Is.True, "CheckXMLAttributes Failed");
+                    Assert.That(RoSXmlHelper.CheckXmlAttributes(generatedXmlFilePath, requestBody, listOfEventJsons).Result, Is.True, "CheckXmlAttributes Failed");
                     Assert.That(AzureTableHelper.GetSapStatus(correlationId), Is.EqualTo("Complete"), $"SAP status is Incomplete for {correlationId}");
                     break;
                 case false:
