@@ -61,7 +61,7 @@ stages:
             inputs:
               script: |
                 hostname
-                a version
+                az version
           - task: UseDotNet@2
             displayName: 'Use .NET 6.0.x sdk'
             inputs:
