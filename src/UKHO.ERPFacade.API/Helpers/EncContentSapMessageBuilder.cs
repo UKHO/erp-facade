@@ -88,7 +88,7 @@ namespace UKHO.ERPFacade.API.Helpers
             XmlNode IM_MATINFONode = soapXml.SelectSingleNode(XpathImMatInfo);
             XmlNode actionItemNode = soapXml.SelectSingleNode(XpathActionItems);
 
-            bool IsConditionSatisfied = false;
+            bool isConditionSatisfied = false;
             _logger.LogInformation(EventIds.BuildingSapActionStarted.ToEventId(), "Building SAP actions.");
             foreach (var product in eventData.Data.Products)
             {
@@ -111,23 +111,23 @@ namespace UKHO.ERPFacade.API.Helpers
                                     object jsonFieldValue = CommonHelper.ParseXmlNode(conditions.AttributeName, product, product.GetType());
                                     if (jsonFieldValue != null! && IsValidValue(jsonFieldValue.ToString(), conditions.AttributeValue))
                                     {
-                                        IsConditionSatisfied = true;
+                                        isConditionSatisfied = true;
                                     }
                                     else
                                     {
-                                        IsConditionSatisfied = false;
+                                        isConditionSatisfied = false;
                                         break;
                                     }
                                 }
-                                if (IsConditionSatisfied) break;
+                                if (isConditionSatisfied) break;
                             }
 
-                            if (IsConditionSatisfied)
+                            if (isConditionSatisfied)
                             {
                                 actionNode = BuildAction(soapXml, product, unitOfSale, action, ukhoWeekNumber);
                                 actionItemNode.AppendChild(actionNode);
                                 _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
-                                IsConditionSatisfied = false;
+                                isConditionSatisfied = false;
                             }
                             break;
 
@@ -169,22 +169,22 @@ namespace UKHO.ERPFacade.API.Helpers
                                         object jsonFieldValue = CommonHelper.ParseXmlNode(conditions.AttributeName, unitofSale, unitofSale.GetType());
                                         if (jsonFieldValue != null! && IsValidValue(jsonFieldValue.ToString(), conditions.AttributeValue))
                                         {
-                                            IsConditionSatisfied = true;
+                                            isConditionSatisfied = true;
                                         }
                                         else
                                         {
-                                            IsConditionSatisfied = false;
+                                            isConditionSatisfied = false;
                                             break;
                                         }
                                     }
                                 }
-                                if (IsConditionSatisfied)
+                                if (isConditionSatisfied)
                                 {
                                     actionNode = BuildAction(soapXml, product, unitofSale, action, ukhoWeekNumber);
                                     actionItemNode.AppendChild(actionNode);
                                     _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
 
-                                    IsConditionSatisfied = false;
+                                    isConditionSatisfied = false;
                                 }
                                 break;
 
@@ -196,22 +196,22 @@ namespace UKHO.ERPFacade.API.Helpers
                                         object jsonFieldValue = CommonHelper.ParseXmlNode(conditions.AttributeName, product, product.GetType());
                                         if (jsonFieldValue != null! && IsValidValue(jsonFieldValue.ToString(), conditions.AttributeValue))
                                         {
-                                            IsConditionSatisfied = true;
+                                            isConditionSatisfied = true;
                                         }
                                         else
                                         {
-                                            IsConditionSatisfied = false;
+                                            isConditionSatisfied = false;
                                             break;
                                         }
                                     }
                                 }
-                                if (IsConditionSatisfied)
+                                if (isConditionSatisfied)
                                 {
                                     actionNode = BuildAction(soapXml, product, unitofSale, action, ukhoWeekNumber);
                                     actionItemNode.AppendChild(actionNode);
                                     _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
 
-                                    IsConditionSatisfied = false;
+                                    isConditionSatisfied = false;
                                 }
                                 break;
                         }
@@ -233,18 +233,18 @@ namespace UKHO.ERPFacade.API.Helpers
                                 foreach (var conditions in rules.Conditions)
                                 {
                                     object jsonFieldValue = CommonHelper.ParseXmlNode(conditions.AttributeName, unitOfSale, unitOfSale.GetType());
-                                    if (jsonFieldValue != null && IsValidValue(jsonFieldValue.ToString(), conditions.AttributeValue))
+                                    if (jsonFieldValue != null! && IsValidValue(jsonFieldValue.ToString(), conditions.AttributeValue))
                                     {
-                                        IsConditionSatisfied = true;
+                                        isConditionSatisfied = true;
                                     }
                                     else
                                     {
-                                        IsConditionSatisfied = false;
+                                        isConditionSatisfied = false;
                                         break;
                                     }
                                 }
                             }
-                            if (IsConditionSatisfied)
+                            if (isConditionSatisfied)
                             {
                                 var product = eventData.Data.Products.Where(x => x.InUnitsOfSale.Contains(unitOfSale.UnitName)
                                               && unitOfSale.UnitOfSaleType == UnitSaleType).FirstOrDefault();
@@ -253,7 +253,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                 actionItemNode.AppendChild(actionNode);
                                 _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
 
-                                IsConditionSatisfied = false;
+                                isConditionSatisfied = false;
                             }
                             break;
 

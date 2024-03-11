@@ -39,6 +39,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         private const string XpathValidFrom = $"//*[local-name()='VALIDFROM']";
         private const string XpathActiveKey = $"//*[local-name()='ACTIVEKEY']";
         private const string XpathNextKey = $"//*[local-name()='NEXTKEY']";
+        private const string XpathChildCell = $"//*[local-name()='CHILDCELL']";
+        private const string XpathReplacedBy = $"//*[local-name()='REPLACEDBY']";
 
         private const string SapXmlFile = @"<?xml version=""1.0"" encoding=""utf-8""?>
 <soap:Envelope xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:soap=""http://schemas.xmlsoap.org/soap/envelope/"">
@@ -251,7 +253,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         {
             var scenarios = JsonConvert.DeserializeObject<EncEventPayload>(ScenariosDataUpdateEncCellForUpdate);
             var correlationId = "367ce4a4-1d62-4f56-b359-59e178d77100";
-            var permitKeys = new PermitKey { ActiveKey = "", NextKey = "" };
+            var permitKeys = new PermitKey { ActiveKey = "fakeActiveKey", NextKey = "fakeNextKey" };
 
             XmlDocument soapXml = new();
             soapXml.LoadXml(SapXmlFile);
@@ -373,6 +375,10 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             result.Should().BeOfType<XmlDocument>();
             var actionItem = result.SelectSingleNode(XpathActionItems);
             actionItem.ChildNodes.Count.Should().Be(3);
+            var childCell = result.SelectSingleNode(XpathChildCell);
+            childCell.InnerXml.Should().Be("DE416080");
+            var replacedBy = result.SelectSingleNode(XpathReplacedBy);
+            replacedBy.InnerXml.Should().Be("DK4LIMFW");
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
