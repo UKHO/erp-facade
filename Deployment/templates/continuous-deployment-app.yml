@@ -12,6 +12,7 @@ steps:
           echo "##vso[task.setvariable variable=SapConfiguration.SapUsernameForEncEvent]$(SapUsernameForEncEvent)"
           echo "##vso[task.setvariable variable=SapConfiguration.SapUsernameForRecordOfSale]$(SapUsernameForRecordOfSale)"
           echo "##vso[task.setvariable variable=SapConfiguration.SapPasswordForRecordOfSale]$(SapPasswordForRecordOfSale)"
+          echo "az --version"
 
   - task: FileTransform@1
     displayName: "File Transform: Mock Service Application Settings"
@@ -37,22 +38,15 @@ steps:
       fileType: 'json'
       targetFiles: '**/appsettings.json'
 
-  # - task: AzureCLI@2
-  #   displayName: "Stop Event Aggregator Webjob"
-  #   inputs:
-  #     azureSubscription: "ERP-Facade-Dev-A.011.05.12"
-  #     scriptType: 'pscore'
-  #     scriptLocation: 'inlineScript'
-  #     inlineScript: 'Get-AzWebAppContinuousWebJob -ResourceGroupName $(ResourceGroup) -AppName $(WEB_APP_NAME) -Name EventAggregationWebJob | Stop-AzWebAppContinuousWebJob'
-  - task: PowerShell@2
+  - task: AzureCLI@2
     displayName: "Stop Event Aggregator Webjob"
     inputs:
-      # azureSubscription: "ERP-Facade-Dev-A.011.05.12"
-      #scriptType: 'pscore'
-      #scriptLocation: 'inlineScript'
-      targetType: 'inline'
-      Script: Stop-AzWebAppContinuousWebJob -ResourceGroupName $(ResourceGroup) -AppName $(WEB_APP_NAME) -Name EventAggregationWebJob
-
+      azureSubscription: "ERP-Facade-Dev-A.011.05.12"
+      Script: az --version
+      scriptType: 'pscore'
+      scriptLocation: 'inlineScript'
+      inlineScript: 'Get-AzWebAppContinuousWebJob -ResourceGroupName $(ResourceGroup) -AppName $(WEB_APP_NAME) -Name EventAggregationWebJob | Stop-AzWebAppContinuousWebJob'
+  
   - task: AzureWebApp@1
     displayName: "Azure App Deploy: Staging slot"
     inputs:
