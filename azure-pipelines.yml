@@ -464,6 +464,11 @@ stages:
           runOnce:
             deploy:
               steps:
+                - task: PowerShell@2
+                  displayName: Azure CLI Version
+                  inputs:
+                    targetType: 'inline'
+                    script: 'az version'
                 - template: Deployment/templates/continuous-deployment-app.yml
                   parameters:
                     AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
