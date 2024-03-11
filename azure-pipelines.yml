@@ -55,13 +55,7 @@ stages:
         workspace:
           clean: all
         displayName: "Dependencychecker"
-        pool: Private Link Deployments (ENG)
         steps:
-          - task: CmdLine@2
-            inputs:
-              script: |
-                hostname
-                az version
           - task: UseDotNet@2
             displayName: 'Use .NET 6.0.x sdk'
             inputs:
