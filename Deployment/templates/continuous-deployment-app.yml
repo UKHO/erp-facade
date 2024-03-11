@@ -37,6 +37,13 @@ steps:
       fileType: 'json'
       targetFiles: '**/appsettings.json'
 
+  - task: PowerShell@2
+    displayName: "Stop Event Aggregator Webjob "
+    inputs:
+      targetType: 'inline'
+      script: |
+          Get-AzWebAppContinuousWebJob -ResourceGroupName $(ResourceGroup) -AppName $(WEB_APP_NAME) -Name EventAggregationWebJob | Stop-AzWebAppContinuousWebJob
+          
   - task: AzureWebApp@1
     displayName: "Azure App Deploy: Staging slot"
     inputs:
