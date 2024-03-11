@@ -55,7 +55,7 @@ stages:
         workspace:
           clean: all
         displayName: "Dependencychecker"
-        pool: DeploymentPoolPE
+        pool: Private Link Deployments (ENG)
         steps:
           - task: CmdLine@2
             inputs:
