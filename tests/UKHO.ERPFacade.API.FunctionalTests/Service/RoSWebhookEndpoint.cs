@@ -36,9 +36,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
         {
             string requestBody;
 
-            using (StreamReader streamReader = new StreamReader(payloadFilePath))
+            using (StreamReader streamReader = new(payloadFilePath))
             {
-                requestBody = streamReader.ReadToEnd();
+                requestBody = await streamReader.ReadToEndAsync();
             }
 
             GeneratedCorrelationId = SapXmlHelper.GenerateRandomCorrelationId();
@@ -101,7 +101,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
                         await Task.Delay(30000);
                     }
                     Assert.That(blobList, Does.Contain("SapXmlPayload"), $"XML is not generated for {correlationId} at {DateTime.Now}.");
-                    string generatedXmlFilePath = _azureBlobStorageHelper.DownloadGeneratedXMLFile(generatedXmlFolder, correlationId, "recordofsaleblobs");
+                    string generatedXmlFilePath = _azureBlobStorageHelper.DownloadGeneratedXmlFile(generatedXmlFolder, correlationId, "recordofsaleblobs");
                     Assert.That(RoSXmlHelper.CheckXmlAttributes(generatedXmlFilePath, requestBody, listOfEventJsons).Result, Is.True, "CheckXmlAttributes Failed");
                     Assert.That(AzureTableHelper.GetSapStatus(correlationId), Is.EqualTo("Complete"), $"SAP status is Incomplete for {correlationId}");
                     break;

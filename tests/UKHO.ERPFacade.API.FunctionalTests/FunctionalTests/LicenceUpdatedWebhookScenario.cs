@@ -94,7 +94,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         {
             Console.WriteLine("Scenario:" + payloadJsonFileName + "\n");
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.LicenceUpdatedPayloadTestData, payloadJsonFileName);
-            string generatedXmlFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXMLFolder, Config.TestConfig.LicenceUpdatedPayloadTestData);
+            string generatedXmlFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXmlFolder, Config.TestConfig.LicenceUpdatedPayloadTestData);
             RestResponse response = await LUpdatedWebhookEndpoint.PostLicenceUpdatedResponseAsyncForXML(filePath, generatedXmlFolder, await _authToken.GetAzureADToken(false));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }

@@ -104,7 +104,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     if (!item.UNITTYPE.Equals(GetUoSInfo(productName).UnitType))
                         s_attrNotMatched.Add(nameof(item.UNITTYPE));
                     //Checking blanks
-                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "EDITIONNO", "UPDATENO", "ACTIVEKEY", "NEXTKEY" };
+                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "EDITIONNO", "UPDATENO", "ActiveKey", "NextKey" };
                     VerifyBlankFields(item, blankFieldNames);
 
                     if (s_attrNotMatched.Count == 0)
@@ -168,8 +168,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     }
                     else if (product.Status.StatusName.Contains("Update") || product.Status.StatusName.Contains("Re-issue"))
                     {
-                        blankFieldNames.Add("ACTIVEKEY");
-                        blankFieldNames.Add("NEXTKEY");
+                        blankFieldNames.Add("ActiveKey");
+                        blankFieldNames.Add("NextKey");
                     }
                     //Checking blanks
                     VerifyBlankFields(item, blankFieldNames);
@@ -264,7 +264,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     if (!item.UPDATENO.Equals(product.UpdateNumber))
                         s_attrNotMatched.Add(nameof(item.UPDATENO));
                     //Checking blanks
-                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
+                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "UNITTYPE", "ActiveKey", "NextKey" };
                     VerifyBlankFields(item, blankFieldNames);
 
                     if (s_attrNotMatched.Count == 0)
@@ -304,7 +304,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         s_attrNotMatched.Add(nameof(item.PRODTYPE));
 
                     //Checking blanks
-                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
+                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ActiveKey", "NextKey" };
                     VerifyBlankFields(item, blankFieldNames);
 
                     if (s_attrNotMatched.Count == 0)
@@ -345,7 +345,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         s_attrNotMatched.Add(nameof(item.PRODUCTNAME));
 
                     //Checking blanks
-                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
+                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ActiveKey", "NextKey" };
                     VerifyBlankFields(item, blankFieldNames);
 
                     if (s_attrNotMatched.Count == 0)
@@ -386,7 +386,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                             s_attrNotMatched.Add(nameof(item.PRODTYPE));
                         //xmlAttributes[4] & [5] are skipped as already checked
                         //Checking blanks
-                        List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
+                        List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ActiveKey", "NextKey" };
                         VerifyBlankFields(item, blankFieldNames);
 
                         if (s_attrNotMatched.Count == 0)
@@ -428,7 +428,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!item.PRODUCTNAME.Equals(GetUoSName(childCell))))
                         s_attrNotMatched.Add(nameof(item.PRODUCTNAME));
                     //Checking blanks
-                    List<string> blankFieldNames = new List<string> { "CANCELLED", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
+                    List<string> blankFieldNames = new List<string> { "CANCELLED", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ActiveKey", "NextKey" };
                     VerifyBlankFields(item, blankFieldNames);
 
                     if (s_attrNotMatched.Count == 0)
@@ -475,7 +475,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                             s_attrNotMatched.Add(nameof(item.VALIDFROM));
                         if (!item.CORRECTION.Equals(correctionTag))
                             s_attrNotMatched.Add(nameof(item.CORRECTION));
-                        List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
+                        List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ActiveKey", "NextKey" };
                         VerifyBlankFields(item, blankFieldNames);
 
                         if (s_attrNotMatched.Count == 0)
@@ -531,7 +531,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         s_attrNotMatched.Add(nameof(item.CORRECTION));
 
                     //Checking blanks
-                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "EDITIONNO", "UPDATENO", "ACTIVEKEY", "NEXTKEY" };
+                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "EDITIONNO", "UPDATENO", "ActiveKey", "NextKey" };
                     VerifyBlankFields(item, blankFieldNames);
 
                     if (s_attrNotMatched.Count == 0)
@@ -618,16 +618,16 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             if (permitState.Contains("Same"))
             {
 
-                if (!item.ACTIVEKEY.Equals(Config.TestConfig.PermitWithSameKey.ACTIVEKEY))
+                if (!item.ACTIVEKEY.Equals(Config.TestConfig.PermitWithSameKey.ActiveKey))
                     s_attrNotMatched.Add(nameof(item.ACTIVEKEY));
-                if (!item.NEXTKEY.Equals(Config.TestConfig.PermitWithSameKey.NEXTKEY))
+                if (!item.NEXTKEY.Equals(Config.TestConfig.PermitWithSameKey.NextKey))
                     s_attrNotMatched.Add(nameof(item.NEXTKEY));
             }
             else if (permitState.Contains("Different"))
             {
-                if (!item.ACTIVEKEY.Equals(Config.TestConfig.PermitWithDifferentKey.ACTIVEKEY))
+                if (!item.ACTIVEKEY.Equals(Config.TestConfig.PermitWithDifferentKey.ActiveKey))
                     s_attrNotMatched.Add(nameof(item.ACTIVEKEY));
-                if (!item.NEXTKEY.Equals(Config.TestConfig.PermitWithDifferentKey.NEXTKEY))
+                if (!item.NEXTKEY.Equals(Config.TestConfig.PermitWithDifferentKey.NextKey))
                     s_attrNotMatched.Add(nameof(item.NEXTKEY));
             }
             return true;
@@ -665,7 +665,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
         public static async Task<bool> VerifyPresenceOfMandatoryXmlAttributes(ZMAT_ACTIONITEMS[] ZMAT_ACTIONITEMS)
         {
-            List<string> actionAttributesSeq = Config.TestConfig.XMLActionList.ToList<string>();
+            List<string> actionAttributesSeq = Config.TestConfig.XmlActionList.ToList<string>();
             List<string> currentActionAttributes = new();
             foreach (ZMAT_ACTIONITEMS item in ZMAT_ACTIONITEMS)
             {
@@ -907,144 +907,73 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
         public static int CalculateNewCellCount(JsonPayloadHelper jsonPayload)
         {
-            JsonPayloadHelper obj = jsonPayload;
-            int count = 0;
-
-            foreach (Product product in obj.Data.Products)
-            {
-                if (product.Status.IsNewCell == true)
-                {
-                    count++;
-                }
-            }
-
+            int count = jsonPayload.Data.Products.Count(product => product.Status.IsNewCell == true);
             if (count > 0)
             {
                 UpdateActionList(count, "1.  CREATE ENC CELL");
                 Console.WriteLine("Total no. of Create ENC Cell: " + count);
             }
-
             return count;
         }
 
         public static int CalculateNewUnitOfSalesCount(JsonPayloadHelper jsonPayload)
         {
-            JsonPayloadHelper obj = jsonPayload;
-            int newUoSCount = 0;
-
-            foreach (UnitOfSale unitOfSale in obj.Data.UnitsOfSales)
-            {
-                if (unitOfSale.IsNewUnitOfSale == true)
-                {
-                    newUoSCount++;
-                }
-            }
-
+            int newUoSCount = jsonPayload.Data.UnitsOfSales.Count(unitOfSale => unitOfSale.IsNewUnitOfSale == true);
             if (newUoSCount > 0)
             {
                 UpdateActionList(newUoSCount, "2.  CREATE AVCS UNIT OF SALE");
                 Console.WriteLine("Total no. of Create AVCS Unit of Sale: " + newUoSCount);
             }
-
             return newUoSCount;
         }
 
         public static int CalculateAssignCellToUoSActionCount(JsonPayloadHelper jsonPayload)
         {
-            JsonPayloadHelper obj = jsonPayload;
-            int count = 0;
-            foreach (UnitOfSale unitOfSale in obj.Data.UnitsOfSales)
-            {
-                count = count + unitOfSale.CompositionChanges.AddProducts.Count;
-            }
-
+            int count = jsonPayload.Data.UnitsOfSales.Aggregate(0, (current, unitOfSale) => current + unitOfSale.CompositionChanges.AddProducts.Count);
             if (count > 0)
             {
                 UpdateActionList(count, "3.  ASSIGN CELL TO AVCS UNIT OF SALE");
                 Console.WriteLine("Total no. of Assign Cell to AVCS UoS: " + count);
             }
-
             return count;
         }
 
         public static int CalculateReplaceCellActionCount(JsonPayloadHelper jsonPayload)
         {
-            JsonPayloadHelper obj = jsonPayload;
-            int count = 0;
-            foreach (Product product in obj.Data.Products)
-            {
-                if (product.Status.IsNewCell == false && ((product.ReplacedBy.Count) > 0))
-                {
-                    count = count + product.ReplacedBy.Count;
-                }
-            }
-
+            int count = jsonPayload.Data.Products.Where(product => product.Status.IsNewCell == false && ((product.ReplacedBy.Count) > 0)).Aggregate(0, (current, product) => current + product.ReplacedBy.Count);
             if (count > 0)
             {
                 UpdateActionList(count, "4.  REPLACED WITH ENC CELL");
                 Console.WriteLine("Total no. of ReplaceD With ENC Cell: " + count);
             }
-
             return count;
         }
 
         public static int CalculateChangeEncCellActionCount(JsonPayloadHelper jsonPayload)
         {
-            JsonPayloadHelper obj = jsonPayload;
-            int count = 0;
-
-            foreach (Product product in obj.Data.Products)
-            {
-                if (product.ContentChange == false)
-                {
-                    count++;
-                }
-            }
-
+            int count = jsonPayload.Data.Products.Count(product => product.ContentChange == false);
             if (count > 0)
             {
                 UpdateActionList(count, "5.  CHANGE ENC CELL");
                 Console.WriteLine("Total No. of Change ENC Cell: " + count);
             }
-
             return count;
         }
 
         public static int CalculateChangeUoSActionCount(JsonPayloadHelper jsonPayload)
         {
-            JsonPayloadHelper obj = jsonPayload;
-            int count = 0;
-
-            foreach (Product product in obj.Data.Products)
-            {
-                if (product.ContentChange == false)
-                {
-                    count = count + product.InUnitsOfSale.Count;
-                }
-            }
-
+            int count = jsonPayload.Data.Products.Where(product => product.ContentChange == false).Aggregate(0, (current, product) => current + product.InUnitsOfSale.Count);
             if (count > 0)
             {
                 UpdateActionList(count, "6.  CHANGE AVCS UNIT OF SALE");
                 Console.WriteLine("Total No. of Change AVCS UoS: " + count);
             }
-
             return count;
         }
 
         public static int CalculateUpdateEncCellEditionUpdateNumber(JsonPayloadHelper jsonPayload)
         {
-            JsonPayloadHelper obj = jsonPayload;
-            int count = 0;
-            foreach (Product product in obj.Data.Products)
-            {
-                if (product.ContentChange == true && product.Status.IsNewCell == false
-                    && (product.Status.StatusName == "Update" || product.Status.StatusName == "New Edition" || product.Status.StatusName == "Re-issue"))
-                {
-                    count++;
-                }
-            }
-
+            int count = jsonPayload.Data.Products.Count(product => product.ContentChange == true && product.Status.IsNewCell == false && (product.Status.StatusName == "Update" || product.Status.StatusName == "New Edition" || product.Status.StatusName == "Re-issue"));
             if (count > 0)
             {
                 UpdateActionList(count, "7.  UPDATE ENC CELL EDITION UPDATE NUMBER");
@@ -1055,106 +984,64 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
         public static int CalculateUpdateEncCellEditionUpdateNumberForSuspendedStatus(JsonPayloadHelper jsonPayload)
         {
-            JsonPayloadHelper obj = jsonPayload;
-            int count = 0;
-            foreach (Product product in obj.Data.Products)
-            {
-                if (product.Status.StatusName == "Suspended")
-                {
-                    count++;
-                }
-            }
-
+            int count = jsonPayload.Data.Products.Count(product => product.Status.StatusName == "Suspended");
             if (count > 0)
             {
                 UpdateActionList(count, "7.  UPDATE ENC CELL EDITION UPDATE NUMBER");
                 Console.WriteLine("Total no. of ENC Cell Edition Update Number: " + count);
             }
-
             return count;
         }
 
         public static int CalculateRemoveCellFromUoSActionCount(JsonPayloadHelper jsonPayload)
         {
-            JsonPayloadHelper obj = jsonPayload;
-            int count = 0;
-            foreach (UnitOfSale unitOfSale in obj.Data.UnitsOfSales)
-            {
-                if (unitOfSale.CompositionChanges.RemoveProducts.Count > 0)
-                {
-                    count = count + unitOfSale.CompositionChanges.RemoveProducts.Count;
-                }
-            }
-
+            int count = jsonPayload.Data.UnitsOfSales.Where(unitOfSale => unitOfSale.CompositionChanges.RemoveProducts.Count > 0).Aggregate(0, (current, unitOfSale) => current + unitOfSale.CompositionChanges.RemoveProducts.Count);
             if (count > 0)
             {
                 UpdateActionList(count, "8.  REMOVE ENC CELL FROM AVCS UNIT OF SALE");
                 Console.WriteLine("Total no. of Remove Cell from UoS: " + count);
             }
-
             return count;
         }
 
         public static int CalculateCancelledCellCount(JsonPayloadHelper jsonPayload)
         {
-            JsonPayloadHelper obj = jsonPayload;
-            int cancelledCellCount = 0;
-
-            foreach (Product product in obj.Data.Products)
-            {
-                if (product.Status.StatusName == "Cancellation Update")
-                {
-                    cancelledCellCount++;
-                }
-            }
-
+            int cancelledCellCount = jsonPayload.Data.Products.Count(product => product.Status.StatusName == "Cancellation Update");
             if (cancelledCellCount > 0)
             {
                 UpdateActionList(cancelledCellCount, "9.  CANCEL ENC CELL");
                 Console.WriteLine("Total No. of Cancel ENC Cell: " + cancelledCellCount);
             }
-
             return cancelledCellCount;
         }
 
         public static int CalculateCancelUnitOfSalesActionCount(JsonPayloadHelper jsonPayload)
         {
-            JsonPayloadHelper obj = jsonPayload;
-            int cancelledUoSCount = 0;
-
-            foreach (UnitOfSale unitOfSale in obj.Data.UnitsOfSales)
-            {
-                if (unitOfSale.Status == "NotForSale")
-                {
-                    cancelledUoSCount++;
-                }
-            }
-
+            int cancelledUoSCount = jsonPayload.Data.UnitsOfSales.Count(unitOfSale => unitOfSale.Status == "NotForSale");
             if (cancelledUoSCount > 0)
             {
                 UpdateActionList(cancelledUoSCount, "99. CANCEL AVCS UNIT OF SALE");
                 Console.WriteLine("Total No. of Cancel AVCS UoS: " + cancelledUoSCount);
             }
-
             return cancelledUoSCount;
         }
 
         public static string GenerateRandomCorrelationId()
         {
             Guid guid = Guid.NewGuid();
-            string randomCorrID = guid.ToString("N").Substring(0, 21);
-            randomCorrID = randomCorrID.Insert(5, "-");
-            randomCorrID = randomCorrID.Insert(11, "-");
-            randomCorrID = randomCorrID.Insert(16, "-");
-            string currentTimeStamp = DateTime.Now.ToString("yyyyMMdd");
-            randomCorrID = "ft-" + currentTimeStamp + "-" + randomCorrID;
-            Console.WriteLine("Generated CorrelationId = " + randomCorrID);
-            return randomCorrID;
+            string randomCorrId = guid.ToString("N").Substring(0, 21);
+            randomCorrId = randomCorrId.Insert(5, "-");
+            randomCorrId = randomCorrId.Insert(11, "-");
+            randomCorrId = randomCorrId.Insert(16, "-");
+            var currentTimeStamp = DateTime.Now.ToString("yyyyMMdd");
+            randomCorrId = "ft-" + currentTimeStamp + "-" + randomCorrId;
+            Console.WriteLine("Generated CorrelationId = " + randomCorrId);
+            return randomCorrId;
         }
 
         public static string UpdateTimeAndCorrIdField(string requestBody, string generatedCorrelationId)
         {
-            string currentTimeStamp = DateTime.Now.ToString("yyyy-MM-dd");
+            var currentTimeStamp = DateTime.Now.ToString("yyyy-MM-dd");
             JObject jsonObj = JObject.Parse(requestBody);
             jsonObj["time"] = currentTimeStamp;
             jsonObj["data"]["correlationId"] = generatedCorrelationId;
@@ -1205,8 +1092,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             JObject jsonObj = JObject.Parse(requestBody);
             if (permitState.Contains("Same"))
             {
-                JToken products = jsonObj["data"]["products"];
-                foreach (JToken product in products)
+                var products = jsonObj["data"]["products"];
+                foreach (var product in products)
                 {
                     Assert.That(Config.TestConfig.PermitWithSameKey.Permit, Is.Not.EqualTo(""), "Permit String is empty");
                     product["permit"] = Config.TestConfig.PermitWithSameKey.Permit;
@@ -1214,8 +1101,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             }
             else if (permitState.Contains("Different"))
             {
-                JToken products = jsonObj["data"]["products"];
-                foreach (JToken product in products)
+                var products = jsonObj["data"]["products"];
+                foreach (var product in products)
                 {
                     Assert.That(Config.TestConfig.PermitWithDifferentKey.Permit, Is.Not.EqualTo(""), "Permit String is empty");
                     product["permit"] = Config.TestConfig.PermitWithDifferentKey.Permit;
@@ -1223,8 +1110,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             }
             else
             {
-                JToken products = jsonObj["data"]["products"];
-                foreach (JToken product in products)
+                var products = jsonObj["data"]["products"];
+                foreach (var product in products)
                 {
                     product["permit"] = "permitString";
                 }

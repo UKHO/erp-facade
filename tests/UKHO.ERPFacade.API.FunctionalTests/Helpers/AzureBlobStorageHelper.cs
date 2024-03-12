@@ -6,79 +6,55 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
     public class AzureBlobStorageHelper
     {
-        
-
-        public string DownloadGeneratedXML(string expectedXMLfilePath, string blobContainer)
+        public string DownloadGeneratedXml(string expectedXmLfilePath, string blobContainer)
         {
-            BlobServiceClient blobServiceClient = new BlobServiceClient(Config.TestConfig.AzureStorageConfiguration.ConnectionString);
+            BlobServiceClient blobServiceClient = new(Config.TestConfig.AzureStorageConfiguration.ConnectionString);
             BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(blobContainer);
             BlobClient blobClient = containerClient.GetBlobClient("SapXmlPayload.xml");
             try
             {
                 BlobDownloadInfo blobDownload = blobClient.Download();
-                using (FileStream downloadFileStream = new((expectedXMLfilePath + "\\" + blobContainer + ".xml"), FileMode.Create))
-                {
-                    blobDownload.Content.CopyTo(downloadFileStream);
-                }
+                using FileStream downloadFileStream = new((expectedXmLfilePath + "\\" + blobContainer + ".xml"), FileMode.Create);
+                blobDownload.Content.CopyTo(downloadFileStream);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(blobContainer + " " + ex.Message);
             }
-            return (expectedXMLfilePath + "\\" + blobContainer + ".xml");
+            return (expectedXmLfilePath + "\\" + blobContainer + ".xml");
         }
 
         public bool VerifyBlobExists(string parentContainerName, string subContainerName)
         {
             BlobServiceClient blobServiceClient = new BlobServiceClient(Config.TestConfig.AzureStorageConfiguration.ConnectionString);
             BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(parentContainerName);
-            BlobClient blobClient = containerClient.GetBlobClient(subContainerName);
-
-            foreach (BlobItem blobItem in containerClient.GetBlobs())
-            {
-                if (blobItem.Name.Substring(0, 36) == subContainerName)
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return containerClient.GetBlobs().Any(blobItem => blobItem.Name.Substring(0, 36) == subContainerName);
         }
 
         public List<string> GetBlobNamesInFolder(string blobContainerName, string corrId)
         {
-            List<string> blobList = new();
             BlobContainerClient blobContainerClient = new(Config.TestConfig.AzureStorageConfiguration.ConnectionString, blobContainerName);
 
             var blobs = blobContainerClient.GetBlobs(BlobTraits.None, BlobStates.None, corrId);
 
-            foreach (BlobItem blob in blobs)
-            {
-                var blobName = blob.Name.Split("/");
-                var fileName = blobName[1].Split(".");
-                blobList.Add(fileName[0]);
-            }
-
-            return blobList;
+            return (from blob in blobs select blob.Name.Split("/") into blobName select blobName[1].Split(".") into fileName select fileName[0]).ToList();
         }
 
-        public string DownloadGeneratedXMLFile(string expectedXMLfilePath, string blobContainer, string parentContainerName)
+        public string DownloadGeneratedXmlFile(string expectedXmlFilePath, string blobContainer, string parentContainerName)
         {
             string fileName = "";
-            string licenceUpdatedXMLFile = "SapXmlPayload";
+            string licenceUpdatedXmlFile = "SapXmlPayload";
             BlobServiceClient blobServiceClient = new BlobServiceClient(Config.TestConfig.AzureStorageConfiguration.ConnectionString);
 
             BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(parentContainerName + "\\" + blobContainer);
-            BlobClient blobClient = containerClient.GetBlobClient(blobContainer + "/" + licenceUpdatedXMLFile + ".xml");
+            BlobClient blobClient = containerClient.GetBlobClient(blobContainer + "/" + licenceUpdatedXmlFile + ".xml");
             try
             {
                 BlobDownloadInfo blobDownload = blobClient.Download();
-                fileName = expectedXMLfilePath + "\\" + blobContainer + "\\" + licenceUpdatedXMLFile + ".xml";
+                fileName = expectedXmlFilePath + "\\" + blobContainer + "\\" + licenceUpdatedXmlFile + ".xml";
                 Directory.CreateDirectory(Path.GetDirectoryName(fileName));
-                using (FileStream downloadFileStream = new(fileName, FileMode.Create))
-                {
-                    blobDownload.Content.CopyTo(downloadFileStream);
-                }
+                using FileStream downloadFileStream = new(fileName, FileMode.Create);
+                blobDownload.Content.CopyTo(downloadFileStream);
             }
             catch (Exception ex)
             {

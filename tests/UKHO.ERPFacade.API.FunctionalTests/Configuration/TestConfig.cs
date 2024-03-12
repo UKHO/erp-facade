@@ -4,14 +4,14 @@
     {
         public string PayloadFolder { get; set; }
         public string WebhookPayloadFileName { get; set; }
-        public string GeneratedXMLFolder { get; set; }
+        public string GeneratedXmlFolder { get; set; }
         public ErpFacadeConfiguration ErpFacadeConfiguration { get; set; }
         public AzureADconfiguration AzureADConfiguration { get; set; }
         public AzureStorageConfiguration AzureStorageConfiguration { get; set; }
-        public string[] XMLActionList { get; set; }
+        public string[] XmlActionList { get; set; }
         public string LicenceUpdatedPayloadTestData { get; set; }
-        public string[] RosLicenceUpdateXMLList { get; set; }
-        public string[] RoSLicenceUpdatedProdXMLList { get; set; }
+        public string[] RosLicenceUpdateXmlList { get; set; }
+        public string[] RoSLicenceUpdatedProdXmlList { get; set; }
         public string WeekNoTag { get; set; }
         public string ValidFromTag { get; set; }
         public PermitWithSameKey PermitWithSameKey { get; set; }
@@ -51,14 +51,14 @@
     public class PermitWithSameKey
     {
         public string Permit { get; set; }
-        public string ACTIVEKEY { get; set; }
-        public string NEXTKEY { get; set; }
+        public string ActiveKey { get; set; }
+        public string NextKey { get; set; }
     }
 
     public class PermitWithDifferentKey
     {
         public string Permit { get; set; }
-        public string ACTIVEKEY { get; set; }
-        public string NEXTKEY { get; set; }
+        public string ActiveKey { get; set; }
+        public string NextKey { get; set; }
     }
 }

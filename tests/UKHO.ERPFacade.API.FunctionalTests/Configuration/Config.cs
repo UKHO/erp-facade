@@ -8,7 +8,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Configuration
 
         public static void ConfigSetup()
         {
-            IConfiguration ConfigurationRoot = new ConfigurationBuilder()
+            IConfiguration configurationRoot = new ConfigurationBuilder()
                                .AddJsonFile("appsettings.json", false)
 #if DEBUG
                 //Add development overrides configuration
@@ -19,7 +19,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Configuration
 
 
             TestConfig = new();
-            ConfigurationRoot.Bind(TestConfig);
+            configurationRoot.Bind(TestConfig);
 
         }
     }

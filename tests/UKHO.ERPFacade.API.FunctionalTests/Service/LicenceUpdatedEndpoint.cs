@@ -20,7 +20,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
         public LicenceUpdatedEndpoint()
         {
            _azureBlobStorageHelper = new AzureBlobStorageHelper();
-           RestClientOptions options = new RestClientOptions(Config.TestConfig.ErpFacadeConfiguration.BaseUrl);
+           RestClientOptions options = new(Config.TestConfig.ErpFacadeConfiguration.BaseUrl);
            _client = new RestClient(options);
         }
 
@@ -65,7 +65,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
 
             using (StreamReader streamReader = new StreamReader(payloadFilePath))
             {
-                requestBody = streamReader.ReadToEnd();
+                requestBody = await streamReader.ReadToEndAsync();
             }
 
             if (scenarioName == "Bad Request")
@@ -100,7 +100,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
 
             using (StreamReader streamReader = new(filePath))
             {
-                requestBody = streamReader.ReadToEnd();
+                requestBody = await streamReader.ReadToEndAsync();
             }
             GeneratedCorrelationId = SapXmlHelper.GenerateRandomCorrelationId();
             requestBody = SapXmlHelper.UpdateTimeAndCorrIdField(requestBody, GeneratedCorrelationId);
@@ -110,7 +110,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
             RestResponse response = await _client.ExecuteAsync(request);
             JsonInputLicenceUpdateHelper jsonPayload = JsonConvert.DeserializeObject<JsonInputLicenceUpdateHelper>(requestBody);
-            string generatedXmlFilePath = _azureBlobStorageHelper.DownloadGeneratedXMLFile(generatedXmlFolder, GeneratedCorrelationId, "licenceupdatedblobs");
+            string generatedXmlFilePath = _azureBlobStorageHelper.DownloadGeneratedXmlFile(generatedXmlFolder, GeneratedCorrelationId, "licenceupdatedblobs");
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 Assert.That(LicenceUpdateXmlHelper.CheckXmlAttributes(jsonPayload, generatedXmlFilePath, requestBody).Result, Is.True, "CheckXmlAttributes Failed");

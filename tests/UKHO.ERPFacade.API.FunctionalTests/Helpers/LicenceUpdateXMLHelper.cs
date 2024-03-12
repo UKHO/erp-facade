@@ -19,8 +19,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         {
             UpdatedJsonPayload = JsonConvert.DeserializeObject<JsonInputLicenceUpdateHelper>(updatedRequestBody);
 
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.LoadXml(File.ReadAllText(xmlFilePath));
+            XmlDocument xmlDoc = new();
+            xmlDoc.LoadXml(await File.ReadAllTextAsync(xmlFilePath));
 
             while (xmlDoc.DocumentElement.Name == "soap:Envelope" || xmlDoc.DocumentElement.Name == "soap:Body")
             {
@@ -117,7 +117,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         public static async Task<bool> VerifyPresenseOfMandatoryXMLAtrributes(Z_ADDS_ROSIM_ORDER order)
         {
             List<string> ActionAttributesSeq = new List<string>();
-            ActionAttributesSeq = Config.TestConfig.RosLicenceUpdateXMLList.ToList<string>();
+            ActionAttributesSeq = Config.TestConfig.RosLicenceUpdateXmlList.ToList<string>();
             List<string> CurrentActionAttributes = new List<string>();
             CurrentActionAttributes.Clear();
             Type arrayType = order.GetType();

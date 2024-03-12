@@ -38,7 +38,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
 
             using (StreamReader streamReader = new(filePath))
             {
-                requestBody = streamReader.ReadToEnd();
+                requestBody = await streamReader.ReadToEndAsync();
             }
             GeneratedCorrelationId = SapXmlHelper.GenerateRandomCorrelationId();
             requestBody = SapXmlHelper.UpdateTimeAndCorrIdField(requestBody, GeneratedCorrelationId);
@@ -73,7 +73,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             string correlationId = jsonPayload.Data.correlationId;
 
             //Logic to download XML from container using TraceID from JSON
-            string generatedXmlFilePath = _azureBlobStorageHelper.DownloadGeneratedXML(generatedXmlFolder, correlationId);
+            string generatedXmlFilePath = _azureBlobStorageHelper.DownloadGeneratedXml(generatedXmlFolder, correlationId);
 
             //Logic to verifyxml
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
