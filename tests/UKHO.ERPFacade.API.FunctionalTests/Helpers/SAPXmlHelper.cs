@@ -20,8 +20,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         private static JsonPayloadHelper UpdatedJsonPayload { get; set; }
         public static List<string> ListFromJson = new();
         public static List<string> ActionsListFromXml = new();
-        private static readonly string weekNoTag = Config.TestConfig.WeekNoTag;
-        private static readonly string validFromTag = Config.TestConfig.ValidFromTag;
+        private static readonly string s_weekNoTag = Config.TestConfig.WeekNoTag;
+        private static readonly string s_validFromTag = Config.TestConfig.ValidFromTag;
 
         public static async Task<bool> CheckXMLAttributes(JsonPayloadHelper jsonPayload, string XMLFilePath, string updatedRequestBody, string correctionTag, string permitState)
         {
@@ -100,7 +100,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     if (!item.ENCSIZE.Equals(GetUoSInfo(productName).UnitSize))
                         AttrNotMatched.Add(nameof(item.ENCSIZE));
                     VerifyAdditionalXmlTags(item, correctionTag);
-                    
                     //Checking blanks
                     List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "EDITIONNO", "UPDATENO", "ACTIVEKEY", "NEXTKEY", "TITLE", "UNITTYPE" };
                     VerifyBlankFields(item, blankFieldNames);
@@ -241,7 +240,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     if (!item.ENCSIZE.Equals(product.Size))
                         AttrNotMatched.Add(nameof(item.ENCSIZE));
                     VerifyAdditionalXmlTags(item, correctionTag);
-
                     //Checking blanks
                     List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "UNITTYPE", "ACTIVEKEY", "NEXTKEY", "TITLE", "EDITIONNO", "UPDATENO" };
                     VerifyBlankFields(item, blankFieldNames);
@@ -407,7 +405,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     //if (!product.InUnitsOfSale.Contains(item.PRODUCTNAME))
                     if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!item.PRODUCTNAME.Equals(GetUoSName(childCell))))
                         AttrNotMatched.Add(nameof(item.PRODUCTNAME));
-                    //VerifyAdditionalXmlTags(item, correctionTag);
                     //Checking blanks
                     List<string> blankFieldNames = new List<string> { "CANCELLED", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
                     VerifyBlankFields(item, blankFieldNames);
@@ -578,9 +575,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
         private static void VerifyAdditionalXmlTags(ZMAT_ACTIONITEMS item, string correctionTag)
         {
-            if (!item.WEEKNO.Equals(weekNoTag))
+            if (!item.WEEKNO.Equals(s_weekNoTag))
                 AttrNotMatched.Add(nameof(item.WEEKNO));
-            if (!item.VALIDFROM.Equals(validFromTag))
+            if (!item.VALIDFROM.Equals(s_validFromTag))
                 AttrNotMatched.Add(nameof(item.VALIDFROM));
             if (!item.CORRECTION.Equals(correctionTag))
                 AttrNotMatched.Add(nameof(item.CORRECTION));
