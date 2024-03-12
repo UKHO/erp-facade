@@ -95,8 +95,6 @@ namespace UKHO.ERPFacade.API.Helpers
                 //Actions for ENC CELL
                 foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == EncCell))
                 {
-                    var unitOfSale = GetUnitOfSaleForEncCell(eventData.Data.UnitsOfSales, product);
-
                     XmlElement actionNode;
                     switch (action.ActionNumber)
                     {
@@ -104,6 +102,7 @@ namespace UKHO.ERPFacade.API.Helpers
                         case 6:
                         case 8:
                         case 10:
+                            var unitOfSale = GetUnitOfSaleForEncCell(eventData.Data.UnitsOfSales, product);
                             foreach (var rules in action.Rules)
                             {
                                 foreach (var conditions in rules.Conditions)
@@ -132,18 +131,20 @@ namespace UKHO.ERPFacade.API.Helpers
                             break;
 
                         case 4:
+                            var unitOfSaleForReplace = GetUnitOfSaleForEncCell(eventData.Data.UnitsOfSales, product);
                             foreach (var replacedProduct in product.ReplacedBy)
                             {
-                                actionNode = BuildAction(soapXml, product, unitOfSale, action, ukhoWeekNumber, null, replacedProduct);
+                                actionNode = BuildAction(soapXml, product, unitOfSaleForReplace, action, ukhoWeekNumber, null, replacedProduct);
                                 actionItemNode.AppendChild(actionNode);
                                 _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
                             }
                             break;
 
                         case 5:
+                            var unitOfSaleForCoverage = GetUnitOfSaleForEncCell(eventData.Data.UnitsOfSales, product);
                             foreach (var additionalCoverageProduct in product.AdditionalCoverage)
                             {
-                                actionNode = BuildAction(soapXml, product, unitOfSale, action, ukhoWeekNumber, null, additionalCoverageProduct);
+                                actionNode = BuildAction(soapXml, product, unitOfSaleForCoverage, action, ukhoWeekNumber, null, additionalCoverageProduct);
                                 actionItemNode.AppendChild(actionNode);
                                 _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
                             }
