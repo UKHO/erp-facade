@@ -36,14 +36,6 @@ steps:
       folderPath: '$(Pipeline.Workspace)/UKHOERPFacadeAPI/*.zip'
       fileType: 'json'
       targetFiles: '**/appsettings.json'
-
-  - task: AzureCLI@2
-    displayName: "Stop Event Aggregator Webjob"
-    inputs:
-      azureSubscription: "ERP-Facade-Dev-A.011.05.12"
-      scriptType: 'pscore'
-      scriptLocation: 'inlineScript'
-      inlineScript: 'Get-AzWebAppContinuousWebJob -ResourceGroupName $(ResourceGroup) -AppName $(WEB_APP_NAME) -Name EventAggregationWebJob | Stop-AzWebAppContinuousWebJob'
            
   - task: AzureWebApp@1
     displayName: "Azure App Deploy: Staging slot"
