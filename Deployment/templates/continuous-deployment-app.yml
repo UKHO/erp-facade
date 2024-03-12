@@ -71,20 +71,20 @@ steps:
       filePath: "$(Pipeline.Workspace)/terraformartifact/check_service_status.ps1"
       arguments: "-healthEndPointUrl $(ErpFacadeConfiguration.BaseUrl)/health -waitTimeInMinute $(waitTimeInMinute)"
       
-  # - task: AzureCLI@2
-  #   displayName: "Stop Event Aggregator Webjob"
-  #   inputs:
-  #     azureSubscription: "ERP-Facade-Dev-A.011.05.12"
-  #     scriptType: 'pscore'
-  #     scriptLocation: 'scriptPath'
-  #     scriptPath: "$(Pipeline.Workspace)/terraformartifact/Stop_Azure_Webjob.ps1"
-  #     arguments: '-resourcegroup $(ResourceGroup) -appname $(WEB_APP_NAME)'
-
-  - task: AzurePowerShell@5
+  - task: AzureCLI@2
     displayName: "Stop Event Aggregator Webjob"
     inputs:
-      arguments: '-ResourceGroup $(ResourceGroup) -WEB_APP_NAME $(WEB_APP_NAME)'
-      azureSubscription: 'ERP-Facade-Dev-A.011.05.12'
-      ScriptType: 'InlineScript'
-      azurePowerShellVersion: 'LatestVersion'
-      Inline: 'Invoke-AzureRmResourceAction -ResourceGroupName $(ResourceGroup) -ResourceType Microsoft.Web/sites/ContinuousWebJobs -ResourceName $(WEB_APP_NAME)/EventAggregationWebJob -Action stop -ApiVersion 2015-08-01 -Force'
+      azureSubscription: "ERP-Facade-Dev-A.011.05.12"
+      scriptType: 'pscore'
+      scriptLocation: 'scriptPath'
+      scriptPath: "$(Pipeline.Workspace)/terraformartifact/Stop_Azure_Webjob.ps1"
+      arguments: '-resourcegroup $(ResourceGroup) -appname $(WEB_APP_NAME)'
+
+  # - task: AzurePowerShell@5
+  #   displayName: "Stop Event Aggregator Webjob"
+  #   inputs:
+  #     arguments: '-ResourceGroup $(ResourceGroup) -WEB_APP_NAME $(WEB_APP_NAME)'
+  #     azureSubscription: 'ERP-Facade-Dev-A.011.05.12'
+  #     ScriptType: 'InlineScript'
+  #     azurePowerShellVersion: 'LatestVersion'
+  #     Inline: 'Invoke-AzureRmResourceAction -ResourceGroupName $(ResourceGroup) -ResourceType Microsoft.Web/sites/ContinuousWebJobs -ResourceName $(WEB_APP_NAME)/EventAggregationWebJob -Action stop -ApiVersion 2015-08-01 -Force'
