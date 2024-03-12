@@ -74,8 +74,8 @@ steps:
   - task: AzureCLI@2
     displayName: "Stop Event Aggregator Webjob"
     inputs:
-      azureSubscription: "${{ parameters.AzureSubscription }}"
-      scriptType: 'ps'
+      azureSubscription: "ERP-Facade-Dev-A.011.05.12"
+      scriptType: 'pscore'
       scriptLocation: 'scriptPath'
       scriptPath: "$(Pipeline.Workspace)/terraformartifact/Stop_Azure_Webjob.ps1"
       arguments: '-resourcegroup $(ResourceGroup) -appname $(WEB_APP_NAME)'
