@@ -46,36 +46,36 @@ steps:
       scriptPath: "$(Pipeline.Workspace)/terraformartifact/Stop_Azure_Webjob.ps1"
       arguments: '-resourcegroup $(ResourceGroup) -appname $(WEB_APP_NAME)'
 
-  - task: azurewebapp@1
-    displayname: "azure app deploy: staging slot"
+  - task: AzureWebApp@1
+    displayName: "Azure App Deploy: Staging slot"
     inputs:
-      azuresubscription: "${{ parameters.azuresubscription }}"
-      apptype: webapp
-      appname: "$(web_app_name)"
-      package: "$(pipeline.workspace)/ukhoerpfacadeapi/ukhoerpfacadeapi.zip"
-      deploytoslotorase: true
-      slotname: $(web_app_slot_name)
+      azureSubscription: "${{ parameters.AzureSubscription }}"
+      appType: webApp
+      appName: "$(WEB_APP_NAME)"
+      package: "$(Pipeline.Workspace)/UKHOERPFacadeAPI/UKHOERPFacadeAPI.zip"
+      deployToSlotOrASE: true
+      slotName: $(WEB_APP_SLOT_NAME)
 
-  - task: powershell@2
-    displayname: "check the status of staging slot"
+  - task: PowerShell@2
+    displayName: "Check the status of staging slot"
     inputs:
-      targettype: filepath
-      filepath: "$(pipeline.workspace)/terraformartifact/check_service_status.ps1"
-      arguments: "-healthendpointurl https://$(web_app_slot_host_name)/health -waittimeinminute $(waittimeinminute)"
+      targetType: filePath
+      filePath: "$(Pipeline.Workspace)/terraformartifact/check_service_status.ps1"
+      arguments: "-healthEndPointUrl https://$(WEB_APP_SLOT_HOST_NAME)/health -waitTimeInMinute $(waitTimeInMinute)"
      
-  - task: azureappservicemanage@0
-    displayname: "swap with production slot"
+  - task: AzureAppServiceManage@0
+    displayName: "Swap with production slot"
     inputs:
-      azuresubscription: "${{ parameters.azuresubscription }}"
-      resourcegroupname: $(resourcegroup)
-      webappname: $(web_app_name)
-      action: "swap slots"
-      swapwithproduction: true
-      sourceslot: $(web_app_slot_name)
+      azureSubscription: "${{ parameters.AzureSubscription }}"
+      resourceGroupName: $(ResourceGroup)
+      webAppName: $(WEB_APP_NAME)
+      action: "Swap Slots"
+      swapWithProduction: true
+      sourceSlot: $(WEB_APP_SLOT_NAME)
 
-  - task: powershell@2
-    displayname: "check the status of production slot"
+  - task: PowerShell@2
+    displayName: "Check the status of production slot"
     inputs:
-      targettype: filepath
-      filepath: "$(pipeline.workspace)/terraformartifact/check_service_status.ps1"
-      arguments: "-healthendpointurl $(erpfacadeconfiguration.baseurl)/health -waittimeinminute $(waittimeinminute)"
+      targetType: filePath
+      filePath: "$(Pipeline.Workspace)/terraformartifact/check_service_status.ps1"
+      arguments: "-healthEndPointUrl $(ErpFacadeConfiguration.BaseUrl)/health -waitTimeInMinute $(waitTimeInMinute)"
