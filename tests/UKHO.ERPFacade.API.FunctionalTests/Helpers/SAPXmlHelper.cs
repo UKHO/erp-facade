@@ -100,7 +100,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     if (!item.ENCSIZE.Equals(GetUoSInfo(productName).UnitSize))
                         s_attrNotMatched.Add(nameof(item.ENCSIZE));
                     VerifyAdditionalXmlTags(item, correctionTag);
-                    
                     //Checking blanks
                     List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "EDITIONNO", "UPDATENO", "ACTIVEKEY", "NEXTKEY", "TITLE", "UNITTYPE" };
                     VerifyBlankFields(item, blankFieldNames);
@@ -241,7 +240,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     if (!item.ENCSIZE.Equals(product.Size))
                         s_attrNotMatched.Add(nameof(item.ENCSIZE));
                     VerifyAdditionalXmlTags(item, correctionTag);
-
                     //Checking blanks
                     List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "UNITTYPE", "ACTIVEKEY", "NEXTKEY", "TITLE", "EDITIONNO", "UPDATENO" };
                     VerifyBlankFields(item, blankFieldNames);
@@ -578,9 +576,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
         private static void VerifyAdditionalXmlTags(ZMAT_ACTIONITEMS item, string correctionTag)
         {
-            if (!item.WEEKNO.Equals(weekNoTag))
+            if (!item.WEEKNO.Equals(s_weekNoTag))
                 AttrNotMatched.Add(nameof(item.WEEKNO));
-            if (!item.VALIDFROM.Equals(validFromTag))
+            if (!item.VALIDFROM.Equals(s_validFromTag))
                 AttrNotMatched.Add(nameof(item.VALIDFROM));
             if (!item.CORRECTION.Equals(correctionTag))
                 AttrNotMatched.Add(nameof(item.CORRECTION));

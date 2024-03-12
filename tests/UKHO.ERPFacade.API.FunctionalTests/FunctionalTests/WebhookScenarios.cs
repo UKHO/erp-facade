@@ -64,17 +64,17 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [TestCase("ID7_1CellCancel.JSON", "N", TestName = "WhenICallTheWebhookWithOneCancelCellScenario_ThenWebhookReturns200Response")]
 
         //Metadata Change
-        [TestCase("ID8_2CellMetadataChange.JSON", "N", TestName = "WhenICallTheWebhookWith2CellMetadataChangeScenario_ThenWebhookReturns200Response")]
+        [TestCase("ID8_2CellMetadataChange.JSON", "Y", TestName = "WhenICallTheWebhookWith2CellMetadataChangeScenario_ThenWebhookReturns200Response")]
         [TestCase("ID9_MetadataChange.JSON", "N", TestName = "WhenICallTheWebhookWithMetadataChangeScenario_ThenWebhookReturns200Response")]
 
         //Update
-        [TestCase("ID10_UpdateSimple.JSON", "N", TestName = "WhenICallTheWebhookWithSimpleUpdateScenarioHavingOneCellWithStatusNameAsUpdate_ThenWebhookReturns200Response")]
+        [TestCase("ID10_UpdateSimple.JSON", "Y", TestName = "WhenICallTheWebhookWithSimpleUpdateScenarioHavingOneCellWithStatusNameAsUpdate_ThenWebhookReturns200Response")]
         [TestCase("ID11_updateOneCellWithNewEditionStatus.JSON", "N", "SamePermitKey", TestName = "WhenICallTheWebhookWithSimpleUpdateScenarioHavingOneCellWithStatusNameAsNewEdition_ThenWebhookReturns200Response")]
         [TestCase("ID12_updateOneCellWithReIssueStatus.JSON", "N", TestName = "WhenICallTheWebhookWithSimpleUpdateScenarioHavingOneCellStatusNameAsReIssue_ThenWebhookReturns200Response")]
         [TestCase("ID13_updateTwoCellsWithDifferentStatusName.JSON", "N", "DifferentPermitKey", TestName = "WhenICallTheWebhookWithSimpleUpdateScenarioHavingTwoCellsWithDifferentStatusName_ThenWebhookReturns200Response")]
 
         //Move Cell
-        [TestCase("ID14_moveOneCell.JSON", "N", TestName = "WhenICallTheWebhookWithSimpleMoveCellScenario_ThenWebhookReturns200Response")]
+        [TestCase("ID14_moveOneCell.JSON", "Y", TestName = "WhenICallTheWebhookWithSimpleMoveCellScenario_ThenWebhookReturns200Response")]
         [TestCase("ID15_oneNewCellAndOneMoveOneCell.JSON", "N", TestName = "WhenICallTheWebhookWithOneNewCellAndOneMoveOneCellScenario_ThenWebhookReturns200Response")]
 
         //Mixed
@@ -95,7 +95,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [TestCase("ID26_New_CellV_03.JSON", "N", TestName = "WhenICallTheWebhookWithNewCellV03PayloadFile_ThenWebhookReturns200Response")]
 
         //Supplier Defined Releasability Set v0.1
-        [TestCase("ID27_supplier_Defined_ReleasabilitySet_V_01.JSON", "N", TestName = "WhenICallTheWebhookWithSupplierDefinedReleasabilitySetV01_ThenWebhookReturns200Response")]
+        [TestCase("ID27_supplier_Defined_ReleasabilitySet_V_01.JSON", "Y", TestName = "WhenICallTheWebhookWithSupplierDefinedReleasabilitySetV01_ThenWebhookReturns200Response")]
 
         //Suspended & Withdrawn
         [TestCase("ID28_simpleSuspendedScenario.JSON", "N", TestName = "WhenICallTheWebhookWithSimpleSuspendedScenario_ThenWebhookReturns200Response")]
