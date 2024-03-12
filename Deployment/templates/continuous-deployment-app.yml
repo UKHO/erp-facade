@@ -44,7 +44,7 @@ steps:
       scriptType: 'ps'
       scriptLocation: 'scriptPath'
       scriptPath: "$(Pipeline.Workspace)/terraformartifact/Stop_Azure_Webjob.ps1"
-      arguments: '-resourcegroup $(ResourceGroup) -appname $(WEB_APP)'
+      arguments: '-resourcegroup $(ResourceGroup) -appname $(WEB_APP_NAME)'
 
   - task: AzureWebApp@1
     displayName: "Azure App Deploy: Staging slot"

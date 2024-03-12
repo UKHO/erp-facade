@@ -5,5 +5,5 @@ param (
 )
 
 Write-Output "Stopping event aggregator webjob"
-Stop-AzWebAppContinuousWebJob -ResourceGroupName $(resourcegroup) -AppName $(appname) -Name EventAggregationWebJob
+az webapp webjob continuous stop --name $(appname) --resource-group $(resourcegroup) --webjob-name EventAggregationWebJob
 az webapp restart --name $appname --resource-group $resourcegroup
