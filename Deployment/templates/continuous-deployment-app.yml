@@ -86,4 +86,5 @@ steps:
       arguments: '-ResourceGroup $(ResourceGroup) -WEB_APP_NAME $(WEB_APP_NAME)'
       azureSubscription: 'ERP-Facade-Dev-A.011.05.12'
       ScriptType: 'InlineScript'
+      azurePowerShellVersion: 'LatestVersion'
       Inline: 'Invoke-AzureRmResourceAction -ResourceGroupName $(ResourceGroup) -ResourceType Microsoft.Web/sites/ContinuousWebJobs -ResourceName $(WEB_APP_NAME)/EventAggregationWebJob -Action stop -ApiVersion 2015-08-01 -Force'
