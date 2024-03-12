@@ -38,7 +38,6 @@
                     "VAR Unique",
                     "VAR"
                 ],
-
                 "size": "medium",
                 "_COMMENT": "size code not included as will be in ERP Facade",
                 "_ENUM": [
@@ -79,52 +78,14 @@
                         "southLimit": 22.0,
                         "eastLimit": 120.0,
                         "westLimit": 119.0
-                    },
-                    "polygons": [
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 24,
-                                    "longitude": 121.5
-                                },
-                                {
-                                    "latitude": 121,
-                                    "longitude": 56
-                                },
-                                {
-                                    "latitude": 45,
-                                    "longitude": 78
-                                },
-                                {
-                                    "latitude": 119,
-                                    "longitude": 121.5
-                                }
-                            ]
-                        },
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 24,
-                                    "longitude": 121.5
-                                },
-                                {
-                                    "latitude": 121,
-                                    "longitude": 56
-                                },
-                                {
-                                    "latitude": 45,
-                                    "longitude": 78
-                                },
-                                {
-                                    "latitude": 119,
-                                    "longitude": 121.5
-                                }
-                            ]
-                        }
-                    ]
+                    }
                 },
                 "_COMMENT": "The units in which product is included, including any 1-1 unit",
-                "inUnitsOfSale": [ "TWP3401", "RMC0221", "PAYSF" ],
+                "inUnitsOfSale": [
+                    "TWP3401",
+                    "RMC0221",
+                    "PAYSF"
+                ],
                 "s63": {
                     "name": "xxxxxxx1.001",
                     "hash": "5160204288db0a543850da177ec637b71ed55946e7f3843e6180b1906ee4f4ea",
@@ -174,11 +135,12 @@
                         "southLimit": 22.581615,
                         "eastLimit": 120.349635,
                         "westLimit": 119.39142
-                    },
-                    "polygons": []
+                    }
                 },
                 "compositionChanges": {
-                    "addProducts": [ "TWP3401" ],
+                    "addProducts": [
+                        "TWP3401"
+                    ],
                     "removeProducts": []
                 }
             },
@@ -205,12 +167,13 @@
                         "southLimit": 22.581615,
                         "eastLimit": 120.349635,
                         "westLimit": 119.39142
-                    },
-                    "polygons": []
+                    }
                 },
                 "compositionChanges": {
                     "addProducts": [],
-                    "removeProducts": [ "TWP3401" ]
+                    "removeProducts": [
+                        "TWP3401"
+                    ]
                 }
             },
             {
@@ -225,44 +188,12 @@
                 "status": "ForSale",
                 "isNewUnitOfSale": false,
                 "geographicLimit": {
-                    "boundingBox": {},
-                    "polygons": [
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 89,
-                                    "longitude": -179.995
-                                },
-                                {
-                                    "latitude": 89,
-                                    "longitude": 0
-                                },
-                                {
-                                    "latitude": 89,
-                                    "longitude": 179.995
-                                },
-                                {
-                                    "latitude": -89,
-                                    "longitude": 179.995
-                                },
-                                {
-                                    "latitude": -89,
-                                    "longitude": 0
-                                },
-                                {
-                                    "latitude": -89,
-                                    "longitude": -179.995
-                                },
-                                {
-                                    "latitude": 89,
-                                    "longitude": -179.995
-                                }
-                            ]
-                        }
-                    ]
+                    "boundingBox": {}
                 },
                 "compositionChanges": {
-                    "addProducts": [ "TWP3401" ],
+                    "addProducts": [
+                        "TWP3401"
+                    ],
                     "removeProducts": []
                 }
             }

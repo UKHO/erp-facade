@@ -38,7 +38,6 @@
                     "VAR Unique",
                     "VAR"
                 ],
-
                 "size": "small",
                 "_COMMENT": "size code not included as will be in ERP Facade",
                 "_ENUM": [
@@ -71,7 +70,10 @@
                     "_COMMENT": "A cell new to the service"
                 },
                 "replaces": [],
-                "replacedBy": [ "US4AK6NT", "US4AK6NU" ],
+                "replacedBy": [
+                    "US4AK6NT",
+                    "US4AK6NU"
+                ],
                 "additionalCoverage": [],
                 "geographicLimit": {
                     "boundingBox": {
@@ -79,52 +81,14 @@
                         "southLimit": 22.0,
                         "eastLimit": 120.0,
                         "westLimit": 119.0
-                    },
-                    "polygons": [
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 24,
-                                    "longitude": 121.5
-                                },
-                                {
-                                    "latitude": 121,
-                                    "longitude": 56
-                                },
-                                {
-                                    "latitude": 45,
-                                    "longitude": 78
-                                },
-                                {
-                                    "latitude": 119,
-                                    "longitude": 121.5
-                                }
-                            ]
-                        },
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 24,
-                                    "longitude": 121.5
-                                },
-                                {
-                                    "latitude": 121,
-                                    "longitude": 56
-                                },
-                                {
-                                    "latitude": 45,
-                                    "longitude": 78
-                                },
-                                {
-                                    "latitude": 119,
-                                    "longitude": 121.5
-                                }
-                            ]
-                        }
-                    ]
+                    }
                 },
                 "_COMMENT": "The units in which product is included, including any 1-1 unit",
-                "inUnitsOfSale": [ "US5AK83M", "AVCSO", "PAYSF" ],
+                "inUnitsOfSale": [
+                    "US5AK83M",
+                    "AVCSO",
+                    "PAYSF"
+                ],
                 "s63": {
                     "name": "US5AK83M.001",
                     "hash": "5160204288db0a543850da177ec637b71ed55946e7f3843e6180b1906ee4f4ea",
@@ -183,7 +147,6 @@
                     "VAR Unique",
                     "VAR"
                 ],
-
                 "size": "medium",
                 "_COMMENT": " size code not included as will be in ERP Facade",
                 "_ENUM": [
@@ -206,7 +169,9 @@
                     "statusDate": "2023-03-03T00:00:00.00+01:00",
                     "isNewCell": true
                 },
-                "replaces": [ "US5AK83M" ],
+                "replaces": [
+                    "US5AK83M"
+                ],
                 "replacedBy": [],
                 "additionalCoverage": [],
                 "geographicLimit": {
@@ -215,31 +180,13 @@
                         "southLimit": 63,
                         "eastLimit": 162,
                         "westLimit": 161
-                    },
-                    "polygons": [
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 22.57515,
-                                    "longitude": 120.21948
-                                },
-                                {
-                                    "latitude": 22.64326,
-                                    "longitude": 120
-                                },
-                                {
-                                    "latitude": 22.57154,
-                                    "longitude": 120
-                                },
-                                {
-                                    "latitude": 22.57515,
-                                    "longitude": 121.21948
-                                }
-                            ]
-                        }
-                    ]
+                    }
                 },
-                "inUnitsOfSale": [ "US4AK6NT", "AVCSO", "PAYSF" ],
+                "inUnitsOfSale": [
+                    "US4AK6NT",
+                    "AVCSO",
+                    "PAYSF"
+                ],
                 "s63": {
                     "name": "US4AK6NT.001",
                     "hash": "5160204288db0a543850da177ec637b71ed55946e7f3843e6180b1906ee4f4ea",
@@ -286,7 +233,6 @@
                     "VAR Unique",
                     "VAR"
                 ],
-
                 "size": "medium",
                 "_COMMENT": " size code not included as will be in ERP Facade",
                 "_ENUM": [
@@ -309,7 +255,9 @@
                     "statusDate": "2023-03-03T00:00:00.00+01:00",
                     "isNewCell": true
                 },
-                "replaces": [ "US5AK83M" ],
+                "replaces": [
+                    "US5AK83M"
+                ],
                 "replacedBy": [],
                 "additionalCoverage": [],
                 "geographicLimit": {
@@ -318,31 +266,13 @@
                         "southLimit": 63,
                         "eastLimit": 162,
                         "westLimit": 161
-                    },
-                    "polygons": [
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 22.57515,
-                                    "longitude": 120.21948
-                                },
-                                {
-                                    "latitude": 22.64326,
-                                    "longitude": 120
-                                },
-                                {
-                                    "latitude": 22.57154,
-                                    "longitude": 120
-                                },
-                                {
-                                    "latitude": 22.57515,
-                                    "longitude": 121.21948
-                                }
-                            ]
-                        }
-                    ]
+                    }
                 },
-                "inUnitsOfSale": [ "US4AK6NU", "AVCSO", "PAYSF" ],
+                "inUnitsOfSale": [
+                    "US4AK6NU",
+                    "AVCSO",
+                    "PAYSF"
+                ],
                 "s63": {
                     "name": "US4AK6NU.001",
                     "hash": "5160204288db0a543850da177ec637b71ed55946e7f3843e6180b1906ee4f4ea",
@@ -392,12 +322,13 @@
                         "southLimit": 22.581615,
                         "eastLimit": 120.349635,
                         "westLimit": 119.39142
-                    },
-                    "polygons": []
+                    }
                 },
                 "compositionChanges": {
                     "addProducts": [],
-                    "removeProducts": [ "US5AK83M" ]
+                    "removeProducts": [
+                        "US5AK83M"
+                    ]
                 }
             },
             {
@@ -419,15 +350,12 @@
                         "southLimit": 22.4625767,
                         "eastLimit": 120.34972,
                         "westLimit": 120.219475
-                    },
-                    "polygons": [
-                        {
-                            "polygon": []
-                        }
-                    ]
+                    }
                 },
                 "compositionChanges": {
-                    "addProducts": [ "US4AK6NT" ],
+                    "addProducts": [
+                        "US4AK6NT"
+                    ],
                     "removeProducts": []
                 }
             },
@@ -450,15 +378,12 @@
                         "southLimit": 22.4625767,
                         "eastLimit": 120.34972,
                         "westLimit": 120.219475
-                    },
-                    "polygons": [
-                        {
-                            "polygon": []
-                        }
-                    ]
+                    }
                 },
                 "compositionChanges": {
-                    "addProducts": [ "US4AK6NU" ],
+                    "addProducts": [
+                        "US4AK6NU"
+                    ],
                     "removeProducts": []
                 }
             },
@@ -475,29 +400,7 @@
                 "status": "ForSale",
                 "isNewUnitOfSale": false,
                 "geographicLimit": {
-                    "boundingBox": {},
-                    "polygons": [
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 22.0,
-                                    "longitude": 120.0
-                                },
-                                {
-                                    "latitude": 22.0,
-                                    "longitude": 120
-                                },
-                                {
-                                    "latitude": 22.0,
-                                    "longitude": 120
-                                },
-                                {
-                                    "latitude": 22.0,
-                                    "longitude": 121.0
-                                }
-                            ]
-                        }
-                    ]
+                    "boundingBox": {}
                 },
                 "compositionChanges": {
                     "addProducts": [
@@ -522,41 +425,7 @@
                 "status": "ForSale",
                 "isNewUnitOfSale": false,
                 "geographicLimit": {
-                    "boundingBox": {},
-                    "polygons": [
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 89,
-                                    "longitude": -179.995
-                                },
-                                {
-                                    "latitude": 89,
-                                    "longitude": 0
-                                },
-                                {
-                                    "latitude": 89,
-                                    "longitude": 179.995
-                                },
-                                {
-                                    "latitude": -89,
-                                    "longitude": 179.995
-                                },
-                                {
-                                    "latitude": -89,
-                                    "longitude": 0
-                                },
-                                {
-                                    "latitude": -89,
-                                    "longitude": -179.995
-                                },
-                                {
-                                    "latitude": 89,
-                                    "longitude": -179.995
-                                }
-                            ]
-                        }
-                    ]
+                    "boundingBox": {}
                 },
                 "compositionChanges": {
                     "addProducts": [
