@@ -12,7 +12,7 @@
         "ukhoWeekNumber": {
             "year": 2024,
             "week": 3,
-            "currentWeekAlphaCorrection": true
+            "currentWeekAlphaCorrection": false
         },
         "products": [
             {
@@ -71,49 +71,7 @@
                         "southLimit": 22,
                         "eastLimit": 120,
                         "westLimit": 119
-                    },
-                    "polygons": [
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 24,
-                                    "longitude": 121.5
-                                },
-                                {
-                                    "latitude": 121,
-                                    "longitude": 56
-                                },
-                                {
-                                    "latitude": 45,
-                                    "longitude": 78
-                                },
-                                {
-                                    "latitude": 119,
-                                    "longitude": 121.5
-                                }
-                            ]
-                        },
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 24,
-                                    "longitude": 121.5
-                                },
-                                {
-                                    "latitude": 121,
-                                    "longitude": 56
-                                },
-                                {
-                                    "latitude": 45,
-                                    "longitude": 78
-                                },
-                                {
-                                    "latitude": 119,
-                                    "longitude": 121.5
-                                }
-                            ]
-                        }
-                    ]
+                    }
                 },
                 "inUnitsOfSale": [
                     "DE416080",
@@ -194,29 +152,7 @@
                 "isNewUnitOfSale": false,
                 "unitOfSaleType": "folio",
                 "geographicLimit": {
-                    "boundingBox": {},
-                    "polygons": [
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 22,
-                                    "longitude": 120
-                                },
-                                {
-                                    "latitude": 22,
-                                    "longitude": 120
-                                },
-                                {
-                                    "latitude": 22,
-                                    "longitude": 120
-                                },
-                                {
-                                    "latitude": 22,
-                                    "longitude": 121
-                                }
-                            ]
-                        }
-                    ]
+                    "boundingBox": {}
                 },
                 "compositionChanges": {
                     "addProducts": [],
@@ -234,41 +170,7 @@
                 "isNewUnitOfSale": false,
                 "unitOfSaleType": "folio",
                 "geographicLimit": {
-                    "boundingBox": {},
-                    "polygons": [
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 89,
-                                    "longitude": -179.995
-                                },
-                                {
-                                    "latitude": 89,
-                                    "longitude": 0
-                                },
-                                {
-                                    "latitude": 89,
-                                    "longitude": 179.995
-                                },
-                                {
-                                    "latitude": -89,
-                                    "longitude": 179.995
-                                },
-                                {
-                                    "latitude": -89,
-                                    "longitude": 0
-                                },
-                                {
-                                    "latitude": -89,
-                                    "longitude": -179.995
-                                },
-                                {
-                                    "latitude": 89,
-                                    "longitude": -179.995
-                                }
-                            ]
-                        }
-                    ]
+                    "boundingBox": {}
                 },
                 "compositionChanges": {
                     "addProducts": [],
