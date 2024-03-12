@@ -68,6 +68,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     Assert.That(VerifyChangeAVCSUnitOfSale(item.PRODUCTNAME, item) ?? false);
                 else if (item.ACTION == "UPDATE ENC CELL EDITION UPDATE NUMBER")
                     Assert.That(VerifyUpdateAVCSUnitOfSale(item.CHILDCELL, item, permitState) ?? false);
+                else
+                    Assert.Fail("Not a required action");
                 ActionCounter++;
             }
 
@@ -613,7 +615,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
         private static bool VerifyDecryptedPermit(string childCell, ZMAT_ACTIONITEMS item, string permitState)
         {
-            Console.WriteLine("Action#:" + ActionCounter + ".Childcell:" + childCell);
+            //Console.WriteLine("Action#:" + ActionCounter + ".Childcell:" + childCell);
 
             if (permitState.Contains("Same"))
             {
@@ -898,6 +900,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                                  + CalculateNewUnitOfSalesCount(jsonPayload)
                                  + CalculateAssignCellToUoSActionCount(jsonPayload)
                                  + CalculateReplaceCellActionCount(jsonPayload)
+                                 + CalculateAdditionalcoverageCellActionCount(jsonPayload)
                                  + CalculateChangeEncCellActionCount(jsonPayload)
                                  + CalculateChangeUoSActionCount(jsonPayload)
                                  + CalculateRemoveCellFromUoSActionCount(jsonPayload)
@@ -992,6 +995,21 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
             return count;
         }
+        public static int CalculateAdditionalcoverageCellActionCount(JsonPayloadHelper jsonPayload)
+        {
+            
+            int count = jsonPayload.Data.Products.Where(product => (product.AdditionalCoverage.Count) > 0).Sum(product => product.AdditionalCoverage.Count);
+
+            if (count <= 0)
+            {
+                return count;
+            }
+
+            UpdateActionList(count, "5.  ADDITIONAL COVERAGE ENC CELL");
+            Console.WriteLine("Total no. of Additional coverage ENC Cell: " + count);
+
+            return count;
+        }
 
         public static int CalculateChangeEncCellActionCount(JsonPayloadHelper jsonPayload)
         {
@@ -1008,7 +1026,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
             if (count > 0)
             {
-                UpdateActionList(count, "5.  CHANGE ENC CELL");
+                UpdateActionList(count, "6.  CHANGE ENC CELL");
                 Console.WriteLine("Total No. of Change ENC Cell: " + count);
             }
 
@@ -1030,7 +1048,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
             if (count > 0)
             {
-                UpdateActionList(count, "6.  CHANGE AVCS UNIT OF SALE");
+                UpdateActionList(count, "7.  CHANGE AVCS UNIT OF SALE");
                 Console.WriteLine("Total No. of Change AVCS UoS: " + count);
             }
 
@@ -1052,7 +1070,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
             if (count > 0)
             {
-                UpdateActionList(count, "7.  UPDATE ENC CELL EDITION UPDATE NUMBER");
+                UpdateActionList(count, "8.  UPDATE ENC CELL EDITION UPDATE NUMBER");
                 Console.WriteLine("Total no. of ENC Cell Edition Update Number: " + count);
             }
             return count;
@@ -1072,7 +1090,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
             if (count > 0)
             {
-                UpdateActionList(count, "7.  UPDATE ENC CELL EDITION UPDATE NUMBER");
+                UpdateActionList(count, "8.  UPDATE ENC CELL EDITION UPDATE NUMBER");
                 Console.WriteLine("Total no. of ENC Cell Edition Update Number: " + count);
             }
 
@@ -1093,7 +1111,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
             if (count > 0)
             {
-                UpdateActionList(count, "8.  REMOVE ENC CELL FROM AVCS UNIT OF SALE");
+                UpdateActionList(count, "9.  REMOVE ENC CELL FROM AVCS UNIT OF SALE");
                 Console.WriteLine("Total no. of Remove Cell from UoS: " + count);
             }
 
@@ -1115,7 +1133,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
             if (cancelledCellCount > 0)
             {
-                UpdateActionList(cancelledCellCount, "9.  CANCEL ENC CELL");
+                UpdateActionList(cancelledCellCount, "91. CANCEL ENC CELL");
                 Console.WriteLine("Total No. of Cancel ENC Cell: " + cancelledCellCount);
             }
 
@@ -1137,7 +1155,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
             if (cancelledUoSCount > 0)
             {
-                UpdateActionList(cancelledUoSCount, "99. CANCEL AVCS UNIT OF SALE");
+                UpdateActionList(cancelledUoSCount, "92. CANCEL AVCS UNIT OF SALE");
                 Console.WriteLine("Total No. of Cancel AVCS UoS: " + cancelledUoSCount);
             }
 
