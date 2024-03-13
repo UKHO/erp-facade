@@ -36,7 +36,7 @@ steps:
       folderPath: '$(Pipeline.Workspace)/UKHOERPFacadeAPI/*.zip'
       fileType: 'json'
       targetFiles: '**/appsettings.json'
-
+           
   - task: AzureWebApp@1
     displayName: "Azure App Deploy: Staging slot"
     inputs:
