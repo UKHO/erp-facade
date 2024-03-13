@@ -385,15 +385,15 @@ stages:
         value: $(PermitDecryptionHardwareId)
       - name: "PermitWithSameKey.Permit"
         value: $(PermitWithSameKeyPermit)
-      - name: "PermitWithSameKey.ACTIVEKEY"
+      - name: "PermitWithSameKey.ActiveKey"
         value: $(PermitWithSameKeyACTIVEKEY)
-      - name: "PermitWithSameKey.NEXTKEY"
+      - name: "PermitWithSameKey.NextKey"
         value: $(PermitWithSameKeyNEXTKEY)
       - name: "PermitWithDifferentKey.Permit"
         value: $(PermitWithDifferentKeyPermit)
-      - name: "PermitWithDifferentKey.ACTIVEKEY"
+      - name: "PermitWithDifferentKey.ActiveKey"
         value: $(PermitWithDifferentKeyACTIVEKEY)
-      - name: "PermitWithDifferentKey.NEXTKEY"
+      - name: "PermitWithDifferentKey.NextKey"
         value: $(PermitWithDifferentKeyNEXTKEY)
     jobs:
       - deployment: DevDeployTerraform
@@ -665,15 +665,15 @@ stages:
         value: $(PermitDecryptionHardwareId)
       - name: "PermitWithSameKey.Permit"
         value: $(PermitWithSameKeyPermit)
-      - name: "PermitWithSameKey.ACTIVEKEY"
+      - name: "PermitWithSameKey.ActiveKey"
         value: $(PermitWithSameKeyACTIVEKEY)
-      - name: "PermitWithSameKey.NEXTKEY"
+      - name: "PermitWithSameKey.NextKey"
         value: $(PermitWithSameKeyNEXTKEY)
       - name: "PermitWithDifferentKey.Permit"
         value: $(PermitWithDifferentKeyPermit)
-      - name: "PermitWithDifferentKey.ACTIVEKEY"
+      - name: "PermitWithDifferentKey.ActiveKey"
         value: $(PermitWithDifferentKeyACTIVEKEY)
-      - name: "PermitWithDifferentKey.NEXTKEY"
+      - name: "PermitWithDifferentKey.NextKey"
         value: $(PermitWithDifferentKeyNEXTKEY)
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
 
