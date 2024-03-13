@@ -104,7 +104,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     if (!item.UNITTYPE.Equals(GetUoSInfo(productName).UnitType))
                         s_attrNotMatched.Add(nameof(item.UNITTYPE));
                     //Checking blanks
-                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "EDITIONNO", "UPDATENO", "ActiveKey", "NextKey" };
+                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "EDITIONNO", "UPDATENO", "ACTIVEKEY", "NEXTKEY" };
                     VerifyBlankFields(item, blankFieldNames);
 
                     if (s_attrNotMatched.Count == 0)
@@ -168,8 +168,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     }
                     else if (product.Status.StatusName.Contains("Update") || product.Status.StatusName.Contains("Re-issue"))
                     {
-                        blankFieldNames.Add("ActiveKey");
-                        blankFieldNames.Add("NextKey");
+                        blankFieldNames.Add("ACTIVEKEY");
+                        blankFieldNames.Add("NEXTKEY");
                     }
                     //Checking blanks
                     VerifyBlankFields(item, blankFieldNames);
@@ -264,7 +264,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     if (!item.UPDATENO.Equals(product.UpdateNumber))
                         s_attrNotMatched.Add(nameof(item.UPDATENO));
                     //Checking blanks
-                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "UNITTYPE", "ActiveKey", "NextKey" };
+                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
                     VerifyBlankFields(item, blankFieldNames);
 
                     if (s_attrNotMatched.Count == 0)
@@ -304,7 +304,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         s_attrNotMatched.Add(nameof(item.PRODTYPE));
 
                     //Checking blanks
-                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ActiveKey", "NextKey" };
+                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
                     VerifyBlankFields(item, blankFieldNames);
 
                     if (s_attrNotMatched.Count == 0)
@@ -345,7 +345,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         s_attrNotMatched.Add(nameof(item.PRODUCTNAME));
 
                     //Checking blanks
-                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ActiveKey", "NextKey" };
+                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
                     VerifyBlankFields(item, blankFieldNames);
 
                     if (s_attrNotMatched.Count == 0)
@@ -386,7 +386,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                             s_attrNotMatched.Add(nameof(item.PRODTYPE));
                         //xmlAttributes[4] & [5] are skipped as already checked
                         //Checking blanks
-                        List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ActiveKey", "NextKey" };
+                        List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
                         VerifyBlankFields(item, blankFieldNames);
 
                         if (s_attrNotMatched.Count == 0)
@@ -428,7 +428,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!item.PRODUCTNAME.Equals(GetUoSName(childCell))))
                         s_attrNotMatched.Add(nameof(item.PRODUCTNAME));
                     //Checking blanks
-                    List<string> blankFieldNames = new List<string> { "CANCELLED", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ActiveKey", "NextKey" };
+                    List<string> blankFieldNames = new List<string> { "CANCELLED", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
                     VerifyBlankFields(item, blankFieldNames);
 
                     if (s_attrNotMatched.Count == 0)
@@ -475,7 +475,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                             s_attrNotMatched.Add(nameof(item.VALIDFROM));
                         if (!item.CORRECTION.Equals(correctionTag))
                             s_attrNotMatched.Add(nameof(item.CORRECTION));
-                        List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ActiveKey", "NextKey" };
+                        List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
                         VerifyBlankFields(item, blankFieldNames);
 
                         if (s_attrNotMatched.Count == 0)
@@ -531,7 +531,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         s_attrNotMatched.Add(nameof(item.CORRECTION));
 
                     //Checking blanks
-                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "EDITIONNO", "UPDATENO", "ActiveKey", "NextKey" };
+                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "EDITIONNO", "UPDATENO", "ACTIVEKEY", "NEXTKEY" };
                     VerifyBlankFields(item, blankFieldNames);
 
                     if (s_attrNotMatched.Count == 0)
