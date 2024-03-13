@@ -56,6 +56,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     Assert.That(VerifyAssignCellToAVCSUnitOfSale(item.CHILDCELL, item.PRODUCTNAME, item, correctionTag));
                 else if (item.ACTION == "REPLACED WITH ENC CELL")
                     Assert.That(VerifyReplaceWithENCCell(item.CHILDCELL, item.REPLACEDBY, item) ?? false);
+                else if (item.ACTION == "ADDITIONAL COVERAGE ENC CELL")
+                    Assert.That(VerifyAdditionalCoverageWithEncCell(item.CHILDCELL, item.REPLACEDBY, item, correctionTag) ?? false);
                 else if (item.ACTION == "REMOVE ENC CELL FROM AVCS UNIT OF SALE")
                     Assert.That(VerifyRemoveENCCellFromAVCSUnitOFSale(item.CHILDCELL, item.PRODUCTNAME, item) ?? false);
                 else if (item.ACTION == "CANCEL ENC CELL")
@@ -436,11 +438,59 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     if (AttrNotMatched.Count == 0)
                     {
                         Console.WriteLine("REPLACED WITH ENC CELL Action's Data is correct");
+                        int valueIndex = product.ReplacedBy.IndexOf(replaceBy);
+                        product.ReplacedBy[valueIndex] = product.ReplacedBy[valueIndex].Replace(replaceBy, "skip");
                         return true;
                     }
                     else
                     {
                         Console.WriteLine("REPLACED WITH ENC CELL Action's Data is incorrect");
+                        Console.WriteLine("Not matching attributes are:");
+                        foreach (string attribute in AttrNotMatched)
+                        { Console.WriteLine(attribute); }
+                        return false;
+                    }
+                }
+            }
+            Console.WriteLine("JSON doesn't have corresponding product.");
+            return false;
+        }
+
+        private static bool? VerifyAdditionalCoverageWithEncCell(string childCell, string replaceBy, ZMAT_ACTIONITEMS item, string correctionTag)
+        {
+            Console.WriteLine("Action#:" + ActionCounter + ".ENC Cell:" + childCell);
+            foreach (Product product in JsonPayload.Data.Products)
+            {
+                if ((childCell == product.ProductName) && (product.AdditionalCoverage.Contains(replaceBy)))
+                {
+                    AttrNotMatched.Clear();
+                    if (!item.ACTIONNUMBER.Equals(ActionCounter.ToString()))
+                        AttrNotMatched.Add(nameof(item.ACTIONNUMBER));
+                    //xmlAttributes[1] is skipped as already checked
+                    if (!item.PRODUCT.Equals("ENC CELL"))
+                        AttrNotMatched.Add(nameof(item.PRODUCT));
+                    if (!item.PRODTYPE.Equals(product.ProductType[4..]))
+                        AttrNotMatched.Add(nameof(item.PRODTYPE));
+                    if (!item.WEEKNO.Equals(weekNoTag))
+                        AttrNotMatched.Add(nameof(item.WEEKNO));
+                    if (!item.VALIDFROM.Equals(validFromTag))
+                        AttrNotMatched.Add(nameof(item.VALIDFROM));
+                    if (!item.CORRECTION.Equals(correctionTag))
+                        AttrNotMatched.Add(nameof(item.CORRECTION));
+                    //Checking blanks
+                    List<string> blankFieldNames = new List<string> { "PRODUCTNAME","CANCELLED", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
+                    VerifyBlankFields(item, blankFieldNames);
+
+                    if (AttrNotMatched.Count == 0)
+                    {
+                        Console.WriteLine("ADDITIONAL COVERAGE ENC CELL Action's Data is correct");
+                        int valueIndex = product.AdditionalCoverage.IndexOf(replaceBy);
+                        product.AdditionalCoverage[valueIndex] = product.AdditionalCoverage[valueIndex].Replace(replaceBy, "skip");
+                        return true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("ADDITIONAL COVERAGE ENC CELL Action's Data is incorrect");
                         Console.WriteLine("Not matching attributes are:");
                         foreach (string attribute in AttrNotMatched)
                         { Console.WriteLine(attribute); }
