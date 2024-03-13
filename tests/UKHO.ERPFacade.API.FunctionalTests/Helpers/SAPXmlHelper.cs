@@ -67,7 +67,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 else if (item.ACTION == "CHANGE AVCS UNIT OF SALE")
                     Assert.That(VerifyChangeAVCSUnitOfSale(item.PRODUCTNAME, item, correctionTag) ?? false);
                 else if (item.ACTION == "UPDATE ENC CELL EDITION UPDATE NUMBER")
-                    Assert.That(VerifyUpdateAVCSUnitOfSale(item.CHILDCELL, item, permitState, correctionTag) ?? false);
+                    Assert.That(VerifyUpdateEncCellEditionUpdateNumber(item.CHILDCELL, item, permitState, correctionTag) ?? false);
                 s_actionCounter++;
             }
 
@@ -127,7 +127,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return false;
         }
 
-        private static bool? VerifyUpdateAVCSUnitOfSale(string childCell, ZMAT_ACTIONITEMS item, string permitState, string correctionTag)
+        private static bool? VerifyUpdateEncCellEditionUpdateNumber(string childCell, ZMAT_ACTIONITEMS item, string permitState, string correctionTag)
         {
             Console.WriteLine("Action#:" + s_actionCounter + ".Childcell:" + childCell);
             foreach (Product product in JsonPayload.Data.Products)
