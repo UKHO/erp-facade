@@ -145,7 +145,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     if (!item.PRODTYPE.Equals(product.ProductType[4..]))
                         s_attrNotMatched.Add(nameof(item.PRODTYPE));
                     if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!item.PRODUCTNAME.Equals(GetUoSName(childCell))))
-                        s_attrNotMatched.Add(nameof(item.PRODUCTNAME));                   
+                        AttrNotMatched.Add(nameof(item.PRODUCTNAME));                   
                     if (!item.EDITIONNO.Equals(product.EditionNumber))
                         s_attrNotMatched.Add(nameof(item.EDITIONNO));
                     if (!item.UPDATENO.Equals(product.UpdateNumber))
