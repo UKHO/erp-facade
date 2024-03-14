@@ -182,29 +182,8 @@
                         "southLimit": 63,
                         "eastLimit": 162,
                         "westLimit": 161
-                    },
-                    "polygons": [
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 22.57515,
-                                    "longitude": 120.21948
-                                },
-                                {
-                                    "latitude": 22.64326,
-                                    "longitude": 120
-                                },
-                                {
-                                    "latitude": 22.57154,
-                                    "longitude": 120
-                                },
-                                {
-                                    "latitude": 22.57515,
-                                    "longitude": 121.21948
-                                }
-                            ]
-                        }
-                    ]
+                    }
+                   
                 },
                 "inUnitsOfSale": [
                     "US4AK6NT",

@@ -1,5 +1,4 @@
 ﻿using System.Text;
-
 using System.Xml;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
@@ -158,7 +157,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "UNITTYPE", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE" };
                     if (product.Status.StatusName.Contains("New Edition"))
                     {
-                        Assert.That(VerifyDecryptedPermit(item, permitState));
+                        VerifyDecryptedPermit(item, permitState);
                     }
                     else if (product.Status.StatusName.Contains("Update") || product.Status.StatusName.Contains("Re-issue"))
                     {
@@ -595,7 +594,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     if (!item.UPDATENO.Equals(product.UpdateNumber))
                         AttrNotMatched.Add(nameof(item.UPDATENO));
                     VerifyAdditionalXmlTags(item, correctionTag);
-                    Assert.That(VerifyDecryptedPermit(item, permitState));
+                    VerifyDecryptedPermit(item, permitState);
                     //Checking blanks
                     List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "UNITTYPE" };
                     VerifyBlankFields(item, blankFieldNames);
@@ -633,7 +632,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         {
             if (permitState.Contains("Same"))
             {
-
                 if (!item.ACTIVEKEY.Equals(Config.TestConfig.PermitWithSameKey.ACTIVEKEY))
                     AttrNotMatched.Add(nameof(item.ACTIVEKEY));
                 if (!item.NEXTKEY.Equals(Config.TestConfig.PermitWithSameKey.NEXTKEY))

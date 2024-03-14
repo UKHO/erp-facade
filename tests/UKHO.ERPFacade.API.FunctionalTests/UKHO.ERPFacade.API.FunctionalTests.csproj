@@ -90,16 +90,10 @@
     <None Update="ERPFacadePayloadTestData\ID36_MoveAndSuspended_With_2UoS_But1_Having_addProductsValue.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPFacadePayloadTestData\ID40_1AdditionalCoveragewithReplacedCell.JSON">
+    <None Update="ERPFacadePayloadTestData\ID39_1AdditionalCoverageWithReplacedCell.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPFacadePayloadTestData\ID41_1AdditionalCoveragewithReplacedCellAnd1CancelledCell.JSON">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ERPFacadePayloadTestData\ID39_3AdditionalCoverageCell.JSON">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ERPFacadePayloadTestData\ID38_1AdditionalCoverageCell.JSON">
+    <None Update="ERPFacadePayloadTestData\ID40_1AdditionalCoverageWithReplacedCellAnd1CancelledCell.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPFacadePayloadTestData\LicenceUpdatedPayloadTestData\LU01_ValidInput.json">

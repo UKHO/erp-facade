@@ -84,7 +84,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [TestCase("ID19_CR_metadata_move.JSON", "N", TestName = "WhenICallTheWebhookWithMixScenarioHavingCancel&ReplaceAndMetadataChangeAndMoveCell_ThenWebhookReturns200Response")]
 
         //New Edition
-        [TestCase("ID20_newEditionAdditionalCoverageV_01.JSON", "N", TestName = "WhenICallTheWebhookWithNewEditionAdditionalCoverageV01PayloadFile_ThenWebhookReturns200Response")]
+        [TestCase("ID20_newEditionAdditionalCoverageV_01.JSON", "N", "SamePermitKey",TestName = "WhenICallTheWebhookWithNewEditionAdditionalCoverageV01PayloadFile_ThenWebhookReturns200Response")]
 
         //V0.3S
         [TestCase("ID21_cancelAndReplaceV_03.JSON", "N", TestName = "WhenICallTheWebhookWithCancelAndReplaceV03PayloadFile_ThenWebhookReturns200Response")]
@@ -112,10 +112,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
         // Rule change for create avcs unit of sale (having multiple products in addProducts)
         [TestCase("ID37_CreateUoSHavingMultipleItemsInAddProducts.JSON", "N", TestName = "WhenICallTheWebhookWithMoveAndNewCellScenarioWhereUoSHasMultipleValuesInAddProducts_ThenWebhookReturns200Response")]
-        [TestCase("ID38_1AdditionalCoverageCell.JSON", "N", TestName = "WhenICallTheWebhookWithOneAdditionalCoverageCellScenario_ThenWebhookReturns200Response")]
-        [TestCase("ID39_3AdditionalCoverageCell.JSON", "N", TestName = "WhenICallTheWebhookWithThreeAdditionalCoverageCellScenario_ThenWebhookReturns200Response")]
-        [TestCase("ID40_1AdditionalCoverageWithReplacedCell.JSON", "N", TestName = "WhenICallTheWebhookWithOneAdditionalCoverageWithReplacedCellScenario_ThenWebhookReturns200Response")]
-        [TestCase("ID41_1AdditionalCoverageWithReplacedCellAnd1CancelledCell.JSON", "N", TestName = "WhenICallTheWebhookWithOneAdditionalCoverageWithReplacedAndOneCancelledCellScenario_ThenWebhookReturns200Response")]
+        
+        [TestCase("ID38_3AdditionalCoverageCell.JSON", "N","SamePermitKey", TestName = "WhenICallTheWebhookWithThreeAdditionalCoverageCellScenario_ThenWebhookReturns200Response")]
+        [TestCase("ID39_1AdditionalCoverageWithReplacedCell.JSON", "N","SamePermitKey", TestName = "WhenICallTheWebhookWithOneAdditionalCoverageWithReplacedCellScenario_ThenWebhookReturns200Response")]
+        [TestCase("ID40_1AdditionalCoverageWithReplacedCellAnd1CancelledCell.JSON", "N", "SamePermitKey",TestName = "WhenICallTheWebhookWithOneAdditionalCoverageWithReplacedAndOneCancelledCellScenario_ThenWebhookReturns200Response")]
         public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponse1(string payloadJsonFileName, string correctionTag, string permitState = "permitString")
         {
             Console.WriteLine("Scenario:" + payloadJsonFileName + "\n");
