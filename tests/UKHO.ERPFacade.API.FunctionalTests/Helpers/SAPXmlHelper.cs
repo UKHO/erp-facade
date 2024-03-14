@@ -577,11 +577,11 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         private static void VerifyAdditionalXmlTags(ZMAT_ACTIONITEMS item, string correctionTag)
         {
             if (!item.WEEKNO.Equals(s_weekNoTag))
-                AttrNotMatched.Add(nameof(item.WEEKNO));
+                s_attrNotMatched.Add(nameof(item.WEEKNO));
             if (!item.VALIDFROM.Equals(s_validFromTag))
-                AttrNotMatched.Add(nameof(item.VALIDFROM));
+                s_attrNotMatched.Add(nameof(item.VALIDFROM));
             if (!item.CORRECTION.Equals(correctionTag))
-                AttrNotMatched.Add(nameof(item.CORRECTION));
+                s_attrNotMatched.Add(nameof(item.CORRECTION));
         }
 
         private static bool VerifyDecryptedPermit(string childCell, ZMAT_ACTIONITEMS item, string permitState)
