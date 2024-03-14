@@ -84,7 +84,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [TestCase("ID19_CR_metadata_move.JSON", "N", TestName = "WhenICallTheWebhookWithMixScenarioHavingCancel&ReplaceAndMetadataChangeAndMoveCell_ThenWebhookReturns200Response")]
 
         //New Edition
-        [TestCase("ID20_newEditionAdditionalCoverageV_01.JSON", "Y", TestName = "WhenICallTheWebhookWithNewEditionAdditionalCoverageV01PayloadFile_ThenWebhookReturns200Response")]
+        [TestCase("ID20_newEditionAdditionalCoverageV_01.JSON", "N", TestName = "WhenICallTheWebhookWithNewEditionAdditionalCoverageV01PayloadFile_ThenWebhookReturns200Response")]
 
         //V0.3S
         [TestCase("ID21_cancelAndReplaceV_03.JSON", "N", TestName = "WhenICallTheWebhookWithCancelAndReplaceV03PayloadFile_ThenWebhookReturns200Response")]
