@@ -34,7 +34,6 @@
                     "VAR Unique",
                     "VAR"
                 ],
-
                 "size": "mdeium",
                 "_COMMENT": " size code not included as will be mapped in SAP",
                 "_ENUM": [
@@ -66,8 +65,7 @@
                     "isNewCell": false,
                     "_COMMENT": "A cell new to the service"
                 },
-                "replaces": [
-                ],
+                "replaces": [],
                 "replacedBy": [],
                 "additionalCoverage": [],
                 "geographicLimit": {
@@ -76,49 +74,7 @@
                         "southLimit": 22.581615,
                         "eastLimit": 120.349635,
                         "westLimit": 119.39142
-                    },
-                    "polygons": [
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 24,
-                                    "longitude": 121.5
-                                },
-                                {
-                                    "latitude": 121,
-                                    "longitude": 56
-                                },
-                                {
-                                    "latitude": 45,
-                                    "longitude": 78
-                                },
-                                {
-                                    "latitude": 119,
-                                    "longitude": 121.5
-                                }
-                            ]
-                        },
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 24,
-                                    "longitude": 121.5
-                                },
-                                {
-                                    "latitude": 121,
-                                    "longitude": 56
-                                },
-                                {
-                                    "latitude": 45,
-                                    "longitude": 78
-                                },
-                                {
-                                    "latitude": 119,
-                                    "longitude": 121.5
-                                }
-                            ]
-                        }
-                    ]
+                    }
                 },
                 "_COMMENT": "The units of sale in which product is included, including any 1-1 unit",
                 "inUnitsOfSale": [
@@ -201,8 +157,7 @@
                         "southLimit": 22.581615,
                         "eastLimit": 120.349635,
                         "westLimit": 119.39142
-                    },
-                    "polygons": []
+                    }
                 },
                 "compositionChanges": {
                     "addProducts": [],
@@ -236,37 +191,11 @@
                 "status": "ForSale",
                 "isNewUnitOfSale": false,
                 "geographicLimit": {
-                    "boundingBox": {},
-                    "polygons": [
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 22.57515,
-                                    "longitude": 120.21948
-                                },
-                                {
-                                    "latitude": 22.64326,
-                                    "longitude": 120
-                                },
-                                {
-                                    "latitude": 22.57154,
-                                    "longitude": 120
-                                },
-                                {
-                                    "latitude": 22.57515,
-                                    "longitude": 121.21948
-                                }
-                            ]
-                        }
-                    ]
+                    "boundingBox": {}
                 },
                 "compositionChanges": {
-                    "addProducts": [
-
-                    ],
-                    "removeProducts": [
-
-                    ]
+                    "addProducts": [],
+                    "removeProducts": []
                 }
             },
             {
@@ -296,49 +225,11 @@
                 "status": "ForSale",
                 "isNewUnitOfSale": false,
                 "geographicLimit": {
-                    "boundingBox": {},
-                    "polygons": [
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 89,
-                                    "longitude": -179.995
-                                },
-                                {
-                                    "latitude": 89,
-                                    "longitude": 0
-                                },
-                                {
-                                    "latitude": 89,
-                                    "longitude": 179.995
-                                },
-                                {
-                                    "latitude": -89,
-                                    "longitude": 179.995
-                                },
-                                {
-                                    "latitude": -89,
-                                    "longitude": 0
-                                },
-                                {
-                                    "latitude": -89,
-                                    "longitude": -179.995
-                                },
-                                {
-                                    "latitude": 89,
-                                    "longitude": -179.995
-                                }
-                            ]
-                        }
-                    ]
+                    "boundingBox": {}
                 },
                 "compositionChanges": {
-                    "addProducts": [
-
-                    ],
-                    "removeProducts": [
-
-                    ]
+                    "addProducts": [],
+                    "removeProducts": []
                 }
             }
         ]
