@@ -7,7 +7,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
     public class JsonHelper
     {
-        private static readonly string s_projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
+        private static readonly string ProjectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
         //for local
         //private static readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
 
@@ -15,7 +15,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         {
             List<JsonInputRoSWebhookEvent> listOfEventJson = new();
 
-            foreach (var filePath in fileNames.Select(fileName => Path.Combine(s_projectDir, Config.TestConfig.PayloadFolder, "RoSPayloadTestData", fileName)))
+            foreach (var filePath in fileNames.Select(fileName => Path.Combine(ProjectDir, Config.TestConfig.PayloadFolder, "RoSPayloadTestData", fileName)))
             {
                 string requestBody;
 
