@@ -183,7 +183,6 @@
                         "eastLimit": 162,
                         "westLimit": 161
                     }
-                   
                 },
                 "inUnitsOfSale": [
                     "US4AK6NT",
@@ -261,12 +260,7 @@
                         "southLimit": 22.4625767,
                         "eastLimit": 120.34972,
                         "westLimit": 120.219475
-                    },
-                    "polygons": [
-                        {
-                            "polygon": []
-                        }
-                    ]
+                    }
                 },
                 "compositionChanges": {
                     "addProducts": [],
