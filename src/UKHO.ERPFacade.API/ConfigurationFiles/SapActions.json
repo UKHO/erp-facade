@@ -520,6 +520,138 @@
             },
             {
                 "ActionNumber": 5,
+                "Action": "ADDITIONAL COVERAGE ENC CELL",
+                "Product": "ENC CELL",
+                "Rules": [
+                    {
+                        "Conditions": [
+                        ]
+                    }
+                ],
+                "Attributes": [
+                    {
+                        "IsRequired": true,
+                        "Section": "Product",
+                        "JsonPropertyName": "ProductType",
+                        "XmlNodeName": "PRODTYPE",
+                        "SortingOrder": 1
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "Product",
+                        "JsonPropertyName": "ProductName",
+                        "XmlNodeName": "CHILDCELL",
+                        "SortingOrder": 2
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "UnitOfSale",
+                        "JsonPropertyName": "UnitName",
+                        "XmlNodeName": "PRODUCTNAME",
+                        "SortingOrder": 3
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "CANCELLED",
+                        "SortingOrder": 4
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "Product",
+                        "JsonPropertyName": "AdditionalCoverage",
+                        "XmlNodeName": "REPLACEDBY",
+                        "SortingOrder": 5
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "Agency",
+                        "XmlNodeName": "AGENCY",
+                        "SortingOrder": 6
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "ProviderCode",
+                        "XmlNodeName": "PROVIDER",
+                        "SortingOrder": 7
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "Size",
+                        "XmlNodeName": "ENCSIZE",
+                        "SortingOrder": 8
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "Title",
+                        "XmlNodeName": "TITLE",
+                        "SortingOrder": 9
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "EditionNumber",
+                        "XmlNodeName": "EDITIONNO",
+                        "SortingOrder": 10
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "UpdateNumber",
+                        "XmlNodeName": "UPDATENO",
+                        "SortingOrder": 11
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "UnitOfSale",
+                        "JsonPropertyName": "UnitType",
+                        "XmlNodeName": "UNITTYPE",
+                        "SortingOrder": 12
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "WEEKNO",
+                        "SortingOrder": 13
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "VALIDFROM",
+                        "SortingOrder": 14
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "CurrentWeekAlphaCorrection",
+                        "XmlNodeName": "CORRECTION",
+                        "SortingOrder": 15
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "Permit",
+                        "XmlNodeName": "ACTIVEKEY",
+                        "SortingOrder": 16
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "Permit",
+                        "XmlNodeName": "NEXTKEY",
+                        "SortingOrder": 17
+                    }
+                ]
+            },
+            {
+                "ActionNumber": 6,
                 "Action": "CHANGE ENC CELL",
                 "Product": "ENC CELL",
                 "Rules": [
@@ -656,7 +788,7 @@
                 ]
             },
             {
-                "ActionNumber": 6,
+                "ActionNumber": 7,
                 "Action": "CHANGE AVCS UNIT OF SALE",
                 "Product": "AVCS UNIT",
                 "Rules": [
@@ -793,7 +925,7 @@
                 ]
             },
             {
-                "ActionNumber": 7,
+                "ActionNumber": 8,
                 "Action": "UPDATE ENC CELL EDITION UPDATE NUMBER",
                 "Product": "ENC CELL",
                 "Rules": [
@@ -949,7 +1081,7 @@
                 ]
             },
             {
-                "ActionNumber": 8,
+                "ActionNumber": 9,
                 "Action": "REMOVE ENC CELL FROM AVCS UNIT OF SALE",
                 "Product": "AVCS UNIT",
                 "Rules": [
@@ -1081,7 +1213,7 @@
                 ]
             },
             {
-                "ActionNumber": 9,
+                "ActionNumber": 10,
                 "Action": "CANCEL ENC CELL",
                 "Product": "ENC CELL",
                 "Rules": [
@@ -1197,7 +1329,7 @@
                 ]
             },
             {
-                "ActionNumber": 10,
+                "ActionNumber": 11,
                 "Action": "CANCEL AVCS UNIT OF SALE",
                 "Product": "AVCS UNIT",
                 "Rules": [

@@ -7,7 +7,7 @@
     "subject": "DE416080",
     "datacontenttype": "application/json",
     "data": {
-        "correlationId": "abcs-cor0012-newedition-20101",
+        "correlationId": "abcd-3hd921-ffd3-1004s",
         "ukhoWeekNumber": {
             "year": 2024,
             "week": 3,
@@ -29,11 +29,20 @@
                 "providerCode": "1",
                 "providerName": "ICE",
                 "_ENUM": [
+                    "ICE",
+                    "ICE_GB",
+                    "ICE_UK",
+                    "PRIMAR",
+                    "VAR Unique",
+                    "VAR"
+                ],
+
+                "size": "medium",
+                "_ENUM": [
                     "large",
                     "medium",
                     "small"
                 ],
-                "size": "medium",
                 "agency": "DE",
                 "bundle": [
                     {
@@ -59,22 +68,16 @@
                 },
                 "replaces": [],
                 "replacedBy": [],
-                "additionalCoverage": [
-                    "DK4LIMFW"
-                ],
+                "additionalCoverage": [ "DK4LIMFW", "DK4LIMFX", "DK4LIMFY" ],
                 "geographicLimit": {
                     "boundingBox": {
-                        "northLimit": 24,
-                        "southLimit": 22,
-                        "eastLimit": 120,
-                        "westLimit": 119
+                        "northLimit": 24.0,
+                        "southLimit": 22.0,
+                        "eastLimit": 120.0,
+                        "westLimit": 119.0
                     }
                 },
-                "inUnitsOfSale": [
-                    "DE416080",
-                    "AVCSO",
-                    "PAYSF"
-                ],
+                "inUnitsOfSale": [ "DE416080", "AVCSO", "PAYSF" ],
                 "s63": {
                     "name": "XXXXXXXX.001",
                     "hash": "5160204288db0a543850da177ec637b71ed55946e7f3843e6180b1906ee4f4ea",
@@ -130,7 +133,7 @@
                         "southLimit": 22.581615,
                         "eastLimit": 120.349635,
                         "westLimit": 119.39142
-                    }                    
+                    }
                 },
                 "compositionChanges": {
                     "addProducts": [],
@@ -144,15 +147,12 @@
                 "unitType": "AVCS Online Folio",
                 "status": "ForSale",
                 "isNewUnitOfSale": false,
-                "unitOfSaleType": "folio",
                 "geographicLimit": {
                     "boundingBox": {}
                 },
                 "compositionChanges": {
                     "addProducts": [],
-                    "removeProducts": [
-                        "DE416080"
-                    ]
+                    "removeProducts": [ "DE416080" ]
                 }
             },
             {
@@ -162,15 +162,12 @@
                 "unitSize": "large",
                 "status": "ForSale",
                 "isNewUnitOfSale": false,
-                "unitOfSaleType": "folio",
                 "geographicLimit": {
                     "boundingBox": {}
                 },
                 "compositionChanges": {
                     "addProducts": [],
-                    "removeProducts": [
-                        "DE416080"
-                    ]
+                    "removeProducts": [ "DE416080" ]
                 }
             }
         ]
