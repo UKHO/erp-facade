@@ -27,13 +27,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return tableClient;
         }
 
-        public static bool CheckResponseDateTime(string correlationId)
-        {
-            TableClient tableClient = GetTableClient(ErpFacadeTableName);
-            Pageable<EESEventEntity> existingEntity = tableClient.Query<EESEventEntity>(filter: TableClient.CreateQueryFilter($"CorrelationId eq {correlationId}"));
-            return existingEntity != null && existingEntity.Any(tableItem => tableItem.ResponseDateTime.HasValue);
-        }
-
+        
         public static string GetSapStatus(string correlationId)
         {
             TableClient tableClient = GetTableClient(RoSEventsTableName);

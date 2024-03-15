@@ -16,13 +16,11 @@ using UKHO.ERPFacade.API.Helpers;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.HealthCheck;
 using UKHO.ERPFacade.Common.HttpClients;
-using UKHO.ERPFacade.Common.Infrastructure;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Providers;
 using UKHO.ERPFacade.Common.PermitDecryption;
-using UKHO.ERPFacade.Common.Services;
 using UKHO.Logging.EventHubLogProvider;
 
 namespace UKHO.ERPFacade
@@ -168,14 +166,10 @@ namespace UKHO.ERPFacade
 
             builder.Services.Configure<AzureStorageConfiguration>(configuration.GetSection("AzureStorageConfiguration"));
             builder.Services.Configure<SapConfiguration>(configuration.GetSection("SapConfiguration"));
-            builder.Services.Configure<SharedKeyConfiguration>(configuration.GetSection("SharedKeyConfiguration"));
-
             builder.Services.Configure<SapActionConfiguration>(configuration.GetSection("SapActionConfiguration"));
             sapActionConfiguration = configuration.GetSection("SapActionConfiguration").Get<SapActionConfiguration>()!;
             builder.Services.Configure<EESHealthCheckEnvironmentConfiguration>(configuration.GetSection("EESHealthCheckEnvironmentConfiguration"));
             builder.Services.Configure<PermitConfiguration>(configuration.GetSection("PermitConfiguration"));
-
-            builder.Services.AddInfrastructure();
 
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -185,10 +179,7 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<IEncContentSapMessageBuilder, EncContentSapMessageBuilder>();
             builder.Services.AddScoped<IXmlHelper, XmlHelper>();
             builder.Services.AddScoped<IFileSystemHelper, FileSystemHelper>();
-            builder.Services.AddScoped<IFileSystem, FileSystem>();
-            builder.Services.AddScoped<IErpFacadeService, ErpFacadeService>();
-            builder.Services.AddScoped<IJsonHelper, JsonHelper>();
-            builder.Services.AddScoped<SharedKeyAuthFilter>();
+            builder.Services.AddScoped<IFileSystem, FileSystem>();            
             builder.Services.AddScoped<IEESClient, EESClient>();
             builder.Services.AddScoped<ILicenceUpdatedSapMessageBuilder, LicenceUpdatedSapMessageBuilder>();
             builder.Services.AddScoped<IWeekDetailsProvider, WeekDetailsProvider>();

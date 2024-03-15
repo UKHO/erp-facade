@@ -172,8 +172,7 @@
                         "southLimit": 63,
                         "eastLimit": 162,
                         "westLimit": 161
-                    }
-                    
+                    }                    
                 },
                 "inUnitsOfSale": [ "US4AK6NT", "AVCSO", "PAYSF" ],
                 "s63": {
@@ -225,8 +224,7 @@
                         "southLimit": 22.581615,
                         "eastLimit": 120.349635,
                         "westLimit": 119.39142
-                    }
-                    
+                    }                    
                 },
                 "compositionChanges": {
                     "addProducts": [],
@@ -272,8 +270,7 @@
                 "status": "ForSale",
                 "isNewUnitOfSale": false,
                 "geographicLimit": {
-                    "boundingBox": {}
-                    
+                    "boundingBox": {}                    
                 },
                 "compositionChanges": {
                     "addProducts": [

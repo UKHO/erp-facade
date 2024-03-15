@@ -14,7 +14,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         private static JsonInputRoSWebhookEvent jsonPayload;
         private static readonly List<string> s_attrNotMatched = new();
 
-        public static async Task<bool> CheckXmlAttributes(string generatedXmlFilePath, string requestBody, List<JsonInputRoSWebhookEvent> listOfEventJsons)
+        public static async Task<bool> CheckXmlAttributes(string generatedXmlFilePath, string requestBody, List<JsonInputRoSWebhookEvent> listOfEventJson)
         {
             jsonPayload = JsonConvert.DeserializeObject<JsonInputRoSWebhookEvent>(requestBody);
 
@@ -53,19 +53,19 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 switch (rosXmlPayload.LICTRANSACTION)
                 {
                     case "MAINTAINHOLDINGS":
-                        Assert.That(VerifyMaintainHolding(rosXmlPayload, roSJsonFields, listOfEventJsons), Is.True);
+                        Assert.That(VerifyMaintainHolding(rosXmlPayload, roSJsonFields, listOfEventJson), Is.True);
                         break;
                     case "NEWLICENCE":
-                        Assert.That(VerifyNewLicence(rosXmlPayload, roSJsonFields, listOfEventJsons), Is.True);
+                        Assert.That(VerifyNewLicence(rosXmlPayload, roSJsonFields, listOfEventJson), Is.True);
                         break;
                     case "MIGRATENEWLICENCE":
-                        Assert.That(VerifyMigrateNewLicence(rosXmlPayload, roSJsonFields, listOfEventJsons), Is.True);
+                        Assert.That(VerifyMigrateNewLicence(rosXmlPayload, roSJsonFields, listOfEventJson), Is.True);
                         break;
                     case "MIGRATEEXISTINGLICENCE":
-                        Assert.That(VerifyMigrateExistingLicence(rosXmlPayload, roSJsonFields, listOfEventJsons), Is.True);
+                        Assert.That(VerifyMigrateExistingLicence(rosXmlPayload, roSJsonFields, listOfEventJson), Is.True);
                         break;
                     case "CONVERTLICENCE":
-                        Assert.That(VerifyConvertTrialToFullLicence(rosXmlPayload, roSJsonFields, listOfEventJsons), Is.True);
+                        Assert.That(VerifyConvertTrialToFullLicence(rosXmlPayload, roSJsonFields, listOfEventJson), Is.True);
                         break;
                 }
             }
@@ -306,7 +306,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
         public static async Task<bool> VerifyPresenseOfMandatoryXMLAtrributes(Z_ADDS_ROSIM_ORDER order)
         {
-            List<string> actionAttributesSeq = Config.TestConfig.RosLicenceUpdateXMLList.ToList<string>();
+            List<string> actionAttributesSeq = Config.TestConfig.RosLicenceUpdateXmlList.ToList<string>();
             List<string> currentActionAttributes = new();
             currentActionAttributes.Clear();
             Type arrayType = order.GetType();
@@ -322,7 +322,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 }
             }
 
-            List<string> actionAttributesSeqProd = Config.TestConfig.RoSLicenceUpdatedProdXMLList.ToList<string>();
+            List<string> actionAttributesSeqProd = Config.TestConfig.RoSLicenceUpdatedProdXmlList.ToList<string>();
             List<string> currentActionAttributesProd = new();
             currentActionAttributesProd.Clear();
             Z_ADDS_ROSIM_ORDERItem[] items = order.PROD;

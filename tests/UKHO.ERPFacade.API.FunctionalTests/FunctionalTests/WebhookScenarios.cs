@@ -10,7 +10,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
     [TestFixture]
     public class WebhookScenarios
     {
-        private WebhookEndpoint _webhook { get; set; }
+        private WebhookEndpoint WebhookEndpoint { get; set; }
         private readonly ADAuthTokenProvider _authToken = new();
         private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
         //for local
@@ -19,13 +19,13 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [SetUp]
         public void Setup()
         {
-            _webhook = new WebhookEndpoint();
+            WebhookEndpoint = new WebhookEndpoint();
         }
 
         [Test(Description = "WhenValidEventInNewEncContentPublishedEventOptions_ThenWebhookReturns200OkResponse"), Order(0)]
         public async Task WhenValidEventInNewEncContentPublishedEventOptions_ThenWebhookReturns200OkResponse()
         {
-            var response = await _webhook.OptionWebhookResponseAsync(await _authToken.GetAzureADToken(false));
+            var response = await WebhookEndpoint.OptionWebhookResponseAsync(await _authToken.GetAzureADToken(false));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
 
@@ -33,7 +33,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponse()
         {
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.WebhookPayloadFileName);
-            var response = await _webhook.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(false));
+            var response = await WebhookEndpoint.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(false));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
 
@@ -41,7 +41,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithInvalidToken_ThenWebhookReturns401UnAuthorizedResponse()
         {
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.WebhookPayloadFileName);
-            var response = await _webhook.PostWebhookResponseAsync(filePath, "invalidToken_abcd");
+            var response = await WebhookEndpoint.PostWebhookResponseAsync(filePath, "invalidToken_abcd");
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
         }
 
@@ -49,7 +49,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithTokenHavingNoRole_ThenWebhookReturns403ForbiddenResponse()
         {
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.WebhookPayloadFileName);
-            var response = await _webhook.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(true));
+            var response = await WebhookEndpoint.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(true));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.Forbidden);
         }
 
@@ -102,7 +102,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [TestCase("ID29_simpleWithdrawnScenario.JSON", "N", TestName = "WhenICallTheWebhookWithSimpleWithdrawnScenario_ThenWebhookReturns200Response")]
         [TestCase("ID30_Suspend_and_WithdrawV01.JSON", "N", TestName = "WhenICallTheWebhookWithSuspendedAndWithdrawnScenario_ThenWebhookReturns200Response")]
         [TestCase("ID31_metadataAndSuspended.JSON", "N", TestName = "WhenICallTheWebhookWithMetadataAndSuspendedMixScenario_ThenWebhookReturns200Response")]
-        [TestCase("ID32_moveAndSuspended.JSON", "N", TestName = "WhenICallTheWebhookWithMovedataAndSuspendedMixScenario_ThenWebhookReturns200Response")]
+        [TestCase("ID32_moveAndSuspended.JSON", "N", TestName = "WhenICallTheWebhookWithMoveDataAndSuspendedMixScenario_ThenWebhookReturns200Response")]
 
         //Rule change unitType & addProducts
         [TestCase("ID33_NewCell_With2UoS_But_only1_having_addProduct.JSON", "N", TestName = "WhenICallTheWebhookWithNewCellScenarioWithMultipleUoSHavingUnitOfSalesTypeUnitButOnly1HavingValueInAddProducts_ThenWebhookReturns200Response")]
@@ -120,8 +120,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         {
             Console.WriteLine("Scenario:" + payloadJsonFileName + "\n");
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, payloadJsonFileName);
-            string generatedXMLFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXMLFolder);
-            RestResponse response = await _webhook.PostWebhookResponseAsyncForXML(filePath, generatedXMLFolder, await _authToken.GetAzureADToken(false), correctionTag, permitState);
+            string generatedXmlFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXmlFolder);
+            RestResponse response = await WebhookEndpoint.PostWebhookResponseAsyncForXml(filePath, generatedXmlFolder, await _authToken.GetAzureADToken(false), correctionTag, permitState);
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
     }
