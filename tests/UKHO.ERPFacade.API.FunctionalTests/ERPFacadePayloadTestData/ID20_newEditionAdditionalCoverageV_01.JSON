@@ -4,7 +4,6 @@
     "source": "https://encpublishing.ukho.gov.uk",
     "id": "2f03a25f-28b3-46ea-b009-5943250a9a41",
     "time": "2020-10-13T12:08:03.4880776Z",
-    "_COMMENT": "A comma separated list of products",
     "subject": "DE416080",
     "datacontenttype": "application/json",
     "data": {
@@ -29,7 +28,6 @@
                 "permit": "permitString",
                 "providerCode": "1",
                 "providerName": "ICE",
-                "_COMMENT": "The units in which product is included, including any 1-1 unit",
                 "_ENUM": [
                     "large",
                     "medium",
@@ -57,8 +55,7 @@
                         "Suspended"
                     ],
                     "statusDate": "2023-03-03T00:00:00.00+01:00",
-                    "isNewCell": false,
-                    "_COMMENT": "A cell new to the service"
+                    "isNewCell": false
                 },
                 "replaces": [],
                 "replacedBy": [],
@@ -114,7 +111,6 @@
                 ]
             }
         ],
-        "_COMMENT": "Prices for all units in event will be included, including Cancelled Cell",
         "unitsOfSale": [
             {
                 "unitName": "DE416080",
@@ -128,7 +124,6 @@
                 ],
                 "isNewUnitOfSale": false,
                 "unitOfSaleType": "unit",
-                "_COMMENT": "BoundingBox or polygon or both or neither",
                 "geographicLimit": {
                     "boundingBox": {
                         "northLimit": 24.146815,

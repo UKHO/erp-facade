@@ -104,7 +104,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         attrNotMatched.Add(nameof(item.ENCSIZE));
                     VerifyAdditionalXmlTags(item, correctionTag);
                     //Checking blanks
-                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "EDITIONNO", "UPDATENO", "ACTIVEKEY", "NEXTKEY", "TITLE", "UNITTYPE" };
+                    List<string> blankFieldNames = new() { "CANCELLED", "REPLACEDBY", "EDITIONNO", "UPDATENO", "ACTIVEKEY", "NEXTKEY", "TITLE", "UNITTYPE" };
                     VerifyBlankFields(item, blankFieldNames);
 
                     if (attrNotMatched.Count == 0)
@@ -114,16 +114,14 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         changeAvcsUoS[valueIndex] = changeAvcsUoS[valueIndex].Replace(productName, "skip");
                         return true;
                     }
-                    else
+
+                    Console.WriteLine("CHANGE AVCS UNIT OF SALE Action's Data is incorrect");
+                    Console.WriteLine("Not matching attributes are:");
+                    foreach (string attribute in attrNotMatched)
                     {
-                        Console.WriteLine("CHANGE AVCS UNIT OF SALE Action's Data is incorrect");
-                        Console.WriteLine("Not matching attributes are:");
-                        foreach (string attribute in attrNotMatched)
-                        {
-                            Console.WriteLine(attribute);
-                        }
-                        return false;
+                        Console.WriteLine(attribute);
                     }
+                    return false;
                 }
             }
             Console.WriteLine("JSON doesn't have corresponding Unit of Sale.");
@@ -154,7 +152,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     if (!item.UPDATENO.Equals(product.UpdateNumber))
                         attrNotMatched.Add(nameof(item.UPDATENO));
                     VerifyAdditionalXmlTags(item, correctionTag);
-                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "UNITTYPE", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE" };
+                    List<string> blankFieldNames = new() { "CANCELLED", "REPLACEDBY", "UNITTYPE", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE" };
                     if (product.Status.StatusName.Contains("New Edition"))
                     {
                         VerifyDecryptedPermit(item, permitState);
@@ -172,14 +170,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         Console.WriteLine("UPDATE ENC CELL EDITION UPDATE NUMBER Action's Data is correct");
                         return true;
                     }
-                    else
-                    {
-                        Console.WriteLine("UPDATE ENC CELL EDITION UPDATE NUMBER Action's Data is incorrect");
-                        Console.WriteLine("Not matching attributes are:");
-                        foreach (string attribute in attrNotMatched)
-                        { Console.WriteLine(attribute); }
-                        return false;
-                    }
+
+                    Console.WriteLine("UPDATE ENC CELL EDITION UPDATE NUMBER Action's Data is incorrect");
+                    Console.WriteLine("Not matching attributes are:");
+                    foreach (string attribute in attrNotMatched)
+                    { Console.WriteLine(attribute); }
+                    return false;
                 }
                 else if ((childCell == product.ProductName) && (product.Status.StatusName.Contains("Suspended")))
                 {
@@ -198,7 +194,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     if (!item.UPDATENO.Equals(product.UpdateNumber))
                         attrNotMatched.Add(nameof(item.UPDATENO));
                     //Checking blanks
-                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "UNITTYPE", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE" };
+                    List<string> blankFieldNames = new(){ "CANCELLED", "REPLACEDBY", "UNITTYPE", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE" };
                     VerifyBlankFields(item, blankFieldNames);
 
                     if (attrNotMatched.Count == 0)
@@ -206,14 +202,11 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         Console.WriteLine("UPDATE ENC CELL EDITION UPDATE NUMBER Action's Data is correct");
                         return true;
                     }
-                    else
-                    {
-                        Console.WriteLine("UPDATE ENC CELL EDITION UPDATE NUMBER Action's Data is incorrect");
-                        Console.WriteLine("Not matching attributes are:");
-                        foreach (string attribute in attrNotMatched)
-                        { Console.WriteLine(attribute); }
-                        return false;
-                    }
+                    Console.WriteLine("UPDATE ENC CELL EDITION UPDATE NUMBER Action's Data is incorrect");
+                    Console.WriteLine("Not matching attributes are:");
+                    foreach (string attribute in attrNotMatched)
+                    { Console.WriteLine(attribute); }
+                    return false;
                 }
             }
             Console.WriteLine("JSON doesn't have corresponding product.");
@@ -244,7 +237,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         attrNotMatched.Add(nameof(item.ENCSIZE));
                     VerifyAdditionalXmlTags(item, correctionTag);
                     //Checking blanks
-                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "UNITTYPE", "ACTIVEKEY", "NEXTKEY", "TITLE", "EDITIONNO", "UPDATENO" };
+                    List<string> blankFieldNames = new() { "CANCELLED", "REPLACEDBY", "UNITTYPE", "ACTIVEKEY", "NEXTKEY", "TITLE", "EDITIONNO", "UPDATENO" };
                     VerifyBlankFields(item, blankFieldNames);
 
                     if (attrNotMatched.Count == 0)
@@ -253,14 +246,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         changeEncCell.Add(childCell, product.InUnitsOfSale);
                         return true;
                     }
-                    else
-                    {
-                        Console.WriteLine("CHANGE ENC CELL Action's Data is incorrect");
-                        Console.WriteLine("Not matching attributes are:");
-                        foreach (string attribute in attrNotMatched)
-                        { Console.WriteLine(attribute); }
-                        return false;
-                    }
+
+                    Console.WriteLine("CHANGE ENC CELL Action's Data is incorrect");
+                    Console.WriteLine("Not matching attributes are:");
+                    foreach (string attribute in attrNotMatched)
+                    { Console.WriteLine(attribute); }
+                    return false;
                 }
             }
             Console.WriteLine("JSON doesn't have corresponding product.");
@@ -284,7 +275,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         attrNotMatched.Add(nameof(item.PRODTYPE));
 
                     //Checking blanks
-                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
+                    List<string> blankFieldNames = new() { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
                     VerifyBlankFields(item, blankFieldNames);
 
                     if (attrNotMatched.Count == 0)
@@ -292,14 +283,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         Console.WriteLine("CANCEL AVCS UNIT OF SALE Action's Data is correct");
                         return true;
                     }
-                    else
-                    {
-                        Console.WriteLine("CANCEL AVCS UNIT OF SALE Action's Data is incorrect");
-                        Console.WriteLine("Not matching attributes are:");
-                        foreach (string attribute in attrNotMatched)
-                        { Console.WriteLine(attribute); }
-                        return false;
-                    }
+
+                    Console.WriteLine("CANCEL AVCS UNIT OF SALE Action's Data is incorrect");
+                    Console.WriteLine("Not matching attributes are:");
+                    foreach (string attribute in attrNotMatched)
+                    { Console.WriteLine(attribute); }
+                    return false;
                 }
             }
             Console.WriteLine("JSON doesn't have corresponding Unit of Sale.");
@@ -325,7 +314,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         attrNotMatched.Add(nameof(item.PRODUCTNAME));
 
                     //Checking blanks
-                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
+                    List<string> blankFieldNames = new() { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
                     VerifyBlankFields(item, blankFieldNames);
 
                     if (attrNotMatched.Count == 0)
@@ -333,14 +322,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         Console.WriteLine("CANCEL ENC CELL Action's Data is correct");
                         return true;
                     }
-                    else
-                    {
-                        Console.WriteLine("CANCEL ENC CELL Action's Data is incorrect");
-                        Console.WriteLine("Not matching attributes are:");
-                        foreach (string attribute in attrNotMatched)
-                        { Console.WriteLine(attribute); }
-                        return false;
-                    }
+
+                    Console.WriteLine("CANCEL ENC CELL Action's Data is incorrect");
+                    Console.WriteLine("Not matching attributes are:");
+                    foreach (string attribute in attrNotMatched)
+                    { Console.WriteLine(attribute); }
+                    return false;
                 }
             }
             Console.WriteLine("JSON doesn't have corresponding product.");
@@ -367,7 +354,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         VerifyAdditionalXmlTags(item, correctionTag);
                         //xmlAttributes[4] & [5] are skipped as already checked
                         //Checking blanks
-                        List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
+                        List<string> blankFieldNames = new() { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
                         VerifyBlankFields(item, blankFieldNames);
 
                         if (attrNotMatched.Count == 0)
@@ -375,14 +362,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                             Console.WriteLine("REMOVE ENC CELL FROM AVCS UNIT OF SALE Action's Data is correct");
                             return true;
                         }
-                        else
-                        {
-                            Console.WriteLine("REMOVE ENC CELL FROM AVCS UNIT OF SALE Action's Data is incorrect");
-                            Console.WriteLine("Not matching attributes are:");
-                            foreach (string attribute in attrNotMatched)
-                            { Console.WriteLine(attribute); }
-                            return false;
-                        }
+
+                        Console.WriteLine("REMOVE ENC CELL FROM AVCS UNIT OF SALE Action's Data is incorrect");
+                        Console.WriteLine("Not matching attributes are:");
+                        foreach (string attribute in attrNotMatched)
+                        { Console.WriteLine(attribute); }
+                        return false;
                     }
                 }
             }
@@ -409,7 +394,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         attrNotMatched.Add(nameof(item.PRODUCTNAME));
                     //VerifyAdditionalXmlTags(item, correctionTag);
                     //Checking blanks
-                    List<string> blankFieldNames = new List<string> { "CANCELLED", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
+                    List<string> blankFieldNames = new() { "CANCELLED", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
                     VerifyBlankFields(item, blankFieldNames);
 
                     if (attrNotMatched.Count == 0)
@@ -419,14 +404,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         product.ReplacedBy[valueIndex] = product.ReplacedBy[valueIndex].Replace(replaceBy, "skip");
                         return true;
                     }
-                    else
-                    {
-                        Console.WriteLine("REPLACED WITH ENC CELL Action's Data is incorrect");
-                        Console.WriteLine("Not matching attributes are:");
-                        foreach (string attribute in attrNotMatched)
-                        { Console.WriteLine(attribute); }
-                        return false;
-                    }
+
+                    Console.WriteLine("REPLACED WITH ENC CELL Action's Data is incorrect");
+                    Console.WriteLine("Not matching attributes are:");
+                    foreach (string attribute in attrNotMatched)
+                    { Console.WriteLine(attribute); }
+                    return false;
                 }
             }
             Console.WriteLine("JSON doesn't have corresponding product.");
@@ -450,7 +433,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         attrNotMatched.Add(nameof(item.PRODTYPE));
                     VerifyAdditionalXmlTags(item, correctionTag);
                     //Checking blanks
-                    List<string> blankFieldNames = new List<string> { "PRODUCTNAME", "CANCELLED", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
+                    List<string> blankFieldNames = new() { "PRODUCTNAME", "CANCELLED", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
                     VerifyBlankFields(item, blankFieldNames);
 
                     if (attrNotMatched.Count == 0)
@@ -460,14 +443,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         product.AdditionalCoverage[valueIndex] = product.AdditionalCoverage[valueIndex].Replace(replaceBy, "skip");
                         return true;
                     }
-                    else
-                    {
-                        Console.WriteLine("ADDITIONAL COVERAGE ENC CELL Action's Data is incorrect");
-                        Console.WriteLine("Not matching attributes are:");
-                        foreach (string attribute in attrNotMatched)
-                        { Console.WriteLine(attribute); }
-                        return false;
-                    }
+
+                    Console.WriteLine("ADDITIONAL COVERAGE ENC CELL Action's Data is incorrect");
+                    Console.WriteLine("Not matching attributes are:");
+                    foreach (string attribute in attrNotMatched)
+                    { Console.WriteLine(attribute); }
+                    return false;
                 }
             }
             Console.WriteLine("JSON doesn't have corresponding product.");
@@ -494,7 +475,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         //xmlAttributes[4] & [5] are skipped as already checked
                         //Checking blanks
                         VerifyAdditionalXmlTags(item, correctionTag);
-                        List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
+                        List<string> blankFieldNames = new() { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
                         VerifyBlankFields(item, blankFieldNames);
 
                         if (attrNotMatched.Count == 0)
@@ -502,14 +483,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                             Console.WriteLine("ASSIGN CELL TO AVCS UNIT OF SALE Action's Data is correct");
                             return true;
                         }
-                        else
-                        {
-                            Console.WriteLine("ASSIGN CELL TO AVCS UNIT OF SALE Action's Data is incorrect");
-                            Console.WriteLine("Not matching attributes are:");
-                            foreach (string attribute in attrNotMatched)
-                            { Console.WriteLine(attribute); }
-                            return false;
-                        }
+
+                        Console.WriteLine("ASSIGN CELL TO AVCS UNIT OF SALE Action's Data is incorrect");
+                        Console.WriteLine("Not matching attributes are:");
+                        foreach (string attribute in attrNotMatched)
+                        { Console.WriteLine(attribute); }
+                        return false;
                     }
                 }
             }
@@ -544,7 +523,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         attrNotMatched.Add(nameof(item.UNITTYPE));
                     VerifyAdditionalXmlTags(item, correctionTag);
                     //Checking blanks
-                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "EDITIONNO", "UPDATENO", "ACTIVEKEY", "NEXTKEY" };
+                    List<string> blankFieldNames = new() { "CANCELLED", "REPLACEDBY", "EDITIONNO", "UPDATENO", "ACTIVEKEY", "NEXTKEY" };
                     VerifyBlankFields(item, blankFieldNames);
 
                     if (attrNotMatched.Count == 0)
@@ -552,14 +531,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         Console.WriteLine("CREATE AVCS UNIT OF SALE Action's Data is correct");
                         return true;
                     }
-                    else
-                    {
-                        Console.WriteLine("CREATE AVCS UNIT OF SALE Action's Data is incorrect");
-                        Console.WriteLine("Not matching attributes are:");
-                        foreach (string attribute in attrNotMatched)
-                        { Console.WriteLine(attribute); }
-                        return false;
-                    }
+
+                    Console.WriteLine("CREATE AVCS UNIT OF SALE Action's Data is incorrect");
+                    Console.WriteLine("Not matching attributes are:");
+                    foreach (string attribute in attrNotMatched)
+                    { Console.WriteLine(attribute); }
+                    return false;
                 }
             }
             Console.WriteLine("JSON doesn't have corresponding Unit of Sale.");
@@ -597,7 +574,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     VerifyAdditionalXmlTags(item, correctionTag);
                     VerifyDecryptedPermit(item, permitState);
                     //Checking blanks
-                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "UNITTYPE" };
+                    List<string> blankFieldNames = new() { "CANCELLED", "REPLACEDBY", "UNITTYPE" };
                     VerifyBlankFields(item, blankFieldNames);
 
                     if (attrNotMatched.Count == 0)
@@ -605,14 +582,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         Console.WriteLine("CREATE ENC CELL Action's Data is correct");
                         return true;
                     }
-                    else
-                    {
-                        Console.WriteLine("CREATE ENC CELL Action's Data is incorrect");
-                        Console.WriteLine("Not matching attributes are:");
-                        foreach (string attribute in attrNotMatched)
-                        { Console.WriteLine(attribute); }
-                        return false;
-                    }
+
+                    Console.WriteLine("CREATE ENC CELL Action's Data is incorrect");
+                    Console.WriteLine("Not matching attributes are:");
+                    foreach (string attribute in attrNotMatched)
+                    { Console.WriteLine(attribute); }
+                    return false;
                 }
             }
             Console.WriteLine("JSON doesn't have corresponding product.");
@@ -775,11 +750,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 Console.WriteLine("XML has correct action sequence");
                 return true;
             }
-            else
-            {
-                Console.WriteLine("XML has incorrect action sequence");
-                return false;
-            }
+
+            Console.WriteLine("XML has incorrect action sequence");
+            return false;
         }
 
         public static bool VerifyInitialXmlHeaders(JsonPayloadHelper jsonPayload, string generatedXMLFilePath)
@@ -794,11 +767,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 Console.WriteLine("XML headers are correct");
                 return true;
             }
-            else
-            {
-                Console.WriteLine("XML headers are incorrect");
-                return false;
-            }
+
+            Console.WriteLine("XML headers are incorrect");
+            return false;
         }
 
         public static bool VerifyRECTIMEHeader(JsonPayloadHelper jsonPayload, string generatedXmlFilePath)
@@ -810,13 +781,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             string timeFromXml = GetRequiredXmlText(generatedXmlFilePath, "RECDATE");
 
             if (timeFromJson == timeFromXml)
-            {
                 return true;
-            }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
         public static bool VerifyNoOfActionsHeader(JsonPayloadHelper jsonPayload, string generatedXMLFilePath)
@@ -829,11 +795,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 Console.WriteLine("XML has correct number of actions");
                 return true;
             }
-            else
-            {
-                Console.WriteLine("XML has incorrect number of actions");
-                return false;
-            }
+
+            Console.WriteLine("XML has incorrect number of actions");
+            return false;
         }
 
         public static bool VerifyCORRIDHeader(JsonPayloadHelper jsonPayload, string generatedXMLFilePath)
@@ -842,13 +806,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             string corrId = GetRequiredXmlText(generatedXMLFilePath, "CORRID");
 
             if (correlationId == corrId)
-            {
                 return true;
-            }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
         public static bool VerifyORGHeader(JsonPayloadHelper jsonPayload, string generatedXmlFilePath)
@@ -856,14 +815,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             string orgValueFromXMl = GetRequiredXmlText(generatedXmlFilePath, "ORG");
 
             if (orgValueFromXMl == "UKHO")
-            {
                 return true;
-            }
-            else
-            {
-                Console.WriteLine("ORG Header failed to match");
-                return false;
-            }
+
+            Console.WriteLine("ORG Header failed to match");
+            return false;
         }
 
         public static List<string> CurateListOfActionsFromXmlFile(string downloadedXmlFilePath)
@@ -877,7 +832,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             {
                 ActionsListFromXml.Add(node.InnerText);
             }
-
             return ActionsListFromXml;
         }
 
@@ -966,15 +920,13 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
             return count;
         }
+
         public static int CalculateAdditionalCoverageCellActionCount(JsonPayloadHelper jsonPayload)
         {
-
             int count = jsonPayload.Data.Products.Where(product => (product.AdditionalCoverage.Count) > 0).Sum(product => product.AdditionalCoverage.Count);
 
             if (count <= 0)
-            {
                 return count;
-            }
 
             UpdateActionList(count, "5.  ADDITIONAL COVERAGE ENC CELL");
             Console.WriteLine("Total no. of Additional coverage ENC Cell: " + count);
@@ -1102,22 +1054,13 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         string name = uosObj.UnitName;
                         return name;
                     }
-                    else
-                    {
-                        Console.WriteLine("Item not found");
-                        return "";
-                    }
+                    Console.WriteLine("Item not found");
+                    return "";
                 }
-                else
-                {
-                    return matchingUosItems.FirstOrDefault().UnitName;
-                }
+                return matchingUosItems.FirstOrDefault()?.UnitName;
             }
-            else
-            {
-                Console.WriteLine("Product object is null");
-                return null;
-            }
+            Console.WriteLine("Product object is null");
+            return null;
         }
 
         public static string UpdatePermitField(string requestBody, string permitState)
