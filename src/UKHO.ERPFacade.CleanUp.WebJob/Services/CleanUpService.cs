@@ -11,11 +11,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.Services
         private readonly ILogger<CleanUpService> _logger;
         private readonly IOptions<ErpFacadeWebJobConfiguration> _erpFacadeWebjobConfig;
         private readonly IAzureTableReaderWriter _azureTableReaderWriter;
-        private readonly IAzureBlobEventWriter _azureBlobEventWriter;
-
-        private const string CompleteStatus = "Complete";
-        private const string PriceChangeContainerName = "pricechangeblobs";
-        private const string BulkPriceInformationFileName = "BulkPriceInformation.json";
+        private readonly IAzureBlobEventWriter _azureBlobEventWriter;               
 
         public CleanUpService(ILogger<CleanUpService> logger,
                                IOptions<ErpFacadeWebJobConfiguration> erpFacadeWebjobConfig,
@@ -29,35 +25,11 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.Services
         }
 
         public void CleanUpAzureTableAndBlobs()
-        {
-            CleanUpBlobsAndTablesRelatedToSlicing();
+        {            
             CleanUpBlobsAndTablesRelatedToEESEvent();
         }
 
-        //Private methods
-        private void CleanUpBlobsAndTablesRelatedToSlicing()
-        {
-            _logger.LogInformation(EventIds.FetchMasterEntities.ToEventId(), "Fetching master entities from azure table");
-            var masterEntities = _azureTableReaderWriter.GetMasterEntities(CompleteStatus);
-            foreach (var masterEntity in masterEntities)
-            {
-                _logger.LogInformation(EventIds.FetchBlobCreateDate.ToEventId(), "Fetching create date of blob : {0}", masterEntity.CorrId);
-                var blobCreateDate = _azureBlobEventWriter.GetBlobCreateDate(masterEntity.CorrId + '/' + BulkPriceInformationFileName, PriceChangeContainerName);
-                TimeSpan timediff = DateTime.Now - blobCreateDate;
-                if (timediff.Days > int.Parse(_erpFacadeWebjobConfig.Value.CleanUpDurationInDays))
-                {
-                    _azureTableReaderWriter.DeleteUnitPriceChangeEntityForMasterCorrId(masterEntity.CorrId);
-                    _azureTableReaderWriter.DeletePriceMasterEntity(masterEntity.CorrId);
-                    _logger.LogInformation(EventIds.FetchBlobsFromContainer.ToEventId(), "Fetching all blobs present in container");
-                    foreach (var blob in _azureBlobEventWriter.GetBlobsInContainer(PriceChangeContainerName, masterEntity.CorrId))
-                    {
-                        _azureBlobEventWriter.DeleteBlob(blob, PriceChangeContainerName);
-                        _logger.LogInformation(EventIds.DeletedBlobSuccessful.ToEventId(), "Deleted blob : {0}  from container", blob);
-                    }
-                }
-            }
-        }
-
+        //Private methods       
         private void CleanUpBlobsAndTablesRelatedToEESEvent()
         {
             _logger.LogInformation(EventIds.FetchEESEntities.ToEventId(), "Fetching all EES entities from azure table");
@@ -67,7 +39,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.Services
                 if (!entity.RequestDateTime.HasValue)
                     continue;
                 TimeSpan timediff = DateTime.Now - entity.RequestDateTime.Value;
-                if (timediff.Days > int.Parse(_erpFacadeWebjobConfig.Value.CleanUpDurationInDays) && entity.ResponseDateTime.HasValue)
+                if (timediff.Days > int.Parse(_erpFacadeWebjobConfig.Value.CleanUpDurationInDays))
                 {
                     Task.FromResult(_azureTableReaderWriter.DeleteEESEntity(entity.CorrelationId));
                     _logger.LogInformation(EventIds.DeletedContainerSuccessful.ToEventId(), "Deleting container : {0}", entity.CorrelationId);
