@@ -1,4 +1,3 @@
-import exec from 'k6/execution';
 import { sleep } from 'k6';
 import http from 'k6/http';
 import { check } from 'k6';
@@ -14,6 +13,16 @@ var defaultPayload1 = JSON.parse(open('./PayloadData/WebhookPayloads/1ProductNew
 var defaultPayload2 = JSON.parse(open('./PayloadData/WebhookPayloads/5ProductsNewCell.json'));
 var defaultPayload3 = JSON.parse(open('./PayloadData/WebhookPayloads/10ProductsNewCell.json'));
 var defaultPayload4 = JSON.parse(open('./PayloadData/WebhookPayloads/100ProductsNewCell.json'));
+
+if (!Config.baseURL.toString().toUpperCase().includes("DEV")) {
+    throw new Error("Invalid Environment !! Please use DEV environment for performance testing.\n");
+}
+
+const url = new URL(Config.baseURL + Config.WebhookURL);
+const headers = {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${Config.Token}`,
+};
 
 export const options = {
     discardResponseBodies: true,
@@ -61,18 +70,9 @@ export const options = {
     }
 };
 
+
+
 export function ScenarioWithOneProduct() {
-
-    if (!Config.baseURL.toString().toUpperCase().includes("DEV")) {
-        exec.test.abort("Invalid Environment !! Please use DEV environment for performance testing.");
-    }
-
-    const url = new URL(Config.baseURL + Config.WebhookURL);
-
-    const headers = {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${Config.Token}`,
-    };
 
     const updatedPayload1 = PayloadSetup(defaultPayload1, ProductList);
     const res = http.post(url.toString(), JSON.stringify(updatedPayload1), { headers }, { tags: { my_custom_tag: 'ScenarioWithOneProduct' } });
@@ -87,12 +87,6 @@ export function ScenarioWithOneProduct() {
     sleep(1);
 }
 export function ScenarioWithFiveProduct() {
-    const url = new URL(Config.baseURL + Config.WebhookURL);
-
-    const headers = {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${Config.Token}`,
-    };
 
     const updatedPayload2 = PayloadSetup(defaultPayload2, ProductList);
     const res = http.post(url.toString(), JSON.stringify(updatedPayload2), { headers }, { tags: { my_custom_tag: 'ScenarioWithFiveProduct' } });
@@ -108,12 +102,6 @@ export function ScenarioWithFiveProduct() {
 }
 
 export function ScenarioWithTenProduct() {
-    const url = new URL(Config.baseURL + Config.WebhookURL);
-
-    const headers = {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${Config.Token}`,
-    };
 
     const updatedPayload3 = PayloadSetup(defaultPayload3, ProductList);
     const res = http.post(url.toString(), JSON.stringify(updatedPayload3), { headers }, { tags: { my_custom_tag: 'ScenarioWithTenProduct' } });
@@ -129,11 +117,6 @@ export function ScenarioWithTenProduct() {
 }
 
 export function ScenarioWithHundredProduct() {
-    const url = new URL(Config.baseURL + Config.WebhookURL);
-    const headers = {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${Config.Token}`,
-    };
 
     const updatedPayload4 = PayloadSetup(defaultPayload4, ProductList);
     const res = http.post(url.toString(), JSON.stringify(updatedPayload4), { headers }, { tags: { my_custom_tag: 'ScenarioWithHundredProduct' } });
