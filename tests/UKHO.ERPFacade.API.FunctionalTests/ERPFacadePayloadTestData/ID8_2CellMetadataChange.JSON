@@ -4,7 +4,6 @@
     "source": "https://encpublishing.ukho.gov.uk",
     "id": "2f03a25f-28b3-46ea-b009-5943250a9a41",
     "time": "2023-05-18T12:08:03.4880776Z",
-    "_COMMENT": "A comma separated list of products",
     "subject": "MX545010, MX545012",
     "datacontenttype": "application/json",
     "data": {
@@ -29,7 +28,6 @@
                 "permit": "permitString",
                 "providerCode": "2",
                 "providerName": "PRIMAR",
-                "_COMMENT": "provider code and descrption are a n-1 mapping",
                 "_ENUM": [
                     "ICE",
                     "ICE_GB",
@@ -39,7 +37,6 @@
                     "VAR"
                 ],
                 "size": "medium",
-                "_COMMENT": " size code not included as will be in ERP Facade",
                 "_ENUM": [
                     "large",
                     "medium",
@@ -66,8 +63,7 @@
                         "Suspended"
                     ],
                     "statusDate": "2023-03-03T00:00:00.00+01:00",
-                    "isNewCell": false,
-                    "_COMMENT": "A cell new to the service"
+                    "isNewCell": false
                 },
                 "replaces": [],
                 "replacedBy": [],
@@ -80,7 +76,6 @@
                         "westLimit": 119.0
                     }
                 },
-                "_COMMENT": "The units in which product is included, including any 1-1 unit",
                 "inUnitsOfSale": [
                     "MX545010",
                     "AVCSO",
@@ -135,7 +130,6 @@
                 "permit": "permitString",
                 "providerCode": "2",
                 "providerName": "PRIMAR",
-                "_COMMENT": "provider code and descrption are a n-1 mapping",
                 "_ENUM": [
                     "ICE",
                     "ICE_GB",
@@ -145,7 +139,6 @@
                     "VAR"
                 ],
                 "size": "medium",
-                "_COMMENT": " size code not included as will be in ERP Facade",
                 "_ENUM": [
                     "large",
                     "medium",
@@ -172,8 +165,7 @@
                         "Suspended"
                     ],
                     "statusDate": "2023-03-03T00:00:00.00+01:00",
-                    "isNewCell": false,
-                    "_COMMENT": "A cell new to the service"
+                    "isNewCell": false
                 },
                 "replaces": [],
                 "replacedBy": [],
@@ -186,7 +178,6 @@
                         "westLimit": 119.0
                     }
                 },
-                "_COMMENT": "The units in which product is included, including any 1-1 unit",
                 "inUnitsOfSale": [
                     "MX545012",
                     "AVCSO",
@@ -228,7 +219,6 @@
                 ]
             }
         ],
-        "_COMMENT": "Prices for all units in event will be included, including Cancelled Cell",
         "unitsOfSale": [
             {
                 "unitName": "MX545010",
@@ -246,7 +236,6 @@
                     "NotForSale"
                 ],
                 "isNewUnitOfSale": false,
-                "_COMMENT": "BoundingBox or polygon or both or neither",
                 "geographicLimit": {
                     "boundingBox": {
                         "northLimit": 24.146815,
@@ -276,7 +265,6 @@
                     "NotForSale"
                 ],
                 "isNewUnitOfSale": false,
-                "_COMMENT": "BoundingBox or polygon or both or neither",
                 "geographicLimit": {
                     "boundingBox": {
                         "northLimit": 24.146815,

@@ -1,11 +1,9 @@
 {
-    "_COMMENT": "Updated 05/04/23 MK - new attributes added: isNewUnitOfSale; contentChange; unitOfSaleType, unitSize",
     "specversion": "1.0",
     "type": "uk.gov.ukho.encpublishing.enccontentpublished.v2.1",
     "source": "https://encpublishing.ukho.gov.uk",
     "id": "2f03a25f-28b3-46ea-b009-5943250a9a41",
     "time": "2023-05-18T12:08:03.4880776Z",
-    "_COMMENT": "A comma separated list of products",
     "subject": "UK45TRI",
     "datacontenttype": "application/json",
     "data": {
@@ -30,7 +28,6 @@
                 "permit": "permitString",
                 "providerCode": "1",
                 "providerName": "ICE",
-                "_COMMENT": "provider code and descrption are n-1 mapping",
                 "_ENUM": [
                     "ICE",
                     "ICE_GB",
@@ -40,7 +37,6 @@
                     "VAR"
                 ],
                 "size": "mdeium",
-                "_COMMENT": " size code not included as will be mapped in SAP",
                 "_ENUM": [
                     "large",
                     "medium",
@@ -67,8 +63,7 @@
                         "Suspended"
                     ],
                     "statusDate": "2020-07-16T19:20:30.45+01:00",
-                    "isNewCell": false,
-                    "_COMMENT": "A cell new to the service"
+                    "isNewCell": false
                 },
                 "replaces": [],
                 "replacedBy": [],
@@ -81,7 +76,6 @@
                         "westLimit": 119.39142
                     }
                 },
-                "_COMMENT": "The units of sale in which product is included, including any 1-1 unit",
                 "inUnitsOfSale": [
                     "UK45TRI",
                     "AVCSO",
@@ -123,7 +117,6 @@
                 ]
             }
         ],
-        "_COMMENT": "All units will be included, including Cancelled Cell units",
         "unitsOfSale": [
             {
                 "unitName": "UK45TRI",
@@ -134,7 +127,6 @@
                     "folio"
                 ],
                 "unitSize": "medium",
-                "_COMMENT": " size code not included as will be mapped in SAP",
                 "_ENUM": [
                     "large",
                     "medium",
@@ -178,7 +170,6 @@
                     "folio"
                 ],
                 "unitSize": "large",
-                "_COMMENT": " size code not included as will be mapped in SAP",
                 "_ENUM": [
                     "large",
                     "medium",
