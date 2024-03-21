@@ -46,7 +46,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.Forbidden);
         }
 
-
         [Test, Order(0)]
         [TestCase("RoS01_ValidRoSMainHolding.json", TestName = "WhenValidRoSEventInRecordOfSalePublishedEventPostReceivedWithValidToken_ThenWebhookReturns200OkResponse")]
         public async Task WhenValidRoSEventInRecordOfSalePublishedEventPostReceivedWithValidToken_ThenWebhookReturns200OkResponse(string payloadFileName)
@@ -111,7 +110,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
 
-
         [TestCase("LTC02_InvalidRoSMigrateNewLicence.json", TestName = "WhenValidRoSMigrateNewLicencePublishedEventReceivedWithInvalidPayload_ThenWebhookReturns500InternalServerError")]
         [TestCase("LTC06_InvalidRoSMigrateExistingLicence.json", TestName = "WhenValidRoSMigrateExistingLicencePublishedEventReceivedWithInvalidPayload_ThenWebhookReturns500InternalServerError")]
         [TestCase("LTC08_InvalidRoSConvertTrialToFullLicence.json", TestName = "WhenValidRoSConvertTrialToFullNewLicencePublishedEventReceivedWithInvalidPayload_ThenWebhookReturns500InternalServerError")]
@@ -124,7 +122,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             RestResponse response = await RosWebhookEndpoint.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(false));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.InternalServerError);
         }
-
 
         [TestCase("RoS13_ValidFirstPayloadForMerging.json", "RoS13_ValidLastPayloadForMerging.json", TestName = "WhenValidRoSEventsReceivedWithValidPayloadsForMerging_ThenWebhookReturns200OkResponseAndWebJobCreatesXMLPayload")]
         public async Task WhenValidRoSEventsReceivedWithValidPayloadsForMerging_ThenWebhookReturns200OkResponseAndWebJobCreatesXMLPayload(string firstEventPayloadJsonFileName, string lastEventPayloadJsonFileName)
@@ -149,7 +146,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             //Assert if ROS webhook returns OK
             lastEventResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
-
 
         [TestCase("LTC01_RoSMigrateNewLicence.json", TestName = "WhenValidRoSMigrateNewLicencePublishedEventReceivedWithValidPayload_ThenWebhookReturns200OkResponse")]
         [TestCase("LTC04_RoSMigrateExistingLicence.json", TestName = "WhenValidRoSMigrateExistingLicencePublishedEventReceivedWithValidPayload_ThenWebhookReturns200OkResponse")]
