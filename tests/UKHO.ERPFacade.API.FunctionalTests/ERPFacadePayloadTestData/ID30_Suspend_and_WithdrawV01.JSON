@@ -178,7 +178,6 @@
                         "westLimit": 119.0
                     }
                 },
-                "_COMMENT": "The units in which product is included, including any 1-1 unit",
                 "inUnitsOfSale": [
                     "GB50782L",
                     "AVCSO"

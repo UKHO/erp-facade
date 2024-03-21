@@ -147,7 +147,6 @@
                     "NotForSale"
                 ],
                 "isNewUnitOfSale": false,
-                "_COMMENT": "BoundingBox or polygon or both or neither",
                 "geographicLimit": {
                     "boundingBox": {
                         "northLimit": 24.146815,
@@ -203,7 +202,6 @@
                     "folio"
                 ],
                 "unitSize": "large",
-                "_COMMENT": " size code not included as will be mapped in SAP",
                 "_ENUM": [
                     "large",
                     "medium",

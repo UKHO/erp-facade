@@ -153,8 +153,7 @@
                         "Suspended"
                     ],
                     "statusDate": "2020-07-16T19:20:30.45+01:00",
-                    "isNewCell": false,
-                    "_COMMENT": "A cell new to the service"
+                    "isNewCell": false
                 },
                 "replaces": [],
                 "replacedBy": [],
@@ -206,7 +205,6 @@
                     "folio"
                 ],
                 "unitSize": "medium",
-                "_COMMENT": " size code not included as will be mapped in SAP",
                 "_ENUM": [
                     "large",
                     "medium",
@@ -249,7 +247,6 @@
                     "folio"
                 ],
                 "unitSize": "medium",
-                "_COMMENT": " size code not included as will be mapped in SAP",
                 "_ENUM": [
                     "large",
                     "medium",

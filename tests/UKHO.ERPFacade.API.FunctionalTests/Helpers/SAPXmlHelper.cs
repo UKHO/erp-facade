@@ -20,7 +20,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         public static List<string> ListFromJson = new();
         public static List<string> ActionsListFromXml = new();
         private static readonly string weekNoTag = Config.TestConfig.WeekNoTag;
-        private static readonly string validFromTag = Config.TestConfig.ValidFromTag;
+        private static readonly string validFromTagThursday = Config.TestConfig.ValidFromTagThursday;
+        private static readonly string validFromTagFriday = Config.TestConfig.ValidFromTagFriday;
         private static readonly int noOfMandatoryXMLAttribute = 20;
 
         public static async Task<bool> CheckXmlAttributes(JsonPayloadHelper jsonPayload, string xmlFilePath, string updatedRequestBody, string correctionTag, string permitState)
@@ -600,8 +601,16 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         {
             if (!item.WEEKNO.Equals(weekNoTag))
                 attrNotMatched.Add(nameof(item.WEEKNO));
-            if (!item.VALIDFROM.Equals(validFromTag))
-                attrNotMatched.Add(nameof(item.VALIDFROM));
+            if (correctionTag == "Y")
+            {
+                if (!item.VALIDFROM.Equals(validFromTagFriday))
+                    attrNotMatched.Add(nameof(item.VALIDFROM));
+            }
+            else
+            {
+                if (!item.VALIDFROM.Equals(validFromTagThursday))
+                    attrNotMatched.Add(nameof(item.VALIDFROM));
+            }
             if (!item.CORRECTION.Equals(correctionTag))
                 attrNotMatched.Add(nameof(item.CORRECTION));
         }

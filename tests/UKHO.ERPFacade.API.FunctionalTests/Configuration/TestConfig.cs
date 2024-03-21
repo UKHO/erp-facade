@@ -13,7 +13,8 @@
         public string[] RosLicenceUpdateXmlList { get; set; }
         public string[] RoSLicenceUpdatedProdXmlList { get; set; }
         public string WeekNoTag { get; set; }
-        public string ValidFromTag { get; set; }
+        public string ValidFromTagThursday { get; set; }
+        public string ValidFromTagFriday { get; set; }
         public PermitWithSameKey PermitWithSameKey { get; set; }
         public PermitWithDifferentKey PermitWithDifferentKey { get; set; }
     }
