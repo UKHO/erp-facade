@@ -42,9 +42,6 @@
     <ProjectReference Include="..\UKHO.ERPFacade.Common\UKHO.ERPFacade.Common.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Update="disable.job">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="SapXmlTemplates\RosSapRequest.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
