@@ -503,6 +503,27 @@
                         "SortingOrder": 12
                     },
                     {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "WEEKNO",
+                        "SortingOrder": 13
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "VALIDFROM",
+                        "SortingOrder": 14
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "CurrentWeekAlphaCorrection",
+                        "XmlNodeName": "CORRECTION",
+                        "SortingOrder": 15
+                    },
+                    {
                         "IsRequired": false,
                         "Section": "Product",
                         "JsonPropertyName": "Permit",
@@ -1313,6 +1334,27 @@
                         "SortingOrder": 12
                     },
                     {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "WEEKNO",
+                        "SortingOrder": 13
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "VALIDFROM",
+                        "SortingOrder": 14
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "CurrentWeekAlphaCorrection",
+                        "XmlNodeName": "CORRECTION",
+                        "SortingOrder": 15
+                    },
+                    {
                         "IsRequired": false,
                         "Section": "Product",
                         "JsonPropertyName": "Permit",
@@ -1427,6 +1469,27 @@
                         "JsonPropertyName": "UnitType",
                         "XmlNodeName": "UNITTYPE",
                         "SortingOrder": 12
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "WEEKNO",
+                        "SortingOrder": 13
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "VALIDFROM",
+                        "SortingOrder": 14
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "CurrentWeekAlphaCorrection",
+                        "XmlNodeName": "CORRECTION",
+                        "SortingOrder": 15
                     },
                     {
                         "IsRequired": false,

@@ -4,7 +4,6 @@
     "source": "https://encpublishing.ukho.gov.uk",
     "id": "2f03a25f-28b3-46ea-b009-5943250a9a41",
     "time": "2020-10-13T12:08:03.4880776Z",
-    "_COMMENT": "A comma separated list of products",
     "subject": "US5AK83M,US4AK6NT,MX545010",
     "datacontenttype": "application/json",
     "data": {
@@ -29,7 +28,6 @@
                 "permit": "permitString",
                 "providerCode": "1",
                 "providerName": "ICE",
-                "_COMMENT": "provider code and descrption are a n-1 mapping",
                 "_ENUM": [
                     "ICE",
                     "ICE_GB",
@@ -39,7 +37,6 @@
                     "VAR"
                 ],
                 "size": "small",
-                "_COMMENT": "size code not included as will be in ERP Facade",
                 "_ENUM": [
                     "large",
                     "medium",
@@ -66,8 +63,7 @@
                         "Suspended"
                     ],
                     "statusDate": "2023-03-03T00:00:00.00+01:00",
-                    "isNewCell": false,
-                    "_COMMENT": "A cell new to the service"
+                    "isNewCell": false
                 },
                 "replaces": [],
                 "replacedBy": [
@@ -82,7 +78,6 @@
                         "westLimit": 119.0
                     }
                 },
-                "_COMMENT": "The units in which product is included, including any 1-1 unit",
                 "inUnitsOfSale": [
                     "US5AK83M",
                     "AVCSO",
@@ -134,10 +129,9 @@
                 "updateNumber": 2,
                 "mayAffectHoldings": true,
                 "contentChange": true,
-                "permit": "4A4E096BC7SDSAFEQAE71194324",
+                "permit": "permitString",
                 "providerCode": "1",
                 "providerName": "ICE",
-                "_COMMENT": "provider code and descrption are a n-1 mapping",
                 "_ENUM": [
                     "ICE",
                     "ICE_GB",
@@ -147,7 +141,6 @@
                     "VAR"
                 ],
                 "size": "medium",
-                "_COMMENT": " size code not included as will be in ERP Facade",
                 "_ENUM": [
                     "large",
                     "medium",
@@ -223,7 +216,6 @@
                 "permit": "permitString",
                 "providerCode": "1",
                 "providerName": "ICE",
-                "_COMMENT": "provider code and descrption are a n-1 mapping",
                 "_ENUM": [
                     "ICE",
                     "ICE_GB",
@@ -233,7 +225,6 @@
                     "VAR"
                 ],
                 "size": "medium",
-                "_COMMENT": " size code not included as will be in ERP Facade",
                 "_ENUM": [
                     "large",
                     "medium",
@@ -260,8 +251,7 @@
                         "Suspended"
                     ],
                     "statusDate": "2023-03-03T00:00:00.00+01:00",
-                    "isNewCell": true,
-                    "_COMMENT": "A cell new to the service"
+                    "isNewCell": true
                 },
                 "replaces": [],
                 "replacedBy": [],
@@ -274,7 +264,6 @@
                         "westLimit": 119.0
                     }
                 },
-                "_COMMENT": "The units in which product is included, including any 1-1 unit",
                 "inUnitsOfSale": [
                     "MX545010",
                     "AVCSO",
@@ -316,7 +305,6 @@
                 ]
             }
         ],
-        "_COMMENT": "Prices for all units in event will be included, including Cancelled Cell",
         "unitsOfSale": [
             {
                 "unitName": "US5AK83M",
@@ -334,7 +322,6 @@
                     "ForSale",
                     "NotForSale"
                 ],
-                "_COMMENT": "BoundingBox or polygon or both or neither",
                 "geographicLimit": {
                     "boundingBox": {
                         "northLimit": 24.146815,
@@ -362,7 +349,6 @@
                 "unitType": "AVCS Units Coastal",
                 "status": "ForSale",
                 "isNewUnitOfSale": true,
-                "_COMMENT": "avcs_cat has either boundingBox or polygon - should both be included?",
                 "geographicLimit": {
                     "boundingBox": {
                         "northLimit": 22.643255,
@@ -394,7 +380,6 @@
                     "NotForSale"
                 ],
                 "isNewUnitOfSale": true,
-                "_COMMENT": "BoundingBox or polygon or both or neither",
                 "geographicLimit": {
                     "boundingBox": {
                         "northLimit": 24.146815,

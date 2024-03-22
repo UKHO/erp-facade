@@ -398,9 +398,9 @@ namespace UKHO.ERPFacade.API.Helpers
                         switch (node.XmlNodeName)
                         {
                             case ValidFrom:
-                                string thursdayDate = _weekDetailsProvider.GetThursdayDateOfWeek(
-                                ukhoWeekNumber.Year, ukhoWeekNumber.Week);
-                                itemSubNode.InnerText = GetXmlNodeValue(thursdayDate);
+                                string weekDate = _weekDetailsProvider.GetDateOfWeek(
+                                ukhoWeekNumber.Year, ukhoWeekNumber.Week, ukhoWeekNumber.CurrentWeekAlphaCorrection);
+                                itemSubNode.InnerText = GetXmlNodeValue(weekDate);
                                 break;
 
                             case WeekNo:

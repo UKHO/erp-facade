@@ -338,7 +338,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
 
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
-            A.CallTo(() => _fakeWeekDetailsProvider.GetThursdayDateOfWeek(A<int>.Ignored, A<int>.Ignored)).Returns("20240118");
+            A.CallTo(() => _fakeWeekDetailsProvider.GetDateOfWeek(A<int>.Ignored, A<int>.Ignored, A<bool>.Ignored)).Returns("20240118");
 
             var result = _fakeEncContentSapMessageBuilder.BuildSapMessageXml(scenarios!, correlationId);
 
@@ -482,7 +482,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             XmlDocument soapXml = new();
             soapXml.LoadXml(SapXmlFile);
 
-            A.CallTo(() => _fakeWeekDetailsProvider.GetThursdayDateOfWeek(A<int>.Ignored, A<int>.Ignored)).Returns("20240118");
+            A.CallTo(() => _fakeWeekDetailsProvider.GetDateOfWeek(A<int>.Ignored, A<int>.Ignored, A<bool>.Ignored)).Returns("20240118");
 
             var action = _fakeSapActionConfig.Value.SapActions.FirstOrDefault(x => x.Product == EncCell);
 
@@ -503,7 +503,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             XmlDocument soapXml = new();
             soapXml.LoadXml(SapXmlFile);
 
-            A.CallTo(() => _fakeWeekDetailsProvider.GetThursdayDateOfWeek(A<int>.Ignored, A<int>.Ignored)).Returns("20240118");
+            A.CallTo(() => _fakeWeekDetailsProvider.GetDateOfWeek(A<int>.Ignored, A<int>.Ignored, A<bool>.Ignored)).Returns("20240118");
 
             MethodInfo getUnitOfSaleForEncCell = typeof(EncContentSapMessageBuilder).GetMethod("GetUnitOfSaleForEncCell", BindingFlags.NonPublic | BindingFlags.Instance)!;
             var unitOfSale = (UnitOfSale)getUnitOfSaleForEncCell.Invoke(_fakeEncContentSapMessageBuilder, new object[] { scenarios.Data.UnitsOfSales,

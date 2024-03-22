@@ -20,14 +20,16 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         public static List<string> ListFromJson = new();
         public static List<string> ActionsListFromXml = new();
         private static readonly string weekNoTag = Config.TestConfig.WeekNoTag;
-        private static readonly string validFromTag = Config.TestConfig.ValidFromTag;
+        private static readonly string validFromTagThursday = Config.TestConfig.ValidFromTagThursday;
+        private static readonly string validFromTagFriday = Config.TestConfig.ValidFromTagFriday;
+        private static readonly int noOfMandatoryXMLAttribute = 20;
 
         public static async Task<bool> CheckXmlAttributes(JsonPayloadHelper jsonPayload, string xmlFilePath, string updatedRequestBody, string correctionTag, string permitState)
         {
             SapXmlHelper.JsonPayload = jsonPayload;
             UpdatedJsonPayload = JsonConvert.DeserializeObject<JsonPayloadHelper>(updatedRequestBody);
 
-            XmlDocument xmlDoc = new XmlDocument();
+            XmlDocument xmlDoc = new ();
             xmlDoc.LoadXml(await File.ReadAllTextAsync(xmlFilePath));
 
             while (xmlDoc.DocumentElement.Name == "soap:Envelope" || xmlDoc.DocumentElement.Name == "soap:Body")
@@ -60,9 +62,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 else if (item.ACTION == "REMOVE ENC CELL FROM AVCS UNIT OF SALE")
                     Assert.That(VerifyRemoveENCCellFromAVCSUnitOFSale(item.CHILDCELL, item.PRODUCTNAME, item, correctionTag) ?? false);
                 else if (item.ACTION == "CANCEL ENC CELL")
-                    Assert.That(VerifyCancelEncCell(item.CHILDCELL, item.PRODUCTNAME, item) ?? false);
+                    Assert.That(VerifyCancelEncCell(item.CHILDCELL, item.PRODUCTNAME, item, correctionTag) ?? false);
                 else if (item.ACTION == "CANCEL AVCS UNIT OF SALE")
-                    Assert.That(VerifyCancelToAVCSUnitOfSale(item.PRODUCTNAME, item) ?? false);
+                    Assert.That(VerifyCancelToAVCSUnitOfSale(item.PRODUCTNAME, item, correctionTag) ?? false);
                 else if (item.ACTION == "CHANGE ENC CELL")
                     Assert.That(VerifyChangeEncCell(item.CHILDCELL, item, correctionTag) ?? false);
                 else if (item.ACTION == "CHANGE AVCS UNIT OF SALE")
@@ -258,7 +260,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return false;
         }
 
-        private static bool? VerifyCancelToAVCSUnitOfSale(string productName, ZMAT_ACTIONITEMS item)
+        private static bool? VerifyCancelToAVCSUnitOfSale(string productName, ZMAT_ACTIONITEMS item, string correctionTag)
         {
             Console.WriteLine("Action#:" + actionCounter + ".UnitOfSale:" + productName);
             foreach (UnitOfSale unitOfSale in JsonPayload.Data.UnitsOfSales)
@@ -273,7 +275,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         attrNotMatched.Add(nameof(item.PRODUCT));
                     if (!item.PRODTYPE.Equals((GetProductInfo(unitOfSale.CompositionChanges.RemoveProducts)).ProductType))
                         attrNotMatched.Add(nameof(item.PRODTYPE));
-
+                    VerifyAdditionalXmlTags(item, correctionTag);
                     //Checking blanks
                     List<string> blankFieldNames = new() { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
                     VerifyBlankFields(item, blankFieldNames);
@@ -295,7 +297,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return false;
         }
 
-        private static bool? VerifyCancelEncCell(string childCell, string productName, ZMAT_ACTIONITEMS item)
+        private static bool? VerifyCancelEncCell(string childCell, string productName, ZMAT_ACTIONITEMS item, string correctionTag)
         {
             Console.WriteLine("Action#:" + actionCounter + ".ENC Cell:" + childCell);
             foreach (Product product in JsonPayload.Data.Products)
@@ -312,6 +314,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         attrNotMatched.Add(nameof(item.PRODTYPE));
                     if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!item.PRODUCTNAME.Equals(GetUoSName(childCell))))
                         attrNotMatched.Add(nameof(item.PRODUCTNAME));
+                    VerifyAdditionalXmlTags(item, correctionTag);
 
                     //Checking blanks
                     List<string> blankFieldNames = new() { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
@@ -392,7 +395,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         attrNotMatched.Add(nameof(item.PRODTYPE));
                     if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!item.PRODUCTNAME.Equals(GetUoSName(childCell))))
                         attrNotMatched.Add(nameof(item.PRODUCTNAME));
-                    //VerifyAdditionalXmlTags(item, correctionTag);
+                    VerifyAdditionalXmlTags(item, correctionTag);
                     //Checking blanks
                     List<string> blankFieldNames = new() { "CANCELLED", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
                     VerifyBlankFields(item, blankFieldNames);
@@ -598,13 +601,21 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         {
             if (!item.WEEKNO.Equals(weekNoTag))
                 attrNotMatched.Add(nameof(item.WEEKNO));
-            if (!item.VALIDFROM.Equals(validFromTag))
-                attrNotMatched.Add(nameof(item.VALIDFROM));
+            if (correctionTag == "Y")
+            {
+                if (!item.VALIDFROM.Equals(validFromTagFriday))
+                    attrNotMatched.Add(nameof(item.VALIDFROM));
+            }
+            else
+            {
+                if (!item.VALIDFROM.Equals(validFromTagThursday))
+                    attrNotMatched.Add(nameof(item.VALIDFROM));
+            }
             if (!item.CORRECTION.Equals(correctionTag))
                 attrNotMatched.Add(nameof(item.CORRECTION));
         }
 
-        private static bool VerifyDecryptedPermit(ZMAT_ACTIONITEMS item, string permitState)
+        private static void VerifyDecryptedPermit(ZMAT_ACTIONITEMS item, string permitState)
         {
             if (permitState.Contains("Same"))
             {
@@ -621,7 +632,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 if (!item.NEXTKEY.Equals(Config.TestConfig.PermitWithDifferentKey.NextKey))
                     attrNotMatched.Add(nameof(item.NEXTKEY));
             }
-            return true;
         }
 
         private static bool VerifyBlankFields(ZMAT_ACTIONITEMS item, List<string> fieldNames)
@@ -664,19 +674,30 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 Type arrayType = item.GetType();
                 System.Reflection.PropertyInfo[] properties = arrayType.GetProperties();
                 currentActionAttributes.AddRange(properties.Select(property => property.Name));
-                for (int i = 0; i < 15; i++)
+                if (currentActionAttributes.Count == noOfMandatoryXMLAttribute)
                 {
-                    if (currentActionAttributes[i] != actionAttributesSeq[i])
+
+
+                    for (int i = 0; i < noOfMandatoryXMLAttribute; i++)
                     {
-                        Console.WriteLine("First missed Attribute is:" + actionAttributesSeq[i] +
-                                          " for action number:" + item.ACTIONNUMBER);
-                        return false;
+                        if (currentActionAttributes[i] != actionAttributesSeq[i])
+                        {
+                            Console.WriteLine("First missed Attribute is:" + actionAttributesSeq[i] +
+                                              " for action number:" + item.ACTIONNUMBER);
+                            return false;
+                        }
                     }
+                }
+                else
+                {
+                    Console.WriteLine("Mandatory attributes are more than expected for Action number " + item.ACTIONNUMBER);
+
+                    return false;
                 }
             }
             if (ZMAT_ACTIONITEMS.Length > 0)
             {
-                Console.WriteLine("Mandatory atrributes are present in all XML actions");
+                Console.WriteLine("Mandatory attributes are present in all XML actions");
                 await Task.CompletedTask;
                 return true;
             }

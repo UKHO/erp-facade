@@ -1,16 +1,19 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using UKHO.WeekNumberUtils;
+﻿using UKHO.WeekNumberUtils;
 
 namespace UKHO.ERPFacade.Common.Providers
 {
-    [ExcludeFromCodeCoverage]
     public class WeekDetailsProvider : IWeekDetailsProvider
     {
-        public string GetThursdayDateOfWeek(int year, int week)
+        public string GetDateOfWeek(int year, int week, bool currentWeekAlphaCorrection)
         {
             var weekDetails = new WeekNumber(year, week);
-
             var thursdayDate = weekDetails.Date;
+
+            if (currentWeekAlphaCorrection)
+            {
+                var fridayDate = thursdayDate.AddDays(1);
+                return fridayDate.ToString("yyyyMMdd");
+            }
 
             return thursdayDate.ToString("yyyyMMdd");
         }
