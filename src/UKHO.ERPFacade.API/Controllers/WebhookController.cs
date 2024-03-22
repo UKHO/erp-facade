@@ -121,6 +121,7 @@ namespace UKHO.ERPFacade.API.Controllers
         [HttpOptions]
         [Route("/webhook/recordofsalepublishedeventreceived")]
         [Authorize(Policy = "RecordOfSaleWebhookCaller")]
+        [NonAction]
         public IActionResult RecordOfSalePublishedEventOptions()
         {
             var webhookRequestOrigin = HttpContext.Request.Headers["WebHook-Request-Origin"].FirstOrDefault();
@@ -169,6 +170,7 @@ namespace UKHO.ERPFacade.API.Controllers
         [HttpOptions]
         [Route("/webhook/licenceupdatedpublishedeventreceived")]
         [Authorize(Policy = "LicenceUpdatedWebhookCaller")]
+        [NonAction]
         public IActionResult LicenceUpdatedPublishedEventReceivedOption()
         {
             var webhookRequestOrigin = HttpContext.Request.Headers["WebHook-Request-Origin"].FirstOrDefault();
