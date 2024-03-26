@@ -10,8 +10,7 @@ variable "resource_group_name" {
 
 locals {
   env_name           = lower(terraform.workspace)
-  service_name       = "erpfacade"
-  table_name         = "eesevents"
+  service_name       = "erpfacade"  
   web_app_name       = "${local.service_name}-${local.env_name}-api"
   mock_web_app_name  = "${local.service_name}-${local.env_name}-sapmockservice"
   key_vault_name     = "${local.service_name}-ukho-${local.env_name}-kv"

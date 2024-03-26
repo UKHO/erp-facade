@@ -13,10 +13,6 @@ variable "location" {
 variable "tags" {
 }
 
-variable "table_name" {
-  type = string
-}
-
 variable "webapp_principal_id" {
   type  = string
 }
