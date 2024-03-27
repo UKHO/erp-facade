@@ -1,14 +1,18 @@
 {
     "specversion": "1.0",
-    "type": "uk.gov.ukho.encpublishing.enccontentpublished.v2",
+    "type": "uk.gov.ukho.encpublishing.enccontentpublished.v2.1",
     "source": "https://encpublishing.ukho.gov.uk",
     "id": "2f03a25f-28b3-46ea-b009-5943250a9a41",
     "time": "2020-10-13T12:08:03.4880776Z",
-    "_COMMENT": "A comma separated list of products",
     "subject": "FR679000",
     "datacontenttype": "application/json",
     "data": {
         "correlationId": "cdsa-v03-newcell-3021",
+        "ukhoWeekNumber": {
+            "year": 2024,
+            "week": 3,
+            "currentWeekAlphaCorrection": false
+        },
         "products": [
             {
                 "productType": "ENC S57",
@@ -24,7 +28,6 @@
                 "permit": "permitString",
                 "providerCode": 1,
                 "providerName": "ICE",
-                "_COMMENT": "provider code and descrption are a n-1 mapping",
                 "_ENUM": [
                     "ICE",
                     "ICE_GB",
@@ -35,7 +38,6 @@
                 ],
 
                 "size": "medium",
-                "_COMMENT": " size code not included as will be in ERP Facade",
                 "_ENUM": [
                     "large",
                     "medium",
@@ -62,8 +64,7 @@
                         "Suspended"
                     ],
                     "statusDate": "2023-03-03T00:00:00.00+01:00",
-                    "isNewCell": true,
-                    "_COMMENT": "A cell new to the service"
+                    "isNewCell": true
                 },
                 "replaces": [],
                 "replacedBy": [],
@@ -74,51 +75,8 @@
                         "southLimit": 22.0,
                         "eastLimit": 120.0,
                         "westLimit": 119.0
-                    },
-                    "polygons": [
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 24,
-                                    "longitude": 121.5
-                                },
-                                {
-                                    "latitude": 121,
-                                    "longitude": 56
-                                },
-                                {
-                                    "latitude": 45,
-                                    "longitude": 78
-                                },
-                                {
-                                    "latitude": 119,
-                                    "longitude": 121.5
-                                }
-                            ]
-                        },
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 24,
-                                    "longitude": 121.5
-                                },
-                                {
-                                    "latitude": 121,
-                                    "longitude": 56
-                                },
-                                {
-                                    "latitude": 45,
-                                    "longitude": 78
-                                },
-                                {
-                                    "latitude": 119,
-                                    "longitude": 121.5
-                                }
-                            ]
-                        }
-                    ]
+                    }
                 },
-                "_COMMENT": "The units in which product is included, including any 1-1 unit",
                 "inUnitsOfSale": [ "MX545010", "AVCSO", "PAYSF" ],
                 "s63": {
                     "name": "XXXXXXXX.001",
@@ -155,7 +113,7 @@
                     }
                 ]
             },
-			{
+            {
                 "productType": "ENC S57",
                 "dataSetName": "MX545011.001",
                 "productName": "MX545011",
@@ -169,7 +127,6 @@
                 "permit": "permitString",
                 "providerCode": 1,
                 "providerName": "ICE",
-                "_COMMENT": "provider code and descrption are a n-1 mapping",
                 "_ENUM": [
                     "ICE",
                     "ICE_GB",
@@ -180,7 +137,6 @@
                 ],
 
                 "size": "medium",
-                "_COMMENT": " size code not included as will be in ERP Facade",
                 "_ENUM": [
                     "large",
                     "medium",
@@ -207,8 +163,7 @@
                         "Suspended"
                     ],
                     "statusDate": "2023-03-03T00:00:00.00+01:00",
-                    "isNewCell": true,
-                    "_COMMENT": "A cell new to the service"
+                    "isNewCell": true
                 },
                 "replaces": [],
                 "replacedBy": [],
@@ -219,52 +174,8 @@
                         "southLimit": 22.0,
                         "eastLimit": 120.0,
                         "westLimit": 119.0
-                    },
-                    "polygons": [
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 24,
-                                    "longitude": 121.5
-                                },
-                                {
-                                    "latitude": 121,
-                                    "longitude": 56
-                                },
-                                {
-                                    "latitude": 45,
-                                    "longitude": 78
-                                },
-                                {
-                                    "latitude": 119,
-                                    "longitude": 121.5
-                                }
-                            ]
-                        },
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 24,
-                                    "longitude": 121.5
-                                },
-                                {
-                                    "latitude": 121,
-                                    "longitude": 56
-                                },
-                                {
-                                    "latitude": 45,
-                                    "longitude": 78
-                                },
-                                {
-                                    "latitude": 119,
-                                    "longitude": 121.5
-                                }
-                            ]
-                        }
-					 
-                    ]
+                    }
                 },
-                "_COMMENT": "The units in which product is included, including any 1-1 unit",
                 "inUnitsOfSale": [ "MX545011", "AVCSO", "PAYSF" ],
                 "s63": {
                     "name": "XXXXXXXX.001",
@@ -301,7 +212,7 @@
                     }
                 ]
             },
-			{
+            {
                 "productType": "ENC S57",
                 "dataSetName": "MX545012.001",
                 "productName": "MX545012",
@@ -315,7 +226,6 @@
                 "permit": "permitString",
                 "providerCode": 1,
                 "providerName": "ICE",
-                "_COMMENT": "provider code and descrption are a n-1 mapping",
                 "_ENUM": [
                     "ICE",
                     "ICE_GB",
@@ -326,7 +236,6 @@
                 ],
 
                 "size": "medium",
-                "_COMMENT": " size code not included as will be in ERP Facade",
                 "_ENUM": [
                     "large",
                     "medium",
@@ -353,8 +262,7 @@
                         "Suspended"
                     ],
                     "statusDate": "2023-03-03T00:00:00.00+01:00",
-                    "isNewCell": true,
-                    "_COMMENT": "A cell new to the service"
+                    "isNewCell": true
                 },
                 "replaces": [],
                 "replacedBy": [],
@@ -365,51 +273,8 @@
                         "southLimit": 22.0,
                         "eastLimit": 120.0,
                         "westLimit": 119.0
-                    },
-                    "polygons": [
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 24,
-                                    "longitude": 121.5
-                                },
-                                {
-                                    "latitude": 121,
-                                    "longitude": 56
-                                },
-                                {
-                                    "latitude": 45,
-                                    "longitude": 78
-                                },
-                                {
-                                    "latitude": 119,
-                                    "longitude": 121.5
-                                }
-                            ]
-                        },
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 24,
-                                    "longitude": 121.5
-                                },
-                                {
-                                    "latitude": 121,
-                                    "longitude": 56
-                                },
-                                {
-                                    "latitude": 45,
-                                    "longitude": 78
-                                },
-                                {
-                                    "latitude": 119,
-                                    "longitude": 121.5
-                                }
-                            ]
-                        }
-                    ]
+                    }
                 },
-                "_COMMENT": "The units in which product is included, including any 1-1 unit",
                 "inUnitsOfSale": [ "MX545012", "AVCSO", "PAYSF" ],
                 "s63": {
                     "name": "XXXXXXXX.001",
@@ -446,7 +311,7 @@
                     }
                 ]
             },
-			{
+            {
                 "productType": "ENC S57",
                 "dataSetName": "MX545013.001",
                 "productName": "MX545013",
@@ -460,7 +325,6 @@
                 "permit": "permitString",
                 "providerCode": 1,
                 "providerName": "ICE",
-                "_COMMENT": "provider code and descrption are a n-1 mapping",
                 "_ENUM": [
                     "ICE",
                     "ICE_GB",
@@ -471,7 +335,6 @@
                 ],
 
                 "size": "medium",
-                "_COMMENT": " size code not included as will be in ERP Facade",
                 "_ENUM": [
                     "large",
                     "medium",
@@ -498,8 +361,7 @@
                         "Suspended"
                     ],
                     "statusDate": "2023-03-03T00:00:00.00+01:00",
-                    "isNewCell": true,
-                    "_COMMENT": "A cell new to the service"
+                    "isNewCell": true
                 },
                 "replaces": [],
                 "replacedBy": [],
@@ -510,51 +372,8 @@
                         "southLimit": 22.0,
                         "eastLimit": 120.0,
                         "westLimit": 119.0
-                    },
-                    "polygons": [
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 24,
-                                    "longitude": 121.5
-                                },
-                                {
-                                    "latitude": 121,
-                                    "longitude": 56
-                                },
-                                {
-                                    "latitude": 45,
-                                    "longitude": 78
-                                },
-                                {
-                                    "latitude": 119,
-                                    "longitude": 121.5
-                                }
-                            ]
-                        },
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 24,
-                                    "longitude": 121.5
-                                },
-                                {
-                                    "latitude": 121,
-                                    "longitude": 56
-                                },
-                                {
-                                    "latitude": 45,
-                                    "longitude": 78
-                                },
-                                {
-                                    "latitude": 119,
-                                    "longitude": 121.5
-                                }
-                            ]
-                        }
-                    ]
+                    }
                 },
-                "_COMMENT": "The units in which product is included, including any 1-1 unit",
                 "inUnitsOfSale": [ "MX545013", "AVCSO", "PAYSF" ],
                 "s63": {
                     "name": "XXXXXXXX.001",
@@ -591,7 +410,7 @@
                     }
                 ]
             },
-			{
+            {
                 "productType": "ENC S57",
                 "dataSetName": "MX545014.001",
                 "productName": "MX545014",
@@ -605,7 +424,6 @@
                 "permit": "permitString",
                 "providerCode": 1,
                 "providerName": "ICE",
-                "_COMMENT": "provider code and descrption are a n-1 mapping",
                 "_ENUM": [
                     "ICE",
                     "ICE_GB",
@@ -616,7 +434,6 @@
                 ],
 
                 "size": "medium",
-                "_COMMENT": " size code not included as will be in ERP Facade",
                 "_ENUM": [
                     "large",
                     "medium",
@@ -643,8 +460,7 @@
                         "Suspended"
                     ],
                     "statusDate": "2023-03-03T00:00:00.00+01:00",
-                    "isNewCell": true,
-                    "_COMMENT": "A cell new to the service"
+                    "isNewCell": true
                 },
                 "replaces": [],
                 "replacedBy": [],
@@ -655,51 +471,8 @@
                         "southLimit": 22.0,
                         "eastLimit": 120.0,
                         "westLimit": 119.0
-                    },
-                    "polygons": [
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 24,
-                                    "longitude": 121.5
-                                },
-                                {
-                                    "latitude": 121,
-                                    "longitude": 56
-                                },
-                                {
-                                    "latitude": 45,
-                                    "longitude": 78
-                                },
-                                {
-                                    "latitude": 119,
-                                    "longitude": 121.5
-                                }
-                            ]
-                        },
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 24,
-                                    "longitude": 121.5
-                                },
-                                {
-                                    "latitude": 121,
-                                    "longitude": 56
-                                },
-                                {
-                                    "latitude": 45,
-                                    "longitude": 78
-                                },
-                                {
-                                    "latitude": 119,
-                                    "longitude": 121.5
-                                }
-                            ]
-                        }
-                    ]
+                    }
                 },
-                "_COMMENT": "The units in which product is included, including any 1-1 unit",
                 "inUnitsOfSale": [ "MX545014", "AVCSO", "PAYSF" ],
                 "s63": {
                     "name": "XXXXXXXX.001",
@@ -736,7 +509,7 @@
                     }
                 ]
             },
-			{
+            {
                 "productType": "ENC S57",
                 "dataSetName": "MX545015.001",
                 "productName": "MX545015",
@@ -750,7 +523,6 @@
                 "permit": "permitString",
                 "providerCode": 1,
                 "providerName": "ICE",
-                "_COMMENT": "provider code and descrption are a n-1 mapping",
                 "_ENUM": [
                     "ICE",
                     "ICE_GB",
@@ -761,7 +533,6 @@
                 ],
 
                 "size": "medium",
-                "_COMMENT": " size code not included as will be in ERP Facade",
                 "_ENUM": [
                     "large",
                     "medium",
@@ -788,8 +559,7 @@
                         "Suspended"
                     ],
                     "statusDate": "2023-03-03T00:00:00.00+01:00",
-                    "isNewCell": true,
-                    "_COMMENT": "A cell new to the service"
+                    "isNewCell": true
                 },
                 "replaces": [],
                 "replacedBy": [],
@@ -800,51 +570,8 @@
                         "southLimit": 22.0,
                         "eastLimit": 120.0,
                         "westLimit": 119.0
-                    },
-                    "polygons": [
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 24,
-                                    "longitude": 121.5
-                                },
-                                {
-                                    "latitude": 121,
-                                    "longitude": 56
-                                },
-                                {
-                                    "latitude": 45,
-                                    "longitude": 78
-                                },
-                                {
-                                    "latitude": 119,
-                                    "longitude": 121.5
-                                }
-                            ]
-                        },
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 24,
-                                    "longitude": 121.5
-                                },
-                                {
-                                    "latitude": 121,
-                                    "longitude": 56
-                                },
-                                {
-                                    "latitude": 45,
-                                    "longitude": 78
-                                },
-                                {
-                                    "latitude": 119,
-                                    "longitude": 121.5
-                                }
-                            ]
-                        }
-                    ]
+                    }
                 },
-                "_COMMENT": "The units in which product is included, including any 1-1 unit",
                 "inUnitsOfSale": [ "MX545015", "AVCSO", "PAYSF" ],
                 "s63": {
                     "name": "XXXXXXXX.001",
@@ -881,7 +608,7 @@
                     }
                 ]
             },
-			{
+            {
                 "productType": "ENC S57",
                 "dataSetName": "MX545016.001",
                 "productName": "MX545016",
@@ -895,7 +622,6 @@
                 "permit": "permitString",
                 "providerCode": 1,
                 "providerName": "ICE",
-                "_COMMENT": "provider code and descrption are a n-1 mapping",
                 "_ENUM": [
                     "ICE",
                     "ICE_GB",
@@ -906,7 +632,6 @@
                 ],
 
                 "size": "medium",
-                "_COMMENT": " size code not included as will be in ERP Facade",
                 "_ENUM": [
                     "large",
                     "medium",
@@ -933,8 +658,7 @@
                         "Suspended"
                     ],
                     "statusDate": "2023-03-03T00:00:00.00+01:00",
-                    "isNewCell": true,
-                    "_COMMENT": "A cell new to the service"
+                    "isNewCell": true
                 },
                 "replaces": [],
                 "replacedBy": [],
@@ -945,52 +669,8 @@
                         "southLimit": 22.0,
                         "eastLimit": 120.0,
                         "westLimit": 119.0
-                    },
-                    "polygons": [
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 24,
-                                    "longitude": 121.5
-                                },
-                                {
-                                    "latitude": 121,
-                                    "longitude": 56
-                                },
-                                {
-                                    "latitude": 45,
-                                    "longitude": 78
-                                },
-                                {
-                                    "latitude": 119,
-                                    "longitude": 121.5
-                                }
-                            ]
-                        },
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 24,
-                                    "longitude": 121.5
-                                },
-                                {
-                                    "latitude": 121,
-                                    "longitude": 56
-                                },
-                                {
-                                    "latitude": 45,
-                                    "longitude": 78
-                                },
-                                {
-                                    "latitude": 119,
-                                    "longitude": 121.5
-                                }
-                            ]
-                        }
-					 
-                    ]
+                    }
                 },
-                "_COMMENT": "The units in which product is included, including any 1-1 unit",
                 "inUnitsOfSale": [ "MX545016", "AVCSO", "PAYSF" ],
                 "s63": {
                     "name": "XXXXXXXX.001",
@@ -1027,7 +707,7 @@
                     }
                 ]
             },
-			{
+            {
                 "productType": "ENC S57",
                 "dataSetName": "MX545017.001",
                 "productName": "MX545017",
@@ -1041,7 +721,6 @@
                 "permit": "permitString",
                 "providerCode": 1,
                 "providerName": "ICE",
-                "_COMMENT": "provider code and descrption are a n-1 mapping",
                 "_ENUM": [
                     "ICE",
                     "ICE_GB",
@@ -1052,7 +731,6 @@
                 ],
 
                 "size": "medium",
-                "_COMMENT": " size code not included as will be in ERP Facade",
                 "_ENUM": [
                     "large",
                     "medium",
@@ -1079,8 +757,7 @@
                         "Suspended"
                     ],
                     "statusDate": "2023-03-03T00:00:00.00+01:00",
-                    "isNewCell": true,
-                    "_COMMENT": "A cell new to the service"
+                    "isNewCell": true
                 },
                 "replaces": [],
                 "replacedBy": [],
@@ -1091,51 +768,8 @@
                         "southLimit": 22.0,
                         "eastLimit": 120.0,
                         "westLimit": 119.0
-                    },
-                    "polygons": [
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 24,
-                                    "longitude": 121.5
-                                },
-                                {
-                                    "latitude": 121,
-                                    "longitude": 56
-                                },
-                                {
-                                    "latitude": 45,
-                                    "longitude": 78
-                                },
-                                {
-                                    "latitude": 119,
-                                    "longitude": 121.5
-                                }
-                            ]
-                        },
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 24,
-                                    "longitude": 121.5
-                                },
-                                {
-                                    "latitude": 121,
-                                    "longitude": 56
-                                },
-                                {
-                                    "latitude": 45,
-                                    "longitude": 78
-                                },
-                                {
-                                    "latitude": 119,
-                                    "longitude": 121.5
-                                }
-                            ]
-                        }
-                    ]
+                    }
                 },
-                "_COMMENT": "The units in which product is included, including any 1-1 unit",
                 "inUnitsOfSale": [ "MX545017", "AVCSO", "PAYSF" ],
                 "s63": {
                     "name": "XXXXXXXX.001",
@@ -1172,7 +806,7 @@
                     }
                 ]
             },
-			{
+            {
                 "productType": "ENC S57",
                 "dataSetName": "MX545018.001",
                 "productName": "MX545018",
@@ -1186,7 +820,6 @@
                 "permit": "permitString",
                 "providerCode": 1,
                 "providerName": "ICE",
-                "_COMMENT": "provider code and descrption are a n-1 mapping",
                 "_ENUM": [
                     "ICE",
                     "ICE_GB",
@@ -1197,7 +830,6 @@
                 ],
 
                 "size": "medium",
-                "_COMMENT": " size code not included as will be in ERP Facade",
                 "_ENUM": [
                     "large",
                     "medium",
@@ -1224,8 +856,7 @@
                         "Suspended"
                     ],
                     "statusDate": "2023-03-03T00:00:00.00+01:00",
-                    "isNewCell": true,
-                    "_COMMENT": "A cell new to the service"
+                    "isNewCell": true
                 },
                 "replaces": [],
                 "replacedBy": [],
@@ -1236,51 +867,8 @@
                         "southLimit": 22.0,
                         "eastLimit": 120.0,
                         "westLimit": 119.0
-                    },
-                    "polygons": [
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 24,
-                                    "longitude": 121.5
-                                },
-                                {
-                                    "latitude": 121,
-                                    "longitude": 56
-                                },
-                                {
-                                    "latitude": 45,
-                                    "longitude": 78
-                                },
-                                {
-                                    "latitude": 119,
-                                    "longitude": 121.5
-                                }
-                            ]
-                        },
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 24,
-                                    "longitude": 121.5
-                                },
-                                {
-                                    "latitude": 121,
-                                    "longitude": 56
-                                },
-                                {
-                                    "latitude": 45,
-                                    "longitude": 78
-                                },
-                                {
-                                    "latitude": 119,
-                                    "longitude": 121.5
-                                }
-                            ]
-                        }
-                    ]
+                    }
                 },
-                "_COMMENT": "The units in which product is included, including any 1-1 unit",
                 "inUnitsOfSale": [ "MX545018", "AVCSO", "PAYSF" ],
                 "s63": {
                     "name": "XXXXXXXX.001",
@@ -1317,7 +905,7 @@
                     }
                 ]
             },
-			{
+            {
                 "productType": "ENC S57",
                 "dataSetName": "MX545019.001",
                 "productName": "MX545019",
@@ -1331,7 +919,6 @@
                 "permit": "permitString",
                 "providerCode": 1,
                 "providerName": "ICE",
-                "_COMMENT": "provider code and descrption are a n-1 mapping",
                 "_ENUM": [
                     "ICE",
                     "ICE_GB",
@@ -1342,7 +929,6 @@
                 ],
 
                 "size": "medium",
-                "_COMMENT": " size code not included as will be in ERP Facade",
                 "_ENUM": [
                     "large",
                     "medium",
@@ -1369,8 +955,7 @@
                         "Suspended"
                     ],
                     "statusDate": "2023-03-03T00:00:00.00+01:00",
-                    "isNewCell": true,
-                    "_COMMENT": "A cell new to the service"
+                    "isNewCell": true
                 },
                 "replaces": [],
                 "replacedBy": [],
@@ -1381,51 +966,8 @@
                         "southLimit": 22.0,
                         "eastLimit": 120.0,
                         "westLimit": 119.0
-                    },
-                    "polygons": [
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 24,
-                                    "longitude": 121.5
-                                },
-                                {
-                                    "latitude": 121,
-                                    "longitude": 56
-                                },
-                                {
-                                    "latitude": 45,
-                                    "longitude": 78
-                                },
-                                {
-                                    "latitude": 119,
-                                    "longitude": 121.5
-                                }
-                            ]
-                        },
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 24,
-                                    "longitude": 121.5
-                                },
-                                {
-                                    "latitude": 121,
-                                    "longitude": 56
-                                },
-                                {
-                                    "latitude": 45,
-                                    "longitude": 78
-                                },
-                                {
-                                    "latitude": 119,
-                                    "longitude": 121.5
-                                }
-                            ]
-                        }
-                    ]
+                    }
                 },
-                "_COMMENT": "The units in which product is included, including any 1-1 unit",
                 "inUnitsOfSale": [ "MX545019", "AVCSO", "PAYSF" ],
                 "s63": {
                     "name": "XXXXXXXX.001",
@@ -1463,7 +1005,6 @@
                 ]
             }
         ],
-        "_COMMENT": "Prices for all units in event will be included, including Cancelled Cell",
         "unitsOfSale": [
             {
                 "unitName": "MX545010",
@@ -1478,22 +1019,20 @@
                 "isNewUnitOfSale": true,
                 "unitOfSaleType": "unit",
 
-                "_COMMENT": "BoundingBox or polygon or both or neither",
                 "geographicLimit": {
                     "boundingBox": {
                         "northLimit": 24.146815,
                         "southLimit": 22.581615,
                         "eastLimit": 120.349635,
                         "westLimit": 119.39142
-                    },
-                    "polygons": []
+                    }
                 },
                 "compositionChanges": {
                     "addProducts": [ "MX545010" ],
                     "removeProducts": []
                 }
             },
-			{
+            {
                 "unitName": "MX545011",
                 "title": "Isla MX545011",
                 "unitType": "AVCS Units Coastal",
@@ -1506,22 +1045,20 @@
                 "isNewUnitOfSale": true,
                 "unitOfSaleType": "unit",
 
-                "_COMMENT": "BoundingBox or polygon or both or neither",
                 "geographicLimit": {
                     "boundingBox": {
                         "northLimit": 24.146815,
                         "southLimit": 22.581615,
                         "eastLimit": 120.349635,
                         "westLimit": 119.39142
-                    },
-                    "polygons": []
+                    }
                 },
                 "compositionChanges": {
                     "addProducts": [ "MX545011" ],
                     "removeProducts": []
                 }
             },
-			{
+            {
                 "unitName": "MX545012",
                 "title": "Isla MX545012",
                 "unitType": "AVCS Units Coastal",
@@ -1534,22 +1071,20 @@
                 "isNewUnitOfSale": true,
                 "unitOfSaleType": "unit",
 
-                "_COMMENT": "BoundingBox or polygon or both or neither",
                 "geographicLimit": {
                     "boundingBox": {
                         "northLimit": 24.146815,
                         "southLimit": 22.581615,
                         "eastLimit": 120.349635,
                         "westLimit": 119.39142
-                    },
-                    "polygons": []
+                    }
                 },
                 "compositionChanges": {
                     "addProducts": [ "MX545012" ],
                     "removeProducts": []
                 }
             },
-			{
+            {
                 "unitName": "MX545013",
                 "title": "Isla MX545013",
                 "unitType": "AVCS Units Coastal",
@@ -1562,22 +1097,20 @@
                 "isNewUnitOfSale": true,
                 "unitOfSaleType": "unit",
 
-                "_COMMENT": "BoundingBox or polygon or both or neither",
                 "geographicLimit": {
                     "boundingBox": {
                         "northLimit": 24.146815,
                         "southLimit": 22.581615,
                         "eastLimit": 120.349635,
                         "westLimit": 119.39142
-                    },
-                    "polygons": []
+                    }
                 },
                 "compositionChanges": {
                     "addProducts": [ "MX545013" ],
                     "removeProducts": []
                 }
             },
-			{
+            {
                 "unitName": "MX545014",
                 "title": "Isla MX545014",
                 "unitType": "AVCS Units Coastal",
@@ -1590,22 +1123,20 @@
                 "isNewUnitOfSale": true,
                 "unitOfSaleType": "unit",
 
-                "_COMMENT": "BoundingBox or polygon or both or neither",
                 "geographicLimit": {
                     "boundingBox": {
                         "northLimit": 24.146815,
                         "southLimit": 22.581615,
                         "eastLimit": 120.349635,
                         "westLimit": 119.39142
-                    },
-                    "polygons": []
+                    }
                 },
                 "compositionChanges": {
                     "addProducts": [ "MX545014" ],
                     "removeProducts": []
                 }
             },
-			{
+            {
                 "unitName": "MX545015",
                 "title": "Isla MX545015",
                 "unitType": "AVCS Units Coastal",
@@ -1618,22 +1149,20 @@
                 "isNewUnitOfSale": true,
                 "unitOfSaleType": "unit",
 
-                "_COMMENT": "BoundingBox or polygon or both or neither",
                 "geographicLimit": {
                     "boundingBox": {
                         "northLimit": 24.146815,
                         "southLimit": 22.581615,
                         "eastLimit": 120.349635,
                         "westLimit": 119.39142
-                    },
-                    "polygons": []
+                    }
                 },
                 "compositionChanges": {
                     "addProducts": [ "MX545015" ],
                     "removeProducts": []
                 }
             },
-			{
+            {
                 "unitName": "MX545016",
                 "title": "Isla MX545016",
                 "unitType": "AVCS Units Coastal",
@@ -1646,22 +1175,20 @@
                 "isNewUnitOfSale": true,
                 "unitOfSaleType": "unit",
 
-                "_COMMENT": "BoundingBox or polygon or both or neither",
                 "geographicLimit": {
                     "boundingBox": {
                         "northLimit": 24.146815,
                         "southLimit": 22.581615,
                         "eastLimit": 120.349635,
                         "westLimit": 119.39142
-                    },
-                    "polygons": []
+                    }
                 },
                 "compositionChanges": {
                     "addProducts": [ "MX545016" ],
                     "removeProducts": []
                 }
             },
-			{
+            {
                 "unitName": "MX545017",
                 "title": "Isla MX545017",
                 "unitType": "AVCS Units Coastal",
@@ -1673,23 +1200,20 @@
                 ],
                 "isNewUnitOfSale": true,
                 "unitOfSaleType": "unit",
-
-                "_COMMENT": "BoundingBox or polygon or both or neither",
                 "geographicLimit": {
                     "boundingBox": {
                         "northLimit": 24.146815,
                         "southLimit": 22.581615,
                         "eastLimit": 120.349635,
                         "westLimit": 119.39142
-                    },
-                    "polygons": []
+                    }
                 },
                 "compositionChanges": {
                     "addProducts": [ "MX545017" ],
                     "removeProducts": []
                 }
             },
-			{
+            {
                 "unitName": "MX545018",
                 "title": "Isla MX545018",
                 "unitType": "AVCS Units Coastal",
@@ -1702,22 +1226,20 @@
                 "isNewUnitOfSale": true,
                 "unitOfSaleType": "unit",
 
-                "_COMMENT": "BoundingBox or polygon or both or neither",
                 "geographicLimit": {
                     "boundingBox": {
                         "northLimit": 24.146815,
                         "southLimit": 22.581615,
                         "eastLimit": 120.349635,
                         "westLimit": 119.39142
-                    },
-                    "polygons": []
+                    }
                 },
                 "compositionChanges": {
                     "addProducts": [ "MX545018" ],
                     "removeProducts": []
                 }
             },
-			{
+            {
                 "unitName": "MX545019",
                 "title": "Isla MX545019",
                 "unitType": "AVCS Units Coastal",
@@ -1729,16 +1251,13 @@
                 ],
                 "isNewUnitOfSale": true,
                 "unitOfSaleType": "unit",
-
-                "_COMMENT": "BoundingBox or polygon or both or neither",
                 "geographicLimit": {
                     "boundingBox": {
                         "northLimit": 24.146815,
                         "southLimit": 22.581615,
                         "eastLimit": 120.349635,
                         "westLimit": 119.39142
-                    },
-                    "polygons": []
+                    }
                 },
                 "compositionChanges": {
                     "addProducts": [ "MX545019" ],
@@ -1755,29 +1274,7 @@
                 "unitOfSaleType": "folio",
 
                 "geographicLimit": {
-                    "boundingBox": {},
-                    "polygons": [
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 22.0,
-                                    "longitude": 120.0
-                                },
-                                {
-                                    "latitude": 22.0,
-                                    "longitude": 120
-                                },
-                                {
-                                    "latitude": 22.0,
-                                    "longitude": 120
-                                },
-                                {
-                                    "latitude": 22.0,
-                                    "longitude": 121.0
-                                }
-                            ]
-                        }
-                    ]
+                    "boundingBox": {}
                 },
                 "compositionChanges": {
                     "addProducts": [
@@ -1795,41 +1292,7 @@
                 "unitOfSaleType": "folio",
                 "isNewUnitOfSale": false,
                 "geographicLimit": {
-                    "boundingBox": {},
-                    "polygons": [
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 89,
-                                    "longitude": -179.995
-                                },
-                                {
-                                    "latitude": 89,
-                                    "longitude": 0
-                                },
-                                {
-                                    "latitude": 89,
-                                    "longitude": 179.995
-                                },
-                                {
-                                    "latitude": -89,
-                                    "longitude": 179.995
-                                },
-                                {
-                                    "latitude": -89,
-                                    "longitude": 0
-                                },
-                                {
-                                    "latitude": -89,
-                                    "longitude": -179.995
-                                },
-                                {
-                                    "latitude": 89,
-                                    "longitude": -179.995
-                                }
-                            ]
-                        }
-                    ]
+                    "boundingBox": {}
                 },
                 "compositionChanges": {
                     "addProducts": [

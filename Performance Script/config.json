@@ -1,5 +1,6 @@
-{      
-    "baseURL":"https://erpfacade-dev-api.azurewebsites.net",
-    "WebhookURL":"/webhook/newenccontentpublishedeventreceived",
-    "Token" :""
+{
+    "baseURL": "https://erpfacade-dev-api.azurewebsites.net",
+    "WebhookURL": "/webhook/newenccontentpublishedeventreceived",
+    "Token": "",
+    "permit": ""
 }

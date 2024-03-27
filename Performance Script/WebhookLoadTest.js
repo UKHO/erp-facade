@@ -6,6 +6,7 @@ import { textSummary } from "https://jslib.k6.io/k6-summary/0.0.1/index.js";
 import { URL } from 'https://jslib.k6.io/url/1.0.0/index.js';
 import { PayloadSetup } from './PayloadDataSetup/PayloadSetup.js';
 
+
 var Config = JSON.parse(open('./config.json'));
 var ProductList = JSON.parse(open('./PayloadData/WebhookPayloads/SAPProductList.json'));
 
@@ -17,12 +18,19 @@ var defaultPayload4 = JSON.parse(open('./PayloadData/WebhookPayloads/100Products
 if (!Config.baseURL.toString().toUpperCase().includes("DEV")) {
     throw new Error("Invalid Environment !! Please use DEV environment for performance testing.\n");
 }
-
 const url = new URL(Config.baseURL + Config.WebhookURL);
 const headers = {
     'Content-Type': 'application/json',
     Authorization: `Bearer ${Config.Token}`,
+
 };
+
+export function setup() {
+    const event = new Date(Date.now());
+    console.log("start time:" + event.toUTCString());
+
+}
+
 
 export const options = {
     discardResponseBodies: true,
@@ -129,6 +137,10 @@ export function ScenarioWithHundredProduct() {
 
     console.log("Status code:" + res.status);
     sleep(1);
+}
+export function teardown() {
+    const eventEndDate = new Date(Date.now());
+    console.log("End time:" + eventEndDate.toUTCString());
 }
 
 //reporting
