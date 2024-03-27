@@ -4,7 +4,6 @@
     "source": "https://encpublishing.ukho.gov.uk",
     "id": "2f03a25f-28b3-46ea-b009-5943250a9a41",
     "time": "2023-05-18T12:08:03.4880776Z",
-    "_COMMENT": "A comma separated list of products",
     "subject": "MX545010",
     "datacontenttype": "application/json",
     "data": {
@@ -12,7 +11,7 @@
         "ukhoWeekNumber": {
             "year": 2024,
             "week": 3,
-            "currentWeekAlphaCorrection": false
+            "currentWeekAlphaCorrection": true
         },
         "products": [
             {
@@ -29,7 +28,6 @@
                 "permit": "permitString",
                 "providerCode": "1",
                 "providerName": "ICE",
-                "_COMMENT": "provider code and descrption are a n-1 mapping",
                 "_ENUM": [
                     "ICE",
                     "ICE_GB",
@@ -38,9 +36,7 @@
                     "VAR Unique",
                     "VAR"
                 ],
-
                 "size": "medium",
-                "_COMMENT": " size code not included as will be in ERP Facade",
                 "_ENUM": [
                     "large",
                     "medium",
@@ -67,8 +63,7 @@
                         "Suspended"
                     ],
                     "statusDate": "2023-03-03T00:00:00.00+01:00",
-                    "isNewCell": false,
-                    "_COMMENT": "A cell new to the service"
+                    "isNewCell": false
                 },
                 "replaces": [],
                 "replacedBy": [],
@@ -79,52 +74,14 @@
                         "southLimit": 22.0,
                         "eastLimit": 120.0,
                         "westLimit": 119.0
-                    },
-                    "polygons": [
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 24,
-                                    "longitude": 121.5
-                                },
-                                {
-                                    "latitude": 121,
-                                    "longitude": 56
-                                },
-                                {
-                                    "latitude": 45,
-                                    "longitude": 78
-                                },
-                                {
-                                    "latitude": 119,
-                                    "longitude": 121.5
-                                }
-                            ]
-                        },
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 24,
-                                    "longitude": 121.5
-                                },
-                                {
-                                    "latitude": 121,
-                                    "longitude": 56
-                                },
-                                {
-                                    "latitude": 45,
-                                    "longitude": 78
-                                },
-                                {
-                                    "latitude": 119,
-                                    "longitude": 121.5
-                                }
-                            ]
-                        }
-                    ]
+                    }
                 },
-                "_COMMENT": "The units in which product is included, including any 1-1 unit",
-                "inUnitsOfSale": [ "MX545010", "MX509226", "AVCSO", "PAYSF" ],
+                "inUnitsOfSale": [
+                    "MX545010",
+                    "MX509226",
+                    "AVCSO",
+                    "PAYSF"
+                ],
                 "s63": {
                     "name": "XXXXXXXX.001",
                     "hash": "5160204288db0a543850da177ec637b71ed55946e7f3843e6180b1906ee4f4ea",
@@ -161,7 +118,6 @@
                 ]
             }
         ],
-        "_COMMENT": "Prices for all units in event will be included, including Cancelled Cell",
         "unitsOfSale": [
             {
                 "unitName": "MX545010",
@@ -175,19 +131,19 @@
                     "NotForSale"
                 ],
                 "isNewUnitOfSale": false,
-                "_COMMENT": "BoundingBox or polygon or both or neither",
                 "geographicLimit": {
                     "boundingBox": {
                         "northLimit": 24.146815,
                         "southLimit": 22.581615,
                         "eastLimit": 120.349635,
                         "westLimit": 119.39142
-                    },
-                    "polygons": []
+                    }
                 },
                 "compositionChanges": {
                     "addProducts": [],
-                    "removeProducts": [ "MX545010" ]
+                    "removeProducts": [
+                        "MX545010"
+                    ]
                 }
             },
             {
@@ -202,18 +158,18 @@
                     "NotForSale"
                 ],
                 "isNewUnitOfSale": false,
-                "_COMMENT": "BoundingBox or polygon or both or neither",
                 "geographicLimit": {
                     "boundingBox": {
                         "northLimit": 24.146815,
                         "southLimit": 22.581615,
                         "eastLimit": 120.349635,
                         "westLimit": 119.39142
-                    },
-                    "polygons": []
+                    }
                 },
                 "compositionChanges": {
-                    "addProducts": [ "MX545010" ],
+                    "addProducts": [
+                        "MX545010"
+                    ],
                     "removeProducts": []
                 }
             },
@@ -226,35 +182,11 @@
                 "status": "ForSale",
                 "isNewUnitOfSale": false,
                 "geographicLimit": {
-                    "boundingBox": {},
-                    "polygons": [
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 22.0,
-                                    "longitude": 120.0
-                                },
-                                {
-                                    "latitude": 22.0,
-                                    "longitude": 120
-                                },
-                                {
-                                    "latitude": 22.0,
-                                    "longitude": 120
-                                },
-                                {
-                                    "latitude": 22.0,
-                                    "longitude": 121.0
-                                }
-                            ]
-                        }
-                    ]
+                    "boundingBox": {}
                 },
                 "compositionChanges": {
                     "addProducts": [],
-                    "removeProducts": [
-
-                    ]
+                    "removeProducts": []
                 }
             },
             {
@@ -266,48 +198,11 @@
                 "status": "ForSale",
                 "isNewUnitOfSale": false,
                 "geographicLimit": {
-                    "boundingBox": {},
-                    "polygons": [
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 89,
-                                    "longitude": -179.995
-                                },
-                                {
-                                    "latitude": 89,
-                                    "longitude": 0
-                                },
-                                {
-                                    "latitude": 89,
-                                    "longitude": 179.995
-                                },
-                                {
-                                    "latitude": -89,
-                                    "longitude": 179.995
-                                },
-                                {
-                                    "latitude": -89,
-                                    "longitude": 0
-                                },
-                                {
-                                    "latitude": -89,
-                                    "longitude": -179.995
-                                },
-                                {
-                                    "latitude": 89,
-                                    "longitude": -179.995
-                                }
-                            ]
-                        }
-                    ]
+                    "boundingBox": {}
                 },
                 "compositionChanges": {
-                    "addProducts": [
-                    ],
-                    "removeProducts": [
-
-                    ]
+                    "addProducts": [],
+                    "removeProducts": []
                 }
             }
         ]

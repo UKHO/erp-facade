@@ -2,6 +2,6 @@
 {
     public interface IWeekDetailsProvider
     { 
-        public string GetThursdayDateOfWeek(int year, int week);
+        public string GetDateOfWeek(int year, int week, bool currentWeekAlphaCorrection);
     }
 }

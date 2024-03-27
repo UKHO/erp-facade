@@ -1,5 +1,4 @@
 ﻿using System.Text;
-
 using System.Xml;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
@@ -10,26 +9,28 @@ using UKHO.ERPFacade.API.FunctionalTests.Model;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
-    public class SAPXmlHelper
+    public class SapXmlHelper
     {
-        private static int ActionCounter;
-        private static readonly List<string> AttrNotMatched = new();
-        private static List<string> ChangeAVCSUoS = new();
-        private static readonly Dictionary<string, List<string>> ChangeENCCell = new();
+        private static int actionCounter;
+        private static readonly List<string> attrNotMatched = new();
+        private static List<string> changeAvcsUoS = new();
+        private static readonly Dictionary<string, List<string>> changeEncCell = new();
         private static JsonPayloadHelper JsonPayload { get; set; }
         private static JsonPayloadHelper UpdatedJsonPayload { get; set; }
         public static List<string> ListFromJson = new();
         public static List<string> ActionsListFromXml = new();
         private static readonly string weekNoTag = Config.TestConfig.WeekNoTag;
-        private static readonly string validFromTag = Config.TestConfig.ValidFromTag;
+        private static readonly string validFromTagThursday = Config.TestConfig.ValidFromTagThursday;
+        private static readonly string validFromTagFriday = Config.TestConfig.ValidFromTagFriday;
+        private static readonly int noOfMandatoryXMLAttribute = 20;
 
-        public static async Task<bool> CheckXMLAttributes(JsonPayloadHelper jsonPayload, string XMLFilePath, string updatedRequestBody, string correctionTag, string permitState)
+        public static async Task<bool> CheckXmlAttributes(JsonPayloadHelper jsonPayload, string xmlFilePath, string updatedRequestBody, string correctionTag, string permitState)
         {
-            SAPXmlHelper.JsonPayload = jsonPayload;
+            SapXmlHelper.JsonPayload = jsonPayload;
             UpdatedJsonPayload = JsonConvert.DeserializeObject<JsonPayloadHelper>(updatedRequestBody);
 
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.LoadXml(File.ReadAllText(XMLFilePath));
+            XmlDocument xmlDoc = new ();
+            xmlDoc.LoadXml(await File.ReadAllTextAsync(xmlFilePath));
 
             while (xmlDoc.DocumentElement.Name == "soap:Envelope" || xmlDoc.DocumentElement.Name == "soap:Body")
             {
@@ -42,97 +43,96 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             var serializer = new XmlSerializer(typeof(Z_ADDS_MAT_INFO));
             var result = (Z_ADDS_MAT_INFO)serializer.Deserialize(reader);
 
-            Assert.That(VerifyPresenseOfMandatoryXMLAtrributes(result.IM_MATINFO.ACTIONITEMS).Result);
+            Assert.That(VerifyPresenceOfMandatoryXmlAttributes(result.IM_MATINFO.ACTIONITEMS).Result);
 
-            ActionCounter = 1;
-            ChangeENCCell.Clear();
+            actionCounter = 1;
+            changeEncCell.Clear();
             foreach (ZMAT_ACTIONITEMS item in result.IM_MATINFO.ACTIONITEMS)
             {
                 if (item.ACTION == "CREATE ENC CELL")
-                    Assert.That(VerifyCreateENCCell(item.CHILDCELL, item, correctionTag, permitState));
+                    Assert.That(VerifyCreateEncCell(item.CHILDCELL, item, correctionTag, permitState));
                 else if (item.ACTION == "CREATE AVCS UNIT OF SALE")
                     Assert.That(VerifyCreateAVCSUnitOfSale(item.PRODUCTNAME, item, correctionTag));
                 else if (item.ACTION == "ASSIGN CELL TO AVCS UNIT OF SALE")
                     Assert.That(VerifyAssignCellToAVCSUnitOfSale(item.CHILDCELL, item.PRODUCTNAME, item, correctionTag));
                 else if (item.ACTION == "REPLACED WITH ENC CELL")
-                    Assert.That(VerifyReplaceWithENCCell(item.CHILDCELL, item.REPLACEDBY, item) ?? false);
+                    Assert.That(VerifyReplaceWithEncCell(item.CHILDCELL, item.REPLACEDBY, item, correctionTag) ?? false);
+                else if (item.ACTION == "ADDITIONAL COVERAGE ENC CELL")
+                    Assert.That(VerifyAdditionalCoverageWithEncCell(item.CHILDCELL, item.REPLACEDBY, item, correctionTag) ?? false);
                 else if (item.ACTION == "REMOVE ENC CELL FROM AVCS UNIT OF SALE")
-                    Assert.That(VerifyRemoveENCCellFromAVCSUnitOFSale(item.CHILDCELL, item.PRODUCTNAME, item) ?? false);
+                    Assert.That(VerifyRemoveENCCellFromAVCSUnitOFSale(item.CHILDCELL, item.PRODUCTNAME, item, correctionTag) ?? false);
                 else if (item.ACTION == "CANCEL ENC CELL")
-                    Assert.That(VerifyCancelENCCell(item.CHILDCELL, item.PRODUCTNAME, item) ?? false);
+                    Assert.That(VerifyCancelEncCell(item.CHILDCELL, item.PRODUCTNAME, item, correctionTag) ?? false);
                 else if (item.ACTION == "CANCEL AVCS UNIT OF SALE")
-                    Assert.That(VerifyCancelToAVCSUnitOfSale(item.PRODUCTNAME, item) ?? false);
+                    Assert.That(VerifyCancelToAVCSUnitOfSale(item.PRODUCTNAME, item, correctionTag) ?? false);
                 else if (item.ACTION == "CHANGE ENC CELL")
-                    Assert.That(VerifyChangeENCCell(item.CHILDCELL, item) ?? false);
+                    Assert.That(VerifyChangeEncCell(item.CHILDCELL, item, correctionTag) ?? false);
                 else if (item.ACTION == "CHANGE AVCS UNIT OF SALE")
-                    Assert.That(VerifyChangeAVCSUnitOfSale(item.PRODUCTNAME, item) ?? false);
+                    Assert.That(VerifyChangeAVCSUnitOfSale(item.PRODUCTNAME, item, correctionTag) ?? false);
                 else if (item.ACTION == "UPDATE ENC CELL EDITION UPDATE NUMBER")
-                    Assert.That(VerifyUpdateAVCSUnitOfSale(item.CHILDCELL, item, permitState) ?? false);
-                ActionCounter++;
+                    Assert.That(VerifyUpdateEncCellEditionUpdateNumber(item.CHILDCELL, item, permitState, correctionTag) ?? false);
+                else
+                    Assert.Fail("Not a required action");
+                actionCounter++;
             }
 
-            Console.WriteLine("Total verified Actions:" + --ActionCounter);
+            Console.WriteLine("Total verified Actions:" + --actionCounter);
             await Task.CompletedTask;
             Console.WriteLine("XML has correct data");
             return true;
         }
 
-        private static bool? VerifyChangeAVCSUnitOfSale(string productName, ZMAT_ACTIONITEMS item)
+        private static bool? VerifyChangeAVCSUnitOfSale(string productName, ZMAT_ACTIONITEMS item, string correctionTag)
         {
-            Console.WriteLine("Action#:" + ActionCounter + ".UnitOfSale:" + productName);
-            foreach (KeyValuePair<string, List<string>> ele2 in ChangeENCCell)
+            Console.WriteLine("Action#:" + actionCounter + ".UnitOfSale:" + productName);
+            foreach (KeyValuePair<string, List<string>> ele2 in changeEncCell)
             {
-                ChangeAVCSUoS = ele2.Value;
+                changeAvcsUoS = ele2.Value;
 
-                if (ChangeAVCSUoS.Contains(productName))
+                if (changeAvcsUoS.Contains(productName))
                 {
-                    AttrNotMatched.Clear();
-                    if (!item.ACTIONNUMBER.Equals(ActionCounter.ToString()))
-                        AttrNotMatched.Add(nameof(item.ACTIONNUMBER));
+                    attrNotMatched.Clear();
+                    if (!item.ACTIONNUMBER.Equals(actionCounter.ToString()))
+                        attrNotMatched.Add(nameof(item.ACTIONNUMBER));
                     if (!item.PRODUCT.Equals("AVCS UNIT"))
-                        AttrNotMatched.Add(nameof(item.PRODUCT));
+                        attrNotMatched.Add(nameof(item.PRODUCT));
                     if (!item.PRODTYPE.Equals(GetProductInfo(ele2.Key).ProductType))
-                        AttrNotMatched.Add(nameof(item.PRODTYPE));
+                        attrNotMatched.Add(nameof(item.PRODTYPE));
                     if (!item.AGENCY.Equals((GetProductInfo(ele2.Key)).Agency))
-                        AttrNotMatched.Add(nameof(item.AGENCY));
+                        attrNotMatched.Add(nameof(item.AGENCY));
                     if (!item.PROVIDER.Equals(GetProductInfo(ele2.Key).ProviderCode))
-                        AttrNotMatched.Add(nameof(item.PROVIDER));
+                        attrNotMatched.Add(nameof(item.PROVIDER));
                     if (!item.ENCSIZE.Equals(GetUoSInfo(productName).UnitSize))
-                        AttrNotMatched.Add(nameof(item.ENCSIZE));
-                    if (!item.TITLE.Equals((GetUoSInfo(productName)).Title))
-                        AttrNotMatched.Add(nameof(item.TITLE));
-                    if (!item.UNITTYPE.Equals(GetUoSInfo(productName).UnitType))
-                        AttrNotMatched.Add(nameof(item.UNITTYPE));
+                        attrNotMatched.Add(nameof(item.ENCSIZE));
+                    VerifyAdditionalXmlTags(item, correctionTag);
                     //Checking blanks
-                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "EDITIONNO", "UPDATENO", "ACTIVEKEY", "NEXTKEY" };
+                    List<string> blankFieldNames = new() { "CANCELLED", "REPLACEDBY", "EDITIONNO", "UPDATENO", "ACTIVEKEY", "NEXTKEY", "TITLE", "UNITTYPE" };
                     VerifyBlankFields(item, blankFieldNames);
 
-                    if (AttrNotMatched.Count == 0)
+                    if (attrNotMatched.Count == 0)
                     {
                         Console.WriteLine("CHANGE AVCS UNIT OF SALE Action's Data is correct");
-                        var valueindex = ele2.Value.IndexOf(productName);
-                        ChangeAVCSUoS[valueindex] = ChangeAVCSUoS[valueindex].Replace(productName, "skip");
+                        int valueIndex = ele2.Value.IndexOf(productName);
+                        changeAvcsUoS[valueIndex] = changeAvcsUoS[valueIndex].Replace(productName, "skip");
                         return true;
                     }
-                    else
+
+                    Console.WriteLine("CHANGE AVCS UNIT OF SALE Action's Data is incorrect");
+                    Console.WriteLine("Not matching attributes are:");
+                    foreach (string attribute in attrNotMatched)
                     {
-                        Console.WriteLine("CHANGE AVCS UNIT OF SALE Action's Data is incorrect");
-                        Console.WriteLine("Not matching attributes are:");
-                        foreach (string attribute in AttrNotMatched)
-                        {
-                            Console.WriteLine(attribute);
-                        }
-                        return false;
+                        Console.WriteLine(attribute);
                     }
+                    return false;
                 }
             }
             Console.WriteLine("JSON doesn't have corresponding Unit of Sale.");
             return false;
         }
 
-        private static bool? VerifyUpdateAVCSUnitOfSale(string childCell, ZMAT_ACTIONITEMS item, string permitState)
+        private static bool? VerifyUpdateEncCellEditionUpdateNumber(string childCell, ZMAT_ACTIONITEMS item, string permitState, string correctionTag)
         {
-            Console.WriteLine("Action#:" + ActionCounter + ".Childcell:" + childCell);
+            Console.WriteLine("Action#:" + actionCounter + ".Childcell:" + childCell);
             foreach (Product product in JsonPayload.Data.Products)
             {
                 if ((childCell == product.ProductName) &&
@@ -140,31 +140,24 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     (!product.Status.IsNewCell) &&
                     (product.ContentChange))
                 {
-                    AttrNotMatched.Clear();
-                    if (!item.ACTIONNUMBER.Equals(ActionCounter.ToString()))
-                        AttrNotMatched.Add(nameof(item.ACTIONNUMBER));
+                    attrNotMatched.Clear();
+                    if (!item.ACTIONNUMBER.Equals(actionCounter.ToString()))
+                        attrNotMatched.Add(nameof(item.ACTIONNUMBER));
                     if (!item.PRODUCT.Equals("ENC CELL"))
-                        AttrNotMatched.Add(nameof(item.PRODUCT));
+                        attrNotMatched.Add(nameof(item.PRODUCT));
                     if (!item.PRODTYPE.Equals(product.ProductType[4..]))
-                        AttrNotMatched.Add(nameof(item.PRODTYPE));
+                        attrNotMatched.Add(nameof(item.PRODTYPE));
                     if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!item.PRODUCTNAME.Equals(GetUoSName(childCell))))
-                        AttrNotMatched.Add(nameof(item.PRODUCTNAME));
-                    if (!item.AGENCY.Equals(product.Agency))
-                        AttrNotMatched.Add(nameof(item.AGENCY));
-                    if (!item.PROVIDER.Equals(product.ProviderCode))
-                        AttrNotMatched.Add(nameof(item.PROVIDER));
-                    if (!item.ENCSIZE.Equals(product.Size))
-                        AttrNotMatched.Add(nameof(item.ENCSIZE));
-                    if (!item.TITLE.Equals(product.Title))
-                        AttrNotMatched.Add(nameof(item.TITLE));
+                        attrNotMatched.Add(nameof(item.PRODUCTNAME));
                     if (!item.EDITIONNO.Equals(product.EditionNumber))
-                        AttrNotMatched.Add(nameof(item.EDITIONNO));
+                        attrNotMatched.Add(nameof(item.EDITIONNO));
                     if (!item.UPDATENO.Equals(product.UpdateNumber))
-                        AttrNotMatched.Add(nameof(item.UPDATENO));
-                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "UNITTYPE" };
+                        attrNotMatched.Add(nameof(item.UPDATENO));
+                    VerifyAdditionalXmlTags(item, correctionTag);
+                    List<string> blankFieldNames = new() { "CANCELLED", "REPLACEDBY", "UNITTYPE", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE" };
                     if (product.Status.StatusName.Contains("New Edition"))
                     {
-                        Assert.That(VerifyDecryptedPermit(item.CHILDCELL, item, permitState));
+                        VerifyDecryptedPermit(item, permitState);
                     }
                     else if (product.Status.StatusName.Contains("Update") || product.Status.StatusName.Contains("Re-issue"))
                     {
@@ -174,202 +167,179 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     //Checking blanks
                     VerifyBlankFields(item, blankFieldNames);
 
-                    if (AttrNotMatched.Count == 0)
+                    if (attrNotMatched.Count == 0)
                     {
                         Console.WriteLine("UPDATE ENC CELL EDITION UPDATE NUMBER Action's Data is correct");
                         return true;
                     }
-                    else
-                    {
-                        Console.WriteLine("UPDATE ENC CELL EDITION UPDATE NUMBER Action's Data is incorrect");
-                        Console.WriteLine("Not matching attributes are:");
-                        foreach (string attribute in AttrNotMatched)
-                        { Console.WriteLine(attribute); }
-                        return false;
-                    }
+
+                    Console.WriteLine("UPDATE ENC CELL EDITION UPDATE NUMBER Action's Data is incorrect");
+                    Console.WriteLine("Not matching attributes are:");
+                    foreach (string attribute in attrNotMatched)
+                    { Console.WriteLine(attribute); }
+                    return false;
                 }
                 else if ((childCell == product.ProductName) && (product.Status.StatusName.Contains("Suspended")))
                 {
-                    AttrNotMatched.Clear();
+                    attrNotMatched.Clear();
                     Console.WriteLine("The UoS name for " + childCell + " calculated is: " + GetUoSName(childCell));
-                    if (!item.ACTIONNUMBER.Equals(ActionCounter.ToString()))
-                        AttrNotMatched.Add(nameof(item.ACTIONNUMBER));
+                    if (!item.ACTIONNUMBER.Equals(actionCounter.ToString()))
+                        attrNotMatched.Add(nameof(item.ACTIONNUMBER));
                     if (!item.PRODUCT.Equals("ENC CELL"))
-                        AttrNotMatched.Add(nameof(item.PRODUCT));
+                        attrNotMatched.Add(nameof(item.PRODUCT));
                     if (!item.PRODTYPE.Equals(product.ProductType[4..]))
-                        AttrNotMatched.Add(nameof(item.PRODTYPE));
+                        attrNotMatched.Add(nameof(item.PRODTYPE));
                     if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!item.PRODUCTNAME.Equals(GetUoSName(childCell))))
-                        AttrNotMatched.Add(nameof(item.PRODUCTNAME));
-                    if (!item.AGENCY.Equals(product.Agency))
-                        AttrNotMatched.Add(nameof(item.AGENCY));
-                    if (!item.PROVIDER.Equals(product.ProviderCode))
-                        AttrNotMatched.Add(nameof(item.PROVIDER));
-                    if (!item.ENCSIZE.Equals(product.Size))
-                        AttrNotMatched.Add(nameof(item.ENCSIZE));
-                    if (!item.TITLE.Equals(product.Title))
-                        AttrNotMatched.Add(nameof(item.TITLE));
+                        attrNotMatched.Add(nameof(item.PRODUCTNAME));
                     if (!item.EDITIONNO.Equals(product.EditionNumber))
-                        AttrNotMatched.Add(nameof(item.EDITIONNO));
+                        attrNotMatched.Add(nameof(item.EDITIONNO));
                     if (!item.UPDATENO.Equals(product.UpdateNumber))
-                        AttrNotMatched.Add(nameof(item.UPDATENO));
+                        attrNotMatched.Add(nameof(item.UPDATENO));
                     //Checking blanks
-                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "UNITTYPE" };
+                    List<string> blankFieldNames = new(){ "CANCELLED", "REPLACEDBY", "UNITTYPE", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE" };
                     VerifyBlankFields(item, blankFieldNames);
 
-                    if (AttrNotMatched.Count == 0)
+                    if (attrNotMatched.Count == 0)
                     {
                         Console.WriteLine("UPDATE ENC CELL EDITION UPDATE NUMBER Action's Data is correct");
                         return true;
                     }
-                    else
-                    {
-                        Console.WriteLine("UPDATE ENC CELL EDITION UPDATE NUMBER Action's Data is incorrect");
-                        Console.WriteLine("Not matching attributes are:");
-                        foreach (string attribute in AttrNotMatched)
-                        { Console.WriteLine(attribute); }
-                        return false;
-                    }
+                    Console.WriteLine("UPDATE ENC CELL EDITION UPDATE NUMBER Action's Data is incorrect");
+                    Console.WriteLine("Not matching attributes are:");
+                    foreach (string attribute in attrNotMatched)
+                    { Console.WriteLine(attribute); }
+                    return false;
                 }
             }
             Console.WriteLine("JSON doesn't have corresponding product.");
             return false;
         }
 
-        private static bool? VerifyChangeENCCell(string childCell, ZMAT_ACTIONITEMS item)
+        private static bool? VerifyChangeEncCell(string childCell, ZMAT_ACTIONITEMS item, string correctionTag)
         {
-            Console.WriteLine("Action#:" + ActionCounter + ".Childcell:" + childCell);
+            Console.WriteLine("Action#:" + actionCounter + ".Childcell:" + childCell);
             foreach (Product product in JsonPayload.Data.Products)
             {
                 if ((childCell == product.ProductName) && (!product.ContentChange))
                 {
-                    AttrNotMatched.Clear();
-                    if (!item.ACTIONNUMBER.Equals(ActionCounter.ToString()))
-                        AttrNotMatched.Add(nameof(item.ACTIONNUMBER));
+                    attrNotMatched.Clear();
+                    if (!item.ACTIONNUMBER.Equals(actionCounter.ToString()))
+                        attrNotMatched.Add(nameof(item.ACTIONNUMBER));
                     if (!item.PRODUCT.Equals("ENC CELL"))
-                        AttrNotMatched.Add(nameof(item.PRODUCT));
+                        attrNotMatched.Add(nameof(item.PRODUCT));
                     if (!item.PRODTYPE.Equals(product.ProductType[4..]))
-                        AttrNotMatched.Add(nameof(item.PRODTYPE));
+                        attrNotMatched.Add(nameof(item.PRODTYPE));
                     if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!item.PRODUCTNAME.Equals(GetUoSName(childCell))))
-                        AttrNotMatched.Add(nameof(item.PRODUCTNAME));
+                        attrNotMatched.Add(nameof(item.PRODUCTNAME));
                     if (!item.AGENCY.Equals(product.Agency))
-                        AttrNotMatched.Add(nameof(item.AGENCY));
+                        attrNotMatched.Add(nameof(item.AGENCY));
                     if (!item.PROVIDER.Equals(product.ProviderCode))
-                        AttrNotMatched.Add(nameof(item.PROVIDER));
+                        attrNotMatched.Add(nameof(item.PROVIDER));
                     if (!item.ENCSIZE.Equals(product.Size))
-                        AttrNotMatched.Add(nameof(item.ENCSIZE));
-                    if (!item.TITLE.Equals(product.Title))
-                        AttrNotMatched.Add(nameof(item.TITLE));
-                    if (!item.EDITIONNO.Equals(product.EditionNumber))
-                        AttrNotMatched.Add(nameof(item.EDITIONNO));
-                    if (!item.UPDATENO.Equals(product.UpdateNumber))
-                        AttrNotMatched.Add(nameof(item.UPDATENO));
+                        attrNotMatched.Add(nameof(item.ENCSIZE));
+                    VerifyAdditionalXmlTags(item, correctionTag);
                     //Checking blanks
-                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
+                    List<string> blankFieldNames = new() { "CANCELLED", "REPLACEDBY", "UNITTYPE", "ACTIVEKEY", "NEXTKEY", "TITLE", "EDITIONNO", "UPDATENO" };
                     VerifyBlankFields(item, blankFieldNames);
 
-                    if (AttrNotMatched.Count == 0)
+                    if (attrNotMatched.Count == 0)
                     {
                         Console.WriteLine("CHANGE ENC CELL Action's Data is correct");
-                        ChangeENCCell.Add(childCell, product.InUnitsOfSale);
+                        changeEncCell.Add(childCell, product.InUnitsOfSale);
                         return true;
                     }
-                    else
-                    {
-                        Console.WriteLine("CHANGE ENC CELL Action's Data is incorrect");
-                        Console.WriteLine("Not matching attributes are:");
-                        foreach (string attribute in AttrNotMatched)
-                        { Console.WriteLine(attribute); }
-                        return false;
-                    }
+
+                    Console.WriteLine("CHANGE ENC CELL Action's Data is incorrect");
+                    Console.WriteLine("Not matching attributes are:");
+                    foreach (string attribute in attrNotMatched)
+                    { Console.WriteLine(attribute); }
+                    return false;
                 }
             }
             Console.WriteLine("JSON doesn't have corresponding product.");
             return false;
         }
 
-        private static bool? VerifyCancelToAVCSUnitOfSale(string productName, ZMAT_ACTIONITEMS item)
+        private static bool? VerifyCancelToAVCSUnitOfSale(string productName, ZMAT_ACTIONITEMS item, string correctionTag)
         {
-            Console.WriteLine("Action#:" + ActionCounter + ".UnitOfSale:" + productName);
+            Console.WriteLine("Action#:" + actionCounter + ".UnitOfSale:" + productName);
             foreach (UnitOfSale unitOfSale in JsonPayload.Data.UnitsOfSales)
             {
                 if ((productName == unitOfSale.UnitName) && (unitOfSale.Status.Equals("NotForSale")))
                 {
-                    AttrNotMatched.Clear();
-                    if (!item.ACTIONNUMBER.Equals(ActionCounter.ToString()))
-                        AttrNotMatched.Add(nameof(item.ACTIONNUMBER));
+                    attrNotMatched.Clear();
+                    if (!item.ACTIONNUMBER.Equals(actionCounter.ToString()))
+                        attrNotMatched.Add(nameof(item.ACTIONNUMBER));
                     //xmlAttributes[1] is skipped as already checked
                     if (!item.PRODUCT.Equals("AVCS UNIT"))
-                        AttrNotMatched.Add(nameof(item.PRODUCT));
+                        attrNotMatched.Add(nameof(item.PRODUCT));
                     if (!item.PRODTYPE.Equals((GetProductInfo(unitOfSale.CompositionChanges.RemoveProducts)).ProductType))
-                        AttrNotMatched.Add(nameof(item.PRODTYPE));
-
+                        attrNotMatched.Add(nameof(item.PRODTYPE));
+                    VerifyAdditionalXmlTags(item, correctionTag);
                     //Checking blanks
-                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
+                    List<string> blankFieldNames = new() { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
                     VerifyBlankFields(item, blankFieldNames);
 
-                    if (AttrNotMatched.Count == 0)
+                    if (attrNotMatched.Count == 0)
                     {
                         Console.WriteLine("CANCEL AVCS UNIT OF SALE Action's Data is correct");
                         return true;
                     }
-                    else
-                    {
-                        Console.WriteLine("CANCEL AVCS UNIT OF SALE Action's Data is incorrect");
-                        Console.WriteLine("Not matching attributes are:");
-                        foreach (string attribute in AttrNotMatched)
-                        { Console.WriteLine(attribute); }
-                        return false;
-                    }
+
+                    Console.WriteLine("CANCEL AVCS UNIT OF SALE Action's Data is incorrect");
+                    Console.WriteLine("Not matching attributes are:");
+                    foreach (string attribute in attrNotMatched)
+                    { Console.WriteLine(attribute); }
+                    return false;
                 }
             }
             Console.WriteLine("JSON doesn't have corresponding Unit of Sale.");
             return false;
         }
 
-        private static bool? VerifyCancelENCCell(string childCell, string productName, ZMAT_ACTIONITEMS item)
+        private static bool? VerifyCancelEncCell(string childCell, string productName, ZMAT_ACTIONITEMS item, string correctionTag)
         {
-            Console.WriteLine("Action#:" + ActionCounter + ".ENC Cell:" + childCell);
+            Console.WriteLine("Action#:" + actionCounter + ".ENC Cell:" + childCell);
             foreach (Product product in JsonPayload.Data.Products)
             {
                 if ((childCell == product.ProductName) && (product.Status.StatusName.Equals("Cancellation Update")) && (product.InUnitsOfSale.Contains(productName)))
                 {
-                    AttrNotMatched.Clear();
-                    if (!item.ACTIONNUMBER.Equals(ActionCounter.ToString()))
-                        AttrNotMatched.Add(nameof(item.ACTIONNUMBER));
+                    attrNotMatched.Clear();
+                    if (!item.ACTIONNUMBER.Equals(actionCounter.ToString()))
+                        attrNotMatched.Add(nameof(item.ACTIONNUMBER));
                     //xmlAttributes[1] is skipped as already checked
                     if (!item.PRODUCT.Equals("ENC CELL"))
-                        AttrNotMatched.Add(nameof(item.PRODUCT));
+                        attrNotMatched.Add(nameof(item.PRODUCT));
                     if (!item.PRODTYPE.Equals(product.ProductType[4..]))
-                        AttrNotMatched.Add(nameof(item.PRODTYPE));
+                        attrNotMatched.Add(nameof(item.PRODTYPE));
                     if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!item.PRODUCTNAME.Equals(GetUoSName(childCell))))
-                        AttrNotMatched.Add(nameof(item.PRODUCTNAME));
+                        attrNotMatched.Add(nameof(item.PRODUCTNAME));
+                    VerifyAdditionalXmlTags(item, correctionTag);
 
                     //Checking blanks
-                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
+                    List<string> blankFieldNames = new() { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
                     VerifyBlankFields(item, blankFieldNames);
 
-                    if (AttrNotMatched.Count == 0)
+                    if (attrNotMatched.Count == 0)
                     {
                         Console.WriteLine("CANCEL ENC CELL Action's Data is correct");
                         return true;
                     }
-                    else
-                    {
-                        Console.WriteLine("CANCEL ENC CELL Action's Data is incorrect");
-                        Console.WriteLine("Not matching attributes are:");
-                        foreach (string attribute in AttrNotMatched)
-                        { Console.WriteLine(attribute); }
-                        return false;
-                    }
+
+                    Console.WriteLine("CANCEL ENC CELL Action's Data is incorrect");
+                    Console.WriteLine("Not matching attributes are:");
+                    foreach (string attribute in attrNotMatched)
+                    { Console.WriteLine(attribute); }
+                    return false;
                 }
             }
             Console.WriteLine("JSON doesn't have corresponding product.");
             return false;
         }
 
-        private static bool? VerifyRemoveENCCellFromAVCSUnitOFSale(string childCell, string productName, ZMAT_ACTIONITEMS item)
+        private static bool? VerifyRemoveENCCellFromAVCSUnitOFSale(string childCell, string productName, ZMAT_ACTIONITEMS item, string correctionTag)
         {
-            Console.WriteLine("Action#:" + ActionCounter + ".AVCSUnitOfSale:" + productName);
+            Console.WriteLine("Action#:" + actionCounter + ".AVCSUnitOfSale:" + productName);
             foreach (UnitOfSale unitOfSale in JsonPayload.Data.UnitsOfSales)
             {
                 List<string> pdts = unitOfSale.CompositionChanges.RemoveProducts;
@@ -377,31 +347,30 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 {
                     if ((childCell == pdt) && (productName == unitOfSale.UnitName))
                     {
-                        AttrNotMatched.Clear();
-                        if (!item.ACTIONNUMBER.Equals(ActionCounter.ToString()))
-                            AttrNotMatched.Add(nameof(item.ACTIONNUMBER));
+                        attrNotMatched.Clear();
+                        if (!item.ACTIONNUMBER.Equals(actionCounter.ToString()))
+                            attrNotMatched.Add(nameof(item.ACTIONNUMBER));
                         if (!item.PRODUCT.Equals("AVCS UNIT"))
-                            AttrNotMatched.Add(nameof(item.PRODUCT));
+                            attrNotMatched.Add(nameof(item.PRODUCT));
                         if (!item.PRODTYPE.Equals((GetProductInfo(unitOfSale.CompositionChanges.RemoveProducts)).ProductType))
-                            AttrNotMatched.Add(nameof(item.PRODTYPE));
+                            attrNotMatched.Add(nameof(item.PRODTYPE));
+                        VerifyAdditionalXmlTags(item, correctionTag);
                         //xmlAttributes[4] & [5] are skipped as already checked
                         //Checking blanks
-                        List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
+                        List<string> blankFieldNames = new() { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
                         VerifyBlankFields(item, blankFieldNames);
 
-                        if (AttrNotMatched.Count == 0)
+                        if (attrNotMatched.Count == 0)
                         {
                             Console.WriteLine("REMOVE ENC CELL FROM AVCS UNIT OF SALE Action's Data is correct");
                             return true;
                         }
-                        else
-                        {
-                            Console.WriteLine("REMOVE ENC CELL FROM AVCS UNIT OF SALE Action's Data is incorrect");
-                            Console.WriteLine("Not matching attributes are:");
-                            foreach (string attribute in AttrNotMatched)
-                            { Console.WriteLine(attribute); }
-                            return false;
-                        }
+
+                        Console.WriteLine("REMOVE ENC CELL FROM AVCS UNIT OF SALE Action's Data is incorrect");
+                        Console.WriteLine("Not matching attributes are:");
+                        foreach (string attribute in attrNotMatched)
+                        { Console.WriteLine(attribute); }
+                        return false;
                     }
                 }
             }
@@ -409,41 +378,80 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return false;
         }
 
-        private static bool? VerifyReplaceWithENCCell(string childCell, string replaceBy, ZMAT_ACTIONITEMS item)
+        private static bool? VerifyReplaceWithEncCell(string childCell, string replaceBy, ZMAT_ACTIONITEMS item, string correctionTag)
         {
-            Console.WriteLine("Action#:" + ActionCounter + ".ENC Cell:" + childCell);
+            Console.WriteLine("Action#:" + actionCounter + ".ENC Cell:" + childCell);
             foreach (Product product in JsonPayload.Data.Products)
             {
                 if ((childCell == product.ProductName) && (product.ReplacedBy.Contains(replaceBy)))
                 {
-                    AttrNotMatched.Clear();
-                    if (!item.ACTIONNUMBER.Equals(ActionCounter.ToString()))
-                        AttrNotMatched.Add(nameof(item.ACTIONNUMBER));
+                    attrNotMatched.Clear();
+                    if (!item.ACTIONNUMBER.Equals(actionCounter.ToString()))
+                        attrNotMatched.Add(nameof(item.ACTIONNUMBER));
                     //xmlAttributes[1] is skipped as already checked
                     if (!item.PRODUCT.Equals("ENC CELL"))
-                        AttrNotMatched.Add(nameof(item.PRODUCT));
+                        attrNotMatched.Add(nameof(item.PRODUCT));
                     if (!item.PRODTYPE.Equals(product.ProductType[4..]))
-                        AttrNotMatched.Add(nameof(item.PRODTYPE));
-                    //if (!product.InUnitsOfSale.Contains(item.PRODUCTNAME))
+                        attrNotMatched.Add(nameof(item.PRODTYPE));
                     if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!item.PRODUCTNAME.Equals(GetUoSName(childCell))))
-                        AttrNotMatched.Add(nameof(item.PRODUCTNAME));
+                        attrNotMatched.Add(nameof(item.PRODUCTNAME));
+                    VerifyAdditionalXmlTags(item, correctionTag);
                     //Checking blanks
-                    List<string> blankFieldNames = new List<string> { "CANCELLED", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
+                    List<string> blankFieldNames = new() { "CANCELLED", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
                     VerifyBlankFields(item, blankFieldNames);
 
-                    if (AttrNotMatched.Count == 0)
+                    if (attrNotMatched.Count == 0)
                     {
                         Console.WriteLine("REPLACED WITH ENC CELL Action's Data is correct");
+                        int valueIndex = product.ReplacedBy.IndexOf(replaceBy);
+                        product.ReplacedBy[valueIndex] = product.ReplacedBy[valueIndex].Replace(replaceBy, "skip");
                         return true;
                     }
-                    else
+
+                    Console.WriteLine("REPLACED WITH ENC CELL Action's Data is incorrect");
+                    Console.WriteLine("Not matching attributes are:");
+                    foreach (string attribute in attrNotMatched)
+                    { Console.WriteLine(attribute); }
+                    return false;
+                }
+            }
+            Console.WriteLine("JSON doesn't have corresponding product.");
+            return false;
+        }
+
+        private static bool? VerifyAdditionalCoverageWithEncCell(string childCell, string replaceBy, ZMAT_ACTIONITEMS item, string correctionTag)
+        {
+            Console.WriteLine("Action#:" + actionCounter + ".ENC Cell:" + childCell);
+            foreach (Product product in JsonPayload.Data.Products)
+            {
+                if ((childCell == product.ProductName) && (product.AdditionalCoverage.Contains(replaceBy)))
+                {
+                    attrNotMatched.Clear();
+                    if (!item.ACTIONNUMBER.Equals(actionCounter.ToString()))
+                        attrNotMatched.Add(nameof(item.ACTIONNUMBER));
+                    //xmlAttributes[1] is skipped as already checked
+                    if (!item.PRODUCT.Equals("ENC CELL"))
+                        attrNotMatched.Add(nameof(item.PRODUCT));
+                    if (!item.PRODTYPE.Equals(product.ProductType[4..]))
+                        attrNotMatched.Add(nameof(item.PRODTYPE));
+                    VerifyAdditionalXmlTags(item, correctionTag);
+                    //Checking blanks
+                    List<string> blankFieldNames = new() { "PRODUCTNAME", "CANCELLED", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
+                    VerifyBlankFields(item, blankFieldNames);
+
+                    if (attrNotMatched.Count == 0)
                     {
-                        Console.WriteLine("REPLACED WITH ENC CELL Action's Data is incorrect");
-                        Console.WriteLine("Not matching attributes are:");
-                        foreach (string attribute in AttrNotMatched)
-                        { Console.WriteLine(attribute); }
-                        return false;
+                        Console.WriteLine("ADDITIONAL COVERAGE ENC CELL Action's Data is correct");
+                        int valueIndex = product.AdditionalCoverage.IndexOf(replaceBy);
+                        product.AdditionalCoverage[valueIndex] = product.AdditionalCoverage[valueIndex].Replace(replaceBy, "skip");
+                        return true;
                     }
+
+                    Console.WriteLine("ADDITIONAL COVERAGE ENC CELL Action's Data is incorrect");
+                    Console.WriteLine("Not matching attributes are:");
+                    foreach (string attribute in attrNotMatched)
+                    { Console.WriteLine(attribute); }
+                    return false;
                 }
             }
             Console.WriteLine("JSON doesn't have corresponding product.");
@@ -452,7 +460,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
         private static bool VerifyAssignCellToAVCSUnitOfSale(string childCell, string productName, ZMAT_ACTIONITEMS item, string correctionTag)
         {
-            Console.WriteLine("Action#:" + ActionCounter + ".AVCSUnitOfSale:" + productName);
+            Console.WriteLine("Action#:" + actionCounter + ".AVCSUnitOfSale:" + productName);
             foreach (UnitOfSale unitOfSale in JsonPayload.Data.UnitsOfSales)
             {
                 List<string> pdts = unitOfSale.CompositionChanges.AddProducts;
@@ -460,37 +468,30 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 {
                     if ((childCell == pdt) && (productName == unitOfSale.UnitName))
                     {
-                        AttrNotMatched.Clear();
-                        if (!item.ACTIONNUMBER.Equals(ActionCounter.ToString()))
-                            AttrNotMatched.Add(nameof(item.ACTIONNUMBER));
+                        attrNotMatched.Clear();
+                        if (!item.ACTIONNUMBER.Equals(actionCounter.ToString()))
+                            attrNotMatched.Add(nameof(item.ACTIONNUMBER));
                         if (!item.PRODUCT.Equals("AVCS UNIT"))
-                            AttrNotMatched.Add(nameof(item.PRODUCT));
+                            attrNotMatched.Add(nameof(item.PRODUCT));
                         if (!item.PRODTYPE.Equals((GetProductInfo(unitOfSale.CompositionChanges.AddProducts)).ProductType))
-                            AttrNotMatched.Add(nameof(item.PRODTYPE));
+                            attrNotMatched.Add(nameof(item.PRODTYPE));
                         //xmlAttributes[4] & [5] are skipped as already checked
                         //Checking blanks
-                        if (!item.WEEKNO.Equals(weekNoTag))
-                            AttrNotMatched.Add(nameof(item.WEEKNO));
-                        if (!item.VALIDFROM.Equals(validFromTag))
-                            AttrNotMatched.Add(nameof(item.VALIDFROM));
-                        if (!item.CORRECTION.Equals(correctionTag))
-                            AttrNotMatched.Add(nameof(item.CORRECTION));
-                        List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
+                        VerifyAdditionalXmlTags(item, correctionTag);
+                        List<string> blankFieldNames = new() { "CANCELLED", "REPLACEDBY", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE", "EDITIONNO", "UPDATENO", "UNITTYPE", "ACTIVEKEY", "NEXTKEY" };
                         VerifyBlankFields(item, blankFieldNames);
 
-                        if (AttrNotMatched.Count == 0)
+                        if (attrNotMatched.Count == 0)
                         {
                             Console.WriteLine("ASSIGN CELL TO AVCS UNIT OF SALE Action's Data is correct");
                             return true;
                         }
-                        else
-                        {
-                            Console.WriteLine("ASSIGN CELL TO AVCS UNIT OF SALE Action's Data is incorrect");
-                            Console.WriteLine("Not matching attributes are:");
-                            foreach (string attribute in AttrNotMatched)
-                            { Console.WriteLine(attribute); }
-                            return false;
-                        }
+
+                        Console.WriteLine("ASSIGN CELL TO AVCS UNIT OF SALE Action's Data is incorrect");
+                        Console.WriteLine("Not matching attributes are:");
+                        foreach (string attribute in attrNotMatched)
+                        { Console.WriteLine(attribute); }
+                        return false;
                     }
                 }
             }
@@ -500,137 +501,137 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
         private static bool VerifyCreateAVCSUnitOfSale(string productName, ZMAT_ACTIONITEMS item, string correctionTag)
         {
-            Console.WriteLine("Action#:" + ActionCounter + ".UnitOfSale:" + productName);
+            Console.WriteLine("Action#:" + actionCounter + ".UnitOfSale:" + productName);
             foreach (UnitOfSale unitOfSale in JsonPayload.Data.UnitsOfSales)
             {
                 if ((productName == unitOfSale.UnitName) && (unitOfSale.IsNewUnitOfSale))
                 {
-                    AttrNotMatched.Clear();
-                    if (!item.ACTIONNUMBER.Equals(ActionCounter.ToString()))
-                        AttrNotMatched.Add(nameof(item.ACTIONNUMBER));
+                    attrNotMatched.Clear();
+                    if (!item.ACTIONNUMBER.Equals(actionCounter.ToString()))
+                        attrNotMatched.Add(nameof(item.ACTIONNUMBER));
                     //xmlAttributes[1] is skipped as already checked
                     if (!item.PRODUCT.Equals("AVCS UNIT"))
-                        AttrNotMatched.Add(nameof(item.PRODUCT));
+                        attrNotMatched.Add(nameof(item.PRODUCT));
                     if (!item.PRODTYPE.Equals((GetFirstProductsInfoHavingUoS(productName)).ProductType))
-                        AttrNotMatched.Add(nameof(item.PRODTYPE));
+                        attrNotMatched.Add(nameof(item.PRODTYPE));
                     if (!item.AGENCY.Equals((GetFirstProductsInfoHavingUoS(productName)).Agency))
-                        AttrNotMatched.Add(nameof(item.AGENCY));
+                        attrNotMatched.Add(nameof(item.AGENCY));
                     if (!item.PROVIDER.Equals((GetFirstProductsInfoHavingUoS(productName)).ProviderCode))
-                        AttrNotMatched.Add(nameof(item.PROVIDER));
+                        attrNotMatched.Add(nameof(item.PROVIDER));
                     if (!item.ENCSIZE.Equals(unitOfSale.UnitSize))
-                        AttrNotMatched.Add(nameof(item.ENCSIZE));
+                        attrNotMatched.Add(nameof(item.ENCSIZE));
                     if (!item.TITLE.Equals(unitOfSale.Title))
-                        AttrNotMatched.Add(nameof(item.TITLE));
+                        attrNotMatched.Add(nameof(item.TITLE));
                     if (!item.UNITTYPE.Equals(unitOfSale.UnitType))
-                        AttrNotMatched.Add(nameof(item.UNITTYPE));
-                    if (!item.WEEKNO.Equals(weekNoTag))
-                        AttrNotMatched.Add(nameof(item.WEEKNO));
-                    if (!item.VALIDFROM.Equals(validFromTag))
-                        AttrNotMatched.Add(nameof(item.VALIDFROM));
-                    if (!item.CORRECTION.Equals(correctionTag))
-                        AttrNotMatched.Add(nameof(item.CORRECTION));
-
+                        attrNotMatched.Add(nameof(item.UNITTYPE));
+                    VerifyAdditionalXmlTags(item, correctionTag);
                     //Checking blanks
-                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "EDITIONNO", "UPDATENO", "ACTIVEKEY", "NEXTKEY" };
+                    List<string> blankFieldNames = new() { "CANCELLED", "REPLACEDBY", "EDITIONNO", "UPDATENO", "ACTIVEKEY", "NEXTKEY" };
                     VerifyBlankFields(item, blankFieldNames);
 
-                    if (AttrNotMatched.Count == 0)
+                    if (attrNotMatched.Count == 0)
                     {
                         Console.WriteLine("CREATE AVCS UNIT OF SALE Action's Data is correct");
                         return true;
                     }
-                    else
-                    {
-                        Console.WriteLine("CREATE AVCS UNIT OF SALE Action's Data is incorrect");
-                        Console.WriteLine("Not matching attributes are:");
-                        foreach (string attribute in AttrNotMatched)
-                        { Console.WriteLine(attribute); }
-                        return false;
-                    }
+
+                    Console.WriteLine("CREATE AVCS UNIT OF SALE Action's Data is incorrect");
+                    Console.WriteLine("Not matching attributes are:");
+                    foreach (string attribute in attrNotMatched)
+                    { Console.WriteLine(attribute); }
+                    return false;
                 }
             }
             Console.WriteLine("JSON doesn't have corresponding Unit of Sale.");
             return false;
         }
 
-        private static bool VerifyCreateENCCell(string childCell, ZMAT_ACTIONITEMS item, string correctionTag, string permitState)
+        private static bool VerifyCreateEncCell(string childCell, ZMAT_ACTIONITEMS item, string correctionTag, string permitState)
         {
-            Console.WriteLine("Action#:" + ActionCounter + ".Childcell:" + childCell);
+            Console.WriteLine("Action#:" + actionCounter + ".Childcell:" + childCell);
             foreach (Product product in JsonPayload.Data.Products)
             {
                 if ((childCell == product.ProductName) && (product.Status.IsNewCell))
                 {
-                    AttrNotMatched.Clear();
-                    if (!item.ACTIONNUMBER.Equals(ActionCounter.ToString()))
-                        AttrNotMatched.Add(nameof(item.ACTIONNUMBER));
+                    attrNotMatched.Clear();
+                    if (!item.ACTIONNUMBER.Equals(actionCounter.ToString()))
+                        attrNotMatched.Add(nameof(item.ACTIONNUMBER));
                     if (!item.PRODUCT.Equals("ENC CELL"))
-                        AttrNotMatched.Add(nameof(item.PRODUCT));
+                        attrNotMatched.Add(nameof(item.PRODUCT));
                     if (!item.PRODTYPE.Equals(product.ProductType[4..]))
-                        AttrNotMatched.Add(nameof(item.PRODTYPE));
+                        attrNotMatched.Add(nameof(item.PRODTYPE));
                     if ((!product.InUnitsOfSale.Contains(item.PRODUCTNAME)) && (!item.PRODUCTNAME.Equals(GetUoSName(childCell))))
-                        AttrNotMatched.Add(nameof(item.PRODUCTNAME));
+                        attrNotMatched.Add(nameof(item.PRODUCTNAME));
                     if (!item.AGENCY.Equals(product.Agency))
-                        AttrNotMatched.Add(nameof(item.AGENCY));
+                        attrNotMatched.Add(nameof(item.AGENCY));
                     if (!item.PROVIDER.Equals(product.ProviderCode))
-                        AttrNotMatched.Add(nameof(item.PROVIDER));
+                        attrNotMatched.Add(nameof(item.PROVIDER));
                     if (!item.ENCSIZE.Equals(product.Size))
-                        AttrNotMatched.Add(nameof(item.ENCSIZE));
+                        attrNotMatched.Add(nameof(item.ENCSIZE));
                     if (!item.TITLE.Equals(product.Title))
-                        AttrNotMatched.Add(nameof(item.TITLE));
+                        attrNotMatched.Add(nameof(item.TITLE));
                     if (!item.EDITIONNO.Equals(product.EditionNumber))
-                        AttrNotMatched.Add(nameof(item.EDITIONNO));
+                        attrNotMatched.Add(nameof(item.EDITIONNO));
                     if (!item.UPDATENO.Equals(product.UpdateNumber))
-                        AttrNotMatched.Add(nameof(item.UPDATENO));
-                    if (!item.WEEKNO.Equals(weekNoTag))
-                        AttrNotMatched.Add(nameof(item.WEEKNO));
-                    if (!item.VALIDFROM.Equals(validFromTag))
-                        AttrNotMatched.Add(nameof(item.VALIDFROM));
-                    if (!item.CORRECTION.Equals(correctionTag))
-                        AttrNotMatched.Add(nameof(item.CORRECTION));
-                    Assert.That(VerifyDecryptedPermit(item.CHILDCELL, item, permitState));
+                        attrNotMatched.Add(nameof(item.UPDATENO));
+                    VerifyAdditionalXmlTags(item, correctionTag);
+                    VerifyDecryptedPermit(item, permitState);
                     //Checking blanks
-                    List<string> blankFieldNames = new List<string> { "CANCELLED", "REPLACEDBY", "UNITTYPE" };
+                    List<string> blankFieldNames = new() { "CANCELLED", "REPLACEDBY", "UNITTYPE" };
                     VerifyBlankFields(item, blankFieldNames);
 
-                    if (AttrNotMatched.Count == 0)
+                    if (attrNotMatched.Count == 0)
                     {
                         Console.WriteLine("CREATE ENC CELL Action's Data is correct");
                         return true;
                     }
-                    else
-                    {
-                        Console.WriteLine("CREATE ENC CELL Action's Data is incorrect");
-                        Console.WriteLine("Not matching attributes are:");
-                        foreach (string attribute in AttrNotMatched)
-                        { Console.WriteLine(attribute); }
-                        return false;
-                    }
+
+                    Console.WriteLine("CREATE ENC CELL Action's Data is incorrect");
+                    Console.WriteLine("Not matching attributes are:");
+                    foreach (string attribute in attrNotMatched)
+                    { Console.WriteLine(attribute); }
+                    return false;
                 }
             }
             Console.WriteLine("JSON doesn't have corresponding product.");
             return true;
         }
 
-        private static bool VerifyDecryptedPermit(string childCell, ZMAT_ACTIONITEMS item, string permitState)
+        private static void VerifyAdditionalXmlTags(ZMAT_ACTIONITEMS item, string correctionTag)
         {
-            Console.WriteLine("Action#:" + ActionCounter + ".Childcell:" + childCell);
+            if (!item.WEEKNO.Equals(weekNoTag))
+                attrNotMatched.Add(nameof(item.WEEKNO));
+            if (correctionTag == "Y")
+            {
+                if (!item.VALIDFROM.Equals(validFromTagFriday))
+                    attrNotMatched.Add(nameof(item.VALIDFROM));
+            }
+            else
+            {
+                if (!item.VALIDFROM.Equals(validFromTagThursday))
+                    attrNotMatched.Add(nameof(item.VALIDFROM));
+            }
+            if (!item.CORRECTION.Equals(correctionTag))
+                attrNotMatched.Add(nameof(item.CORRECTION));
+        }
 
+        private static void VerifyDecryptedPermit(ZMAT_ACTIONITEMS item, string permitState)
+        {
             if (permitState.Contains("Same"))
             {
 
-                if (!item.ACTIVEKEY.Equals(Config.TestConfig.PermitWithSameKey.ACTIVEKEY))
-                    AttrNotMatched.Add(nameof(item.ACTIVEKEY));
-                if (!item.NEXTKEY.Equals(Config.TestConfig.PermitWithSameKey.NEXTKEY))
-                    AttrNotMatched.Add(nameof(item.NEXTKEY));
+                if (!item.ACTIVEKEY.Equals(Config.TestConfig.PermitWithSameKey.ActiveKey))
+                    attrNotMatched.Add(nameof(item.ACTIVEKEY));
+                if (!item.NEXTKEY.Equals(Config.TestConfig.PermitWithSameKey.NextKey))
+                    attrNotMatched.Add(nameof(item.NEXTKEY));
             }
             else if (permitState.Contains("Different"))
             {
-                if (!item.ACTIVEKEY.Equals(Config.TestConfig.PermitWithDifferentKey.ACTIVEKEY))
-                    AttrNotMatched.Add(nameof(item.ACTIVEKEY));
-                if (!item.NEXTKEY.Equals(Config.TestConfig.PermitWithDifferentKey.NEXTKEY))
-                    AttrNotMatched.Add(nameof(item.NEXTKEY));
+                if (!item.ACTIVEKEY.Equals(Config.TestConfig.PermitWithDifferentKey.ActiveKey))
+                    attrNotMatched.Add(nameof(item.ACTIVEKEY));
+                if (!item.NEXTKEY.Equals(Config.TestConfig.PermitWithDifferentKey.NextKey))
+                    attrNotMatched.Add(nameof(item.NEXTKEY));
             }
-            return true;
         }
 
         private static bool VerifyBlankFields(ZMAT_ACTIONITEMS item, List<string> fieldNames)
@@ -640,7 +641,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             foreach (string field in fieldNames)
             {
                 if (!typeof(ZMAT_ACTIONITEMS).GetProperty(field).GetValue(item, null).Equals(""))
-                    AttrNotMatched.Add(typeof(ZMAT_ACTIONITEMS).GetProperty(field).Name);
+                    attrNotMatched.Add(typeof(ZMAT_ACTIONITEMS).GetProperty(field).Name);
             }
             return allBlanks;
         }
@@ -663,34 +664,40 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return productInfo;
         }
 
-        public static async Task<bool> VerifyPresenseOfMandatoryXMLAtrributes(ZMAT_ACTIONITEMS[] ZMAT_ACTIONITEMS)
+        public static async Task<bool> VerifyPresenceOfMandatoryXmlAttributes(ZMAT_ACTIONITEMS[] ZMAT_ACTIONITEMS)
         {
-            List<string> ActionAttributesSeq = new List<string>();
-            ActionAttributesSeq = Config.TestConfig.XMLActionList.ToList<string>();
-            List<string> CurrentActionAttributes = new List<string>();
-
+            List<string> actionAttributesSeq = Config.TestConfig.XmlActionList.ToList<string>();
+            List<string> currentActionAttributes = new();
             foreach (ZMAT_ACTIONITEMS item in ZMAT_ACTIONITEMS)
             {
-                CurrentActionAttributes.Clear();
+                currentActionAttributes.Clear();
                 Type arrayType = item.GetType();
-                var properties = arrayType.GetProperties();
-                foreach (var property in properties)
+                System.Reflection.PropertyInfo[] properties = arrayType.GetProperties();
+                currentActionAttributes.AddRange(properties.Select(property => property.Name));
+                if (currentActionAttributes.Count == noOfMandatoryXMLAttribute)
                 {
-                    CurrentActionAttributes.Add(property.Name);
-                }
-                for (int i = 0; i < 15; i++)
-                {
-                    if (CurrentActionAttributes[i] != ActionAttributesSeq[i])
+
+
+                    for (int i = 0; i < noOfMandatoryXMLAttribute; i++)
                     {
-                        Console.WriteLine("First missed Attribute is:" + ActionAttributesSeq[i] +
-                                          " for action number:" + item.ACTIONNUMBER);
-                        return false;
+                        if (currentActionAttributes[i] != actionAttributesSeq[i])
+                        {
+                            Console.WriteLine("First missed Attribute is:" + actionAttributesSeq[i] +
+                                              " for action number:" + item.ACTIONNUMBER);
+                            return false;
+                        }
                     }
+                }
+                else
+                {
+                    Console.WriteLine("Mandatory attributes are more than expected for Action number " + item.ACTIONNUMBER);
+
+                    return false;
                 }
             }
             if (ZMAT_ACTIONITEMS.Length > 0)
             {
-                Console.WriteLine("Mandatory atrributes are present in all XML actions");
+                Console.WriteLine("Mandatory attributes are present in all XML actions");
                 await Task.CompletedTask;
                 return true;
             }
@@ -718,23 +725,23 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
         private static ProductUoSInfo GetUoSInfo(string productName)
         {
-            ProductUoSInfo UoSInfo = new ProductUoSInfo();
+            ProductUoSInfo uoSInfo = new();
             foreach (UnitOfSale uos in JsonPayload.Data.UnitsOfSales)
             {
                 if (productName.Equals(uos.UnitName))
                 {
-                    UoSInfo.UnitType = uos.UnitType;
-                    UoSInfo.UnitSize = uos.UnitSize;
-                    UoSInfo.Title = uos.Title;
-                    UoSInfo.UnitOfSaleType = uos.UnitOfSaleType;
+                    uoSInfo.UnitType = uos.UnitType;
+                    uoSInfo.UnitSize = uos.UnitSize;
+                    uoSInfo.Title = uos.Title;
+                    uoSInfo.UnitOfSaleType = uos.UnitOfSaleType;
                 }
             }
-            return UoSInfo;
+            return uoSInfo;
         }
 
         private static UoSProductInfo GetProductInfo(string products)
         {
-            UoSProductInfo productInfo = new UoSProductInfo();
+            UoSProductInfo productInfo = new();
             foreach (Product product in JsonPayload.Data.Products)
             {
                 if (products.Equals(product.ProductName))
@@ -748,30 +755,28 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return productInfo;
         }
 
-        public static string GetRequiredXMLText(string generatedXMLFilePath, string tagName)
+        public static string GetRequiredXmlText(string generatedXmlFilePath, string tagName)
         {
-            XmlDocument xDoc = new XmlDocument();
-            xDoc.LoadXml(File.ReadAllText(generatedXMLFilePath));
+            XmlDocument xDoc = new();
+            xDoc.LoadXml(File.ReadAllText(generatedXmlFilePath));
             XmlNode node = xDoc.SelectSingleNode("//" + tagName);
             return node.InnerText;
         }
 
-        public static bool VerifyOrderOfActions(JsonPayloadHelper jsonPayload, string generatedXMLFilePath)
+        public static bool VerifyOrderOfActions(JsonPayloadHelper jsonPayload, string generatedXmlFilePath)
         {
-            bool areEqual = GetFinalActionsListFromJson(ListFromJson).SequenceEqual(CurateListOfActionsFromXmlFile(generatedXMLFilePath));
+            bool areEqual = GetFinalActionsListFromJson(ListFromJson).SequenceEqual(CurateListOfActionsFromXmlFile(generatedXmlFilePath));
             if (areEqual)
             {
                 Console.WriteLine("XML has correct action sequence");
                 return true;
             }
-            else
-            {
-                Console.WriteLine("XML has incorrect action sequence");
-                return false;
-            }
+
+            Console.WriteLine("XML has incorrect action sequence");
+            return false;
         }
 
-        public static bool VerifyInitialXMLHeaders(JsonPayloadHelper jsonPayload, string generatedXMLFilePath)
+        public static bool VerifyInitialXmlHeaders(JsonPayloadHelper jsonPayload, string generatedXMLFilePath)
         {
             bool isNoOfActionsMatching = VerifyNoOfActionsHeader(jsonPayload, generatedXMLFilePath);
             bool isRecTimeMatching = VerifyRECTIMEHeader(jsonPayload, generatedXMLFilePath);
@@ -783,90 +788,71 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 Console.WriteLine("XML headers are correct");
                 return true;
             }
-            else
-            {
-                Console.WriteLine("XML headers are incorrect");
-                return false;
-            }
+
+            Console.WriteLine("XML headers are incorrect");
+            return false;
         }
 
-        public static bool VerifyRECTIMEHeader(JsonPayloadHelper jsonPayload, string generatedXMLFilePath)
+        public static bool VerifyRECTIMEHeader(JsonPayloadHelper jsonPayload, string generatedXmlFilePath)
         {
             string time = jsonPayload.Time;
             DateTime dt = DateTime.Parse(time);
-            string timeFromJSON = dt.ToString("yyyyMMdd");
+            string timeFromJson = dt.ToString("yyyyMMdd");
 
-            string timeFromXML = GetRequiredXMLText(generatedXMLFilePath, "RECDATE");
+            string timeFromXml = GetRequiredXmlText(generatedXmlFilePath, "RECDATE");
 
-            if (timeFromJSON == timeFromXML)
-            {
+            if (timeFromJson == timeFromXml)
                 return true;
-            }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
         public static bool VerifyNoOfActionsHeader(JsonPayloadHelper jsonPayload, string generatedXMLFilePath)
         {
-            int totalNumberofActions = CalculateTotalNumberOfActions(jsonPayload);
-            int noofActions = int.Parse(GetRequiredXMLText(generatedXMLFilePath, "NOOFACTIONS"));
+            int totalNumberOfActions = CalculateTotalNumberOfActions(jsonPayload);
+            int noOfActions = int.Parse(GetRequiredXmlText(generatedXMLFilePath, "NOOFACTIONS"));
 
-            if (totalNumberofActions == noofActions)
+            if (totalNumberOfActions == noOfActions)
             {
                 Console.WriteLine("XML has correct number of actions");
                 return true;
             }
-            else
-            {
-                Console.WriteLine("XML has incorrect number of actions");
-                return false;
-            }
+
+            Console.WriteLine("XML has incorrect number of actions");
+            return false;
         }
 
         public static bool VerifyCORRIDHeader(JsonPayloadHelper jsonPayload, string generatedXMLFilePath)
         {
-            string correlationID = jsonPayload.Data.correlationId;
-            string corrID = GetRequiredXMLText(generatedXMLFilePath, "CORRID");
+            string correlationId = jsonPayload.Data.correlationId;
+            string corrId = GetRequiredXmlText(generatedXMLFilePath, "CORRID");
 
-            if (correlationID == corrID)
-            {
+            if (correlationId == corrId)
                 return true;
-            }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
-        public static bool VerifyORGHeader(JsonPayloadHelper jsonPayload, string generatedXMLFilePath)
+        public static bool VerifyORGHeader(JsonPayloadHelper jsonPayload, string generatedXmlFilePath)
         {
-            string orgValueFromXMl = GetRequiredXMLText(generatedXMLFilePath, "ORG");
+            string orgValueFromXMl = GetRequiredXmlText(generatedXmlFilePath, "ORG");
 
             if (orgValueFromXMl == "UKHO")
-            {
                 return true;
-            }
-            else
-            {
-                Console.WriteLine("ORG Header failed to match");
-                return false;
-            }
+
+            Console.WriteLine("ORG Header failed to match");
+            return false;
         }
 
-        public static List<string> CurateListOfActionsFromXmlFile(string downloadedXMLFilePath)
+        public static List<string> CurateListOfActionsFromXmlFile(string downloadedXmlFilePath)
         {
             ActionsListFromXml.Clear();
             XmlDocument xDoc = new XmlDocument();
-            xDoc.LoadXml(File.ReadAllText(downloadedXMLFilePath));
+            xDoc.LoadXml(File.ReadAllText(downloadedXmlFilePath));
             XmlNodeList nodeList = xDoc.SelectNodes("//ACTION");
 
             foreach (XmlNode node in nodeList)
             {
                 ActionsListFromXml.Add(node.InnerText);
             }
-
             return ActionsListFromXml;
         }
 
@@ -898,6 +884,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                                  + CalculateNewUnitOfSalesCount(jsonPayload)
                                  + CalculateAssignCellToUoSActionCount(jsonPayload)
                                  + CalculateReplaceCellActionCount(jsonPayload)
+                                 + CalculateAdditionalCoverageCellActionCount(jsonPayload)
                                  + CalculateChangeEncCellActionCount(jsonPayload)
                                  + CalculateChangeUoSActionCount(jsonPayload)
                                  + CalculateRemoveCellFromUoSActionCount(jsonPayload)
@@ -912,78 +899,40 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
         public static int CalculateNewCellCount(JsonPayloadHelper jsonPayload)
         {
-            var obj = jsonPayload;
-            int count = 0;
-
-            foreach (Product product in obj.Data.Products)
-            {
-                if (product.Status.IsNewCell == true)
-                {
-                    count++;
-                }
-            }
-
+            int count = jsonPayload.Data.Products.Count(product => product.Status.IsNewCell == true);
             if (count > 0)
             {
                 UpdateActionList(count, "1.  CREATE ENC CELL");
                 Console.WriteLine("Total no. of Create ENC Cell: " + count);
             }
-
             return count;
         }
 
         public static int CalculateNewUnitOfSalesCount(JsonPayloadHelper jsonPayload)
         {
-            var obj = jsonPayload;
-            int newUoSCount = 0;
-
-            foreach (UnitOfSale unitOfSale in obj.Data.UnitsOfSales)
-            {
-                if (unitOfSale.IsNewUnitOfSale == true)
-                {
-                    newUoSCount++;
-                }
-            }
-
+            int newUoSCount = jsonPayload.Data.UnitsOfSales.Count(unitOfSale => unitOfSale.IsNewUnitOfSale == true);
             if (newUoSCount > 0)
             {
                 UpdateActionList(newUoSCount, "2.  CREATE AVCS UNIT OF SALE");
                 Console.WriteLine("Total no. of Create AVCS Unit of Sale: " + newUoSCount);
             }
-
             return newUoSCount;
         }
 
         public static int CalculateAssignCellToUoSActionCount(JsonPayloadHelper jsonPayload)
         {
-            var obj = jsonPayload;
-            int count = 0;
-            foreach (UnitOfSale unitOfSale in obj.Data.UnitsOfSales)
-            {
-                count = count + unitOfSale.CompositionChanges.AddProducts.Count;
-            }
-
+            int count = jsonPayload.Data.UnitsOfSales.Aggregate(0, (current, unitOfSale) => current + unitOfSale.CompositionChanges.AddProducts.Count);
             if (count > 0)
             {
                 UpdateActionList(count, "3.  ASSIGN CELL TO AVCS UNIT OF SALE");
                 Console.WriteLine("Total no. of Assign Cell to AVCS UoS: " + count);
             }
-
             return count;
         }
 
         public static int CalculateReplaceCellActionCount(JsonPayloadHelper jsonPayload)
         {
-            var obj = jsonPayload;
-            int count = 0;
-            foreach (Product product in obj.Data.Products)
-            {
-                if (product.Status.IsNewCell == false && ((product.ReplacedBy.Count) > 0))
-                {
-                    count = count + product.ReplacedBy.Count;
-                }
-            }
-
+            int count = jsonPayload.Data.Products.Where(product => product.Status.IsNewCell == false && ((product.ReplacedBy.Count) > 0)).Aggregate(0, (current, product) => current + product.ReplacedBy.Count);
             if (count > 0)
             {
                 UpdateActionList(count, "4.  REPLACED WITH ENC CELL");
@@ -993,66 +942,47 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return count;
         }
 
+        public static int CalculateAdditionalCoverageCellActionCount(JsonPayloadHelper jsonPayload)
+        {
+            int count = jsonPayload.Data.Products.Where(product => (product.AdditionalCoverage.Count) > 0).Sum(product => product.AdditionalCoverage.Count);
+
+            if (count <= 0)
+                return count;
+
+            UpdateActionList(count, "5.  ADDITIONAL COVERAGE ENC CELL");
+            Console.WriteLine("Total no. of Additional coverage ENC Cell: " + count);
+
+            return count;
+        }
+
         public static int CalculateChangeEncCellActionCount(JsonPayloadHelper jsonPayload)
         {
-            var obj = jsonPayload;
-            int count = 0;
-
-            foreach (Product product in obj.Data.Products)
-            {
-                if (product.ContentChange == false)
-                {
-                    count++;
-                }
-            }
-
+            int count = jsonPayload.Data.Products.Count(product => product.ContentChange == false);
             if (count > 0)
             {
-                UpdateActionList(count, "5.  CHANGE ENC CELL");
+                UpdateActionList(count, "6.  CHANGE ENC CELL");
                 Console.WriteLine("Total No. of Change ENC Cell: " + count);
             }
-
             return count;
         }
 
         public static int CalculateChangeUoSActionCount(JsonPayloadHelper jsonPayload)
         {
-            var obj = jsonPayload;
-            int count = 0;
-
-            foreach (Product product in obj.Data.Products)
-            {
-                if (product.ContentChange == false)
-                {
-                    count = count + product.InUnitsOfSale.Count;
-                }
-            }
-
+            int count = jsonPayload.Data.Products.Where(product => product.ContentChange == false).Aggregate(0, (current, product) => current + product.InUnitsOfSale.Count);
             if (count > 0)
             {
-                UpdateActionList(count, "6.  CHANGE AVCS UNIT OF SALE");
+                UpdateActionList(count, "7.  CHANGE AVCS UNIT OF SALE");
                 Console.WriteLine("Total No. of Change AVCS UoS: " + count);
             }
-
             return count;
         }
 
         public static int CalculateUpdateEncCellEditionUpdateNumber(JsonPayloadHelper jsonPayload)
         {
-            var obj = jsonPayload;
-            int count = 0;
-            foreach (Product product in obj.Data.Products)
-            {
-                if (product.ContentChange == true && product.Status.IsNewCell == false
-                    && (product.Status.StatusName == "Update" || product.Status.StatusName == "New Edition" || product.Status.StatusName == "Re-issue"))
-                {
-                    count++;
-                }
-            }
-
+            int count = jsonPayload.Data.Products.Count(product => product.ContentChange == true && product.Status.IsNewCell == false && (product.Status.StatusName == "Update" || product.Status.StatusName == "New Edition" || product.Status.StatusName == "Re-issue"));
             if (count > 0)
             {
-                UpdateActionList(count, "7.  UPDATE ENC CELL EDITION UPDATE NUMBER");
+                UpdateActionList(count, "8.  UPDATE ENC CELL EDITION UPDATE NUMBER");
                 Console.WriteLine("Total no. of ENC Cell Edition Update Number: " + count);
             }
             return count;
@@ -1060,101 +990,59 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
         public static int CalculateUpdateEncCellEditionUpdateNumberForSuspendedStatus(JsonPayloadHelper jsonPayload)
         {
-            var obj = jsonPayload;
-            int count = 0;
-            foreach (Product product in obj.Data.Products)
-            {
-                if (product.Status.StatusName == "Suspended")
-                {
-                    count++;
-                }
-            }
-
+            int count = jsonPayload.Data.Products.Count(product => product.Status.StatusName == "Suspended");
             if (count > 0)
             {
-                UpdateActionList(count, "7.  UPDATE ENC CELL EDITION UPDATE NUMBER");
+                UpdateActionList(count, "8.  UPDATE ENC CELL EDITION UPDATE NUMBER");
                 Console.WriteLine("Total no. of ENC Cell Edition Update Number: " + count);
             }
-
             return count;
         }
 
         public static int CalculateRemoveCellFromUoSActionCount(JsonPayloadHelper jsonPayload)
         {
-            var obj = jsonPayload;
-            int count = 0;
-            foreach (UnitOfSale unitOfSale in obj.Data.UnitsOfSales)
-            {
-                if (unitOfSale.CompositionChanges.RemoveProducts.Count > 0)
-                {
-                    count = count + unitOfSale.CompositionChanges.RemoveProducts.Count;
-                }
-            }
-
+            int count = jsonPayload.Data.UnitsOfSales.Where(unitOfSale => unitOfSale.CompositionChanges.RemoveProducts.Count > 0).Aggregate(0, (current, unitOfSale) => current + unitOfSale.CompositionChanges.RemoveProducts.Count);
             if (count > 0)
             {
-                UpdateActionList(count, "8.  REMOVE ENC CELL FROM AVCS UNIT OF SALE");
+                UpdateActionList(count, "9.  REMOVE ENC CELL FROM AVCS UNIT OF SALE");
                 Console.WriteLine("Total no. of Remove Cell from UoS: " + count);
             }
-
             return count;
         }
 
         public static int CalculateCancelledCellCount(JsonPayloadHelper jsonPayload)
         {
-            var obj = jsonPayload;
-            int cancelledCellCount = 0;
-
-            foreach (Product product in obj.Data.Products)
-            {
-                if (product.Status.StatusName == "Cancellation Update")
-                {
-                    cancelledCellCount++;
-                }
-            }
-
+            int cancelledCellCount = jsonPayload.Data.Products.Count(product => product.Status.StatusName == "Cancellation Update");
             if (cancelledCellCount > 0)
             {
-                UpdateActionList(cancelledCellCount, "9.  CANCEL ENC CELL");
+                UpdateActionList(cancelledCellCount, "91. CANCEL ENC CELL");
                 Console.WriteLine("Total No. of Cancel ENC Cell: " + cancelledCellCount);
             }
-
             return cancelledCellCount;
         }
 
         public static int CalculateCancelUnitOfSalesActionCount(JsonPayloadHelper jsonPayload)
         {
-            var obj = jsonPayload;
-            int cancelledUoSCount = 0;
-
-            foreach (UnitOfSale unitOfSale in obj.Data.UnitsOfSales)
-            {
-                if (unitOfSale.Status == "NotForSale")
-                {
-                    cancelledUoSCount++;
-                }
-            }
-
+            int cancelledUoSCount = jsonPayload.Data.UnitsOfSales.Count(unitOfSale => unitOfSale.Status == "NotForSale");
             if (cancelledUoSCount > 0)
             {
-                UpdateActionList(cancelledUoSCount, "99. CANCEL AVCS UNIT OF SALE");
+                UpdateActionList(cancelledUoSCount, "92. CANCEL AVCS UNIT OF SALE");
                 Console.WriteLine("Total No. of Cancel AVCS UoS: " + cancelledUoSCount);
             }
-
             return cancelledUoSCount;
         }
 
         public static string GenerateRandomCorrelationId()
         {
             Guid guid = Guid.NewGuid();
-            string randomCorrID = guid.ToString("N").Substring(0, 21);
-            randomCorrID = randomCorrID.Insert(5, "-");
-            randomCorrID = randomCorrID.Insert(11, "-");
-            randomCorrID = randomCorrID.Insert(16, "-");
-            string currentTimeStamp = DateTime.Now.ToString("yyyyMMdd");
-            randomCorrID = "ft-" + currentTimeStamp + "-" + randomCorrID;
-            Console.WriteLine("Generated CorrelationId = " + randomCorrID);
-            return randomCorrID;
+            string randomCorrId = guid.ToString("N").Substring(0, 21);
+            randomCorrId = randomCorrId.Insert(5, "-");
+            randomCorrId = randomCorrId.Insert(11, "-");
+            randomCorrId = randomCorrId.Insert(16, "-");
+            var currentTimeStamp = DateTime.Now.ToString("yyyyMMdd");
+            randomCorrId = "ft-" + currentTimeStamp + "-" + randomCorrId;
+            Console.WriteLine("Generated CorrelationId = " + randomCorrId);
+            return randomCorrId;
         }
 
         public static string UpdateTimeAndCorrIdField(string requestBody, string generatedCorrelationId)
@@ -1187,22 +1075,13 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         string name = uosObj.UnitName;
                         return name;
                     }
-                    else
-                    {
-                        Console.WriteLine("Item not found");
-                        return "";
-                    }
+                    Console.WriteLine("Item not found");
+                    return "";
                 }
-                else
-                {
-                    return matchingUosItems.FirstOrDefault().UnitName;
-                }
+                return matchingUosItems.FirstOrDefault()?.UnitName;
             }
-            else
-            {
-                Console.WriteLine("Product object is null");
-                return null;
-            }
+            Console.WriteLine("Product object is null");
+            return null;
         }
 
         public static string UpdatePermitField(string requestBody, string permitState)
@@ -1213,7 +1092,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 var products = jsonObj["data"]["products"];
                 foreach (var product in products)
                 {
-                    Assert.That(Config.TestConfig.PermitWithSameKey.Permit != "","Permit String is empty");
+                    Assert.That(Config.TestConfig.PermitWithSameKey.Permit, Is.Not.EqualTo(""), "Permit String is empty");
                     product["permit"] = Config.TestConfig.PermitWithSameKey.Permit;
                 }
             }
@@ -1222,7 +1101,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 var products = jsonObj["data"]["products"];
                 foreach (var product in products)
                 {
-                    Assert.That(Config.TestConfig.PermitWithDifferentKey.Permit!= "", "Permit String is empty");
+                    Assert.That(Config.TestConfig.PermitWithDifferentKey.Permit, Is.Not.EqualTo(""), "Permit String is empty");
                     product["permit"] = Config.TestConfig.PermitWithDifferentKey.Permit;
                 }
             }

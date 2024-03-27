@@ -3,11 +3,11 @@
     "type": "uk.gov.ukho.encpublishing.enccontentpublished.v2.1",
     "source": "https://encpublishing.ukho.gov.uk",
     "id": "2f03a25f-28b3-46ea-b009-5943250a9a41",
-    "time": "2023-05-18T12:08:03.4880776Z",
-    "subject": "MX545010",
+    "time": "2020-10-13T12:08:03.4880776Z",
+    "subject": "DE416080",
     "datacontenttype": "application/json",
     "data": {
-        "correlationId": "367ce4a4-ddd1-4f56-b359-69e178d87810",
+        "correlationId": "abcd-3hd921-ffd3-1004s",
         "ukhoWeekNumber": {
             "year": 2024,
             "week": 3,
@@ -16,15 +16,15 @@
         "products": [
             {
                 "productType": "ENC S57",
-                "dataSetName": "MX545010.001",
-                "productName": "MX545010",
-                "title": "Isla Clarion",
-                "scale": 90000,
-                "usageBand": 5,
-                "editionNumber": 1,
+                "dataSetName": "DE416080.001",
+                "productName": "DE416080",
+                "title": "Greifswalder Bodden",
+                "scale": 100000,
+                "usageBand": 4,
+                "editionNumber": 11,
                 "updateNumber": 0,
                 "mayAffectHoldings": true,
-                "contentChange": false,
+                "contentChange": true,
                 "permit": "permitString",
                 "providerCode": "1",
                 "providerName": "ICE",
@@ -36,13 +36,14 @@
                     "VAR Unique",
                     "VAR"
                 ],
+
                 "size": "medium",
                 "_ENUM": [
                     "large",
                     "medium",
                     "small"
                 ],
-                "agency": "MX",
+                "agency": "DE",
                 "bundle": [
                     {
                         "bundleType": "DVD",
@@ -53,7 +54,7 @@
                     }
                 ],
                 "status": {
-                    "statusName": "Suspended",
+                    "statusName": "New Edition",
                     "_ENUM": [
                         "New Edition",
                         "Re-issue",
@@ -67,7 +68,7 @@
                 },
                 "replaces": [],
                 "replacedBy": [],
-                "additionalCoverage": [],
+                "additionalCoverage": [ "DK4LIMFW", "DK4LIMFX", "DK4LIMFY" ],
                 "geographicLimit": {
                     "boundingBox": {
                         "northLimit": 24.0,
@@ -76,12 +77,7 @@
                         "westLimit": 119.0
                     }
                 },
-                "inUnitsOfSale": [
-                    "MX545010",
-                    "MX509226",
-                    "AVCSO",
-                    "PAYSF"
-                ],
+                "inUnitsOfSale": [ "DE416080", "AVCSO", "PAYSF" ],
                 "s63": {
                     "name": "XXXXXXXX.001",
                     "hash": "5160204288db0a543850da177ec637b71ed55946e7f3843e6180b1906ee4f4ea",
@@ -120,37 +116,9 @@
         ],
         "unitsOfSale": [
             {
-                "unitName": "MX545010",
-                "title": "Isla Clarion",
+                "unitName": "DE416080",
+                "title": "Greifswalder Bodden Unit",
                 "unitType": "AVCS Units Coastal",
-                "unitSize": "large",
-                "unitOfSaleType": "unit",
-                "status": "ForSale",
-                "_ENUM": [
-                    "ForSale",
-                    "NotForSale"
-                ],
-                "isNewUnitOfSale": false,
-                "geographicLimit": {
-                    "boundingBox": {
-                        "northLimit": 24.146815,
-                        "southLimit": 22.581615,
-                        "eastLimit": 120.349635,
-                        "westLimit": 119.39142
-                    }
-                },
-                "compositionChanges": {
-                    "addProducts": [
-                        "MX545010"
-                    ],
-                    "removeProducts": []
-                }
-            },
-            {
-                "unitName": "MX509226",
-                "title": "Playa del Carmen",
-                "unitType": "AVCS Units Coastal",
-                "unitOfSaleType": "unit",
                 "unitSize": "large",
                 "status": "ForSale",
                 "_ENUM": [
@@ -158,6 +126,7 @@
                     "NotForSale"
                 ],
                 "isNewUnitOfSale": false,
+                "unitOfSaleType": "unit",
                 "geographicLimit": {
                     "boundingBox": {
                         "northLimit": 24.146815,
@@ -176,39 +145,29 @@
                 "title": "AVCS Online Folio Some Title",
                 "unitSize": "large",
                 "unitType": "AVCS Online Folio",
-                "unitOfSaleType": "folio",
                 "status": "ForSale",
-                "_ENUM": [
-                    "ForSale",
-                    "NotForSale"
-                ],
                 "isNewUnitOfSale": false,
                 "geographicLimit": {
                     "boundingBox": {}
                 },
                 "compositionChanges": {
                     "addProducts": [],
-                    "removeProducts": []
+                    "removeProducts": [ "DE416080" ]
                 }
             },
             {
                 "unitName": "PAYSF",
                 "title": "World Folio",
                 "unitType": "AVCS Folio Transit",
-                "unitOfSaleType": "folio",
                 "unitSize": "large",
                 "status": "ForSale",
-                "_ENUM": [
-                    "ForSale",
-                    "NotForSale"
-                ],
                 "isNewUnitOfSale": false,
                 "geographicLimit": {
                     "boundingBox": {}
                 },
                 "compositionChanges": {
                     "addProducts": [],
-                    "removeProducts": []
+                    "removeProducts": [ "DE416080" ]
                 }
             }
         ]

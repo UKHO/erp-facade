@@ -3,8 +3,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Net.Http.Headers;
 using System.Text;
 using UKHO.ERPFacade.Common.Configuration;
-using UKHO.SAP.MockAPIService.Enums;
-using UKHO.SAP.MockAPIService.Services;
 
 namespace UKHO.SAP.MockAPIService.Filters
 {
@@ -12,15 +10,13 @@ namespace UKHO.SAP.MockAPIService.Filters
     public class BasicAuthMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly IOptions<SapConfiguration> _sapConfiguration;
-        private readonly MockService _mockService;
+        private readonly IOptions<SapConfiguration> _sapConfiguration;        
         private readonly IConfiguration _configuration;
 
-        public BasicAuthMiddleware(RequestDelegate next, IOptions<SapConfiguration> sapConfiguration, MockService mockService, IConfiguration configuration)
+        public BasicAuthMiddleware(RequestDelegate next, IOptions<SapConfiguration> sapConfiguration, IConfiguration configuration)
         {
             _next = next;
-            _sapConfiguration = sapConfiguration ?? throw new ArgumentNullException(nameof(sapConfiguration));
-            _mockService = mockService ?? throw new ArgumentNullException(nameof(_mockService));
+            _sapConfiguration = sapConfiguration ?? throw new ArgumentNullException(nameof(sapConfiguration));           
             _configuration = configuration ?? throw new ArgumentNullException(nameof(_configuration));
         }
 
@@ -57,17 +53,7 @@ namespace UKHO.SAP.MockAPIService.Filters
                 if (!IsUserAuthenticated(name, password, contextReqPath))
                 {
                     context.Response.StatusCode = 401;
-                }
-
-                if (bool.Parse(_configuration["IsFTRunning"]))
-                {
-                    string currentTestCase = _mockService.GetCurrentTestCase();
-
-                    if (currentTestCase == TestCase.SAPInternalServerError500.ToString())
-                    {
-                        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-                    }
-                }
+                }               
             }
             catch (FormatException)
             {

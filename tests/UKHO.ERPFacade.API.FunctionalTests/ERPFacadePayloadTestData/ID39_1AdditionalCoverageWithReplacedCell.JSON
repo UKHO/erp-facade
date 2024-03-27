@@ -3,11 +3,11 @@
     "type": "uk.gov.ukho.encpublishing.enccontentpublished.v2.1",
     "source": "https://encpublishing.ukho.gov.uk",
     "id": "2f03a25f-28b3-46ea-b009-5943250a9a41",
-    "time": "2023-05-18T12:08:03.4880776Z",
-    "subject": "MX545010",
+    "time": "2020-10-13T12:08:03.4880776Z",
+    "subject": "DE416080",
     "datacontenttype": "application/json",
     "data": {
-        "correlationId": "367ce4a4-ddd1-4f56-b359-69e178d87810",
+        "correlationId": "abcd-3hd921-ffd3-1005s",
         "ukhoWeekNumber": {
             "year": 2024,
             "week": 3,
@@ -16,15 +16,15 @@
         "products": [
             {
                 "productType": "ENC S57",
-                "dataSetName": "MX545010.001",
-                "productName": "MX545010",
-                "title": "Isla Clarion",
-                "scale": 90000,
-                "usageBand": 5,
-                "editionNumber": 1,
+                "dataSetName": "DE416080.001",
+                "productName": "DE416080",
+                "title": "Greifswalder Bodden",
+                "scale": 100000,
+                "usageBand": 4,
+                "editionNumber": 11,
                 "updateNumber": 0,
                 "mayAffectHoldings": true,
-                "contentChange": false,
+                "contentChange": true,
                 "permit": "permitString",
                 "providerCode": "1",
                 "providerName": "ICE",
@@ -42,7 +42,7 @@
                     "medium",
                     "small"
                 ],
-                "agency": "MX",
+                "agency": "DE",
                 "bundle": [
                     {
                         "bundleType": "DVD",
@@ -53,7 +53,7 @@
                     }
                 ],
                 "status": {
-                    "statusName": "Suspended",
+                    "statusName": "New Edition",
                     "_ENUM": [
                         "New Edition",
                         "Re-issue",
@@ -67,7 +67,12 @@
                 },
                 "replaces": [],
                 "replacedBy": [],
-                "additionalCoverage": [],
+                "replacedBy": [
+                    "US4AK6NT"
+                ],
+                "additionalCoverage": [
+                    "DK4LIMFW"
+                ],
                 "geographicLimit": {
                     "boundingBox": {
                         "northLimit": 24.0,
@@ -77,8 +82,7 @@
                     }
                 },
                 "inUnitsOfSale": [
-                    "MX545010",
-                    "MX509226",
+                    "DE416080",
                     "AVCSO",
                     "PAYSF"
                 ],
@@ -116,41 +120,97 @@
                         "fileSize": "1360"
                     }
                 ]
+            },
+            {
+                "productType": "ENC S57",
+                "dataSetName": "US4AK6NT.001",
+                "productName": "US4AK6NT",
+                "title": "Norton Sound - Alaska",
+                "scale": 12000,
+                "usageBand": 6,
+                "editionNumber": 8,
+                "updateNumber": 2,
+                "mayAffectHoldings": true,
+                "contentChange": true,
+                "permit": "permitString",
+                "providerCode": "1",
+                "providerName": "ICE",
+                "_ENUM": [
+                    "ICE",
+                    "ICE_GB",
+                    "ICE_UK",
+                    "PRIMAR",
+                    "VAR Unique",
+                    "VAR"
+                ],
+                "size": "medium",
+                "_ENUM": [
+                    "large",
+                    "medium",
+                    "small"
+                ],
+                "agency": "US",
+                "bundle": [
+                    {
+                        "bundleType": "DVD",
+                        "_ENUM": [
+                            "DVD"
+                        ],
+                        "location": "M1;B1"
+                    }
+                ],
+                "status": {
+                    "statusName": "New Edition",
+                    "statusDate": "2023-03-03T00:00:00.00+01:00",
+                    "isNewCell": false
+                },
+                "replaces": [
+                    "DE416080"
+                ],
+                "replacedBy": [],
+                "additionalCoverage": [],
+                "geographicLimit": {
+                    "boundingBox": {
+                        "northLimit": 63,
+                        "southLimit": 63,
+                        "eastLimit": 162,
+                        "westLimit": 161
+                    }
+                },
+                "inUnitsOfSale": [
+                    "US4AK6NT",
+                    "AVCSO",
+                    "PAYSF"
+                ],
+                "s63": {
+                    "name": "US4AK6NT.001",
+                    "hash": "5160204288db0a543850da177ec637b71ed55946e7f3843e6180b1906ee4f4ea",
+                    "location": "8198201e-78ce-4af8-9145-ad68ba0472e2",
+                    "fileSize": "4500",
+                    "compression": true,
+                    "s57Crc": "5C06E104"
+                },
+                "signature": {
+                    "name": "US4AK6NT.001",
+                    "hash": "fd0c9e5f95c0b664a1a27c2ff98812c648ebd113b117f5639f74536c397fbac9",
+                    "location": "0ecf2f38-a876-4d77-bd0e-0d901d3a0e73",
+                    "fileSize": "2500"
+                },
+                "ancillaryFiles": [
+                    {
+                        "name": "US4AK6NT_04.TXT",
+                        "hash": "d030b93ad8a0801e6955e4f52599f6200d01310155882a1b80eec78c9b93662b",
+                        "location": "2a29932e-dcb8-4e3a-b8a2-b3cfc335ede5",
+                        "fileSize": "1240"
+                    }
+                ]
             }
         ],
         "unitsOfSale": [
             {
-                "unitName": "MX545010",
-                "title": "Isla Clarion",
+                "unitName": "DE416080",
+                "title": "Greifswalder Bodden Unit",
                 "unitType": "AVCS Units Coastal",
-                "unitSize": "large",
-                "unitOfSaleType": "unit",
-                "status": "ForSale",
-                "_ENUM": [
-                    "ForSale",
-                    "NotForSale"
-                ],
-                "isNewUnitOfSale": false,
-                "geographicLimit": {
-                    "boundingBox": {
-                        "northLimit": 24.146815,
-                        "southLimit": 22.581615,
-                        "eastLimit": 120.349635,
-                        "westLimit": 119.39142
-                    }
-                },
-                "compositionChanges": {
-                    "addProducts": [
-                        "MX545010"
-                    ],
-                    "removeProducts": []
-                }
-            },
-            {
-                "unitName": "MX509226",
-                "title": "Playa del Carmen",
-                "unitType": "AVCS Units Coastal",
-                "unitOfSaleType": "unit",
                 "unitSize": "large",
                 "status": "ForSale",
                 "_ENUM": [
@@ -158,6 +218,7 @@
                     "NotForSale"
                 ],
                 "isNewUnitOfSale": false,
+                "unitOfSaleType": "unit",
                 "geographicLimit": {
                     "boundingBox": {
                         "northLimit": 24.146815,
@@ -172,16 +233,36 @@
                 }
             },
             {
+                "unitName": "US4AK6NT",
+                "title": "Norton Sound - Alaska",
+                "unitOfSaleType": "unit",
+                "_ENUM": [
+                    "unit",
+                    "folio"
+                ],
+                "unitSize": "medium",
+                "unitType": "AVCS Units Coastal",
+                "status": "ForSale",
+                "isNewUnitOfSale": false,
+                "geographicLimit": {
+                    "boundingBox": {
+                        "northLimit": 22.643255,
+                        "southLimit": 22.4625767,
+                        "eastLimit": 120.34972,
+                        "westLimit": 120.219475
+                    }
+                },
+                "compositionChanges": {
+                    "addProducts": [],
+                    "removeProducts": []
+                }
+            },
+            {
                 "unitName": "AVCSO",
                 "title": "AVCS Online Folio Some Title",
                 "unitSize": "large",
                 "unitType": "AVCS Online Folio",
-                "unitOfSaleType": "folio",
                 "status": "ForSale",
-                "_ENUM": [
-                    "ForSale",
-                    "NotForSale"
-                ],
                 "isNewUnitOfSale": false,
                 "geographicLimit": {
                     "boundingBox": {}
@@ -195,13 +276,8 @@
                 "unitName": "PAYSF",
                 "title": "World Folio",
                 "unitType": "AVCS Folio Transit",
-                "unitOfSaleType": "folio",
                 "unitSize": "large",
                 "status": "ForSale",
-                "_ENUM": [
-                    "ForSale",
-                    "NotForSale"
-                ],
                 "isNewUnitOfSale": false,
                 "geographicLimit": {
                     "boundingBox": {}

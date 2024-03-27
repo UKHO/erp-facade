@@ -10,7 +10,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
     [TestFixture]
     public class WebhookScenarios
     {
-        private WebhookEndpoint _webhook { get; set; }
+        private WebhookEndpoint WebhookEndpoint { get; set; }
         private readonly ADAuthTokenProvider _authToken = new();
         private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
         //for local
@@ -19,13 +19,13 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [SetUp]
         public void Setup()
         {
-            _webhook = new WebhookEndpoint();
+            WebhookEndpoint = new WebhookEndpoint();
         }
 
         [Test(Description = "WhenValidEventInNewEncContentPublishedEventOptions_ThenWebhookReturns200OkResponse"), Order(0)]
         public async Task WhenValidEventInNewEncContentPublishedEventOptions_ThenWebhookReturns200OkResponse()
         {
-            var response = await _webhook.OptionWebhookResponseAsync(await _authToken.GetAzureADToken(false));
+            var response = await WebhookEndpoint.OptionWebhookResponseAsync(await _authToken.GetAzureADToken(false));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
 
@@ -33,7 +33,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponse()
         {
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.WebhookPayloadFileName);
-            var response = await _webhook.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(false));
+            var response = await WebhookEndpoint.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(false));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
 
@@ -41,7 +41,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithInvalidToken_ThenWebhookReturns401UnAuthorizedResponse()
         {
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.WebhookPayloadFileName);
-            var response = await _webhook.PostWebhookResponseAsync(filePath, "invalidToken_abcd");
+            var response = await WebhookEndpoint.PostWebhookResponseAsync(filePath, "invalidToken_abcd");
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
         }
 
@@ -49,7 +49,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithTokenHavingNoRole_ThenWebhookReturns403ForbiddenResponse()
         {
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.WebhookPayloadFileName);
-            var response = await _webhook.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(true));
+            var response = await WebhookEndpoint.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(true));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.Forbidden);
         }
 
@@ -64,17 +64,17 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [TestCase("ID7_1CellCancel.JSON", "N", TestName = "WhenICallTheWebhookWithOneCancelCellScenario_ThenWebhookReturns200Response")]
 
         //Metadata Change
-        [TestCase("ID8_2CellMetadataChange.JSON", "N", TestName = "WhenICallTheWebhookWith2CellMetadataChangeScenario_ThenWebhookReturns200Response")]
+        [TestCase("ID8_2CellMetadataChange.JSON", "Y", TestName = "WhenICallTheWebhookWith2CellMetadataChangeScenario_ThenWebhookReturns200Response")]
         [TestCase("ID9_MetadataChange.JSON", "N", TestName = "WhenICallTheWebhookWithMetadataChangeScenario_ThenWebhookReturns200Response")]
 
         //Update
-        [TestCase("ID10_UpdateSimple.JSON", "N", TestName = "WhenICallTheWebhookWithSimpleUpdateScenarioHavingOneCellWithStatusNameAsUpdate_ThenWebhookReturns200Response")]
+        [TestCase("ID10_UpdateSimple.JSON", "Y", TestName = "WhenICallTheWebhookWithSimpleUpdateScenarioHavingOneCellWithStatusNameAsUpdate_ThenWebhookReturns200Response")]
         [TestCase("ID11_updateOneCellWithNewEditionStatus.JSON", "N", "SamePermitKey", TestName = "WhenICallTheWebhookWithSimpleUpdateScenarioHavingOneCellWithStatusNameAsNewEdition_ThenWebhookReturns200Response")]
         [TestCase("ID12_updateOneCellWithReIssueStatus.JSON", "N", TestName = "WhenICallTheWebhookWithSimpleUpdateScenarioHavingOneCellStatusNameAsReIssue_ThenWebhookReturns200Response")]
         [TestCase("ID13_updateTwoCellsWithDifferentStatusName.JSON", "N", "DifferentPermitKey", TestName = "WhenICallTheWebhookWithSimpleUpdateScenarioHavingTwoCellsWithDifferentStatusName_ThenWebhookReturns200Response")]
 
         //Move Cell
-        [TestCase("ID14_moveOneCell.JSON", "N", TestName = "WhenICallTheWebhookWithSimpleMoveCellScenario_ThenWebhookReturns200Response")]
+        [TestCase("ID14_moveOneCell.JSON", "Y", TestName = "WhenICallTheWebhookWithSimpleMoveCellScenario_ThenWebhookReturns200Response")]
         [TestCase("ID15_oneNewCellAndOneMoveOneCell.JSON", "N", TestName = "WhenICallTheWebhookWithOneNewCellAndOneMoveOneCellScenario_ThenWebhookReturns200Response")]
 
         //Mixed
@@ -84,7 +84,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [TestCase("ID19_CR_metadata_move.JSON", "N", TestName = "WhenICallTheWebhookWithMixScenarioHavingCancel&ReplaceAndMetadataChangeAndMoveCell_ThenWebhookReturns200Response")]
 
         //New Edition
-        [TestCase("ID20_newEditionAdditionalCoverageV_01.JSON", "N", TestName = "WhenICallTheWebhookWithNewEditionAdditionalCoverageV01PayloadFile_ThenWebhookReturns200Response")]
+        [TestCase("ID20_newEditionAdditionalCoverageV_01.JSON", "N", "SamePermitKey",TestName = "WhenICallTheWebhookWithNewEditionAdditionalCoverageV01PayloadFile_ThenWebhookReturns200Response")]
 
         //V0.3S
         [TestCase("ID21_cancelAndReplaceV_03.JSON", "N", TestName = "WhenICallTheWebhookWithCancelAndReplaceV03PayloadFile_ThenWebhookReturns200Response")]
@@ -95,14 +95,14 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [TestCase("ID26_New_CellV_03.JSON", "N", TestName = "WhenICallTheWebhookWithNewCellV03PayloadFile_ThenWebhookReturns200Response")]
 
         //Supplier Defined Releasability Set v0.1
-        [TestCase("ID27_supplier_Defined_ReleasabilitySet_V_01.JSON", "N", TestName = "WhenICallTheWebhookWithSupplierDefinedReleasabilitySetV01_ThenWebhookReturns200Response")]
+        [TestCase("ID27_supplier_Defined_ReleasabilitySet_V_01.JSON", "Y", TestName = "WhenICallTheWebhookWithSupplierDefinedReleasabilitySetV01_ThenWebhookReturns200Response")]
 
         //Suspended & Withdrawn
         [TestCase("ID28_simpleSuspendedScenario.JSON", "N", TestName = "WhenICallTheWebhookWithSimpleSuspendedScenario_ThenWebhookReturns200Response")]
         [TestCase("ID29_simpleWithdrawnScenario.JSON", "N", TestName = "WhenICallTheWebhookWithSimpleWithdrawnScenario_ThenWebhookReturns200Response")]
         [TestCase("ID30_Suspend_and_WithdrawV01.JSON", "N", TestName = "WhenICallTheWebhookWithSuspendedAndWithdrawnScenario_ThenWebhookReturns200Response")]
         [TestCase("ID31_metadataAndSuspended.JSON", "N", TestName = "WhenICallTheWebhookWithMetadataAndSuspendedMixScenario_ThenWebhookReturns200Response")]
-        [TestCase("ID32_moveAndSuspended.JSON", "N", TestName = "WhenICallTheWebhookWithMovedataAndSuspendedMixScenario_ThenWebhookReturns200Response")]
+        [TestCase("ID32_moveAndSuspended.JSON", "N", TestName = "WhenICallTheWebhookWithMoveDataAndSuspendedMixScenario_ThenWebhookReturns200Response")]
 
         //Rule change unitType & addProducts
         [TestCase("ID33_NewCell_With2UoS_But_only1_having_addProduct.JSON", "N", TestName = "WhenICallTheWebhookWithNewCellScenarioWithMultipleUoSHavingUnitOfSalesTypeUnitButOnly1HavingValueInAddProducts_ThenWebhookReturns200Response")]
@@ -112,13 +112,16 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
         // Rule change for create avcs unit of sale (having multiple products in addProducts)
         [TestCase("ID37_CreateUoSHavingMultipleItemsInAddProducts.JSON", "N", TestName = "WhenICallTheWebhookWithMoveAndNewCellScenarioWhereUoSHasMultipleValuesInAddProducts_ThenWebhookReturns200Response")]
-
+        
+        [TestCase("ID38_3AdditionalCoverageCell.JSON", "N","SamePermitKey", TestName = "WhenICallTheWebhookWithThreeAdditionalCoverageCellScenario_ThenWebhookReturns200Response")]
+        [TestCase("ID39_1AdditionalCoverageWithReplacedCell.JSON", "N","SamePermitKey", TestName = "WhenICallTheWebhookWithOneAdditionalCoverageWithReplacedCellScenario_ThenWebhookReturns200Response")]
+        [TestCase("ID40_1AdditionalCoverageWithReplacedCellAnd1CancelledCell.JSON", "N", "SamePermitKey",TestName = "WhenICallTheWebhookWithOneAdditionalCoverageWithReplacedAndOneCancelledCellScenario_ThenWebhookReturns200Response")]
         public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponse1(string payloadJsonFileName, string correctionTag, string permitState = "permitString")
         {
             Console.WriteLine("Scenario:" + payloadJsonFileName + "\n");
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, payloadJsonFileName);
-            string generatedXMLFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXMLFolder);
-            RestResponse response = await _webhook.PostWebhookResponseAsyncForXML(filePath, generatedXMLFolder, await _authToken.GetAzureADToken(false), correctionTag, permitState);
+            string generatedXmlFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXmlFolder);
+            RestResponse response = await WebhookEndpoint.PostWebhookResponseAsyncForXml(filePath, generatedXmlFolder, await _authToken.GetAzureADToken(false), correctionTag, permitState);
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
     }

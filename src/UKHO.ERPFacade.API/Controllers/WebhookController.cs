@@ -121,6 +121,7 @@ namespace UKHO.ERPFacade.API.Controllers
         [HttpOptions]
         [Route("/webhook/recordofsalepublishedeventreceived")]
         [Authorize(Policy = "RecordOfSaleWebhookCaller")]
+        [NonAction]
         public IActionResult RecordOfSalePublishedEventOptions()
         {
             var webhookRequestOrigin = HttpContext.Request.Headers["WebHook-Request-Origin"].FirstOrDefault();
@@ -138,6 +139,7 @@ namespace UKHO.ERPFacade.API.Controllers
         [HttpPost]
         [Route("/webhook/recordofsalepublishedeventreceived")]
         [Authorize(Policy = "RecordOfSaleWebhookCaller")]
+        [NonAction]
         public virtual async Task<IActionResult> RecordOfSalePublishedEventReceived([FromBody] JObject recordOfSaleEventJson)
         {
             _logger.LogInformation(EventIds.RecordOfSalePublishedEventReceived.ToEventId(), "ERP Facade webhook has received record of sale event from EES.");
@@ -168,6 +170,7 @@ namespace UKHO.ERPFacade.API.Controllers
         [HttpOptions]
         [Route("/webhook/licenceupdatedpublishedeventreceived")]
         [Authorize(Policy = "LicenceUpdatedWebhookCaller")]
+        [NonAction]
         public IActionResult LicenceUpdatedPublishedEventReceivedOption()
         {
             var webhookRequestOrigin = HttpContext.Request.Headers["WebHook-Request-Origin"].FirstOrDefault();
@@ -185,6 +188,7 @@ namespace UKHO.ERPFacade.API.Controllers
         [HttpPost]
         [Route("/webhook/licenceupdatedpublishedeventreceived")]
         [Authorize(Policy = "LicenceUpdatedWebhookCaller")]
+        [NonAction]
         public virtual async Task<IActionResult> LicenceUpdatedPublishedEventReceived([FromBody] JObject licenceUpdatedEventJson)
         {
             _logger.LogInformation(EventIds.LicenceUpdatedEventPublishedEventReceived.ToEventId(), "ERP Facade webhook has received new licence updated publish event from EES.");

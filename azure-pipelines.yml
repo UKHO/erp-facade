@@ -188,26 +188,6 @@ stages:
               modifyOutputPath: false
 
           - task: DotNetCoreCLI@2
-            displayName: "Publish ERPFacadeMonitoringWebjob Code"
-            inputs:
-              command: "publish"
-              publishWebProjects: false
-              projects: "**/UKHO.ERPFacade.Monitoring.WebJob.csproj"
-              arguments: "--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/UKHO.ERPFacade.API/App_Data/jobs/continuous/ERPFacadeMonitoringWebjob"
-              zipAfterPublish: false
-              modifyOutputPath: false
-          
-          - task: DotNetCoreCLI@2
-            displayName: "Publish PriceChangeEventWebJob"
-            inputs:
-              command: "publish"
-              publishWebProjects: false
-              projects: "**/UKHO.ERPFacade.PublishPriceChange.WebJob.csproj"
-              arguments: "--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/UKHO.ERPFacade.API/App_Data/jobs/continuous/PriceChangeEventWebJob"
-              zipAfterPublish: false
-              modifyOutputPath: false
-
-          - task: DotNetCoreCLI@2
             displayName: "Publish Cleanup Webjob"
             inputs:
               command: "publish"
@@ -401,23 +381,19 @@ stages:
         value: $(AzureADConfigurationAutoTestClientIdNoRole)
       - name: "AzureADConfiguration.ClientSecretNoRole"
         value: $(AzureADConfigurationClientSecretNoRole)
-      - name: "EnterpriseEventServiceConfiguration.ClientId"
-        value: $(AzureADConfigurationClientId)
-      - name: "SharedKeyConfiguration.Key"
-        value: $(SharedKeyConfigurationKey)
       - name: "PermitConfiguration.PermitDecryptionHardwareId"
         value: $(PermitDecryptionHardwareId)
       - name: "PermitWithSameKey.Permit"
         value: $(PermitWithSameKeyPermit)
-      - name: "PermitWithSameKey.ACTIVEKEY"
+      - name: "PermitWithSameKey.ActiveKey"
         value: $(PermitWithSameKeyACTIVEKEY)
-      - name: "PermitWithSameKey.NEXTKEY"
+      - name: "PermitWithSameKey.NextKey"
         value: $(PermitWithSameKeyNEXTKEY)
       - name: "PermitWithDifferentKey.Permit"
         value: $(PermitWithDifferentKeyPermit)
-      - name: "PermitWithDifferentKey.ACTIVEKEY"
+      - name: "PermitWithDifferentKey.ActiveKey"
         value: $(PermitWithDifferentKeyACTIVEKEY)
-      - name: "PermitWithDifferentKey.NEXTKEY"
+      - name: "PermitWithDifferentKey.NextKey"
         value: $(PermitWithDifferentKeyNEXTKEY)
     jobs:
       - deployment: DevDeployTerraform
@@ -567,23 +543,7 @@ stages:
                 - template: Deployment/templates/continuous-deployment-app.yml
                   parameters:
                     AzureSubscription: "ERP-Facade-vNext-IAT-A.011.08"
-
-      - job: FunctionalTests
-        dependsOn:
-        - IATDeployTerraform
-        - IATDeployApp
-        pool: $(WindowsPool)
-        variables:
-          - name : AzureStorageConfiguration.ConnectionString
-            value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
-        displayName: "IAT Functional Automated Tests"
-        workspace:
-         clean: all
-        steps:
-          - template: Deployment/templates/continuous-testing.yml
-            parameters:
-              AzureSubscription: "ERP-Facade-Dev-A.011.05.12"              
-    
+   
   - stage: E2EDeploy
     dependsOn: IATDeploy
     displayName: "E2Edeploy (inc terraform, webapp deploy)"    
@@ -679,10 +639,6 @@ stages:
         value: $(AzureADConfigurationAutoTestClientIdNoRole)
       - name: "AzureADConfiguration.ClientSecretNoRole"
         value: $(AzureADConfigurationClientSecretNoRole)
-      - name: "EnterpriseEventServiceConfiguration.ClientId"
-        value: $(EnterpriseEventServiceConfigurationClientId)
-      - name: "SharedKeyConfiguration.Key"
-        value: $(SharedKeyConfigurationKey)
       - name: mockWebAppName
         value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup
@@ -693,15 +649,15 @@ stages:
         value: $(PermitDecryptionHardwareId)
       - name: "PermitWithSameKey.Permit"
         value: $(PermitWithSameKeyPermit)
-      - name: "PermitWithSameKey.ACTIVEKEY"
+      - name: "PermitWithSameKey.ActiveKey"
         value: $(PermitWithSameKeyACTIVEKEY)
-      - name: "PermitWithSameKey.NEXTKEY"
+      - name: "PermitWithSameKey.NextKey"
         value: $(PermitWithSameKeyNEXTKEY)
       - name: "PermitWithDifferentKey.Permit"
         value: $(PermitWithDifferentKeyPermit)
-      - name: "PermitWithDifferentKey.ACTIVEKEY"
+      - name: "PermitWithDifferentKey.ActiveKey"
         value: $(PermitWithDifferentKeyACTIVEKEY)
-      - name: "PermitWithDifferentKey.NEXTKEY"
+      - name: "PermitWithDifferentKey.NextKey"
         value: $(PermitWithDifferentKeyNEXTKEY)
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
 

@@ -8,6 +8,7 @@ using UKHO.ERPFacade.API.FunctionalTests.Service;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 {
+    [Ignore("It was originally built for ADDS Increment 3")]
     [TestFixture]
     public class RoSWebhookScenarios
     {
@@ -121,14 +122,14 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             RestResponse response = await RosWebhookEndpoint.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(false));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.InternalServerError);
         }
-       
+
         [TestCase("RoS13_ValidFirstPayloadForMerging.json", "RoS13_ValidLastPayloadForMerging.json", TestName = "WhenValidRoSEventsReceivedWithValidPayloadsForMerging_ThenWebhookReturns200OkResponseAndWebJobCreatesXMLPayload")]
         public async Task WhenValidRoSEventsReceivedWithValidPayloadsForMerging_ThenWebhookReturns200OkResponseAndWebJobCreatesXMLPayload(string firstEventPayloadJsonFileName, string lastEventPayloadJsonFileName)
         {
             Console.WriteLine("Scenario: Merging ROS Events - " + firstEventPayloadJsonFileName + " & " + lastEventPayloadJsonFileName + "\n");
 
-            string generatedCorrelationId = SAPXmlHelper.GenerateRandomCorrelationId();
-            string generatedXmlFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXMLFolder, "RoSPayloadTestData");
+            string generatedCorrelationId = SapXmlHelper.GenerateRandomCorrelationId();
+            string generatedXmlFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXmlFolder, "RoSPayloadTestData");
             List<JsonInputRoSWebhookEvent> listOfEventJsons = await JsonHelper.GetEventJsonListUsingFileNameAsync(new List<string> { firstEventPayloadJsonFileName, lastEventPayloadJsonFileName });
 
             //Send first event
@@ -149,12 +150,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [TestCase("LTC01_RoSMigrateNewLicence.json", TestName = "WhenValidRoSMigrateNewLicencePublishedEventReceivedWithValidPayload_ThenWebhookReturns200OkResponse")]
         [TestCase("LTC04_RoSMigrateExistingLicence.json", TestName = "WhenValidRoSMigrateExistingLicencePublishedEventReceivedWithValidPayload_ThenWebhookReturns200OkResponse")]
         [TestCase("LTC07_RoSConvertTrialToFullLicence.json", TestName = "WhenValidRoSConvertTrialToFullLicencePublishedEventReceivedWithValidPayload_ThenWebhookReturns200OkResponse")]
-        public async Task WhenValidRoSMigrateLicencePublishedEventReceivedWithValidPayload_ThenWebhookReturns200OkResponse( string firstEventPayloadJsonFileName)
+        public async Task WhenValidRoSMigrateLicencePublishedEventReceivedWithValidPayload_ThenWebhookReturns200OkResponse(string firstEventPayloadJsonFileName)
         {
             Console.WriteLine("Scenario: Merging ROS Events - " + firstEventPayloadJsonFileName + " & " + "\n");
 
-            string generatedCorrelationId = SAPXmlHelper.GenerateRandomCorrelationId();
-            string generatedXmlFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXMLFolder, "RoSPayloadTestData");
+            string generatedCorrelationId = SapXmlHelper.GenerateRandomCorrelationId();
+            string generatedXmlFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXmlFolder, "RoSPayloadTestData");
             List<JsonInputRoSWebhookEvent> listOfEventJsons2 = await JsonHelper.GetEventJsonListUsingFileNameAsync(new List<string> { firstEventPayloadJsonFileName });
             string firstEventPayloadJsonFilePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, "RoSPayloadTestData", firstEventPayloadJsonFileName);
             RestResponse firstEventResponse = await RosWebhookEndpoint.PostWebhookResponseAsyncForXml(generatedCorrelationId, firstEventPayloadJsonFilePath, true, true, generatedXmlFolder, listOfEventJsons2, await _authToken.GetAzureADToken(false));

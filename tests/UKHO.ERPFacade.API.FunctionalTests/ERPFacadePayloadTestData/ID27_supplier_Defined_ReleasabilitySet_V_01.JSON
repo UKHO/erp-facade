@@ -1,15 +1,18 @@
 {
-    "_COMMENT": "Updated 05/04/23 MK - new attributes added: isNewUnitOfSale; contentChange; unitOfSaleType, unitSize, correlationId",
     "specversion": "1.0",
     "type": "uk.gov.ukho.encpublishing.enccontentpublished.v2.1",
     "source": "https://encpublishing.ukho.gov.uk",
     "id": "2f03a25f-28b3-46ea-b009-5943250a9a41",
     "time": "2020-10-13T12:08:03.4880776Z",
-    "_COMMENT": "A comma separated list of products",
     "subject": "DE416075,DE5NOBRB",
     "datacontenttype": "application/json",
     "data": {
         "correlationId": "bgde1-37abc-su34-30001",
+        "ukhoWeekNumber": {
+            "year": 2024,
+            "week": 3,
+            "currentWeekAlphaCorrection": true
+        },
         "products": [
             {
                 "productType": "ENC S57",
@@ -25,7 +28,6 @@
                 "permit": "permitString",
                 "providerCode": "1",
                 "providerName": "ICE",
-                "_COMMENT": "provider code and descrption are n-1 mapping",
                 "_ENUM": [
                     "ICE",
                     "ICE_GB",
@@ -34,9 +36,7 @@
                     "VAR Unique",
                     "VAR"
                 ],
-
                 "size": "medium",
-                "_COMMENT": " size code not included as will be mapped in SAP",
                 "_ENUM": [
                     "large",
                     "medium",
@@ -63,8 +63,7 @@
                         "Suspended"
                     ],
                     "statusDate": "2020-07-16T19:20:30.45+01:00",
-                    "isNewCell": false,
-                    "_COMMENT": "A cell new to the service"
+                    "isNewCell": false
                 },
                 "replaces": [],
                 "replacedBy": [],
@@ -75,51 +74,8 @@
                         "southLimit": 22.581615,
                         "eastLimit": 120.349635,
                         "westLimit": 119.39142
-                    },
-                    "polygons": [
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 24,
-                                    "longitude": 121.5
-                                },
-                                {
-                                    "latitude": 121,
-                                    "longitude": 56
-                                },
-                                {
-                                    "latitude": 45,
-                                    "longitude": 78
-                                },
-                                {
-                                    "latitude": 119,
-                                    "longitude": 121.5
-                                }
-                            ]
-                        },
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 24,
-                                    "longitude": 121.5
-                                },
-                                {
-                                    "latitude": 121,
-                                    "longitude": 56
-                                },
-                                {
-                                    "latitude": 45,
-                                    "longitude": 78
-                                },
-                                {
-                                    "latitude": 119,
-                                    "longitude": 121.5
-                                }
-                            ]
-                        }
-                    ]
+                    }
                 },
-                "_COMMENT": "The units of sale in which product is included, including any 1-1 unit",
                 "inUnitsOfSale": [
                     "DE416075",
                     "AVCSO",
@@ -162,7 +118,6 @@
                 "permit": "permitString",
                 "providerCode": "1",
                 "providerName": "ICE",
-                "_COMMENT": "provider code and descrption are n-1 mapping",
                 "_ENUM": [
                     "ICE",
                     "ICE_GB",
@@ -171,9 +126,7 @@
                     "VAR Unique",
                     "VAR"
                 ],
-
                 "size": "medium",
-                "_COMMENT": " size code not included as will be mapped in SAP",
                 "_ENUM": [
                     "large",
                     "medium",
@@ -200,8 +153,7 @@
                         "Suspended"
                     ],
                     "statusDate": "2020-07-16T19:20:30.45+01:00",
-                    "isNewCell": false,
-                    "_COMMENT": "A cell new to the service"
+                    "isNewCell": false
                 },
                 "replaces": [],
                 "replacedBy": [],
@@ -212,51 +164,8 @@
                         "southLimit": 22.581615,
                         "eastLimit": 120.349635,
                         "westLimit": 119.39142
-                    },
-                    "polygons": [
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 24,
-                                    "longitude": 121.5
-                                },
-                                {
-                                    "latitude": 121,
-                                    "longitude": 56
-                                },
-                                {
-                                    "latitude": 45,
-                                    "longitude": 78
-                                },
-                                {
-                                    "latitude": 119,
-                                    "longitude": 121.5
-                                }
-                            ]
-                        },
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 24,
-                                    "longitude": 121.5
-                                },
-                                {
-                                    "latitude": 121,
-                                    "longitude": 56
-                                },
-                                {
-                                    "latitude": 45,
-                                    "longitude": 78
-                                },
-                                {
-                                    "latitude": 119,
-                                    "longitude": 121.5
-                                }
-                            ]
-                        }
-                    ]
+                    }
                 },
-                "_COMMENT": "The units of sale in which product is included, including any 1-1 unit",
                 "inUnitsOfSale": [
                     "DE5NOBRB",
                     "AVCSO",
@@ -286,7 +195,6 @@
                 ]
             }
         ],
-        "_COMMENT": "All units will be included, including Cancelled Cell units",
         "unitsOfSale": [
             {
                 "unitName": "DE416075",
@@ -297,7 +205,6 @@
                     "folio"
                 ],
                 "unitSize": "medium",
-                "_COMMENT": " size code not included as will be mapped in SAP",
                 "_ENUM": [
                     "large",
                     "medium",
@@ -318,15 +225,13 @@
                     "NotForSale"
                 ],
                 "isNewUnitOfSale": false,
-                "_COMMENT": "BoundingBox or polygon or both or neither",
                 "geographicLimit": {
                     "boundingBox": {
                         "northLimit": 24.146815,
                         "southLimit": 22.581615,
                         "eastLimit": 120.349635,
                         "westLimit": 119.39142
-                    },
-                    "polygons": []
+                    }
                 },
                 "compositionChanges": {
                     "addProducts": [],
@@ -342,7 +247,6 @@
                     "folio"
                 ],
                 "unitSize": "medium",
-                "_COMMENT": " size code not included as will be mapped in SAP",
                 "_ENUM": [
                     "large",
                     "medium",
@@ -363,15 +267,13 @@
                     "NotForSale"
                 ],
                 "isNewUnitOfSale": false,
-                "_COMMENT": "BoundingBox or polygon or both or neither",
                 "geographicLimit": {
                     "boundingBox": {
                         "northLimit": 24.146815,
                         "southLimit": 22.581615,
                         "eastLimit": 120.349635,
                         "westLimit": 119.39142
-                    },
-                    "polygons": []
+                    }
                 },
                 "compositionChanges": {
                     "addProducts": [],
@@ -387,7 +289,6 @@
                     "folio"
                 ],
                 "unitSize": "large",
-                "_COMMENT": " size code not included as will be mapped in SAP",
                 "_ENUM": [
                     "large",
                     "medium",
@@ -405,37 +306,11 @@
                 "status": "ForSale",
                 "isNewUnitOfSale": false,
                 "geographicLimit": {
-                    "boundingBox": {},
-                    "polygons": [
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 22.57515,
-                                    "longitude": 120.21948
-                                },
-                                {
-                                    "latitude": 22.64326,
-                                    "longitude": 120
-                                },
-                                {
-                                    "latitude": 22.57154,
-                                    "longitude": 120
-                                },
-                                {
-                                    "latitude": 22.57515,
-                                    "longitude": 121.21948
-                                }
-                            ]
-                        }
-                    ]
+                    "boundingBox": {}
                 },
                 "compositionChanges": {
-                    "addProducts": [
-
-                    ],
-                    "removeProducts": [
-
-                    ]
+                    "addProducts": [],
+                    "removeProducts": []
                 }
             },
             {
@@ -447,7 +322,6 @@
                     "folio"
                 ],
                 "unitSize": "large",
-                "_COMMENT": " size code not included as will be mapped in SAP",
                 "_ENUM": [
                     "large",
                     "medium",
@@ -465,49 +339,11 @@
                 "status": "ForSale",
                 "isNewUnitOfSale": false,
                 "geographicLimit": {
-                    "boundingBox": {},
-                    "polygons": [
-                        {
-                            "polygon": [
-                                {
-                                    "latitude": 89,
-                                    "longitude": -179.995
-                                },
-                                {
-                                    "latitude": 89,
-                                    "longitude": 0
-                                },
-                                {
-                                    "latitude": 89,
-                                    "longitude": 179.995
-                                },
-                                {
-                                    "latitude": -89,
-                                    "longitude": 179.995
-                                },
-                                {
-                                    "latitude": -89,
-                                    "longitude": 0
-                                },
-                                {
-                                    "latitude": -89,
-                                    "longitude": -179.995
-                                },
-                                {
-                                    "latitude": 89,
-                                    "longitude": -179.995
-                                }
-                            ]
-                        }
-                    ]
+                    "boundingBox": {}
                 },
                 "compositionChanges": {
-                    "addProducts": [
-
-                    ],
-                    "removeProducts": [
-
-                    ]
+                    "addProducts": [],
+                    "removeProducts": []
                 }
             }
         ]
