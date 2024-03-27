@@ -1,7 +1,5 @@
 {      
     "baseURL":"https://erpfacade-dev-api.azurewebsites.net",
-    "UnitOFSaleURL":"/erpfacade/priceinformation",
     "WebhookURL":"/webhook/newenccontentpublishedeventreceived",
-    "Token" :"",
-    "Key":""
+    "Token" :""
 }
