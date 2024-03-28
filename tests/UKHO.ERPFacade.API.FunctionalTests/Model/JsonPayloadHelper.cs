@@ -191,9 +191,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
     {
         [JsonProperty("boundingBox")]
         public BoundingBox BoundingBox { get; set; }
-
-        [JsonProperty("polygons")]
-        public List<Polygons> Polygons { get; set; }
     }
 
     public class BoundingBox
@@ -209,21 +206,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Model
 
         [JsonProperty("westLimit")]
         public double WestLimit { get; set; }
-    }
-
-    public class Polygons
-    {
-        [JsonProperty("polygon")]
-        public List<Polygon> Polygon { get; set; }
-    }
-
-    public class Polygon
-    {
-        [JsonProperty("latitude")]
-        public double Latitude { get; set; }
-
-        [JsonProperty("longitude")]
-        public double Longitude { get; set; }
     }
 
     public class S63
