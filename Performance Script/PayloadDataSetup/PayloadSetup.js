@@ -16,7 +16,7 @@ export function PayloadSetup(payload, productList) {
       jsonObj.data.products[i].providerName = "PRIMAR";
       jsonObj.data.products[i].size = "large";
       jsonObj.data.products[i].agency = "FR";
-      jsonObj.data.products[i].permit = Config.permit;
+      jsonObj.data.products[i].permit = Config.Permit;
 
       jsonObj.data.unitsOfSale[i].unitName = productList.frenchProducts[700 + i];
       jsonObj.data.unitsOfSale[i].unitSize = "large";

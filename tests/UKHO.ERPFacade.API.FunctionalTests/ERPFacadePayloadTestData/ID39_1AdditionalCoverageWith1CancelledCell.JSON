@@ -53,7 +53,7 @@
                     }
                 ],
                 "status": {
-                    "statusName": "New Edition",
+                    "statusName": "Cancellation Update",
                     "_ENUM": [
                         "New Edition",
                         "Re-issue",
@@ -66,10 +66,7 @@
                     "isNewCell": false
                 },
                 "replaces": [],
-                "replacedBy": [],
-                "replacedBy": [
-                    "US4AK6NT"
-                ],
+                "replacedBy": [],               
                 "additionalCoverage": [
                     "DK4LIMFW"
                 ],

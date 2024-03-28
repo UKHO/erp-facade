@@ -15,10 +15,10 @@ var defaultPayload2 = JSON.parse(open('./PayloadData/WebhookPayloads/5ProductsNe
 var defaultPayload3 = JSON.parse(open('./PayloadData/WebhookPayloads/10ProductsNewCell.json'));
 var defaultPayload4 = JSON.parse(open('./PayloadData/WebhookPayloads/100ProductsNewCell.json'));
 
-if (!Config.baseURL.toString().toUpperCase().includes("DEV")) {
+if (!Config.BaseUrl.toString().toUpperCase().includes("DEV")) {
     throw new Error("Invalid Environment !! Please use DEV environment for performance testing.\n");
 }
-const url = new URL(Config.baseURL + Config.WebhookURL);
+const url = new URL(Config.BaseUrl + Config.WebhookUrl);
 const headers = {
     'Content-Type': 'application/json',
     Authorization: `Bearer ${Config.Token}`,
@@ -26,8 +26,8 @@ const headers = {
 };
 
 export function setup() {
-    const event = new Date(Date.now());
-    console.log("start time:" + event.toUTCString());
+    const eventStartDate = new Date(Date.now());
+    console.log("start time:" + eventStartDate.toUTCString());
 
 }
 

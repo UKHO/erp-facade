@@ -114,7 +114,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [TestCase("ID37_CreateUoSHavingMultipleItemsInAddProducts.JSON", "N", TestName = "WhenICallTheWebhookWithMoveAndNewCellScenarioWhereUoSHasMultipleValuesInAddProducts_ThenWebhookReturns200Response")]
         
         [TestCase("ID38_3AdditionalCoverageCell.JSON", "N","SamePermitKey", TestName = "WhenICallTheWebhookWithThreeAdditionalCoverageCellScenario_ThenWebhookReturns200Response")]
-        [TestCase("ID39_1AdditionalCoverageWithReplacedCell.JSON", "N","SamePermitKey", TestName = "WhenICallTheWebhookWithOneAdditionalCoverageWithReplacedCellScenario_ThenWebhookReturns200Response")]
+        [TestCase("ID39_1AdditionalCoverageWith1CancelledCell.JSON", "N","SamePermitKey", TestName = "WhenICallTheWebhookWithOneAdditionalCoverageWithCancelledCellScenario_ThenWebhookReturns200Response")]
         [TestCase("ID40_1AdditionalCoverageWithReplacedCellAnd1CancelledCell.JSON", "N", "SamePermitKey",TestName = "WhenICallTheWebhookWithOneAdditionalCoverageWithReplacedAndOneCancelledCellScenario_ThenWebhookReturns200Response")]
         public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponse1(string payloadJsonFileName, string correctionTag, string permitState = "permitString")
         {
