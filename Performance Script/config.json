@@ -1,8 +1,6 @@
-{      
-    "baseURL":"https://erpfacade-qa-api.azurewebsites.net",
-    "UnitOFSaleURL":"/erpfacade/priceinformation",
-    "WebhookURL":"/webhook/newenccontentpublishedeventreceived",
-    "Token" :"",
-    "Key":""
-
+{
+    "BaseUrl": "https://erpfacade-dev-api.azurewebsites.net",
+    "WebhookUrl": "/webhook/newenccontentpublishedeventreceived",
+    "Token": "",
+    "Permit": ""
 }

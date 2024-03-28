@@ -90,6 +90,9 @@
     <None Update="ERPFacadePayloadTestData\ID38_3AdditionalCoverageCell.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ERPFacadePayloadTestData\ID39_1AdditionalCoverageWith1CancelledCell.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ERPFacadePayloadTestData\ID39_1AdditionalCoverageWithReplacedCell.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -1,4 +1,5 @@
-export  function PayloadSetup(payload, productList) {
+const Config = JSON.parse(open('../config.json'));
+export function PayloadSetup(payload, productList) {
     
     var productArraySize = payload.data.products.length;
     var unitOfSalesArraySize = payload.data.unitsOfSale.length;
@@ -15,7 +16,8 @@ export  function PayloadSetup(payload, productList) {
       jsonObj.data.products[i].providerName = "PRIMAR";
       jsonObj.data.products[i].size = "large";
       jsonObj.data.products[i].agency = "FR";
-      
+      jsonObj.data.products[i].permit = Config.Permit;
+
       jsonObj.data.unitsOfSale[i].unitName = productList.frenchProducts[700 + i];
       jsonObj.data.unitsOfSale[i].unitSize = "large";
       jsonObj.data.unitsOfSale[i].compositionChanges.addProducts.splice(0, 1, productList.frenchProducts[700 + i]);
