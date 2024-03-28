@@ -490,9 +490,7 @@ stages:
       - name: "AzureADConfiguration.ClientSecretNoRole"
         value: $(AzureADConfigurationClientSecretNoRole)
       - name: "EnterpriseEventServiceConfiguration.ClientId"
-        value: $(EnterpriseEventServiceConfigurationClientId)
-      - name: "SharedKeyConfiguration.Key"
-        value: $(SharedKeyConfigurationKey)
+        value: $(EnterpriseEventServiceConfigurationClientId)      
       - name: mockWebAppName
         value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup
@@ -564,9 +562,7 @@ stages:
       - name: "AzureADConfiguration.ClientSecretNoRole"
         value: $(AzureADConfigurationClientSecretNoRole)
       - name: "EnterpriseEventServiceConfiguration.ClientId"
-        value: $(EnterpriseEventServiceConfigurationClientId)
-      - name: "SharedKeyConfiguration.Key"
-        value: $(SharedKeyConfigurationKey)
+        value: $(EnterpriseEventServiceConfigurationClientId)      
       - name: mockWebAppName
         value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup
@@ -732,9 +728,7 @@ stages:
       - name: "AzureADConfiguration.ClientId"
         value: $(AzureADConfigurationClientId)
       - name: "EnterpriseEventServiceConfiguration.ClientId"
-        value: $(EnterpriseEventServiceConfigurationClientId)
-      - name: "SharedKeyConfiguration.Key"
-        value: $(SharedKeyConfigurationKey)
+        value: $(EnterpriseEventServiceConfigurationClientId)      
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
     jobs:
       - deployment: LiveDeployTerraform
