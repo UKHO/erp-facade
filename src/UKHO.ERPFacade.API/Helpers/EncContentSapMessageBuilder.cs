@@ -46,7 +46,6 @@ namespace UKHO.ERPFacade.API.Helpers
         private const string IsCorrectionFalse = "N";
         private const string ActiveKey = "ACTIVEKEY";
         private const string NextKey = "NEXTKEY";
-        private const string ProductStatusNewEdition = "New Edition";
 
         public EncContentSapMessageBuilder(ILogger<EncContentSapMessageBuilder> logger,
                                  IXmlHelper xmlHelper,
@@ -319,7 +318,7 @@ namespace UKHO.ERPFacade.API.Helpers
 
             List<(int sortingOrder, XmlElement itemNode)> actionAttributeList = new();
 
-            PermitKey? permitKey = action.ActionNumber == 1 || (action.ActionNumber == 8 && product.Status.StatusName == ProductStatusNewEdition) ? _permitDecryption.GetPermitKeys(product.Permit) : null;
+            PermitKey? permitKey = action.ActionNumber is 1 or 8 ? _permitDecryption.GetPermitKeys(product.Permit) : null;
 
             foreach (var node in action.Attributes.Where(x => x.Section == ProductSection))
             {
