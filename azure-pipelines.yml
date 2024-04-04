@@ -115,7 +115,7 @@ stages:
 
           - script: |
               detect-secrets --version
-              detect-secrets scan --all-files --force-use-all-plugins > $(Build.SourcesDirectory)/*
+              detect-secrets scan --all-files --force-use-all-plugins > $(Build.SourcesDirectory)/
             displayName: "Run detect-secrets tool"
 
   - stage: Devdeploy
