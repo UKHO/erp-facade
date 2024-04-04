@@ -97,7 +97,7 @@ stages:
                 param($ReportLocation)
                 Invoke-VulnerabilityCheck -ReportLocation $ReportLocation
          
-      - job: detect-secrets    
+      - job: detectsecrets    
         workspace:
           clean: all
         displayName: "detect secrets tool"
