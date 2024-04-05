@@ -155,15 +155,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         attrNotMatched.Add(nameof(item.UPDATENO));
                     VerifyAdditionalXmlTags(item, correctionTag);
                     List<string> blankFieldNames = new() { "CANCELLED", "REPLACEDBY", "UNITTYPE", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE" };
-                    if (product.Status.StatusName.Contains("New Edition"))
-                    {
-                        VerifyDecryptedPermit(item, permitState);
-                    }
-                    else if (product.Status.StatusName.Contains("Update") || product.Status.StatusName.Contains("Re-issue"))
-                    {
-                        blankFieldNames.Add("ACTIVEKEY");
-                        blankFieldNames.Add("NEXTKEY");
-                    }
+                    VerifyDecryptedPermit(item, permitState);
+                        
                     //Checking blanks
                     VerifyBlankFields(item, blankFieldNames);
 
@@ -195,6 +188,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                         attrNotMatched.Add(nameof(item.EDITIONNO));
                     if (!item.UPDATENO.Equals(product.UpdateNumber))
                         attrNotMatched.Add(nameof(item.UPDATENO));
+                    VerifyDecryptedPermit(item, permitState);
                     //Checking blanks
                     List<string> blankFieldNames = new(){ "CANCELLED", "REPLACEDBY", "UNITTYPE", "AGENCY", "PROVIDER", "ENCSIZE", "TITLE" };
                     VerifyBlankFields(item, blankFieldNames);
