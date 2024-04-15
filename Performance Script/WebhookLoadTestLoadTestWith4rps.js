@@ -10,14 +10,15 @@ import { PayloadSetup } from './PayloadDataSetup/PayloadSetupDifferentProfiles.j
 var Config = JSON.parse(open('./config.json'));
 var ProductList = JSON.parse(open('./PayloadData/WebhookPayloads/SAPProductList.json'));
 
-var defaultPayload1 = JSON.parse(open('./PayloadData/WebhookPayloads/1ProductNewCell.json'));
-var defaultPayload2 = JSON.parse(open('./PayloadData/WebhookPayloads/2ProductENCNewAndMoveCell.json'));
-var defaultPayload3 = JSON.parse(open('./PayloadData/WebhookPayloads/100ProductsNewCell.json'));
+var PayloadOneProduct = JSON.parse(open('./PayloadData/WebhookPayloads/1ProductNewCell.json'));
+var PayloadTwoProducts = JSON.parse(open('./PayloadData/WebhookPayloads/2ProductENCNewAndMoveCell.json'));
+var PayloadHundredProducts = JSON.parse(open('./PayloadData/WebhookPayloads/100ProductsNewCell.json'));
 
 if (!Config.BaseUrl.toString().toUpperCase().includes("DEV")) {
     throw new Error("Invalid Environment !! Please use DEV environment for performance testing.\n");
 }
 const url = new URL(Config.BaseUrl + Config.WebhookUrl);
+
 const headers = {
     'Content-Type': 'application/json',
     Authorization: `Bearer ${Config.Token}`,
@@ -27,7 +28,6 @@ const headers = {
 export function setup() {
     const event = new Date(Date.now());
     console.log("start time:" + event.toUTCString());
-
 }
 
 export const options = {
@@ -36,11 +36,11 @@ export const options = {
         'http_req_duration{scenario:ScenarioWithOneProduct}': [`max>=0`],
         'iterations{scenario:ScenarioWithOneProduct}': [`count>=0`],
 
-        'http_req_duration{scenario:ScenarioWithTwoProduct}': [`max>=0`],
-        'iterations{scenario:ScenarioWithTwoProduct}': [`count>=0`],
+        'http_req_duration{scenario:ScenarioWithTwoProducts}': [`max>=0`],
+        'iterations{scenario:ScenarioWithTwoProducts}': [`count>=0`],
 
-        'http_req_duration{scenario:ScenarioWithHundredProduct}': [`max>=0`],
-        'iterations{scenario:ScenarioWithHundredProduct}': [`count>=0`],
+        'http_req_duration{scenario:ScenarioWithHundredProducts}': [`max>=0`],
+        'iterations{scenario:ScenarioWithHundredProducts}': [`count>=0`],
     },
     scenarios: {
         ScenarioWithOneProduct: {
@@ -53,9 +53,9 @@ export const options = {
             preAllocatedVUs: 5,
             maxVUs: 12,
         },
-        ScenarioWithTwoProduct: { 
+        ScenarioWithTwoProducts: {
             executor: 'constant-arrival-rate',
-            exec: 'ScenarioWithTwoProduct',
+            exec: 'ScenarioWithTwoProducts',
             rate: 4,
             timeUnit: '1s',
             startTime: '27m',
@@ -63,9 +63,9 @@ export const options = {
             preAllocatedVUs: 5,
             maxVUs: 12
         },
-        ScenarioWithHundredProduct: { 
+        ScenarioWithHundredProducts: {
             executor: 'constant-arrival-rate',
-            exec: 'ScenarioWithHundredProduct',
+            exec: 'ScenarioWithHundredProducts',
             rate: 1,
             timeUnit: '1s',
             startTime: '1799s',
@@ -77,10 +77,10 @@ export const options = {
 
 export function ScenarioWithOneProduct() {
 
-    const updatedPayload1 = PayloadSetup(defaultPayload1, ProductList);
-    const res = http.post(url.toString(), JSON.stringify(updatedPayload1), { headers }, { tags: { my_custom_tag: 'ScenarioWithOneProduct' } });
-    console.log("In ScenarioWithOneProduct");
-    console.log(updatedPayload1.data.correlationId);
+    const updatedPayloadOneProduct = PayloadSetup(PayloadOneProduct, ProductList);
+    const res = http.post(url.toString(), JSON.stringify(updatedPayloadOneProduct), { headers }, { tags: { my_custom_tag: 'ScenarioWithOneProduct' } });
+    console.log("In ScenarioWithOneProduct:");
+    console.log(updatedPayloadOneProduct.data.correlationId);
 
     check(res, {
         'Status is 200': (r) => r.status === 200,
@@ -88,12 +88,12 @@ export function ScenarioWithOneProduct() {
     console.log("Status code:" + res.status);
 }
 
-export function ScenarioWithTwoProduct() {
+export function ScenarioWithTwoProducts() {
 
-    const updatedPayload2 = PayloadSetup(defaultPayload2, ProductList);
-    const res = http.post(url.toString(), JSON.stringify(updatedPayload2), { headers }, { tags: { my_custom_tag: 'ScenarioWithTwoProduct' } });
-    console.log("In ScenarioWithTwoProduct");
-    console.log(updatedPayload3.data.correlationId);
+    const updatedPayloadTwoProducts = PayloadSetup(PayloadTwoProducts, ProductList);
+    const res = http.post(url.toString(), JSON.stringify(updatedPayloadTwoProducts), { headers }, { tags: { my_custom_tag: 'ScenarioWithTwoProducts' } });
+    console.log("In ScenarioWithTwoProducts");
+    console.log(updatedPayloadTwoProducts.data.correlationId);
 
     check(res, {
         'Status is 200': (r) => r.status === 200,
@@ -101,12 +101,12 @@ export function ScenarioWithTwoProduct() {
     console.log("Status code:" + res.status);
 }
 
-export function ScenarioWithHundredProduct() {
+export function ScenarioWithHundredProducts() {
 
-    const updatedPayload3 = PayloadSetup(defaultPayload3, ProductList);
-    const res = http.post(url.toString(), JSON.stringify(updatedPayload3), { headers }, { tags: { my_custom_tag: 'ScenarioWithHundredProduct' } });
-    console.log("In ScenarioWithTwoProduct");
-    console.log(updatedPayload3.data.correlationId);
+    const updatedPayloadHundredProducts = PayloadSetup(PayloadHundredProducts, ProductList);
+    const res = http.post(url.toString(), JSON.stringify(updatedPayloadHundredProducts), { headers }, { tags: { my_custom_tag: 'ScenarioWithHundredProducts' } });
+    console.log("In ScenarioWithHundredProducts");
+    console.log(updatedPayloadHundredProducts.data.correlationId);
 
     check(res, {
         'Status is 200': (r) => r.status === 200,
