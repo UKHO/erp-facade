@@ -28,9 +28,7 @@ const headers = {
 export function setup() {
     const event = new Date(Date.now());
     console.log("start time:" + event.toUTCString());
-
 }
-
 
 export const options = {
     discardResponseBodies: true,
@@ -87,10 +85,9 @@ export function ScenarioWithOneProduct() {
     check(res, {
         'Status is 200': (r) => r.status === 200,
     });
-
     console.log("Status code:" + res.status);
-
 }
+
 export function ScenarioWithTwoProduct() {
 
     const updatedPayload2 = PayloadSetup(defaultPayload2, ProductList);
@@ -101,9 +98,9 @@ export function ScenarioWithTwoProduct() {
     check(res, {
         'Status is 200': (r) => r.status === 200,
     });
-
     console.log("Status code:" + res.status);
 }
+
 export function ScenarioWithHundredProduct() {
 
     const updatedPayload3 = PayloadSetup(defaultPayload3, ProductList);
@@ -114,7 +111,6 @@ export function ScenarioWithHundredProduct() {
     check(res, {
         'Status is 200': (r) => r.status === 200,
     });
-
     console.log("Status code:" + res.status);
 }
 

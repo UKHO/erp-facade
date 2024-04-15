@@ -9,12 +9,8 @@ export function PayloadSetup(payload, productList) {
     payload.data.correlationId = generateUniqueCorrId();
 
     for (var i = 0; i < productArraySize; i++) {
-
         jsonObj.data.products[i].permit = Config.Permit;
-
-
     }
-
     return jsonObj;
 }
 
