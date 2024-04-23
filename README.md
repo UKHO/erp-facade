@@ -17,4 +17,4 @@ An event handler application called the ERP Facade will subscribe to EES events.
  
 * Recording of the Inbound Trace ID on the *enccontentpublished* event for each intended SAP Inbound communication batch.
  
-* Communication of each batch of information (which may contain multiple Units of Sale) via API calls to the SAP Inbound web service using SOAP 1.2 protocol.
+* Communication of each batch of information (which may contain multiple Units of Sale) via API calls to the SAP Inbound web service using SOAP 1.2 protocol.  
