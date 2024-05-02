@@ -57,7 +57,7 @@ stages:
         displayName: "Dependencychecker"
         steps:
           - task: UseDotNet@2
-            displayName: 'Use .NET 6.0.x sdk'
+            displayName: 'Use .NET 8.0.x sdk'
             inputs:
               packageType: sdk
               useGlobalJson: true
@@ -103,7 +103,7 @@ stages:
         displayName: "Dotnet Test and Publish Code Coverage"
         steps:
           - task: UseDotNet@2
-            displayName: 'Use .NET 6.0.x sdk'
+            displayName: 'Use .NET 8.0.x sdk'
             inputs:
               packagetype: sdk
               useglobaljson: true
@@ -149,7 +149,7 @@ stages:
         steps:
 
           - task: UseDotNet@2
-            displayName: 'Use .NET 6.0.x sdk'
+            displayName: 'Use .NET 8.0.x sdk'
             inputs:
               packageType: sdk
               useGlobalJson: true
@@ -242,7 +242,7 @@ stages:
         steps:
 
           - task: UseDotNet@2
-            displayName: 'Use .NET 6.0.x sdk'
+            displayName: 'Use .NET 8.0.x sdk'
             inputs:
               packageType: sdk
               useGlobalJson: true
@@ -291,7 +291,7 @@ stages:
         steps:
 
           - task: UseDotNet@2
-            displayName: 'Use .NET 6.0.x sdk'
+            displayName: 'Use .NET 8.0.x sdk'
             inputs:
               packageType: sdk
               useGlobalJson: true
@@ -340,7 +340,7 @@ stages:
         dependsOn: BuildAndPublishMockService
         steps:
           - task: UseDotNet@2
-            displayName: 'Use .NET 6.0.x sdk'
+            displayName: 'Use .NET 8.0.x sdk'
             inputs:
               packageType: sdk
               useGlobalJson: true
