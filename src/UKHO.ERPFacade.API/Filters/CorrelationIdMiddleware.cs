@@ -41,8 +41,8 @@ namespace UKHO.ERPFacade.API.Filters
 
             httpContext.Request.Body.Position = 0;
 
-            httpContext.Request.Headers.Add(XCorrelationIdHeaderKey, correlationId);
-            httpContext.Response.Headers.Add(XCorrelationIdHeaderKey, correlationId);
+            httpContext.Request.Headers.Append(XCorrelationIdHeaderKey, correlationId);
+            httpContext.Response.Headers.Append(XCorrelationIdHeaderKey, correlationId);
 
             var state = new Dictionary<string, object>
             {

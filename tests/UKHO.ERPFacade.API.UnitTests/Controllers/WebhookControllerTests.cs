@@ -92,8 +92,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
               && call.GetArgument<EventId>(1) == EventIds.NewEncContentPublishedEventOptionsCallCompleted.ToEventId()
               && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Completed processing the Options request for the New ENC Content Published event for webhook. | WebHook-Request-Origin : {webhookRequestOrigin}").MustHaveHappenedOnceExactly();
 
-            A.CallTo(() => responseHeaders.Add("WebHook-Allowed-Rate", "*")).MustHaveHappened();
-            A.CallTo(() => responseHeaders.Add("WebHook-Allowed-Origin", "test.com")).MustHaveHappened();
+            A.CallTo(() => responseHeaders.Append("WebHook-Allowed-Rate", "*")).MustHaveHappened();
+            A.CallTo(() => responseHeaders.Append("WebHook-Allowed-Origin", "test.com")).MustHaveHappened();
         }
 
         [Test]
@@ -276,8 +276,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
               && call.GetArgument<EventId>(1) == EventIds.RecordOfSalePublishedEventOptionsCallCompleted.ToEventId()
               && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Completed processing the Options request for the Record of Sale Published event for webhook. | WebHook-Request-Origin : {webhookRequestOrigin}").MustHaveHappenedOnceExactly();
 
-            A.CallTo(() => responseHeaders.Add("WebHook-Allowed-Rate", "*")).MustHaveHappened();
-            A.CallTo(() => responseHeaders.Add("WebHook-Allowed-Origin", "test.com")).MustHaveHappened();
+            A.CallTo(() => responseHeaders.Append("WebHook-Allowed-Rate", "*")).MustHaveHappened();
+            A.CallTo(() => responseHeaders.Append("WebHook-Allowed-Origin", "test.com")).MustHaveHappened();
         }
 
         [Test]
@@ -371,8 +371,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
               && call.GetArgument<EventId>(1) == EventIds.LicenceUpdatedEventOptionsCallCompleted.ToEventId()
               && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Completed processing the Options request for the Licence updated event for webhook. | WebHook-Request-Origin : {webhookRequestOrigin}").MustHaveHappenedOnceExactly();
 
-            A.CallTo(() => responseHeaders.Add("WebHook-Allowed-Rate", "*")).MustHaveHappened();
-            A.CallTo(() => responseHeaders.Add("WebHook-Allowed-Origin", "test.com")).MustHaveHappened();
+            A.CallTo(() => responseHeaders.Append("WebHook-Allowed-Rate", "*")).MustHaveHappened();
+            A.CallTo(() => responseHeaders.Append("WebHook-Allowed-Origin", "test.com")).MustHaveHappened();
         }
 
         [Test]
