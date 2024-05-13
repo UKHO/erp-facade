@@ -192,15 +192,6 @@
   <suppress>
     <notes>
       <![CDATA[
-   file name: System.Security.Cryptography.Xml:4.7.0
-   vulnerability: Buffer overflow and spoofing Affects .Net 3.1 .Net 5.0 and <= .Net 6.0.8 Currently running Net 6.0.13,  sdk 6.0.405
-   ]]>
-    </notes>
-    <cve>CVE-2022-34716</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
    file name: Microsoft.Azure.WebJobs.dll
    ]]>
     </notes>
@@ -376,26 +367,6 @@
   <suppress>
     <notes>
       <![CDATA[
-   file name: Microsoft.IdentityModel.Abstractions.dll
-   Fixed in SDK >= 6.0.418
-   ]]>
-    </notes>
-    <packageUrl regex="true">^pkg:generic/Microsoft\.IdentityModel\.Abstractions@.*$</packageUrl>
-    <cve>CVE-2024-21319</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
-   file name: Microsoft.IdentityModel.Abstractions:6.22.0
-   Fixed in SDK >= 6.0.418
-   ]]>
-    </notes>
-    <packageUrl regex="true">^pkg:nuget/Microsoft\.IdentityModel\.Abstractions@.*$</packageUrl>
-    <cve>CVE-2024-21319</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
    file name: Newtonsoft.Json.Bson.dll
    False positive - Newtonsoft.Json > 13.0.1 included in project
    ]]>
@@ -404,60 +375,40 @@
     <cve>CVE-2024-21907</cve>
   </suppress>
   <suppress>
-   <notes><![CDATA[
+    <notes>
+      <![CDATA[
    file name: Elastic.Apm.AspNetCore.dll
-   ]]></notes>
-   <packageUrl regex="true">^pkg:generic/Elastic\.Apm\.AspNetCore@.*$</packageUrl>
-   <cve>CVE-2021-37941</cve>
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:generic/Elastic\.Apm\.AspNetCore@.*$</packageUrl>
+    <cve>CVE-2019-7617</cve>
   </suppress>
   <suppress>
-   <notes><![CDATA[
-   file name: Elastic.Apm.AspNetCore.dll
-   ]]></notes>
-   <packageUrl regex="true">^pkg:generic/Elastic\.Apm\.AspNetCore@.*$</packageUrl>
-   <cve>CVE-2019-7617</cve>
-  </suppress>
-  <suppress>
-   <notes><![CDATA[
+    <notes>
+      <![CDATA[
    file name: Elastic.Apm.Extensions.Hosting.dll
-   ]]></notes>
-   <packageUrl regex="true">^pkg:generic/Elastic\.Apm\.Extensions\.Hosting@.*$</packageUrl>
-   <cve>CVE-2021-37941</cve>
-  </suppress>  
-  <suppress>
-   <notes><![CDATA[
-   file name: Elastic.Apm.Extensions.Hosting.dll
-   ]]></notes>
-   <packageUrl regex="true">^pkg:generic/Elastic\.Apm\.Extensions\.Hosting@.*$</packageUrl>
-   <cve>CVE-2019-7617</cve>
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:generic/Elastic\.Apm\.Extensions\.Hosting@.*$</packageUrl>
+    <cve>CVE-2019-7617</cve>
   </suppress>
   <suppress>
-   <notes><![CDATA[
+    <notes>
+      <![CDATA[
    file name: Elastic.Apm.Extensions.Logging.dll
-   ]]></notes>
-   <packageUrl regex="true">^pkg:generic/Elastic\.Apm\.Extensions\.Logging@.*$</packageUrl>
-   <cve>CVE-2021-37941</cve>
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:generic/Elastic\.Apm\.Extensions\.Logging@.*$</packageUrl>
+    <cve>CVE-2019-7617</cve>
   </suppress>
   <suppress>
-   <notes><![CDATA[
-   file name: Elastic.Apm.Extensions.Logging.dll
-   ]]></notes>
-   <packageUrl regex="true">^pkg:generic/Elastic\.Apm\.Extensions\.Logging@.*$</packageUrl>
-   <cve>CVE-2019-7617</cve>
-  </suppress>
-  <suppress>
-   <notes><![CDATA[
+    <notes>
+      <![CDATA[
    file name: Elastic.Apm.dll
-   ]]></notes>
-   <packageUrl regex="true">^pkg:generic/Elastic\.Apm@.*$</packageUrl>
-   <cve>CVE-2021-37941</cve>
-  </suppress>
-  <suppress>
-   <notes><![CDATA[
-   file name: Elastic.Apm.dll
-   ]]></notes>
-   <packageUrl regex="true">^pkg:generic/Elastic\.Apm@.*$</packageUrl>
-   <cve>CVE-2019-7617</cve>
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:generic/Elastic\.Apm@.*$</packageUrl>
+    <cve>CVE-2019-7617</cve>
   </suppress>
   <suppress>
     <notes>
@@ -468,14 +419,5 @@
     </notes>
     <cve>CVE-2024-21386</cve>
     <cve>CVE-2024-21404</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
-   file name: Azure.Identity:1.11.0
-   Low level vulnerability. Package is set to latest version, when next fix is released must be updated to resolved CVE.
-   ]]>
-    </notes>
-    <vulnerabilityName>CVE-2024-29992</vulnerabilityName>
   </suppress>
 </suppressions>
