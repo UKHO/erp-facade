@@ -12,9 +12,6 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <NoWarn>8600;8602;8618</NoWarn>
   </PropertyGroup>
-  <ItemGroup>
-    <Compile Remove="HealthCheck\SapServiceHealthCheckTests.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="FakeItEasy" Version="8.2.0" />
