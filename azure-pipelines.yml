@@ -57,10 +57,10 @@ stages:
         displayName: "Dependencychecker"
         steps:
           - task: UseDotNet@2
-            displayName: 'Use .NET 8.0.x sdk'
+            displayName: 'Use .NET sdk'
             inputs:
               packageType: sdk
-              useGlobalJson: true
+              version: 6.x
               workingDirectory: '$(Build.SourcesDirectory)\src'
 
           - task: DotNetCoreCLI@2
@@ -75,14 +75,6 @@ stages:
               nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
               workingDirectory: '$(Build.SourcesDirectory)\src'
               packagesDirectory: '$(Build.SourcesDirectory)\src\packagesForAPI'
-
-          - task: UseDotNet@2
-            displayName: 'Use .NET 6.x sdk'
-            inputs:
-              version: '6.x'
-              packageType: sdk
-              useGlobalJson: true
-              workingDirectory: '$(Build.SourcesDirectory)\src'
 
           - task: CmdLine@1
             displayName: "Run OWASP Dependency Checker"
