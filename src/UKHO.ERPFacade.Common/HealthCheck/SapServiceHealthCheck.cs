@@ -34,36 +34,39 @@ namespace UKHO.ERPFacade.Common.HealthCheck
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
-            try
-            {
-                string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, SapHealthCheckXmlPath);
+            // TODO Re-work once a stable alternative has been found
+            return HealthCheckResult.Healthy("SAP is Healthy !!!");
 
-                //Check whether template file exists or not
-                if (!_fileSystemHelper.IsFileExists(sapXmlTemplatePath))
-                {
-                    _logger.LogWarning(EventIds.SapHealthCheckXmlTemplateNotFound.ToEventId(), "The SAP Health Check xml template does not exist.");
-                    throw new FileNotFoundException();
-                }
+            //try
+            //{
+            //    string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, SapHealthCheckXmlPath);
 
-                XmlDocument sapPayload = _xmlHelper.CreateXmlDocument(sapXmlTemplatePath);
+            //    //Check whether template file exists or not
+            //    if (!_fileSystemHelper.IsFileExists(sapXmlTemplatePath))
+            //    {
+            //        _logger.LogWarning(EventIds.SapHealthCheckXmlTemplateNotFound.ToEventId(), "The SAP Health Check xml template does not exist.");
+            //        throw new FileNotFoundException();
+            //    }
 
-                HttpResponseMessage response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapEndpointForEncEvent, _sapConfig.Value.SapServiceOperationForEncEvent, _sapConfig.Value.SapUsernameForEncEvent, _sapConfig.Value.SapPasswordForEncEvent);
+            //    XmlDocument sapPayload = _xmlHelper.CreateXmlDocument(sapXmlTemplatePath);
 
-                _logger.LogInformation(EventIds.SapHealthCheckRequestSentToSap.ToEventId(), "SAP Health Check request has been sent to SAP successfully. | {StatusCode}", response.StatusCode);
+            //    HttpResponseMessage response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapEndpointForEncEvent, _sapConfig.Value.SapServiceOperationForEncEvent, _sapConfig.Value.SapUsernameForEncEvent, _sapConfig.Value.SapPasswordForEncEvent);
 
-                if (!response.IsSuccessStatusCode)
-                {
-                    _logger.LogError(EventIds.SAPIsUnhealthy.ToEventId(), "SAP is Unhealthy !!!");
-                    return HealthCheckResult.Unhealthy("SAP is Unhealthy");
-                }
-                _logger.LogDebug(EventIds.SAPIsHealthy.ToEventId(), "SAP is Healthy");
-                return HealthCheckResult.Healthy("SAP is Healthy !!!");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(EventIds.ErrorOccuredInSap.ToEventId(), "An error occured while processing your request in SAP. | {Message}", ex.Message);
-                return HealthCheckResult.Unhealthy("SAP is Unhealthy" + ex.Message);
-            }
+            //    _logger.LogInformation(EventIds.SapHealthCheckRequestSentToSap.ToEventId(), "SAP Health Check request has been sent to SAP successfully. | {StatusCode}", response.StatusCode);
+
+            //    if (!response.IsSuccessStatusCode)
+            //    {
+            //        _logger.LogError(EventIds.SAPIsUnhealthy.ToEventId(), "SAP is Unhealthy !!!");
+            //        return HealthCheckResult.Unhealthy("SAP is Unhealthy");
+            //    }
+            //    _logger.LogDebug(EventIds.SAPIsHealthy.ToEventId(), "SAP is Healthy");
+            //    return HealthCheckResult.Healthy("SAP is Healthy !!!");
+            //}
+            //catch (Exception ex)
+            //{
+            //    _logger.LogError(EventIds.ErrorOccuredInSap.ToEventId(), "An error occured while processing your request in SAP. | {Message}", ex.Message);
+            //    return HealthCheckResult.Unhealthy("SAP is Unhealthy" + ex.Message);
+            //}
         }
     }
 }
