@@ -76,6 +76,14 @@ stages:
               workingDirectory: '$(Build.SourcesDirectory)\src'
               packagesDirectory: '$(Build.SourcesDirectory)\src\packagesForAPI'
 
+          - task: UseDotNet@2
+            displayName: 'Use .NET 6.x sdk'
+            inputs:
+              version: '6.x'
+              packageType: sdk
+              useGlobalJson: true
+              workingDirectory: '$(Build.SourcesDirectory)\src'
+
           - task: CmdLine@1
             displayName: "Run OWASP Dependency Checker"
             inputs:
