@@ -35,11 +35,11 @@ variables:
   - name: BuildCounter
     value: $[counter(format('{0:yyyyMMdd}', pipeline.startTime), 1)]
   - name: WindowsPool
-    value: "NautilusBuild"
+    value: "Mare Nubium"
   - name: Container
     value: "ukhydrographicoffice/terraform-azure-powershell-unzip:1.7.2"
   - name: DeploymentPool
-    value: "UKHO Ubuntu 1804"
+    value: "Mare Nectaris"
   - name: DeploymentPoolFT
     value: "Tiberius"
   - name: DeploymentPoolPE
