@@ -49,6 +49,7 @@ stages:
   - stage: PERFORM_DEPENDENCYCHECK_DOTNETBUILD_DOTNETTEST_AND_PUBLISH
     displayName: "Build (DependencyChecker, Dotnet Build & Restore , Dotnet Test and Publish Artifact )"
     dependsOn: []
+    pool: NautilusBuild
     jobs:
       - job: Dependencychecker
         condition: eq('${{ parameters.DisableDependencyCheck }}', false)      
@@ -60,7 +61,7 @@ stages:
             displayName: 'Use .NET sdk'
             inputs:
               packageType: sdk
-              version: 6.x
+              useGlobalJson: true
               workingDirectory: '$(Build.SourcesDirectory)\src'
 
           - task: DotNetCoreCLI@2
