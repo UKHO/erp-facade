@@ -35,11 +35,11 @@ variables:
   - name: BuildCounter
     value: $[counter(format('{0:yyyyMMdd}', pipeline.startTime), 1)]
   - name: WindowsPool
-    value: "NautilusBuild"
+    value: "Mare Nubium"
   - name: Container
     value: "ukhydrographicoffice/terraform-azure-powershell-unzip:1.7.2"
   - name: DeploymentPool
-    value: "UKHO Ubuntu 1804"
+    value: "Mare Nectaris"
   - name: DeploymentPoolFT
     value: "Tiberius"
   - name: DeploymentPoolPE
@@ -51,13 +51,14 @@ stages:
     dependsOn: []
     jobs:
       - job: Dependencychecker
+        pool: NautilusBuild
         condition: eq('${{ parameters.DisableDependencyCheck }}', false)      
         workspace:
           clean: all
         displayName: "Dependencychecker"
         steps:
           - task: UseDotNet@2
-            displayName: 'Use .NET 8.0.x sdk'
+            displayName: 'Use .NET sdk'
             inputs:
               packageType: sdk
               useGlobalJson: true
