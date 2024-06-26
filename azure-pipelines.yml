@@ -544,7 +544,7 @@ stages:
                     AzureSubscription: "ERP-Facade-vNext-IAT-A.011.08"
    
   - stage: E2EDeploy
-    dependsOn: IATDeploy
+    dependsOn: IvNextIATDeploy
     displayName: "E2Edeploy (inc terraform, webapp deploy)"    
     variables:
       - group: "ERP-Facade-E2E"
@@ -690,7 +690,7 @@ stages:
                     AzureSubscription: "ERP-Facade-vNext-IAT-A.011.08"
 
   - stage: QAdeploy
-    dependsOn: Devdeploy
+    dependsOn: IATDeploy
     displayName: "QAdeploy (inc terraform, webapp deploy)"
     variables:
       - group: "ERP-Facade-QA"
