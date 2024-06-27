@@ -687,7 +687,7 @@ stages:
               steps:
                 - template: Deployment/templates/continuous-deployment-app.yml
                   parameters:
-                    AzureSubscription: "ERP-Facade-vNext-IAT-A.011.08"
+                    AzureSubscription: "ERP-Facade-IAT-A.011.08"
 
   - stage: QAdeploy
     dependsOn: IATDeploy
