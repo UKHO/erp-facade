@@ -518,7 +518,7 @@ stages:
       - deployment: vNextIATDeployApp
         dependsOn: vNextIATDeployTerraform
         displayName: "vNextIAT - Deploy Dotnet App"
-        environment: "ERP-vNextIAT"
+        environment: "ERP-vNIAT"
         pool: $(DeploymentPoolPE)
         variables:
           - name : WEB_APP_NAME
