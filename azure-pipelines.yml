@@ -501,7 +501,7 @@ stages:
     jobs:
       - deployment: vNextIATDeployTerraform
         displayName: "vNextIAT - Deploy Terraform"
-        environment: "ERP-vNextIAT"
+        environment: "ERP-vNIAT"
         pool: $(DeploymentPool)
         container: ${{variables.Container}}
         workspace:
