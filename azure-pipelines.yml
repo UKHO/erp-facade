@@ -690,7 +690,7 @@ stages:
                     AzureSubscription: "ERP-Facade-IAT-A.011.08"
 
   - stage: PreProd   
-    displayName: "IATdeploy (inc terraform, webapp deploy)"
+    displayName: "PreProddeploy (inc terraform, webapp deploy)"
     dependsOn: IATDeploy
     variables:
       - group: "ERP-Facade-PreProd"
