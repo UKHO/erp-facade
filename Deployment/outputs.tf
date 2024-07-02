@@ -34,8 +34,3 @@ output "webapp_slot_name" {
 output "webapp_slot_default_site_hostname" {
   value = module.webapp_service.slot_default_site_hostname
 }
-
-output "key_vault_name" {
-  value = local.key_vault_name
-}
-
