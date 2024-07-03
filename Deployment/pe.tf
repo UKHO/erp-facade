@@ -10,22 +10,22 @@ data "azurerm_resource_group" "perg" {
 
 data "azurerm_virtual_network" "pevn" {
     provider = azurerm.erpe2e
-    name = local.pvnet
+    name = local.pe_vnet_name
     resource_group_name = local.spokerg
 }
 
 data "azurerm_subnet" "pesn" {
     provider = azurerm.erpe2e
-    name = local.pesn
-    virtual_network_name = local.pvnet
+    name = local.pe_subnet_name
+    virtual_network_name = local.pe_vnet_name
     resource_group_name = local.spokerg
 }
 
 locals {
     perg = "erpfacade-e2e-rg"
     spokerg = "m-spokeconfig-rg"
-    pvnet = "ERPFvNextE2E-vnet"
-    pesn = "pe-subnet"  
+    //pvnet = "ERPFvNextE2E-vnet"
+    //pesn = "pe-subnet"  
     pe_environment = "e2e"
     pe_identity = "erpe2e2sap"
     vnet_link = "erpe2e2sap"
