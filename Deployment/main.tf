@@ -89,3 +89,5 @@ module "storage" {
   webapp_principal_id                   = module.webapp_service.web_app_object_id
   slot_principal_id                     = module.webapp_service.slot_object_id
 }
+
+

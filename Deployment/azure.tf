@@ -3,6 +3,10 @@ terraform {
     azurerm = {
       source  = "hashicorp/azurerm"
       version = "=3.89.0"
+      configuration_aliases = [ # merged from pvt ep module
+        azurerm.hub,
+        azurerm.spoke,
+      ]
     }
   }
 

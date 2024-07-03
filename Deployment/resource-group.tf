@@ -3,3 +3,9 @@ resource "azurerm_resource_group" "rg" {
   location = var.location
   tags     = local.tags
 }
+
+resource "azurerm_resource_group" "rg" {
+  name     = "m-pe-rg"
+  location = var.location
+  tags     = local.tags
+}
