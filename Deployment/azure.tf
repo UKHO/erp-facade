@@ -30,6 +30,6 @@ provider "azurerm" {
 
 provider "azurerm" {
   features {} 
-  alias = "spoke"
+  alias = "erpe2e"
   subscription_id = local.subscription_id
 }
