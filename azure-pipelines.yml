@@ -546,7 +546,6 @@ stages:
   - stage: E2EDeploy
     dependsOn: Devdeploy
     displayName: "E2Edeploy (inc terraform, webapp deploy)"    
-    condition: and(succeeded(), eq('${{ parameters.vNext }}', true))
     variables:
       - group: "ERP-Facade-E2E"
       - group: "Erp-E2E"
