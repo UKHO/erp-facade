@@ -17,6 +17,12 @@ terraform {
   }
 }
 
+locals {
+  hub_subscription_id = "282900b8-5415-4137-afcc-fd13fe9a64a7"
+}
+
 provider "azurerm" {
-  features {}
+  features {} 
+  alias = "hub"
+  subscription_id = local.hub_subscription_id
 }

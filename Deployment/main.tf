@@ -90,4 +90,3 @@ module "storage" {
   slot_principal_id                     = module.webapp_service.slot_object_id
 }
 
-
