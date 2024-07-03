@@ -43,7 +43,7 @@ module "private_endpoint_link" {
   count               = var.sku_name == "e2e" ? 1 : 0 
   providers = {
     azurerm.hub   = azurerm.hub
-    azurerm.spoke   = azurerm.spoke
+    azurerm.spoke   = azurerm.erpe2e
   }
   vnet_link           = local.vnet_link
   private_connection  = [local.private_connection]
