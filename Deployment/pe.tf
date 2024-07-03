@@ -1,17 +1,21 @@
 data "azurerm_resource_group" "rg" {
+    provider = azurerm.spoke
     name = local.perg 
 } 
 
 data "azurerm_resource_group" "perg" {
+    provider = azurerm.spoke
     name = local.spokerg
 }
 
 data "azurerm_virtual_network" "pevn" {
+    provider = azurerm.spoke
     name = local.pvnet
     resource_group_name = local.spokerg
 }
 
 data "azurerm_subnet" "pesn" {
+    provider = azurerm.spoke
     name = local.pesn
     virtual_network_name = local.pvnet
     resource_group_name = local.spokerg
@@ -39,7 +43,7 @@ module "private_endpoint_link" {
   count               = var.sku_name == "e2e" ? 1 : 0 
   providers = {
     azurerm.src   = azurerm.hub
-    azurerm.src   = azurerm.alias
+    azurerm.src   = azurerm.spoke
   }
   vnet_link           = local.vnet_link
   private_connection  = [local.private_connection]
