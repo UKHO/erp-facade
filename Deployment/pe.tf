@@ -42,8 +42,8 @@ module "private_endpoint_link" {
   source              = "github.com/UKHO/tfmodule-azure-private-endpoint-private-link?ref=0.6.0"
   count               = var.sku_name == "e2e" ? 1 : 0 
   providers = {
-    azurerm.src   = azurerm.hub
-    azurerm.src   = azurerm.spoke
+    azurerm.hub   = azurerm.hub
+    azurerm.spoke   = azurerm.spoke
   }
   vnet_link           = local.vnet_link
   private_connection  = [local.private_connection]
