@@ -34,7 +34,3 @@ variable "spoke_vnet_name" {
 variable "spoke_subnet_name" {
   type = string
 }
-
-variable "subscription_id" {
-  type = string
-}
