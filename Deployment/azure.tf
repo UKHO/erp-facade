@@ -1,18 +1,19 @@
-terraform {
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "=3.89.0"
-    }
-  }
+provider "azurerm" {
+  features {}
+}
 
-  required_version = "=1.7.2"
-  backend "azurerm" {
-    container_name = "tfstate"
-    key            = "terraform.deployment.tfplan"
-  }
+locals {
+  
 }
 
 provider "azurerm" {
-  features {}
+  features {} 
+  alias = "hub"
+  subscription_id = local.hub_subscription_id
+}
+
+provider "azurerm" {
+  features {} 
+  alias = "erpe2e"
+  subscription_id = var.subscription_id
 }
