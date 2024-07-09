@@ -23,7 +23,6 @@ data "azurerm_subnet" "pesn" {
 
 module "private_endpoint_link" {
   source              = "github.com/UKHO/tfmodule-azure-private-endpoint-private-link?ref=0.6.0"
-  count               = var.sku_name == "e2e" ? 1 : 0 
   providers = {
     azurerm.hub   = azurerm.hub
     azurerm.spoke   = azurerm.erpe2e
