@@ -12,7 +12,6 @@ locals {
   pe_identity = "erp${local.env_name}2sap"
   vnet_link = "erp${local.env_name}2sap"
   private_connection = "/subscriptions/${var.subscription_id}/resourceGroups/erpfacade-${local.env_name}-rg/providers/Microsoft.Web/sites/erpfacade-${local.env_name}-api"
-  pe_vnet_name = "ERPFvNextE2E-vnet"
   pe_subnet_name = "pe-subnet"
   pe_vnet_rg = "m-spokeconfig-rg"
   dns_resource_group = "engineering-rg"
