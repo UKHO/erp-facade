@@ -36,5 +36,5 @@ output "webapp_slot_default_site_hostname" {
 }
 
 output "azurerm_key_vault" {
-  value =  module.key_vault.name
+  value =  local.key_vault_name
 }
