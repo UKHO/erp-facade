@@ -16,7 +16,7 @@ data "azurerm_virtual_network" "pevn" {
 
 data "azurerm_subnet" "pesn" {
     provider = azurerm.erp
-    name = local.pe_subnet_name
+    name = var.pe_subnet_name
     virtual_network_name = var.pe_vnet_name
     resource_group_name = var.spoke_rg
 }

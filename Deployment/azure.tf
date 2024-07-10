@@ -9,7 +9,7 @@ locals {
 provider "azurerm" {
   features {} 
   alias = "hub"
-  subscription_id = local.hub_subscription_id
+  subscription_id = var.hub_subscription_id
 }
 
 provider "azurerm" {
