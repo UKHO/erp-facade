@@ -14,6 +14,6 @@ provider "azurerm" {
 
 provider "azurerm" {
   features {} 
-  alias = "erpe2e"
+  alias = "erp"
   subscription_id = var.subscription_id
 }
