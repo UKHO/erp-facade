@@ -35,7 +35,7 @@ module "private_endpoint_link" {
   pe_vnet_rg          = var.spoke_rg 
   pe_vnet_name        = var.pe_vnet_name
   pe_subnet_name      = var.pe_subnet_name
-  pe_resource_group   = data.azurerm_resource_group.perg
+  pe_resource_group   = data.azurerm_resource_group.rg
   dns_resource_group  = local.dns_resource_group
 }
 
