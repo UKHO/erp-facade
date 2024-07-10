@@ -1,3 +1,9 @@
+terraform {
+  backend "azurerm" {
+    container_name       = "tfstate"
+  }
+}
+
 provider "azurerm" {
   features {}
 }
