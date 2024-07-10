@@ -12,6 +12,10 @@ variable "subscription_id" {
   type = string
 }
 
+variable "hub_subscription_id" {
+  type = string
+}
+
 variable "sku_name" {
   type = map(any)
   default = {

@@ -1,7 +1,6 @@
 locals {
   env_name           = lower(terraform.workspace)
   service_name       = "erpfacade"  
-  hub_subscription_id = "282900b8-5415-4137-afcc-fd13fe9a64a7"
   web_app_name       = "${local.service_name}-${local.env_name}-api"
   mock_web_app_name  = "${local.service_name}-${local.env_name}-sapmockservice"
   key_vault_name     = "${local.service_name}-ukho-${local.env_name}-kv"
