@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-    <RunSettings>
-        <TestRunParameters>
-        <Parameter name="ErpEndpointSharedKey" value="" />
-        <Parameter name="ErpBaseUri" value="https://erpfacade-e2e-api.azurewebsites.net" />
-        <Parameter name="ErpPriceEndpointUri" value="erpfacade/priceinformation" />        
-    </TestRunParameters>
-</RunSettings>
