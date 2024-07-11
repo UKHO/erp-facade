@@ -39,4 +39,21 @@ module "private_endpoint_link" {
   dns_resource_group  = local.dns_resource_group
 }
 
+module "mock_private_endpoint_link" {
+  source              = "github.com/UKHO/tfmodule-azure-private-endpoint-private-link?ref=0.6.0"
+  providers = {
+    azurerm.hub   = azurerm.hub
+    azurerm.spoke   = azurerm.erp
+  }
+  vnet_link           = local.vnet_link 
+  private_connection  = [local.mock_private_connection] 
+  zone_group          = local.zone_group 
+  pe_identity         = [local.mock_pe_identity] 
+  pe_environment      = local.env_name 
+  pe_vnet_rg          = var.spoke_rg 
+  pe_vnet_name        = var.pe_vnet_name 
+  pe_subnet_name      = var.pe_subnet_name
+  pe_resource_group   = data.azurerm_resource_group.rg
+  dns_resource_group  = local.dns_resource_group
+}
 
