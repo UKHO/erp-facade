@@ -1,0 +1,25 @@
+﻿{
+    "CustomProductDummies": [
+      {
+        "Name": "AVCSO",
+        "Durations": [
+          "12"
+        ]
+      },
+      {
+        "Name": "PAYSF",
+        "Durations": [
+          "12",
+          "3"
+        ]
+      }
+    ],
+    "DefaultProductDummy" : {
+      "Durations": [
+        "12",
+        "9",
+        "6",
+        "3"
+      ]
+    }
+}

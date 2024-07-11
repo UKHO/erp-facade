@@ -18,3 +18,18 @@ An event handler application called the ERP Facade will subscribe to EES events.
 * Recording of the Inbound Trace ID on the *enccontentpublished* event for each intended SAP Inbound communication batch.
  
 * Communication of each batch of information (which may contain multiple Units of Sale) via API calls to the SAP Inbound web service using SOAP 1.2 protocol.
+
+# ADDS SAP Mock
+
+SAP mock for support of manual or automated ADDS testing in absence of real SAP instance.
+
+Initial version supports:
+- Supports hosting of /z_adds_mat_info endpoint to which SAP action items XML can be posted.
+- Supports sending pricing information JSON to a configurable ERP facade pricing endpoint, using the product names from the SAP action items recieved.
+- Supports configuring the price output depending on the product name(s) provided in the SAP XML - one price info JSON object per duration per product name is sent, combined a single array. Product names are matched to durations as specified in `ProductDummyData.json`
+
+Initial version does not support:
+- Hosting of /z_adds_ros endpoint for communication with Fleet Manager
+- Customisation of other price information values. These are hard coded in `ErpFacadePriceEndpointClient`
+
+There is an integration level test, for which you may need to specify a .runsettings file in your IDE or test runner. One runsettings file is provided though secrets are ommitted.

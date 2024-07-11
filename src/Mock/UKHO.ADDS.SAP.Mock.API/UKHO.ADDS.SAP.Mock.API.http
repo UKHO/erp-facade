@@ -1,0 +1,6 @@
+@UKHO.ADDS.SAP.Mock.API_HostAddress = http://localhost:5020
+
+GET {{UKHO.ADDS.SAP.Mock.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
