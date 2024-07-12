@@ -21,7 +21,8 @@ namespace UKHO.ERPFacade.Common.HealthCheck
             var options = _options.Get(context.Registration.Name);
 
             // Include GC information in the reported diagnostics.
-            var allocated = GC.GetTotalMemory(forceFullCollection: false);
+            long allocated = GC.GetTotalMemory(forceFullCollection: false);
+
             var data = new Dictionary<string, object>()
             {
                 { "AllocatedBytes", allocated },
@@ -29,21 +30,20 @@ namespace UKHO.ERPFacade.Common.HealthCheck
                 { "Gen1Collections", GC.CollectionCount(1) },
                 { "Gen2Collections", GC.CollectionCount(2) },
             };
+
             var status = allocated < options.Threshold ? HealthStatus.Healthy : HealthStatus.Unhealthy;
 
             return Task.FromResult(new HealthCheckResult(
                 status,
-                description: "Reports degraded status if allocated bytes " +
-                             $">= {options.Threshold} bytes.",
+                description: "Reports degraded status if allocated bytes " + $">= {options.Threshold} bytes.",
                 exception: null,
                 data: data));
         }
     }
     public class MemoryCheckOptions
     {
-        public string Memorystatus { get; set; }
-        //public int Threshold { get; set; }
-        // Failure threshold (in bytes)
+        public string MemoryStatus { get; set; }
+
         public long Threshold { get; set; } = 1024L * 1024L * 1024L;
     }
 }

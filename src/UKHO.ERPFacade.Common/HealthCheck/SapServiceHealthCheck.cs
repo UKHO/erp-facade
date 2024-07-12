@@ -34,18 +34,25 @@ namespace UKHO.ERPFacade.Common.HealthCheck
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
+            var healthCheckData = new Dictionary<string, object>();
+            const string description = "Reports unhealthy if SAP endpoint is not reachable, or does not return 200 status";
+
             try
             {
                 string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, SapHealthCheckXmlPath);
+
+                healthCheckData.Add("SAP Template Path", sapXmlTemplatePath);
 
                 //Check whether template file exists or not
                 if (!_fileSystemHelper.IsFileExists(sapXmlTemplatePath))
                 {
                     _logger.LogWarning(EventIds.SapHealthCheckXmlTemplateNotFound.ToEventId(), "The SAP Health Check xml template does not exist.");
-                    throw new FileNotFoundException();
+                    return HealthCheckResult.Unhealthy(data: healthCheckData, description: description);
                 }
 
                 XmlDocument sapPayload = _xmlHelper.CreateXmlDocument(sapXmlTemplatePath);
+
+                healthCheckData.Add("SAP SOAP endpoint", new Uri(_sapClient.Uri, _sapConfig.Value.SapEndpointForEncEvent));
 
                 HttpResponseMessage response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapEndpointForEncEvent, _sapConfig.Value.SapServiceOperationForEncEvent, _sapConfig.Value.SapUsernameForEncEvent, _sapConfig.Value.SapPasswordForEncEvent);
 
@@ -53,16 +60,16 @@ namespace UKHO.ERPFacade.Common.HealthCheck
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    _logger.LogError(EventIds.SAPIsUnhealthy.ToEventId(), "SAP is Unhealthy !!!");
-                    return HealthCheckResult.Unhealthy("SAP is Unhealthy");
+                    _logger.LogError(EventIds.SAPIsUnhealthy.ToEventId(), "SAP is Unhealthy");
+                    return HealthCheckResult.Unhealthy(data: healthCheckData, description: description);
                 }
                 _logger.LogDebug(EventIds.SAPIsHealthy.ToEventId(), "SAP is Healthy");
-                return HealthCheckResult.Healthy("SAP is Healthy !!!");
+                return HealthCheckResult.Healthy(data: healthCheckData, description: description);
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.ErrorOccuredInSap.ToEventId(), "An error occured while processing your request in SAP. | {Message}", ex.Message);
-                return HealthCheckResult.Unhealthy("SAP is Unhealthy" + ex.Message);
+                _logger.LogError(EventIds.ErrorOccuredInSap.ToEventId(), "An error occurred while processing your request in SAP. | {Message}", ex.Message);
+                return HealthCheckResult.Unhealthy(exception: ex, data: healthCheckData, description: description);
             }
         }
     }
