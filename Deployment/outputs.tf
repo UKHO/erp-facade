@@ -1,5 +1,5 @@
 output "webapp_name" {
-  value = module.webapp_service.webapp_name
+  value = "https://erpfacadedev.admiralty.co.uk" # module.webapp_service.webapp_name
 }
 
 output "mock_webapp_name" {
