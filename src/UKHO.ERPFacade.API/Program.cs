@@ -229,15 +229,6 @@ namespace UKHO.ERPFacade
                 .AddCheck<SapServiceHealthCheck>("SAP Health Check", failureStatus: HealthStatus.Unhealthy)
                 .AddCheck<EESServiceHealthCheck>("EES Health Check", failureStatus: HealthStatus.Unhealthy)
                 .AddCheck<MemoryHealthCheck>("ERP Memory Check", failureStatus: HealthStatus.Unhealthy);
-
-            builder.Services.AddHealthChecksUI(opt =>
-            {
-                opt.SetEvaluationTimeInSeconds(10); 
-                opt.MaximumHistoryEntriesPerEndpoint(60); 
-                opt.SetApiMaxActiveRequests(1);
-                opt.AddHealthCheckEndpoint("ERP API", "/health");
-
-            }).AddInMemoryStorage();
         }
     }
 }
