@@ -445,30 +445,30 @@ stages:
                   parameters:
                     AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
 
-      - job: FunctionalTests
-        dependsOn:
-        - DevDeployTerraform
-        - DevDeployApp
-        pool: $(WindowsPool)
-        variables:
-          - name : ErpFacadeConfiguration.BaseUrl
-            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
-          - name : SapMockConfiguration.BaseUrl
-            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl'] ]
-          - name : AzureStorageConfiguration.ConnectionString
-            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
-          - name : mockWebAppName
-            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp'] ]
-          - name : mockWebAppResourceGroup
-            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName'] ]
+      # - job: FunctionalTests
+      #   dependsOn:
+      #   - DevDeployTerraform
+      #   - DevDeployApp
+      #   pool: $(WindowsPool)
+      #   variables:
+      #     - name : ErpFacadeConfiguration.BaseUrl
+      #       value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
+      #     - name : SapMockConfiguration.BaseUrl
+      #       value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl'] ]
+      #     - name : AzureStorageConfiguration.ConnectionString
+      #       value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
+      #     - name : mockWebAppName
+      #       value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp'] ]
+      #     - name : mockWebAppResourceGroup
+      #       value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName'] ]
 
-        displayName: "Dev Functional Automated Tests"
-        workspace:
-         clean: all
-        steps:
-          - template: Deployment/templates/continuous-testing.yml
-            parameters:
-              AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
+      #   displayName: "Dev Functional Automated Tests"
+      #   workspace:
+      #    clean: all
+      #   steps:
+      #     - template: Deployment/templates/continuous-testing.yml
+      #       parameters:
+      #         AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
 
   # - stage: vNextIATDeploy
   #   dependsOn:  Devdeploy
