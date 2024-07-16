@@ -53,6 +53,9 @@ namespace UKHO.ERPFacade.Common.HealthCheck
                 XmlDocument sapPayload = _xmlHelper.CreateXmlDocument(sapXmlTemplatePath);
 
                 healthCheckData.Add("SAP SOAP endpoint", new Uri(_sapClient.Uri, _sapConfig.Value.SapEndpointForEncEvent));
+                healthCheckData.Add("SAP svc op for ENC", _sapConfig.Value.SapServiceOperationForEncEvent);
+                healthCheckData.Add("SAP username for ENC", _sapConfig.Value.SapUsernameForEncEvent);
+                healthCheckData.Add("SAP password for ENC", _sapConfig.Value.SapPasswordForEncEvent);
 
                 HttpResponseMessage response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapEndpointForEncEvent, _sapConfig.Value.SapServiceOperationForEncEvent, _sapConfig.Value.SapUsernameForEncEvent, _sapConfig.Value.SapPasswordForEncEvent);
 
