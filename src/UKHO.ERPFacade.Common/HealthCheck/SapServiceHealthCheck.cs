@@ -58,6 +58,11 @@ namespace UKHO.ERPFacade.Common.HealthCheck
 
                 _logger.LogInformation(EventIds.SapHealthCheckRequestSentToSap.ToEventId(), "SAP Health Check request has been sent to SAP successfully. | {StatusCode}", response.StatusCode);
 
+                var responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                healthCheckData.Add("http-response-code", response.StatusCode);
+                healthCheckData.Add("http-response", responseContent);
+
                 if (!response.IsSuccessStatusCode)
                 {
                     _logger.LogError(EventIds.SAPIsUnhealthy.ToEventId(), "SAP is Unhealthy");
