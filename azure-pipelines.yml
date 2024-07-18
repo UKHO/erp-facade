@@ -470,81 +470,81 @@ stages:
       #       parameters:
       #         AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
 
-  # - stage: vNextIATDeploy
-  #   dependsOn:  Devdeploy
-  #   displayName: "VNext IATdeploy (inc terraform, webapp deploy)"
-  #   condition: and(succeeded(), eq('${{ parameters.vNext }}', true))
-  #   variables:
-  #     - group: "ERP-Facade-vNextIAT"
-  #     - group: "Erp-vNextIAT"
-  #     - group: "ERP-FACADE-vNextIAT-KV"
-  #     - name: "AzureADConfiguration.TenantId"
-  #       value: $(AzureADConfigurationTenantId)
-  #     - name: "AzureADConfiguration.ClientId"
-  #       value: $(AzureADConfigurationClientId)
-  #     - name: "AzureADConfiguration.AutoTestClientId"
-  #       value: $(AzureADConfigurationAutoTestClientId)
-  #     - name: "AzureADConfiguration.ClientSecret"
-  #       value: $(AzureADConfigurationClientSecret)
-  #     - name: "AzureADConfiguration.AutoTestClientIdNoRole"
-  #       value: $(AzureADConfigurationAutoTestClientIdNoRole)
-  #     - name: "AzureADConfiguration.ClientSecretNoRole"
-  #       value: $(AzureADConfigurationClientSecretNoRole)
-  #     - name: "EnterpriseEventServiceConfiguration.ClientId"
-  #       value: $(EnterpriseEventServiceConfigurationClientId)      
-  #     - name: mockWebAppName
-  #       value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
-  #     - name: mockWebAppResourceGroup
-  #       value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
-  #     - name: "SapMockConfiguration.BaseUrl"
-  #       value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
-  #   jobs:
-  #     - deployment: vNextIATDeployTerraform
-  #       displayName: "vNextIAT - Deploy Terraform"
-  #       environment: "ERP-vNextIAT"
-  #       pool: $(DeploymentPool)
-  #       container: ${{variables.Container}}
-  #       workspace:
-  #         clean: all
-  #       strategy:
-  #         runOnce:
-  #           deploy:
-  #             steps:
-  #               - template: Deployment/templates/continuous-deployment.yml
-  #                 parameters:
-  #                   ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
-  #                   AzureSubscription: "ERP-Facade-QA-A.011.05.12"
+  - stage: vNextIATDeploy
+    dependsOn:  Devdeploy
+    displayName: "VNext IATdeploy (inc terraform, webapp deploy)"
+    condition: and(succeeded(), eq('${{ parameters.vNext }}', true))
+    variables:
+      - group: "ERP-Facade-vNextIAT"
+      - group: "Erp-vNextIAT"
+      - group: "ERP-FACADE-vNextIAT-KV"
+      - name: "AzureADConfiguration.TenantId"
+        value: $(AzureADConfigurationTenantId)
+      - name: "AzureADConfiguration.ClientId"
+        value: $(AzureADConfigurationClientId)
+      - name: "AzureADConfiguration.AutoTestClientId"
+        value: $(AzureADConfigurationAutoTestClientId)
+      - name: "AzureADConfiguration.ClientSecret"
+        value: $(AzureADConfigurationClientSecret)
+      - name: "AzureADConfiguration.AutoTestClientIdNoRole"
+        value: $(AzureADConfigurationAutoTestClientIdNoRole)
+      - name: "AzureADConfiguration.ClientSecretNoRole"
+        value: $(AzureADConfigurationClientSecretNoRole)
+      - name: "EnterpriseEventServiceConfiguration.ClientId"
+        value: $(EnterpriseEventServiceConfigurationClientId)      
+      - name: mockWebAppName
+        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
+      - name: mockWebAppResourceGroup
+        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
+      - name: "SapMockConfiguration.BaseUrl"
+        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
+    jobs:
+      - deployment: vNextIATDeployTerraform
+        displayName: "vNextIAT - Deploy Terraform"
+        environment: "ERP-vNextIAT"
+        pool: $(DeploymentPool)
+        container: ${{variables.Container}}
+        workspace:
+          clean: all
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - template: Deployment/templates/continuous-deployment.yml
+                  parameters:
+                    ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
+                    AzureSubscription: "ERP-Facade-QA-A.011.05.12"
 
-  #     - deployment: vNextIATDeployApp
-  #       dependsOn: vNextIATDeployTerraform
-  #       displayName: "vNextIAT - Deploy Dotnet App"
-  #       environment: "ERP-vNextIAT"
-  #       pool: $(DeploymentPoolPE)
-  #       variables:
-  #         - name : WEB_APP_NAME
-  #           value : $[ dependencies.vNextIATDeployTerraform.outputs['vNextIATDeployTerraform.TerraformDeploy.WEB_APP'] ]
-  #         - name : "KeyVaultSettings.ServiceUri"
-  #           value : $[ dependencies.vNextIATDeployTerraform.outputs['vNextIATDeployTerraform.TerraformDeploy.keyvaulturi'] ]
-  #         - name : "AzureWebJobsStorage.ConnectionString"
-  #           value : $[ dependencies.vNextIATDeployTerraform.outputs['vNextIATDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
-  #         - name : ResourceGroup
-  #           value : $[ dependencies.vNextIATDeployTerraform.outputs['vNextIATDeployTerraform.TerraformDeploy.ResourceGroup'] ]
-  #         - name : WEB_APP_SLOT_NAME
-  #           value : $[ dependencies.vNextIATDeployTerraform.outputs['vNextIATDeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME'] ]
-  #         - name : WEB_APP_SLOT_HOST_NAME
-  #           value : $[ dependencies.vNextIATDeployTerraform.outputs['vNextIATDeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME'] ]
-  #       workspace:
-  #         clean: all
-  #       strategy:
-  #         runOnce:
-  #           deploy:
-  #             steps:
-  #               - template: Deployment/templates/continuous-deployment-app.yml
-  #                 parameters:
-  #                   AzureSubscription: "ERP-Facade-vNext-IAT-A.011.08"
+      - deployment: vNextIATDeployApp
+        dependsOn: vNextIATDeployTerraform
+        displayName: "vNextIAT - Deploy Dotnet App"
+        environment: "ERP-vNextIAT"
+        pool: $(DeploymentPoolPE)
+        variables:
+          - name : WEB_APP_NAME
+            value : $[ dependencies.vNextIATDeployTerraform.outputs['vNextIATDeployTerraform.TerraformDeploy.WEB_APP'] ]
+          - name : "KeyVaultSettings.ServiceUri"
+            value : $[ dependencies.vNextIATDeployTerraform.outputs['vNextIATDeployTerraform.TerraformDeploy.keyvaulturi'] ]
+          - name : "AzureWebJobsStorage.ConnectionString"
+            value : $[ dependencies.vNextIATDeployTerraform.outputs['vNextIATDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
+          - name : ResourceGroup
+            value : $[ dependencies.vNextIATDeployTerraform.outputs['vNextIATDeployTerraform.TerraformDeploy.ResourceGroup'] ]
+          - name : WEB_APP_SLOT_NAME
+            value : $[ dependencies.vNextIATDeployTerraform.outputs['vNextIATDeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME'] ]
+          - name : WEB_APP_SLOT_HOST_NAME
+            value : $[ dependencies.vNextIATDeployTerraform.outputs['vNextIATDeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME'] ]
+        workspace:
+          clean: all
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - template: Deployment/templates/continuous-deployment-app.yml
+                  parameters:
+                    AzureSubscription: "ERP-Facade-vNext-IAT-A.011.08"
    
   - stage: E2EDeploy
-    dependsOn: Devdeploy
+    dependsOn: vNextIATDeploy
     displayName: "E2Edeploy (inc terraform, webapp deploy)"    
     variables:
       - group: "ERP-Facade-E2E"
