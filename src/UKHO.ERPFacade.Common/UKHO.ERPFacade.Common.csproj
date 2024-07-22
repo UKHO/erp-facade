@@ -17,8 +17,8 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Azure.Identity" Version="1.12.0" />
-    <PackageReference Include="Azure.Storage.Blobs" Version="12.20.0" />
-    <PackageReference Include="Azure.Storage.Queues" Version="12.18.0" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.21.0" />
+    <PackageReference Include="Azure.Storage.Queues" Version="12.19.0" />
     <PackageReference Include="LazyCache.AspNetCore" Version="2.4.0" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Server.Abstractions" Version="2.2.0" />
@@ -31,7 +31,7 @@
     <PackageReference Include="Azure.Data.Tables" Version="12.8.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
-    <PackageReference Include="System.IO.Abstractions" Version="21.0.22" />
+    <PackageReference Include="System.IO.Abstractions" Version="21.0.26" />
     <PackageReference Include="System.Runtime.Caching" Version="8.0.0" />
     <PackageReference Include="UKHO.Logging.EventHubLogProvider" Version="1.24163.8" />
     <PackageReference Include="UKHO.WeekNumberUtils" Version="1.5.22270.11" />
