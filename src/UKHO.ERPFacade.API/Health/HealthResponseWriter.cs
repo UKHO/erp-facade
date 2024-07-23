@@ -13,7 +13,7 @@ namespace UKHO.ERPFacade.API.Health
         private static readonly byte[] _emptyResponse = "{}"u8.ToArray();
         private static readonly Lazy<JsonSerializerOptions> _options = new(CreateJsonOptions);
 
-        public static async Task WriteHealthCheckUiResponse(HttpContext httpContext, HealthReport report) // TODO: rename public API
+        public static async Task WriteHealthCheckUiResponse(HttpContext httpContext, HealthReport report) 
         {
             if (report != null)
             {
@@ -40,9 +40,6 @@ namespace UKHO.ERPFacade.API.Health
             };
 
             options.Converters.Add(new JsonStringEnumConverter());
-
-            // for compatibility with older UI versions ( <3.0 ) we arrange
-            // timespan serialization as s
             options.Converters.Add(new TimeSpanConverter());
 
             return options;
