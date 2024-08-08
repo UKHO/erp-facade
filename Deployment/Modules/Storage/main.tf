@@ -6,6 +6,7 @@ resource "azurerm_storage_account" "storage" {
   account_replication_type           = "LRS"
   account_kind                       = "StorageV2"
   allow_nested_items_to_be_public    = false
+  public_network_access_enabled      = true
   tags                               = var.tags
 }
 

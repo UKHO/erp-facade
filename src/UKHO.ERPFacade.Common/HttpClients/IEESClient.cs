@@ -2,6 +2,6 @@
 {
     public interface IEESClient
     {
-        Task<HttpResponseMessage> EESHealthCheck();
+        Task<HttpResponseMessage> Get(string url);
     }
 }

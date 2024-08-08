@@ -8,10 +8,13 @@ using Elastic.Apm.AspNetCore;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Newtonsoft.Json.Serialization;
 using Serilog;
 using UKHO.ERPFacade.API.Filters;
+using UKHO.ERPFacade.API.Health;
 using UKHO.ERPFacade.API.Helpers;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.HealthCheck;
@@ -185,9 +188,7 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<IWeekDetailsProvider, WeekDetailsProvider>();
             builder.Services.AddScoped<IPermitDecryption, PermitDecryption>();
 
-            builder.Services.AddHealthChecks()
-                .AddCheck<SapServiceHealthCheck>("SapServiceHealthCheck")
-                .AddCheck<EESServiceHealthCheck>("EESServiceHealthCheck");
+            ConfigureHealthChecks(builder);
 
             builder.Services.AddHttpClient<ISapClient, SapClient>(c =>
             {
@@ -204,13 +205,25 @@ namespace UKHO.ERPFacade
 
             app.UseAuthorization();
 
-            app.MapHealthChecks("/health");
+            app.MapHealthChecks("/health", new HealthCheckOptions()
+            {
+                Predicate = x => true,
+                ResponseWriter = HealthResponseWriter.WriteHealthCheckUiResponse
+            });
 
             app.UseAuthentication();
 
             app.UseElasticApm(configuration);
 
             app.Run();
+        }
+
+        private static void ConfigureHealthChecks(WebApplicationBuilder builder)
+        {
+            builder.Services.AddHealthChecks()
+                .AddCheck<SapServiceHealthCheck>("SAP Health Check", failureStatus: HealthStatus.Unhealthy)
+                .AddCheck<EESServiceHealthCheck>("EES Health Check", failureStatus: HealthStatus.Unhealthy)
+                .AddCheck<MemoryHealthCheck>("ERP Memory Check", failureStatus: HealthStatus.Unhealthy);
         }
     }
 }
