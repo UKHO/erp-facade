@@ -41,7 +41,7 @@ namespace UKHO.ERPFacade.Common.HealthCheck
             {
                 string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, SapHealthCheckXmlPath);
 
-                healthCheckData.Add("SAP Template Path", sapXmlTemplatePath);
+                // healthCheckData.Add("SAP Template Path", sapXmlTemplatePath);
 
                 //Check whether template file exists or not
                 if (!_fileSystemHelper.IsFileExists(sapXmlTemplatePath))
@@ -52,8 +52,8 @@ namespace UKHO.ERPFacade.Common.HealthCheck
 
                 XmlDocument sapPayload = _xmlHelper.CreateXmlDocument(sapXmlTemplatePath);
 
-                healthCheckData.Add("SAP SOAP endpoint", new Uri(_sapClient.Uri, _sapConfig.Value.SapEndpointForEncEvent));
-                healthCheckData.Add("SAP SOAP operation(ENC)", _sapConfig.Value.SapServiceOperationForEncEvent);
+                // healthCheckData.Add("SAP SOAP endpoint", new Uri(_sapClient.Uri, _sapConfig.Value.SapEndpointForEncEvent));
+                // healthCheckData.Add("SAP SOAP operation(ENC)", _sapConfig.Value.SapServiceOperationForEncEvent);
 
                 HttpResponseMessage response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapEndpointForEncEvent, _sapConfig.Value.SapServiceOperationForEncEvent, _sapConfig.Value.SapUsernameForEncEvent, _sapConfig.Value.SapPasswordForEncEvent);
 
