@@ -28,7 +28,7 @@ namespace UKHO.ERPFacade.Common.HealthCheck
 
             try
             {
-                // healthCheckData.Add("EES health endpoint", _eesHealthCheckEnvironmentConfiguration.Value.EESHealthCheckUrl);
+                healthCheckData.Add("EES health endpoint", _eesHealthCheckEnvironmentConfiguration.Value.EESHealthCheckUrl);
 
                 HttpResponseMessage response = await _eesClient.Get(_eesHealthCheckEnvironmentConfiguration.Value.EESHealthCheckUrl);
 
