@@ -44,6 +44,7 @@ resource "azurerm_windows_web_app_slot" "staging" {
   name                = "staging"
   app_service_id      = azurerm_windows_web_app.webapp_service.id
   tags                = azurerm_windows_web_app.webapp_service.tags
+  public_network_access_enabled      = false
 
   site_config {
     application_stack {    
@@ -74,11 +75,12 @@ resource "azurerm_windows_web_app" "mock_webapp_service" {
   resource_group_name = var.resource_group_name
   service_plan_id     = azurerm_service_plan.app_service_plan.id
   tags                = var.tags
+  public_network_access_enabled      = false
 
   site_config {
     application_stack {    
       current_stack  = "dotnet"
-      dotnet_version = "v6.0"
+      dotnet_version = "v8.0"
     }
     always_on  = true
     ftps_state = "Disabled"
@@ -99,7 +101,8 @@ resource "azurerm_app_service_virtual_network_swift_connection" "webapp_vnet_int
 }
 
 resource "azurerm_app_service_virtual_network_swift_connection" "mock_webapp_vnet_integration" {
-  app_service_id = azurerm_windows_web_app.mock_webapp_service.id
+  count               = var.env_name == "dev" ? 1 : 0
+  app_service_id = azurerm_windows_web_app.mock_webapp_service[0].id
   subnet_id      = var.subnet_id
 }
 
