@@ -235,28 +235,28 @@ namespace UKHO.ERPFacade.API.Controllers
         }
 
         [HttpOptions]
-        [Route("/webhook/newS100contentpublishedeventreceived")]
+        [Route("/webhook/s100contentpublishedeventreceived")]
         [Authorize(Policy = "S100ContentPublishedWebhookCaller")]
-        public IActionResult NewS100ContentPublishedEventOptions()
+        public IActionResult S100ContentPublishedEventOptions()
         {
             var webhookRequestOrigin = HttpContext.Request.Headers["WebHook-Request-Origin"].FirstOrDefault();
 
-            _logger.LogInformation(EventIds.NewS100ContentPublishedEventOptionsCallStarted.ToEventId(), "Started processing the Options request for the New ENC Content Published event for webhook. | WebHook-Request-Origin : {webhookRequestOrigin}", webhookRequestOrigin);
+            _logger.LogInformation(EventIds.S100ContentPublishedEventOptionsCallStarted.ToEventId(), "Started processing the Options request for the S100 Content Published event for webhook. | WebHook-Request-Origin : {webhookRequestOrigin}", webhookRequestOrigin);
 
             HttpContext.Response.Headers.Add("WebHook-Allowed-Rate", "*");
             HttpContext.Response.Headers.Add("WebHook-Allowed-Origin", webhookRequestOrigin);
 
-            _logger.LogInformation(EventIds.NewS100ContentPublishedEventOptionsCallCompleted.ToEventId(), "Completed processing the Options request for the New ENC Content Published event for webhook. | WebHook-Request-Origin : {webhookRequestOrigin}", webhookRequestOrigin);
+            _logger.LogInformation(EventIds.S100ContentPublishedEventOptionsCallCompleted.ToEventId(), "Completed processing the Options request for the S100 Content Published event for webhook. | WebHook-Request-Origin : {webhookRequestOrigin}", webhookRequestOrigin);
 
             return new OkObjectResult(StatusCodes.Status200OK);
         }
 
         [HttpPost]
-        [Route("/webhook/newS100contentpublishedeventreceived")]
+        [Route("/webhook/s100contentpublishedeventreceived")]
         //[Authorize(Policy = "S100ContentPublishedWebhookCaller")]
-        public virtual async Task<IActionResult> NewS100ContentPublishedEventReceived([FromBody] JObject s100EventJson)
+        public virtual async Task<IActionResult> S100ContentPublishedEventReceived([FromBody] JObject s100EventJson)
         {
-            _logger.LogInformation(EventIds.NewS100ContentPublishedEventReceived.ToEventId(), "ERP Facade webhook has received new enccontentpublished event from EES.");
+            _logger.LogInformation(EventIds.S100ContentPublishedEventReceived.ToEventId(), "ERP Facade webhook has received s100contentpublished event from EES.");
 
             string correlationId = s100EventJson.SelectToken(CorrelationIdKey)?.Value<string>();
 

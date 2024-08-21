@@ -716,17 +716,17 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940143 - New S100 content published event options call started.
         /// </summary>
-        NewS100ContentPublishedEventOptionsCallStarted = 940143,
+        S100ContentPublishedEventOptionsCallStarted = 940143,
 
         /// <summary>
         /// 940144 - New S100 content published event options call completed.
         /// </summary>
-        NewS100ContentPublishedEventOptionsCallCompleted = 940144,
+        S100ContentPublishedEventOptionsCallCompleted = 940144,
 
         /// <summary>
         /// 940145 - New S100 content published event received by ERP Facade webhook.
         /// </summary>
-        NewS100ContentPublishedEventReceived = 940145,
+        S100ContentPublishedEventReceived = 940145,
 
         /// <summary>
         /// 940146 - CorrelationId is missing in S100 content published event.
