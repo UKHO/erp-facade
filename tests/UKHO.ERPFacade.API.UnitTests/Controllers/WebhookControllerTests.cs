@@ -39,6 +39,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         private IOptions<SapConfiguration> _fakeSapConfig;
         private WebhookController _fakeWebHookController;
         private ILicenceUpdatedSapMessageBuilder _fakeLicenceUpdatedSapMessageBuilder;
+        private IS100ContentSapMessageBuilder _fakeS100ContentSapMessageBuilder;
 
         [SetUp]
         public void Setup()
@@ -52,6 +53,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             _fakeXmlHelper = A.Fake<IXmlHelper>();
             _fakeEncContentSapMessageBuilder = A.Fake<IEncContentSapMessageBuilder>();
             _fakeLicenceUpdatedSapMessageBuilder = A.Fake<ILicenceUpdatedSapMessageBuilder>();
+            _fakeS100ContentSapMessageBuilder = A.Fake<IS100ContentSapMessageBuilder>();
             _fakeSapConfig = Options.Create(new SapConfiguration()
             {
                 SapServiceOperationForEncEvent = "Z_ADDS_MAT_INFO"
@@ -65,7 +67,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
                 _fakeSapClient,
                 _fakeEncContentSapMessageBuilder,
                 _fakeSapConfig,
-                _fakeLicenceUpdatedSapMessageBuilder);
+                _fakeLicenceUpdatedSapMessageBuilder,
+                _fakeS100ContentSapMessageBuilder);
         }
 
         [Test]
@@ -247,7 +250,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
                                                            _fakeSapClient,
                                                            _fakeEncContentSapMessageBuilder,
                                                            null,
-                                                           _fakeLicenceUpdatedSapMessageBuilder))
+                                                           _fakeLicenceUpdatedSapMessageBuilder,
+                                                           _fakeS100ContentSapMessageBuilder))
              .ParamName
              .Should().Be("sapConfig");
         }

@@ -711,7 +711,47 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940141 - Exception occured while decrypting the permit string.
         /// </summary>
-        PermitDecryptionException = 940142
+        PermitDecryptionException = 940142,
+
+        /// <summary>
+        /// 940143 - New S100 content published event options call started.
+        /// </summary>
+        NewS100ContentPublishedEventOptionsCallStarted = 940143,
+
+        /// <summary>
+        /// 940144 - New S100 content published event options call completed.
+        /// </summary>
+        NewS100ContentPublishedEventOptionsCallCompleted = 940144,
+
+        /// <summary>
+        /// 940145 - New S100 content published event received by ERP Facade webhook.
+        /// </summary>
+        NewS100ContentPublishedEventReceived = 940145,
+
+        /// <summary>
+        /// 940146 - CorrelationId is missing in S100 content published event.
+        /// </summary>
+        CorrelationIdMissingInS100Event = 940146,
+
+        /// <summary>
+        /// 940147 - Storing the received S100 content published event in azure table.
+        /// </summary>
+        StoreS100ContentPublishedEventInAzureTable = 940147,
+
+        /// <summary>
+        /// 940148 - Uploading the received S100 content published event in blob storage.
+        /// </summary>
+        UploadS100ContentPublishedEventInAzureBlob = 940148,
+
+        /// <summary>
+        /// 940149 - S100 content published event is uploaded in blob storage successfully.
+        /// </summary>
+        UploadedS100ContentPublishedEventInAzureBlob = 940149,
+
+        /// <summary>
+        /// 940150 - S100 Update pushed to SAP
+        /// </summary>
+        S100UpdatePushedToSap = 940150,
 
     }
 

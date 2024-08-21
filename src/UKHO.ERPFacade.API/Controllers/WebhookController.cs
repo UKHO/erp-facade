@@ -17,7 +17,7 @@ namespace UKHO.ERPFacade.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class WebhookController : BaseController<WebhookController>
     {
         private readonly ILogger<WebhookController> _logger;
@@ -28,6 +28,7 @@ namespace UKHO.ERPFacade.API.Controllers
         private readonly IEncContentSapMessageBuilder _encContentSapMessageBuilder;
         private readonly IOptions<SapConfiguration> _sapConfig;
         private readonly ILicenceUpdatedSapMessageBuilder _licenceUpdatedSapMessageBuilder;
+        private readonly IS100ContentSapMessageBuilder _s100ContentSapMessageBuilder;
 
         private const string EventIdKey = "id";
         private const string CorrelationIdKey = "data.correlationId";
@@ -37,6 +38,8 @@ namespace UKHO.ERPFacade.API.Controllers
         private const string LicenceUpdatedEventFileName = "LicenceUpdatedEvent.json";
         private const string RecordOfSaleContainerName = "recordofsaleblobs";
         private const string JsonFileType = ".json";
+        private const string S100EventFileName = "S100PublishingEvent.json";
+
 
         public WebhookController(IHttpContextAccessor contextAccessor,
                                  ILogger<WebhookController> logger,
@@ -46,7 +49,8 @@ namespace UKHO.ERPFacade.API.Controllers
                                  ISapClient sapClient,
                                  IEncContentSapMessageBuilder encContentSapMessageBuilder,
                                  IOptions<SapConfiguration> sapConfig,
-                                 ILicenceUpdatedSapMessageBuilder licenceUpdatedSapMessageBuilder)
+                                 ILicenceUpdatedSapMessageBuilder licenceUpdatedSapMessageBuilder,
+                                 IS100ContentSapMessageBuilder s100ContentSapMessageBuilder)
         : base(contextAccessor)
         {
             _logger = logger;
@@ -57,6 +61,7 @@ namespace UKHO.ERPFacade.API.Controllers
             _encContentSapMessageBuilder = encContentSapMessageBuilder;
             _licenceUpdatedSapMessageBuilder = licenceUpdatedSapMessageBuilder;
             _sapConfig = sapConfig ?? throw new ArgumentNullException(nameof(sapConfig));
+            _s100ContentSapMessageBuilder = s100ContentSapMessageBuilder;
         }
 
         [HttpOptions]
@@ -225,6 +230,65 @@ namespace UKHO.ERPFacade.API.Controllers
             _logger.LogInformation(EventIds.LicenceUpdatedPublishedEventUpdatePushedToSap.ToEventId(), "The licence updated event data has been sent to SAP successfully. | {StatusCode}", response.StatusCode);
 
             await _azureTableReaderWriter.UpdateLicenceUpdatedEventStatus(correlationId);
+
+            return new OkObjectResult(StatusCodes.Status200OK);
+        }
+
+        [HttpOptions]
+        [Route("/webhook/newS100contentpublishedeventreceived")]
+        [Authorize(Policy = "S100ContentPublishedWebhookCaller")]
+        public IActionResult NewS100ContentPublishedEventOptions()
+        {
+            var webhookRequestOrigin = HttpContext.Request.Headers["WebHook-Request-Origin"].FirstOrDefault();
+
+            _logger.LogInformation(EventIds.NewS100ContentPublishedEventOptionsCallStarted.ToEventId(), "Started processing the Options request for the New ENC Content Published event for webhook. | WebHook-Request-Origin : {webhookRequestOrigin}", webhookRequestOrigin);
+
+            HttpContext.Response.Headers.Add("WebHook-Allowed-Rate", "*");
+            HttpContext.Response.Headers.Add("WebHook-Allowed-Origin", webhookRequestOrigin);
+
+            _logger.LogInformation(EventIds.NewS100ContentPublishedEventOptionsCallCompleted.ToEventId(), "Completed processing the Options request for the New ENC Content Published event for webhook. | WebHook-Request-Origin : {webhookRequestOrigin}", webhookRequestOrigin);
+
+            return new OkObjectResult(StatusCodes.Status200OK);
+        }
+
+        [HttpPost]
+        [Route("/webhook/newS100contentpublishedeventreceived")]
+        //[Authorize(Policy = "S100ContentPublishedWebhookCaller")]
+        public virtual async Task<IActionResult> NewS100ContentPublishedEventReceived([FromBody] JObject s100EventJson)
+        {
+            _logger.LogInformation(EventIds.NewS100ContentPublishedEventReceived.ToEventId(), "ERP Facade webhook has received new enccontentpublished event from EES.");
+
+            string correlationId = s100EventJson.SelectToken(CorrelationIdKey)?.Value<string>();
+
+            if (string.IsNullOrEmpty(correlationId))
+            {
+                _logger.LogWarning(EventIds.CorrelationIdMissingInS100Event.ToEventId(), "CorrelationId is missing in S100 content published event.");
+                return new BadRequestObjectResult(StatusCodes.Status400BadRequest);
+            }
+
+            _logger.LogInformation(EventIds.StoreS100ContentPublishedEventInAzureTable.ToEventId(), "Storing the received S100 content published event in azure table.");
+            await _azureTableReaderWriter.UpsertEntity(correlationId);
+
+            _logger.LogInformation(EventIds.UploadS100ContentPublishedEventInAzureBlob.ToEventId(), "Uploading the received S100 content published event in blob storage.");
+            await _azureBlobEventWriter.UploadEvent(s100EventJson.ToString(), correlationId, S100EventFileName);
+            _logger.LogInformation(EventIds.UploadedS100ContentPublishedEventInAzureBlob.ToEventId(), "S100 content published event is uploaded in blob storage successfully.");
+
+            XmlDocument sapPayload = _s100ContentSapMessageBuilder.BuildSapMessageXml(JsonConvert.DeserializeObject<S100EventPayload>(s100EventJson.ToString()), correlationId);
+
+            _logger.LogInformation(EventIds.UploadSapXmlPayloadInAzureBlobStarted.ToEventId(), "Uploading the SAP xml payload in blob storage.");
+            await _azureBlobEventWriter.UploadEvent(sapPayload.ToIndentedString(), correlationId, SapXmlPayloadFileName);
+            _logger.LogInformation(EventIds.UploadSapXmlPayloadInAzureBlobCompleted.ToEventId(), "SAP xml payload is uploaded in blob storage successfully.");
+
+            HttpResponseMessage response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapEndpointForEncEvent, _sapConfig.Value.SapServiceOperationForEncEvent, _sapConfig.Value.SapUsernameForEncEvent, _sapConfig.Value.SapPasswordForEncEvent);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogError(EventIds.ErrorOccuredInSap.ToEventId(), "An error occured while processing your request in SAP. | {StatusCode}", response.StatusCode);
+                throw new ERPFacadeException(EventIds.ErrorOccuredInSap.ToEventId());
+            }
+            _logger.LogInformation(EventIds.S100UpdatePushedToSap.ToEventId(), "ENC update has been sent to SAP successfully. | {StatusCode}", response.StatusCode);
+
+            await _azureTableReaderWriter.UpdateRequestTimeEntity(correlationId);
 
             return new OkObjectResult(StatusCodes.Status200OK);
         }
