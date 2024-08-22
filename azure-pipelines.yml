@@ -449,7 +449,7 @@ stages:
         dependsOn:
         - DevDeployTerraform
         - DevDeployApp
-        pool: $(WindowsPool)
+        pool: $(DeploymentPoolPE)
         variables:
           - name : ErpFacadeConfiguration.BaseUrl
             value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
