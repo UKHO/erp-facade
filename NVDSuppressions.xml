@@ -253,24 +253,7 @@
     </notes>
     <packageUrl regex="true">^pkg:generic/dotnet\-getdocument@.*$</packageUrl>
     <cve>CVE-2023-36558</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
-   file name: System.CodeDom:6.0.0
-   False positive - applies to VB.
-   ]]>
-    </notes>
-    <packageUrl regex="true">^pkg:nuget/System\.CodeDom@.*$</packageUrl>
-    <cve>CVE-2006-4732</cve>
-    <cve>CVE-2007-0065</cve>
-    <cve>CVE-2007-2224</cve>
-    <cve>CVE-2007-2884</cve>
-    <cve>CVE-2007-4776</cve>
-    <cve>CVE-2008-0392</cve>
-    <cve>CVE-2008-3704</cve>
-    <cve>CVE-2001-0153</cve>
-  </suppress>
+  </suppress>  
   <suppress>
     <notes>
       <![CDATA[
