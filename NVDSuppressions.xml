@@ -188,15 +188,7 @@
    ]]>
     </notes>
     <cve>CVE-2022-30187</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
-   file name: Microsoft.Azure.WebJobs.dll
-   ]]>
-    </notes>
-    <cve>CVE-2022-29149</cve>
-  </suppress>
+  </suppress>  
   <suppress>
     <notes>
       <![CDATA[
@@ -278,15 +270,6 @@
     <cve>CVE-2008-0392</cve>
     <cve>CVE-2008-3704</cve>
     <cve>CVE-2001-0153</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
-   file name: Various
-   False positive - applies to https://www.drupal.org
-   ]]>
-    </notes>
-    <cve>CVE-2014-9152</cve>
   </suppress>
   <suppress>
     <notes>
@@ -424,20 +407,12 @@
     <notes>
       <![CDATA[
    file name: Azure.Identity.dll
-   ]]>
-    </notes>
-    <packageUrl regex="true">^pkg:generic/Azure\.Identity@.*$</packageUrl>
-    <cve>CVE-2024-35255</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
    file name: Azure.Identity:1.12.0
    ]]>
     </notes>
     <packageUrl regex="true">^pkg:generic/Azure\.Identity@.*$</packageUrl>
     <cve>CVE-2024-35255</cve>
-  </suppress>
+  </suppress> 
   <suppress>
     <notes>
       <![CDATA[
