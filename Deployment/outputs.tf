@@ -1,5 +1,5 @@
 output "webapp_name" {
-  value = module.webapp_service.webapp_name
+  value =  module.webapp_service.webapp_name
 }
 
 output "mock_webapp_name" {
@@ -17,6 +17,10 @@ output "resource_group" {
 
 output "erp_facade_web_app_url" {
   value = "https://${module.webapp_service.default_site_hostname}"
+}
+
+output "erp_facade_web_app_public_url" {
+  value = "https://erpfacade${local.env_name}.admiralty.co.uk"
 }
 
 output "erp_facade_mock_service_url" {

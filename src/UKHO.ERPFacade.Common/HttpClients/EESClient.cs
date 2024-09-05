@@ -9,14 +9,14 @@ namespace UKHO.ERPFacade.Common.HttpClients
     {
         private readonly HttpClient _httpClient;
         private readonly IOptions<EESHealthCheckEnvironmentConfiguration> _eesHealthCheckEnvironmentConfiguration;
-        public EESClient(HttpClient httpClient, IOptions<EESHealthCheckEnvironmentConfiguration> eesHealthCheckEnvironmentConfiguration)
+        public EESClient(HttpClient httpClient)
         {
             _httpClient = httpClient;
-            _eesHealthCheckEnvironmentConfiguration = eesHealthCheckEnvironmentConfiguration;
         }
-        public async Task<HttpResponseMessage> EESHealthCheck()
+
+        public async Task<HttpResponseMessage> Get(string url)
         {
-                return  await _httpClient.GetAsync(_eesHealthCheckEnvironmentConfiguration.Value.EESHealthCheckUrl);
+                return  await _httpClient.GetAsync(url);
         }
     }
 }

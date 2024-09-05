@@ -25,5 +25,7 @@ namespace UKHO.ERPFacade.Common.HttpClients
 
             return await _httpClient.PostAsync($"{endpoint}?op={sapServiceOperation}", new StringContent(sapMessageXml.InnerXml, Encoding.UTF8, "text/xml"));
         }
+
+        public Uri? Uri => _httpClient.BaseAddress;
     }
 }
