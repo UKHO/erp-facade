@@ -192,14 +192,6 @@
   <suppress>
     <notes>
       <![CDATA[
-   file name: Microsoft.Azure.WebJobs.dll
-   ]]>
-    </notes>
-    <cve>CVE-2022-29149</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
    file name: Azure.Identity.dll
    file name: Azure.Identity:1.10.3
    ]]>
@@ -261,32 +253,6 @@
     </notes>
     <packageUrl regex="true">^pkg:generic/dotnet\-getdocument@.*$</packageUrl>
     <cve>CVE-2023-36558</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
-   file name: System.CodeDom:6.0.0
-   False positive - applies to VB.
-   ]]>
-    </notes>
-    <packageUrl regex="true">^pkg:nuget/System\.CodeDom@.*$</packageUrl>
-    <cve>CVE-2006-4732</cve>
-    <cve>CVE-2007-0065</cve>
-    <cve>CVE-2007-2224</cve>
-    <cve>CVE-2007-2884</cve>
-    <cve>CVE-2007-4776</cve>
-    <cve>CVE-2008-0392</cve>
-    <cve>CVE-2008-3704</cve>
-    <cve>CVE-2001-0153</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
-   file name: Various
-   False positive - applies to https://www.drupal.org
-   ]]>
-    </notes>
-    <cve>CVE-2014-9152</cve>
   </suppress>
   <suppress>
     <notes>
@@ -424,14 +390,6 @@
     <notes>
       <![CDATA[
    file name: Azure.Identity.dll
-   ]]>
-    </notes>
-    <packageUrl regex="true">^pkg:generic/Azure\.Identity@.*$</packageUrl>
-    <cve>CVE-2024-35255</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
    file name: Azure.Identity:1.12.0
    ]]>
     </notes>
