@@ -20,7 +20,7 @@ output "erp_facade_web_app_url" {
 }
 
 output "erp_facade_web_app_public_url" {
-  value = "https://erpfacadedev.admiralty.co.uk"
+  value = "https://erpfacade${local.env_name}.admiralty.co.uk"
 }
 
 output "erp_facade_mock_service_url" {
