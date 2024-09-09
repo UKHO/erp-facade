@@ -44,10 +44,9 @@ namespace UKHO.ERPFacade.Common.HealthCheck
                 return HealthCheckResult.Healthy(data: healthCheckData, description: description);
             }
             catch (Exception ex)
-            {;
+            {
                 _logger.LogInformation(EventIds.ErrorOccurredInEES.ToEventId(), "An error occurred while processing your request in EES. | {Message}", ex.Message);
                 return HealthCheckResult.Unhealthy("EES is Unhealthy" + ex.Message);
-
             }
         }
     }
