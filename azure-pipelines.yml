@@ -468,7 +468,7 @@ stages:
   - stage: vNextIATDeploy
     dependsOn:  Devdeploy
     displayName: "VNext IATdeploy (inc terraform, webapp deploy)"
-    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/'), eq(variables['Build.SourceBranch'], 'refs/heads/develop')))
+    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
     variables:
       - group: "ERP-Facade-vNextIAT"
       - group: "Erp-vNextIAT"
@@ -580,7 +580,7 @@ stages:
         value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
       - name: "SapMockConfiguration.BaseUrl"
         value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
-    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/'), eq(variables['Build.SourceBranch'], 'refs/heads/develop')))
+    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
 
     jobs:
       - deployment: E2EDeployTerraform
@@ -629,7 +629,8 @@ stages:
 
   - stage: IATDeploy
     dependsOn: DevDeploy   
-    displayName: "IATdeploy (inc terraform, webapp deploy)"    
+    displayName: "IATdeploy (inc terraform, webapp deploy)"  
+    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))  
     variables:
       - group: "ERP-Facade-IAT"
       - group: "Erp-IAT"
@@ -654,8 +655,7 @@ stages:
         value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
       - name: "SapMockConfiguration.BaseUrl"
         value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
-
-    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
+   
     jobs:
       - deployment: IATDeployTerraform
         displayName: "IAT - Deploy Terraform"
