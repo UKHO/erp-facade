@@ -4,13 +4,8 @@ parameters:
   - name: ContinueEvenIfResourcesAreGettingDestroyed
     displayName: "Continue even if resources are getting destroyed"
     type: boolean
-    default: false
-       
-  - name: vNext
-    displayName: "Run the vNext Path"
-    type: boolean
-    default: false
-
+    default: false 
+    
   - name: DisableDependencyCheck
     displayName: "Disable OWASP dependency checking"
     type: boolean
