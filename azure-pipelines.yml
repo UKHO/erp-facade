@@ -5,11 +5,6 @@ parameters:
     displayName: "Continue even if resources are getting destroyed"
     type: boolean
     default: false
-       
-  - name: vNext
-    displayName: "Run the vNext Path"
-    type: boolean
-    default: false
 
   - name: DisableDependencyCheck
     displayName: "Disable OWASP dependency checking"
@@ -659,6 +654,8 @@ stages:
         value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
       - name: "SapMockConfiguration.BaseUrl"
         value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
+
+    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
     jobs:
       - deployment: IATDeployTerraform
         displayName: "IAT - Deploy Terraform"
