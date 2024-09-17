@@ -732,7 +732,7 @@ stages:
     jobs:
       - deployment: PreProdDeployTerraform
         displayName: "PreProd - Deploy Terraform"
-        environment: "prp"
+        environment: "ERP-preprod"
         pool: $(DeploymentPool)
         container: ${{variables.Container}}
         workspace:
@@ -749,7 +749,7 @@ stages:
       - deployment: PreProdDeploy
         dependsOn: PreProdDeployTerraform
         displayName: "PRP - Deploy Dotnet App"
-        environment: "prp"
+        environment: "ERP-preprod"
         pool: $(DeploymentPoolPE)
         variables:
           - name : WEB_APP_NAME
