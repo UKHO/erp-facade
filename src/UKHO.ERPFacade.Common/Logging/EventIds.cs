@@ -709,9 +709,14 @@ namespace UKHO.ERPFacade.Common.Logging
         InvalidUkhoWeekNumber = 940141,
 
         /// <summary>
-        /// 940141 - Exception occured while decrypting the permit string.
+        /// 940142 - Exception occured while decrypting the permit string.
         /// </summary>
-        PermitDecryptionException = 940142
+        PermitDecryptionException = 940142,
+
+        /// <summary>
+        /// 940143 - Exception occured while decrypting the permit string.
+        /// </summary>
+        UnitOfSaleNotFoundException = 940143
 
     }
 

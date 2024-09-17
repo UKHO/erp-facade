@@ -111,6 +111,12 @@ namespace UKHO.ERPFacade.Common.Models
 
         [JsonProperty("compositionChanges")]
         public CompositionChanges CompositionChanges { get; set; }
+
+        [JsonProperty("providerCode")]
+        public string ProviderCode { get; set; }
+
+        [JsonProperty("providerName")]
+        public string ProviderName { get; set; }
     }
 
     [ExcludeFromCodeCoverage]
