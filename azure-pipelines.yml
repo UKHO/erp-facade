@@ -629,7 +629,7 @@ stages:
   - stage: IATDeploy
     dependsOn: DevDeploy   
     displayName: "IATdeploy (inc terraform, webapp deploy)"  
-    condition: and(succeeded())  
+    condition: and(succeeded(), not(eq(variables['Build.SourceBranch'], 'refs/heads/develop'), startsWith(variables['Build.SourceBranch'], 'refs/heads/dev/'))) 
     variables:
       - group: "ERP-Facade-IAT"
       - group: "Erp-IAT"
@@ -703,7 +703,7 @@ stages:
   - stage: PreProdDeploy
     dependsOn: IATDeploy   
     displayName: "PreProddeploy (inc terraform, webapp deploy)"  
-    condition: and(succeeded())  
+    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))  
     variables:
       - group: "ERP-Facade-PreProd"
       - group: "Erp-PreProd"
