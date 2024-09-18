@@ -714,10 +714,19 @@ namespace UKHO.ERPFacade.Common.Logging
         PermitDecryptionException = 940142,
 
         /// <summary>
-        /// 940143 - Exception occured while decrypting the permit string.
+        /// 940143 - Unit of Sale not found.
         /// </summary>
-        UnitOfSaleNotFoundException = 940143
+        UnitOfSaleNotFoundException = 940143,
 
+        /// <summary>
+        /// 940144 - Permit decryption hardware id not found in configuration.
+        /// </summary>
+        HardwareIdNotFoundException = 940144,
+
+        /// <summary>
+        /// 940145 - Permit string provided empty in ENC content published event.
+        /// </summary>
+        PermitStringIsEmpty = 940145
     }
 
     /// <summary>

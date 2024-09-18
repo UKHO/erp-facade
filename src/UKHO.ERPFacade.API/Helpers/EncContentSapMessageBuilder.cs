@@ -50,6 +50,8 @@ namespace UKHO.ERPFacade.API.Helpers
         private const string NextKey = "NEXTKEY";
         private const string UnitOfSaleStatusForSale = "ForSale";
         private const string Agency = "AGENCY";
+        private const string CreateEncCellAction = "CREATE ENC CELL";
+        private const string UpdateAction = "UPDATE ENC CELL EDITION UPDATE NUMBER";
 
         public EncContentSapMessageBuilder(ILogger<EncContentSapMessageBuilder> logger,
                                  IXmlHelper xmlHelper,
@@ -106,7 +108,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                 var unitFromAddProduct = GetUnitFromAddProductComposition(eventData.Data.UnitsOfSales, product);
                                 if (unitFromAddProduct == null)
                                 {
-                                    LogException("No unit found in Add product composition while creating SAP action " + action.Action + ".");
+                                    LogException($"No unit found in Add product composition while creating SAP action {action.Action}.");
                                 }
 
                                 actionNode = BuildAction(soapXml, product, unitFromAddProduct, action, ukhoWeekNumber, product.ProductName);
@@ -121,7 +123,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                 var unitOfSaleForReplace = GetUnitFromRemoveProductComposition(eventData.Data.UnitsOfSales, product);
                                 if (unitOfSaleForReplace == null)
                                 {
-                                    LogException("No unit found in remove product compositions while creating SAP action " + action.Action + ".");
+                                    LogException($"No unit found in remove product compositions while creating SAP action {action.Action}.");
                                 }
 
                                 foreach (var replacedProduct in product.ReplacedBy)
@@ -159,7 +161,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                 var unitFromRemoveProduct = GetUnitFromRemoveProductComposition(eventData.Data.UnitsOfSales, product);
                                 if (unitFromRemoveProduct == null)
                                 {
-                                    LogException("No unit found in remove product compositions while creating SAP action " + action.Action + ".");
+                                    LogException($"No unit found in remove product compositions while creating SAP action {action.Action}.");
                                 }
 
                                 actionNode = BuildAction(soapXml, product, unitFromRemoveProduct, action, ukhoWeekNumber, product.ProductName);
@@ -254,7 +256,7 @@ namespace UKHO.ERPFacade.API.Helpers
 
             List<(int sortingOrder, XmlElement itemNode)> actionAttributeList = new();
 
-            PermitKey? permitKey = (product != null && action.ActionNumber is 1 or 8) ? _permitDecryption.GetPermitKeys(product.Permit) : null;
+            PermitKey? permitKey = (product != null && action.Action is CreateEncCellAction or UpdateAction) ? _permitDecryption.GetPermitKeys(product.Permit) : null;
 
             foreach (var node in action.Attributes.Where(x => x.Section == ProductSection))
             {
@@ -397,27 +399,7 @@ namespace UKHO.ERPFacade.API.Helpers
                 return fieldValue.Substring(0, Math.Min(250, fieldValue.Length));
             }
             return string.Empty;
-        }
-
-        private bool IsValidValue(string jsonFieldValue, string attributeValue)
-        {
-            if (attributeValue.Contains('|'))
-            {
-                string[] values = attributeValue.Split('|');
-                foreach (string value in values)
-                {
-                    if (jsonFieldValue == value.Trim())
-                    {
-                        return true;
-                    }
-                }
-                return false;
-            }
-            else
-            {
-                return jsonFieldValue == attributeValue;
-            }
-        }
+        }       
 
         private UnitOfSale? GetUnitFromInUnitOfSale(List<UnitOfSale> listOfUnitOfSales, Product product)
         {
@@ -460,7 +442,7 @@ namespace UKHO.ERPFacade.API.Helpers
                 foreach (var conditions in rules.Conditions)
                 {
                     object jsonFieldValue = CommonHelper.ParseXmlNode(conditions.AttributeName, obj, obj.GetType());
-                    if (jsonFieldValue != null! && IsValidValue(jsonFieldValue.ToString(), conditions.AttributeValue))
+                    if (jsonFieldValue != null! && jsonFieldValue.ToString() == conditions.AttributeValue)
                     {
                         isConditionSatisfied = true;
                     }
