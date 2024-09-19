@@ -350,7 +350,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         [Test]
         public void WhenValidHeaderRequestedInLicenceUpdatedPublishedEventOptions_ThenWebhookReturns200OkResponse()
         {
-            var responseHeaders = A.Fake<IHeaderDictionary>();
+            var responseHeaders = new HeaderDictionary(); //A.Fake<IHeaderDictionary>();
             var httpContext = A.Fake<HttpContext>();
 
             A.CallTo(() => httpContext.Response.Headers).Returns(responseHeaders);
@@ -371,8 +371,12 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
               && call.GetArgument<EventId>(1) == EventIds.LicenceUpdatedEventOptionsCallCompleted.ToEventId()
               && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Completed processing the Options request for the Licence updated event for webhook. | WebHook-Request-Origin : {webhookRequestOrigin}").MustHaveHappenedOnceExactly();
 
-            A.CallTo(() => responseHeaders.Append("WebHook-Allowed-Rate", "*")).MustHaveHappened();
-            A.CallTo(() => responseHeaders.Append("WebHook-Allowed-Origin", "test.com")).MustHaveHappened();
+          //  A.CallTo(() => responseHeaders.Append("WebHook-Allowed-Rate", "*")).MustHaveHappened();
+          //  A.CallTo(() => responseHeaders.Append("WebHook-Allowed-Origin", "test.com")).MustHaveHappened();
+            Assert.That(responseHeaders.ContainsKey("WebHook-Allowed-Rate"), Is.True);
+            Assert.That(responseHeaders["WebHook-Allowed-Rate"], Is.EqualTo("*"));
+            Assert.That(responseHeaders.ContainsKey("WebHook-Allowed-Origin"), Is.True);
+            Assert.That(responseHeaders["WebHook-Allowed-Origin"], Is.EqualTo("test.com"));
         }
 
         [Test]

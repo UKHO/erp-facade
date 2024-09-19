@@ -177,7 +177,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
             _logger.LogInformation(EventIds.LicenceUpdatedEventOptionsCallStarted.ToEventId(), "Started processing the Options request for the Licence updated event for webhook. | WebHook-Request-Origin : {webhookRequestOrigin}", webhookRequestOrigin);
 
-            HttpContext.Response.Headers.Append("WebHook-Allowed-Rate", "*");
+            HttpContext.Response.Headers.Add("WebHook-Allowed-Rate", "*");
             HttpContext.Response.Headers.Append("WebHook-Allowed-Origin", webhookRequestOrigin);
 
             _logger.LogInformation(EventIds.LicenceUpdatedEventOptionsCallCompleted.ToEventId(), "Completed processing the Options request for the Licence updated event for webhook. | WebHook-Request-Origin : {webhookRequestOrigin}", webhookRequestOrigin);
