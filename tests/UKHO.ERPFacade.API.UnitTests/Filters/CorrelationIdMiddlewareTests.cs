@@ -46,8 +46,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
 
             A.CallTo(() => _fakeHttpContext.Request.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey]).Returns(correlationId);
             A.CallTo(() => _fakeHttpContext.Response.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey]).Returns(correlationId);
-            A.CallTo(() => _fakeHttpContext.Request.Headers.Append(CorrelationIdMiddleware.XCorrelationIdHeaderKey, correlationId)).MustHaveHappenedOnceExactly();
-            A.CallTo(() => _fakeHttpContext.Response.Headers.Append(CorrelationIdMiddleware.XCorrelationIdHeaderKey, correlationId)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _fakeHttpContext.Request.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey, correlationId)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _fakeHttpContext.Response.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey, correlationId)).MustHaveHappenedOnceExactly();
             A.CallTo(() => _fakeLogger.BeginScope(A<Dictionary<string, object>>._)).MustHaveHappenedOnceExactly();
         }
 
