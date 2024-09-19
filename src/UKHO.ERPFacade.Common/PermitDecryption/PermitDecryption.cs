@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Configuration;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -22,8 +23,8 @@ namespace UKHO.ERPFacade.Common.PermitDecryption
 
             if (string.IsNullOrEmpty(_permitConfiguration.Value.PermitDecryptionHardwareId))
             {
-                _logger.LogError(EventIds.HardwareIdNotFoundException.ToEventId(), "Permit decryption Hardware Id not found in configuration.");
-                throw new ERPFacadeException(EventIds.HardwareIdNotFoundException.ToEventId());
+                _logger.LogError(EventIds.HardwareIdNotFoundException.ToEventId(), "Hardware Ids are not configured for permit decryption.");
+                throw new ConfigurationErrorsException("Hardware Ids are not configured for permit decryption.");
             }
         }
 
@@ -31,10 +32,10 @@ namespace UKHO.ERPFacade.Common.PermitDecryption
         {
             if (string.IsNullOrEmpty(permit))
             {
-                _logger.LogError(EventIds.PermitStringIsEmpty.ToEventId(), "Permit string provided empty in ENC content published event.");
-                throw new ERPFacadeException(EventIds.PermitStringIsEmpty.ToEventId());
+                _logger.LogError(EventIds.EmptyPermitStringException.ToEventId(), "Encrypted permit is empty in event payload.");
+                throw new ERPFacadeException(EventIds.EmptyPermitStringException.ToEventId());
             }
-              
+
             try
             {
                 byte[] hardwareIds = GetHardwareIds();
@@ -52,7 +53,7 @@ namespace UKHO.ERPFacade.Common.PermitDecryption
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.PermitDecryptionException.ToEventId(), ex, "An error occurred while decrypting the permit string.");
+                _logger.LogError(EventIds.PermitDecryptionException.ToEventId(), ex, "Permit decryption failed and could not generate ActiveKey & NextKey.");
                 throw new ERPFacadeException(EventIds.PermitDecryptionException.ToEventId());
             }
         }

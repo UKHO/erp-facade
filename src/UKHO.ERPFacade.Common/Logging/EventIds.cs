@@ -726,7 +726,7 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940145 - Permit string provided empty in ENC content published event.
         /// </summary>
-        PermitStringIsEmpty = 940145
+        EmptyPermitStringException = 940145
     }
 
     /// <summary>
