@@ -28,7 +28,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
             _fakeNextMiddleware = A.Fake<RequestDelegate>();
             _middleware = new CorrelationIdMiddleware(_fakeNextMiddleware);
             _fakeLogger = A.Fake<ILogger<CorrelationIdMiddleware>>();
-            var responseHeaders = new HeaderDictionary();
+            var responseHeaders = A.Fake<IHeaderDictionary>();
             _fakeHttpContext = A.Fake<HttpContext>();            
             _fakeHttpContext.RequestServices = new ServiceCollection().AddSingleton(_fakeLogger).BuildServiceProvider();
             A.CallTo(() => _fakeHttpContext.Response.Headers).Returns(responseHeaders);
