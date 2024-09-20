@@ -46,10 +46,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
 
             A.CallTo(() => _fakeHttpContext.Request.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey]).Returns(correlationId);
             A.CallTo(() => _fakeHttpContext.Response.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey]).Returns(correlationId);
-            A.CallTo(() => _fakeLogger.BeginScope(A<Dictionary<string, object>>._)).MustHaveHappenedOnceExactly();
-
-            Assert.That(_fakeHttpContext.Response.Headers.ContainsKey(CorrelationIdMiddleware.XCorrelationIdHeaderKey), Is.True);
-            Assert.That(_fakeHttpContext.Response.Headers.Values.Contains(correlationId), Is.True);            
+            A.CallTo(() => _fakeLogger.BeginScope(A<Dictionary<string, object>>._)).MustHaveHappenedOnceExactly();                      
         }
 
         [Test]

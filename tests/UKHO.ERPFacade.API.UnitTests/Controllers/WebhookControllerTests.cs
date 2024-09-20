@@ -257,7 +257,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         [Test]
         public void WhenValidHeaderRequestedInRecordOfSalePublishedEventOptions_ThenWebhookReturns200OkResponse()
         {
-            var responseHeaders = A.Fake<IHeaderDictionary>();
+            var responseHeaders = new HeaderDictionary();
             var httpContext = A.Fake<HttpContext>();
 
             A.CallTo(() => httpContext.Response.Headers).Returns(responseHeaders);
@@ -277,7 +277,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
               && call.GetArgument<LogLevel>(0) == LogLevel.Information
               && call.GetArgument<EventId>(1) == EventIds.RecordOfSalePublishedEventOptionsCallCompleted.ToEventId()
               && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Completed processing the Options request for the Record of Sale Published event for webhook. | WebHook-Request-Origin : {webhookRequestOrigin}").MustHaveHappenedOnceExactly();
-                        
+
             Assert.That(responseHeaders.ContainsKey("WebHook-Allowed-Rate"), Is.True);
             Assert.That(responseHeaders["WebHook-Allowed-Rate"], Is.EqualTo("*"));
             Assert.That(responseHeaders.ContainsKey("WebHook-Allowed-Origin"), Is.True);
