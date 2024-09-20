@@ -91,30 +91,20 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
             var correlationId = Guid.NewGuid().ToString();
             var bodyAsJson = new JArray { { new JObject { { "corrid", correlationId } } } };
             var bodyAsText = bodyAsJson.ToString();
-            var responseHeaders =A.Fake<IHeaderDictionary>() ;
+            var responseHeaders =new HeaderDictionary() ;
+            var requestHeaders = new HeaderDictionary();
 
             _fakeHttpContext.Request.Body = new MemoryStream(Encoding.UTF8.GetBytes(bodyAsText));
             _fakeHttpContext.Request.ContentLength = bodyAsText.Length;
             _fakeHttpContext.Response.Body = new MemoryStream();
             A.CallTo(() => _fakeHttpContext.Response.Headers).Returns(responseHeaders);
-            A.CallTo(() => _fakeHttpContext.Request.Headers).Returns(responseHeaders);
-          
-
+            A.CallTo(() => _fakeHttpContext.Request.Headers).Returns(requestHeaders);
 
             await _middleware.InvokeAsync(_fakeHttpContext);
 
-            //A.CallTo(() => _fakeHttpContext.Request.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey]).Returns(correlationId);
-            //A.CallTo(() => _fakeHttpContext.Response.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey]).Returns(correlationId);
-            A.CallTo(() => _fakeHttpContext.Response.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey]).Returns(new[] { correlationId });
-            A.CallTo(() => _fakeHttpContext.Request.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey]).Returns(new[] { correlationId });
-            _fakeHttpContext.Request.Headers.Append(CorrelationIdMiddleware.XCorrelationIdHeaderKey, correlationId);
-            _fakeHttpContext.Response.Headers.Append(CorrelationIdMiddleware.XCorrelationIdHeaderKey, correlationId);
-           // A.CallTo(() => _fakeHttpContext.Request.Headers.Append(CorrelationIdMiddleware.XCorrelationIdHeaderKey, correlationId)).MustHaveHappenedOnceExactly();
-           // A.CallTo(() => _fakeHttpContext.Response.Headers.Append(CorrelationIdMiddleware.XCorrelationIdHeaderKey, correlationId)).MustHaveHappenedOnceExactly();
-            A.CallTo(() => _fakeLogger.BeginScope(A<Dictionary<string, object>>._)).MustHaveHappenedOnceExactly();
-            //Assert.That(_fakeHttpContext.Request.Headers.Keys.Contains(CorrelationIdMiddleware.XCorrelationIdHeaderKey), Is.True);
+            Assert.That(_fakeHttpContext.Request.Headers.Keys.Contains(CorrelationIdMiddleware.XCorrelationIdHeaderKey), Is.True);
             Assert.That(_fakeHttpContext.Request.Headers.Values.Contains(correlationId), Is.True);
-           // Assert.That(_fakeHttpContext.Response.Headers.Keys.Contains(CorrelationIdMiddleware.XCorrelationIdHeaderKey), Is.True);
+            Assert.That(_fakeHttpContext.Response.Headers.Keys.Contains(CorrelationIdMiddleware.XCorrelationIdHeaderKey), Is.True);
             Assert.That(_fakeHttpContext.Response.Headers.Values.Contains(correlationId), Is.True);
         }
     }
