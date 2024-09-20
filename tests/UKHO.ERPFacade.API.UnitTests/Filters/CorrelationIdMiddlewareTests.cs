@@ -52,10 +52,12 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
            
             A.CallTo(() => _fakeLogger.BeginScope(A<Dictionary<string, object>>._)).MustHaveHappenedOnceExactly();
 
-            Assert.That(_fakeHttpContext.Request.Headers.Keys.Contains(CorrelationIdMiddleware.XCorrelationIdHeaderKey), Is.True);
-            Assert.That(_fakeHttpContext.Request.Headers.Values.Contains(correlationId), Is.True);
-            Assert.That(_fakeHttpContext.Response.Headers.Keys.Contains(CorrelationIdMiddleware.XCorrelationIdHeaderKey), Is.True);
-            Assert.That(_fakeHttpContext.Response.Headers.Values.Contains(correlationId), Is.True);
+            Assert.That(_fakeHttpContext.Request.Headers.Count, Is.EqualTo(1));
+            Assert.That(_fakeHttpContext.Request.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey], Is.EqualTo(correlationId));
+
+            Assert.That(_fakeHttpContext.Response.Headers.Count, Is.EqualTo(1));
+            Assert.That(_fakeHttpContext.Response.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey], Is.EqualTo(correlationId));
+
         }
 
         [Test]
@@ -108,10 +110,11 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
 
             await _middleware.InvokeAsync(_fakeHttpContext);
 
-            Assert.That(_fakeHttpContext.Request.Headers.Keys.Contains(CorrelationIdMiddleware.XCorrelationIdHeaderKey), Is.True);
-            Assert.That(_fakeHttpContext.Request.Headers.Values.Contains(correlationId), Is.True);
-            Assert.That(_fakeHttpContext.Response.Headers.Keys.Contains(CorrelationIdMiddleware.XCorrelationIdHeaderKey), Is.True);
-            Assert.That(_fakeHttpContext.Response.Headers.Values.Contains(correlationId), Is.True);
+            Assert.That(_fakeHttpContext.Request.Headers.Count, Is.EqualTo(1));
+            Assert.That(_fakeHttpContext.Request.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey], Is.EqualTo(correlationId));
+
+            Assert.That(_fakeHttpContext.Response.Headers.Count, Is.EqualTo(1));
+            Assert.That(_fakeHttpContext.Response.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey], Is.EqualTo(correlationId));
         }
     }
 }
