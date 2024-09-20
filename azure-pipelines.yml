@@ -1,6 +1,4 @@
 name: $(BuildDefinitionName)_$(SourceBranchName)_$(Date:yy)$(DayOfYear).$(BuildCounter)
-- name: DotNetSdkVersion
-value: "8.x"
 
 parameters:
   - name: ContinueEvenIfResourcesAreGettingDestroyed
@@ -41,6 +39,8 @@ variables:
     value: "Tiberius"
   - name: DeploymentPoolPE
     value: "Private Link Deployments (ENG)"
+  - name: DotNetSdkVersion
+    value: "8.x"
 
 stages:
   - stage: PERFORM_DEPENDENCYCHECK_DOTNETBUILD_DOTNETTEST_AND_PUBLISH
