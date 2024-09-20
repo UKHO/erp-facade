@@ -91,7 +91,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
             var correlationId = Guid.NewGuid().ToString();
             var bodyAsJson = new JArray { { new JObject { { "corrid", correlationId } } } };
             var bodyAsText = bodyAsJson.ToString();
-            var responseHeaders = new HeaderDictionary();
+            var responseHeaders =A.Fake<IHeaderDictionary>() ;
 
             _fakeHttpContext.Request.Body = new MemoryStream(Encoding.UTF8.GetBytes(bodyAsText));
             _fakeHttpContext.Request.ContentLength = bodyAsText.Length;
