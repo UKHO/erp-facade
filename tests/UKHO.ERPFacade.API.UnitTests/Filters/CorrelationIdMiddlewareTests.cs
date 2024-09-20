@@ -91,15 +91,19 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
 
             _fakeHttpContext.Request.Body = new MemoryStream(Encoding.UTF8.GetBytes(bodyAsText));
             _fakeHttpContext.Request.ContentLength = bodyAsText.Length;
-            _fakeHttpContext.Response.Body = new MemoryStream();
+            _fakeHttpContext.Response.Body = new MemoryStream();           
 
             await _middleware.InvokeAsync(_fakeHttpContext);
 
             A.CallTo(() => _fakeHttpContext.Request.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey]).Returns(correlationId);
             A.CallTo(() => _fakeHttpContext.Response.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey]).Returns(correlationId);
-            A.CallTo(() => _fakeHttpContext.Request.Headers.Append(CorrelationIdMiddleware.XCorrelationIdHeaderKey, correlationId)).MustHaveHappenedOnceExactly();
-            A.CallTo(() => _fakeHttpContext.Response.Headers.Append(CorrelationIdMiddleware.XCorrelationIdHeaderKey, correlationId)).MustHaveHappenedOnceExactly();
+           // A.CallTo(() => _fakeHttpContext.Request.Headers.Append(CorrelationIdMiddleware.XCorrelationIdHeaderKey, correlationId)).MustHaveHappenedOnceExactly();
+           // A.CallTo(() => _fakeHttpContext.Response.Headers.Append(CorrelationIdMiddleware.XCorrelationIdHeaderKey, correlationId)).MustHaveHappenedOnceExactly();
             A.CallTo(() => _fakeLogger.BeginScope(A<Dictionary<string, object>>._)).MustHaveHappenedOnceExactly();
+            Assert.That(_fakeHttpContext.Request.Headers.Keys.Contains(CorrelationIdMiddleware.XCorrelationIdHeaderKey), Is.True);
+            Assert.That(_fakeHttpContext.Request.Headers.Values.Contains(correlationId), Is.True);
+            Assert.That(_fakeHttpContext.Response.Headers.Keys.Contains(CorrelationIdMiddleware.XCorrelationIdHeaderKey), Is.True);
+            Assert.That(_fakeHttpContext.Response.Headers.Values.Contains(correlationId), Is.True);
         }
     }
 }
