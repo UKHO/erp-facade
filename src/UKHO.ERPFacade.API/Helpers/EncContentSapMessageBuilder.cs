@@ -154,13 +154,8 @@ namespace UKHO.ERPFacade.API.Helpers
                         //Case 8 : UPDATE ENC CELL EDITION UPDATE NUMBER
                         case 6:
                         case 8:
-                            if (ValidateActionRules(action, product))
-                            {
-                                if (unitOfSale is null)
-                                {
-                                    _logger.LogError(EventIds.UnitOfSaleNotFoundException.ToEventId(), "Required unit not found in event payload to generate {ActionName} action.", action.Action);
-                                    throw new ERPFacadeException(EventIds.UnitOfSaleNotFoundException.ToEventId());
-                                }
+                            if (ValidateActionRules(action, product) & unitOfSale is not null)
+                            {                                
                                 actionNode = BuildAction(soapXml, product, unitOfSale, action, eventData.Data.UkhoWeekNumber, product.ProductName);
                                 actionItemNode.AppendChild(actionNode);
                                 _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
