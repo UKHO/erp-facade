@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using FakeItEasy;
@@ -27,8 +28,10 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
             _fakeNextMiddleware = A.Fake<RequestDelegate>();
             _middleware = new CorrelationIdMiddleware(_fakeNextMiddleware);
             _fakeLogger = A.Fake<ILogger<CorrelationIdMiddleware>>();
-            _fakeHttpContext = A.Fake<HttpContext>();
+            var responseHeaders = new HeaderDictionary();
+            _fakeHttpContext = A.Fake<HttpContext>();            
             _fakeHttpContext.RequestServices = new ServiceCollection().AddSingleton(_fakeLogger).BuildServiceProvider();
+            A.CallTo(() => _fakeHttpContext.Response.Headers).Returns(responseHeaders);
         }
 
         [Test]
@@ -93,7 +96,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
             _fakeHttpContext.Request.ContentLength = bodyAsText.Length;
             _fakeHttpContext.Response.Body = new MemoryStream();           
 
-            await _middleware.InvokeAsync(_fakeHttpContext);
+            await _middleware.InvokeAsync(_fakeHttpContext);           
 
             A.CallTo(() => _fakeHttpContext.Request.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey]).Returns(correlationId);
             A.CallTo(() => _fakeHttpContext.Response.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey]).Returns(correlationId);
