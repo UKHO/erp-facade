@@ -277,9 +277,11 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
               && call.GetArgument<LogLevel>(0) == LogLevel.Information
               && call.GetArgument<EventId>(1) == EventIds.RecordOfSalePublishedEventOptionsCallCompleted.ToEventId()
               && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Completed processing the Options request for the Record of Sale Published event for webhook. | WebHook-Request-Origin : {webhookRequestOrigin}").MustHaveHappenedOnceExactly();
-
-            A.CallTo(() => responseHeaders.Add("WebHook-Allowed-Rate", "*")).MustHaveHappened();
-            A.CallTo(() => responseHeaders.Add("WebHook-Allowed-Origin", "test.com")).MustHaveHappened();
+                        
+            Assert.That(responseHeaders.ContainsKey("WebHook-Allowed-Rate"), Is.True);
+            Assert.That(responseHeaders["WebHook-Allowed-Rate"], Is.EqualTo("*"));
+            Assert.That(responseHeaders.ContainsKey("WebHook-Allowed-Origin"), Is.True);
+            Assert.That(responseHeaders["WebHook-Allowed-Origin"], Is.EqualTo("test.com"));
         }
 
         [Test]
