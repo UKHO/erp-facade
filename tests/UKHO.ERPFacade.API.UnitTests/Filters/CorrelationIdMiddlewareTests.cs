@@ -91,15 +91,22 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
             var correlationId = Guid.NewGuid().ToString();
             var bodyAsJson = new JArray { { new JObject { { "corrid", correlationId } } } };
             var bodyAsText = bodyAsJson.ToString();
+            var responseHeaders = new HeaderDictionary();
 
             _fakeHttpContext.Request.Body = new MemoryStream(Encoding.UTF8.GetBytes(bodyAsText));
             _fakeHttpContext.Request.ContentLength = bodyAsText.Length;
-            _fakeHttpContext.Response.Body = new MemoryStream();           
+            _fakeHttpContext.Response.Body = new MemoryStream();
+            A.CallTo(() => _fakeHttpContext.Response.Headers).Returns(responseHeaders);
+            A.CallTo(() => _fakeHttpContext.Request.Headers).Returns(responseHeaders);
+          
+
 
             await _middleware.InvokeAsync(_fakeHttpContext);
 
-            A.CallTo(() => _fakeHttpContext.Request.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey]).Returns(correlationId);
-            A.CallTo(() => _fakeHttpContext.Response.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey]).Returns(correlationId);
+            //A.CallTo(() => _fakeHttpContext.Request.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey]).Returns(correlationId);
+            //A.CallTo(() => _fakeHttpContext.Response.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey]).Returns(correlationId);
+            A.CallTo(() => _fakeHttpContext.Response.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey]).Returns(new[] { correlationId });
+            A.CallTo(() => _fakeHttpContext.Request.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey]).Returns(new[] { correlationId });
             _fakeHttpContext.Request.Headers.Append(CorrelationIdMiddleware.XCorrelationIdHeaderKey, correlationId);
             _fakeHttpContext.Response.Headers.Append(CorrelationIdMiddleware.XCorrelationIdHeaderKey, correlationId);
            // A.CallTo(() => _fakeHttpContext.Request.Headers.Append(CorrelationIdMiddleware.XCorrelationIdHeaderKey, correlationId)).MustHaveHappenedOnceExactly();
