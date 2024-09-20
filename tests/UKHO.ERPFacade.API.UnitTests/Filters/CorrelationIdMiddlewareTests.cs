@@ -27,11 +27,9 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
         {
             _fakeNextMiddleware = A.Fake<RequestDelegate>();
             _middleware = new CorrelationIdMiddleware(_fakeNextMiddleware);
-            _fakeLogger = A.Fake<ILogger<CorrelationIdMiddleware>>();
-           // var responseHeaders = A.Fake<IHeaderDictionary>();
+            _fakeLogger = A.Fake<ILogger<CorrelationIdMiddleware>>();           
             _fakeHttpContext = A.Fake<HttpContext>();            
-            _fakeHttpContext.RequestServices = new ServiceCollection().AddSingleton(_fakeLogger).BuildServiceProvider();
-           // A.CallTo(() => _fakeHttpContext.Response.Headers).Returns(responseHeaders);
+            _fakeHttpContext.RequestServices = new ServiceCollection().AddSingleton(_fakeLogger).BuildServiceProvider();          
         }
 
         [Test]
@@ -51,9 +49,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
             A.CallTo(() => _fakeHttpContext.Request.Headers).Returns(requestHeaders);
 
             await _middleware.InvokeAsync(_fakeHttpContext);
-
-            A.CallTo(() => _fakeHttpContext.Request.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey]).Returns(correlationId);
-            A.CallTo(() => _fakeHttpContext.Response.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey]).Returns(correlationId);
+           
             A.CallTo(() => _fakeLogger.BeginScope(A<Dictionary<string, object>>._)).MustHaveHappenedOnceExactly();
 
             Assert.That(_fakeHttpContext.Request.Headers.Keys.Contains(CorrelationIdMiddleware.XCorrelationIdHeaderKey), Is.True);
