@@ -21,7 +21,7 @@
                         ]
                     }
                 ],
-                "Attributes": [                   
+                "Attributes": [
                     {
                         "IsRequired": true,
                         "Section": "UnitOfSale",
@@ -149,7 +149,7 @@
                         ]
                     }
                 ],
-                "Attributes": [                   
+                "Attributes": [
                     {
                         "IsRequired": true,
                         "Section": "UnitOfSale",
@@ -261,12 +261,8 @@
                 "ActionNumber": 3,
                 "Action": "ASSIGN CELL TO AVCS UNIT OF SALE",
                 "Product": "AVCS UNIT",
-                "Rules": [
-                    {
-                        "Conditions": []
-                    }
-                ],
-                "Attributes": [                    
+                "Rules": [],
+                "Attributes": [
                     {
                         "IsRequired": true,
                         "Section": "UnitOfSale",
@@ -389,7 +385,7 @@
                         ]
                     }
                 ],
-                "Attributes": [                    
+                "Attributes": [
                     {
                         "IsRequired": true,
                         "Section": "UnitOfSale",
@@ -501,12 +497,8 @@
                 "ActionNumber": 5,
                 "Action": "ADDITIONAL COVERAGE ENC CELL",
                 "Product": "ENC CELL",
-                "Rules": [
-                    {
-                        "Conditions": []
-                    }
-                ],
-                "Attributes": [                  
+                "Rules": [],
+                "Attributes": [
                     {
                         "IsRequired": false,
                         "Section": "UnitOfSale",
@@ -638,7 +630,7 @@
                         ]
                     }
                 ],
-                "Attributes": [                    
+                "Attributes": [
                     {
                         "IsRequired": true,
                         "Section": "UnitOfSale",
@@ -771,7 +763,7 @@
                         ]
                     }
                 ],
-                "Attributes": [                    
+                "Attributes": [
                     {
                         "IsRequired": true,
                         "Section": "UnitOfSale",
@@ -899,7 +891,7 @@
                         ]
                     }
                 ],
-                "Attributes": [                    
+                "Attributes": [
                     {
                         "IsRequired": true,
                         "Section": "UnitOfSale",
@@ -1011,12 +1003,8 @@
                 "ActionNumber": 9,
                 "Action": "REMOVE ENC CELL FROM AVCS UNIT OF SALE",
                 "Product": "AVCS UNIT",
-                "Rules": [
-                    {
-                        "Conditions": []
-                    }
-                ],
-                "Attributes": [                   
+                "Rules": [],
+                "Attributes": [
                     {
                         "IsRequired": true,
                         "Section": "UnitOfSale",
@@ -1144,7 +1132,7 @@
                         ]
                     }
                 ],
-                "Attributes": [                    
+                "Attributes": [
                     {
                         "IsRequired": true,
                         "Section": "UnitOfSale",
@@ -1267,7 +1255,7 @@
                         ]
                     }
                 ],
-                "Attributes": [                    
+                "Attributes": [
                     {
                         "IsRequired": true,
                         "Section": "UnitOfSale",

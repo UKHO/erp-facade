@@ -25,24 +25,24 @@ namespace UKHO.ERPFacade.API.Filters
 
             if (!string.IsNullOrWhiteSpace(bodyAsText))
             {
-                JToken bodyAsJson = JToken.Parse(bodyAsText);
+                var bodyAsJson = JToken.Parse(bodyAsText);
                 if (bodyAsJson is JArray)
                 {
-                    JArray requestJArray = JArray.Parse(bodyAsText);
+                    var requestJArray = JArray.Parse(bodyAsText);
                     if (!string.IsNullOrEmpty(requestJArray.First.SelectToken(CorrIdKey)?.Value<string>()))
                         correlationId = requestJArray.First.SelectToken(CorrIdKey)?.Value<string>();
                 }
                 if (bodyAsJson is JObject)
                 {
-                    JObject requestJObject = JObject.Parse(bodyAsText);
+                    var requestJObject = JObject.Parse(bodyAsText);
                     correlationId = requestJObject.SelectToken(CorrelationIdKey)?.Value<string>();
                 }
             }
 
             httpContext.Request.Body.Position = 0;
 
-            httpContext.Request.Headers.Add(XCorrelationIdHeaderKey, correlationId);
-            httpContext.Response.Headers.Add(XCorrelationIdHeaderKey, correlationId);
+            httpContext.Request.Headers.Append(XCorrelationIdHeaderKey, correlationId);
+            httpContext.Response.Headers.Append(XCorrelationIdHeaderKey, correlationId);
 
             var state = new Dictionary<string, object>
             {

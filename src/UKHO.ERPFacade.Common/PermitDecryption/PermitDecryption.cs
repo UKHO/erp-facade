@@ -28,9 +28,9 @@ namespace UKHO.ERPFacade.Common.PermitDecryption
             }
         }
 
-        public PermitKey GetPermitKeys(string permit)
+        public DecryptedPermit Decrypt(string encryptedPermit)
         {
-            if (string.IsNullOrEmpty(permit))
+            if (string.IsNullOrEmpty(encryptedPermit))
             {
                 _logger.LogError(EventIds.EmptyPermitStringException.ToEventId(), "Encrypted permit is empty in event payload.");
                 throw new ERPFacadeException(EventIds.EmptyPermitStringException.ToEventId());
@@ -42,14 +42,14 @@ namespace UKHO.ERPFacade.Common.PermitDecryption
                 byte[] firstCellKey = null;
                 byte[] secondCellKey = null;
 
-                S63Crypt.GetEncKeysFromPermit(permit, hardwareIds, ref firstCellKey, ref secondCellKey);
+                S63Crypt.GetEncKeysFromPermit(encryptedPermit, hardwareIds, ref firstCellKey, ref secondCellKey);
 
-                var keys = new PermitKey
+                var decryptedPermit = new DecryptedPermit
                 {
                     ActiveKey = Convert.ToHexString(firstCellKey),
                     NextKey = Convert.ToHexString(secondCellKey)
                 };
-                return keys;
+                return decryptedPermit;
             }
             catch (Exception ex)
             {

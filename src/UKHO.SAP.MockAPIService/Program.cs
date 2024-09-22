@@ -21,9 +21,7 @@ namespace UKHO.SAP.MockAPIService
             IConfiguration configuration = builder.Configuration;
             IWebHostEnvironment webHostEnvironment = builder.Environment;
 
-            builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
-            {
-                config.SetBasePath(webHostEnvironment.ContentRootPath)
+            builder.Configuration.SetBasePath(webHostEnvironment.ContentRootPath)
                 .AddJsonFile("appsettings.json", false, true)
                 .AddJsonFile($"appsettings.{webHostEnvironment.EnvironmentName}.json", true, true)
 #if DEBUG
@@ -31,7 +29,6 @@ namespace UKHO.SAP.MockAPIService
                 .AddJsonFile("appsettings.local.overrides.json", true, true)
 #endif
                 .AddEnvironmentVariables();
-            });
 
             string kvServiceUri = configuration["KeyVaultSettings:ServiceUri"];
             if (!string.IsNullOrWhiteSpace(kvServiceUri))
@@ -50,9 +47,9 @@ namespace UKHO.SAP.MockAPIService
 
             builder.Services.AddSingleton<Iz_adds_mat_info, z_adds_mat_info>();
             builder.Services.AddSingleton<Iz_adds_ros, z_adds_ros>();
-            builder.Services.AddSingleton<IAzureBlobEventWriter, AzureBlobEventWriter>();            
+            builder.Services.AddSingleton<IAzureBlobEventWriter, AzureBlobEventWriter>();
             builder.Services.AddHealthChecks();
-            
+
             builder.Services.AddControllers(o =>
             {
                 o.AllowEmptyInputInBodyModelBinding = true;
@@ -65,11 +62,11 @@ namespace UKHO.SAP.MockAPIService
 
             app.UseHttpsRedirection();
 
-            app.UseWhen(context => (!context.Request.Path.StartsWithSegments("/api")&&
+            app.UseWhen(context => (!context.Request.Path.StartsWithSegments("/api") &&
                    !context.Request.Path.StartsWithSegments("/health")), appBuilder =>
-            {
-                appBuilder.BasicAuthCustomMiddleware();
-            });            
+                   {
+                       appBuilder.BasicAuthCustomMiddleware();
+                   });
 
             app.UseRouting();
 

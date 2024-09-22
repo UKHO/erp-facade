@@ -1,5 +1,4 @@
-﻿using System.Xml;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -68,8 +67,8 @@ namespace UKHO.ERPFacade.API.Controllers
 
             _logger.LogInformation(EventIds.NewEncContentPublishedEventOptionsCallStarted.ToEventId(), "Started processing the Options request for the New ENC Content Published event for webhook. | WebHook-Request-Origin : {webhookRequestOrigin}", webhookRequestOrigin);
 
-            HttpContext.Response.Headers.Add("WebHook-Allowed-Rate", "*");
-            HttpContext.Response.Headers.Add("WebHook-Allowed-Origin", webhookRequestOrigin);
+            HttpContext.Response.Headers.Append("WebHook-Allowed-Rate", "*");
+            HttpContext.Response.Headers.Append("WebHook-Allowed-Origin", webhookRequestOrigin);
 
             _logger.LogInformation(EventIds.NewEncContentPublishedEventOptionsCallCompleted.ToEventId(), "Completed processing the Options request for the New ENC Content Published event for webhook. | WebHook-Request-Origin : {webhookRequestOrigin}", webhookRequestOrigin);
 
@@ -83,7 +82,7 @@ namespace UKHO.ERPFacade.API.Controllers
         {
             _logger.LogInformation(EventIds.NewEncContentPublishedEventReceived.ToEventId(), "ERP Facade webhook has received new enccontentpublished event from EES.");
 
-            string correlationId = encEventJson.SelectToken(CorrelationIdKey)?.Value<string>();
+            var correlationId = encEventJson.SelectToken(CorrelationIdKey)?.Value<string>();
 
             if (string.IsNullOrEmpty(correlationId))
             {
@@ -98,13 +97,13 @@ namespace UKHO.ERPFacade.API.Controllers
             await _azureBlobEventWriter.UploadEvent(encEventJson.ToString(), correlationId, EncEventFileName);
             _logger.LogInformation(EventIds.UploadedEncContentPublishedEventInAzureBlob.ToEventId(), "ENC content published event is uploaded in blob storage successfully.");
 
-            XmlDocument sapPayload = _encContentSapMessageBuilder.BuildSapMessageXml(JsonConvert.DeserializeObject<EncEventPayload>(encEventJson.ToString()), correlationId);
+            var sapPayload = _encContentSapMessageBuilder.BuildSapMessageXml(JsonConvert.DeserializeObject<EncEventPayload>(encEventJson.ToString()), correlationId);
 
             _logger.LogInformation(EventIds.UploadSapXmlPayloadInAzureBlobStarted.ToEventId(), "Uploading the SAP xml payload in blob storage.");
             await _azureBlobEventWriter.UploadEvent(sapPayload.ToIndentedString(), correlationId, SapXmlPayloadFileName);
             _logger.LogInformation(EventIds.UploadSapXmlPayloadInAzureBlobCompleted.ToEventId(), "SAP xml payload is uploaded in blob storage successfully.");
 
-            HttpResponseMessage response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapEndpointForEncEvent, _sapConfig.Value.SapServiceOperationForEncEvent, _sapConfig.Value.SapUsernameForEncEvent, _sapConfig.Value.SapPasswordForEncEvent);
+            var response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapEndpointForEncEvent, _sapConfig.Value.SapServiceOperationForEncEvent, _sapConfig.Value.SapUsernameForEncEvent, _sapConfig.Value.SapPasswordForEncEvent);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -128,8 +127,8 @@ namespace UKHO.ERPFacade.API.Controllers
 
             _logger.LogInformation(EventIds.RecordOfSalePublishedEventOptionsCallStarted.ToEventId(), "Started processing the Options request for the Record of Sale Published event for webhook. | WebHook-Request-Origin : {webhookRequestOrigin}", webhookRequestOrigin);
 
-            HttpContext.Response.Headers.Add("WebHook-Allowed-Rate", "*");
-            HttpContext.Response.Headers.Add("WebHook-Allowed-Origin", webhookRequestOrigin);
+            HttpContext.Response.Headers.Append("WebHook-Allowed-Rate", "*");
+            HttpContext.Response.Headers.Append("WebHook-Allowed-Origin", webhookRequestOrigin);
 
             _logger.LogInformation(EventIds.RecordOfSalePublishedEventOptionsCallCompleted.ToEventId(), "Completed processing the Options request for the Record of Sale Published event for webhook. | WebHook-Request-Origin : {webhookRequestOrigin}", webhookRequestOrigin);
 
@@ -144,8 +143,8 @@ namespace UKHO.ERPFacade.API.Controllers
         {
             _logger.LogInformation(EventIds.RecordOfSalePublishedEventReceived.ToEventId(), "ERP Facade webhook has received record of sale event from EES.");
 
-            string correlationId = recordOfSaleEventJson.SelectToken(CorrelationIdKey)?.Value<string>();
-            string eventId = recordOfSaleEventJson.SelectToken(EventIdKey)?.Value<string>();
+            var correlationId = recordOfSaleEventJson.SelectToken(CorrelationIdKey)?.Value<string>();
+            var eventId = recordOfSaleEventJson.SelectToken(EventIdKey)?.Value<string>();
 
             if (string.IsNullOrEmpty(correlationId))
             {
@@ -177,8 +176,8 @@ namespace UKHO.ERPFacade.API.Controllers
 
             _logger.LogInformation(EventIds.LicenceUpdatedEventOptionsCallStarted.ToEventId(), "Started processing the Options request for the Licence updated event for webhook. | WebHook-Request-Origin : {webhookRequestOrigin}", webhookRequestOrigin);
 
-            HttpContext.Response.Headers.Add("WebHook-Allowed-Rate", "*");
-            HttpContext.Response.Headers.Add("WebHook-Allowed-Origin", webhookRequestOrigin);
+            HttpContext.Response.Headers.Append("WebHook-Allowed-Rate", "*");
+            HttpContext.Response.Headers.Append("WebHook-Allowed-Origin", webhookRequestOrigin);
 
             _logger.LogInformation(EventIds.LicenceUpdatedEventOptionsCallCompleted.ToEventId(), "Completed processing the Options request for the Licence updated event for webhook. | WebHook-Request-Origin : {webhookRequestOrigin}", webhookRequestOrigin);
 
@@ -193,7 +192,7 @@ namespace UKHO.ERPFacade.API.Controllers
         {
             _logger.LogInformation(EventIds.LicenceUpdatedEventPublishedEventReceived.ToEventId(), "ERP Facade webhook has received new licence updated publish event from EES.");
 
-            string correlationId = licenceUpdatedEventJson.SelectToken(CorrelationIdKey)?.Value<string>();
+            var correlationId = licenceUpdatedEventJson.SelectToken(CorrelationIdKey)?.Value<string>();
 
             if (string.IsNullOrEmpty(correlationId))
             {
@@ -208,13 +207,13 @@ namespace UKHO.ERPFacade.API.Controllers
             await _azureBlobEventWriter.UploadEvent(licenceUpdatedEventJson.ToString(), LicenceUpdatedContainerName, correlationId + '/' + LicenceUpdatedEventFileName);
             _logger.LogInformation(EventIds.UploadedLicenceUpdatedPublishedEventInAzureBlob.ToEventId(), "Licence updated  published event is uploaded in blob storage successfully.");
 
-            XmlDocument sapPayload = _licenceUpdatedSapMessageBuilder.BuildLicenceUpdatedSapMessageXml(JsonConvert.DeserializeObject<LicenceUpdatedEventPayLoad>(licenceUpdatedEventJson.ToString()), correlationId);
+            var sapPayload = _licenceUpdatedSapMessageBuilder.BuildLicenceUpdatedSapMessageXml(JsonConvert.DeserializeObject<LicenceUpdatedEventPayLoad>(licenceUpdatedEventJson.ToString()), correlationId);
 
             _logger.LogInformation(EventIds.UploadLicenceUpdatedSapXmlPayloadInAzureBlob.ToEventId(), "Uploading the SAP xml payload for licence updated event in blob storage.");
             await _azureBlobEventWriter.UploadEvent(sapPayload.ToIndentedString(), LicenceUpdatedContainerName, correlationId + '/' + SapXmlPayloadFileName);
             _logger.LogInformation(EventIds.UploadedLicenceUpdatedSapXmlPayloadInAzureBlob.ToEventId(), "SAP xml payload for licence updated event is uploaded in blob storage successfully.");
 
-            HttpResponseMessage response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapEndpointForRecordOfSale, _sapConfig.Value.SapServiceOperationForRecordOfSale, _sapConfig.Value.SapUsernameForRecordOfSale, _sapConfig.Value.SapPasswordForRecordOfSale);
+            var response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapEndpointForRecordOfSale, _sapConfig.Value.SapServiceOperationForRecordOfSale, _sapConfig.Value.SapUsernameForRecordOfSale, _sapConfig.Value.SapPasswordForRecordOfSale);
 
             if (!response.IsSuccessStatusCode)
             {

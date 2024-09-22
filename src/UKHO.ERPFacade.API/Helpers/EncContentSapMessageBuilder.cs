@@ -79,325 +79,334 @@ namespace UKHO.ERPFacade.API.Helpers
         {
             string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, SapXmlPath);
 
-            //Check whether SAP xml payload template file exists or not
+            // Check if SAP XML payload template exists
             if (!_fileSystemHelper.IsFileExists(sapXmlTemplatePath))
             {
                 _logger.LogError(EventIds.SapXmlTemplateNotFound.ToEventId(), "The SAP xml payload template does not exist.");
                 throw new FileNotFoundException("The SAP xml payload template does not exist.");
             }
 
-            XmlDocument soapXml = _xmlHelper.CreateXmlDocument(sapXmlTemplatePath);
+            var soapXml = _xmlHelper.CreateXmlDocument(sapXmlTemplatePath);
 
-            XmlNode IM_MATINFONode = soapXml.SelectSingleNode(XpathImMatInfo);
-            XmlNode actionItemNode = soapXml.SelectSingleNode(XpathActionItems);
+            var IM_MATINFONode = soapXml.SelectSingleNode(XpathImMatInfo);
+            var actionItemNode = soapXml.SelectSingleNode(XpathActionItems);
 
             _logger.LogInformation(EventIds.BuildingSapActionStarted.ToEventId(), "Building SAP actions.");
 
-            //SAP Actions for ENC Cell
-            foreach (var product in eventData.Data.Products)
-            {
-                foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == EncCell))
-                {
-                    XmlElement actionNode;
+            // Build SAP actions for ENC Cell
+            BuildEncCellActions(eventData, soapXml, actionItemNode);
 
-                    //Get primary unit of sale for product
-                    var unitOfSale = GetUnitOfSale(action.ActionNumber, eventData.Data.UnitsOfSales, product);
+            // Build SAP actions for Units
+            BuildUnitActions(eventData, soapXml, actionItemNode);
 
-                    switch (action.ActionNumber)
-                    {
-                        //Case 1 : CREATE ENC CELL
-                        //Case 10 : CANCEL ENC CELL
-                        case 1:
-                        case 10:
-                            if (ValidateActionRules(action, product))
-                            {
-                                if (unitOfSale is null)
-                                {
-                                    _logger.LogError(EventIds.UnitOfSaleNotFoundException.ToEventId(), "Required unit not found in event payload to generate {ActionName} action.", action.Action);
-                                    throw new ERPFacadeException(EventIds.UnitOfSaleNotFoundException.ToEventId());
-                                }
-                                actionNode = BuildAction(soapXml, product, unitOfSale, action, eventData.Data.UkhoWeekNumber, product.ProductName);
-                                actionItemNode.AppendChild(actionNode);
-                                _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
-                            }
-                            break;
-
-                        //Case 4 : REPLACED WITH ENC CELL 
-                        case 4:
-                            if (ValidateActionRules(action, product) && product.ReplacedBy.Count != 0)
-                            {
-                                if (unitOfSale is null)
-                                {
-                                    _logger.LogError(EventIds.UnitOfSaleNotFoundException.ToEventId(), "Required unit not found in event payload to generate {ActionName} action.", action.Action);
-                                    throw new ERPFacadeException(EventIds.UnitOfSaleNotFoundException.ToEventId());
-                                }
-                                foreach (var replacedProduct in product.ReplacedBy)
-                                {
-                                    actionNode = BuildAction(soapXml, product, unitOfSale, action, eventData.Data.UkhoWeekNumber, product.ProductName, replacedProduct);
-                                    actionItemNode.AppendChild(actionNode);
-                                    _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
-                                }
-                            }
-                            break;
-
-                        //Case 5 : ADDITIONAL COVERAGE ENC CELL
-                        case 5:
-                            foreach (var additionalCoverageProduct in product.AdditionalCoverage)
-                            {
-                                actionNode = BuildAction(soapXml, product, null, action, eventData.Data.UkhoWeekNumber, product.ProductName, additionalCoverageProduct);
-                                actionItemNode.AppendChild(actionNode);
-                                _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
-                            }
-                            break;
-
-                        //Case 6 : CHANGE ENC CELL
-                        //Case 8 : UPDATE ENC CELL EDITION UPDATE NUMBER
-                        case 6:
-                        case 8:
-                            if (ValidateActionRules(action, product) & unitOfSale is not null)
-                            {                                
-                                actionNode = BuildAction(soapXml, product, unitOfSale, action, eventData.Data.UkhoWeekNumber, product.ProductName);
-                                actionItemNode.AppendChild(actionNode);
-                                _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
-                            }
-                            break;
-                    }
-                }
-            }
-
-            //SAP Actions for Units
-            foreach (var unitOfSale in eventData.Data.UnitsOfSales)
-            {
-                foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == AvcsUnit))
-                {
-                    XmlElement actionNode;
-
-                    switch (action.ActionNumber)
-                    {
-                        //Case 2 : CREATE AVCS UNIT OF SALE
-                        //Case 7 : CHANGE AVCS UNIT OF SALE
-                        //Case 11 : CANCEL AVCS UNIT OF SALE
-                        case 2:
-                        case 7:
-                        case 11:
-                            if (ValidateActionRules(action, unitOfSale))
-                            {
-                                actionNode = BuildAction(soapXml, null, unitOfSale, action, eventData.Data.UkhoWeekNumber, string.Empty);
-                                actionItemNode.AppendChild(actionNode);
-                                _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
-                            }
-                            break;
-
-                        //Case 3 : ASSIGN CELL TO AVCS UNIT OF SALE
-                        case 3:
-                            foreach (var addProduct in unitOfSale.CompositionChanges.AddProducts)
-                            {
-                                actionNode = BuildAction(soapXml, null, unitOfSale, action, eventData.Data.UkhoWeekNumber, addProduct);
-                                actionItemNode.AppendChild(actionNode);
-                                _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
-                            }
-                            break;
-
-                        //Case 9 : REMOVE ENC CELL FROM AVCS UNIT OF SALE
-                        case 9:
-                            foreach (var removeProduct in unitOfSale.CompositionChanges.RemoveProducts)
-                            {
-                                actionNode = BuildAction(soapXml, null, unitOfSale, action, eventData.Data.UkhoWeekNumber, removeProduct);
-                                actionItemNode.AppendChild(actionNode);
-                                _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
-                            }
-                            break;
-                    }
-                }
-            }
-
-            XmlNode xmlNode = SortXmlPayload(actionItemNode);
-
-            XmlNode noOfActions = soapXml.SelectSingleNode(XpathNoOfActions);
-            XmlNode corrId = soapXml.SelectSingleNode(XpathCorrId);
-            XmlNode recDate = soapXml.SelectSingleNode(XpathRecDate);
-            XmlNode recTime = soapXml.SelectSingleNode(XpathRecTime);
-
-            corrId.InnerText = correlationId;
-            noOfActions.InnerText = xmlNode.ChildNodes.Count.ToString();
-            recDate.InnerText = DateTime.UtcNow.ToString(RecDateFormat);
-            recTime.InnerText = DateTime.UtcNow.ToString(RecTimeFormat);
-
-            IM_MATINFONode.AppendChild(xmlNode);
+            // Finalize SAP XML message
+            FinalizeSapXmlMessage(soapXml, correlationId, actionItemNode);
 
             return soapXml;
         }
 
-        private XmlElement BuildAction(XmlDocument soapXml, Product product, UnitOfSale unitOfSale, SapAction action, UkhoWeekNumber ukhoWeekNumber, string childCell, string replacedByOrAddCoverageProduct = null)
+        private void BuildEncCellActions(EncEventPayload eventData, XmlDocument soapXml, XmlNode actionItemNode)
         {
-            XmlElement itemNode = soapXml.CreateElement(Item);
-
-            XmlElement actionNumberNode = soapXml.CreateElement(ActionNumber);
-            actionNumberNode.InnerText = action.ActionNumber.ToString();
-
-            XmlElement actionNode = soapXml.CreateElement(Action);
-            actionNode.InnerText = action.Action.ToString();
-
-            XmlElement productNode = soapXml.CreateElement(Product);
-            productNode.InnerText = action.Product.ToString();
-
-            XmlElement prodTypeNode = soapXml.CreateElement(ProdType);
-            prodTypeNode.InnerText = ProdTypeValue;
-
-            XmlElement childCellNode = soapXml.CreateElement(ChildCell);
-            childCellNode.InnerText = childCell;
-
-            itemNode.AppendChild(actionNumberNode);
-            itemNode.AppendChild(actionNode);
-            itemNode.AppendChild(productNode);
-            itemNode.AppendChild(prodTypeNode);
-            itemNode.AppendChild(childCellNode);
-
-            List<(int sortingOrder, XmlElement itemNode)> actionAttributeList = [];
-
-            PermitKey? permitKey = (product != null && action.Action is CreateEncCell or UpdateCell) ? _permitDecryption.GetPermitKeys(product.Permit) : null;
-
-            foreach (var node in action.Attributes.Where(x => x.Section == ProductSection))
+            foreach (var product in eventData.Data.Products)
             {
-                XmlElement itemSubNode = soapXml.CreateElement(node.XmlNodeName);
-
-                if (node.IsRequired)
+                foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == EncCell))
                 {
-                    if (node.XmlNodeName == ReplacedBy && replacedByOrAddCoverageProduct != null)
+                    var unitOfSale = GetUnitOfSale(action.ActionNumber, eventData.Data.UnitsOfSales, product);
+
+                    if (!ValidateActionRules(action, product))
+                        continue;
+
+                    switch (action.ActionNumber)
                     {
-                        itemSubNode.InnerText = GetXmlNodeValue(replacedByOrAddCoverageProduct.ToString());
+                        case 1://CREATE ENC CELL
+                        case 10://CANCEL ENC CELL
+                            BuildAndAppendActionNode(soapXml, product, unitOfSale, action, eventData, actionItemNode, product.ProductName);
+                            break;
+
+                        case 4://REPLACED WITH ENC CELL
+                            foreach (var replacedProduct in product.ReplacedBy)
+                            {
+                                BuildAndAppendActionNode(soapXml, product, unitOfSale, action, eventData, actionItemNode, product.ProductName, replacedProduct);
+                            }
+                            break;
+
+                        case 5://ADDITIONAL COVERAGE ENC CELL
+                            foreach (var additionalCoverageProduct in product.AdditionalCoverage)
+                            {
+                                BuildAndAppendActionNode(soapXml, product, null, action, eventData, actionItemNode, product.ProductName, additionalCoverageProduct);
+                            }
+                            break;
+
+                        case 6://CHANGE ENC CELL
+                        case 8://UPDATE ENC CELL EDITION UPDATE NUMBER
+                            if (unitOfSale is not null)
+                                BuildAndAppendActionNode(soapXml, product, unitOfSale, action, eventData, actionItemNode, product.ProductName);
+                            break;
                     }
-                    else if (node.XmlNodeName == ActiveKey)
+                }
+            }
+        }
+
+        private void BuildUnitActions(EncEventPayload eventData, XmlDocument soapXml, XmlNode actionItemNode)
+        {
+            foreach (var unitOfSale in eventData.Data.UnitsOfSales)
+            {
+                foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == AvcsUnit))
+                {
+                    if (!ValidateActionRules(action, unitOfSale))
+                        continue;
+
+                    switch (action.ActionNumber)
                     {
-                        itemSubNode.InnerText = string.Empty;
-                        if (permitKey != null && !string.IsNullOrEmpty(permitKey.ActiveKey))
-                        {
-                            itemSubNode.InnerText = permitKey.ActiveKey;
-                        }
+                        case 2://CREATE AVCS UNIT OF SALE
+                        case 7://CHANGE AVCS UNIT OF SALE
+                        case 11://CANCEL AVCS UNIT OF SALE
+                            BuildAndAppendActionNode(soapXml, null, unitOfSale, action, eventData, actionItemNode);
+                            break;
+
+                        case 3://ASSIGN CELL TO AVCS UNIT OF SALE
+                            foreach (var addProduct in unitOfSale.CompositionChanges.AddProducts)
+                            {
+                                BuildAndAppendActionNode(soapXml, null, unitOfSale, action, eventData, actionItemNode, addProduct, null);
+                            }
+                            break;
+
+                        case 9://REMOVE ENC CELL FROM AVCS UNIT OF SALE
+                            foreach (var removeProduct in unitOfSale.CompositionChanges.RemoveProducts)
+                            {
+                                BuildAndAppendActionNode(soapXml, null, unitOfSale, action, eventData, actionItemNode, removeProduct, null);
+                            }
+                            break;
                     }
-                    else if (node.XmlNodeName == NextKey)
+                }
+            }
+        }
+
+        private void BuildAndAppendActionNode(XmlDocument soapXml, Product product, UnitOfSale unitOfSale, SapAction action, EncEventPayload eventData, XmlNode actionItemNode, string childCell = null, string replacedBy = null)
+        {
+            var actionNode = BuildAction(soapXml, product, unitOfSale, action, eventData.Data.UkhoWeekNumber, childCell, replacedBy);
+            actionItemNode.AppendChild(actionNode);
+            _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
+        }
+
+        private void FinalizeSapXmlMessage(XmlDocument soapXml, string correlationId, XmlNode actionItemNode)
+        {
+            var xmlNode = SortXmlPayload(actionItemNode);
+
+            SetXmlNodeValue(soapXml, XpathCorrId, correlationId);
+            SetXmlNodeValue(soapXml, XpathNoOfActions, xmlNode.ChildNodes.Count.ToString());
+            SetXmlNodeValue(soapXml, XpathRecDate, DateTime.UtcNow.ToString(RecDateFormat));
+            SetXmlNodeValue(soapXml, XpathRecTime, DateTime.UtcNow.ToString(RecTimeFormat));
+
+            var IM_MATINFONode = soapXml.SelectSingleNode(XpathImMatInfo);
+            IM_MATINFONode.AppendChild(xmlNode);
+        }
+
+        private bool ValidateActionRules(SapAction action, Object obj)
+        {
+            bool isConditionSatisfied = false;
+
+            //Return true if no rules for SAP action.
+            if (action.Rules is null) return true;
+
+            foreach (var rules in action.Rules)
+            {
+                foreach (var conditions in rules.Conditions)
+                {
+                    object jsonFieldValue = CommonHelper.ParseXmlNode(conditions.AttributeName, obj, obj.GetType());
+                    if (jsonFieldValue != null! && jsonFieldValue.ToString() == conditions.AttributeValue)
                     {
-                        itemSubNode.InnerText = string.Empty;
-                        if (permitKey != null && !string.IsNullOrEmpty(permitKey.NextKey))
-                        {
-                            itemSubNode.InnerText = permitKey.NextKey;
-                        }
+                        isConditionSatisfied = true;
                     }
                     else
                     {
-                        object jsonFieldValue = CommonHelper.ParseXmlNode(node.JsonPropertyName, product, product.GetType());
-                        itemSubNode.InnerText = GetXmlNodeValue(jsonFieldValue.ToString(), node.XmlNodeName);
+                        isConditionSatisfied = false;
+                        break;
                     }
                 }
-                else
-                {
-                    itemSubNode.InnerText = string.Empty;
-                }
-                actionAttributeList.Add((node.SortingOrder, itemSubNode));
+                if (isConditionSatisfied) break;
             }
+            return isConditionSatisfied;
+        }
 
-            foreach (var node in action.Attributes.Where(x => x.Section == UnitOfSaleSection))
+        private XmlElement BuildAction(XmlDocument soapXml, Product product, UnitOfSale unitOfSale, SapAction action, UkhoWeekNumber ukhoWeekNumber, string childCell, string replacedBy = null)
+        {
+            // Create main item node
+            var itemNode = soapXml.CreateElement(nameof(Item));
+
+            // Add basic action-related nodes
+            AppendChildNode(itemNode, soapXml, ActionNumber, action.ActionNumber.ToString());
+            AppendChildNode(itemNode, soapXml, Action, action.Action.ToString());
+            AppendChildNode(itemNode, soapXml, Product, action.Product.ToString());
+            AppendChildNode(itemNode, soapXml, ProdType, ProdTypeValue);
+
+            // Add child cell node
+            AppendChildNode(itemNode, soapXml, ChildCell, childCell);
+
+            List<(int sortingOrder, XmlElement node)> actionAttributes = [];
+
+            // Get permit keys for New cell and Updated cell
+            var decryptedPermit = product != null && (action.Action == CreateEncCell || action.Action == UpdateCell) ? _permitDecryption.Decrypt(product.Permit) : null;
+
+            // Process ProductSection attributes
+            ProcessAttributes(action.Attributes.Where(x => x.Section == ProductSection), soapXml, product, actionAttributes, decryptedPermit, replacedBy);
+
+            // Process UnitOfSaleSection attributes
+            ProcessAttributes(action.Attributes.Where(x => x.Section == UnitOfSaleSection), soapXml, unitOfSale, actionAttributes, null, null);
+
+            // Process UkhoWeekNumberSection attributes
+            ProcessUkhoWeekNumberAttributes(action.Attributes.Where(x => x.Section == UkhoWeekNumberSection), soapXml, ukhoWeekNumber, actionAttributes);
+
+            // Sort and append attributes to SAP action
+            foreach (var (sortingOrder, node) in actionAttributes.OrderBy(x => x.sortingOrder))
             {
-                XmlElement itemSubNode = soapXml.CreateElement(node.XmlNodeName);
-
-                if (node.IsRequired && unitOfSale != null)
-                {
-                    object jsonFieldValue = CommonHelper.ParseXmlNode(node.JsonPropertyName, unitOfSale, unitOfSale.GetType());
-                    itemSubNode.InnerText = GetXmlNodeValue(jsonFieldValue.ToString(), node.XmlNodeName);
-                }
-                else
-                {
-                    itemSubNode.InnerText = string.Empty;
-                }
-                actionAttributeList.Add((node.SortingOrder, itemSubNode));
-            }
-
-            foreach (var node in action.Attributes.Where(x => x.Section == UkhoWeekNumberSection))
-            {
-                XmlElement itemSubNode = soapXml.CreateElement(node.XmlNodeName);
-
-                if (node.IsRequired)
-                {
-                    if (IsValidWeekNumber(ukhoWeekNumber))
-                    {
-                        switch (node.XmlNodeName)
-                        {
-                            case ValidFrom:
-                                string weekDate = _weekDetailsProvider.GetDateOfWeek(
-                                ukhoWeekNumber.Year, ukhoWeekNumber.Week, ukhoWeekNumber.CurrentWeekAlphaCorrection);
-                                itemSubNode.InnerText = GetXmlNodeValue(weekDate);
-                                break;
-
-                            case WeekNo:
-                                string weekData = GetUkhoWeekNumberData(ukhoWeekNumber);
-                                itemSubNode.InnerText = GetXmlNodeValue(weekData);
-                                break;
-
-                            case Correction:
-                                itemSubNode.InnerText = ukhoWeekNumber.CurrentWeekAlphaCorrection ? GetXmlNodeValue(IsCorrectionTrue) : GetXmlNodeValue(IsCorrectionFalse);
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        _logger.LogError(EventIds.InvalidUkhoWeekNumber.ToEventId(), "Invalid UkhoWeekNumber field received in enccontentpublished event.");
-                        itemSubNode.InnerText = string.Empty;
-                    }
-                }
-                else
-                {
-                    itemSubNode.InnerText = string.Empty;
-                }
-                actionAttributeList.Add((node.SortingOrder, itemSubNode));
-            }
-
-            var sortedActionAttributeList = actionAttributeList.OrderBy(x => x.sortingOrder).ToList();
-
-            foreach (var itemAttribute in sortedActionAttributeList)
-            {
-                itemNode.AppendChild(itemAttribute.itemNode);
+                itemNode.AppendChild(node);
             }
 
             return itemNode;
         }
 
-        private XmlNode SortXmlPayload(XmlNode actionItemNode)
+        private void ProcessAttributes(IEnumerable<ActionItemAttribute> attributes, XmlDocument soapXml, object source, List<(int, XmlElement)> actionAttributes, DecryptedPermit decryptedPermit = null, string replacedBy = null)
         {
-            List<XmlNode> actionItemList = new();
-            int sequenceNumber = 1;
-
-            foreach (XmlNode subNode in actionItemNode)
+            foreach (var attribute in attributes)
             {
-                actionItemList.Add(subNode);
+                try
+                {
+                    var attributeNode = soapXml.CreateElement(attribute.XmlNodeName);
+
+                    if (attribute.IsRequired)
+                    {
+                        if (attribute.XmlNodeName == ReplacedBy && !string.IsNullOrEmpty(replacedBy))
+                        {
+                            attributeNode.InnerText = GetXmlNodeValue(replacedBy.ToString());
+                        }
+                        else if (attribute.XmlNodeName == ActiveKey && decryptedPermit != null && !string.IsNullOrEmpty(decryptedPermit.ActiveKey))
+                        {
+                            attributeNode.InnerText = decryptedPermit.ActiveKey;
+                        }
+                        else if (attribute.XmlNodeName == NextKey && decryptedPermit != null && !string.IsNullOrEmpty(decryptedPermit.NextKey))
+                        {
+                            attributeNode.InnerText = decryptedPermit.NextKey;
+                        }
+                        else
+                        {
+                            object jsonFieldValue = CommonHelper.ParseXmlNode(attribute.JsonPropertyName, source, source.GetType());
+
+                            if (jsonFieldValue != null)
+                            {
+                                attributeNode.InnerText = GetXmlNodeValue(jsonFieldValue.ToString(), attribute.XmlNodeName);
+                            }
+                            else
+                            {
+                                _logger.LogError($"Error processing attribute {attribute.JsonPropertyName} for {attribute.XmlNodeName}");
+                                throw new ERPFacadeException(EventIds.UnhandledException.ToEventId());
+                            }
+                        }
+                    }
+                    actionAttributes.Add((attribute.SortingOrder, attributeNode));
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error processing attribute {attribute.JsonPropertyName} for {attribute.XmlNodeName}: {ex.Message}");
+                    throw new ERPFacadeException(EventIds.UnhandledException.ToEventId());
+                }
             }
+        }
 
-            var sortedActionItemList = actionItemList.Cast<XmlNode>().OrderBy(x => Convert.ToInt32(x.SelectSingleNode(ActionNumber).InnerText)).ToList();
-
-            foreach (XmlNode actionItem in sortedActionItemList)
+        private void ProcessUkhoWeekNumberAttributes(IEnumerable<ActionItemAttribute> attributes, XmlDocument soapXml, UkhoWeekNumber ukhoWeekNumber, List<(int, XmlElement)> actionAttributes)
+        {
+            foreach (var attribute in attributes)
             {
-                actionItem.SelectSingleNode(ActionNumber).InnerText = sequenceNumber.ToString();
-                sequenceNumber++;
-            }
+                var attributeNode = soapXml.CreateElement(attribute.XmlNodeName);
 
-            foreach (XmlNode actionItem in sortedActionItemList)
-            {
-                actionItemNode.AppendChild(actionItem);
+                if (attribute.IsRequired && IsValidWeekNumber(ukhoWeekNumber))
+                {
+                    switch (attribute.XmlNodeName)
+                    {
+                        case ValidFrom:
+                            string weekDate = _weekDetailsProvider.GetDateOfWeek(ukhoWeekNumber.Year, ukhoWeekNumber.Week, ukhoWeekNumber.CurrentWeekAlphaCorrection);
+                            attributeNode.InnerText = GetXmlNodeValue(weekDate);
+                            break;
+                        case WeekNo:
+                            string weekData = GetUkhoWeekNumberData(ukhoWeekNumber);
+                            attributeNode.InnerText = GetXmlNodeValue(weekData);
+                            break;
+                        case Correction:
+                            attributeNode.InnerText = GetXmlNodeValue(ukhoWeekNumber.CurrentWeekAlphaCorrection ? IsCorrectionTrue : IsCorrectionFalse);
+                            break;
+                    }
+                }
+                else
+                {
+                    attributeNode.InnerText = string.Empty;
+                }
+                actionAttributes.Add((attribute.SortingOrder, attributeNode));
             }
-            return actionItemNode;
+        }
+
+        private void SetXmlNodeValue(XmlDocument xmlDoc, string xPath, string value)
+        {
+            var node = xmlDoc.SelectSingleNode(xPath);
+            if (node != null)
+            {
+                node.InnerText = value;
+            }
         }
 
         private string GetXmlNodeValue(string fieldValue, string xmlNodeName = null)
         {
-            if (!string.IsNullOrWhiteSpace(fieldValue))
-            {
-                if (xmlNodeName == Agency)
-                {
-                    return !string.IsNullOrEmpty(fieldValue) ? fieldValue.Substring(0, 2) : string.Empty;
-                }
+            // Return empty if fieldValue is null, empty, or whitespace
+            if (string.IsNullOrWhiteSpace(fieldValue))
+                return string.Empty;
 
-                return fieldValue.Substring(0, Math.Min(250, fieldValue.Length));
+            // Define constants for substring lengths
+            const int maxDefaultLength = 250;
+            const int agencyCodeLength = 2;
+
+            // Return first 2 characters if the node is Agency, else limit other nodes to 250 characters
+            if (xmlNodeName == Agency)
+                return fieldValue.Substring(0, Math.Min(agencyCodeLength, fieldValue.Length));
+
+            return fieldValue.Substring(0, Math.Min(maxDefaultLength, fieldValue.Length));
+        }
+
+        private XmlNode SortXmlPayload(XmlNode actionItemNode)
+        {
+            // Extract all action item nodes
+            var actionItems = actionItemNode.Cast<XmlNode>().ToList();
+            int sequenceNumber = 1;
+
+            // Sort based on the ActionNumber
+            var sortedActionItems = actionItems
+                .OrderBy(node => Convert.ToInt32(node.SelectSingleNode(ActionNumber)?.InnerText ?? "0"))
+                .ToList();
+
+            // Update the sequence number in the sorted list
+            foreach (XmlNode actionItem in sortedActionItems)
+            {
+                var actionNumberNode = actionItem.SelectSingleNode(ActionNumber);
+                if (actionNumberNode != null)
+                {
+                    actionNumberNode.InnerText = sequenceNumber.ToString();
+                    sequenceNumber++;
+                }
             }
-            return string.Empty;
+
+            // Clear existing children and append sorted action items
+            actionItemNode.RemoveAll();
+            foreach (XmlNode actionItem in sortedActionItems)
+            {
+                actionItemNode.AppendChild(actionItem);
+            }
+
+            return actionItemNode;
+        }
+
+        private void AppendChildNode(XmlElement parentNode, XmlDocument doc, string nodeName, string value)
+        {
+            var childNode = doc.CreateElement(nodeName);
+            childNode.InnerText = value ?? string.Empty;
+            parentNode.AppendChild(childNode);
         }
 
         private UnitOfSale? GetUnitOfSale(int actionNumber, List<UnitOfSale> listOfUnitOfSales, Product product)
@@ -439,29 +448,6 @@ namespace UKHO.ERPFacade.API.Helpers
             if (ukhoWeekNumber.Week == 0 || ukhoWeekNumber.Year == 0) isValid = false;
 
             return isValid;
-        }
-
-        private bool ValidateActionRules(SapAction action, Object obj)
-        {
-            bool isConditionSatisfied = false;
-            foreach (var rules in action.Rules)
-            {
-                foreach (var conditions in rules.Conditions)
-                {
-                    object jsonFieldValue = CommonHelper.ParseXmlNode(conditions.AttributeName, obj, obj.GetType());
-                    if (jsonFieldValue != null! && jsonFieldValue.ToString() == conditions.AttributeValue)
-                    {
-                        isConditionSatisfied = true;
-                    }
-                    else
-                    {
-                        isConditionSatisfied = false;
-                        break;
-                    }
-                }
-                if (isConditionSatisfied) break;
-            }
-            return isConditionSatisfied;
         }
     }
 }

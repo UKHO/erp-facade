@@ -29,8 +29,8 @@ namespace UKHO.ERPFacade.API.Filters
 
                 if (exceptionType == typeof(ERPFacadeException))
                 {
-                    EventIds eventId = (EventIds)((ERPFacadeException)exception).EventId.Id;
-                    _logger.LogError(eventId.ToEventId(), exception, eventId.ToString() + ". | _X-Correlation-ID : {_X-Correlation-ID}", correlationId);
+                    var eventId = (EventIds)((ERPFacadeException)exception).EventId.Id;
+                    _logger.LogError(eventId.ToEventId(), exception, "_X-Correlation-ID : {_X-Correlation-ID}", correlationId);
                 }
                 else
                 {
