@@ -88,7 +88,6 @@ namespace UKHO.ERPFacade.API.Helpers
 
             var soapXml = _xmlHelper.CreateXmlDocument(sapXmlTemplatePath);
 
-            var IM_MATINFONode = soapXml.SelectSingleNode(XpathImMatInfo);
             var actionItemNode = soapXml.SelectSingleNode(XpathActionItems);
 
             _logger.LogInformation(EventIds.BuildingSapActionStarted.ToEventId(), "Building SAP actions.");
@@ -333,30 +332,39 @@ namespace UKHO.ERPFacade.API.Helpers
         {
             foreach (var attribute in attributes)
             {
-                var attributeNode = soapXml.CreateElement(attribute.XmlNodeName);
+                try
+                {
+                    var attributeNode = soapXml.CreateElement(attribute.XmlNodeName);
 
-                if (attribute.IsRequired && IsValidWeekNumber(ukhoWeekNumber))
-                {
-                    switch (attribute.XmlNodeName)
+                    if (attribute.IsRequired)
                     {
-                        case ValidFrom:
-                            string weekDate = _weekDetailsProvider.GetDateOfWeek(ukhoWeekNumber.Year, ukhoWeekNumber.Week, ukhoWeekNumber.CurrentWeekAlphaCorrection);
-                            attributeNode.InnerText = GetXmlNodeValue(weekDate);
-                            break;
-                        case WeekNo:
-                            string weekData = GetUkhoWeekNumberData(ukhoWeekNumber);
-                            attributeNode.InnerText = GetXmlNodeValue(weekData);
-                            break;
-                        case Correction:
-                            attributeNode.InnerText = GetXmlNodeValue(ukhoWeekNumber.CurrentWeekAlphaCorrection ? IsCorrectionTrue : IsCorrectionFalse);
-                            break;
+                        switch (attribute.XmlNodeName)
+                        {
+                            case ValidFrom:
+                                string weekDate = _weekDetailsProvider.GetDateOfWeek(ukhoWeekNumber.Year, ukhoWeekNumber.Week, ukhoWeekNumber.CurrentWeekAlphaCorrection);
+                                attributeNode.InnerText = GetXmlNodeValue(weekDate);
+                                break;
+                            case WeekNo:
+                                string weekData = GetUkhoWeekNumberData(ukhoWeekNumber);
+                                attributeNode.InnerText = GetXmlNodeValue(weekData);
+                                break;
+                            case Correction:
+                                attributeNode.InnerText = GetXmlNodeValue(ukhoWeekNumber.CurrentWeekAlphaCorrection ? IsCorrectionTrue : IsCorrectionFalse);
+                                break;
+                        }
                     }
+                    else
+                    {
+                        attributeNode.InnerText = string.Empty;
+                    }
+
+                    actionAttributes.Add((attribute.SortingOrder, attributeNode));
                 }
-                else
+                catch (Exception ex)
                 {
-                    attributeNode.InnerText = string.Empty;
+                    _logger.LogError($"Error processing attribute {attribute.JsonPropertyName} for {attribute.XmlNodeName}: {ex.Message}");
+                    throw new ERPFacadeException(EventIds.UnhandledException.ToEventId());
                 }
-                actionAttributes.Add((attribute.SortingOrder, attributeNode));
             }
         }
 
@@ -454,16 +462,6 @@ namespace UKHO.ERPFacade.API.Helpers
             var weekNumber = string.Join("", ukhoWeekNumber.Year, validWeek);
 
             return weekNumber;
-        }
-
-        private bool IsValidWeekNumber(UkhoWeekNumber ukhoWeekNumber)
-        {
-            bool isValid = ukhoWeekNumber != null!;
-            if (!isValid) return isValid;
-
-            if (ukhoWeekNumber.Week == 0 || ukhoWeekNumber.Year == 0) isValid = false;
-
-            return isValid;
         }
     }
 }

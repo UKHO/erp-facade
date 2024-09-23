@@ -6,9 +6,6 @@ namespace UKHO.ERPFacade.Common.Models
     [ExcludeFromCodeCoverage]
     public class Product
     {
-        [JsonProperty("productType")]
-        public string ProductType { get; set; }
-
         [JsonProperty("dataSetName")]
         public string DataSetName { get; set; }
 
@@ -47,9 +44,6 @@ namespace UKHO.ERPFacade.Common.Models
 
         [JsonProperty("size")]
         public string Size { get; set; }
-
-        [JsonProperty("agency")]
-        public string Agency { get; set; }
 
         [JsonProperty("bundle")]
         public List<Bundle> Bundle { get; set; }
@@ -178,7 +172,7 @@ namespace UKHO.ERPFacade.Common.Models
         public string Location { get; set; }
 
         [JsonProperty("fileSize")]
-        public string FileSize { get; set; }
+        public int FileSize { get; set; }
 
         [JsonProperty("compression")]
         public bool Compression { get; set; }
@@ -200,7 +194,7 @@ namespace UKHO.ERPFacade.Common.Models
         public string Location { get; set; }
 
         [JsonProperty("fileSize")]
-        public string FileSize { get; set; }
+        public int FileSize { get; set; }
     }
 
     [ExcludeFromCodeCoverage]
@@ -212,11 +206,8 @@ namespace UKHO.ERPFacade.Common.Models
         [JsonProperty("hash")]
         public string Hash { get; set; }
 
-        [JsonProperty("location")]
-        public string Location { get; set; }
-
         [JsonProperty("fileSize")]
-        public string FileSize { get; set; }
+        public int FileSize { get; set; }
     }
 
     [ExcludeFromCodeCoverage]
