@@ -40,7 +40,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
                         //Acquiring token through user interaction
                         AuthenticationResult tokenTask = await debugApp.AcquireTokenInteractive(scopes)
-                                                                .WithAuthority($"{Config.TestConfig.AzureADConfiguration.MicrosoftOnlineLoginUrl}{Config.TestConfig.AzureADConfiguration.TenantId}", true)
                                                                 .ExecuteAsync();
                         token = tokenTask.AccessToken;
                     }
