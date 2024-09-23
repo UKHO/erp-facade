@@ -1,6 +1,8 @@
 parameters:
   - name: AzureSubscription
     type: string
+  
+variables:
   - name: DotNetSdkVersion
     value: "8.x"
 
