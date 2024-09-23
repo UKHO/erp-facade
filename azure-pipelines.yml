@@ -460,6 +460,7 @@ stages:
           - template: Deployment/templates/continuous-testing.yml
             parameters:
               AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
+              DotNetSdkVersion: $(DotNetSdkVersion)
 
   - stage: vNextIATDeploy
     dependsOn:  Devdeploy
