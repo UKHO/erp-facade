@@ -120,10 +120,22 @@ namespace UKHO.ERPFacade.API.Helpers
                     {
                         case 1://CREATE ENC CELL
                         case 10://CANCEL ENC CELL
+                            if (unitOfSale is null)
+                            {
+                                _logger.LogError(EventIds.UnitOfSaleNotFoundException.ToEventId(), "Required unit not found in event payload to generate {ActionName} action.", action.Action);
+                                throw new ERPFacadeException(EventIds.UnitOfSaleNotFoundException.ToEventId());
+                            }
+
                             BuildAndAppendActionNode(soapXml, product, unitOfSale, action, eventData, actionItemNode, product.ProductName);
                             break;
 
                         case 4://REPLACED WITH ENC CELL
+                            if (product.ReplacedBy.Any() && unitOfSale is null)
+                            {
+                                _logger.LogError(EventIds.UnitOfSaleNotFoundException.ToEventId(), "Required unit not found in event payload to generate {ActionName} action.", action.Action);
+                                throw new ERPFacadeException(EventIds.UnitOfSaleNotFoundException.ToEventId());
+                            }
+
                             foreach (var replacedProduct in product.ReplacedBy)
                             {
                                 BuildAndAppendActionNode(soapXml, product, unitOfSale, action, eventData, actionItemNode, product.ProductName, replacedProduct);
@@ -303,6 +315,10 @@ namespace UKHO.ERPFacade.API.Helpers
                             }
                         }
                     }
+                    else
+                    {
+                        attributeNode.InnerText = string.Empty;
+                    }
                     actionAttributes.Add((attribute.SortingOrder, attributeNode));
                 }
                 catch (Exception ex)
@@ -365,9 +381,9 @@ namespace UKHO.ERPFacade.API.Helpers
 
             // Return first 2 characters if the node is Agency, else limit other nodes to 250 characters
             if (xmlNodeName == Agency)
-                return fieldValue.Substring(0, Math.Min(agencyCodeLength, fieldValue.Length));
+                return CommonHelper.ToSubstring(fieldValue, 0, agencyCodeLength);
 
-            return fieldValue.Substring(0, Math.Min(maxDefaultLength, fieldValue.Length));
+            return CommonHelper.ToSubstring(fieldValue, 0, maxDefaultLength);
         }
 
         private XmlNode SortXmlPayload(XmlNode actionItemNode)
