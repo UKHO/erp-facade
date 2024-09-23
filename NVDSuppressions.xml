@@ -394,16 +394,7 @@
     </notes>
     <packageUrl regex="true">^pkg:generic/Azure\.Identity@.*$</packageUrl>
     <cve>CVE-2024-35255</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
-   file name: Azure.Identity:1.12.0
-   ]]>
-    </notes>
-    <packageUrl regex="true">^pkg:generic/Azure\.Identity@.*$</packageUrl>
-    <cve>CVE-2024-35255</cve>
-  </suppress>
+  </suppress> 
   <suppress>
     <notes>
       <![CDATA[
