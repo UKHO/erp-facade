@@ -30,12 +30,6 @@ namespace UKHO.ERPFacade.Common.PermitDecryption
 
         public DecryptedPermit Decrypt(string encryptedPermit)
         {
-            if (string.IsNullOrEmpty(encryptedPermit))
-            {
-                _logger.LogError(EventIds.EmptyPermitStringException.ToEventId(), "Encrypted permit is empty in event payload.");
-                throw new ERPFacadeException(EventIds.EmptyPermitStringException.ToEventId());
-            }
-
             try
             {
                 byte[] hardwareIds = GetHardwareIds();
