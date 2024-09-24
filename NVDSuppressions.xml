@@ -423,5 +423,14 @@
     <cve>CVE-2020-7021</cve>
     <cve>CVE-2020-7020</cve>
   </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Elastic.Apm.EntityFrameworkCore.dll
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:generic/Elastic\.Apm\.EntityFrameworkCore@.*$</packageUrl>
+    <cve>CVE-2019-7617</cve>
+  </suppress>
 </suppressions>
 
