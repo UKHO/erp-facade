@@ -404,23 +404,24 @@
     <packageUrl regex="true">^pkg:nuget/Azure\.Identity@.*$</packageUrl>
     <cve>CVE-2024-35255</cve>
   </suppress>
-</suppressions>
-<suppress>
-  <notes>
-    <![CDATA[
+  <suppress>
+    <notes>
+      <![CDATA[
    file name: Elastic.Apm.Elasticsearch.dll   
    ]]>
-  </notes>
-  <packageUrl regex="true">^pkg:generic/Elastic\.Apm\.Elasticsearch@.*$</packageUrl>
-  <cve>CVE-2019-7611</cve>
-  <cve>CVE-2023-46674</cve>
-  <cve>CVE-2023-31418</cve>
-  <cve>CVE-2019-7617</cve>
-  <cve>CVE-2020-7019</cve>
-  <cve>CVE-2021-22144</cve>
-  <cve>CVE-2019-7614</cve>
-  <cve>CVE-2021-22135</cve>
-  <cve>CVE-2021-22137</cve>
-  <cve>CVE-2020-7021</cve>
-  <cve>CVE-2020-7020</cve>
-</suppress>
+    </notes>
+    <packageUrl regex="true">^pkg:generic/Elastic\.Apm\.Elasticsearch@.*$</packageUrl>
+    <cve>CVE-2019-7611</cve>
+    <cve>CVE-2023-46674</cve>
+    <cve>CVE-2023-31418</cve>
+    <cve>CVE-2019-7617</cve>
+    <cve>CVE-2020-7019</cve>
+    <cve>CVE-2021-22144</cve>
+    <cve>CVE-2019-7614</cve>
+    <cve>CVE-2021-22135</cve>
+    <cve>CVE-2021-22137</cve>
+    <cve>CVE-2020-7021</cve>
+    <cve>CVE-2020-7020</cve>
+  </suppress>
+</suppressions>
+
