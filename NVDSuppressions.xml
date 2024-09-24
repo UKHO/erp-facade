@@ -525,6 +525,15 @@
     <cve>CVE-2015-1609</cve>
     <cve>CVE-2013-2132</cve>
   </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Elasticsearch.Net.dll
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:generic/Elasticsearch\.Net@.*$</packageUrl>
+    <cve>CVE-2023-46674</cve>
+  </suppress>
 
 
 
