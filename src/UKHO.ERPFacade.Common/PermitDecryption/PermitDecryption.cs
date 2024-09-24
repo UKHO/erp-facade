@@ -47,7 +47,7 @@ namespace UKHO.ERPFacade.Common.PermitDecryption
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.PermitDecryptionException.ToEventId(), ex, "Permit decryption failed and could not generate ActiveKey & NextKey.");
+                _logger.LogError(EventIds.PermitDecryptionException.ToEventId(), ex, "Permit decryption failed and could not generate ActiveKey & NextKey. | Exception : {Exception}", ex.Message);
                 throw new ERPFacadeException(EventIds.PermitDecryptionException.ToEventId());
             }
         }

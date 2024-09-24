@@ -109,7 +109,7 @@ namespace UKHO.ERPFacade.API.Helpers
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.GenerationOfSapXmlPayloadFailed.ToEventId(), "Error while building SAP XML payload. | Exception : {Exception}", ex.Message);
+                _logger.LogError(EventIds.GenerationOfSapXmlPayloadFailed.ToEventId(), ex, "Error while building SAP XML payload. | Exception : {Exception}", ex.Message);
                 throw new ERPFacadeException(EventIds.GenerationOfSapXmlPayloadFailed.ToEventId());
             }
         }
@@ -133,7 +133,7 @@ namespace UKHO.ERPFacade.API.Helpers
                         case 10://CANCEL ENC CELL
                             if (unitOfSale is null)
                             {
-                                _logger.LogError(EventIds.UnitOfSaleNotFoundException.ToEventId(), "Required unit not found in event payload to generate {ActionName} action for {Product}.", action.Action, product.ProductName);
+                                _logger.LogError(EventIds.UnitOfSaleNotFoundException.ToEventId(), new Exception(), "Required unit not found in event payload to generate {ActionName} action for {Product}.", action.Action, product.ProductName);
                                 throw new ERPFacadeException(EventIds.UnitOfSaleNotFoundException.ToEventId());
                             }
                             BuildAndAppendActionNode(soapXml, product, unitOfSale, action, eventData, actionItemNode, product.ProductName);
@@ -142,7 +142,7 @@ namespace UKHO.ERPFacade.API.Helpers
                         case 4://REPLACED WITH ENC CELL
                             if (product.ReplacedBy.Any() && unitOfSale is null)
                             {
-                                _logger.LogError(EventIds.UnitOfSaleNotFoundException.ToEventId(), "Required unit not found in event payload to generate {ActionName} action for {Product}.", action.Action, product.ProductName);
+                                _logger.LogError(EventIds.UnitOfSaleNotFoundException.ToEventId(), new Exception(), "Required unit not found in event payload to generate {ActionName} action for {Product}.", action.Action, product.ProductName);
                                 throw new ERPFacadeException(EventIds.UnitOfSaleNotFoundException.ToEventId());
                             }
                             foreach (var replacedProduct in product.ReplacedBy)
@@ -264,6 +264,7 @@ namespace UKHO.ERPFacade.API.Helpers
                 foreach (var conditions in rules.Conditions)
                 {
                     object jsonFieldValue = CommonHelper.ParseXmlNode(conditions.AttributeName, obj, obj.GetType());
+
                     if (jsonFieldValue != null! && jsonFieldValue.ToString() == conditions.AttributeValue)
                     {
                         isConditionSatisfied = true;
@@ -306,7 +307,7 @@ namespace UKHO.ERPFacade.API.Helpers
             List<(int sortingOrder, XmlElement node)> actionAttributes = [];
 
             // Get permit keys for New cell and Updated cell
-            if (product != null && !IsPropertyNullOrEmpty(product.Permit) && (action.Action == CreateEncCell || action.Action == UpdateCell))
+            if (product != null && !IsPropertyNullOrEmpty("permit", product.Permit) && (action.Action == CreateEncCell || action.Action == UpdateCell))
             {
                 decryptedPermit = _permitDecryption.Decrypt(product.Permit);
             }
@@ -346,15 +347,15 @@ namespace UKHO.ERPFacade.API.Helpers
 
                     if (attribute.IsRequired)
                     {
-                        if (attribute.XmlNodeName == ReplacedBy && !IsPropertyNullOrEmpty(replacedBy))
+                        if (attribute.XmlNodeName == ReplacedBy && !IsPropertyNullOrEmpty(attribute.JsonPropertyName, replacedBy))
                         {
                             attributeNode.InnerText = GetXmlNodeValue(replacedBy.ToString());
                         }
-                        else if (attribute.XmlNodeName == ActiveKey && decryptedPermit != null && !IsPropertyNullOrEmpty(decryptedPermit.ActiveKey))
+                        else if (attribute.XmlNodeName == ActiveKey && decryptedPermit != null && !IsPropertyNullOrEmpty(attribute.JsonPropertyName, decryptedPermit.ActiveKey))
                         {
                             attributeNode.InnerText = decryptedPermit.ActiveKey;
                         }
-                        else if (attribute.XmlNodeName == NextKey && decryptedPermit != null && !IsPropertyNullOrEmpty(decryptedPermit.NextKey))
+                        else if (attribute.XmlNodeName == NextKey && decryptedPermit != null && !IsPropertyNullOrEmpty(attribute.JsonPropertyName, decryptedPermit.NextKey))
                         {
                             attributeNode.InnerText = decryptedPermit.NextKey;
                         }
@@ -362,7 +363,7 @@ namespace UKHO.ERPFacade.API.Helpers
                         {
                             var jsonFieldValue = CommonHelper.ParseXmlNode(attribute.JsonPropertyName, source, source.GetType()).ToString();
 
-                            if (!IsPropertyNullOrEmpty(jsonFieldValue))
+                            if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, jsonFieldValue))
                             {
                                 attributeNode.InnerText = GetXmlNodeValue(jsonFieldValue.ToString(), attribute.XmlNodeName);
                             }
@@ -376,7 +377,7 @@ namespace UKHO.ERPFacade.API.Helpers
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(EventIds.BuildingSapActionInformationException.ToEventId(), "Error while generating SAP action information. | Action : {ActionName} | XML Attribute : {attribute.XmlNodeName} | Exception : {Exception}", action, attribute.XmlNodeName, ex.Message);
+                    _logger.LogError(EventIds.BuildingSapActionInformationException.ToEventId(), ex, "Error while generating SAP action information. | Action : {ActionName} | XML Attribute : {attribute.XmlNodeName} | Exception : {Exception}", action, attribute.XmlNodeName, ex.Message);
                     throw new ERPFacadeException(EventIds.BuildingSapActionInformationException.ToEventId());
                 }
             }
@@ -386,7 +387,7 @@ namespace UKHO.ERPFacade.API.Helpers
         {
             if (ukhoWeekNumber == null)
             {
-                _logger.LogError(EventIds.RequiredSectionNotFound.ToEventId(), "UkhoWeekNumber section not found in enccontentpublished event payload while creating {Action} action.", action);
+                _logger.LogError(EventIds.RequiredSectionNotFound.ToEventId(), new Exception(), "UkhoWeekNumber section not found in enccontentpublished event payload while creating {Action} action.", action);
                 throw new ERPFacadeException(EventIds.RequiredSectionNotFound.ToEventId());
             }
 
@@ -421,7 +422,7 @@ namespace UKHO.ERPFacade.API.Helpers
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(EventIds.BuildingSapActionInformationException.ToEventId(), "Error while generating SAP action information. | Action : {ActionName} | XML Attribute : {attribute.XmlNodeName} | Exception : {Exception}", action, attribute.XmlNodeName, ex.Message);
+                    _logger.LogError(EventIds.BuildingSapActionInformationException.ToEventId(), ex, "Error while generating SAP action information. | Action : {ActionName} | XML Attribute : {attribute.XmlNodeName} | Exception : {Exception}", action, attribute.XmlNodeName, ex.Message);
                     throw new ERPFacadeException(EventIds.BuildingSapActionInformationException.ToEventId());
                 }
             }
@@ -484,11 +485,11 @@ namespace UKHO.ERPFacade.API.Helpers
             return actionItemNode;
         }
 
-        private bool IsPropertyNullOrEmpty(string propertyName)
+        private bool IsPropertyNullOrEmpty(string propertyName, string propertyValue)
         {
-            if (string.IsNullOrEmpty(propertyName))
+            if (string.IsNullOrEmpty(propertyValue))
             {
-                _logger.LogError(EventIds.EmptyEventJsonPropertyException.ToEventId(), "SAP required property {Property} found empty in enccontentpublished event payload.", propertyName);
+                _logger.LogError(EventIds.EmptyEventJsonPropertyException.ToEventId(), new Exception(), "SAP required property found empty in enccontentpublished event payload. | Property Name : {Property}", propertyName);
                 throw new ERPFacadeException(EventIds.EmptyEventJsonPropertyException.ToEventId());
             }
             else return false;
