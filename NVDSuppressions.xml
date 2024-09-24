@@ -475,8 +475,7 @@
     </notes>
     <packageUrl regex="true">^pkg:generic/Elasticsearch\.Net@.*$</packageUrl>
     <cve>CVE-2020-7009</cve>
-    <cve>CVE-2020-7014</cve>
-    <cve> CVE-2023-46674</cve>
+    <cve>CVE-2020-7014</cve>   
     <cve>CVE-2023-31418</cve>
     <cve>CVE-2023-31419</cve>
     <cve>CVE-2023-46673</cve>
@@ -501,6 +500,32 @@
     <cve>CVE-2014-8180</cve>
     <cve>CVE-2016-6494</cve>
   </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: MongoDB.Driver.Core.dll
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:generic/MongoDB\.Driver\.Core@.*$</packageUrl>
+    <cve>CVE-2021-32036</cve>
+    <cve>CVE-2014-8180</cve>
+    <cve>CVE-2016-6494</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: MongoDB.Libmongocrypt.dll
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:generic/MongoDB\.Libmongocrypt@.*$</packageUrl>
+    <cve>CVE-2012-6619</cve>
+    <cve>CVE-2013-1892</cve>
+    <cve>CVE-2014-8180</cve>
+    <cve>CVE-2016-6494</cve>
+    <cve>CVE-2015-1609</cve>
+    <cve>CVE-2013-2132</cve>
+  </suppress>
+
 
 
 </suppressions>
