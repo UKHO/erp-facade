@@ -66,7 +66,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Error
             && call.GetArgument<EventId>(1) == eventId.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == eventId.ToString() + ". | _X-Correlation-ID : {_X-Correlation-ID}").MustHaveHappenedOnceExactly();
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "_X-Correlation-ID : {_X-Correlation-ID}").MustHaveHappenedOnceExactly();
 
             Assert.That((int)HttpStatusCode.InternalServerError, Is.EqualTo(_fakeHttpContext.Response.StatusCode));
         }
