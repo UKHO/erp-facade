@@ -75,7 +75,7 @@ namespace UKHO.ERPFacade.API.Helpers
         /// <param name="eventData"></param>
         /// <param name="correlationId"></param>
         /// <returns>XmlDocument</returns>
-        public XmlDocument BuildSapMessageXml(EncEventPayload eventData, string correlationId)
+        public XmlDocument BuildSapMessageXml(EncEventPayload eventData)
         {
             string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, SapXmlPath);
 
@@ -99,7 +99,7 @@ namespace UKHO.ERPFacade.API.Helpers
             BuildUnitActions(eventData, soapXml, actionItemNode);
 
             // Finalize SAP XML message
-            FinalizeSapXmlMessage(soapXml, correlationId, actionItemNode);
+            FinalizeSapXmlMessage(soapXml, eventData.Data.CorrelationId, actionItemNode);
 
             return soapXml;
         }

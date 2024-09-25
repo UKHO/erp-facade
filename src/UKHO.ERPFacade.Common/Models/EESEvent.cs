@@ -166,10 +166,7 @@ namespace UKHO.ERPFacade.Common.Models
         public string Name { get; set; }
 
         [JsonProperty("hash")]
-        public string Hash { get; set; }
-
-        [JsonProperty("location")]
-        public string Location { get; set; }
+        public string Hash { get; set; }        
 
         [JsonProperty("fileSize")]
         public int FileSize { get; set; }
@@ -188,10 +185,7 @@ namespace UKHO.ERPFacade.Common.Models
         public string Name { get; set; }
 
         [JsonProperty("hash")]
-        public string Hash { get; set; }
-
-        [JsonProperty("location")]
-        public string Location { get; set; }
+        public string Hash { get; set; }        
 
         [JsonProperty("fileSize")]
         public int FileSize { get; set; }
