@@ -534,8 +534,4 @@
     <packageUrl regex="true">^pkg:generic/Elasticsearch\.Net@.*$</packageUrl>
     <cve>CVE-2023-46674</cve>
   </suppress>
-
-
-
 </suppressions>
-
