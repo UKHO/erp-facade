@@ -190,6 +190,8 @@ namespace UKHO.ERPFacade
 
             app.UseCorrelationIdMiddleware();
 
+            app.UseLoggingMiddleware();
+
             app.MapControllers();
 
             app.UseAuthorization();

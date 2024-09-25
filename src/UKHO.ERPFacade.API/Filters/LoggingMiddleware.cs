@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using Microsoft.AspNetCore.Mvc;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Logging;
 
@@ -7,7 +8,6 @@ namespace UKHO.ERPFacade.API.Filters
     public class LoggingMiddleware
     {
         private readonly RequestDelegate _next;
-
         private readonly ILogger<LoggingMiddleware> _logger;
 
         public LoggingMiddleware(RequestDelegate next, ILogger<LoggingMiddleware> logger)
@@ -20,25 +20,38 @@ namespace UKHO.ERPFacade.API.Filters
         {
             try
             {
+                // Proceed with the next middleware in the pipeline
                 await _next(httpContext);
+            }
+            catch (ERPFacadeException exception)
+            {
+                await HandleExceptionAsync(httpContext, exception, exception.EventId, exception.Message, exception.MessageArguments);
             }
             catch (Exception exception)
             {
-                var exceptionType = exception.GetType();
-                var correlationId = httpContext!.Request.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey].FirstOrDefault()!;
-
-                if (exceptionType == typeof(ERPFacadeException))
-                {
-                    var eventId = (EventIds)((ERPFacadeException)exception).EventId.Id;
-                    _logger.LogError(eventId.ToEventId(), exception, "_X-Correlation-ID : {_X-Correlation-ID}", correlationId);
-                }
-                else
-                {
-                    _logger.LogError(EventIds.UnhandledException.ToEventId(), exception, "Exception occured while processing ErpFacade API." + " | _X-Correlation-ID : {_X-Correlation-ID}", correlationId);
-                }
-
-                httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                await HandleExceptionAsync(httpContext, exception, EventIds.UnhandledException.ToEventId(), exception.Message);
             }
+        }
+
+        private async Task HandleExceptionAsync(HttpContext httpContext, Exception exception, EventId eventId, string message, params object[] messageArgs)
+        {
+            httpContext.Response.ContentType = "application/json";
+            httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+
+            var correlationId = httpContext!.Request.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey].FirstOrDefault()!;
+
+            _logger.LogError(eventId, exception, message, messageArgs);
+
+            var problemDetails = new ProblemDetails
+            {
+                Status = httpContext.Response.StatusCode,
+                Extensions =
+                {
+                    ["correlationId"] = correlationId,
+                }
+            };
+
+            await httpContext.Response.WriteAsJsonAsync(problemDetails);
         }
     }
 }

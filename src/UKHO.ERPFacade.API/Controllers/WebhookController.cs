@@ -107,8 +107,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
             if (!response.IsSuccessStatusCode)
             {
-                _logger.LogError(EventIds.RequestToSapFailed.ToEventId(), new Exception(), "An error occured while sending a request to SAP. | {StatusCode}", response.StatusCode);
-                throw new ERPFacadeException(EventIds.RequestToSapFailed.ToEventId());
+                throw new ERPFacadeException(EventIds.RequestToSapFailed.ToEventId(), "An error occured while sending a request to SAP. | {StatusCode}", response.StatusCode);
             }
             _logger.LogInformation(EventIds.EncUpdateSentToSap.ToEventId(), "ENC update has been sent to SAP successfully. | {StatusCode}", response.StatusCode);
 
@@ -217,8 +216,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
             if (!response.IsSuccessStatusCode)
             {
-                _logger.LogError(EventIds.ErrorOccurredInSapForLicenceUpdatedPublishedEvent.ToEventId(), new Exception(), "An error occurred while sending licence updated event data to SAP. | {StatusCode}", response.StatusCode);
-                throw new ERPFacadeException(EventIds.ErrorOccurredInSapForLicenceUpdatedPublishedEvent.ToEventId());
+                throw new ERPFacadeException(EventIds.ErrorOccurredInSapForLicenceUpdatedPublishedEvent.ToEventId(), "An error occurred while sending licence updated event data to SAP. | {StatusCode}", response.StatusCode);
             }
 
             _logger.LogInformation(EventIds.LicenceUpdatedPublishedEventUpdatePushedToSap.ToEventId(), "The licence updated event data has been sent to SAP successfully. | {StatusCode}", response.StatusCode);

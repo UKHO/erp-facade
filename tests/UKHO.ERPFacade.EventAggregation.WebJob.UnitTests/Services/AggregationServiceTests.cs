@@ -283,7 +283,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Services
             A.CallTo(() =>
                     _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored,
                         A<string>.Ignored))
-                .Throws(new ERPFacadeException(EventIds.UnhandledWebJobException.ToEventId()));
+                .Throws(new ERPFacadeException(EventIds.UnhandledWebJobException.ToEventId(), "message", []));
 
             var ex = Assert.ThrowsAsync<ERPFacadeException>(() => _fakeAggregationService.MergeRecordOfSaleEvents(queueMessage));
 

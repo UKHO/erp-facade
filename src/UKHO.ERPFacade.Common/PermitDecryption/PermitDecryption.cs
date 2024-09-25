@@ -1,10 +1,8 @@
-﻿using System.Configuration;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Configuration;
-using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
 
@@ -20,16 +18,11 @@ namespace UKHO.ERPFacade.Common.PermitDecryption
         {
             _permitConfiguration = permitConfiguration ?? throw new ArgumentNullException(nameof(permitConfiguration));
             _logger = logger;
-
-            if (string.IsNullOrEmpty(_permitConfiguration.Value.PermitDecryptionHardwareId))
-            {
-                _logger.LogError(EventIds.HardwareIdNotFoundException.ToEventId(), "Hardware Ids are not configured for permit decryption.");
-                throw new ConfigurationErrorsException("Hardware Ids are not configured for permit decryption.");
-            }
         }
 
         public DecryptedPermit Decrypt(string encryptedPermit)
         {
+            if (string.IsNullOrEmpty(encryptedPermit)) return null;
             try
             {
                 byte[] hardwareIds = GetHardwareIds();
@@ -48,7 +41,7 @@ namespace UKHO.ERPFacade.Common.PermitDecryption
             catch (Exception ex)
             {
                 _logger.LogError(EventIds.PermitDecryptionException.ToEventId(), ex, "Permit decryption failed and could not generate ActiveKey & NextKey. | Exception : {Exception}", ex.Message);
-                throw new ERPFacadeException(EventIds.PermitDecryptionException.ToEventId());
+                return null;
             }
         }
 
