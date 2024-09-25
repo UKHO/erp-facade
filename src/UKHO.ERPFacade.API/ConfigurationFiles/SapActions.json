@@ -116,14 +116,14 @@
                     {
                         "IsRequired": true,
                         "Section": "Product",
-                        "JsonPropertyName": "Permit",
+                        "JsonPropertyName": "",
                         "XmlNodeName": "ACTIVEKEY",
                         "SortingOrder": 14
                     },
                     {
                         "IsRequired": true,
                         "Section": "Product",
-                        "JsonPropertyName": "Permit",
+                        "JsonPropertyName": "",
                         "XmlNodeName": "NEXTKEY",
                         "SortingOrder": 15
                     }
@@ -986,14 +986,14 @@
                     {
                         "IsRequired": true,
                         "Section": "Product",
-                        "JsonPropertyName": "Permit",
+                        "JsonPropertyName": "",
                         "XmlNodeName": "ACTIVEKEY",
                         "SortingOrder": 14
                     },
                     {
                         "IsRequired": true,
                         "Section": "Product",
-                        "JsonPropertyName": "Permit",
+                        "JsonPropertyName": "",
                         "XmlNodeName": "NEXTKEY",
                         "SortingOrder": 15
                     }

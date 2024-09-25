@@ -22,10 +22,10 @@ namespace UKHO.ERPFacade.Common.Models
         public int UsageBand { get; set; }
 
         [JsonProperty("editionNumber")]
-        public int EditionNumber { get; set; }
+        public int? EditionNumber { get; set; }
 
         [JsonProperty("updateNumber")]
-        public int UpdateNumber { get; set; }
+        public int? UpdateNumber { get; set; }
 
         [JsonProperty("mayAffectHoldings")]
         public bool MayAffectHoldings { get; set; }
@@ -166,7 +166,7 @@ namespace UKHO.ERPFacade.Common.Models
         public string Name { get; set; }
 
         [JsonProperty("hash")]
-        public string Hash { get; set; }        
+        public string Hash { get; set; }
 
         [JsonProperty("fileSize")]
         public int FileSize { get; set; }
@@ -185,7 +185,7 @@ namespace UKHO.ERPFacade.Common.Models
         public string Name { get; set; }
 
         [JsonProperty("hash")]
-        public string Hash { get; set; }        
+        public string Hash { get; set; }
 
         [JsonProperty("fileSize")]
         public int FileSize { get; set; }

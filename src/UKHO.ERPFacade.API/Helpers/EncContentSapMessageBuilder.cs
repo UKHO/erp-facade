@@ -348,13 +348,15 @@ namespace UKHO.ERPFacade.API.Helpers
                         {
                             attributeNode.InnerText = GetXmlNodeValue(replacedBy.ToString());
                         }
-                        else if (attribute.XmlNodeName == ActiveKey && decryptedPermit != null && !IsPropertyNullOrEmpty(attribute.JsonPropertyName, decryptedPermit.ActiveKey))
+                        else if (attribute.XmlNodeName == ActiveKey)
                         {
-                            attributeNode.InnerText = decryptedPermit.ActiveKey;
+                            attributeNode.InnerText = string.Empty;
+                            if (decryptedPermit != null && !string.IsNullOrEmpty(decryptedPermit.ActiveKey)) attributeNode.InnerText = decryptedPermit.ActiveKey;
                         }
-                        else if (attribute.XmlNodeName == NextKey && decryptedPermit != null && !IsPropertyNullOrEmpty(attribute.JsonPropertyName, decryptedPermit.NextKey))
+                        else if (attribute.XmlNodeName == NextKey)
                         {
-                            attributeNode.InnerText = decryptedPermit.NextKey;
+                            attributeNode.InnerText = string.Empty;
+                            if (decryptedPermit != null && !string.IsNullOrEmpty(decryptedPermit.NextKey)) attributeNode.InnerText = decryptedPermit.NextKey;
                         }
                         else
                         {
@@ -408,7 +410,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                 attributeNode.InnerText = GetXmlNodeValue(ukhoWeekNumber.CurrentWeekAlphaCorrection ? IsCorrectionTrue : IsCorrectionFalse);
                                 break;
                         }
-                    }               
+                    }
                     actionAttributes.Add((attribute.SortingOrder, attributeNode));
                 }
                 catch (Exception ex)
