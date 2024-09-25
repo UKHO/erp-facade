@@ -74,7 +74,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         public void WhenBuildSapMessageXmlIsCalledWithCancelCellWithExistingCellReplacementScenario_ThenReturnXMLDocument()
         {
             var cancelReplaceCellEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\CancelCellWithExistingCellReplacement.JSON");
-            var evenData = JsonConvert.DeserializeObject<EncEventPayload>(cancelReplaceCellEventPayloadJson);
+            var eventData = JsonConvert.DeserializeObject<EncEventPayload>(cancelReplaceCellEventPayloadJson);
             var cancelReplaceCellXmlPayload = TestHelper.ReadFileData("ERPTestData\\CancelCellWithExistingReplacement.xml");
 
             XmlDocument soapXml = new();
@@ -84,7 +84,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
             A.CallTo(() => _fakeWeekDetailsProvider.GetDateOfWeek(A<int>.Ignored, A<int>.Ignored, A<bool>.Ignored)).Returns("20240808");
 
-            var result = _fakeEncContentSapMessageBuilder.BuildSapMessageXml(evenData!);
+            var result = _fakeEncContentSapMessageBuilder.BuildSapMessageXml(eventData!);
 
             result.Should().BeOfType<XmlDocument>();
             var actionItem = result.SelectSingleNode(XpathActionItems);
@@ -108,7 +108,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         public void WhenBuildSapMessageXmlIsCalledWithNewCellScenario_ThenReturnXMLDocument()
         {
             var newCellEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\NewCell.JSON");
-            var evenData = JsonConvert.DeserializeObject<EncEventPayload>(newCellEventPayloadJson);
+            var eventData = JsonConvert.DeserializeObject<EncEventPayload>(newCellEventPayloadJson);
             var newCellXmlPayload = TestHelper.ReadFileData("ERPTestData\\NewCell.xml");
             var permitKeys = new DecryptedPermit { ActiveKey = "firstkey", NextKey = "nextkey" };
 
@@ -120,7 +120,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             A.CallTo(() => _fakePermitDecryption.Decrypt(A<string>.Ignored)).Returns(permitKeys);
             A.CallTo(() => _fakeWeekDetailsProvider.GetDateOfWeek(A<int>.Ignored, A<int>.Ignored, A<bool>.Ignored)).Returns("20240801");
 
-            var result = _fakeEncContentSapMessageBuilder.BuildSapMessageXml(evenData!);
+            var result = _fakeEncContentSapMessageBuilder.BuildSapMessageXml(eventData!);
 
             result.Should().BeOfType<XmlDocument>();
             var actionItem = result.SelectSingleNode(XpathActionItems);
@@ -180,7 +180,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         public void WhenBuildSapMessageXmlIsCalledWithAdditionalCoverageWithNewEditionScenario_ThenReturnXMLDocument()
         {
             var additionalCoverageEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\AdditionalCoverageWithNewEdition.JSON");
-            var evenData = JsonConvert.DeserializeObject<EncEventPayload>(additionalCoverageEventPayloadJson);
+            var eventData = JsonConvert.DeserializeObject<EncEventPayload>(additionalCoverageEventPayloadJson);
             var additionalCoverageXmlPayload = TestHelper.ReadFileData("ERPTestData\\AdditionalCoverageWithNewEdition.xml");
             var permitKeys = new DecryptedPermit { ActiveKey = "firstkey", NextKey = "nextkey" };
 
@@ -192,7 +192,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             A.CallTo(() => _fakePermitDecryption.Decrypt(A<string>.Ignored)).Returns(permitKeys);
             A.CallTo(() => _fakeWeekDetailsProvider.GetDateOfWeek(A<int>.Ignored, A<int>.Ignored, A<bool>.Ignored)).Returns("20240801");
 
-            var result = _fakeEncContentSapMessageBuilder.BuildSapMessageXml(evenData!);
+            var result = _fakeEncContentSapMessageBuilder.BuildSapMessageXml(eventData!);
 
             result.Should().BeOfType<XmlDocument>();
             var actionItem = result.SelectSingleNode(XpathActionItems);
@@ -216,11 +216,11 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         public void WhenSapXmlTemplateFileNotExist_ThenThrowFileNotFoundException()
         {
             var newCellEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\NewCell.JSON");
-            var evenData = JsonConvert.DeserializeObject<EncEventPayload>(newCellEventPayloadJson);
+            var eventData = JsonConvert.DeserializeObject<EncEventPayload>(newCellEventPayloadJson);
 
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(false);
 
-            Assert.Throws<ERPFacadeException>(() => _fakeEncContentSapMessageBuilder.BuildSapMessageXml(evenData!));
+            Assert.Throws<ERPFacadeException>(() => _fakeEncContentSapMessageBuilder.BuildSapMessageXml(eventData!));
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Error
@@ -282,6 +282,117 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
 
             var firstActionName = result.SelectSingleNode(XpathAction);
             firstActionName.InnerXml.Should().Be(expectedAction);
-        }        
+        }
+
+        [Test]
+        public void WhenBuildSapMessageXmlIsCalledWithNewCellScenarioForUnitOfSaleNotFoundException()
+        {
+            var newCellEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\NewCell.JSON");
+            var eventData = JsonConvert.DeserializeObject<EncEventPayload>(newCellEventPayloadJson);
+            eventData.Data.UnitsOfSales.Clear();
+
+            XmlDocument soapXml = new();
+            soapXml.LoadXml(_sapXmlTemplate);            
+
+            A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
+            A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
+
+            Assert.Throws<ERPFacadeException>(() => _fakeEncContentSapMessageBuilder.BuildSapMessageXml(eventData!));
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+                                                && call.GetArgument<LogLevel>(0) == LogLevel.Error
+            && call.GetArgument<EventId>(1) == EventIds.UnitOfSaleNotFoundException.ToEventId()
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Required unit not found in event payload to generate {ActionName} action for {Product}.").MustHaveHappenedOnceExactly();
+        }
+
+        [Test]
+        public void WhenBuildSapMessageXmlIsCalledWithCellReplacementScenarioForUnitOfSaleNotFoundException()
+        {
+            var newCellEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\CancelCellWithExistingCellReplacement.JSON");
+            var eventData = JsonConvert.DeserializeObject<EncEventPayload>(newCellEventPayloadJson);
+            eventData.Data.UnitsOfSales.Clear();
+
+            XmlDocument soapXml = new();
+            soapXml.LoadXml(_sapXmlTemplate);
+
+            A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
+            A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
+
+            Assert.Throws<ERPFacadeException>(() => _fakeEncContentSapMessageBuilder.BuildSapMessageXml(eventData!));
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+                                                && call.GetArgument<LogLevel>(0) == LogLevel.Error
+            && call.GetArgument<EventId>(1) == EventIds.UnitOfSaleNotFoundException.ToEventId()
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Required unit not found in event payload to generate {ActionName} action for {Product}.").MustHaveHappenedOnceExactly();
+        }
+
+        [Test]
+        public void WhileProcessingAttributes_TestForBuildingSapActionInformationException()
+        {
+            var newCellEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\NewCell.JSON");
+            var eventData = JsonConvert.DeserializeObject<EncEventPayload>(newCellEventPayloadJson);
+            eventData.Data.Products[0].ProviderCode = string.Empty;
+
+            XmlDocument soapXml = new();
+            soapXml.LoadXml(_sapXmlTemplate);
+
+            A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
+            A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
+
+            Assert.Throws<ERPFacadeException>(() => _fakeEncContentSapMessageBuilder.BuildSapMessageXml(eventData!));
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+                                                && call.GetArgument<LogLevel>(0) == LogLevel.Error
+            && call.GetArgument<EventId>(1) == EventIds.BuildingSapActionInformationException.ToEventId()
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Error while generating SAP action information. | Action : {ActionName} | XML Attribute : {attribute.XmlNodeName} | Exception : {Exception}").MustHaveHappenedOnceExactly();
+        }
+
+        [Test]
+        public void WhileProcessingUkhoWeekNumberAttributes_TestForUkhoWeekNumberSectionNotFoundException()
+        {
+            var newCellEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\NewCell.JSON");
+            var eventData = JsonConvert.DeserializeObject<EncEventPayload>(newCellEventPayloadJson);
+            var permitKeys = new DecryptedPermit { ActiveKey = "firstkey", NextKey = "nextkey" };
+            eventData.Data.UkhoWeekNumber = null;
+
+            XmlDocument soapXml = new();
+            soapXml.LoadXml(_sapXmlTemplate);
+
+            A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
+            A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
+            A.CallTo(() => _fakePermitDecryption.Decrypt(A<string>.Ignored)).Returns(permitKeys);
+
+            Assert.Throws<ERPFacadeException>(() => _fakeEncContentSapMessageBuilder.BuildSapMessageXml(eventData!));
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+                                                && call.GetArgument<LogLevel>(0) == LogLevel.Error
+            && call.GetArgument<EventId>(1) == EventIds.RequiredSectionNotFound.ToEventId()
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "UkhoWeekNumber section not found in enccontentpublished event payload while creating {Action} action.").MustHaveHappenedOnceExactly();
+        }
+
+        [Test]
+        public void WhileProcessingUkhoWeekNumberAttributesWithWrongWeekDetails_TestForBuildingSapActionInformationException()
+        {
+            var newCellEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\NewCell.JSON");
+            var eventData = JsonConvert.DeserializeObject<EncEventPayload>(newCellEventPayloadJson);
+            var permitKeys = new DecryptedPermit { ActiveKey = "firstkey", NextKey = "nextkey" };
+            eventData.Data.UkhoWeekNumber.Week = 89;
+            eventData.Data.UkhoWeekNumber.Year = 432432;
+
+            XmlDocument soapXml = new();
+            soapXml.LoadXml(_sapXmlTemplate);
+
+            A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
+            A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
+            A.CallTo(() => _fakePermitDecryption.Decrypt(A<string>.Ignored)).Returns(permitKeys);
+            A.CallTo(() => _fakeWeekDetailsProvider.GetDateOfWeek(A<int>.Ignored, A<int>.Ignored, A<bool>.Ignored)).Throws<System.Exception>();
+
+            Assert.Throws<ERPFacadeException>(() => _fakeEncContentSapMessageBuilder.BuildSapMessageXml(eventData!));
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+                                                && call.GetArgument<LogLevel>(0) == LogLevel.Error
+            && call.GetArgument<EventId>(1) == EventIds.BuildingSapActionInformationException.ToEventId()
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Error while generating SAP action information. | Action : {ActionName} | XML Attribute : {attribute.XmlNodeName} | Exception : {Exception}").MustHaveHappenedOnceExactly();
+        }
     }
 }

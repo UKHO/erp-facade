@@ -30,9 +30,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="ERPTestData\NewCellWithoutUnit.JSON">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="ERPTestData\UnsortedActionItems.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

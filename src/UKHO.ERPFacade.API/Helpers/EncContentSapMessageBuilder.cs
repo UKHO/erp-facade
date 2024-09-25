@@ -413,11 +413,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                 attributeNode.InnerText = GetXmlNodeValue(ukhoWeekNumber.CurrentWeekAlphaCorrection ? IsCorrectionTrue : IsCorrectionFalse);
                                 break;
                         }
-                    }
-                    else
-                    {
-                        attributeNode.InnerText = string.Empty;
-                    }
+                    }               
                     actionAttributes.Add((attribute.SortingOrder, attributeNode));
                 }
                 catch (Exception ex)
