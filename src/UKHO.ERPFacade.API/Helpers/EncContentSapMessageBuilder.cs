@@ -75,7 +75,7 @@ namespace UKHO.ERPFacade.API.Helpers
         /// <param name="eventData"></param>
         /// <param name="correlationId"></param>
         /// <returns>XmlDocument</returns>
-        public XmlDocument BuildSapMessageXml(EncEventPayload eventData, string correlationId)
+        public XmlDocument BuildSapMessageXml(EncEventPayload eventData)
         {
             try
             {
@@ -101,7 +101,7 @@ namespace UKHO.ERPFacade.API.Helpers
                 BuildUnitActions(eventData, soapXml, actionItemNode);
 
                 // Finalize SAP XML message
-                FinalizeSapXmlMessage(soapXml, correlationId, actionItemNode);
+                FinalizeSapXmlMessage(soapXml, eventData.Data.CorrelationId, actionItemNode);
 
                 _logger.LogInformation(EventIds.GenerationOfSapXmlPayloadCompleted.ToEventId(), "Generation of SAP XML payload completed.");
 
@@ -408,11 +408,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                 attributeNode.InnerText = GetXmlNodeValue(ukhoWeekNumber.CurrentWeekAlphaCorrection ? IsCorrectionTrue : IsCorrectionFalse);
                                 break;
                         }
-                    }
-                    else
-                    {
-                        attributeNode.InnerText = string.Empty;
-                    }
+                    }               
                     actionAttributes.Add((attribute.SortingOrder, attributeNode));
                 }
                 catch (Exception ex)

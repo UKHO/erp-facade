@@ -1,13 +1,11 @@
 using System.Diagnostics.CodeAnalysis;
-using Azure.Extensions.AspNetCore.Configuration.Secrets;
-using Azure.Identity;
-using Azure.Security.KeyVault.Secrets;
-using Newtonsoft.Json.Serialization;
-using SoapCore;
-using UKHO.ERPFacade.Common.Configuration;
-using UKHO.ERPFacade.Common.IO.Azure;
-using UKHO.SAP.MockAPIService.Filters;
-using UKHO.SAP.MockAPIService.Services;
+using WireMock.Server;
+using WireMock.Settings;
+using WireMock.RequestBuilders;
+using WireMock.ResponseBuilders;
+using WireMock.Matchers;
+using System.Text;
+using System.Xml.Linq;
 
 namespace UKHO.SAP.MockAPIService
 {
@@ -17,67 +15,169 @@ namespace UKHO.SAP.MockAPIService
         [ExcludeFromCodeCoverage]
         internal static void Main(string[] args)
         {
-            WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-            IConfiguration configuration = builder.Configuration;
-            IWebHostEnvironment webHostEnvironment = builder.Environment;
-
-            builder.Configuration.SetBasePath(webHostEnvironment.ContentRootPath)
-                .AddJsonFile("appsettings.json", false, true)
-                .AddJsonFile($"appsettings.{webHostEnvironment.EnvironmentName}.json", true, true)
-#if DEBUG
-                //Add development overrides configuration
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, true)
                 .AddJsonFile("appsettings.local.overrides.json", true, true)
-#endif
-                .AddEnvironmentVariables();
+                .Build();
 
-            string kvServiceUri = configuration["KeyVaultSettings:ServiceUri"];
-            if (!string.IsNullOrWhiteSpace(kvServiceUri))
+            var server = WireMockServer.Start(new WireMockServerSettings
             {
-                var secretClient = new SecretClient(new Uri(kvServiceUri), new DefaultAzureCredential(
-                new DefaultAzureCredentialOptions()));
-                builder.Configuration.AddAzureKeyVault(secretClient, new KeyVaultSecretManager());
-            }
-
-            // Add services to the container.
-
-            builder.Services.AddSoapCore();
-
-            builder.Services.Configure<SapConfiguration>(configuration.GetSection("SapConfiguration"));
-            builder.Services.Configure<AzureStorageConfiguration>(configuration.GetSection("AzureStorageConfiguration"));
-
-            builder.Services.AddSingleton<Iz_adds_mat_info, z_adds_mat_info>();
-            builder.Services.AddSingleton<Iz_adds_ros, z_adds_ros>();
-            builder.Services.AddSingleton<IAzureBlobEventWriter, AzureBlobEventWriter>();
-            builder.Services.AddHealthChecks();
-
-            builder.Services.AddControllers(o =>
-            {
-                o.AllowEmptyInputInBodyModelBinding = true;
-            }).AddNewtonsoftJson(options =>
-            {
-                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                Urls = new[] { configuration["SapConfiguration:SapBaseAddress"].ToString() }
             });
+            
+            server
+                .Given(
+                    Request.Create()
+                        .WithPath($"{configuration["SapConfiguration:SapEndpointForEncEvent"].ToString()}")
+                        .WithHeader("Authorization", new ExactMatcher(
+                            ValidateAuthorization(
+                                configuration["SapConfiguration:SapUsernameForEncEvent"].ToString(),
+                                configuration["SapConfiguration:SapPasswordForEncEvent"].ToString())))
+                        .WithHeader("Accept", new ExactMatcher("text/xml"))
+                        .UsingPost()
+                )
+                .RespondWith(
+                    Response.Create()
+                        .WithBody((request) =>
+                        {
+                            var xmlDoc = XDocument.Parse(request.Body);
+                            XNamespace soapNamespace = "http://schemas.xmlsoap.org/soap/envelope/";
+                            XNamespace sapNamespace = "urn:sap-com:document:sap:rfc:functions";
 
-            var app = builder.Build();
+                            var corridValue = xmlDoc
+                                .Element(soapNamespace + "Envelope")?
+                                .Element(soapNamespace + "Body")?
+                                .Element(sapNamespace + "Z_ADDS_MAT_INFO")?
+                                .Element("IM_MATINFO")?
+                                .Element("CORRID")?.Value;
 
-            app.UseHttpsRedirection();
+                            // Create the response body dynamically
+                            return $"Record successfully received for CorrelationId: {corridValue}";
+                        })
+                        .WithStatusCode(200)
+                        .WithHeader("Content-Type", "text/xml; charset=utf-8")
+                );
 
-            app.UseWhen(context => (!context.Request.Path.StartsWithSegments("/api") &&
-                   !context.Request.Path.StartsWithSegments("/health")), appBuilder =>
-                   {
-                       appBuilder.BasicAuthCustomMiddleware();
-                   });
+            server
+                .Given(
+                    Request.Create()
+                        .WithPath($"{configuration["SapConfiguration:SapEndpointForRecordOfSale"].ToString()}")
+                        .WithHeader("Authorization", new ExactMatcher(
+                            ValidateAuthorization(
+                                configuration["SapConfiguration:SapUsernameForRecordOfSale"].ToString(),
+                                configuration["SapConfiguration:SapPasswordForRecordOfSale"].ToString())))
+                        .WithHeader("Accept", new ExactMatcher("text/xml"))
+                        .UsingPost()
+                )
+                .RespondWith(
+                    Response.Create()
+                        .WithBody((request) =>
+                        {
+                            var xmlDoc = XDocument.Parse(request.Body);
+                            XNamespace soapNamespace = "http://schemas.xmlsoap.org/soap/envelope/";
+                            XNamespace sapNamespace = "urn:sap-com:document:sap:rfc:functions";
 
-            app.UseRouting();
+                            var corridValue = xmlDoc
+                                .Element(soapNamespace + "Envelope")?
+                                .Element(soapNamespace + "Body")?
+                                .Element(sapNamespace + "Z_ADDS_ROS")?
+                                .Element("IM_MATINFO")?
+                                .Element("CORRID")?.Value;
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.UseSoapEndpoint<Iz_adds_mat_info>("/z_adds_mat_info.asmx", new SoapEncoderOptions(), SoapSerializer.XmlSerializer);
-                endpoints.UseSoapEndpoint<Iz_adds_ros>("/z_adds_ros.asmx", new SoapEncoderOptions(), SoapSerializer.XmlSerializer);
-                endpoints.MapHealthChecks("/health");
-            });
+                            // Create the response body dynamically
+                            return $"Record successfully received for CorrelationId: {corridValue}";
+                        })
+                        .WithStatusCode(200)
+                        .WithHeader("Content-Type", "text/xml; charset=utf-8")
+                );
 
-            app.Run();
+            server
+                .Given(
+                    Request.Create()
+                        .WithPath($"{configuration["SapConfiguration:SapEndpointForEncEvent"].ToString()}")
+                        .WithHeader("Authorization", new ExactMatcher(
+                            ValidateAuthorization(
+                                configuration["SapConfiguration:SapUsernameForEncEvent"].ToString(),
+                                configuration["SapConfiguration:SapPasswordForEncEvent"].ToString())))
+                        .WithHeader("Accept", new ExactMatcher("text/xml"))
+                        .WithBody(new RegexMatcher("Unauthorize", true))
+                        .UsingPost()
+                )
+                .RespondWith(
+                    Response.Create()
+                        .WithStatusCode(401)
+                        .WithHeader("Content-Type", "text/xml; charset=utf-8")
+                        .WithBody("Unauthorized")
+                );
+
+            server
+                .Given(
+                    Request.Create()
+                        .WithPath($"{configuration["SapConfiguration:SapEndpointForEncEvent"].ToString()}")
+                        .WithHeader("Authorization", new ExactMatcher(
+                            ValidateAuthorization(
+                                configuration["SapConfiguration:SapUsernameForEncEvent"].ToString(),
+                                configuration["SapConfiguration:SapPasswordForEncEvent"].ToString())))
+                        .WithHeader("Accept", new ExactMatcher("text/xml"))
+                        .WithBody(new RegexMatcher("InternalServerError", true))
+                        .UsingPost()
+                )
+                .RespondWith(
+                    Response.Create()
+                        .WithStatusCode(500)
+                        .WithHeader("Content-Type", "text/xml; charset=utf-8")
+                        .WithBody("Internal server error")
+                );
+
+            server
+                .Given(
+                    Request.Create()
+                        .WithPath($"{configuration["SapConfiguration:SapEndpointForRecordOfSale"].ToString()}")
+                        .WithHeader("Authorization", new ExactMatcher(
+                            ValidateAuthorization(
+                                configuration["SapConfiguration:SapUsernameForRecordOfSale"].ToString(),
+                                configuration["SapConfiguration:SapPasswordForRecordOfSale"].ToString())))
+                        .WithHeader("Accept", new ExactMatcher("text/xml"))
+                        .WithBody(new RegexMatcher("Unauthorize", true))
+                        .UsingPost()
+                )
+                .RespondWith(
+                    Response.Create()
+                        .WithStatusCode(401)
+                        .WithHeader("Content-Type", "text/xml; charset=utf-8")
+                        .WithBody("Unauthorized")
+                );
+
+            server
+                .Given(
+                    Request.Create()
+                        .WithPath($"{configuration["SapConfiguration:SapEndpointForRecordOfSale"].ToString()}")
+                        .WithHeader("Authorization", new ExactMatcher(
+                            ValidateAuthorization(
+                                configuration["SapConfiguration:SapUsernameForRecordOfSale"].ToString(),
+                                configuration["SapConfiguration:SapPasswordForRecordOfSale"].ToString())))
+                        .WithHeader("Accept", new ExactMatcher("text/xml"))
+                        .WithBody(new RegexMatcher("InternalServerError", true))
+                        .UsingPost()
+                )
+                .RespondWith(
+                    Response.Create()
+                        .WithStatusCode(500)
+                        .WithHeader("Content-Type", "text/xml; charset=utf-8")
+                        .WithBody("Internal server error")
+                );
+
+            Console.WriteLine("SOAP stub is ready.");
+            Console.WriteLine("Press any key to stop the server...");
+            Console.ReadKey();
+
+            server.Stop();
+        }
+
+        public static string ValidateAuthorization(string username, string password)
+        {
+            return "Basic " + Convert.ToBase64String(Encoding.ASCII.GetBytes($"{username}:{password}"));
         }
     }
 }
