@@ -30,12 +30,6 @@ namespace UKHO.ERPFacade.Common.PermitDecryption
 
         public DecryptedPermit Decrypt(string encryptedPermit)
         {
-            if (string.IsNullOrEmpty(encryptedPermit))
-            {
-                _logger.LogError(EventIds.EmptyPermitStringException.ToEventId(), "Encrypted permit is empty in event payload.");
-                throw new ERPFacadeException(EventIds.EmptyPermitStringException.ToEventId());
-            }
-
             try
             {
                 byte[] hardwareIds = GetHardwareIds();
@@ -53,7 +47,7 @@ namespace UKHO.ERPFacade.Common.PermitDecryption
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.PermitDecryptionException.ToEventId(), ex, "Permit decryption failed and could not generate ActiveKey & NextKey.");
+                _logger.LogError(EventIds.PermitDecryptionException.ToEventId(), ex, "Permit decryption failed and could not generate ActiveKey & NextKey. | Exception : {Exception}", ex.Message);
                 throw new ERPFacadeException(EventIds.PermitDecryptionException.ToEventId());
             }
         }

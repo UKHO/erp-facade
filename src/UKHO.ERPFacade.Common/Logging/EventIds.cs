@@ -34,14 +34,14 @@ namespace UKHO.ERPFacade.Common.Logging
         CorrelationIdMissingInEvent = 940005,
 
         /// <summary>
-        /// 940006 - Storing the received ENC content published event in azure table.
+        /// 940006 - Adding or Updating entry for enccontentpublished event in azure table.
         /// </summary>
-        StoreEncContentPublishedEventInAzureTable = 940006,
+        AddingEntryForEncContentPublishedEventInAzureTable = 940006,
 
         /// <summary>
         /// 940007 - ENC content published event in added in azure table successfully.
         /// </summary>
-        AddedEncContentPublishedEventInAzureTable = 940007,
+        AddedEntryForEncContentPublishedEventInAzureTable = 940007,
 
         /// <summary>
         /// 940008 - Duplicate ENC contect published event received.
@@ -56,22 +56,22 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940010 - Uploading the received ENC content published event in blob storage.
         /// </summary>
-        UploadEncContentPublishedEventInAzureBlob = 940010,
+        UploadEncContentPublishedEventInAzureBlobStarted = 940010,
 
         /// <summary>
         /// 940011 - ENC content published event is uploaded in blob storage successfully.
         /// </summary>
-        UploadedEncContentPublishedEventInAzureBlob = 940011,
+        UploadEncContentPublishedEventInAzureBlobCompleted = 940011,
 
         /// <summary>
-        /// 940012 - Error occured while connecting SAP
+        /// 940012 - Request to SAP failed
         /// </summary>
-        ErrorOccuredInSap = 940012,
+        RequestToSapFailed = 940012,
 
         /// <summary>
-        /// 940013 - ENC Update pushed to SAP
+        /// 940013 - ENC Update sent to SAP
         /// </summary>
-        EncUpdatePushedToSap = 940013,
+        EncUpdateSentToSap = 940013,
 
         /// <summary>
         /// 940014 - Webjob started to process the incomplete transactions.
@@ -134,9 +134,9 @@ namespace UKHO.ERPFacade.Common.Logging
         SapXmlTemplateNotFound = 940025,
 
         /// <summary>
-        /// 940026 - Building Sap Actions Started
+        /// 940026 - Generation of SAP xml payload started
         /// </summary>
-        BuildingSapActionStarted = 940026,
+        GenerationOfSapXmlPayloadStarted = 940026,
 
         /// <summary>
         /// 940027 - Sap Action Created
@@ -144,9 +144,9 @@ namespace UKHO.ERPFacade.Common.Logging
         SapActionCreated = 940027,
 
         /// <summary>
-        /// 940028 - Identifying Scenario Started
+        /// 940028 - Generation of SAP xml payload completed
         /// </summary>
-        IdentifyScenarioStarted = 940028,
+        GenerationOfSapXmlPayloadCompleted = 940028,
 
         /// <summary>
         /// 940029 - Scenario Identified
@@ -726,7 +726,62 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940145 - Permit string provided empty in ENC content published event.
         /// </summary>
-        EmptyPermitStringException = 940145
+        EmptyPermitStringException = 940145,
+
+        /// <summary>
+        /// 940146 - ENC cell SAP action generation started.
+        /// </summary>
+        EncCellSapActionGenerationStarted = 940146,
+
+        /// <summary>
+        /// 940147 - ENC cell SAP actions generation completed.
+        /// </summary>
+        EncCellSapActionGenerationCompleted = 940147,
+
+        /// <summary>
+        /// 940148 - Unit SAP actions generation started.
+        /// </summary>
+        UnitSapActionGenerationStarted = 940148,
+
+        /// <summary>
+        /// 940149 - Unit SAP actions generation completed.
+        /// </summary>
+        UnitSapActionGenerationCompleted = 940149,
+
+        /// <summary>
+        /// 940150 - SAP action generation started.
+        /// </summary>
+        BuilingSapActionStarted = 940150,
+
+        /// <summary>
+        /// 940151 - Required SAP property value is found empty enccontentpublished event.
+        /// </summary>
+        EmptyEventJsonPropertyException = 940151,
+
+        /// <summary>
+        /// 940152 - Error while generating SAP action information.
+        /// </summary>
+        BuildingSapActionInformationException = 940152,
+
+        /// <summary>
+        /// 940153 - Required section not found in JSON payload.
+        /// </summary>
+        RequiredSectionNotFound = 940153,
+
+        /// <summary>
+        /// 940154 - Building ENC cell SAP action failed.
+        /// </summary>
+        BuildingEncCellSapActionFailed = 940154,
+
+        /// <summary>
+        /// 940155 - Building unit SAP action failed.
+        /// </summary>
+        BuildingUnitSapActionFailed = 940155,
+
+        /// <summary>
+        /// 940156 - Generation of SAP xml payload failed
+        /// </summary>
+        GenerationOfSapXmlPayloadFailed = 940156,
     }
 
     /// <summary>
