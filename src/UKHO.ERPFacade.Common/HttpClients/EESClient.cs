@@ -7,8 +7,7 @@ namespace UKHO.ERPFacade.Common.HttpClients
     [ExcludeFromCodeCoverage]
     public class EESClient : IEESClient
     {
-        private readonly HttpClient _httpClient;
-        private readonly IOptions<EESHealthCheckEnvironmentConfiguration> _eesHealthCheckEnvironmentConfiguration;
+        private readonly HttpClient _httpClient;       
         public EESClient(HttpClient httpClient)
         {
             _httpClient = httpClient;

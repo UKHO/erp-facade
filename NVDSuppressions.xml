@@ -192,14 +192,6 @@
   <suppress>
     <notes>
       <![CDATA[
-   file name: Microsoft.Azure.WebJobs.dll
-   ]]>
-    </notes>
-    <cve>CVE-2022-29149</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
    file name: Azure.Identity.dll
    file name: Azure.Identity:1.10.3
    ]]>
@@ -261,33 +253,7 @@
     </notes>
     <packageUrl regex="true">^pkg:generic/dotnet\-getdocument@.*$</packageUrl>
     <cve>CVE-2023-36558</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
-   file name: System.CodeDom:6.0.0
-   False positive - applies to VB.
-   ]]>
-    </notes>
-    <packageUrl regex="true">^pkg:nuget/System\.CodeDom@.*$</packageUrl>
-    <cve>CVE-2006-4732</cve>
-    <cve>CVE-2007-0065</cve>
-    <cve>CVE-2007-2224</cve>
-    <cve>CVE-2007-2884</cve>
-    <cve>CVE-2007-4776</cve>
-    <cve>CVE-2008-0392</cve>
-    <cve>CVE-2008-3704</cve>
-    <cve>CVE-2001-0153</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
-   file name: Various
-   False positive - applies to https://www.drupal.org
-   ]]>
-    </notes>
-    <cve>CVE-2014-9152</cve>
-  </suppress>
+  </suppress> 
   <suppress>
     <notes>
       <![CDATA[
@@ -428,16 +394,7 @@
     </notes>
     <packageUrl regex="true">^pkg:generic/Azure\.Identity@.*$</packageUrl>
     <cve>CVE-2024-35255</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
-   file name: Azure.Identity:1.12.0
-   ]]>
-    </notes>
-    <packageUrl regex="true">^pkg:generic/Azure\.Identity@.*$</packageUrl>
-    <cve>CVE-2024-35255</cve>
-  </suppress>
+  </suppress> 
   <suppress>
     <notes>
       <![CDATA[
@@ -446,5 +403,135 @@
     </notes>
     <packageUrl regex="true">^pkg:nuget/Azure\.Identity@.*$</packageUrl>
     <cve>CVE-2024-35255</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Elastic.Apm.Elasticsearch.dll   
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:generic/Elastic\.Apm\.Elasticsearch@.*$</packageUrl>
+    <cve>CVE-2019-7611</cve>
+    <cve>CVE-2023-46674</cve>
+    <cve>CVE-2023-31418</cve>
+    <cve>CVE-2019-7617</cve>
+    <cve>CVE-2020-7019</cve>
+    <cve>CVE-2021-22144</cve>
+    <cve>CVE-2019-7614</cve>
+    <cve>CVE-2021-22135</cve>
+    <cve>CVE-2021-22137</cve>
+    <cve>CVE-2020-7021</cve>
+    <cve>CVE-2020-7020</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Elastic.Apm.EntityFrameworkCore.dll
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:generic/Elastic\.Apm\.EntityFrameworkCore@.*$</packageUrl>
+    <cve>CVE-2019-7617</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Elastic.Apm.GrpcClient.dll   
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:generic/Elastic\.Apm\.GrpcClient@.*$</packageUrl>
+    <cve>CVE-2023-33953</cve>
+    <cve>CVE-2023-44487</cve>
+    <cve>CVE-2023-4785</cve>
+    <cve>CVE-2023-32732</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Elastic.Apm.MongoDb.dll
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:generic/Elastic\.Apm\.MongoDb@.*$</packageUrl>
+    <cve>CVE-2012-6619</cve>
+    <cve>CVE-2013-1892</cve>
+    <cve>CVE-2014-8180</cve>
+    <cve>CVE-2016-6494</cve>
+    <cve>CVE-2015-1609</cve>
+    <cve>CVE-2013-2132</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Elastic.Apm.NetCoreAll.dll
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:generic/Elastic\.Apm\.NetCoreAll@.*$</packageUrl>
+    <cve>CVE-2019-7617</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Elasticsearch.Net.dll
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:generic/Elasticsearch\.Net@.*$</packageUrl>
+    <cve>CVE-2020-7009</cve>
+    <cve>CVE-2020-7014</cve>   
+    <cve>CVE-2023-31418</cve>
+    <cve>CVE-2023-31419</cve>
+    <cve>CVE-2023-46673</cve>
+    <cve>CVE-2020-7019</cve>
+    <cve>CVE-2023-46673</cve>
+    <cve>CVE-2021-22144</cve>
+    <cve>CVE-2023-49921</cve>
+    <cve>CVE-2020-7021</cve>
+    <cve>CVE-2023-31417</cve>
+    <cve>CVE-2021-22134</cve>
+    <cve>CVE-2020-7020</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: MongoDB.Bson.dll
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:generic/MongoDB\.Bson@.*$</packageUrl>
+    <cve>CVE-2015-4411</cve>
+    <cve>CVE-2021-32036</cve>
+    <cve>CVE-2014-8180</cve>
+    <cve>CVE-2016-6494</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: MongoDB.Driver.Core.dll
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:generic/MongoDB\.Driver\.Core@.*$</packageUrl>
+    <cve>CVE-2021-32036</cve>
+    <cve>CVE-2014-8180</cve>
+    <cve>CVE-2016-6494</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: MongoDB.Libmongocrypt.dll
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:generic/MongoDB\.Libmongocrypt@.*$</packageUrl>
+    <cve>CVE-2012-6619</cve>
+    <cve>CVE-2013-1892</cve>
+    <cve>CVE-2014-8180</cve>
+    <cve>CVE-2016-6494</cve>
+    <cve>CVE-2015-1609</cve>
+    <cve>CVE-2013-2132</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Elasticsearch.Net.dll
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:generic/Elasticsearch\.Net@.*$</packageUrl>
+    <cve>CVE-2023-46674</cve>
   </suppress>
 </suppressions>
