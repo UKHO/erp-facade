@@ -459,8 +459,7 @@ stages:
         steps:
           - template: Deployment/templates/continuous-testing.yml
             parameters:
-              AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
-              DotNetSdkVersion: $(DotNetSdkVersion)
+              AzureSubscription: "ERP-Facade-Dev-A.011.05.12"              
 
   - stage: vNextIATDeploy
     dependsOn:  Devdeploy
@@ -797,8 +796,7 @@ stages:
         steps:
           - template: Deployment/templates/continuous-testing.yml
             parameters:
-              AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
-              DotNetSdkVersion: $(DotNetSdkVersion)
+              AzureSubscription: "ERP-Facade-Dev-A.011.05.12"              
 
   - stage: Livedeploy
     displayName: "Livedeploy (inc terraform, webapp deploy)"

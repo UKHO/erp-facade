@@ -1,9 +1,6 @@
 parameters:
   - name: AzureSubscription
-    type: string
-  - name: DotNetSdkVersion
-    type: string
-    
+    type: string    
 
 steps:
   - task: DownloadBuildArtifacts@0

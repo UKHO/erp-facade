@@ -36,7 +36,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                     if (Config.TestConfig.AzureADConfiguration.IsRunningOnLocalMachine)
                     {
                         IPublicClientApplication debugApp = PublicClientApplicationBuilder.Create(Config.TestConfig.AzureADConfiguration.ClientId).
-                                                            WithRedirectUri("http://localhost").Build();
+                            WithRedirectUri("http://localhost").WithTenantId(Config.TestConfig.AzureADConfiguration.TenantId).Build();                        
 
                         //Acquiring token through user interaction
                         AuthenticationResult tokenTask = await debugApp.AcquireTokenInteractive(scopes)
