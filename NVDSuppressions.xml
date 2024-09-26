@@ -556,6 +556,28 @@
     <notes>
       <![CDATA[
    False positive, vulnerability is for package "wire" not wire mock
+   file name: WireMock.Net.Abstractions.dll
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:generic/WireMock\.Net\.Abstractions@.*$</packageUrl>
+    <cve>CVE-2020-27853</cve>
+    <cve>CVE-2021-41093</cve>
+    <cve>CVE-2020-15258</cve>
+    <cve>CVE-2018-8909</cve>
+    <cve>CVE-2021-32665</cve>
+    <cve>CVE-2021-32666</cve>
+    <cve>CVE-2022-23625</cve>
+    <cve>CVE-2022-23625</cve>
+    <cve>CVE-2022-31009</cve>
+    <cve>CVE-2023-22737</cve>
+    <cve>CVE-2022-43673</cve>
+    <cve>CVE-2021-21301</cve>
+    <cve>CVE-2021-32755</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   False positive, vulnerability is for package "wire" not wire mock
    file name: WireMock.Net.OpenApiParser.dll
    ]]>
     </notes>
@@ -619,5 +641,26 @@
     <cve>CVE-2018-9116</cve>
     <cve>CVE-2023-41329</cve>
     <cve>CVE-2018-9117</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: JsonConverter.Abstractions.dll
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:generic/JsonConverter\.Abstractions@.*$</packageUrl>
+    <cve>CVE-2020-12762</cve>
+    <cve>CVE-2013-6370</cve>
+    <cve>CVE-2013-6371</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: System.Security.Cryptography.X509Certificates:4.1.0
+   .NET Core 1.0, 1.1, and 2.0 allow an unauthenticated attacker to remotely cause a denial of service attack against a .NET Core web application by improperly parsing certificate data.
+   POS is pinned to .Net core SDK 6.0.419 which is not vulnerable.
+   ]]>
+    </notes>
+    <cve>CVE-2017-11770</cve>
   </suppress>
 </suppressions>
