@@ -497,7 +497,17 @@
                 "ActionNumber": 5,
                 "Action": "ADDITIONAL COVERAGE ENC CELL",
                 "Product": "ENC CELL",
-                "Rules": [],
+                "Rules": [
+                    {
+                        "Conditions": [
+                            {
+                                "AttributeDataType": "bool",
+                                "AttributeName": "ContentChange",
+                                "AttributeValue": "True"
+                            }
+                        ]
+                    }
+                ],
                 "Attributes": [
                     {
                         "IsRequired": false,
