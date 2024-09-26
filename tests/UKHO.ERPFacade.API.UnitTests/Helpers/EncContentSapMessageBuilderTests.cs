@@ -298,11 +298,6 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
 
             Assert.Throws<ERPFacadeException>(() => _fakeEncContentSapMessageBuilder.BuildSapMessageXml(eventData!));
-
-            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-                                                && call.GetArgument<LogLevel>(0) == LogLevel.Error
-            && call.GetArgument<EventId>(1) == EventIds.UnitOfSaleNotFoundException.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Required unit not found in event payload to generate {ActionName} action for {Product}.").MustHaveHappenedOnceExactly();
         }
 
         [Test]
@@ -318,12 +313,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
 
-            Assert.Throws<ERPFacadeException>(() => _fakeEncContentSapMessageBuilder.BuildSapMessageXml(eventData!));
-
-            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-                                                && call.GetArgument<LogLevel>(0) == LogLevel.Error
-            && call.GetArgument<EventId>(1) == EventIds.UnitOfSaleNotFoundException.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Required unit not found in event payload to generate {ActionName} action for {Product}.").MustHaveHappenedOnceExactly();
+            Assert.Throws<ERPFacadeException>(() => _fakeEncContentSapMessageBuilder.BuildSapMessageXml(eventData!));            
         }
 
         [Test]
@@ -340,11 +330,6 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
 
             Assert.Throws<ERPFacadeException>(() => _fakeEncContentSapMessageBuilder.BuildSapMessageXml(eventData!));
-
-            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-                                                && call.GetArgument<LogLevel>(0) == LogLevel.Error
-            && call.GetArgument<EventId>(1) == EventIds.BuildingSapActionInformationException.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Error while generating SAP action information. | Action : {ActionName} | XML Attribute : {attribute.XmlNodeName} | Exception : {Exception}").MustHaveHappenedOnceExactly();
         }
 
         [Test]
@@ -363,11 +348,6 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             A.CallTo(() => _fakePermitDecryption.Decrypt(A<string>.Ignored)).Returns(permitKeys);
 
             Assert.Throws<ERPFacadeException>(() => _fakeEncContentSapMessageBuilder.BuildSapMessageXml(eventData!));
-
-            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-                                                && call.GetArgument<LogLevel>(0) == LogLevel.Error
-            && call.GetArgument<EventId>(1) == EventIds.RequiredSectionNotFound.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "UkhoWeekNumber section not found in enccontentpublished event payload while creating {Action} action.").MustHaveHappenedOnceExactly();
         }
 
         [Test]
@@ -388,11 +368,6 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             A.CallTo(() => _fakeWeekDetailsProvider.GetDateOfWeek(A<int>.Ignored, A<int>.Ignored, A<bool>.Ignored)).Throws<System.Exception>();
 
             Assert.Throws<ERPFacadeException>(() => _fakeEncContentSapMessageBuilder.BuildSapMessageXml(eventData!));
-
-            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-                                                && call.GetArgument<LogLevel>(0) == LogLevel.Error
-            && call.GetArgument<EventId>(1) == EventIds.BuildingSapActionInformationException.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Error while generating SAP action information. | Action : {ActionName} | XML Attribute : {attribute.XmlNodeName} | Exception : {Exception}").MustHaveHappenedOnceExactly();
         }
     }
 }

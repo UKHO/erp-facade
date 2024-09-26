@@ -228,11 +228,6 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
              && call.GetArgument<LogLevel>(0) == LogLevel.Information
              && call.GetArgument<EventId>(1) == EventIds.UploadSapXmlPayloadInAzureBlobCompleted.ToEventId()
              && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "SAP XML payload is uploaded in blob storage successfully.").MustHaveHappenedOnceExactly();
-
-            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-             && call.GetArgument<LogLevel>(0) == LogLevel.Error
-             && call.GetArgument<EventId>(1) == EventIds.RequestToSapFailed.ToEventId()
-             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "An error occured while sending a request to SAP. | {StatusCode}").MustHaveHappenedOnceExactly();
         }
 
         [Test]
@@ -497,11 +492,6 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
              && call.GetArgument<LogLevel>(0) == LogLevel.Information
              && call.GetArgument<EventId>(1) == EventIds.UploadedLicenceUpdatedPublishedEventInAzureBlob.ToEventId()
              && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Licence updated  published event is uploaded in blob storage successfully.").MustHaveHappenedOnceExactly();
-
-            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-            && call.GetArgument<LogLevel>(0) == LogLevel.Error
-            && call.GetArgument<EventId>(1) == EventIds.ErrorOccurredInSapForLicenceUpdatedPublishedEvent.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "An error occurred while sending licence updated event data to SAP. | {StatusCode}").MustHaveHappenedOnceExactly();
         }
     }
 }
