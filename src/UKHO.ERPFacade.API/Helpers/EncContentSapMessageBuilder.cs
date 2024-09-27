@@ -431,10 +431,6 @@ namespace UKHO.ERPFacade.API.Helpers
 
         private string GetXmlNodeValue(string fieldValue, string xmlNodeName = null)
         {
-            // Return empty if fieldValue is null, empty, or whitespace
-            if (string.IsNullOrWhiteSpace(fieldValue))
-                return string.Empty;
-
             // Define constants for substring lengths
             const int maxDefaultLength = 250;
             const int agencyCodeLength = 2;
