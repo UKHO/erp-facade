@@ -168,11 +168,6 @@ namespace UKHO.SAP.MockAPIService
                         .WithBody("Internal server error")
                 );
 
-            Console.WriteLine("SOAP stub is ready.");
-            Console.WriteLine("Press any key to stop the server...");
-            Console.ReadKey();
-
-            server.Stop();
         }
 
         public static string ValidateAuthorization(string username, string password)
