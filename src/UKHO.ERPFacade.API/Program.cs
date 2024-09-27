@@ -112,6 +112,8 @@ namespace UKHO.ERPFacade
                 loggingBuilder.AddAzureWebAppDiagnostics();
             });
 
+            builder.Services.AddAllElasticApm();
+
             builder.Services.AddHeaderPropagation(options =>
             {
                 options.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey);
@@ -203,9 +205,6 @@ namespace UKHO.ERPFacade
             });
 
             app.UseAuthentication();
-
-            app.UseElasticApm(configuration);
-
             app.Run();
         }
 

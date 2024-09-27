@@ -40,5 +40,5 @@ variable "mock_app_settings" {
 }
 
 variable "subnet_id" {
-  type = string
+  type = string  
 }
