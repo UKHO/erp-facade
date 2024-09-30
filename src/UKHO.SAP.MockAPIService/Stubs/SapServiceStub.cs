@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using UKHO.SAP.MockAPIService.Configuration;
+﻿using UKHO.SAP.MockAPIService.Configuration;
 using WireMock.Matchers;
 using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
@@ -9,21 +8,18 @@ namespace UKHO.SAP.MockAPIService.Stubs
 {
     public class SapServiceStub : IStub
     {
-        private readonly SapConfiguration _sapConfiguration;
-        private readonly IConfiguration _configuration;
+        private readonly EncEventConfiguration _encEventConfiguration;
 
-        public SapServiceStub(SapConfiguration sapConfiguration, IConfiguration configuration)
+        public SapServiceStub(EncEventConfiguration encEventConfiguration)
         {
-            _sapConfiguration = sapConfiguration ?? throw new ArgumentNullException(nameof(sapConfiguration));
-            _configuration = configuration;
+            _encEventConfiguration = encEventConfiguration ?? throw new ArgumentNullException(nameof(encEventConfiguration));
         }
 
         public void ConfigureStub(WireMockServer server)
         {
-            var sapEndpointForEncEvent = _configuration.GetSection("SapConfiguration:SapEndpointForEncEvent").Value;
             server
                 .Given(Request.Create()
-                    .WithPath(new WildcardMatcher(sapEndpointForEncEvent))
+                    .WithPath(new WildcardMatcher(_encEventConfiguration.Url))
                     .WithHeader("Accept", new ExactMatcher("text/xml"))
                     .UsingPost())
                 .RespondWith(Response.Create().WithBody((request) =>

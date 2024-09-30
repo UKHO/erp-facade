@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using UKHO.SAP.MockAPIService.Configuration;
 using UKHO.SAP.MockAPIService.Stubs;
 
@@ -7,19 +6,16 @@ namespace UKHO.SAP.MockAPIService.StubSetup
 {
     public class StubFactory
     {
-        private readonly SapConfiguration _sapConfiguration;
-        private readonly IConfiguration _configuration;
+        private readonly EncEventConfiguration _encEventConfiguration;
 
-        public StubFactory(IOptions<SapConfiguration> sapConfiguration, IConfiguration configuration)
+        public StubFactory(IOptions<EncEventConfiguration> encEventConfiguration)
         {
-            _sapConfiguration = sapConfiguration?.Value ??
-                                       throw new ArgumentNullException(nameof(sapConfiguration));
-            _configuration = configuration;
+            _encEventConfiguration = encEventConfiguration?.Value ?? throw new ArgumentNullException(nameof(encEventConfiguration));
         }
 
         public IStub CreateSapServiceStub()
         {
-            return new SapServiceStub(_sapConfiguration, _configuration);
+            return new SapServiceStub(_encEventConfiguration);
         }
     }
 }

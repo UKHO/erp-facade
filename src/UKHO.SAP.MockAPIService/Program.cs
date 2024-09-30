@@ -20,17 +20,10 @@ namespace UKHO.SAP.MockAPIService
 
         private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            var sapBaseAddress = configuration.GetSection("SapConfiguration:SapBaseAddress").Value;
+            services.Configure<WireMockServerSettings>(configuration.GetSection("WireMockServerSettings"));
 
-            services.Configure<WireMockServerSettings>(options =>
-            {
-                options.Urls = new[] { sapBaseAddress };
-                options.StartAdminInterface = true;
-                options.ReadStaticMappings = true;
-                options.WatchStaticMappings = true;
-            });
-
-            services.Configure<SapConfiguration>(configuration.GetSection("SapConfiguration"));
+            services.Configure<EncEventConfiguration>(configuration.GetSection("EncEventConfiguration"));
+            services.Configure<RecordOfSaleEventConfiguration>(configuration.GetSection("RecordOfSaleEventConfiguration"));
 
             services.AddSingleton<StubFactory>();
             services.AddHostedService<StubManagerHostedService>();
