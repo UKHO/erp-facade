@@ -24,7 +24,7 @@ namespace UKHO.SAP.MockAPIService
 
             services.Configure<WireMockServerSettings>(options =>
             {
-                options.Urls = [sapBaseAddress];
+                options.Urls = new[] { sapBaseAddress };
                 options.StartAdminInterface = true;
                 options.ReadStaticMappings = true;
                 options.WatchStaticMappings = true;
