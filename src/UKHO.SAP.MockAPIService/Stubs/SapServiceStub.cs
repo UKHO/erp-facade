@@ -20,14 +20,12 @@ namespace UKHO.SAP.MockAPIService.Stubs
             server
                 .Given(Request.Create()
                     .WithPath(new WildcardMatcher(_encEventConfiguration.Url))
-                    .WithHeader("Accept", new ExactMatcher("text/xml"))
+                    .WithHeader("Accept", "text/xml", MatchBehaviour.AcceptOnMatch)
                     .UsingPost())
-                .RespondWith(Response.Create().WithBody((request) =>
-                {
-                    return $"Record successfully received for CorrelationId: TEST";
-                })
-                .WithStatusCode(200)
-                .WithHeader("Content-Type", "text/xml; charset=utf-8"));
+                .RespondWith(Response.Create()
+                    .WithBody((request) => { return $"Record successfully received for CorrelationId: TEST"; })
+                    .WithStatusCode(200)
+                    .WithHeader("Content-Type", "text/xml; charset=utf-8"));
         }
     }
 }
