@@ -52,6 +52,7 @@ namespace UKHO.ERPFacade.API.Helpers
         private const string Agency = "AGENCY";
         private const string CreateEncCell = "CREATE ENC CELL";
         private const string UpdateCell = "UPDATE ENC CELL EDITION UPDATE NUMBER";
+        private const string Permit = "permit";
 
         public EncContentSapMessageBuilder(ILogger<EncContentSapMessageBuilder> logger,
                                  IXmlHelper xmlHelper,
@@ -77,40 +78,33 @@ namespace UKHO.ERPFacade.API.Helpers
         /// <returns>XmlDocument</returns>
         public XmlDocument BuildSapMessageXml(EncEventPayload eventData)
         {
-            try
+            string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, SapXmlPath);
+
+            // Check if SAP XML payload template exists
+            if (!_fileSystemHelper.IsFileExists(sapXmlTemplatePath))
             {
-                string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, SapXmlPath);
-
-                // Check if SAP XML payload template exists
-                if (!_fileSystemHelper.IsFileExists(sapXmlTemplatePath))
-                {
-                    _logger.LogError(EventIds.SapXmlTemplateNotFound.ToEventId(), "The SAP xml payload template does not exist.");
-                    throw new FileNotFoundException("The SAP xml payload template does not exist.");
-                }
-
-                var soapXml = _xmlHelper.CreateXmlDocument(sapXmlTemplatePath);
-
-                var actionItemNode = soapXml.SelectSingleNode(XpathActionItems);
-
-                _logger.LogInformation(EventIds.GenerationOfSapXmlPayloadStarted.ToEventId(), "Generation of SAP XML payload started.");
-
-                // Build SAP actions for ENC Cell
-                BuildEncCellActions(eventData, soapXml, actionItemNode);
-
-                // Build SAP actions for Units
-                BuildUnitActions(eventData, soapXml, actionItemNode);
-
-                // Finalize SAP XML message
-                FinalizeSapXmlMessage(soapXml, eventData.Data.CorrelationId, actionItemNode);
-
-                _logger.LogInformation(EventIds.GenerationOfSapXmlPayloadCompleted.ToEventId(), "Generation of SAP XML payload completed.");
-
-                return soapXml;
+                _logger.LogError(EventIds.SapXmlTemplateNotFound.ToEventId(), "The SAP xml payload template does not exist.");
+                throw new FileNotFoundException("The SAP xml payload template does not exist.");
             }
-            catch (Exception ex)
-            {
-                throw new ERPFacadeException(EventIds.GenerationOfSapXmlPayloadFailed.ToEventId(), "Error while building SAP XML payload. | {Exception}", ex.Message);
-            }
+
+            var soapXml = _xmlHelper.CreateXmlDocument(sapXmlTemplatePath);
+
+            var actionItemNode = soapXml.SelectSingleNode(XpathActionItems);
+
+            _logger.LogInformation(EventIds.GenerationOfSapXmlPayloadStarted.ToEventId(), "Generation of SAP XML payload started.");
+
+            // Build SAP actions for ENC Cell
+            BuildEncCellActions(eventData, soapXml, actionItemNode);
+
+            // Build SAP actions for Units
+            BuildUnitActions(eventData, soapXml, actionItemNode);
+
+            // Finalize SAP XML message
+            FinalizeSapXmlMessage(soapXml, eventData.Data.CorrelationId, actionItemNode);
+
+            _logger.LogInformation(EventIds.GenerationOfSapXmlPayloadCompleted.ToEventId(), "Generation of SAP XML payload completed.");
+
+            return soapXml;
         }
 
         private void BuildEncCellActions(EncEventPayload eventData, XmlDocument soapXml, XmlNode actionItemNode)
@@ -304,7 +298,7 @@ namespace UKHO.ERPFacade.API.Helpers
             List<(int sortingOrder, XmlElement node)> actionAttributes = [];
 
             // Get permit keys for New cell and Updated cell
-            if (product != null && !IsPropertyNullOrEmpty("permit", product.Permit) && (action.Action == CreateEncCell || action.Action == UpdateCell))
+            if (product != null && !IsPropertyNullOrEmpty(Permit, product.Permit) && (action.Action == CreateEncCell || action.Action == UpdateCell))
             {
                 decryptedPermit = _permitDecryption.Decrypt(product.Permit);
             }
@@ -423,10 +417,7 @@ namespace UKHO.ERPFacade.API.Helpers
         private void SetXmlNodeValue(XmlDocument xmlDoc, string xPath, string value)
         {
             var node = xmlDoc.SelectSingleNode(xPath);
-            if (node != null)
-            {
-                node.InnerText = value;
-            }
+            node.InnerText = (node != null) ? value : string.Empty;         
         }
 
         private string GetXmlNodeValue(string fieldValue, string xmlNodeName = null)
@@ -477,7 +468,7 @@ namespace UKHO.ERPFacade.API.Helpers
         {
             if (string.IsNullOrEmpty(propertyValue))
             {
-                throw new ERPFacadeException(EventIds.EmptyEventJsonPropertyException.ToEventId(), "SAP required property found empty in enccontentpublished event payload. | Property Name : {Property} ", propertyName);
+                throw new ERPFacadeException(EventIds.EmptyEventJsonPropertyException.ToEventId(), "SAP required property found empty in enccontentpublished event payload. | Property Name : {Property}", propertyName);
             }
             else return false;
         }
