@@ -1,0 +1,44 @@
+{
+  "specversion": "1.0",
+  "type": "uk.gov.ukho.encpublishing.enccontentpublished.v2.2",
+  "source": "https://encpublishing.ukho.gov.uk",
+  "id": "bc1d32d7-802a-47b2-9e3c-1c2ce7a99ec8",
+  "time": "2024-09-11T13:17:44.6924191+00:00",
+  "subject": "Units 1U319210",
+  "datacontenttype": "application/json",
+  "data": {
+    "correlationId": "d3a2fc8c-aa69-42a9-6e5a-08dccb3abf10",
+    "ukhoWeekNumber": {
+      "year": 2024,
+      "week": 32,
+      "currentWeekAlphaCorrection": false
+    },
+    "products": [],
+    "unitsOfSale": [
+      {
+        "unitName": "1U319210",
+        "title": "SOUTHEAST OF TAIWAN STRAIT edit",
+        "unitOfSaleType": "unit",
+        "unitSize": "large",
+        "unitType": "AVCS Units Coastal",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "status": "ForSale",
+        "isNewUnitOfSale": false,
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 22,
+            "southLimit": 21,
+            "eastLimit": 120,
+            "westLimit": 119
+          },
+          "polygons": []
+        },
+        "compositionChanges": {
+          "addProducts": [],
+          "removeProducts": []
+        }
+      }
+    ]
+  }
+}

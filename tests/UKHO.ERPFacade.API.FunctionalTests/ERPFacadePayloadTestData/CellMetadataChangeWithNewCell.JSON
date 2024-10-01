@@ -1,0 +1,135 @@
+{
+  "specversion": "1.0",
+  "type": "uk.gov.ukho.encpublishing.enccontentpublished.v2.2",
+  "source": "https://encpublishing.ukho.gov.uk",
+  "id": "70b9d449-62e1-4d95-84d4-d1df8a15f070",
+  "time": "2024-09-13T11:13:32.5900085+00:00",
+  "subject": "US5AK1XQ",
+  "datacontenttype": "application/json",
+  "data": {
+    "correlationId": "62d4c8a3-56f1-4f4f-d35d-08dcd31236c8",
+    "ukhoWeekNumber": {
+      "year": 2024,
+      "week": 31,
+      "currentWeekAlphaCorrection": false
+    },
+    "products": [
+      {
+        "dataSetName": "US5AK1XQ.000",
+        "productName": "US5AK1XQ",
+        "title": "Taiya Inlet_Metadata change",
+        "scale": 22000,
+        "usageBand": 5,
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "contentChange": false,
+        "permit": "ThisWillBeReplacedWithActualPermitFromKeyvault",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "size": "medium",
+        "bundle": [
+          {
+            "bundleType": "DVD",
+            "location": "M1;B5"
+          }
+        ],
+        "status": {
+          "statusName": "New Edition",
+          "statusDate": "2024-07-02",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "replacedBy": [],
+        "additionalCoverage": [],
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 59.4,
+            "southLimit": 59.325,
+            "eastLimit": -135.3,
+            "westLimit": -135.45
+          },
+          "polygons": []
+        },
+        "inUnitsOfSale": [
+          "PAYSF",
+          "US5AK1XQ"
+        ],
+        "s63": {
+          "name": "US5AK1XQ.000",
+          "hash": "9DBA1277C5F56B8409A378F4000CFFEE67ECAB653B161139C13446628D19F846",
+          "fileSize": 20192,
+          "compression": true,
+          "s57Crc": "2023F179"
+        },
+        "signature": {
+          "name": "USMAK1XQ.000",
+          "hash": "F41B56E423F2D554743EE0C6B39448FECE1700F2E95420230ECC07E49E749BE9",
+          "fileSize": 874
+        },
+        "ancillaryFiles": [
+          {
+            "name": "US205XQB.TXT",
+            "hash": "A39F51F5602B32C345CDD50683D495C7DC43E1FB69DD464957D5F08F4A16897D",
+            "fileSize": 172
+          },
+          {
+            "name": "US205XQA.TXT",
+            "hash": "242E80518D8C5DFF3F6A163ECAFA50E7A671258AA5B8FEA90258E77E1B7E48E4",
+            "fileSize": 4748
+          }
+        ]
+      }
+    ],
+    "unitsOfSale": [
+      {
+        "unitName": "US5AK1XQ",
+        "title": "Taiya Inlet",
+        "unitOfSaleType": "unit",
+        "unitSize": "medium",
+        "unitType": "AVCS Units Harbour",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "status": "ForSale",
+        "isNewUnitOfSale": false,
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 59.4,
+            "southLimit": 59.325,
+            "eastLimit": -135.3,
+            "westLimit": -135.45
+          },
+          "polygons": []
+        },
+        "compositionChanges": {
+          "addProducts": [],
+          "removeProducts": []
+        }
+      },
+      {
+        "unitName": "PAYSF",
+        "title": "World Folio",
+        "unitOfSaleType": "folio",
+        "unitSize": "large",
+        "unitType": "AVCS Folio Transit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "status": "ForSale",
+        "isNewUnitOfSale": false,
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 0,
+            "southLimit": 0,
+            "eastLimit": 0,
+            "westLimit": 0
+          },
+          "polygons": []
+        },
+        "compositionChanges": {
+          "addProducts": [],
+          "removeProducts": []
+        }
+      }
+    ]
+  }
+}
