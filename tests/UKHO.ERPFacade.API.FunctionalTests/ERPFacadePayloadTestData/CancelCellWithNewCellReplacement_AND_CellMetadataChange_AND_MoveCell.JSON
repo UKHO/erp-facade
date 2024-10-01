@@ -1,0 +1,398 @@
+{
+  "specversion": "1.0",
+  "type": "uk.gov.ukho.encpublishing.enccontentpublished.v2.2",
+  "source": "https://encpublishing.ukho.gov.uk",
+  "id": "dea610c3-3b8b-4a47-b6b0-b0e8fe153bea",
+  "time": "2024-09-16T09:31:22.7263574+00:00",
+  "subject": "1U319240,1U420242,PA5AM111,PA5CP007",
+  "datacontenttype": "application/json",
+  "data": {
+    "correlationId": "c48874d4-255e-4257-6680-08dcd62fd4ae",
+    "ukhoWeekNumber": {
+      "year": 2024,
+      "week": 31,
+      "currentWeekAlphaCorrection": false
+    },
+    "products": [
+      {
+        "dataSetName": "1U319240.013",
+        "productName": "1U319240",
+        "title": "TAIWAN STRAIT SOUTH OF WUQIU ISLETS",
+        "scale": 180000,
+        "usageBand": 3,
+        "editionNumber": 5,
+        "updateNumber": 13,
+        "mayAffectHoldings": false,
+        "contentChange": false,
+        "permit": "ThisWillBeReplacedWithActualPermitFromKeyvault",
+        "providerCode": "2",
+        "providerName": "PRIMAR",
+        "size": "medium",
+        "bundle": [
+          {
+            "bundleType": "DVD",
+            "location": "M1;B2"
+          }
+        ],
+        "status": {
+          "statusName": "Update",
+          "statusDate": "2024-06-23",
+          "isNewCell": false
+        },
+        "replaces": [],
+        "replacedBy": [],
+        "additionalCoverage": [],
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 25,
+            "southLimit": 24,
+            "eastLimit": 120,
+            "westLimit": 119
+          },
+          "polygons": []
+        },
+        "inUnitsOfSale": [
+          "1U319240",
+          "PAYSF"
+        ],
+        "s63": {
+          "name": "1U319240.013",
+          "hash": "0CD79A00512E436C41562C27701013DFA62588BD7B2DCAE8A258630C99DE523C",
+          "fileSize": 1320,
+          "compression": true,
+          "s57Crc": "B0D40934"
+        },
+        "signature": {
+          "name": "1UK19240.013",
+          "hash": "3BA3986CEC4E532CD0D26A487852430F2D4524CEF28A3C34DF0E2D44F3788428",
+          "fileSize": 874
+        },
+        "ancillaryFiles": []
+      },
+      {
+        "dataSetName": "1U420242.001",
+        "productName": "1U420242",
+        "title": "TAICHUNG TO TONGXIAO",
+        "scale": 45000,
+        "usageBand": 4,
+        "editionNumber": 5,
+        "updateNumber": 1,
+        "mayAffectHoldings": true,
+        "contentChange": false,
+        "permit": "ThisWillBeReplacedWithActualPermitFromKeyvault",
+        "providerCode": "2",
+        "providerName": "PRIMAR",
+        "size": "large",
+        "bundle": [
+          {
+            "bundleType": "DVD",
+            "location": "M1;B2"
+          }
+        ],
+        "status": {
+          "statusName": "Update",
+          "statusDate": "2024-06-28",
+          "isNewCell": false
+        },
+        "replaces": [],
+        "replacedBy": [],
+        "additionalCoverage": [],
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 24.5,
+            "southLimit": 24,
+            "eastLimit": 121,
+            "westLimit": 120.5
+          },
+          "polygons": []
+        },
+        "inUnitsOfSale": [
+          "PAYSF",
+          "1U320210"
+        ],
+        "s63": {
+          "name": "1U420242.001",
+          "hash": "382E1123A2379052D76B8FB0496C0C78F875A75A2C26BC14BF28ED69D209DEF0",
+          "fileSize": 1920,
+          "compression": true,
+          "s57Crc": "BE6A157F"
+        },
+        "signature": {
+          "name": "1UL20242.001",
+          "hash": "DF76C99F294029C6C140EE07CD6F0B5A67857C3A7137A3DBA09A98140520C87E",
+          "fileSize": 874
+        },
+        "ancillaryFiles": []
+      },
+      {
+        "dataSetName": "PA5AM111.001",
+        "productName": "PA5AM111",
+        "title": "Bahia Manzanillo Port Terminals",
+        "scale": 12000,
+        "usageBand": 5,
+        "editionNumber": 8,
+        "updateNumber": 1,
+        "mayAffectHoldings": true,
+        "contentChange": true,
+        "permit": "ThisWillBeReplacedWithActualPermitFromKeyvault",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "size": "medium",
+        "bundle": [
+          {
+            "bundleType": "DVD",
+            "location": "M2;B8"
+          }
+        ],
+        "status": {
+          "statusName": "Cancellation Update",
+          "statusDate": "2024-07-16",
+          "isNewCell": false
+        },
+        "replaces": [],
+        "replacedBy": [
+          "PA5CP007"
+        ],
+        "additionalCoverage": [],
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 9.4368333,
+            "southLimit": 9.3043269,
+            "eastLimit": -79.8700001,
+            "westLimit": -79.9022423
+          },
+          "polygons": []
+        },
+        "inUnitsOfSale": [],
+        "s63": {
+          "name": "PA5AM111.001",
+          "hash": "",
+          "fileSize": 0,
+          "compression": true,
+          "s57Crc": "78094592"
+        },
+        "signature": {
+          "name": "PAMAM111.001",
+          "hash": "",
+          "fileSize": 0
+        },
+        "ancillaryFiles": []
+      },
+      {
+        "dataSetName": "PA5CP007.000",
+        "productName": "PA5CP007",
+        "title": "Bah\u00EDa Manzanillo Port Terminal",
+        "scale": 10000,
+        "usageBand": 5,
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "contentChange": true,
+        "permit": "ThisWillBeReplacedWithActualPermitFromKeyvault",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "size": "large",
+        "bundle": [
+          {
+            "bundleType": "DVD",
+            "location": "M2;B8"
+          }
+        ],
+        "status": {
+          "statusName": "New Edition",
+          "statusDate": "2024-06-24",
+          "isNewCell": true
+        },
+        "replaces": [
+          "PA5AM111"
+        ],
+        "replacedBy": [],
+        "additionalCoverage": [],
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 9.4368333,
+            "southLimit": 9.3043269,
+            "eastLimit": -79.8700001,
+            "westLimit": -79.9022423
+          },
+          "polygons": []
+        },
+        "inUnitsOfSale": [
+          "PAYSF",
+          "PA5CP007"
+        ],
+        "s63": {
+          "name": "PA5CP007.000",
+          "hash": "",
+          "fileSize": 0,
+          "compression": true,
+          "s57Crc": "97348E72"
+        },
+        "signature": {
+          "name": "PAMCP007.000",
+          "hash": "",
+          "fileSize": 0
+        },
+        "ancillaryFiles": []
+      }
+    ],
+    "unitsOfSale": [
+      {
+        "unitName": "PA5AM111",
+        "title": "Bahia Manzanillo Port Terminals",
+        "unitOfSaleType": "unit",
+        "unitSize": "medium",
+        "unitType": "AVCS Units Harbour",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "status": "NotForSale",
+        "isNewUnitOfSale": false,
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 9.4368333,
+            "southLimit": 9.3043269,
+            "eastLimit": -79.8700001,
+            "westLimit": -79.9022423
+          },
+          "polygons": []
+        },
+        "compositionChanges": {
+          "addProducts": [],
+          "removeProducts": [
+            "PA5AM111"
+          ]
+        }
+      },
+      {
+        "unitName": "PA5CP007",
+        "title": "Bah\u00EDa Manzanillo Port Terminal",
+        "unitOfSaleType": "unit",
+        "unitSize": "large",
+        "unitType": "AVCS Units Harbour",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 9.4368333,
+            "southLimit": 9.3043269,
+            "eastLimit": -79.8700001,
+            "westLimit": -79.9022423
+          },
+          "polygons": []
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "PA5CP007"
+          ],
+          "removeProducts": []
+        }
+      },
+      {
+        "unitName": "1U319240",
+        "title": "SOUTH OF WUQIU ISLETS",
+        "unitOfSaleType": "unit",
+        "unitSize": "large",
+        "unitType": "AVCS Units Coastal",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "status": "ForSale",
+        "isNewUnitOfSale": false,
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 25,
+            "southLimit": 24,
+            "eastLimit": 120,
+            "westLimit": 119
+          },
+          "polygons": []
+        },
+        "compositionChanges": {
+          "addProducts": [],
+          "removeProducts": []
+        }
+      },
+      {
+        "unitName": "1U320210",
+        "title": "WATERS SOUTHWARD OF TAIWAN",
+        "unitOfSaleType": "unit",
+        "unitSize": "large",
+        "unitType": "AVCS Units Coastal",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "status": "ForSale",
+        "isNewUnitOfSale": false,
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 22,
+            "southLimit": 21,
+            "eastLimit": 121,
+            "westLimit": 120
+          },
+          "polygons": []
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "1U420242"
+          ],
+          "removeProducts": []
+        }
+      },
+      {
+        "unitName": "1U420242",
+        "title": "TAICHUNG TO TONGXIAO",
+        "unitOfSaleType": "unit",
+        "unitSize": "large",
+        "unitType": "AVCS Units Approach",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "status": "ForSale",
+        "isNewUnitOfSale": false,
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 24.5,
+            "southLimit": 24,
+            "eastLimit": 121,
+            "westLimit": 120.5
+          },
+          "polygons": []
+        },
+        "compositionChanges": {
+          "addProducts": [],
+          "removeProducts": [
+            "1U420242"
+          ]
+        }
+      },
+      {
+        "unitName": "PAYSF",
+        "title": "World Folio",
+        "unitOfSaleType": "folio",
+        "unitSize": "large",
+        "unitType": "AVCS Folio Transit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "status": "ForSale",
+        "isNewUnitOfSale": false,
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 0,
+            "southLimit": 0,
+            "eastLimit": 0,
+            "westLimit": 0
+          },
+          "polygons": []
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "PA5CP007"
+          ],
+          "removeProducts": [
+            "PA5AM111"
+          ]
+        }
+      }
+    ]
+  }
+}

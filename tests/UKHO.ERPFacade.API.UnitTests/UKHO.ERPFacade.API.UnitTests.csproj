@@ -33,6 +33,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="ERPTestData\CancelCellWithNewCellReplacement.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ERPTestData\ChangeLicencePayloadTest.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

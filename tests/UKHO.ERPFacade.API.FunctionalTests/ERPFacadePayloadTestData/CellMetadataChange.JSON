@@ -1,0 +1,203 @@
+{
+  "specversion": "1.0",
+  "type": "uk.gov.ukho.encpublishing.enccontentpublished.v2.2",
+  "source": "https://encpublishing.ukho.gov.uk",
+  "id": "2b9b1178-194c-43dc-9e32-1733b5e62b05",
+  "time": "2024-09-15T15:52:53.3005882+00:00",
+  "subject": "1U421213,1U421222",
+  "datacontenttype": "application/json",
+  "data": {
+    "correlationId": "323bcab6-7192-4025-d372-08dcd31236c8",
+    "ukhoWeekNumber": {
+      "year": 2024,
+      "week": 31,
+      "currentWeekAlphaCorrection": false
+    },
+    "products": [
+      {
+        "dataSetName": "1U421213.003",
+        "productName": "1U421213",
+        "title": "SOUTHEAST WATERS OF LANYU",
+        "scale": 45000,
+        "usageBand": 4,
+        "editionNumber": 2,
+        "updateNumber": 3,
+        "mayAffectHoldings": false,
+        "contentChange": false,
+        "permit": "ThisWillBeReplacedWithActualPermitFromKeyvault",
+        "providerCode": "2",
+        "providerName": "PRIMAR",
+        "size": "medium",
+        "bundle": [
+          {
+            "bundleType": "DVD",
+            "location": "M1;B2"
+          }
+        ],
+        "status": {
+          "statusName": "Update",
+          "statusDate": "2024-07-08",
+          "isNewCell": false
+        },
+        "replaces": [],
+        "replacedBy": [],
+        "additionalCoverage": [],
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 22,
+            "southLimit": 21.5,
+            "eastLimit": 122,
+            "westLimit": 121.5
+          },
+          "polygons": []
+        },
+        "inUnitsOfSale": [
+          "1U421213",
+          "PAYSF"
+        ],
+        "s63": {
+          "name": "1U421213.003",
+          "hash": "18884659F1430AA2EDE07CE0366CD52ED6FA4158330058D5BE822DC69708DAE5",
+          "fileSize": 2024,
+          "compression": true,
+          "s57Crc": "63C49A3C"
+        },
+        "signature": {
+          "name": "1UL21213.003",
+          "hash": "32129885068E2FCDB05CC2AFF9A7B19328D6F2389319C0C9FA8A8E512074D967",
+          "fileSize": 874
+        },
+        "ancillaryFiles": []
+      },
+      {
+        "dataSetName": "1U421222.008",
+        "productName": "1U421222",
+        "title": "LANYU AND APPROACHES",
+        "scale": 45000,
+        "usageBand": 4,
+        "editionNumber": 3,
+        "updateNumber": 8,
+        "mayAffectHoldings": false,
+        "contentChange": false,
+        "permit": "ThisWillBeReplacedWithActualPermitFromKeyvault",
+        "providerCode": "2",
+        "providerName": "PRIMAR",
+        "size": "medium",
+        "bundle": [
+          {
+            "bundleType": "DVD",
+            "location": "M1;B2"
+          }
+        ],
+        "status": {
+          "statusName": "Update",
+          "statusDate": "2023-10-30",
+          "isNewCell": false
+        },
+        "replaces": [],
+        "replacedBy": [],
+        "additionalCoverage": [],
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 22.5,
+            "southLimit": 22,
+            "eastLimit": 122,
+            "westLimit": 121.5
+          },
+          "polygons": []
+        },
+        "inUnitsOfSale": [
+          "1U421222",
+          "PAYSF"
+        ],
+        "s63": {
+          "name": "1U421222.008",
+          "hash": "76971ACB6D958E43EBF70CBE27386E322528BB689F288A2EFBB325298399E4FD",
+          "fileSize": 1512,
+          "compression": true,
+          "s57Crc": "D8D4279E"
+        },
+        "signature": {
+          "name": "1UL21222.008",
+          "hash": "4D19D82A0E9913F92FDD727F1862C0992B178A4BC2DE413D4844F49C00F6A648",
+          "fileSize": 874
+        },
+        "ancillaryFiles": []
+      }
+    ],
+    "unitsOfSale": [
+      {
+        "unitName": "1U421213",
+        "title": "SOUTHEAST WATERS OF LANYU",
+        "unitOfSaleType": "unit",
+        "unitSize": "large",
+        "unitType": "AVCS Units Approach",
+        "providerCode": "2",
+        "providerName": "PRIMAR",
+        "status": "ForSale",
+        "isNewUnitOfSale": false,
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 22,
+            "southLimit": 21.5,
+            "eastLimit": 122,
+            "westLimit": 121.5
+          },
+          "polygons": []
+        },
+        "compositionChanges": {
+          "addProducts": [],
+          "removeProducts": []
+        }
+      },
+      {
+        "unitName": "1U421222",
+        "title": "LANYU AND APPROACHES",
+        "unitOfSaleType": "unit",
+        "unitSize": "large",
+        "unitType": "AVCS Units Approach",
+        "providerCode": "2",
+        "providerName": "PRIMAR",
+        "status": "ForSale",
+        "isNewUnitOfSale": false,
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 22.5,
+            "southLimit": 22,
+            "eastLimit": 122,
+            "westLimit": 121.5
+          },
+          "polygons": []
+        },
+        "compositionChanges": {
+          "addProducts": [],
+          "removeProducts": []
+        }
+      },
+      {
+        "unitName": "PAYSF",
+        "title": "World Folio",
+        "unitOfSaleType": "folio",
+        "unitSize": "large",
+        "unitType": "AVCS Folio Transit",
+        "providerCode": "2",
+        "providerName": "PRIMAR",
+        "status": "ForSale",
+        "isNewUnitOfSale": false,
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 0,
+            "southLimit": 0,
+            "eastLimit": 0,
+            "westLimit": 0
+          },
+          "polygons": []
+        },
+        "compositionChanges": {
+          "addProducts": [],
+          "removeProducts": []
+        }
+      }
+    ]
+  }
+}

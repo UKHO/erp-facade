@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="utf-16"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <Z_ADDS_MAT_INFO xmlns="urn:sap-com:document:sap:rfc:functions">
+      <IM_MATINFO xmlns="">
+        <CORRID>c48874d4-255e-4257-6680-08dcd62fd4ae</CORRID>
+        <NOOFACTIONS>16</NOOFACTIONS>
+        <RECDATE>20240920</RECDATE>
+        <RECTIME>014424</RECTIME>
+        <ORG>UKHO</ORG>
+        <ACTIONITEMS>
+          <Item>
+            <ACTIONNUMBER>1</ACTIONNUMBER>
+            <ACTION>CREATE ENC CELL</ACTION>
+            <PRODUCT>ENC CELL</PRODUCT>
+            <PRODTYPE>S57</PRODTYPE>
+            <CHILDCELL>PA5CP007</CHILDCELL>
+            <PRODUCTNAME>PA5CP007</PRODUCTNAME>
+            <CANCELLED />
+            <REPLACEDBY />
+            <AGENCY>PA</AGENCY>
+            <PROVIDER>1</PROVIDER>
+            <ENCSIZE>large</ENCSIZE>
+            <TITLE>Bahía Manzanillo Port Terminal</TITLE>
+            <EDITIONNO>1</EDITIONNO>
+            <UPDATENO>0</UPDATENO>
+            <UNITTYPE />
+            <WEEKNO>202431</WEEKNO>
+            <VALIDFROM>20240801</VALIDFROM>
+            <CORRECTION>N</CORRECTION>
+            <ACTIVEKEY>0FB11A3450</ACTIVEKEY>
+            <NEXTKEY>D902ADDB7E</NEXTKEY>
+          </Item>
+          <Item>
+            <ACTIONNUMBER>2</ACTIONNUMBER>
+            <ACTION>CREATE AVCS UNIT OF SALE</ACTION>
+            <PRODUCT>AVCS UNIT</PRODUCT>
+            <PRODTYPE>S57</PRODTYPE>
+            <CHILDCELL></CHILDCELL>
+            <PRODUCTNAME>PA5CP007</PRODUCTNAME>
+            <CANCELLED />
+            <REPLACEDBY />
+            <AGENCY>PA</AGENCY>
+            <PROVIDER>1</PROVIDER>
+            <ENCSIZE>large</ENCSIZE>
+            <TITLE>Bahía Manzanillo Port Terminal</TITLE>
+            <EDITIONNO />
+            <UPDATENO />
+            <UNITTYPE>AVCS Units Harbour</UNITTYPE>
+            <WEEKNO>202431</WEEKNO>
+            <VALIDFROM>20240801</VALIDFROM>
+            <CORRECTION>N</CORRECTION>
+            <ACTIVEKEY />
+            <NEXTKEY />
+          </Item>
+          <Item>
+            <ACTIONNUMBER>3</ACTIONNUMBER>
+            <ACTION>ASSIGN CELL TO AVCS UNIT OF SALE</ACTION>
+            <PRODUCT>AVCS UNIT</PRODUCT>
+            <PRODTYPE>S57</PRODTYPE>
+            <CHILDCELL>PA5CP007</CHILDCELL>
+            <PRODUCTNAME>PA5CP007</PRODUCTNAME>
+            <CANCELLED />
+            <REPLACEDBY />
+            <AGENCY />
+            <PROVIDER />
+            <ENCSIZE />
+            <TITLE />
+            <EDITIONNO />
+            <UPDATENO />
+            <UNITTYPE />
+            <WEEKNO>202431</WEEKNO>
+            <VALIDFROM>20240801</VALIDFROM>
+            <CORRECTION>N</CORRECTION>
+            <ACTIVEKEY />
+            <NEXTKEY />
+          </Item>
+          <Item>
+            <ACTIONNUMBER>4</ACTIONNUMBER>
+            <ACTION>ASSIGN CELL TO AVCS UNIT OF SALE</ACTION>
+            <PRODUCT>AVCS UNIT</PRODUCT>
+            <PRODTYPE>S57</PRODTYPE>
+            <CHILDCELL>1U420242</CHILDCELL>
+            <PRODUCTNAME>1U320210</PRODUCTNAME>
+            <CANCELLED />
+            <REPLACEDBY />
+            <AGENCY />
+            <PROVIDER />
+            <ENCSIZE />
+            <TITLE />
+            <EDITIONNO />
+            <UPDATENO />
+            <UNITTYPE />
+            <WEEKNO>202431</WEEKNO>
+            <VALIDFROM>20240801</VALIDFROM>
+            <CORRECTION>N</CORRECTION>
+            <ACTIVEKEY />
+            <NEXTKEY />
+          </Item>
+          <Item>
+            <ACTIONNUMBER>5</ACTIONNUMBER>
+            <ACTION>ASSIGN CELL TO AVCS UNIT OF SALE</ACTION>
+            <PRODUCT>AVCS UNIT</PRODUCT>
+            <PRODTYPE>S57</PRODTYPE>
+            <CHILDCELL>PA5CP007</CHILDCELL>
+            <PRODUCTNAME>PAYSF</PRODUCTNAME>
+            <CANCELLED />
+            <REPLACEDBY />
+            <AGENCY />
+            <PROVIDER />
+            <ENCSIZE />
+            <TITLE />
+            <EDITIONNO />
+            <UPDATENO />
+            <UNITTYPE />
+            <WEEKNO>202431</WEEKNO>
+            <VALIDFROM>20240801</VALIDFROM>
+            <CORRECTION>N</CORRECTION>
+            <ACTIVEKEY />
+            <NEXTKEY />
+          </Item>
+          <Item>
+            <ACTIONNUMBER>6</ACTIONNUMBER>
+            <ACTION>REPLACED WITH ENC CELL</ACTION>
+            <PRODUCT>ENC CELL</PRODUCT>
+            <PRODTYPE>S57</PRODTYPE>
+            <CHILDCELL>PA5AM111</CHILDCELL>
+            <PRODUCTNAME>PA5AM111</PRODUCTNAME>
+            <CANCELLED />
+            <REPLACEDBY>PA5CP007</REPLACEDBY>
+            <AGENCY />
+            <PROVIDER />
+            <ENCSIZE />
+            <TITLE />
+            <EDITIONNO />
+            <UPDATENO />
+            <UNITTYPE />
+            <WEEKNO>202431</WEEKNO>
+            <VALIDFROM>20240801</VALIDFROM>
+            <CORRECTION>N</CORRECTION>
+            <ACTIVEKEY />
+            <NEXTKEY />
+          </Item>
+          <Item>
+            <ACTIONNUMBER>7</ACTIONNUMBER>
+            <ACTION>CHANGE ENC CELL</ACTION>
+            <PRODUCT>ENC CELL</PRODUCT>
+            <PRODTYPE>S57</PRODTYPE>
+            <CHILDCELL>1U319240</CHILDCELL>
+            <PRODUCTNAME>1U319240</PRODUCTNAME>
+            <CANCELLED />
+            <REPLACEDBY />
+            <AGENCY>1U</AGENCY>
+            <PROVIDER>2</PROVIDER>
+            <ENCSIZE>medium</ENCSIZE>
+            <TITLE />
+            <EDITIONNO />
+            <UPDATENO />
+            <UNITTYPE />
+            <WEEKNO>202431</WEEKNO>
+            <VALIDFROM>20240801</VALIDFROM>
+            <CORRECTION>N</CORRECTION>
+            <ACTIVEKEY />
+            <NEXTKEY />
+          </Item>
+          <Item>
+            <ACTIONNUMBER>8</ACTIONNUMBER>
+            <ACTION>CHANGE ENC CELL</ACTION>
+            <PRODUCT>ENC CELL</PRODUCT>
+            <PRODTYPE>S57</PRODTYPE>
+            <CHILDCELL>1U420242</CHILDCELL>
+            <PRODUCTNAME>1U320210</PRODUCTNAME>
+            <CANCELLED />
+            <REPLACEDBY />
+            <AGENCY>1U</AGENCY>
+            <PROVIDER>2</PROVIDER>
+            <ENCSIZE>large</ENCSIZE>
+            <TITLE />
+            <EDITIONNO />
+            <UPDATENO />
+            <UNITTYPE />
+            <WEEKNO>202431</WEEKNO>
+            <VALIDFROM>20240801</VALIDFROM>
+            <CORRECTION>N</CORRECTION>
+            <ACTIVEKEY />
+            <NEXTKEY />
+          </Item>
+          <Item>
+            <ACTIONNUMBER>9</ACTIONNUMBER>
+            <ACTION>CHANGE AVCS UNIT OF SALE</ACTION>
+            <PRODUCT>AVCS UNIT</PRODUCT>
+            <PRODTYPE>S57</PRODTYPE>
+            <CHILDCELL></CHILDCELL>
+            <PRODUCTNAME>1U319240</PRODUCTNAME>
+            <CANCELLED />
+            <REPLACEDBY />
+            <AGENCY>1U</AGENCY>
+            <PROVIDER>1</PROVIDER>
+            <ENCSIZE>large</ENCSIZE>
+            <TITLE />
+            <EDITIONNO />
+            <UPDATENO />
+            <UNITTYPE />
+            <WEEKNO>202431</WEEKNO>
+            <VALIDFROM>20240801</VALIDFROM>
+            <CORRECTION>N</CORRECTION>
+            <ACTIVEKEY />
+            <NEXTKEY />
+          </Item>
+          <Item>
+            <ACTIONNUMBER>10</ACTIONNUMBER>
+            <ACTION>CHANGE AVCS UNIT OF SALE</ACTION>
+            <PRODUCT>AVCS UNIT</PRODUCT>
+            <PRODTYPE>S57</PRODTYPE>
+            <CHILDCELL></CHILDCELL>
+            <PRODUCTNAME>1U320210</PRODUCTNAME>
+            <CANCELLED />
+            <REPLACEDBY />
+            <AGENCY>1U</AGENCY>
+            <PROVIDER>1</PROVIDER>
+            <ENCSIZE>large</ENCSIZE>
+            <TITLE />
+            <EDITIONNO />
+            <UPDATENO />
+            <UNITTYPE />
+            <WEEKNO>202431</WEEKNO>
+            <VALIDFROM>20240801</VALIDFROM>
+            <CORRECTION>N</CORRECTION>
+            <ACTIVEKEY />
+            <NEXTKEY />
+          </Item>
+          <Item>
+            <ACTIONNUMBER>11</ACTIONNUMBER>
+            <ACTION>CHANGE AVCS UNIT OF SALE</ACTION>
+            <PRODUCT>AVCS UNIT</PRODUCT>
+            <PRODTYPE>S57</PRODTYPE>
+            <CHILDCELL></CHILDCELL>
+            <PRODUCTNAME>1U420242</PRODUCTNAME>
+            <CANCELLED />
+            <REPLACEDBY />
+            <AGENCY>1U</AGENCY>
+            <PROVIDER>1</PROVIDER>
+            <ENCSIZE>large</ENCSIZE>
+            <TITLE />
+            <EDITIONNO />
+            <UPDATENO />
+            <UNITTYPE />
+            <WEEKNO>202431</WEEKNO>
+            <VALIDFROM>20240801</VALIDFROM>
+            <CORRECTION>N</CORRECTION>
+            <ACTIVEKEY />
+            <NEXTKEY />
+          </Item>
+          <Item>
+            <ACTIONNUMBER>12</ACTIONNUMBER>
+            <ACTION>REMOVE ENC CELL FROM AVCS UNIT OF SALE</ACTION>
+            <PRODUCT>AVCS UNIT</PRODUCT>
+            <PRODTYPE>S57</PRODTYPE>
+            <CHILDCELL>PA5AM111</CHILDCELL>
+            <PRODUCTNAME>PA5AM111</PRODUCTNAME>
+            <CANCELLED />
+            <REPLACEDBY />
+            <AGENCY />
+            <PROVIDER />
+            <ENCSIZE />
+            <TITLE />
+            <EDITIONNO />
+            <UPDATENO />
+            <UNITTYPE />
+            <WEEKNO>202431</WEEKNO>
+            <VALIDFROM>20240801</VALIDFROM>
+            <CORRECTION>N</CORRECTION>
+            <ACTIVEKEY />
+            <NEXTKEY />
+          </Item>
+          <Item>
+            <ACTIONNUMBER>13</ACTIONNUMBER>
+            <ACTION>REMOVE ENC CELL FROM AVCS UNIT OF SALE</ACTION>
+            <PRODUCT>AVCS UNIT</PRODUCT>
+            <PRODTYPE>S57</PRODTYPE>
+            <CHILDCELL>1U420242</CHILDCELL>
+            <PRODUCTNAME>1U420242</PRODUCTNAME>
+            <CANCELLED />
+            <REPLACEDBY />
+            <AGENCY />
+            <PROVIDER />
+            <ENCSIZE />
+            <TITLE />
+            <EDITIONNO />
+            <UPDATENO />
+            <UNITTYPE />
+            <WEEKNO>202431</WEEKNO>
+            <VALIDFROM>20240801</VALIDFROM>
+            <CORRECTION>N</CORRECTION>
+            <ACTIVEKEY />
+            <NEXTKEY />
+          </Item>
+          <Item>
+            <ACTIONNUMBER>14</ACTIONNUMBER>
+            <ACTION>REMOVE ENC CELL FROM AVCS UNIT OF SALE</ACTION>
+            <PRODUCT>AVCS UNIT</PRODUCT>
+            <PRODTYPE>S57</PRODTYPE>
+            <CHILDCELL>PA5AM111</CHILDCELL>
+            <PRODUCTNAME>PAYSF</PRODUCTNAME>
+            <CANCELLED />
+            <REPLACEDBY />
+            <AGENCY />
+            <PROVIDER />
+            <ENCSIZE />
+            <TITLE />
+            <EDITIONNO />
+            <UPDATENO />
+            <UNITTYPE />
+            <WEEKNO>202431</WEEKNO>
+            <VALIDFROM>20240801</VALIDFROM>
+            <CORRECTION>N</CORRECTION>
+            <ACTIVEKEY />
+            <NEXTKEY />
+          </Item>
+          <Item>
+            <ACTIONNUMBER>15</ACTIONNUMBER>
+            <ACTION>CANCEL ENC CELL</ACTION>
+            <PRODUCT>ENC CELL</PRODUCT>
+            <PRODTYPE>S57</PRODTYPE>
+            <CHILDCELL>PA5AM111</CHILDCELL>
+            <PRODUCTNAME>PA5AM111</PRODUCTNAME>
+            <CANCELLED />
+            <REPLACEDBY />
+            <AGENCY />
+            <PROVIDER />
+            <ENCSIZE />
+            <TITLE />
+            <EDITIONNO />
+            <UPDATENO />
+            <UNITTYPE />
+            <WEEKNO>202431</WEEKNO>
+            <VALIDFROM>20240801</VALIDFROM>
+            <CORRECTION>N</CORRECTION>
+            <ACTIVEKEY />
+            <NEXTKEY />
+          </Item>
+          <Item>
+            <ACTIONNUMBER>16</ACTIONNUMBER>
+            <ACTION>CANCEL AVCS UNIT OF SALE</ACTION>
+            <PRODUCT>AVCS UNIT</PRODUCT>
+            <PRODTYPE>S57</PRODTYPE>
+            <CHILDCELL></CHILDCELL>
+            <PRODUCTNAME>PA5AM111</PRODUCTNAME>
+            <CANCELLED />
+            <REPLACEDBY />
+            <AGENCY />
+            <PROVIDER />
+            <ENCSIZE />
+            <TITLE />
+            <EDITIONNO />
+            <UPDATENO />
+            <UNITTYPE />
+            <WEEKNO>202431</WEEKNO>
+            <VALIDFROM>20240801</VALIDFROM>
+            <CORRECTION>N</CORRECTION>
+            <ACTIVEKEY />
+            <NEXTKEY />
+          </Item>
+        </ACTIONITEMS>
+      </IM_MATINFO>
+    </Z_ADDS_MAT_INFO>
+  </soap:Body>
+</soap:Envelope>
