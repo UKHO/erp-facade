@@ -45,6 +45,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         private const string XpathReplacedBy = $"//*[local-name()='REPLACEDBY']";
         private const string XpathActionNumber = $"//*[local-name()='ACTIONNUMBER']";
         private const string XpathAction = $"//*[local-name()='ACTION']";
+        private const string XpathCorrId = $"//*[local-name()='CORRID']";
 
         [SetUp]
         public void Setup()
@@ -116,7 +117,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
              && call.GetArgument<LogLevel>(0) == LogLevel.Information
-             && call.GetArgument<EventId>(1) == EventIds.BuilingSapActionStarted.ToEventId()
+             && call.GetArgument<EventId>(1) == EventIds.BuildingSapActionStarted.ToEventId()
              && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Building SAP action {ActionName}.").MustHaveHappened();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
@@ -161,7 +162,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
              && call.GetArgument<LogLevel>(0) == LogLevel.Information
-             && call.GetArgument<EventId>(1) == EventIds.BuilingSapActionStarted.ToEventId()
+             && call.GetArgument<EventId>(1) == EventIds.BuildingSapActionStarted.ToEventId()
              && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Building SAP action {ActionName}.").MustHaveHappened();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
@@ -206,7 +207,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
              && call.GetArgument<LogLevel>(0) == LogLevel.Information
-             && call.GetArgument<EventId>(1) == EventIds.BuilingSapActionStarted.ToEventId()
+             && call.GetArgument<EventId>(1) == EventIds.BuildingSapActionStarted.ToEventId()
              && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Building SAP action {ActionName}.").MustHaveHappened();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
@@ -251,7 +252,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
              && call.GetArgument<LogLevel>(0) == LogLevel.Information
-             && call.GetArgument<EventId>(1) == EventIds.BuilingSapActionStarted.ToEventId()
+             && call.GetArgument<EventId>(1) == EventIds.BuildingSapActionStarted.ToEventId()
              && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Building SAP action {ActionName}.").MustHaveHappened();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
@@ -277,7 +278,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             var actionItemNode = xmlDoc.SelectSingleNode(XpathActionItems);
 
             var sortedXmlPayLoad = typeof(EncContentSapMessageBuilder).GetMethod("SortXmlPayload", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
-            var result = (XmlNode)sortedXmlPayLoad.Invoke(_fakeEncContentSapMessageBuilder, [actionItemNode!])!;
+            var result = (XmlNode)sortedXmlPayLoad.Invoke(_fakeEncContentSapMessageBuilder, new object[] { actionItemNode! })!;
 
             var firstActionNumber = result.SelectSingleNode(XpathActionNumber);
             firstActionNumber.InnerXml.Should().Be(expectedActionNumber);
