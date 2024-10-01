@@ -1,14 +1,16 @@
 ﻿using System.Text;
 using System.Xml.Linq;
 using Newtonsoft.Json.Linq;
+using NUnit.Framework;
+using UKHO.ERPFacade.API.FunctionalTests.Configuration;
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
     public class SapXmlHelper
     {
-        private static readonly string permitWithSameKeyActiveKey = KeyVaultHelper.GetKeyVaultSecret("PermitWithSameKeyACTIVEKEY");
-        private static readonly string permitWithSameKeyNextKey = KeyVaultHelper.GetKeyVaultSecret("PermitWithSameKeyNEXTKEY");
-        private static readonly string permitWithDifferentKeyActiveKey = KeyVaultHelper.GetKeyVaultSecret("PermitWithDifferentKeyACTIVEKEY");
-        private static readonly string permitWithDifferentKeyNextKey = KeyVaultHelper.GetKeyVaultSecret("PermitWithDifferentKeyNEXTKEY");
+        private static readonly string permitWithSameKeyActiveKey = Config.TestConfig.PermitWithSameKey.ActiveKey;
+        private static readonly string permitWithSameKeyNextKey = Config.TestConfig.PermitWithSameKey.NextKey;
+        private static readonly string permitWithDifferentKeyActiveKey = Config.TestConfig.PermitWithDifferentKey.ActiveKey;
+        private static readonly string permitWithDifferentKeyNextKey = Config.TestConfig.PermitWithDifferentKey.NextKey;
 
         public static string GenerateRandomCorrelationId()
         {
@@ -35,13 +37,16 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         {
             JObject jsonObj = JObject.Parse(requestBody);
             var products = jsonObj["data"]["products"];
-            
-            string permit = KeyVaultHelper.GetKeyVaultSecret(permitState);
+
+            string permit = permitState.Contains("Same") ? Config.TestConfig.PermitWithSameKey.Permit
+                : permitState.Contains("Different") ? Config.TestConfig.PermitWithDifferentKey.Permit
+                : "permitString";
+
             foreach (var product in products)
             {
                 product["permit"] = permit;
             }
-            
+
             return jsonObj.ToString();
         }
 
