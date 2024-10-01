@@ -15,8 +15,7 @@
         public string WeekNoTag { get; set; }
         public string ValidFromTagThursday { get; set; }
         public string ValidFromTagFriday { get; set; }
-        public PermitWithSameKey PermitWithSameKey { get; set; }
-        public PermitWithDifferentKey PermitWithDifferentKey { get; set; }
+        public string KeyVaultUri { get; set; }
     }
 
     public class AzureADconfiguration
@@ -46,20 +45,5 @@
     public class AzureStorageConfiguration
     {
         public string ConnectionString { get; set; }
-    }
-
-    
-    public class PermitWithSameKey
-    {
-        public string Permit { get; set; }
-        public string ActiveKey { get; set; }
-        public string NextKey { get; set; }
-    }
-
-    public class PermitWithDifferentKey
-    {
-        public string Permit { get; set; }
-        public string ActiveKey { get; set; }
-        public string NextKey { get; set; }
     }
 }

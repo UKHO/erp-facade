@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="utf-16"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <Z_ADDS_MAT_INFO xmlns="urn:sap-com:document:sap:rfc:functions">
+      <IM_MATINFO xmlns="">
+        <CORRID>21e3517a-ff12-4f82-9d05-08dcc128489e</CORRID>
+        <NOOFACTIONS>14</NOOFACTIONS>
+        <RECDATE>20240920</RECDATE>
+        <RECTIME>014300</RECTIME>
+        <ORG>UKHO</ORG>
+        <ACTIONITEMS>
+          <Item>
+            <ACTIONNUMBER>1</ACTIONNUMBER>
+            <ACTION>CREATE ENC CELL</ACTION>
+            <PRODUCT>ENC CELL</PRODUCT>
+            <PRODTYPE>S57</PRODTYPE>
+            <CHILDCELL>US5NY6HU</CHILDCELL>
+            <PRODUCTNAME>US5NY6HU</PRODUCTNAME>
+            <CANCELLED />
+            <REPLACEDBY />
+            <AGENCY>US</AGENCY>
+            <PROVIDER>1</PROVIDER>
+            <ENCSIZE>medium</ENCSIZE>
+            <TITLE>Lake Ontario - Oswego Harbor NY</TITLE>
+            <EDITIONNO>2</EDITIONNO>
+            <UPDATENO>0</UPDATENO>
+            <UNITTYPE />
+            <WEEKNO>202431</WEEKNO>
+            <VALIDFROM>20240801</VALIDFROM>
+            <CORRECTION>N</CORRECTION>
+            <ACTIVEKEY>0FB11A3450</ACTIVEKEY>
+            <NEXTKEY>D902ADDB7E</NEXTKEY>
+          </Item>
+          <Item>
+            <ACTIONNUMBER>2</ACTIONNUMBER>
+            <ACTION>CREATE ENC CELL</ACTION>
+            <PRODUCT>ENC CELL</PRODUCT>
+            <PRODTYPE>S57</PRODTYPE>
+            <CHILDCELL>US5NY6HV</CHILDCELL>
+            <PRODUCTNAME>US5NY6HV</PRODUCTNAME>
+            <CANCELLED />
+            <REPLACEDBY />
+            <AGENCY>US</AGENCY>
+            <PROVIDER>1</PROVIDER>
+            <ENCSIZE>medium</ENCSIZE>
+            <TITLE>Lake Ontario - Oswego NY</TITLE>
+            <EDITIONNO>2</EDITIONNO>
+            <UPDATENO>0</UPDATENO>
+            <UNITTYPE />
+            <WEEKNO>202431</WEEKNO>
+            <VALIDFROM>20240801</VALIDFROM>
+            <CORRECTION>N</CORRECTION>
+            <ACTIVEKEY>0FB11A3450</ACTIVEKEY>
+            <NEXTKEY>D902ADDB7E</NEXTKEY>
+          </Item>
+          <Item>
+            <ACTIONNUMBER>3</ACTIONNUMBER>
+            <ACTION>CREATE AVCS UNIT OF SALE</ACTION>
+            <PRODUCT>AVCS UNIT</PRODUCT>
+            <PRODTYPE>S57</PRODTYPE>
+            <CHILDCELL></CHILDCELL>
+            <PRODUCTNAME>US5NY6HU</PRODUCTNAME>
+            <CANCELLED />
+            <REPLACEDBY />
+            <AGENCY>US</AGENCY>
+            <PROVIDER>1</PROVIDER>
+            <ENCSIZE>medium</ENCSIZE>
+            <TITLE>Lake Ontario - Oswego Harbor NY</TITLE>
+            <EDITIONNO />
+            <UPDATENO />
+            <UNITTYPE>AVCS Units Harbour</UNITTYPE>
+            <WEEKNO>202431</WEEKNO>
+            <VALIDFROM>20240801</VALIDFROM>
+            <CORRECTION>N</CORRECTION>
+            <ACTIVEKEY />
+            <NEXTKEY />
+          </Item>
+          <Item>
+            <ACTIONNUMBER>4</ACTIONNUMBER>
+            <ACTION>CREATE AVCS UNIT OF SALE</ACTION>
+            <PRODUCT>AVCS UNIT</PRODUCT>
+            <PRODTYPE>S57</PRODTYPE>
+            <CHILDCELL></CHILDCELL>
+            <PRODUCTNAME>US5NY6HV</PRODUCTNAME>
+            <CANCELLED />
+            <REPLACEDBY />
+            <AGENCY>US</AGENCY>
+            <PROVIDER>1</PROVIDER>
+            <ENCSIZE>medium</ENCSIZE>
+            <TITLE>Lake Ontario - Oswego NY</TITLE>
+            <EDITIONNO />
+            <UPDATENO />
+            <UNITTYPE>AVCS Units Harbour</UNITTYPE>
+            <WEEKNO>202431</WEEKNO>
+            <VALIDFROM>20240801</VALIDFROM>
+            <CORRECTION>N</CORRECTION>
+            <ACTIVEKEY />
+            <NEXTKEY />
+          </Item>
+          <Item>
+            <ACTIONNUMBER>5</ACTIONNUMBER>
+            <ACTION>ASSIGN CELL TO AVCS UNIT OF SALE</ACTION>
+            <PRODUCT>AVCS UNIT</PRODUCT>
+            <PRODTYPE>S57</PRODTYPE>
+            <CHILDCELL>US5NY6HU</CHILDCELL>
+            <PRODUCTNAME>US5NY6HU</PRODUCTNAME>
+            <CANCELLED />
+            <REPLACEDBY />
+            <AGENCY />
+            <PROVIDER />
+            <ENCSIZE />
+            <TITLE />
+            <EDITIONNO />
+            <UPDATENO />
+            <UNITTYPE />
+            <WEEKNO>202431</WEEKNO>
+            <VALIDFROM>20240801</VALIDFROM>
+            <CORRECTION>N</CORRECTION>
+            <ACTIVEKEY />
+            <NEXTKEY />
+          </Item>
+          <Item>
+            <ACTIONNUMBER>6</ACTIONNUMBER>
+            <ACTION>ASSIGN CELL TO AVCS UNIT OF SALE</ACTION>
+            <PRODUCT>AVCS UNIT</PRODUCT>
+            <PRODTYPE>S57</PRODTYPE>
+            <CHILDCELL>US5NY6HV</CHILDCELL>
+            <PRODUCTNAME>US5NY6HV</PRODUCTNAME>
+            <CANCELLED />
+            <REPLACEDBY />
+            <AGENCY />
+            <PROVIDER />
+            <ENCSIZE />
+            <TITLE />
+            <EDITIONNO />
+            <UPDATENO />
+            <UNITTYPE />
+            <WEEKNO>202431</WEEKNO>
+            <VALIDFROM>20240801</VALIDFROM>
+            <CORRECTION>N</CORRECTION>
+            <ACTIVEKEY />
+            <NEXTKEY />
+          </Item>
+          <Item>
+            <ACTIONNUMBER>7</ACTIONNUMBER>
+            <ACTION>ASSIGN CELL TO AVCS UNIT OF SALE</ACTION>
+            <PRODUCT>AVCS UNIT</PRODUCT>
+            <PRODTYPE>S57</PRODTYPE>
+            <CHILDCELL>US5NY6HU</CHILDCELL>
+            <PRODUCTNAME>PAYSF</PRODUCTNAME>
+            <CANCELLED />
+            <REPLACEDBY />
+            <AGENCY />
+            <PROVIDER />
+            <ENCSIZE />
+            <TITLE />
+            <EDITIONNO />
+            <UPDATENO />
+            <UNITTYPE />
+            <WEEKNO>202431</WEEKNO>
+            <VALIDFROM>20240801</VALIDFROM>
+            <CORRECTION>N</CORRECTION>
+            <ACTIVEKEY />
+            <NEXTKEY />
+          </Item>
+          <Item>
+            <ACTIONNUMBER>8</ACTIONNUMBER>
+            <ACTION>ASSIGN CELL TO AVCS UNIT OF SALE</ACTION>
+            <PRODUCT>AVCS UNIT</PRODUCT>
+            <PRODTYPE>S57</PRODTYPE>
+            <CHILDCELL>US5NY6HV</CHILDCELL>
+            <PRODUCTNAME>PAYSF</PRODUCTNAME>
+            <CANCELLED />
+            <REPLACEDBY />
+            <AGENCY />
+            <PROVIDER />
+            <ENCSIZE />
+            <TITLE />
+            <EDITIONNO />
+            <UPDATENO />
+            <UNITTYPE />
+            <WEEKNO>202431</WEEKNO>
+            <VALIDFROM>20240801</VALIDFROM>
+            <CORRECTION>N</CORRECTION>
+            <ACTIVEKEY />
+            <NEXTKEY />
+          </Item>
+          <Item>
+            <ACTIONNUMBER>9</ACTIONNUMBER>
+            <ACTION>REPLACED WITH ENC CELL</ACTION>
+            <PRODUCT>ENC CELL</PRODUCT>
+            <PRODTYPE>S57</PRODTYPE>
+            <CHILDCELL>US5NY28M</CHILDCELL>
+            <PRODUCTNAME>US5NY28M</PRODUCTNAME>
+            <CANCELLED />
+            <REPLACEDBY>US5NY6HU</REPLACEDBY>
+            <AGENCY />
+            <PROVIDER />
+            <ENCSIZE />
+            <TITLE />
+            <EDITIONNO />
+            <UPDATENO />
+            <UNITTYPE />
+            <WEEKNO>202431</WEEKNO>
+            <VALIDFROM>20240801</VALIDFROM>
+            <CORRECTION>N</CORRECTION>
+            <ACTIVEKEY />
+            <NEXTKEY />
+          </Item>
+          <Item>
+            <ACTIONNUMBER>10</ACTIONNUMBER>
+            <ACTION>REPLACED WITH ENC CELL</ACTION>
+            <PRODUCT>ENC CELL</PRODUCT>
+            <PRODTYPE>S57</PRODTYPE>
+            <CHILDCELL>US5NY28M</CHILDCELL>
+            <PRODUCTNAME>US5NY28M</PRODUCTNAME>
+            <CANCELLED />
+            <REPLACEDBY>US5NY6HV</REPLACEDBY>
+            <AGENCY />
+            <PROVIDER />
+            <ENCSIZE />
+            <TITLE />
+            <EDITIONNO />
+            <UPDATENO />
+            <UNITTYPE />
+            <WEEKNO>202431</WEEKNO>
+            <VALIDFROM>20240801</VALIDFROM>
+            <CORRECTION>N</CORRECTION>
+            <ACTIVEKEY />
+            <NEXTKEY />
+          </Item>
+          <Item>
+            <ACTIONNUMBER>11</ACTIONNUMBER>
+            <ACTION>REMOVE ENC CELL FROM AVCS UNIT OF SALE</ACTION>
+            <PRODUCT>AVCS UNIT</PRODUCT>
+            <PRODTYPE>S57</PRODTYPE>
+            <CHILDCELL>US5NY28M</CHILDCELL>
+            <PRODUCTNAME>US5NY28M</PRODUCTNAME>
+            <CANCELLED />
+            <REPLACEDBY />
+            <AGENCY />
+            <PROVIDER />
+            <ENCSIZE />
+            <TITLE />
+            <EDITIONNO />
+            <UPDATENO />
+            <UNITTYPE />
+            <WEEKNO>202431</WEEKNO>
+            <VALIDFROM>20240801</VALIDFROM>
+            <CORRECTION>N</CORRECTION>
+            <ACTIVEKEY />
+            <NEXTKEY />
+          </Item>
+          <Item>
+            <ACTIONNUMBER>12</ACTIONNUMBER>
+            <ACTION>REMOVE ENC CELL FROM AVCS UNIT OF SALE</ACTION>
+            <PRODUCT>AVCS UNIT</PRODUCT>
+            <PRODTYPE>S57</PRODTYPE>
+            <CHILDCELL>US5NY28M</CHILDCELL>
+            <PRODUCTNAME>PAYSF</PRODUCTNAME>
+            <CANCELLED />
+            <REPLACEDBY />
+            <AGENCY />
+            <PROVIDER />
+            <ENCSIZE />
+            <TITLE />
+            <EDITIONNO />
+            <UPDATENO />
+            <UNITTYPE />
+            <WEEKNO>202431</WEEKNO>
+            <VALIDFROM>20240801</VALIDFROM>
+            <CORRECTION>N</CORRECTION>
+            <ACTIVEKEY />
+            <NEXTKEY />
+          </Item>
+          <Item>
+            <ACTIONNUMBER>13</ACTIONNUMBER>
+            <ACTION>CANCEL ENC CELL</ACTION>
+            <PRODUCT>ENC CELL</PRODUCT>
+            <PRODTYPE>S57</PRODTYPE>
+            <CHILDCELL>US5NY28M</CHILDCELL>
+            <PRODUCTNAME>US5NY28M</PRODUCTNAME>
+            <CANCELLED />
+            <REPLACEDBY />
+            <AGENCY />
+            <PROVIDER />
+            <ENCSIZE />
+            <TITLE />
+            <EDITIONNO />
+            <UPDATENO />
+            <UNITTYPE />
+            <WEEKNO>202431</WEEKNO>
+            <VALIDFROM>20240801</VALIDFROM>
+            <CORRECTION>N</CORRECTION>
+            <ACTIVEKEY />
+            <NEXTKEY />
+          </Item>
+          <Item>
+            <ACTIONNUMBER>14</ACTIONNUMBER>
+            <ACTION>CANCEL AVCS UNIT OF SALE</ACTION>
+            <PRODUCT>AVCS UNIT</PRODUCT>
+            <PRODTYPE>S57</PRODTYPE>
+            <CHILDCELL></CHILDCELL>
+            <PRODUCTNAME>US5NY28M</PRODUCTNAME>
+            <CANCELLED />
+            <REPLACEDBY />
+            <AGENCY />
+            <PROVIDER />
+            <ENCSIZE />
+            <TITLE />
+            <EDITIONNO />
+            <UPDATENO />
+            <UNITTYPE />
+            <WEEKNO>202431</WEEKNO>
+            <VALIDFROM>20240801</VALIDFROM>
+            <CORRECTION>N</CORRECTION>
+            <ACTIVEKEY />
+            <NEXTKEY />
+          </Item>
+        </ACTIONITEMS>
+      </IM_MATINFO>
+    </Z_ADDS_MAT_INFO>
+  </soap:Body>
+</soap:Envelope>
