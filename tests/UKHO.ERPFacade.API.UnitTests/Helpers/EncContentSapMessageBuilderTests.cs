@@ -45,6 +45,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         private const string XpathReplacedBy = $"//*[local-name()='REPLACEDBY']";
         private const string XpathActionNumber = $"//*[local-name()='ACTIONNUMBER']";
         private const string XpathAction = $"//*[local-name()='ACTION']";
+        private const string ReplaceEncCellAction = "REPLACED WITH ENC CELL";
+        private const string ChangeEncCellAction = "CHANGE ENC CELL";
 
         [SetUp]
         public void Setup()
@@ -116,7 +118,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
              && call.GetArgument<LogLevel>(0) == LogLevel.Information
-             && call.GetArgument<EventId>(1) == EventIds.BuilingSapActionStarted.ToEventId()
+             && call.GetArgument<EventId>(1) == EventIds.BuildingSapActionStarted.ToEventId()
              && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Building SAP action {ActionName}.").MustHaveHappened();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
@@ -161,7 +163,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
              && call.GetArgument<LogLevel>(0) == LogLevel.Information
-             && call.GetArgument<EventId>(1) == EventIds.BuilingSapActionStarted.ToEventId()
+             && call.GetArgument<EventId>(1) == EventIds.BuildingSapActionStarted.ToEventId()
              && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Building SAP action {ActionName}.").MustHaveHappened();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
@@ -206,7 +208,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
              && call.GetArgument<LogLevel>(0) == LogLevel.Information
-             && call.GetArgument<EventId>(1) == EventIds.BuilingSapActionStarted.ToEventId()
+             && call.GetArgument<EventId>(1) == EventIds.BuildingSapActionStarted.ToEventId()
              && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Building SAP action {ActionName}.").MustHaveHappened();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
@@ -251,7 +253,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
              && call.GetArgument<LogLevel>(0) == LogLevel.Information
-             && call.GetArgument<EventId>(1) == EventIds.BuilingSapActionStarted.ToEventId()
+             && call.GetArgument<EventId>(1) == EventIds.BuildingSapActionStarted.ToEventId()
              && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Building SAP action {ActionName}.").MustHaveHappened();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
@@ -277,7 +279,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             var actionItemNode = xmlDoc.SelectSingleNode(XpathActionItems);
 
             var sortedXmlPayLoad = typeof(EncContentSapMessageBuilder).GetMethod("SortXmlPayload", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
-            var result = (XmlNode)sortedXmlPayLoad.Invoke(_fakeEncContentSapMessageBuilder, [actionItemNode!])!;
+            var result = (XmlNode)sortedXmlPayLoad.Invoke(_fakeEncContentSapMessageBuilder, new object[] { actionItemNode! })!;
 
             var firstActionNumber = result.SelectSingleNode(XpathActionNumber);
             firstActionNumber.InnerXml.Should().Be(expectedActionNumber);
@@ -387,6 +389,44 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
 
             Assert.Throws<ERPFacadeException>(() => _fakeEncContentSapMessageBuilder.BuildSapMessageXml(eventData!))
             .Message.Should().Be("SAP required property found empty in enccontentpublished event payload. | Property Name : {Property}");
+        }
+
+        [Test]
+        public void WhenUnitOfSaleIsNullWhileReplacingEncCell_ThenReturnsNull()
+        {
+            var cancelCellWithNewCellReplacementPayloadJson = TestHelper.ReadFileData("ERPTestData\\CancelCellWithNewCellReplacement.JSON");
+            var eventData = JsonConvert.DeserializeObject<EncEventPayload>(cancelCellWithNewCellReplacementPayloadJson);
+            var action = _fakeSapActionConfig.Value.SapActions.FirstOrDefault(x => x.Product == EncCell && x.Action == ReplaceEncCellAction);
+
+            MethodInfo buildAction = typeof(EncContentSapMessageBuilder).GetMethod("GetUnitOfSale", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
+            var result = (XmlElement)buildAction.Invoke(_fakeEncContentSapMessageBuilder, new object[] { action.ActionNumber, eventData.Data.UnitsOfSales!, eventData.Data.Products.FirstOrDefault()! })!;
+
+            result.Should().BeNull();
+        }
+
+        [Test]
+        public void WhenUnitOfSaleIsNullWhileChangingEncCell_ThenReturnsNull()
+        {
+            var cancelCellWithNewCellReplacementPayloadJson = TestHelper.ReadFileData("ERPTestData\\CancelCellWithNewCellReplacement.JSON");
+            var eventData = JsonConvert.DeserializeObject<EncEventPayload>(cancelCellWithNewCellReplacementPayloadJson);
+            var action = _fakeSapActionConfig.Value.SapActions.FirstOrDefault(x => x.Product == EncCell && x.Action == ChangeEncCellAction);
+
+            MethodInfo buildAction = typeof(EncContentSapMessageBuilder).GetMethod("GetUnitOfSale", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
+            var result = (XmlElement)buildAction.Invoke(_fakeEncContentSapMessageBuilder, new object[] { action.ActionNumber, eventData.Data.UnitsOfSales!, eventData.Data.Products.LastOrDefault()! })!;
+
+            result.Should().BeNull();
+        }
+
+        [Test]
+        [TestCase("fieldvalue", null, "fieldvalue")]
+        [TestCase("fieldvalue", "AGENCY", "fi")]
+        [TestCase("fieldvalue", "", "fieldvalue")]
+        public void WhenGetXmlNodeValue(string fieldValue, string xmlNodeName, string expectedValue)
+        {
+            MethodInfo buildAction = typeof(EncContentSapMessageBuilder).GetMethod("GetXmlNodeValue", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
+            var result = (string)buildAction.Invoke(_fakeEncContentSapMessageBuilder, new object[] { fieldValue, xmlNodeName })!;
+
+            result.Should().Be(expectedValue);
         }
     }
 }

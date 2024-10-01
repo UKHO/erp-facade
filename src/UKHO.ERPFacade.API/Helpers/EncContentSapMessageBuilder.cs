@@ -73,8 +73,7 @@ namespace UKHO.ERPFacade.API.Helpers
         /// <summary>
         /// Generate SAP message xml file.
         /// </summary>
-        /// <param name="eventData"></param>
-        /// <param name="correlationId"></param>
+        /// <param name="eventData"></param>        
         /// <returns>XmlDocument</returns>
         public XmlDocument BuildSapMessageXml(EncEventPayload eventData)
         {
@@ -238,17 +237,17 @@ namespace UKHO.ERPFacade.API.Helpers
         }
 
         /// <summary>
-        /// Reurns true if given product/unit satisfies rules for given action.
+        /// Returns true if given product/unit satisfies rules for given action.
         /// </summary>
         /// <param name="action"></param>
         /// <param name="obj"></param>
         /// <returns></returns>
-        private bool ValidateActionRules(SapAction action, Object obj)
+        private bool ValidateActionRules(SapAction action, object obj)
         {
             bool isConditionSatisfied = false;
 
             //Return true if no rules for SAP action.
-            if (action.Rules is null) return true;
+            if (action.Rules == null!) return true;
 
             foreach (var rules in action.Rules)
             {
@@ -273,7 +272,7 @@ namespace UKHO.ERPFacade.API.Helpers
 
         private void BuildAndAppendActionNode(XmlDocument soapXml, Product product, UnitOfSale unitOfSale, SapAction action, EncEventPayload eventData, XmlNode actionItemNode, string childCell = null, string replacedBy = null)
         {
-            _logger.LogInformation(EventIds.BuilingSapActionStarted.ToEventId(), "Building SAP action {ActionName}.", action.Action);
+            _logger.LogInformation(EventIds.BuildingSapActionStarted.ToEventId(), "Building SAP action {ActionName}.", action.Action);
             var actionNode = BuildAction(soapXml, product, unitOfSale, action, eventData.Data.UkhoWeekNumber, childCell, replacedBy);
             actionItemNode.AppendChild(actionNode);
             _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
@@ -295,10 +294,10 @@ namespace UKHO.ERPFacade.API.Helpers
             // Add child cell node
             AppendChildNode(itemNode, soapXml, ChildCell, childCell);
 
-            List<(int sortingOrder, XmlElement node)> actionAttributes = [];
+            List<(int sortingOrder, XmlElement node)> actionAttributes = new();
 
             // Get permit keys for New cell and Updated cell
-            if (product != null && !IsPropertyNullOrEmpty(Permit, product.Permit) && (action.Action == CreateEncCell || action.Action == UpdateCell))
+            if (product != null! && !IsPropertyNullOrEmpty(Permit, product.Permit) && (action.Action == CreateEncCell || action.Action == UpdateCell))
             {
                 decryptedPermit = _permitDecryption.Decrypt(product.Permit);
             }
@@ -417,7 +416,10 @@ namespace UKHO.ERPFacade.API.Helpers
         private void SetXmlNodeValue(XmlDocument xmlDoc, string xPath, string value)
         {
             var node = xmlDoc.SelectSingleNode(xPath);
-            node.InnerText = (node != null) ? value : string.Empty;         
+            if (node != null)
+            {
+                node.InnerText = value;
+            }
         }
 
         private string GetXmlNodeValue(string fieldValue, string xmlNodeName = null)

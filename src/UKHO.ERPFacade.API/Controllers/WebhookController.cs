@@ -107,7 +107,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new ERPFacadeException(EventIds.RequestToSapFailed.ToEventId(), "An error occured while sending a request to SAP. | {StatusCode}", response.StatusCode);
+                throw new ERPFacadeException(EventIds.RequestToSapFailed.ToEventId(), "An error occurred while sending a request to SAP. | {StatusCode}", response.StatusCode);
             }
             _logger.LogInformation(EventIds.EncUpdateSentToSap.ToEventId(), "ENC update has been sent to SAP successfully. | {StatusCode}", response.StatusCode);
 
