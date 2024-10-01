@@ -39,6 +39,8 @@ variables:
     value: "Tiberius"
   - name: DeploymentPoolPE
     value: "Private Link Deployments (ENG)"
+  - name: DotNetSdkVersion
+    value: "8.x"
 
 stages:
   - stage: PERFORM_DEPENDENCYCHECK_DOTNETBUILD_DOTNETTEST_AND_PUBLISH
@@ -53,11 +55,10 @@ stages:
         displayName: "Dependencychecker"
         steps:
           - task: UseDotNet@2
-            displayName: 'Use .NET sdk'
+            displayName: Use .NET SDK $(DotNetSdkVersion)
             inputs:
               packageType: sdk
-              useGlobalJson: true
-              workingDirectory: '$(Build.SourcesDirectory)\src'
+              version: $(DotNetSdkVersion)
 
           - task: DotNetCoreCLI@2
             displayName: ".Net Core - NuGet restore non test projects only"
@@ -99,11 +100,10 @@ stages:
         displayName: "Dotnet Test and Publish Code Coverage"
         steps:
           - task: UseDotNet@2
-            displayName: 'Use .NET 8.0.x sdk'
+            displayName: Use .NET SDK $(DotNetSdkVersion)
             inputs:
-              packagetype: sdk
-              useglobaljson: true
-              workingdirectory: '$(build.sourcesdirectory)\src'
+              packageType: sdk
+              version: $(DotNetSdkVersion)
 
           - task: DotNetCoreCLI@2
             displayName: ".Net Core - NuGet restore test projects only"
@@ -145,11 +145,10 @@ stages:
         steps:
 
           - task: UseDotNet@2
-            displayName: 'Use .NET 8.0.x sdk'
+            displayName: Use .NET SDK $(DotNetSdkVersion)
             inputs:
               packageType: sdk
-              useGlobalJson: true
-              workingDirectory: '$(Build.SourcesDirectory)\src'
+              version: $(DotNetSdkVersion)
               
           - task: DotNetCoreCLI@2
             displayName: ".Net Core - NuGet restore for non test projects only"
@@ -238,11 +237,10 @@ stages:
         steps:
 
           - task: UseDotNet@2
-            displayName: 'Use .NET 8.0.x sdk'
+            displayName: Use .NET SDK $(DotNetSdkVersion)
             inputs:
               packageType: sdk
-              useGlobalJson: true
-              workingDirectory: '$(Build.SourcesDirectory)\src'
+              version: $(DotNetSdkVersion)
               
           - task: DotNetCoreCLI@2
             displayName: ".Net Core - NuGet restore for non test projects only"
@@ -287,11 +285,10 @@ stages:
         steps:
 
           - task: UseDotNet@2
-            displayName: 'Use .NET 8.0.x sdk'
+            displayName: Use .NET SDK $(DotNetSdkVersion)
             inputs:
               packageType: sdk
-              useGlobalJson: true
-              workingDirectory: '$(Build.SourcesDirectory)\src'
+              version: $(DotNetSdkVersion)
               
           - task: DotNetCoreCLI@2
             displayName: ".Net Core - NuGet restore for mock project"
@@ -336,11 +333,10 @@ stages:
         dependsOn: BuildAndPublishMockService
         steps:
           - task: UseDotNet@2
-            displayName: 'Use .NET 8.0.x sdk'
+            displayName: Use .NET SDK $(DotNetSdkVersion)
             inputs:
               packageType: sdk
-              useGlobalJson: true
-              workingDirectory: '$(Build.SourcesDirectory)'
+              version: $(DotNetSdkVersion)
           - task: DotNetCoreCLI@2
             displayName: "Install Stryker"
             inputs:
@@ -463,7 +459,7 @@ stages:
         steps:
           - template: Deployment/templates/continuous-testing.yml
             parameters:
-              AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
+              AzureSubscription: "ERP-Facade-Dev-A.011.05.12"              
 
   - stage: vNextIATDeploy
     dependsOn:  Devdeploy
@@ -874,7 +870,7 @@ stages:
         steps:
           - template: Deployment/templates/continuous-testing.yml
             parameters:
-              AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
+              AzureSubscription: "ERP-Facade-Dev-A.011.05.12"              
 
   - stage: Livedeploy
     displayName: "Livedeploy (inc terraform, webapp deploy)"

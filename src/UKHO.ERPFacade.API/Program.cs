@@ -119,6 +119,8 @@ namespace UKHO.ERPFacade
                 loggingBuilder.AddAzureWebAppDiagnostics();
             });
 
+            builder.Services.AddAllElasticApm();
+
             builder.Services.AddHeaderPropagation(options =>
             {
                 options.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey);
@@ -182,7 +184,7 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<IEncContentSapMessageBuilder, EncContentSapMessageBuilder>();
             builder.Services.AddScoped<IXmlHelper, XmlHelper>();
             builder.Services.AddScoped<IFileSystemHelper, FileSystemHelper>();
-            builder.Services.AddScoped<IFileSystem, FileSystem>();            
+            builder.Services.AddScoped<IFileSystem, FileSystem>();
             builder.Services.AddScoped<IEESClient, EESClient>();
             builder.Services.AddScoped<ILicenceUpdatedSapMessageBuilder, LicenceUpdatedSapMessageBuilder>();
             builder.Services.AddScoped<IWeekDetailsProvider, WeekDetailsProvider>();
@@ -212,9 +214,6 @@ namespace UKHO.ERPFacade
             });
 
             app.UseAuthentication();
-
-            app.UseElasticApm(configuration);
-
             app.Run();
         }
 
