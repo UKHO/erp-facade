@@ -53,6 +53,8 @@ namespace UKHO.ERPFacade.API.Helpers
         private const string CreateEncCell = "CREATE ENC CELL";
         private const string UpdateCell = "UPDATE ENC CELL EDITION UPDATE NUMBER";
         private const string Permit = "permit";
+        private const int MaxXmlNodeLength = 250;
+        private const int MaxAgencyXmlNodeLength = 2;
 
         public EncContentSapMessageBuilder(ILogger<EncContentSapMessageBuilder> logger,
                                  IXmlHelper xmlHelper,
@@ -82,8 +84,8 @@ namespace UKHO.ERPFacade.API.Helpers
             // Check if SAP XML payload template exists
             if (!_fileSystemHelper.IsFileExists(sapXmlTemplatePath))
             {
-                _logger.LogError(EventIds.SapXmlTemplateNotFound.ToEventId(), "The SAP xml payload template does not exist.");
-                throw new FileNotFoundException("The SAP xml payload template does not exist.");
+                _logger.LogError(EventIds.SapXmlTemplateNotFound.ToEventId(), "The SAP XML payload template does not exist.");
+                throw new FileNotFoundException("The SAP XML payload template does not exist.");
             }
 
             var soapXml = _xmlHelper.CreateXmlDocument(sapXmlTemplatePath);
@@ -337,28 +339,26 @@ namespace UKHO.ERPFacade.API.Helpers
 
                     if (attribute.IsRequired)
                     {
-                        if (attribute.XmlNodeName == ReplacedBy && !IsPropertyNullOrEmpty(attribute.JsonPropertyName, replacedBy))
+                        switch (attribute.XmlNodeName)
                         {
-                            attributeNode.InnerText = GetXmlNodeValue(replacedBy.ToString());
-                        }
-                        else if (attribute.XmlNodeName == ActiveKey)
-                        {
-                            attributeNode.InnerText = string.Empty;
-                            if (decryptedPermit != null && !string.IsNullOrEmpty(decryptedPermit.ActiveKey)) attributeNode.InnerText = decryptedPermit.ActiveKey;
-                        }
-                        else if (attribute.XmlNodeName == NextKey)
-                        {
-                            attributeNode.InnerText = string.Empty;
-                            if (decryptedPermit != null && !string.IsNullOrEmpty(decryptedPermit.NextKey)) attributeNode.InnerText = decryptedPermit.NextKey;
-                        }
-                        else
-                        {
-                            var jsonFieldValue = CommonHelper.ParseXmlNode(attribute.JsonPropertyName, source, source.GetType()).ToString();
-
-                            if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, jsonFieldValue))
-                            {
-                                attributeNode.InnerText = GetXmlNodeValue(jsonFieldValue.ToString(), attribute.XmlNodeName);
-                            }
+                            case ReplacedBy:
+                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, replacedBy)) attributeNode.InnerText = GetXmlNodeValue(replacedBy.ToString(), attribute.XmlNodeName);
+                                break;
+                            case ActiveKey:
+                                attributeNode.InnerText = string.Empty;
+                                if (decryptedPermit != null && !string.IsNullOrEmpty(decryptedPermit.ActiveKey)) attributeNode.InnerText = GetXmlNodeValue(decryptedPermit.ActiveKey, attribute.XmlNodeName);
+                                break;
+                            case NextKey:
+                                attributeNode.InnerText = string.Empty;
+                                if (decryptedPermit != null && !string.IsNullOrEmpty(decryptedPermit.NextKey)) attributeNode.InnerText = GetXmlNodeValue(decryptedPermit.NextKey, attribute.XmlNodeName);
+                                break;
+                            default:
+                                var jsonFieldValue = CommonHelper.ParseXmlNode(attribute.JsonPropertyName, source, source.GetType()).ToString();
+                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, jsonFieldValue))
+                                {
+                                    attributeNode.InnerText = GetXmlNodeValue(jsonFieldValue.ToString(), attribute.XmlNodeName);
+                                }
+                                break;
                         }
                     }
                     else
@@ -369,7 +369,7 @@ namespace UKHO.ERPFacade.API.Helpers
                 }
                 catch (Exception ex)
                 {
-                    throw new ERPFacadeException(EventIds.BuildingSapActionInformationException.ToEventId(), "Error while generating SAP action information. | Action : {ActionName} | XML Attribute : {attribute.XmlNodeName} | Exception : {Exception}", action, attribute.XmlNodeName, ex.Message);
+                    throw new ERPFacadeException(EventIds.BuildingSapActionInformationException.ToEventId(), "Error while generating SAP action information. | Action : {ActionName} | XML Attribute : {attribute.XmlNodeName} | ErrorMessage : {Exception}", action, attribute.XmlNodeName, ex.Message);
                 }
             }
         }
@@ -389,26 +389,33 @@ namespace UKHO.ERPFacade.API.Helpers
 
                     if (attribute.IsRequired)
                     {
-                        switch (attribute.XmlNodeName)
+                        if (ukhoWeekNumber.Year.HasValue && ukhoWeekNumber.Week.HasValue && ukhoWeekNumber.CurrentWeekAlphaCorrection.HasValue)
                         {
-                            case ValidFrom:
-                                var validFrom = _weekDetailsProvider.GetDateOfWeek(ukhoWeekNumber.Year, ukhoWeekNumber.Week, ukhoWeekNumber.CurrentWeekAlphaCorrection);
-                                attributeNode.InnerText = GetXmlNodeValue(validFrom);
-                                break;
-                            case WeekNo:
-                                var weekNo = string.Join("", ukhoWeekNumber.Year, ukhoWeekNumber.Week.ToString("D2"));
-                                attributeNode.InnerText = GetXmlNodeValue(weekNo);
-                                break;
-                            case Correction:
-                                attributeNode.InnerText = GetXmlNodeValue(ukhoWeekNumber.CurrentWeekAlphaCorrection ? IsCorrectionTrue : IsCorrectionFalse);
-                                break;
+                            switch (attribute.XmlNodeName)
+                            {
+                                case ValidFrom:
+                                    var validFrom = _weekDetailsProvider.GetDateOfWeek(ukhoWeekNumber.Year.Value, ukhoWeekNumber.Week.Value, ukhoWeekNumber.CurrentWeekAlphaCorrection.Value);
+                                    attributeNode.InnerText = GetXmlNodeValue(validFrom, attribute.XmlNodeName);
+                                    break;
+                                case WeekNo:
+                                    var weekNo = string.Join("", ukhoWeekNumber.Year, ukhoWeekNumber.Week.Value.ToString("D2"));
+                                    attributeNode.InnerText = GetXmlNodeValue(weekNo, attribute.XmlNodeName);
+                                    break;
+                                case Correction:
+                                    attributeNode.InnerText = GetXmlNodeValue(ukhoWeekNumber.CurrentWeekAlphaCorrection.Value ? IsCorrectionTrue : IsCorrectionFalse, attribute.XmlNodeName);
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            throw new ERPFacadeException(EventIds.EmptyEventJsonPropertyException.ToEventId(), "Required details are missing in enccontentpublished event payload. | Property Name : {Property}", attribute.JsonPropertyName);
                         }
                     }
                     actionAttributes.Add((attribute.SortingOrder, attributeNode));
                 }
                 catch (Exception ex)
                 {
-                    throw new ERPFacadeException(EventIds.BuildingSapActionInformationException.ToEventId(), "Error while generating SAP action information. | Action : {ActionName} | XML Attribute : {attribute.XmlNodeName} | Exception : {Exception}", action, attribute.XmlNodeName, ex.Message);
+                    throw new ERPFacadeException(EventIds.BuildingSapActionInformationException.ToEventId(), "Error while generating SAP action information. | Action : {ActionName} | XML Attribute : {attribute.XmlNodeName} | ErrorMessage : {Exception}", action, attribute.XmlNodeName, ex.Message);
                 }
             }
         }
@@ -424,15 +431,8 @@ namespace UKHO.ERPFacade.API.Helpers
 
         private string GetXmlNodeValue(string fieldValue, string xmlNodeName = null)
         {
-            // Define constants for substring lengths
-            const int maxDefaultLength = 250;
-            const int agencyCodeLength = 2;
-
             // Return first 2 characters if the node is Agency, else limit other nodes to 250 characters
-            if (xmlNodeName == Agency)
-                return CommonHelper.ToSubstring(fieldValue, 0, agencyCodeLength);
-
-            return CommonHelper.ToSubstring(fieldValue, 0, maxDefaultLength);
+            return xmlNodeName == Agency ? CommonHelper.ToSubstring(fieldValue, 0, MaxAgencyXmlNodeLength) : CommonHelper.ToSubstring(fieldValue, 0, MaxXmlNodeLength);
         }
 
         private XmlNode SortXmlPayload(XmlNode actionItemNode)
@@ -470,7 +470,7 @@ namespace UKHO.ERPFacade.API.Helpers
         {
             if (string.IsNullOrEmpty(propertyValue))
             {
-                throw new ERPFacadeException(EventIds.EmptyEventJsonPropertyException.ToEventId(), "SAP required property found empty in enccontentpublished event payload. | Property Name : {Property}", propertyName);
+                throw new ERPFacadeException(EventIds.EmptyEventJsonPropertyException.ToEventId(), "Required details are missing in enccontentpublished event payload. | Property Name : {Property}", propertyName);
             }
             else return false;
         }

@@ -81,12 +81,12 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(false);
 
             Assert.Throws<FileNotFoundException>(() => _fakeEncContentSapMessageBuilder.BuildSapMessageXml(eventData!))
-                .Message.Should().Be("The SAP xml payload template does not exist.");
+                .Message.Should().Be("The SAP XML payload template does not exist.");
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Error
             && call.GetArgument<EventId>(1) == EventIds.SapXmlTemplateNotFound.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "The SAP xml payload template does not exist.").MustHaveHappenedOnceExactly();
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "The SAP XML payload template does not exist.").MustHaveHappenedOnceExactly();
         }
 
         [Test]
@@ -333,7 +333,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
 
             Assert.Throws<ERPFacadeException>(() => _fakeEncContentSapMessageBuilder.BuildSapMessageXml(eventData!))
-                .Message.Should().Be("Error while generating SAP action information. | Action : {ActionName} | XML Attribute : {attribute.XmlNodeName} | Exception : {Exception}");
+                .Message.Should().Be("Error while generating SAP action information. | Action : {ActionName} | XML Attribute : {attribute.XmlNodeName} | ErrorMessage : {Exception}");
         }
 
         [Test]
@@ -370,7 +370,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             A.CallTo(() => _fakeWeekDetailsProvider.GetDateOfWeek(A<int>.Ignored, A<int>.Ignored, A<bool>.Ignored)).Throws<System.Exception>();
 
             Assert.Throws<ERPFacadeException>(() => _fakeEncContentSapMessageBuilder.BuildSapMessageXml(eventData!))
-                .Message.Should().Be("Error while generating SAP action information. | Action : {ActionName} | XML Attribute : {attribute.XmlNodeName} | Exception : {Exception}");
+                .Message.Should().Be("Error while generating SAP action information. | Action : {ActionName} | XML Attribute : {attribute.XmlNodeName} | ErrorMessage : {Exception}");
         }
 
         [Test]
@@ -388,7 +388,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             A.CallTo(() => _fakeWeekDetailsProvider.GetDateOfWeek(A<int>.Ignored, A<int>.Ignored, A<bool>.Ignored)).Throws<System.Exception>();
 
             Assert.Throws<ERPFacadeException>(() => _fakeEncContentSapMessageBuilder.BuildSapMessageXml(eventData!))
-            .Message.Should().Be("SAP required property found empty in enccontentpublished event payload. | Property Name : {Property}");
+            .Message.Should().Be("Required details are missing in enccontentpublished event payload. | Property Name : {Property}");
         }
 
         [Test]

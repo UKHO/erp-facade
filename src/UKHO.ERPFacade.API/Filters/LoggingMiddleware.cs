@@ -48,7 +48,8 @@ namespace UKHO.ERPFacade.API.Filters
                 Extensions =
                 {
                     ["correlationId"] = correlationId,
-                }
+                },
+                Detail = message
             };
 
             await httpContext.Response.WriteAsJsonAsync(problemDetails);
