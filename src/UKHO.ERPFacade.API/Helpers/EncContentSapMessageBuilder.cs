@@ -127,7 +127,7 @@ namespace UKHO.ERPFacade.API.Helpers
                         case 10://CANCEL ENC CELL
                             if (unitOfSale is null)
                             {
-                                throw new ERPFacadeException(EventIds.UnitOfSaleNotFoundException.ToEventId(), "Required unit not found in event payload to generate {ActionName} action for {Product}.", action.Action, product.ProductName);
+                                throw new ERPFacadeException(EventIds.UnitOfSaleNotFoundException.ToEventId(), $"Required unit not found in event payload to generate {action.Action} action for {product.ProductName}.");
                             }
                             BuildAndAppendActionNode(soapXml, product, unitOfSale, action, eventData, actionItemNode, product.ProductName);
                             break;
@@ -135,7 +135,7 @@ namespace UKHO.ERPFacade.API.Helpers
                         case 4://REPLACED WITH ENC CELL
                             if (product.ReplacedBy.Any() && unitOfSale is null)
                             {
-                                throw new ERPFacadeException(EventIds.UnitOfSaleNotFoundException.ToEventId(), "Required unit not found in event payload to generate {ActionName} action for {Product}.", action.Action, product.ProductName);
+                                throw new ERPFacadeException(EventIds.UnitOfSaleNotFoundException.ToEventId(), $"Required unit not found in event payload to generate {action.Action} action for {product.ProductName}.");
                             }
                             foreach (var replacedProduct in product.ReplacedBy)
                             {
@@ -369,7 +369,7 @@ namespace UKHO.ERPFacade.API.Helpers
                 }
                 catch (Exception ex)
                 {
-                    throw new ERPFacadeException(EventIds.BuildingSapActionInformationException.ToEventId(), "Error while generating SAP action information. | Action : {ActionName} | XML Attribute : {attribute.XmlNodeName} | ErrorMessage : {Exception}", action, attribute.XmlNodeName, ex.Message);
+                    throw new ERPFacadeException(EventIds.BuildingSapActionInformationException.ToEventId(), $"Error while generating SAP action information. | Action : {action} | XML Attribute : {attribute.XmlNodeName} | ErrorMessage : {ex.Message}");
                 }
             }
         }
@@ -378,7 +378,7 @@ namespace UKHO.ERPFacade.API.Helpers
         {
             if (ukhoWeekNumber == null)
             {
-                throw new ERPFacadeException(EventIds.RequiredSectionNotFound.ToEventId(), "UkhoWeekNumber section not found in enccontentpublished event payload while creating {Action} action.", action);
+                throw new ERPFacadeException(EventIds.RequiredSectionNotFound.ToEventId(), $"UkhoWeekNumber section not found in enccontentpublished event payload while creating {action} action.");
             }
 
             foreach (var attribute in attributes)
@@ -408,14 +408,14 @@ namespace UKHO.ERPFacade.API.Helpers
                         }
                         else
                         {
-                            throw new ERPFacadeException(EventIds.EmptyEventJsonPropertyException.ToEventId(), "Required details are missing in enccontentpublished event payload. | Property Name : {Property}", attribute.JsonPropertyName);
+                            throw new ERPFacadeException(EventIds.EmptyEventJsonPropertyException.ToEventId(), $"Required details are missing in enccontentpublished event payload. | Property Name : {attribute.JsonPropertyName}");
                         }
                     }
                     actionAttributes.Add((attribute.SortingOrder, attributeNode));
                 }
                 catch (Exception ex)
                 {
-                    throw new ERPFacadeException(EventIds.BuildingSapActionInformationException.ToEventId(), "Error while generating SAP action information. | Action : {ActionName} | XML Attribute : {attribute.XmlNodeName} | ErrorMessage : {Exception}", action, attribute.XmlNodeName, ex.Message);
+                    throw new ERPFacadeException(EventIds.BuildingSapActionInformationException.ToEventId(), $"Error while generating SAP action information. | Action : {action} | XML Attribute : {attribute.XmlNodeName} | ErrorMessage : {ex.Message}");
                 }
             }
         }
@@ -470,7 +470,7 @@ namespace UKHO.ERPFacade.API.Helpers
         {
             if (string.IsNullOrEmpty(propertyValue))
             {
-                throw new ERPFacadeException(EventIds.EmptyEventJsonPropertyException.ToEventId(), "Required details are missing in enccontentpublished event payload. | Property Name : {Property}", propertyName);
+                throw new ERPFacadeException(EventIds.EmptyEventJsonPropertyException.ToEventId(), $"Required details are missing in enccontentpublished event payload. | Property Name : {propertyName}");
             }
             else return false;
         }
