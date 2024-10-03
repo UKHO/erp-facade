@@ -118,6 +118,9 @@
     <None Update="ERPFacadeExpectedXmlFiles\NewCell_AND_UpdateCell_AND_CellMetadataChange.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ERPFacadeExpectedXmlFiles\Re-issue.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ERPFacadeExpectedXmlFiles\SuspendCell.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -242,6 +245,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPFacadePayloadTestData\PriceChangeInput.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\Re-issue.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPFacadePayloadTestData\RoSPayloadTestData\LTC03_InValidLTCwithNoCorrelationID.json">
