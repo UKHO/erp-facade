@@ -1,7 +1,6 @@
 ﻿using System.Text;
 using System.Xml.Linq;
 using Newtonsoft.Json.Linq;
-using NUnit.Framework;
 using UKHO.ERPFacade.API.FunctionalTests.Configuration;
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
@@ -65,7 +64,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 expectedXml = XElement.Load(reader);
             }
 
-            var generatedItems = generatedXml.Descendants("Item").ToList();
+            var generatedAttributes = generatedXml.Descendants("Item").ToList();
             var expectedItems = expectedXml.Descendants("Item").ToList();
 
 
@@ -73,22 +72,22 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             string nextKey = permitState == "PermitWithSameKey" ? permitWithSameKeyNextKey : permitWithDifferentKeyNextKey;
 
             // Ensure both XMLs have the same number of items
-            if (generatedItems.Count != expectedItems.Count)
+            if (generatedAttributes.Count != expectedItems.Count)
             {
                 Console.WriteLine("XML files have different number of items.");
                 return false;
             }
 
             // Iterate over the items and compare their elements
-            for (int i = 0; i < generatedItems.Count; i++)
+            for (int i = 0; i < generatedAttributes.Count; i++)
             {
-                var item1 = generatedItems[i];
-                var item2 = expectedItems[i];
-                string action = item1.Element("ACTION")?.Value;
+                var generatedAction = generatedAttributes[i];
+                var expectedAction = expectedItems[i];
+                string action = generatedAction.Element("ACTION")?.Value;
 
-                foreach (var element1 in item1.Elements())
+                foreach (var element1 in generatedAction.Elements())
                 {
-                    var element2 = item2.Element(element1.Name);
+                    var element2 = expectedAction.Element(element1.Name);
 
                     if ((action == "CREATE ENC CELL" || action == "UPDATE ENC CELL EDITION UPDATE NUMBER") && (element1.Name == "ACTIVEKEY" || element1.Name == "NEXTKEY"))
                     {
@@ -111,7 +110,5 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
             return true;
         }
-
-        
     }
 }
