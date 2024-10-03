@@ -301,7 +301,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
 
             Assert.Throws<ERPFacadeException>(() => _fakeEncContentSapMessageBuilder.BuildSapMessageXml(eventData!))
-                .Message.Should().Be("Required unit not found in event payload to generate {ActionName} action for {Product}.");
+                .Message.Should().Be("Required unit not found in event payload to generate CREATE ENC CELL action for US5AK9DI.");
         }
 
         [Test]
@@ -317,7 +317,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
 
             Assert.Throws<ERPFacadeException>(() => _fakeEncContentSapMessageBuilder.BuildSapMessageXml(eventData!))
-            .Message.Should().Be("Required unit not found in event payload to generate {ActionName} action for {Product}.");
+            .Message.Should().Be("Required unit not found in event payload to generate REPLACED WITH ENC CELL action for GB50382B.");
         }
 
         [Test]
@@ -333,7 +333,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
 
             Assert.Throws<ERPFacadeException>(() => _fakeEncContentSapMessageBuilder.BuildSapMessageXml(eventData!))
-                .Message.Should().Be("Error while generating SAP action information. | Action : {ActionName} | XML Attribute : {attribute.XmlNodeName} | ErrorMessage : {Exception}");
+                .Message.Should().Be("Error while generating SAP action information. | Action : CREATE ENC CELL | XML Attribute : PROVIDER | ErrorMessage : Object reference not set to an instance of an object.");
         }
 
         [Test]
@@ -351,7 +351,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             A.CallTo(() => _fakePermitDecryption.Decrypt(A<string>.Ignored)).Returns(permitKeys);
 
             Assert.Throws<ERPFacadeException>(() => _fakeEncContentSapMessageBuilder.BuildSapMessageXml(eventData!))
-            .Message.Should().Be("UkhoWeekNumber section not found in enccontentpublished event payload while creating {Action} action.");
+            .Message.Should().Be("UkhoWeekNumber section not found in enccontentpublished event payload while creating CREATE ENC CELL action.");
         }
 
         [Test]
@@ -370,7 +370,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             A.CallTo(() => _fakeWeekDetailsProvider.GetDateOfWeek(A<int>.Ignored, A<int>.Ignored, A<bool>.Ignored)).Throws<System.Exception>();
 
             Assert.Throws<ERPFacadeException>(() => _fakeEncContentSapMessageBuilder.BuildSapMessageXml(eventData!))
-                .Message.Should().Be("Error while generating SAP action information. | Action : {ActionName} | XML Attribute : {attribute.XmlNodeName} | ErrorMessage : {Exception}");
+                .Message.Should().Be("Error while generating SAP action information. | Action : CREATE ENC CELL | XML Attribute : VALIDFROM | ErrorMessage : Exception of type 'System.Exception' was thrown.");
         }
 
         [Test]
@@ -388,7 +388,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             A.CallTo(() => _fakeWeekDetailsProvider.GetDateOfWeek(A<int>.Ignored, A<int>.Ignored, A<bool>.Ignored)).Throws<System.Exception>();
 
             Assert.Throws<ERPFacadeException>(() => _fakeEncContentSapMessageBuilder.BuildSapMessageXml(eventData!))
-            .Message.Should().Be("Required details are missing in enccontentpublished event payload. | Property Name : {Property}");
+            .Message.Should().Be("Required details are missing in enccontentpublished event payload. | Property Name : permit");
         }
 
         [Test]
