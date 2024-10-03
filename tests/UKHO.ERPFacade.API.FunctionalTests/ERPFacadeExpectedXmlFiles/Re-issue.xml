@@ -72,8 +72,8 @@
                         <WEEKNO>202440</WEEKNO>
                         <VALIDFROM>20241003</VALIDFROM>
                         <CORRECTION>N</CORRECTION>
-                        <ACTIVEKEY></ACTIVEKEY>
-                        <NEXTKEY></NEXTKEY>
+                        <ACTIVEKEY>ThisWillBeRetrievedFromKeyVaultBeforeAssertion</ACTIVEKEY>
+                        <NEXTKEY>ThisWillBeRetrievedFromKeyVaultBeforeAssertion</NEXTKEY>
                     </Item>
                 </ACTIONITEMS>
             </IM_MATINFO>
