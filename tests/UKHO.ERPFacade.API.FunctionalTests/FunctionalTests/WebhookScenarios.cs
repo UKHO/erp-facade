@@ -102,6 +102,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [TestCase("UpdateCellsWithDifferentStatusName.JSON", "PermitWithDifferentKey", TestName = "WhenICallTheWebhookWithUpdateCellsWithDifferentStatusNameScenario_ThenWebhookReturns200Response")]
         [TestCase("UpdateCellWithNewEdition.JSON", "PermitWithSameKey", TestName = "WhenICallTheWebhookWithUpdateCellWithNewEditionScenario_ThenWebhookReturns200Response")]
 
+        //Re-issue scenario
+        [TestCase("Re-issue.JSON", "PermitWithSameKey", TestName = "WhenICallTheWebhookWithUpdateCellReIssueScenario_ThenWebhookReturns200Response")]
+
         public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponse(string payloadJsonFileName, string permitState)
         {
             Console.WriteLine("Scenario:" + payloadJsonFileName + "\n");

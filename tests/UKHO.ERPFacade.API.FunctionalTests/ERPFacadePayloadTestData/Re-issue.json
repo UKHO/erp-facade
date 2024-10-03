@@ -1,0 +1,116 @@
+{
+  "id": "90b77915-4e40-48ff-8e1a-66e72130ae2c",
+  "source": "fake-penrose",
+  "specversion": "1.0",
+  "type": "uk.gov.ukho.encpublishing.enccontentpublished.v2.2",
+  "datacontenttype": "application/json",
+  "subject": "CA100049",
+  "time": "2024-10-01T16:34:03",
+  "data": {
+    "correlationId": "1bdfc9dd-9f4c-4c52-a32e-b2a924b7d5b6",
+    "ukhoWeekNumber": {
+      "year": 2024,
+      "week": 40,
+      "currentWeekAlphaCorrection": false
+    },
+    "products": [
+      {
+        "dataSetName": "CA100049.000",
+        "productName": "CA100049",
+        "title": "",
+        "scale": 5000000,
+        "usageBand": 1,
+        "editionNumber": 1,
+        "updateNumber": 5,
+        "mayAffectHoldings": false,
+        "contentChange": true,
+        "permit": "ThisWillBeReplacedWithActualPermitFromKeyvault",
+        "providerCode": "12",
+        "providerName": "VAR",
+        "size": "large",
+        "bundle": [
+          {
+            "bundleType": "DVD",
+            "location": "M1;B1"
+          }
+        ],
+        "status": {
+          "statusName": "Re-issue",
+          "statusDate": "2024-10-01T00:00:00.0000000Z",
+          "isNewCell": false
+        },
+        "replaces": [],
+        "replacedBy": [],
+        "additionalCoverage": [],
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 62.8,
+            "southLimit": 48.1,
+            "eastLimit": 3.4,
+            "westLimit": -13.7
+          }
+        },
+        "inUnitsOfSale": [
+          "CA100049",
+          "PAYSF"
+        ],
+        "s63": {
+          "compression": false,
+          "s57Crc": "C6F0307F",
+          "name": "CA100049.000",
+          "hash": "16363f61827868a5839d7670433ab62c63e952d76b3f993a4515ac560ce4613",
+          "fileSize": 23056
+        },
+        "signature": {
+          "name": "CAI00049.000",
+          "hash": "f6d92eccc678c7ecef5bb63ef6fb55bffc987bebc4f3dcb69bd719ed5f4756e2",
+          "fileSize": 874
+        },
+        "ancillaryFiles": []
+      }
+    ],
+    "unitsOfSale": [
+      {
+        "unitName": "CA100049",
+        "title": "",
+        "unitOfSaleType": "unit",
+        "unitSize": "large",
+        "unitType": "AVCS Units Overview",
+        "providerCode": "12",
+        "providerName": "VAR",
+        "status": "ForSale",
+        "isNewUnitOfSale": false,
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 62.8,
+            "southLimit": 48.1,
+            "eastLimit": 3.4,
+            "westLimit": -13.7
+          }
+        },
+        "compositionChanges": {
+          "addProducts": [],
+          "removeProducts": []
+        }
+      },
+      {
+        "unitName": "PAYSF",
+        "title": "World Folio",
+        "unitOfSaleType": "folio",
+        "unitSize": "large",
+        "unitType": "AVCS Units Overview",
+        "providerCode": "1",
+        "providerName": "GB",
+        "status": "ForSale",
+        "isNewUnitOfSale": false,
+        "geographicLimit": {
+          "boundingBox": null
+        },
+        "compositionChanges": {
+          "addProducts": [],
+          "removeProducts": []
+        }
+      }
+    ]
+  }
+}
