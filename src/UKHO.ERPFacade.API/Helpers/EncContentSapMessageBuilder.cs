@@ -378,7 +378,7 @@ namespace UKHO.ERPFacade.API.Helpers
         {
             if (ukhoWeekNumber == null)
             {
-                throw new ERPFacadeException(EventIds.RequiredSectionNotFound.ToEventId(), $"UkhoWeekNumber section not found in enccontentpublished event payload while creating {action} action.");
+                throw new ERPFacadeException(EventIds.RequiredSectionNotFoundException.ToEventId(), $"UkhoWeekNumber section not found in enccontentpublished event payload while creating {action} action.");
             }
 
             foreach (var attribute in attributes)

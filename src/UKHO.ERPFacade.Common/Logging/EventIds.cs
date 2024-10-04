@@ -127,7 +127,7 @@ namespace UKHO.ERPFacade.Common.Logging
         /// 940024 - Deleted EES entity successfully from Azure Table
         /// </summary>
         DeletedEESEntitySuccessful = 940024,
-        
+
         /// <summary>
         /// 940025 - Fetching all EES entities from Azure Table.
         /// </summary>
@@ -436,7 +436,7 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940086 - Required section not found in JSON payload.
         /// </summary>
-        RequiredSectionNotFound = 940086
+        RequiredSectionNotFoundException = 940086
     }
 
     /// <summary>
