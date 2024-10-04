@@ -189,6 +189,7 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<ILicenceUpdatedSapMessageBuilder, LicenceUpdatedSapMessageBuilder>();
             builder.Services.AddScoped<IWeekDetailsProvider, WeekDetailsProvider>();
             builder.Services.AddScoped<IPermitDecryption, PermitDecryption>();
+            builder.Services.AddScoped<IS100DataContentSapMessageBuilder, S100DataContentSapMessageBuilder>();
 
             ConfigureHealthChecks(builder);
 
