@@ -7,7 +7,7 @@
   "subject": "GB100160,GB50382B",
   "datacontenttype": "application/json",
   "data": {
-    "correlationId": "ft_e61f5a69-c5a8-465b-6e56-08dccb3abf10",
+    "correlationId": "ft-e61f5a69-c5a8-465b-6e56-08dccb3abf10",
     "ukhoWeekNumber": {
       "year": 2024,
       "week": 32,

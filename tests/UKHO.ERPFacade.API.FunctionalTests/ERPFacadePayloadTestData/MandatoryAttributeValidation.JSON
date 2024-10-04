@@ -7,7 +7,7 @@
   "subject": "PA5AM111,PA5CP007,RU4O5XQ0",
   "datacontenttype": "application/json",
   "data": {
-    "correlationId": "ft_05334dd0-db09-47a7-9cee-08dcc128489e",
+    "correlationId": "ft-05334dd0-db09-47a7-9cee-08dcc128489e",
     "ukhoWeekNumber": {
       "year": 2024,
       "week": 31,

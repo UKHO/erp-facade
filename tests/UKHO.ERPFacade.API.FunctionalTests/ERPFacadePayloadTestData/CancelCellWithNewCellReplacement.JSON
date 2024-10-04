@@ -7,7 +7,7 @@
   "subject": "US5NY28M,US5NY6HU,US5NY6HV",
   "datacontenttype": "application/json",
   "data": {
-    "correlationId": "ft_21e3517a-ff12-4f82-9d05-08dcc128489e",
+    "correlationId": "ft-21e3517a-ff12-4f82-9d05-08dcc128489e",
     "ukhoWeekNumber": {
       "year": 2024,
       "week": 31,
