@@ -73,20 +73,15 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         }
 
         [Test]
-        public void WhenSapXmlTemplateFileNotExist_ThenThrowFileNotFoundException()
+        public void WhenSapXmlTemplateFileNotExist_ThenThrowERPFacadeException()
         {
             var newCellEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\NewCell.JSON");
             var eventData = JsonConvert.DeserializeObject<EncEventPayload>(newCellEventPayloadJson);
 
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(false);
 
-            Assert.Throws<FileNotFoundException>(() => _fakeEncContentSapMessageBuilder.BuildSapMessageXml(eventData!))
-                .Message.Should().Be("The SAP XML payload template does not exist.");
-
-            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-                                                && call.GetArgument<LogLevel>(0) == LogLevel.Error
-            && call.GetArgument<EventId>(1) == EventIds.SapXmlTemplateNotFound.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "The SAP XML payload template does not exist.").MustHaveHappenedOnceExactly();
+            Assert.Throws<ERPFacadeException>(() => _fakeEncContentSapMessageBuilder.BuildSapMessageXml(eventData!))
+                .Message.Should().Be("The SAP XML payload template does not exist.");       
         }
 
         [Test]

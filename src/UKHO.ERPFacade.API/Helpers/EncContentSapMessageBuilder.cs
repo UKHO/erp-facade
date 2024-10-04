@@ -6,6 +6,7 @@ using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Providers;
 using UKHO.ERPFacade.Common.PermitDecryption;
 using UKHO.ERPFacade.Common.Exceptions;
+using System;
 
 namespace UKHO.ERPFacade.API.Helpers
 {
@@ -84,8 +85,7 @@ namespace UKHO.ERPFacade.API.Helpers
             // Check if SAP XML payload template exists
             if (!_fileSystemHelper.IsFileExists(sapXmlTemplatePath))
             {
-                _logger.LogError(EventIds.SapXmlTemplateNotFound.ToEventId(), "The SAP XML payload template does not exist.");
-                throw new FileNotFoundException("The SAP XML payload template does not exist.");
+                throw new ERPFacadeException(EventIds.SapXmlTemplateNotFound.ToEventId(), "The SAP XML payload template does not exist.");
             }
 
             var soapXml = _xmlHelper.CreateXmlDocument(sapXmlTemplatePath);
