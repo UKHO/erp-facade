@@ -1,13 +1,9 @@
-﻿using System;
-using FluentAssertions;
-using Newtonsoft.Json;
+﻿using FluentAssertions;
 using NUnit.Framework;
 using RestSharp;
 using UKHO.ERPFacade.API.FunctionalTests.Configuration;
 using UKHO.ERPFacade.API.FunctionalTests.Helpers;
-using UKHO.ERPFacade.API.FunctionalTests.Model;
 using UKHO.ERPFacade.API.FunctionalTests.Service;
-using UKHO.ERPFacade.Common.Models;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 {

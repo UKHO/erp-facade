@@ -65,14 +65,14 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             }
 
             var generatedAttributes = generatedXml.Descendants("Item").ToList();
-            var expectedItems = expectedXml.Descendants("Item").ToList();
+            var expectedAttributes = expectedXml.Descendants("Item").ToList();
 
 
             string activeKey = permitState == "PermitWithSameKey" ? permitWithSameKeyActiveKey : permitWithDifferentKeyActiveKey;
             string nextKey = permitState == "PermitWithSameKey" ? permitWithSameKeyNextKey : permitWithDifferentKeyNextKey;
 
             // Ensure both XMLs have the same number of items
-            if (generatedAttributes.Count != expectedItems.Count)
+            if (generatedAttributes.Count != expectedAttributes.Count)
             {
                 Console.WriteLine("XML files have different number of items.");
                 return false;
@@ -82,27 +82,27 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             for (int i = 0; i < generatedAttributes.Count; i++)
             {
                 var generatedAction = generatedAttributes[i];
-                var expectedAction = expectedItems[i];
+                var expectedAction = expectedAttributes[i];
                 string action = generatedAction.Element("ACTION")?.Value;
 
-                foreach (var element1 in generatedAction.Elements())
+                foreach (var generatedAttribute in generatedAction.Elements())
                 {
-                    var element2 = expectedAction.Element(element1.Name);
+                    var expectedAttribute = expectedAction.Element(generatedAttribute.Name);
 
-                    if ((action == "CREATE ENC CELL" || action == "UPDATE ENC CELL EDITION UPDATE NUMBER") && (element1.Name == "ACTIVEKEY" || element1.Name == "NEXTKEY"))
+                    if ((action == "CREATE ENC CELL" || action == "UPDATE ENC CELL EDITION UPDATE NUMBER") && (generatedAttribute.Name == "ACTIVEKEY" || generatedAttribute.Name == "NEXTKEY"))
                     {
-                        string expectedValue = element1.Name == "ACTIVEKEY" ? activeKey : nextKey;
+                        string expectedValue = generatedAttribute.Name == "ACTIVEKEY" ? activeKey : nextKey;
 
-                        if (element1.Value != expectedValue && element1.Value.Length > 0)
+                        if (generatedAttribute.Value != expectedValue && generatedAttribute.Value.Length > 0)
                         {
                             Console.WriteLine(
-                                $"Mismatch in {element1.Name} in item {i + 1}. XML1: {element1.Value}, Expected: {expectedValue}");
+                                $"Mismatch in {generatedAttribute.Name} in item {i + 1}. XML1: {generatedAttribute.Value}, Expected: {expectedValue}");
                             return false;
                         }
                     }
-                    else if (element1.Value != element2?.Value)
+                    else if (generatedAttribute.Value != expectedAttribute?.Value)
                     {
-                        Console.WriteLine($"Mismatch in element {element1.Name.LocalName} in item {i + 1}. XML1: {element1.Value}, XML2: {element2?.Value}");
+                        Console.WriteLine($"Mismatch in element {generatedAttribute.Name.LocalName} in item {i + 1}. XML1: {generatedAttribute.Value}, XML2: {expectedAttribute?.Value}");
                         return false;
                     }
                 }
