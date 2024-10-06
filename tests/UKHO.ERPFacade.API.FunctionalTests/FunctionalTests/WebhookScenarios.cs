@@ -99,7 +99,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [TestCase("UpdateCellWithNewEdition.JSON", "PermitWithSameKey", TestName = "WhenICallTheWebhookWithUpdateCellWithNewEditionScenario_ThenWebhookReturns200Response")]
 
         //Re-issue scenario
-        [TestCase("Re-issue.JSON", "PermitWithSameKey", TestName = "WhenICallTheWebhookWithUpdateCellReIssueScenario_ThenWebhookReturns200Response")]
+        [TestCase("Re-issue.JSON", "PermitWithSameKey", TestName = "WhenICallTheWebhookWithReIssueScenario_ThenWebhookReturns200Response")]
 
         public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponse(string payloadJsonFileName, string permitState)
         {
@@ -107,17 +107,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, payloadJsonFileName);
             string generatedXmlFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXmlFolder);
             RestResponse response = await WebhookEndpoint.PostWebhookResponseAsyncForXml(filePath, generatedXmlFolder, await _authToken.GetAzureADToken(false), permitState );
-            switch (payloadJsonFileName)
-            {
-                case "UnauthorizedResponseFromSap.JSON":
-                case "InternalServerErrorFromSap.JSON":
-                    response.StatusCode.Should().Be(System.Net.HttpStatusCode.InternalServerError);
-                    break;
-
-                default:
-                    response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-                    break;
-            }
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
 
         [Test]
