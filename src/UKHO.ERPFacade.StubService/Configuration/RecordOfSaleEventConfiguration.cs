@@ -1,4 +1,4 @@
-﻿namespace UKHO.SAP.MockAPIService.Configuration
+﻿namespace UKHO.ERPFacade.StubService.Configuration
 {
     public class RecordOfSaleEventConfiguration
     {

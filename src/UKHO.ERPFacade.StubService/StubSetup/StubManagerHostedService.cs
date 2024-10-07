@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using UKHO.SAP.MockAPIService.Stubs;
+using UKHO.ERPFacade.StubService.Stubs;
 using WireMock.Server;
 using WireMock.Settings;
 
-namespace UKHO.SAP.MockAPIService.StubSetup
+namespace UKHO.ERPFacade.StubService.StubSetup
 {
     public class StubManagerHostedService : IHostedService
     {

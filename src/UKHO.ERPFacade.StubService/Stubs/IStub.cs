@@ -1,6 +1,6 @@
 ﻿using WireMock.Server;
 
-namespace UKHO.SAP.MockAPIService.Stubs
+namespace UKHO.ERPFacade.StubService.Stubs
 {
     public interface IStub
     {

@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using UKHO.SAP.MockAPIService.Configuration;
-using UKHO.SAP.MockAPIService.StubSetup;
+using UKHO.ERPFacade.StubService.Configuration;
+using UKHO.ERPFacade.StubService.StubSetup;
 using WireMock.Settings;
 
-namespace UKHO.SAP.MockAPIService
+namespace UKHO.ERPFacade.StubService
 {
     internal static class Program
     {
@@ -22,8 +22,9 @@ namespace UKHO.SAP.MockAPIService
         {
             services.Configure<WireMockServerSettings>(configuration.GetSection("WireMockServerSettings"));
 
-            services.Configure<EncEventConfiguration>(configuration.GetSection("EncEventConfiguration"));
+            services.Configure<S57EncEventConfiguration>(configuration.GetSection("S57EncEventConfiguration"));
             services.Configure<RecordOfSaleEventConfiguration>(configuration.GetSection("RecordOfSaleEventConfiguration"));
+            services.Configure<S100DataEventConfiguration>(configuration.GetSection("S100DataEventConfiguration"));
 
             services.AddSingleton<StubFactory>();
             services.AddHostedService<StubManagerHostedService>();

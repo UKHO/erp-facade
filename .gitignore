@@ -386,3 +386,4 @@ terraform_output.json
 /src/UKHO.SAP.MockAPIService
 /tests/UKHO.ERPFacade.API.FunctionalTests/ERPFacadePayloadTestData/FMLicenseUpdate
 /tests/UKHO.ERPFacade.API.FunctionalTests/Model/JSONHelperLU.cs
+/.config/dotnet-tools.json
