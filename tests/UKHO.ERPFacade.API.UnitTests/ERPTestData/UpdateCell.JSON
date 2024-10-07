@@ -1,0 +1,124 @@
+{
+    "specversion": "1.0",
+    "type": "uk.gov.ukho.encpublishing.enccontentpublished.v2.2",
+    "source": "https://encpublishing.ukho.gov.uk",
+    "id": "6c475a0c-5b97-4ed7-a95d-3008e98f1520",
+    "time": "2024-09-16T10:03:04.1978804+00:00",
+    "subject": "AU421115",
+    "datacontenttype": "application/json",
+    "data": {
+        "correlationId": "b28a8274-444a-4d5a-9d10-08dcc128489e",
+        "ukhoWeekNumber": {
+            "year": 2024,
+            "week": 31,
+            "currentWeekAlphaCorrection": false
+        },
+        "products": [
+            {
+                "dataSetName": "AU421115.003",
+                "productName": "AU421115",
+                "title": "Australia - Western Australia - Montebello Islands - Montebello Islands and Barrow Island",
+                "scale": 180000,
+                "usageBand": 4,
+                "editionNumber": 19,
+                "updateNumber": 3,
+                "mayAffectHoldings": false,
+                "contentChange": true,
+                "permit": "permitstring",
+                "providerCode": "1",
+                "providerName": "ICE",
+                "size": "small",
+                "bundle": [
+                    {
+                        "bundleType": "DVD",
+                        "location": "M2;B7"
+                    }
+                ],
+                "status": {
+                    "statusName": "Update",
+                    "statusDate": "2024-07-17",
+                    "isNewCell": false
+                },
+                "replaces": [],
+                "replacedBy": [],
+                "additionalCoverage": [],
+                "geographicLimit": {
+                    "boundingBox": {
+                        "northLimit": -20,
+                        "southLimit": -21,
+                        "eastLimit": 116,
+                        "westLimit": 115
+                    },
+                    "polygons": []
+                },
+                "inUnitsOfSale": [
+                    "AU421115",
+                    "PAYSF"
+                ],
+                "s63": {
+                    "name": "AU421115.003",
+                    "hash": "",
+                    "fileSize": 0,
+                    "compression": true,
+                    "s57Crc": "9CED2216"
+                },
+                "signature": {
+                    "name": "AUL21115.003",
+                    "hash": "",
+                    "fileSize": 0
+                },
+                "ancillaryFiles": []
+            }
+        ],
+        "unitsOfSale": [
+            {
+                "unitName": "AU421115",
+                "title": "Montebello and Barrow Islands",
+                "unitOfSaleType": "unit",
+                "unitSize": "large",
+                "unitType": "AVCS Units Approach",
+                "providerCode": "1",
+                "providerName": "ICE",
+                "status": "ForSale",
+                "isNewUnitOfSale": false,
+                "geographicLimit": {
+                    "boundingBox": {
+                        "northLimit": -20,
+                        "southLimit": -21,
+                        "eastLimit": 116,
+                        "westLimit": 115
+                    },
+                    "polygons": []
+                },
+                "compositionChanges": {
+                    "addProducts": [],
+                    "removeProducts": []
+                }
+            },
+            {
+                "unitName": "PAYSF",
+                "title": "World Folio",
+                "unitOfSaleType": "folio",
+                "unitSize": "large",
+                "unitType": "AVCS Folio Transit",
+                "providerCode": "1",
+                "providerName": "ICE",
+                "status": "ForSale",
+                "isNewUnitOfSale": false,
+                "geographicLimit": {
+                    "boundingBox": {
+                        "northLimit": 0,
+                        "southLimit": 0,
+                        "eastLimit": 0,
+                        "westLimit": 0
+                    },
+                    "polygons": []
+                },
+                "compositionChanges": {
+                    "addProducts": [],
+                    "removeProducts": []
+                }
+            }
+        ]
+    }
+}

@@ -1,0 +1,214 @@
+{
+  "specversion": "1.0",
+  "type": "uk.gov.ukho.encpublishing.enccontentpublished.v2.2",
+  "source": "https://encpublishing.ukho.gov.uk",
+  "id": "b5c7a0fe-7459-432b-bdd0-9229b63b87ee",
+  "time": "2024-09-11T13:13:07.9481962+00:00",
+  "subject": "GB100160,GB50382B",
+  "datacontenttype": "application/json",
+  "data": {
+    "correlationId": "e61f5a69-c5a8-465b-6e56-08dccb3abf10",
+    "ukhoWeekNumber": {
+      "year": 2024,
+      "week": 32,
+      "currentWeekAlphaCorrection": false
+    },
+    "products": [
+        {
+            "dataSetName": "GB100160.000",
+            "productName": "GB100160",
+            "title": "British Isles",
+            "scale": 1500000,
+            "usageBand": 1,
+            "editionNumber": 54,
+            "updateNumber": 0,
+            "mayAffectHoldings": false,
+            "contentChange": false,
+            "permit": "permitString",
+            "providerCode": "1",
+            "providerName": "ICE",
+            "size": "large",
+            "bundle": [
+                {
+                    "bundleType": "DVD",
+                    "location": "M1;B3"
+                }
+            ],
+            "status": {
+                "statusName": "New Edition",
+                "statusDate": "2024-05-20",
+                "isNewCell": false
+            },
+            "replaces": [
+                "GB50382B"
+            ],
+            "replacedBy": [],
+            "additionalCoverage": [],
+            "geographicLimit": {
+                "boundingBox": {
+                    "northLimit": 62.8339046,
+                    "southLimit": 48.16669,
+                    "eastLimit": 3.4164755,
+                    "westLimit": -13.78663
+                },
+                "polygons": []
+            },
+            "inUnitsOfSale": [
+                "GB100160",
+                "PAYSF"
+            ],
+            "s63": {
+                "name": "GB100160.000",
+                "hash": "D59D6E3CC8058A6FB2E4B0576FEF912801CDB0D5F0DD5D1B18B23DCE16EDEEB9",
+                "fileSize": 1318248,
+                "compression": true,
+                "s57Crc": "9C30F721"
+            },
+            "signature": {
+                "name": "GBI00160.000",
+                "hash": "FB37D9A565437278A2A72F311885C9BBCA7B30B494B3DD48ADA55624B29FB946",
+                "fileSize": 874
+            },
+            "ancillaryFiles": [
+                {
+                    "name": "GBDEEPWR.TXT",
+                    "hash": "1159C9F4E5618C0F5280D96625413C8EFF35DB7C53A7DC72B7FC39C844EE2125",
+                    "fileSize": 128
+                },
+                {
+                    "name": "GBN00905.TXT",
+                    "hash": "699DDF31E5BCD5D553A5BFB235D14F8BFE526A9AE8B0630A7A2C393292B51E94",
+                    "fileSize": 348
+                },
+                {
+                    "name": "GBN00903.TXT",
+                    "hash": "570319BB2F318EA7B5DBBF2DFCCA5349DEE2A37C0513A393F9BF2EF1841BD629",
+                    "fileSize": 305
+                },
+                {
+                    "name": "GB114_18.TXT",
+                    "hash": "FE1216B9D0119AA35713DB71A25E32C853D669448CF5E30278B8686DCCE465F2",
+                    "fileSize": 140
+                },
+                {
+                    "name": "GBD3A002.TXT",
+                    "hash": "0B62ABAED81556475005823A79071580410E15A9C9E7E6472DD88249477B88EA",
+                    "fileSize": 265
+                },
+                {
+                    "name": "GBDARWIN.TXT",
+                    "hash": "2B0EFEE39BD48CDCA8FD6518966850518E53E9DD2C851381F936730A4930A085",
+                    "fileSize": 141
+                },
+                {
+                    "name": "GB114_34.TXT",
+                    "hash": "F6BC3DEDEB0BADD25CD1B2FB83AEEC6A7861159B04B57C7AC8695C9A93FE5C6A",
+                    "fileSize": 150
+                },
+                {
+                    "name": "GB5500MR.TXT",
+                    "hash": "E893DCDD6BB4DF54A7E394E80CD9758FE6C92BD11B22B5507FDE72A2DB89DBF0",
+                    "fileSize": 263
+                },
+                {
+                    "name": "GBN00904.TXT",
+                    "hash": "81B1518737304F274F8DCE4094CE6A42D628061BACC45867B233D1F718DE7A9E",
+                    "fileSize": 303
+                },
+                {
+                    "name": "GBG1DXXX.TXT",
+                    "hash": "0DD997E018EBBC272E8965DC8265DAF51A78B83AEB8EF400C6E09381128EE4AA",
+                    "fileSize": 376
+                },
+                {
+                    "name": "GB062_36.TXT",
+                    "hash": "1608AEBF1AB7BF68ACA9FB5768D0ABEF6B313A0F028FE3D297E15E829F40942E",
+                    "fileSize": 170
+                }
+            ]
+        },
+      {
+        "dataSetName": "GB50382B.003",
+        "productName": "GB50382B",
+        "title": "Warkworth Harbour",
+        "scale": 12000,
+        "usageBand": 5,
+        "editionNumber": 6,
+        "updateNumber": 3,
+        "mayAffectHoldings": true,
+        "contentChange": true,
+        "permit": "",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "size": "small",
+        "bundle": [
+          {
+            "bundleType": "DVD",
+            "location": "M1;B3"
+          }
+        ],
+        "status": {
+          "statusName": "Cancellation Update",
+          "statusDate": "2024-07-15",
+          "isNewCell": false
+        },
+        "replaces": [],
+        "replacedBy": [
+          "GB100160"
+        ],
+        "additionalCoverage": [],
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 55.3600388,
+            "southLimit": 55.3050432,
+            "eastLimit": -1.5116288,
+            "westLimit": -1.6166183
+          },
+          "polygons": []
+        },
+        "inUnitsOfSale": [],
+        "s63": {
+          "name": "GB50382B.003",
+          "hash": "",
+          "fileSize": 0,
+          "compression": true,
+          "s57Crc": "D3821E07"
+        },
+        "signature": {
+          "name": "GBM0382B.003",
+          "hash": "",
+          "fileSize": 0
+        },
+        "ancillaryFiles": []
+      }
+    ],
+    "unitsOfSale": [
+      {
+        "unitName": "PAYSF",
+        "title": "World Folio",
+        "unitOfSaleType": "folio",
+        "unitSize": "large",
+        "unitType": "AVCS Folio Transit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "status": "ForSale",
+        "isNewUnitOfSale": false,
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 0,
+            "southLimit": 0,
+            "eastLimit": 0,
+            "westLimit": 0
+          },
+          "polygons": []
+        },
+        "compositionChanges": {
+          "addProducts": [],
+          "removeProducts": [
+            "GB50382B"
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -51,7 +51,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             return response;
         }
 
-        public async Task<RestResponse> PostWebhookResponseAsyncForXml(string filePath, string generatedXmlFolder, string token, string correctionTag = "N", string permitState = "permitString")
+        public async Task<RestResponse> PostWebhookResponseAsyncForXml(string filePath, string generatedXmlFolder, string token, string permitState = "permitString")
         {
             string requestBody;
 
@@ -59,8 +59,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             {
                 requestBody = await streamReader.ReadToEndAsync();
             }
-            GeneratedCorrelationId = SapXmlHelper.GenerateRandomCorrelationId();
-            requestBody = SapXmlHelper.UpdateTimeAndCorrIdField(requestBody, GeneratedCorrelationId);
             requestBody = SapXmlHelper.UpdatePermitField(requestBody, permitState);
 
             var request = new RestRequest(WebhookRequestEndPoint, Method.Post);
@@ -72,17 +70,38 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             JsonPayloadHelper jsonPayload = JsonConvert.DeserializeObject<JsonPayloadHelper>(requestBody);
             string correlationId = jsonPayload.Data.correlationId;
 
-            //Logic to download XML from container using TraceID from JSON
-            string generatedXmlFilePath = _azureBlobStorageHelper.DownloadGeneratedXml(generatedXmlFolder, correlationId);
-
-            //Logic to verifyxml
+            //Logic to verify xml
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                Assert.That(SapXmlHelper.VerifyInitialXmlHeaders(jsonPayload, generatedXmlFilePath), Is.True, "Initial Header Value Not Correct");
-                Assert.That(SapXmlHelper.VerifyOrderOfActions(jsonPayload, generatedXmlFilePath), Is.True, "Order of Action Not Correct in XML File");
-                Assert.That(SapXmlHelper.CheckXmlAttributes(jsonPayload, generatedXmlFilePath, requestBody, correctionTag, permitState).Result, Is.True, "CheckXmlAttributes Failed");
+                //Logic to download XML from container using TraceID from JSON
+                string generatedXmlFilePath = _azureBlobStorageHelper.DownloadGeneratedXml(generatedXmlFolder, correlationId);
+
+                //Expected XML 
+                string xmlFilePath = filePath.Replace(Config.TestConfig.PayloadFolder, "ERPFacadeExpectedXmlFiles").Replace(".JSON", ".xml");
+
+                Assert.That(SapXmlHelper.VerifyGeneratedXml(generatedXmlFilePath, xmlFilePath, permitState));
             }
             return response;
         }
+
+        public async Task<RestResponse> PostWebhookResponseForMandatoryAttributeValidation(string filePath, string token, string attributeName, int index, string action)
+        {
+            string requestBody;
+
+            using (StreamReader streamReader = new(filePath))
+            {
+                requestBody = await streamReader.ReadToEndAsync();
+            }
+            requestBody = JsonHelper.ModifyMandatoryAttribute(requestBody, attributeName, index, action);
+
+            var request = new RestRequest(WebhookRequestEndPoint, Method.Post);
+            request.AddHeader("Content-Type", "application/json");
+            request.AddHeader("Authorization", "Bearer " + token);
+            request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
+            RestResponse response = await _client.ExecuteAsync(request);
+
+            return response;
+        }
+
     }
 }
