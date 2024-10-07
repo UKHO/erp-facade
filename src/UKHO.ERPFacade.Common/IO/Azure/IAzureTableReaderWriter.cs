@@ -1,19 +1,13 @@
-﻿using UKHO.ERPFacade.Common.Models.TableEntities;
+﻿using Azure.Data.Tables;
+using UKHO.ERPFacade.Common.Models.TableEntities;
 
 namespace UKHO.ERPFacade.Common.IO.Azure
 {
     public interface IAzureTableReaderWriter
     {
-        Task UpsertEntity(string correlationId);
-        Task UpsertLicenceUpdatedEntity(string correlationId);
-        Task<EESEventEntity> GetEntity(string correlationId);
-        Task UpdateRequestTimeEntity(string correlationId);        
-        IList<EESEventEntity> GetAllEntityForEESTable();
-        Task DeleteEESEntity(string correlationId);
-        Task UpsertRecordOfSaleEntity(string correlationId);
-        Task<RecordOfSaleEventEntity> GetRecordOfSaleEntity(string correlationId, string tableName);
-        Task UpdateRecordOfSaleEventStatus(string correlationId);
-        Task UpdateLicenceUpdatedEventStatus(string correlationId);
-        string GetEntityStatus(string correlationId);
+        Task UpsertEntity(string correlationId, string tableName, ITableEntity entity);
+        Task UpdateEntity<TKey, TValue>(string correlationId, string tableName, KeyValuePair<TKey, TValue>[] entitiesToUpdate);        IList<TableEntity> GetAllEntities(string tableName);
+        Task DeleteEntity(string correlationId, string tableName);
+        Task<string> GetEntityValue(string correlationId, string tableName, string entityProperty);
     }
 }

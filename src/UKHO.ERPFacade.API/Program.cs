@@ -22,6 +22,7 @@ using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Providers;
 using UKHO.ERPFacade.Common.PermitDecryption;
 using UKHO.Logging.EventHubLogProvider;
+using UKHO.ERPFacade.API.Services;
 
 namespace UKHO.ERPFacade
 {
@@ -185,6 +186,9 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<IWeekDetailsProvider, WeekDetailsProvider>();
             builder.Services.AddScoped<IPermitDecryption, PermitDecryption>();
             builder.Services.AddScoped<IS100ContentSapMessageBuilder, S100ContentSapMessageBuilder>();
+            builder.Services.AddScoped<IS57Service, S57Service>();
+            builder.Services.AddScoped<IRecordOfSaleService, RecordOfSaleService>();
+            builder.Services.AddScoped<ILicenseUpdatedService, LicenseUpdatedService>();
 
 
             builder.Services.AddHealthChecks()

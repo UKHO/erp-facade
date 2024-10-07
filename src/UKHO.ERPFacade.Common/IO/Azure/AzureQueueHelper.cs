@@ -20,11 +20,8 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             _azureStorageConfig = azureStorageConfig ?? throw new ArgumentNullException(nameof(azureStorageConfig));
         }
 
-        public async Task AddMessage(JObject rosEventJson)
+        public async Task AddMessage(string queueMessage)
         {
-            var rosEventData = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(rosEventJson.ToString());
-            string queueMessage = BuildQueueMessage(rosEventData);
-
             QueueClient queueClient = GetQueueClient(RecordOfSaleQueueName);
 
             await queueClient.SendMessageAsync(queueMessage);
@@ -40,21 +37,6 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             queueClient.CreateIfNotExistsAsync();
 
             return queueClient;
-        }
-
-        private string BuildQueueMessage(RecordOfSaleEventPayLoad recordOfSaleEventPayLoad)
-        {
-            RecordOfSaleQueueMessageEntity recordOfSaleQueueMessageEntity = new()
-            {
-                CorrelationId = recordOfSaleEventPayLoad.Data.CorrelationId,
-                Type = recordOfSaleEventPayLoad.Type,
-                EventId = recordOfSaleEventPayLoad.Id,
-                TransactionType = recordOfSaleEventPayLoad.Data.RecordsOfSale.TransactionType,
-                RelatedEvents = recordOfSaleEventPayLoad.Data.RelatedEvents
-            };
-
-            string queueMessage = JsonConvert.SerializeObject(recordOfSaleQueueMessageEntity);
-            return queueMessage;
         }
     }
 }

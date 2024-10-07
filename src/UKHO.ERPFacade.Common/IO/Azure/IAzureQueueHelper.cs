@@ -4,6 +4,6 @@ namespace UKHO.ERPFacade.Common.IO.Azure
 {
     public interface IAzureQueueHelper
     {
-        Task AddMessage(JObject rosEventJson);
+        Task AddMessage(string queueMessage);
     }
 }

@@ -74,9 +74,9 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
         [Test]
         public void WhenEESEventDataIsMoreForThanConfiguredDays_ThenDeleteRelatedTablesAndBlobs()
         {            
-            List<EESEventEntity> eesEventData = new()
+            List<S57EventEntity> eesEventData = new()
             {
-                new EESEventEntity()
+                new S57EventEntity()
                 {
                     CorrelationId = "corrid",
                     RequestDateTime = DateTime.Now.AddDays(-31),
@@ -110,9 +110,9 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
         [Test]
         public void WhenRequestDateTimeisNull_ThenShouldNotDeleteRelatedTablesAndBlobs()
         {            
-            List<EESEventEntity> eesEventData = new()
+            List<S57EventEntity> eesEventData = new()
             {
-                new EESEventEntity()
+                new S57EventEntity()
                 {
                     CorrelationId = "corrid",                    
                     RequestDateTime = null,
@@ -146,9 +146,9 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
         [Test]
         public void WhenEESEventDataIsWithinConfiguredDays_ThenShouldNotDeleteRelatedTablesAndBlobs()
         {            
-            List<EESEventEntity> eesEventData = new()
+            List<S57EventEntity> eesEventData = new()
             {
-                new EESEventEntity()
+                new S57EventEntity()
                 {
                     CorrelationId = "corrid",                    
                     RequestDateTime = DateTime.Now.AddDays(-21),
@@ -182,9 +182,9 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
         [Test]
         public void WhenEESEventDataIsEqualConfiguredDays_ThenShouldNotDeleteRelatedTablesAndBlobs()
         {            
-            List<EESEventEntity> eesEventData = new()
+            List<S57EventEntity> eesEventData = new()
             {
-                new EESEventEntity()
+                new S57EventEntity()
                 {
                     CorrelationId = "corrid",                    
                     RequestDateTime = DateTime.Now.AddDays(-30),
