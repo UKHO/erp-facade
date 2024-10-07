@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-16"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <Z_ADDS_MAT_INFO xmlns="urn:sap-com:document:sap:rfc:functions">
+      <IM_MATINFO xmlns="">
+        <CORRID>323bcab6-7192-4025-d372-08dcd31236c8</CORRID>
+        <NOOFACTIONS>4</NOOFACTIONS>
+        <RECDATE>20240920</RECDATE>
+        <RECTIME>014823</RECTIME>
+        <ORG>UKHO</ORG>
+        <ACTIONITEMS>
+          <Item>
+            <ACTIONNUMBER>1</ACTIONNUMBER>
+            <ACTION>CHANGE ENC CELL</ACTION>
+            <PRODUCT>ENC CELL</PRODUCT>
+            <PRODTYPE>S57</PRODTYPE>
+            <CHILDCELL>1U421213</CHILDCELL>
+            <PRODUCTNAME>1U421213</PRODUCTNAME>
+            <CANCELLED />
+            <REPLACEDBY />
+            <AGENCY>1U</AGENCY>
+            <PROVIDER>2</PROVIDER>
+            <ENCSIZE>medium</ENCSIZE>
+            <TITLE />
+            <EDITIONNO />
+            <UPDATENO />
+            <UNITTYPE />
+            <WEEKNO>202431</WEEKNO>
+            <VALIDFROM>20240801</VALIDFROM>
+            <CORRECTION>N</CORRECTION>
+            <ACTIVEKEY />
+            <NEXTKEY />
+          </Item>
+          <Item>
+            <ACTIONNUMBER>2</ACTIONNUMBER>
+            <ACTION>CHANGE ENC CELL</ACTION>
+            <PRODUCT>ENC CELL</PRODUCT>
+            <PRODTYPE>S57</PRODTYPE>
+            <CHILDCELL>1U421222</CHILDCELL>
+            <PRODUCTNAME>1U421222</PRODUCTNAME>
+            <CANCELLED />
+            <REPLACEDBY />
+            <AGENCY>1U</AGENCY>
+            <PROVIDER>2</PROVIDER>
+            <ENCSIZE>medium</ENCSIZE>
+            <TITLE />
+            <EDITIONNO />
+            <UPDATENO />
+            <UNITTYPE />
+            <WEEKNO>202431</WEEKNO>
+            <VALIDFROM>20240801</VALIDFROM>
+            <CORRECTION>N</CORRECTION>
+            <ACTIVEKEY />
+            <NEXTKEY />
+          </Item>
+          <Item>
+            <ACTIONNUMBER>3</ACTIONNUMBER>
+            <ACTION>CHANGE AVCS UNIT OF SALE</ACTION>
+            <PRODUCT>AVCS UNIT</PRODUCT>
+            <PRODTYPE>S57</PRODTYPE>
+            <CHILDCELL></CHILDCELL>
+            <PRODUCTNAME>1U421213</PRODUCTNAME>
+            <CANCELLED />
+            <REPLACEDBY />
+            <AGENCY>1U</AGENCY>
+            <PROVIDER>2</PROVIDER>
+            <ENCSIZE>large</ENCSIZE>
+            <TITLE />
+            <EDITIONNO />
+            <UPDATENO />
+            <UNITTYPE />
+            <WEEKNO>202431</WEEKNO>
+            <VALIDFROM>20240801</VALIDFROM>
+            <CORRECTION>N</CORRECTION>
+            <ACTIVEKEY />
+            <NEXTKEY />
+          </Item>
+          <Item>
+            <ACTIONNUMBER>4</ACTIONNUMBER>
+            <ACTION>CHANGE AVCS UNIT OF SALE</ACTION>
+            <PRODUCT>AVCS UNIT</PRODUCT>
+            <PRODTYPE>S57</PRODTYPE>
+            <CHILDCELL></CHILDCELL>
+            <PRODUCTNAME>1U421222</PRODUCTNAME>
+            <CANCELLED />
+            <REPLACEDBY />
+            <AGENCY>1U</AGENCY>
+            <PROVIDER>2</PROVIDER>
+            <ENCSIZE>large</ENCSIZE>
+            <TITLE />
+            <EDITIONNO />
+            <UPDATENO />
+            <UNITTYPE />
+            <WEEKNO>202431</WEEKNO>
+            <VALIDFROM>20240801</VALIDFROM>
+            <CORRECTION>N</CORRECTION>
+            <ACTIVEKEY />
+            <NEXTKEY />
+          </Item>
+        </ACTIONITEMS>
+      </IM_MATINFO>
+    </Z_ADDS_MAT_INFO>
+  </soap:Body>
+</soap:Envelope>

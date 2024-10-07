@@ -1,0 +1,126 @@
+{
+  "specversion": "1.0",
+  "type": "uk.gov.ukho.encpublishing.enccontentpublished.v2.2",
+  "source": "https://encpublishing.ukho.gov.uk",
+  "id": "681eb9ee-2b1e-408f-95c6-3e2dcc33a721",
+  "time": "2024-09-16T10:06:58.8441514+00:00",
+  "subject": "RU4O5XQ0",
+  "datacontenttype": "application/json",
+  "data": {
+    "correlationId": "05334dd0-db09-47a7-9cee-08dcc128489e",
+    "ukhoWeekNumber": {
+      "year": 2024,
+      "week": 31,
+      "currentWeekAlphaCorrection": false
+    },
+    "products": [
+      {
+        "dataSetName": "RU4O5XQ0.000",
+        "productName": "RU4O5XQ0",
+        "title": "Sea of Okhotsk - Shelikhov Gulf - Nayakhanskaya and Varkhalamskaya Inlet",
+        "scale": 45000,
+        "usageBand": 4,
+        "editionNumber": 2,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "contentChange": true,
+        "permit": "permitstring",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "size": "medium",
+        "bundle": [
+          {
+            "bundleType": "DVD",
+            "location": "M1;B4"
+          }
+        ],
+        "status": {
+          "statusName": "New Edition",
+          "statusDate": "2024-07-13",
+          "isNewCell": false
+        },
+        "replaces": [],
+        "replacedBy": [],
+        "additionalCoverage": [
+          "RU4O0YF0"
+        ],
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 61.9386746,
+            "southLimit": 61.6953413,
+            "eastLimit": 159.5691864,
+            "westLimit": 158.8358531
+          },
+          "polygons": []
+        },
+        "inUnitsOfSale": [
+          "RU4O5XQ0",
+          "PAYSF"
+        ],
+        "s63": {
+          "name": "RU4O5XQ0.000",
+          "hash": "",
+          "fileSize": 0,
+          "compression": true,
+          "s57Crc": "867BA7C2"
+        },
+        "signature": {
+          "name": "RULO5XQ0.000",
+          "hash": "",
+          "fileSize": 0
+        },
+        "ancillaryFiles": []
+      }
+    ],
+    "unitsOfSale": [
+      {
+        "unitName": "RU4O5XQ0",
+        "title": "Nayakhanskaya-Varkhalamskaya",
+        "unitOfSaleType": "unit",
+        "unitSize": "large",
+        "unitType": "AVCS Units Approach",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "status": "ForSale",
+        "isNewUnitOfSale": false,
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 61.9386749,
+            "southLimit": 61.6953416,
+            "eastLimit": 159.5691747,
+            "westLimit": 158.8358414
+          },
+          "polygons": []
+        },
+        "compositionChanges": {
+          "addProducts": [],
+          "removeProducts": []
+        }
+      },
+      {
+        "unitName": "PAYSF",
+        "title": "World Folio",
+        "unitOfSaleType": "folio",
+        "unitSize": "large",
+        "unitType": "AVCS Folio Transit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "status": "ForSale",
+        "isNewUnitOfSale": false,
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 0,
+            "southLimit": 0,
+            "eastLimit": 0,
+            "westLimit": 0
+          },
+          "polygons": []
+        },
+        "compositionChanges": {
+          "addProducts": [],
+          "removeProducts": []
+        }
+      }
+    ]
+  }
+}

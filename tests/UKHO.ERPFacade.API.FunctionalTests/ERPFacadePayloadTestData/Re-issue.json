@@ -1,0 +1,125 @@
+{
+    "specversion": "1.0",
+    "type": "uk.gov.ukho.encpublishing.enccontentpublished.v2.2",
+    "source": "https://encpublishing.ukho.gov.uk",
+    "id": "00000000-0000-0000-0000-000000000000",
+    "time": "1970-01-01T00:00:00+00:00",
+    "subject": "NewChartIsAReissue",
+    "datacontenttype": "application/json",
+    "data": {
+        "correlationId": "ft-1bdfc9dd-9f4c-4c52-a32e-b2a924b7d5b6",
+        "ukhoWeekNumber": {
+            "year": 2024,
+            "week": 9,
+            "currentWeekAlphaCorrection": false
+        },
+        "products": [
+            {
+                "dataSetName": "GB1REISS.000",
+                "productName": "GB1REISS",
+                "title": "Not specified",
+                "scale": 0,
+                "usageBand": 1,
+                "editionNumber": 10,
+                "updateNumber": 3,
+                "mayAffectHoldings": true,
+                "contentChange": true,
+                "permit": "ThisWillBeReplacedWithActualPermitFromKeyvault",
+                "providerCode": "1",
+                "providerName": "ICE",
+                "size": "large",
+                "bundle": [
+                    {
+                        "bundleType": "DVD",
+                        "location": "M1;B3"
+                    }
+                ],
+                "status": {
+                    "statusName": "New Edition",
+                    "statusDate": "2024-03-09",
+                    "isNewCell": true
+                },
+                "replaces": [],
+                "replacedBy": [],
+                "additionalCoverage": [],
+                "geographicLimit": {
+                    "boundingBox": {
+                        "northLimit": 38,
+                        "southLimit": 37,
+                        "eastLimit": 140,
+                        "westLimit": 139
+                    }
+                },
+                "inUnitsOfSale": [
+                    "PAYSF",
+                    "GB1REISS"
+                ],
+                "s63": {
+                    "name": "GB1REISS.000",
+                    "hash": "",
+                    "fileSize": 0,
+                    "compression": true,
+                    "s57Crc": ""
+                },
+                "signature": {
+                    "name": "GBIREISS.000",
+                    "hash": "",
+                    "fileSize": 0
+                },
+                "ancillaryFiles": []
+            }
+        ],
+        "unitsOfSale": [
+            {
+                "unitName": "GB1REISS",
+                "title": "Not specified",
+                "unitOfSaleType": "unit",
+                "unitSize": "large",
+                "unitType": "AVCS Units Overview",
+                "providerCode": "1",
+                "providerName": "ICE",
+                "status": "ForSale",
+                "isNewUnitOfSale": true,
+                "geographicLimit": {
+                    "boundingBox": {
+                        "northLimit": 38,
+                        "southLimit": 37,
+                        "eastLimit": 140,
+                        "westLimit": 139
+                    }
+                },
+                "compositionChanges": {
+                    "addProducts": [
+                        "GB1REISS"
+                    ],
+                    "removeProducts": []
+                }
+            },
+            {
+                "unitName": "PAYSF",
+                "title": "World Folio",
+                "unitOfSaleType": "folio",
+                "unitSize": "",
+                "unitType": "AVCS Folio Transit",
+                "providerCode": "",
+                "providerName": "",
+                "status": "ForSale",
+                "isNewUnitOfSale": false,
+                "geographicLimit": {
+                    "boundingBox": {
+                        "northLimit": 0,
+                        "southLimit": 0,
+                        "eastLimit": 0,
+                        "westLimit": 0
+                    }
+                },
+                "compositionChanges": {
+                    "addProducts": [
+                        "GB1REISS"
+                    ],
+                    "removeProducts": []
+                }
+            }
+        ]
+    }
+}
