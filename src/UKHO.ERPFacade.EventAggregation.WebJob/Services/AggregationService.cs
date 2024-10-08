@@ -12,6 +12,7 @@ using UKHO.ERPFacade.EventAggregation.WebJob.Helpers;
 using Microsoft.Extensions.Logging;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Exceptions;
+using Status = UKHO.ERPFacade.Common.Enums.Status;
 
 namespace UKHO.ERPFacade.EventAggregation.WebJob.Services
 {
@@ -25,6 +26,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Services
         private readonly IRecordOfSaleSapMessageBuilder _recordOfSaleSapMessageBuilder;
 
         private const string RecordOfSaleContainerName = "recordofsaleblobs";
+        private const string RecordOfSaleTableName = "recordofsaleevents";
         private const string SapXmlPayloadFileName = "SapXmlPayload.xml";
         private const string IncompleteStatus = "Incomplete";
         private const string JsonFileType = ".json";
@@ -50,9 +52,9 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Services
             {
                 _logger.LogInformation(EventIds.MessageDequeueCount.ToEventId(), "Dequeue Count : {DequeueCount} | _X-Correlation-ID : {_X-Correlation-ID} | EventID : {EventID}", queueMessage.DequeueCount.ToString(), message.CorrelationId, message.EventId);
 
-                string status = _azureTableReaderWriter.GetEntityStatus(message.CorrelationId);
+                var entity = await _azureTableReaderWriter.GetEntity(message.CorrelationId, RecordOfSaleTableName);
 
-                if (status == IncompleteStatus)
+                if (entity["Status"].ToString() == IncompleteStatus)
                 {
                     List<string> blob = _azureBlobEventWriter.GetBlobNamesInFolder(RecordOfSaleContainerName, message.CorrelationId);
 
@@ -81,9 +83,8 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Services
 
                         _logger.LogInformation(EventIds.RecordOfSalePublishedEventDataPushedToSap.ToEventId(), "The record of sale event data has been sent to SAP successfully. | _X-Correlation-ID : {_X-Correlation-ID} | EventID : {EventID} | StatusCode: {StatusCode}", message.CorrelationId, message.EventId, response.StatusCode);
 
-                        await _azureTableReaderWriter.UpdateRecordOfSaleEventStatus(message.CorrelationId);
+                        await _azureTableReaderWriter.UpdateEntity(message.CorrelationId, RecordOfSaleTableName, new[] { new KeyValuePair<string, string>("Status", Status.Complete.ToString()) });
                     }
-
                     else
                     {
                         _logger.LogWarning(EventIds.AllRelatedEventsAreNotPresentInBlob.ToEventId(), "All related events are not present in Azure blob. | _X-Correlation-ID : {_X-Correlation-ID} | EventID : {EventID}", message.CorrelationId, message.EventId);

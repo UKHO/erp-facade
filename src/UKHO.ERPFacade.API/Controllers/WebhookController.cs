@@ -11,6 +11,8 @@ using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
+using UKHO.ERPFacade.Common.Models.TableEntities;
+using Status = UKHO.ERPFacade.Common.Enums.Status;
 
 namespace UKHO.ERPFacade.API.Controllers
 {
@@ -30,11 +32,15 @@ namespace UKHO.ERPFacade.API.Controllers
 
         private const string EventIdKey = "id";
         private const string CorrelationIdKey = "data.correlationId";
-        private const string EncEventFileName = "EncPublishingEvent.json";
+        private const string S57EncEventTableName = "encevents";
+        private const string S57EncContentPublishedEventContainerName = "s57enccontentpublishedevents";
+        private const string S57EncEventFileName = "EncPublishingEvent.json";
         private const string SapXmlPayloadFileName = "SapXmlPayload.xml";
         private const string LicenceUpdatedContainerName = "licenceupdatedblobs";
+        private const string LicenceUpdateTableName = "licenceupdatedevents";
         private const string LicenceUpdatedEventFileName = "LicenceUpdatedEvent.json";
         private const string RecordOfSaleContainerName = "recordofsaleblobs";
+        private const string RecordOfSaleTableName = "recordofsaleevents";
         private const string JsonFileType = ".json";
 
         public WebhookController(IHttpContextAccessor contextAccessor,
@@ -90,17 +96,26 @@ namespace UKHO.ERPFacade.API.Controllers
                 return new BadRequestObjectResult(StatusCodes.Status400BadRequest);
             }
 
+            EncEventEntity encEventEntity = new()
+            {
+                RowKey = Guid.NewGuid().ToString(),
+                PartitionKey = Guid.NewGuid().ToString(),
+                Timestamp = DateTime.UtcNow,
+                CorrelationId = correlationId,
+                RequestDateTime = null
+            };
+
             _logger.LogInformation(EventIds.AddingEntryForEncContentPublishedEventInAzureTable.ToEventId(), "Adding/Updating entry for enccontentpublished event in azure table.");
-            await _azureTableReaderWriter.UpsertEntity(correlationId);
+            await _azureTableReaderWriter.UpsertEntity(correlationId, S57EncEventTableName, encEventEntity);
 
             _logger.LogInformation(EventIds.UploadEncContentPublishedEventInAzureBlobStarted.ToEventId(), "Uploading enccontentpublished event payload in blob storage.");
-            await _azureBlobEventWriter.UploadEvent(encEventJson.ToString(), correlationId, EncEventFileName);
+            await _azureBlobEventWriter.UploadEvent(encEventJson.ToString(), S57EncContentPublishedEventContainerName, correlationId + '/' + S57EncEventFileName);
             _logger.LogInformation(EventIds.UploadEncContentPublishedEventInAzureBlobCompleted.ToEventId(), "The enccontentpublished event payload is uploaded in blob storage successfully.");
 
             var sapPayload = _encContentSapMessageBuilder.BuildSapMessageXml(JsonConvert.DeserializeObject<EncEventPayload>(encEventJson.ToString()));
 
             _logger.LogInformation(EventIds.UploadSapXmlPayloadInAzureBlobStarted.ToEventId(), "Uploading the SAP XML payload in blob storage.");
-            await _azureBlobEventWriter.UploadEvent(sapPayload.ToIndentedString(), correlationId, SapXmlPayloadFileName);
+            await _azureBlobEventWriter.UploadEvent(sapPayload.ToIndentedString(), S57EncContentPublishedEventContainerName, correlationId + '/' + SapXmlPayloadFileName);
             _logger.LogInformation(EventIds.UploadSapXmlPayloadInAzureBlobCompleted.ToEventId(), "SAP XML payload is uploaded in blob storage successfully.");
 
             var response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapEndpointForEncEvent, _sapConfig.Value.SapServiceOperationForEncEvent, _sapConfig.Value.SapUsernameForEncEvent, _sapConfig.Value.SapPasswordForEncEvent);
@@ -111,7 +126,7 @@ namespace UKHO.ERPFacade.API.Controllers
             }
             _logger.LogInformation(EventIds.EncUpdateSentToSap.ToEventId(), "ENC update has been sent to SAP successfully. | {StatusCode}", response.StatusCode);
 
-            await _azureTableReaderWriter.UpdateRequestTimeEntity(correlationId);
+            await _azureTableReaderWriter.UpdateEntity(correlationId, S57EncEventTableName, new[] { new KeyValuePair<string, DateTime>("RequestDateTime", DateTime.UtcNow) });
 
             return new OkObjectResult(StatusCodes.Status200OK);
         }
@@ -151,8 +166,17 @@ namespace UKHO.ERPFacade.API.Controllers
                 return new BadRequestObjectResult(StatusCodes.Status400BadRequest);
             }
 
+            RecordOfSaleEventEntity recordOfSaleEvent = new()
+            {
+                RowKey = Guid.NewGuid().ToString(),
+                PartitionKey = Guid.NewGuid().ToString(),
+                Timestamp = DateTime.UtcNow,
+                CorrelationId = correlationId,
+                Status = Status.Incomplete.ToString()
+            };
+
             _logger.LogInformation(EventIds.StoreRecordOfSalePublishedEventInAzureTable.ToEventId(), "Storing the received Record of sale published event in azure table.");
-            await _azureTableReaderWriter.UpsertRecordOfSaleEntity(correlationId);
+            await _azureTableReaderWriter.UpsertEntity(correlationId, RecordOfSaleTableName, recordOfSaleEvent);
 
             _logger.LogInformation(EventIds.UploadRecordOfSalePublishedEventInAzureBlob.ToEventId(), "Uploading the received Record of sale published event in blob storage.");
             await _azureBlobEventWriter.UploadEvent(recordOfSaleEventJson.ToString(), RecordOfSaleContainerName, correlationId + '/' + eventId + JsonFileType);
@@ -199,8 +223,17 @@ namespace UKHO.ERPFacade.API.Controllers
                 return new BadRequestObjectResult(StatusCodes.Status400BadRequest);
             }
 
+            LicenseUpdatedEventEntity licenceUpdatedEventEntity = new()
+            {
+                RowKey = Guid.NewGuid().ToString(),
+                PartitionKey = Guid.NewGuid().ToString(),
+                Timestamp = DateTime.UtcNow,
+                CorrelationId = correlationId,
+                Status = Status.Incomplete.ToString()
+            };
+
             _logger.LogInformation(EventIds.StoreLicenceUpdatedPublishedEventInAzureTable.ToEventId(), "Storing the received Licence updated published event in azure table.");
-            await _azureTableReaderWriter.UpsertLicenceUpdatedEntity(correlationId);
+            await _azureTableReaderWriter.UpsertEntity(correlationId, LicenceUpdateTableName, licenceUpdatedEventEntity);
 
             _logger.LogInformation(EventIds.UploadLicenceUpdatedPublishedEventInAzureBlob.ToEventId(), "Uploading the received Licence updated  published event in blob storage.");
             await _azureBlobEventWriter.UploadEvent(licenceUpdatedEventJson.ToString(), LicenceUpdatedContainerName, correlationId + '/' + LicenceUpdatedEventFileName);
@@ -221,7 +254,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
             _logger.LogInformation(EventIds.LicenceUpdatedPublishedEventUpdatePushedToSap.ToEventId(), "The licence updated event data has been sent to SAP successfully. | {StatusCode}", response.StatusCode);
 
-            await _azureTableReaderWriter.UpdateLicenceUpdatedEventStatus(correlationId);
+            await _azureTableReaderWriter.UpdateEntity(correlationId, LicenceUpdateTableName, new[] { new KeyValuePair<string, string>("Status", Status.Complete.ToString()) });
 
             return new OkObjectResult(StatusCodes.Status200OK);
         }

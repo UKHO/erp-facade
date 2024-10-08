@@ -11,7 +11,10 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.Services
         private readonly ILogger<CleanUpService> _logger;
         private readonly IOptions<ErpFacadeWebJobConfiguration> _erpFacadeWebjobConfig;
         private readonly IAzureTableReaderWriter _azureTableReaderWriter;
-        private readonly IAzureBlobEventWriter _azureBlobEventWriter;               
+        private readonly IAzureBlobEventWriter _azureBlobEventWriter;
+
+        private const string S57EncContentPublishedEventsContainerName = "s57enccontentpublishedevents";
+        private const string S57EncContentPublishedEventsTableName = "encevents";
 
         public CleanUpService(ILogger<CleanUpService> logger,
                                IOptions<ErpFacadeWebJobConfiguration> erpFacadeWebjobConfig,
@@ -25,25 +28,30 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.Services
         }
 
         public void CleanUpAzureTableAndBlobs()
-        {            
-            CleanUpBlobsAndTablesRelatedToEESEvent();
+        {
+            CleanUpEvents(S57EncContentPublishedEventsTableName, S57EncContentPublishedEventsContainerName);
         }
 
-        //Private methods       
-        private void CleanUpBlobsAndTablesRelatedToEESEvent()
+        private void CleanUpEvents(string tableName, string eventContainerName)
         {
-            _logger.LogInformation(EventIds.FetchEESEntities.ToEventId(), "Fetching all EES entities from azure table");
-            var entities = _azureTableReaderWriter.GetAllEntityForEESTable();
+            _logger.LogInformation(EventIds.FetchEESEntities.ToEventId(), "Fetching all records from azure table {0}", tableName);
+
+            var entities = _azureTableReaderWriter.GetAllEntities(tableName);
+
             foreach (var entity in entities)
             {
-                if (!entity.RequestDateTime.HasValue)
+                if (entity["RequestDateTime"] == null)
                     continue;
-                TimeSpan timediff = DateTime.Now - entity.RequestDateTime.Value;
+
+                TimeSpan timediff = DateTime.Now - Convert.ToDateTime(entity["RequestDateTime"].ToString());
+
                 if (timediff.Days > int.Parse(_erpFacadeWebjobConfig.Value.CleanUpDurationInDays))
                 {
-                    Task.FromResult(_azureTableReaderWriter.DeleteEESEntity(entity.CorrelationId));
-                    _logger.LogInformation(EventIds.DeletedContainerSuccessful.ToEventId(), "Deleting container : {0}", entity.CorrelationId);
-                    _azureBlobEventWriter.DeleteContainer(entity.CorrelationId.ToLower());
+                    Task.FromResult(_azureTableReaderWriter.DeleteEntity(entity["CorrelationId"].ToString(), tableName));
+
+                    _logger.LogInformation(EventIds.DeletedContainerSuccessful.ToEventId(), "Deleting directory {0} from {1} container", entity["CorrelationId"].ToString(), eventContainerName);
+
+                    _azureBlobEventWriter.DeleteDirectory(eventContainerName, entity["CorrelationId"].ToString().ToLower());
                 }
             }
         }

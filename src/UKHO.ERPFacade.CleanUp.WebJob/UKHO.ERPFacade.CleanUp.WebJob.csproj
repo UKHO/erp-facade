@@ -51,7 +51,7 @@
 
   <ItemGroup>
     <None Update="appsettings.local.overrides.json">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="settings.job">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

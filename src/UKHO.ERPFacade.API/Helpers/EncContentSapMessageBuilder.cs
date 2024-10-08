@@ -6,7 +6,6 @@ using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Providers;
 using UKHO.ERPFacade.Common.PermitDecryption;
 using UKHO.ERPFacade.Common.Exceptions;
-using System;
 
 namespace UKHO.ERPFacade.API.Helpers
 {
