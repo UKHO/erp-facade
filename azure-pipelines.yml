@@ -518,7 +518,7 @@ stages:
                 - template: Deployment/templates/continuous-deployment.yml
                   parameters:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
-                    AzureSubscription: "ERP-Facade-QA-A.011.05.12"
+                    AzureSubscription: "ERP-Facade-vNext-IAT-A.011.08"
 
       - deployment: vNextIATDeployApp
         dependsOn: vNextIATDeployTerraform
