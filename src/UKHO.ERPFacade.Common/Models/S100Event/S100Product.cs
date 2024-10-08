@@ -27,7 +27,7 @@ namespace UKHO.ERPFacade.Common.Models.S100Event
         [JsonProperty("replaces")]
         public List<string> Replaces { get; set; }
         [JsonProperty("dataReplacement")]
-        public List<object> DataReplacement { get; set; }
+        public List<string> DataReplacement { get; set; }
         [JsonProperty("boundingBox")]
         public S100BoundingBox BoundingBox { get; set; }
         [JsonProperty("fileSize")]
