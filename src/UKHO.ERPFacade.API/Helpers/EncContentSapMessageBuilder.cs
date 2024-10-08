@@ -299,7 +299,7 @@ namespace UKHO.ERPFacade.API.Helpers
             List<(int sortingOrder, XmlElement node)> actionAttributes = new();
 
             // Get permit keys for New cell and Updated cell
-            if (product != null! && !IsPropertyNullOrEmpty(Permit, product.Permit) && (action.Action == CreateEncCell || action.Action == UpdateCell))
+            if (action.Action == CreateEncCell || action.Action == UpdateCell)
             {
                 decryptedPermit = _permitDecryption.Decrypt(product.Permit);
             }

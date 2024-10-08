@@ -3,6 +3,7 @@ using System.Globalization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Configuration;
+using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
 
@@ -18,11 +19,20 @@ namespace UKHO.ERPFacade.Common.PermitDecryption
         {
             _permitConfiguration = permitConfiguration ?? throw new ArgumentNullException(nameof(permitConfiguration));
             _logger = logger;
+
+            if (string.IsNullOrEmpty(_permitConfiguration.Value.PermitDecryptionHardwareId))
+            {
+                throw new ERPFacadeException(EventIds.HardwareIdNotFoundException.ToEventId(), "Permit decryption Hardware Id not found in configuration.");
+            }
         }
 
         public DecryptedPermit Decrypt(string encryptedPermit)
         {
-            if (string.IsNullOrEmpty(encryptedPermit)) return null;
+            if (string.IsNullOrEmpty(encryptedPermit))
+            {
+                throw new ERPFacadeException(EventIds.EmptyPermitStringException.ToEventId(), "Permit string provided empty in json payload.");
+            }
+
             try
             {
                 byte[] hardwareIds = GetHardwareIds();
@@ -40,8 +50,7 @@ namespace UKHO.ERPFacade.Common.PermitDecryption
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.PermitDecryptionException.ToEventId(), ex, "Permit decryption failed and could not generate ActiveKey & NextKey. | Exception : {Exception}", ex.Message);
-                return null;
+                throw new ERPFacadeException(EventIds.PermitDecryptionException.ToEventId(), $"Permit decryption failed and could not generate ActiveKey & NextKey. | Exception : {ex.Message}");
             }
         }
 
