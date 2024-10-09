@@ -108,5 +108,10 @@ namespace UKHO.ERPFacade.Common.IO
             }
             return xmldoc.InnerXml;
         }
+
+        public static string ToSubstring(string value, int startIndex, int length)
+        {
+            return value.Substring(startIndex, Math.Min(length, value.Length));
+        }
     }
 }

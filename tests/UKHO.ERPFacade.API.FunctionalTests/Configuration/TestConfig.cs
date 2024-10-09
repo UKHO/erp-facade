@@ -48,7 +48,6 @@
         public string ConnectionString { get; set; }
     }
 
-    
     public class PermitWithSameKey
     {
         public string Permit { get; set; }

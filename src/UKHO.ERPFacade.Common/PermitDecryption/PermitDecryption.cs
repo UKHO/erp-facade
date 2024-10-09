@@ -20,27 +20,27 @@ namespace UKHO.ERPFacade.Common.PermitDecryption
             _logger = logger;
         }
 
-        public PermitKey GetPermitKeys(string permit)
+        public DecryptedPermit Decrypt(string encryptedPermit)
         {
-            if (string.IsNullOrEmpty(permit)) return null;
+            if (string.IsNullOrEmpty(encryptedPermit)) return null;
             try
             {
                 byte[] hardwareIds = GetHardwareIds();
                 byte[] firstCellKey = null;
                 byte[] secondCellKey = null;
 
-                S63Crypt.GetEncKeysFromPermit(permit, hardwareIds, ref firstCellKey, ref secondCellKey);
+                S63Crypt.GetEncKeysFromPermit(encryptedPermit, hardwareIds, ref firstCellKey, ref secondCellKey);
 
-                var keys = new PermitKey
+                var decryptedPermit = new DecryptedPermit
                 {
                     ActiveKey = Convert.ToHexString(firstCellKey),
                     NextKey = Convert.ToHexString(secondCellKey)
                 };
-                return keys;
+                return decryptedPermit;
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.PermitDecryptionException.ToEventId(), ex, "An error occurred while decrypting the permit string.");
+                _logger.LogError(EventIds.PermitDecryptionException.ToEventId(), ex, "Permit decryption failed and could not generate ActiveKey & NextKey. | Exception : {Exception}", ex.Message);
                 return null;
             }
         }

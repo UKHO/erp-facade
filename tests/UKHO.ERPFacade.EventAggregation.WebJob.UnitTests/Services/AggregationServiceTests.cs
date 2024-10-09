@@ -191,11 +191,6 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Services
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
             && call.GetArgument<EventId>(1) == EventIds.UploadedRecordOfSaleSapXmlPayloadInAzureBlob.ToEventId()
             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "SAP xml payload for record of sale event is uploaded in blob storage successfully. | _X-Correlation-ID : {_X-Correlation-ID} | EventID : {EventID}").MustHaveHappenedOnceExactly();
-
-            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-            && call.GetArgument<LogLevel>(0) == LogLevel.Error
-            && call.GetArgument<EventId>(1) == EventIds.ErrorOccurredInSapForRecordOfSalePublishedEvent.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "An error occurred while sending record of sale event data to SAP. | _X-Correlation-ID : {_X-Correlation-ID} | EventID : {EventID} | StatusCode: {StatusCode}").MustHaveHappenedOnceExactly();
         }
 
         [Test]
@@ -283,7 +278,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Services
             A.CallTo(() =>
                     _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored,
                         A<string>.Ignored))
-                .Throws(new ERPFacadeException(EventIds.UnhandledWebJobException.ToEventId()));
+                .Throws(new ERPFacadeException(EventIds.UnhandledWebJobException.ToEventId(), "message", []));
 
             var ex = Assert.ThrowsAsync<ERPFacadeException>(() => _fakeAggregationService.MergeRecordOfSaleEvents(queueMessage));
 
@@ -295,11 +290,6 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Services
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
             && call.GetArgument<EventId>(1) == EventIds.MessageDequeueCount.ToEventId()
             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Dequeue Count : {DequeueCount} | _X-Correlation-ID : {_X-Correlation-ID} | EventID : {EventID}").MustHaveHappenedOnceOrMore();
-
-            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-            && call.GetArgument<LogLevel>(0) == LogLevel.Error
-            && call.GetArgument<EventId>(1) == EventIds.UnhandledWebJobException.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Exception occurred while processing Event Aggregation WebJob. | _X-Correlation-ID : {_X-Correlation-ID} | EventID : {EventID}").MustHaveHappenedOnceExactly();
         }
     }
 }
