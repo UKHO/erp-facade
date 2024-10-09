@@ -1,4 +1,5 @@
-﻿using FakeItEasy;
+﻿using Azure.Data.Tables;
+using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -7,7 +8,6 @@ using UKHO.ERPFacade.CleanUp.WebJob.Services;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
-using UKHO.ERPFacade.Common.Models.TableEntities;
 
 namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
 {
@@ -32,7 +32,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
             {
                 CleanUpDurationInDays = "30"
             });
-            _fakeCleanUpService = new CleanUpService(_fakeLogger, _fakeErpFacadeWebjobConfig, _fakeAzureTableReaderWriter,_fakeAzureBlobEventWriter);
+            _fakeCleanUpService = new CleanUpService(_fakeLogger, _fakeErpFacadeWebjobConfig, _fakeAzureTableReaderWriter, _fakeAzureBlobEventWriter);
         }
 
         [Test]
@@ -69,150 +69,142 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
              () => new CleanUpService(_fakeLogger, _fakeErpFacadeWebjobConfig, _fakeAzureTableReaderWriter, null))
              .ParamName
              .Should().Be("azureBlobEventWriter");
-        }      
+        }
 
         [Test]
         public void WhenEESEventDataIsMoreForThanConfiguredDays_ThenDeleteRelatedTablesAndBlobs()
-        {            
-            List<EESEventEntity> eesEventData = new()
+        {
+            List<TableEntity> eesEventData = new()
             {
-                new EESEventEntity()
-                {
-                    CorrelationId = "corrid",
-                    RequestDateTime = DateTime.Now.AddDays(-31),
-                    PartitionKey = Guid.NewGuid().ToString(),
-                    RowKey = Guid.NewGuid().ToString(),
-                    Timestamp = DateTime.Now
-                }
+               new TableEntity() {
+                { "CorrelationId", "corrid" },
+                { "RequestDateTime", DateTime.Now.AddDays(-31) },
+                { "PartitionKey", Guid.NewGuid().ToString() },
+                { "RowKey", Guid.NewGuid().ToString() },
+                { "Timestamp", DateTime.Now }
+            }
             };
 
-                        
-            A.CallTo(() => _fakeAzureTableReaderWriter.GetAllEntityForEESTable()).Returns(eesEventData);
+            A.CallTo(() => _fakeAzureTableReaderWriter.GetAllEntities(A<string>.Ignored)).Returns(eesEventData);
 
             _fakeCleanUpService.CleanUpAzureTableAndBlobs();
-                        
-            A.CallTo(() => _fakeAzureTableReaderWriter.GetAllEntityForEESTable()).MustHaveHappened();
-            A.CallTo(() => _fakeAzureTableReaderWriter.DeleteEESEntity(A<string>.Ignored)).MustHaveHappened();
-            A.CallTo(() => _fakeAzureBlobEventWriter.DeleteContainer(A<string>.Ignored)).MustHaveHappened();
+
+            A.CallTo(() => _fakeAzureTableReaderWriter.GetAllEntities(A<string>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeAzureTableReaderWriter.DeleteEntity(A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeAzureBlobEventWriter.DeleteDirectory(A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
             && call.GetArgument<EventId>(1) == EventIds.FetchEESEntities.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Fetching all EES entities from azure table").MustHaveHappened();
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Fetching all records from azure table {0}").MustHaveHappened();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
            && call.GetArgument<LogLevel>(0) == LogLevel.Information
            && call.GetArgument<EventId>(1) == EventIds.DeletedContainerSuccessful.ToEventId()
-           && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Deleting container : {0}").MustHaveHappened();
+           && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Deleting directory {0} from {1} container").MustHaveHappened();
 
         }
 
         [Test]
         public void WhenRequestDateTimeisNull_ThenShouldNotDeleteRelatedTablesAndBlobs()
-        {            
-            List<EESEventEntity> eesEventData = new()
+        {
+            List<TableEntity> eesEventData = new()
             {
-                new EESEventEntity()
-                {
-                    CorrelationId = "corrid",                    
-                    RequestDateTime = null,
-                    PartitionKey= Guid.NewGuid().ToString(),
-                    RowKey= Guid.NewGuid().ToString(),                    
-                    Timestamp = DateTime.Now
-                }
+               new TableEntity() {
+                { "CorrelationId", "corrid" },
+                { "RequestDateTime", null },
+                { "PartitionKey", Guid.NewGuid().ToString() },
+                { "RowKey", Guid.NewGuid().ToString() },
+                { "Timestamp", DateTime.Now }
+            }
             };
-            
-            A.CallTo(() => _fakeAzureTableReaderWriter.GetAllEntityForEESTable()).Returns(eesEventData);
+
+            A.CallTo(() => _fakeAzureTableReaderWriter.GetAllEntities(A<string>.Ignored)).Returns(eesEventData);
 
             _fakeCleanUpService.CleanUpAzureTableAndBlobs();
-                        
-            A.CallTo(() => _fakeAzureTableReaderWriter.GetAllEntityForEESTable()).MustHaveHappened();
-            A.CallTo(() => _fakeAzureTableReaderWriter.DeleteEESEntity(A<string>.Ignored)).MustNotHaveHappened();
-            A.CallTo(() => _fakeAzureBlobEventWriter.DeleteContainer(A<string>.Ignored)).MustNotHaveHappened();
+
+            A.CallTo(() => _fakeAzureTableReaderWriter.GetAllEntities(A<string>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeAzureTableReaderWriter.DeleteEntity(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeAzureBlobEventWriter.DeleteDirectory(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
 
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
             && call.GetArgument<EventId>(1) == EventIds.FetchEESEntities.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Fetching all EES entities from azure table").MustHaveHappened();
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Fetching all records from azure table {0}").MustHaveHappened();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
            && call.GetArgument<LogLevel>(0) == LogLevel.Information
            && call.GetArgument<EventId>(1) == EventIds.DeletedContainerSuccessful.ToEventId()
-           && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Deleting container : {0}").MustNotHaveHappened();
+           && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Deleting directory {0} from {1} container").MustNotHaveHappened();
 
         }
 
         [Test]
         public void WhenEESEventDataIsWithinConfiguredDays_ThenShouldNotDeleteRelatedTablesAndBlobs()
-        {            
-            List<EESEventEntity> eesEventData = new()
+        {
+            List<TableEntity> eesEventData = new()
             {
-                new EESEventEntity()
-                {
-                    CorrelationId = "corrid",                    
-                    RequestDateTime = DateTime.Now.AddDays(-21),
-                    PartitionKey= Guid.NewGuid().ToString(),
-                    RowKey= Guid.NewGuid().ToString(),                    
-                    Timestamp = DateTime.Now
-                }
+               new TableEntity() {
+                { "CorrelationId", "corrid" },
+                { "RequestDateTime", DateTime.Now.AddDays(-21) },
+                { "PartitionKey", Guid.NewGuid().ToString() },
+                { "RowKey", Guid.NewGuid().ToString() },
+                { "Timestamp", DateTime.Now }
+            }
             };
 
-                        
-            A.CallTo(() => _fakeAzureTableReaderWriter.GetAllEntityForEESTable()).Returns(eesEventData);
+            A.CallTo(() => _fakeAzureTableReaderWriter.GetAllEntities(A<string>.Ignored)).Returns(eesEventData);
 
             _fakeCleanUpService.CleanUpAzureTableAndBlobs();
-            
-            A.CallTo(() => _fakeAzureTableReaderWriter.GetAllEntityForEESTable()).MustHaveHappened();
-            A.CallTo(() => _fakeAzureTableReaderWriter.DeleteEESEntity(A<string>.Ignored)).MustNotHaveHappened();
-            A.CallTo(() => _fakeAzureBlobEventWriter.DeleteContainer(A<string>.Ignored)).MustNotHaveHappened();
+
+            A.CallTo(() => _fakeAzureTableReaderWriter.GetAllEntities(A<string>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeAzureTableReaderWriter.DeleteEntity(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeAzureBlobEventWriter.DeleteDirectory(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
             && call.GetArgument<EventId>(1) == EventIds.FetchEESEntities.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Fetching all EES entities from azure table").MustHaveHappened();
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Fetching all records from azure table {0}").MustHaveHappened();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
            && call.GetArgument<LogLevel>(0) == LogLevel.Information
            && call.GetArgument<EventId>(1) == EventIds.DeletedContainerSuccessful.ToEventId()
-           && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Deleting container : {0}").MustNotHaveHappened();
+           && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Deleting directory {0} from {1} container").MustNotHaveHappened();
 
         }
 
         [Test]
         public void WhenEESEventDataIsEqualConfiguredDays_ThenShouldNotDeleteRelatedTablesAndBlobs()
-        {            
-            List<EESEventEntity> eesEventData = new()
+        {
+            List<TableEntity> eesEventData = new()
             {
-                new EESEventEntity()
-                {
-                    CorrelationId = "corrid",                    
-                    RequestDateTime = DateTime.Now.AddDays(-30),
-                    PartitionKey= Guid.NewGuid().ToString(),
-                    RowKey= Guid.NewGuid().ToString(),                    
-                    Timestamp = DateTime.Now
-                }
+               new TableEntity() {
+                { "CorrelationId", "corrid" },
+                { "RequestDateTime", DateTime.Now.AddDays(-30) },
+                { "PartitionKey", Guid.NewGuid().ToString() },
+                { "RowKey", Guid.NewGuid().ToString() },
+                { "Timestamp", DateTime.Now }
+            }
             };
 
-                        
-            A.CallTo(() => _fakeAzureTableReaderWriter.GetAllEntityForEESTable()).Returns(eesEventData);
+            A.CallTo(() => _fakeAzureTableReaderWriter.GetAllEntities(A<string>.Ignored)).Returns(eesEventData);
 
             _fakeCleanUpService.CleanUpAzureTableAndBlobs();
-                        
-            A.CallTo(() => _fakeAzureTableReaderWriter.GetAllEntityForEESTable()).MustHaveHappened();
-            A.CallTo(() => _fakeAzureTableReaderWriter.DeleteEESEntity(A<string>.Ignored)).MustNotHaveHappened();
-            A.CallTo(() => _fakeAzureBlobEventWriter.DeleteContainer(A<string>.Ignored)).MustNotHaveHappened();
+
+            A.CallTo(() => _fakeAzureTableReaderWriter.GetAllEntities(A<string>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeAzureTableReaderWriter.DeleteEntity(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeAzureBlobEventWriter.DeleteDirectory(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
             && call.GetArgument<EventId>(1) == EventIds.FetchEESEntities.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Fetching all EES entities from azure table").MustHaveHappened();
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Fetching all records from azure table {0}").MustHaveHappened();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
            && call.GetArgument<LogLevel>(0) == LogLevel.Information
            && call.GetArgument<EventId>(1) == EventIds.DeletedContainerSuccessful.ToEventId()
-           && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Deleting container : {0}").MustNotHaveHappened();
-
+           && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Deleting directory {0} from {1} container").MustNotHaveHappened();
         }
     }
 }
