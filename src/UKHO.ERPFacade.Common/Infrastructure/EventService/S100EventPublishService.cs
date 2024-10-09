@@ -46,24 +46,24 @@ namespace UKHO.ERPFacade.Common.Infrastructure.EventService
 
             try
             {
-                _logger.LogInformation(EventIds.StartingEnterpriseEventServiceEventPublisher.ToEventId(), "Attempting to publish {cloudEventType} event for {cloudEventSubject} to S100 Event Service | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}", eventData.Type, eventData.Subject, correlationId, eventData.Id);
+                _logger.LogInformation(EventIds.StartingS100EventServiceEventPublisher.ToEventId(), "Attempting to publish {cloudEventType} event for {cloudEventSubject} to S100 Event Service | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}", eventData.Type, eventData.Subject, correlationId, eventData.Id);
 
                 var response = await client.PostAsync(_eventServiceEndpoint, content);
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    _logger.LogError(EventIds.EnterpriseEventServiceEventPublisherFailure.ToEventId(), "Failed to publish {cloudEventType} event to the S100 Event Service for {cloudEventSubject} | Status Code : {StatusCode} | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}", eventData.Type, eventData.Subject, response.StatusCode.ToString(), correlationId, eventData.Id);
+                    _logger.LogError(EventIds.S100EventServiceEventPublisherFailure.ToEventId(), "Failed to publish {cloudEventType} event to the S100 Event Service for {cloudEventSubject} | Status Code : {StatusCode} | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}", eventData.Type, eventData.Subject, response.StatusCode.ToString(), correlationId, eventData.Id);
 
                     return Result.Failure(response.StatusCode.ToString());
                 }
 
-                _logger.LogInformation(EventIds.EnterpriseEventServiceEventPublisherSuccess.ToEventId(), "Event {cloudEventType} for {cloudEventSubject} is published to S100 Event Service successfully | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}", eventData.Type, eventData.Subject, correlationId, eventData.Id);
+                _logger.LogInformation(EventIds.S100EventServiceEventPublisherSuccess.ToEventId(), "Event {cloudEventType} for {cloudEventSubject} is published to S100 Event Service successfully | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}", eventData.Type, eventData.Subject, correlationId, eventData.Id);
 
                 return Result.Success("Event published successfully");
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.EnterpriseEventServiceEventConnectionFailure.ToEventId(), "Failed to connect to S100 Event Service. | Exception Message : {ExceptionMessage} | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}", ex.Message, correlationId, eventData.Id);
+                _logger.LogError(EventIds.S100EventServiceEventConnectionFailure.ToEventId(), "Failed to connect to S100 Event Service. | Exception Message : {ExceptionMessage} | _X-Correlation-ID : {_X-Correlation-ID} | PublishedEventId : {PublishedEventId}", ex.Message, correlationId, eventData.Id);
 
                 return Result.Failure(ex.Message);
             }

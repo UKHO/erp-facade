@@ -711,7 +711,23 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940141 - Exception occured while decrypting the permit string.
         /// </summary>
-        PermitDecryptionException = 940142
+        PermitDecryptionException = 940142,
+        /// <summary>
+        /// 940143 - Attempting to send cloudEvent to S100 Event Service
+        /// </summary>
+        StartingS100EventServiceEventPublisher = 940143,
+        /// <summary>
+        /// 940144 - Failed to send event cloudEvent to the S100 Event Service
+        /// </summary>
+        S100EventServiceEventPublisherFailure = 940144,
+        /// <summary>
+        /// 940145 - Successfully sent cloudEvent to S100 Event Service
+        /// </summary>
+        S100EventServiceEventPublisherSuccess = 940145,
+        /// <summary>
+        /// 940146 - Failed to connect to the S100 Event Service
+        /// </summary>
+        S100EventServiceEventConnectionFailure = 940146,
 
     }
 
