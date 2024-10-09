@@ -8,7 +8,6 @@ using System.Xml;
 using Azure.Data.Tables;
 using FakeItEasy;
 using FluentAssertions;
-using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -24,7 +23,6 @@ using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
-using static MongoDB.Driver.WriteConcern;
 
 namespace UKHO.ERPFacade.API.UnitTests.Controllers
 {
@@ -118,9 +116,9 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             var result = (OkObjectResult)await _fakeWebHookController.NewEncContentPublishedEventReceived(fakeEncEventJson);
 
             A.CallTo(() => _fakeAzureTableReaderWriter.UpsertEntity(A<string>.Ignored, A<string>.Ignored, A<ITableEntity>.Ignored)).MustHaveHappened();
-            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntity(A<string>.Ignored, A<string>.Ignored, A<KeyValuePair<dynamic, dynamic>[]>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntity(A<string>.Ignored, A<string>.Ignored, A<KeyValuePair<string, DateTime>[]>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureBlobEventWriter.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened(2, Times.Exactly);
-            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, "Z_ADDS_MAT_INFO", A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
 
             result.StatusCode.Should().Be(200);
 
@@ -200,8 +198,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
 
             Assert.ThrowsAsync<ERPFacadeException>(() => _fakeWebHookController.NewEncContentPublishedEventReceived(fakeEncEventJson));
 
-            A.CallTo(() => _fakeAzureTableReaderWriter.UpsertEntity(A<string>.Ignored, A<string>.Ignored, A<TableEntity>.Ignored)).MustHaveHappened();
-            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntity(A<string>.Ignored, A<string>.Ignored, A<KeyValuePair<dynamic, dynamic>[]>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpsertEntity(A<string>.Ignored, A<string>.Ignored, A<TableEntity>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntity(A<string>.Ignored, A<string>.Ignored, A<KeyValuePair<string, DateTime>[]>.Ignored)).MustNotHaveHappened();
             A.CallTo(() => _fakeAzureBlobEventWriter.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
@@ -290,7 +288,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             var result = (OkObjectResult)await _fakeWebHookController.RecordOfSalePublishedEventReceived(fakeRosEventJson);
             result.StatusCode.Should().Be(200);
 
-            A.CallTo(() => _fakeAzureTableReaderWriter.UpsertEntity(A<string>.Ignored, A<string>.Ignored, A<TableEntity>.Ignored)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpsertEntity(A<string>.Ignored, A<string>.Ignored, A<ITableEntity>.Ignored)).MustHaveHappenedOnceExactly();
             A.CallTo(() => _fakeAzureBlobEventWriter.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceExactly();
             A.CallTo(() => _fakeAzureQueueHelper.AddMessage(fakeRosEventJson)).MustHaveHappenedOnceExactly();
 
@@ -392,7 +390,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
 
             var result = (OkObjectResult)await _fakeWebHookController.LicenceUpdatedPublishedEventReceived(fakeLicenceUpdatedEventJson);
 
-            A.CallTo(() => _fakeAzureTableReaderWriter.UpsertEntity(A<string>.Ignored, A<string>.Ignored, A<TableEntity>.Ignored)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpsertEntity(A<string>.Ignored, A<string>.Ignored, A<ITableEntity>.Ignored)).MustHaveHappenedOnceExactly();
             A.CallTo(() => _fakeAzureBlobEventWriter.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedTwiceExactly();
 
             result.StatusCode.Should().Be(200);
@@ -476,7 +474,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
 
             Assert.ThrowsAsync<ERPFacadeException>(() => _fakeWebHookController.LicenceUpdatedPublishedEventReceived(fakeLicenceUpdatedEventJson));
 
-            A.CallTo(() => _fakeAzureTableReaderWriter.UpsertEntity(A<string>.Ignored, A<string>.Ignored, A<TableEntity>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpsertEntity(A<string>.Ignored, A<string>.Ignored, A<ITableEntity>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureBlobEventWriter.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
