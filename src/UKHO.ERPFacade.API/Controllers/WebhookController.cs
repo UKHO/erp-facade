@@ -33,7 +33,7 @@ namespace UKHO.ERPFacade.API.Controllers
         private const string EventIdKey = "id";
         private const string CorrelationIdKey = "data.correlationId";
         private const string S57EncEventTableName = "encevents";
-        private const string S57EncContentPublishedEventContainerName = "s57enccontentpublishedevents";
+        private const string S57EncContentPublishedEventContainerName = "s57events";
         private const string S57EncEventFileName = "EncPublishingEvent.json";
         private const string SapXmlPayloadFileName = "SapXmlPayload.xml";
         private const string LicenceUpdatedContainerName = "licenceupdatedblobs";

@@ -74,7 +74,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 //Logic to download XML from container using TraceID from JSON
-                string generatedXmlFilePath = _azureBlobStorageHelper.DownloadGeneratedXml(generatedXmlFolder, correlationId);
+                string generatedXmlFilePath = _azureBlobStorageHelper.DownloadGeneratedXmlFile(generatedXmlFolder, correlationId, "s57events");
 
                 //Expected XML 
                 string xmlFilePath = filePath.Replace(Config.TestConfig.PayloadFolder, "ERPFacadeExpectedXmlFiles").Replace(".JSON", ".xml");
