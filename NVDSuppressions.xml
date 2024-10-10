@@ -768,4 +768,18 @@
     <packageUrl regex="true">^pkg:generic/YamlDotNet@.*$</packageUrl>
     <cve>CVE-2018-1000210</cve>
   </suppress>
+  <suppress>
+   <notes><![CDATA[
+   file name: System.Runtime.Caching:8.0.0
+   ]]></notes>
+   <packageUrl regex="true">^pkg:nuget/System\.Runtime\.Caching@.*$</packageUrl>
+   <vulnerabilityName>CVE-2024-43483</vulnerabilityName>
+</suppress>
+<suppress>
+   <notes><![CDATA[
+   file name: System.Security.Cryptography.Xml:4.7.0
+   ]]></notes>
+   <packageUrl regex="true">^pkg:nuget/System\.Security\.Cryptography\.Xml@.*$</packageUrl>
+   <vulnerabilityName>CVE-2022-34716</vulnerabilityName>
+</suppress>
 </suppressions>
