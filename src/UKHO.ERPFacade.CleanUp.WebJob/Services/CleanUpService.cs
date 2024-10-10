@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Configuration;
+using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
 
@@ -12,9 +13,6 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.Services
         private readonly IOptions<ErpFacadeWebJobConfiguration> _erpFacadeWebjobConfig;
         private readonly IAzureTableReaderWriter _azureTableReaderWriter;
         private readonly IAzureBlobEventWriter _azureBlobEventWriter;
-
-        private const string S57EncContentPublishedEventsContainerName = "s57enccontentpublishedevents";
-        private const string S57EncContentPublishedEventsTableName = "encevents";
 
         public CleanUpService(ILogger<CleanUpService> logger,
                                IOptions<ErpFacadeWebJobConfiguration> erpFacadeWebjobConfig,
@@ -29,7 +27,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.Services
 
         public void CleanUpAzureTableAndBlobs()
         {
-            CleanUpEvents(S57EncContentPublishedEventsTableName, S57EncContentPublishedEventsContainerName);
+            CleanUpEvents(Constants.S57EventTableName, Constants.S57EventContainerName);
         }
 
         private void CleanUpEvents(string tableName, string eventContainerName)

@@ -5,6 +5,7 @@ using System.Net;
 using UKHO.ERPFacade.API.FunctionalTests.Configuration;
 using UKHO.ERPFacade.API.FunctionalTests.Helpers;
 using UKHO.ERPFacade.API.FunctionalTests.Model;
+using UKHO.ERPFacade.Common.Constants;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Service
 {
@@ -12,8 +13,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
     {
         private readonly RestClient _client;
         private readonly AzureBlobStorageHelper _azureBlobStorageHelper;
-
-        private const string LicenceUpdatedRequestEndPoint = "/webhook/licenceupdatedpublishedeventreceived";
 
         public static string GeneratedCorrelationId = string.Empty;
 
@@ -26,7 +25,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
 
         public async Task<RestResponse> OptionLicenceUpdatedWebhookResponseAsync(string token)
         {
-            var request = new RestRequest(LicenceUpdatedRequestEndPoint, Method.Options);
+            var request = new RestRequest(Constants.LicenceUpdatedRequestEndPoint, Method.Options);
             request.AddHeader("Authorization", "Bearer " + token);
             RestResponse response = await _client.ExecuteAsync(request);
             return response;
@@ -44,7 +43,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             GeneratedCorrelationId = SapXmlHelper.GenerateRandomCorrelationId();
             requestBody = SapXmlHelper.UpdateTimeAndCorrIdField(requestBody, GeneratedCorrelationId);
 
-            var request = new RestRequest(LicenceUpdatedRequestEndPoint, Method.Post);
+            var request = new RestRequest(Constants.LicenceUpdatedRequestEndPoint, Method.Post);
             request.AddHeader("Content-Type", "application/json");
             request.AddHeader("Authorization", "Bearer " + token);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
@@ -70,7 +69,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
 
             if (scenarioName == "Bad Request")
             {
-                var request = new RestRequest(LicenceUpdatedRequestEndPoint, Method.Post);
+                var request = new RestRequest(Constants.LicenceUpdatedRequestEndPoint, Method.Post);
                 request.AddHeader("Content-Type", "application/json");
                 request.AddHeader("Authorization", "Bearer " + token);
                 request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
@@ -80,7 +79,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             }
             else if (scenarioName == "Unsupported Media Type")
             {
-                var request = new RestRequest(LicenceUpdatedRequestEndPoint, Method.Post);
+                var request = new RestRequest(Constants.LicenceUpdatedRequestEndPoint, Method.Post);
                 request.AddHeader("Content-Type", "application/xml");
                 request.AddHeader("Authorization", "Bearer " + token);
                 request.AddParameter("application/xml", requestBody, ParameterType.RequestBody);
@@ -104,7 +103,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             }
             GeneratedCorrelationId = SapXmlHelper.GenerateRandomCorrelationId();
             requestBody = SapXmlHelper.UpdateTimeAndCorrIdField(requestBody, GeneratedCorrelationId);
-            var request = new RestRequest(LicenceUpdatedRequestEndPoint, Method.Post);
+            var request = new RestRequest(Constants.LicenceUpdatedRequestEndPoint, Method.Post);
             request.AddHeader("Content-Type", "application/json");
             request.AddHeader("Authorization", "Bearer " + token);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);

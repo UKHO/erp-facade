@@ -20,8 +20,6 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
         private CleanUpService _fakeCleanUpService;
         private IOptions<ErpFacadeWebJobConfiguration> _fakeErpFacadeWebjobConfig;
 
-        private const string CompleteStatus = "Complete";
-
         [SetUp]
         public void Setup()
         {
