@@ -10,7 +10,7 @@ using UKHO.ERPFacade.Common.Logging;
 
 namespace UKHO.ERPFacade.Common.Infrastructure.EventService
 {
-    public class S100EventPublishService
+    public class S100EventPublishService : IS100EventPublishProvider
     {
         public const string EventServiceClientName = "S100Client";
         private const string CorrelationIdKey = "properties.CorrelationId";
