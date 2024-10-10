@@ -1,0 +1,125 @@
+{
+  "specversion": "1.0",
+  "type": "uk.gov.ukho.encpublishing.enccontentpublished.v2.2",
+  "source": "https://encpublishing.ukho.gov.uk",
+  "id": "7241b5a4-a828-4b11-911a-3914694d123b",
+  "time": "2024-09-17T07:56:32.3496106+00:00",
+  "subject": "GB50382B",
+  "datacontenttype": "application/json",
+  "data": {
+    "correlationId": "ft-8b25f4e8-d31c-4305-9cff-08dcc128489e",
+    "ukhoWeekNumber": {
+      "year": 2024,
+      "week": 31,
+      "currentWeekAlphaCorrection": false
+    },
+    "products": [
+      {
+        "dataSetName": "GB50382B.003",
+        "productName": "GB50382B",
+        "title": "Warkworth Harbour",
+        "scale": 12000,
+        "usageBand": 5,
+        "editionNumber": 6,
+        "updateNumber": 3,
+        "mayAffectHoldings": true,
+        "contentChange": true,
+        "permit": "ThisWillBeReplacedWithActualPermitFromKeyvault",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "size": "small",
+        "bundle": [
+          {
+            "bundleType": "DVD",
+            "location": "M1;B3"
+          }
+        ],
+        "status": {
+          "statusName": "Cancellation Update",
+          "statusDate": "2024-07-15",
+          "isNewCell": false
+        },
+        "replaces": [],
+        "replacedBy": [],
+        "additionalCoverage": [],
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 55.3600388,
+            "southLimit": 55.3050432,
+            "eastLimit": -1.5116288,
+            "westLimit": -1.6166183
+          },
+          "polygons": []
+        },
+        "inUnitsOfSale": [],
+        "s63": {
+          "name": "GB50382B.003",
+          "hash": "",
+          "fileSize": 0,
+          "compression": true,
+          "s57Crc": "D3821E07"
+        },
+        "signature": {
+          "name": "GBM0382B.003",
+          "hash": "",
+          "fileSize": 0
+        },
+        "ancillaryFiles": []
+      }
+    ],
+    "unitsOfSale": [
+      {
+        "unitName": "GB50382B",
+        "title": "Warkworth Harbour",
+        "unitOfSaleType": "unit",
+        "unitSize": "large",
+        "unitType": "AVCS Units Harbour",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "status": "NotForSale",
+        "isNewUnitOfSale": false,
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 55.3600388,
+            "southLimit": 55.3050432,
+            "eastLimit": -1.5116288,
+            "westLimit": -1.6166183
+          },
+          "polygons": []
+        },
+        "compositionChanges": {
+          "addProducts": [],
+          "removeProducts": [
+            "GB50382B"
+          ]
+        }
+      },
+      {
+        "unitName": "PAYSF",
+        "title": "World Folio",
+        "unitOfSaleType": "folio",
+        "unitSize": "large",
+        "unitType": "AVCS Folio Transit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "status": "ForSale",
+        "isNewUnitOfSale": false,
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 0,
+            "southLimit": 0,
+            "eastLimit": 0,
+            "westLimit": 0
+          },
+          "polygons": []
+        },
+        "compositionChanges": {
+          "addProducts": [],
+          "removeProducts": [
+            "GB50382B"
+          ]
+        }
+      }
+    ]
+  }
+}

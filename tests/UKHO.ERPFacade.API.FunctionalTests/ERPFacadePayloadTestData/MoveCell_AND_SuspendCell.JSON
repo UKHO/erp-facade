@@ -1,0 +1,286 @@
+{
+  "specversion": "1.0",
+  "type": "uk.gov.ukho.encpublishing.enccontentpublished.v2.2",
+  "source": "https://encpublishing.ukho.gov.uk",
+  "id": "e8169781-6694-4525-bdfe-5c8357644260",
+  "time": "2024-09-15T15:14:13.9851356+00:00",
+  "subject": "1U320200,1U422220",
+  "datacontenttype": "application/json",
+  "data": {
+    "correlationId": "ft-480f1d52-1f24-46f4-d36d-08dcd31236c8",
+    "ukhoWeekNumber": {
+      "year": 2024,
+      "week": 31,
+      "currentWeekAlphaCorrection": false
+    },
+    "products": [
+      {
+        "dataSetName": "1U320200.000",
+        "productName": "1U320200",
+        "title": "SOUTH CHINA SEA 20N 120E",
+        "scale": 180000,
+        "usageBand": 3,
+        "editionNumber": 2,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "contentChange": false,
+        "permit": "ThisWillBeReplacedWithActualPermitFromKeyvault",
+        "providerCode": "2",
+        "providerName": "PRIMAR",
+        "size": "large",
+        "bundle": [
+          {
+            "bundleType": "DVD",
+            "location": "M1;B2"
+          }
+        ],
+        "status": {
+          "statusName": "New Edition",
+          "statusDate": "2023-04-08",
+          "isNewCell": false
+        },
+        "replaces": [],
+        "replacedBy": [],
+        "additionalCoverage": [],
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 21,
+            "southLimit": 20,
+            "eastLimit": 121,
+            "westLimit": 120
+          },
+          "polygons": []
+        },
+        "inUnitsOfSale": [
+          "PAYSF",
+          "1U319230"
+        ],
+        "s63": {
+          "name": "1U320200.000",
+          "hash": "59ECC9B5B74F104BD215C178F497F6A6472FF83205ADCC97A53329DFCAE67576",
+          "fileSize": 83096,
+          "compression": true,
+          "s57Crc": "0BFBF8F2"
+        },
+        "signature": {
+          "name": "1UK20200.000",
+          "hash": "49C651BE74FCD2F12F8648F5B1160C39D6769DE0E9DA97D73D22EDF083D08EDA",
+          "fileSize": 874
+        },
+        "ancillaryFiles": []
+      },
+      {
+        "dataSetName": "1U422220.000",
+        "productName": "1U422220",
+        "title": "WATERS EASTWARD OF LANYU",
+        "scale": 45000,
+        "usageBand": 4,
+        "editionNumber": 2,
+        "updateNumber": 0,
+        "mayAffectHoldings": false,
+        "contentChange": false,
+        "permit": "ThisWillBeReplacedWithActualPermitFromKeyvault",
+        "providerCode": "2",
+        "providerName": "PRIMAR",
+        "size": "large",
+        "bundle": [
+          {
+            "bundleType": "DVD",
+            "location": "M1;B2"
+          }
+        ],
+        "status": {
+          "statusName": "Suspended",
+          "statusDate": "2024-09-15",
+          "isNewCell": false
+        },
+        "replaces": [],
+        "replacedBy": [],
+        "additionalCoverage": [],
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 22.5,
+            "southLimit": 22,
+            "eastLimit": 122.5,
+            "westLimit": 122
+          },
+          "polygons": []
+        },
+        "inUnitsOfSale": [
+          "1U422220",
+          "PAYSF"
+        ],
+        "s63": {
+          "name": "1U422220.000",
+          "hash": "EC1CCB8B60E700DCD01EB64381041ED5AE6EA7BB7BB43412A06CE7C5E11DFBDE",
+          "fileSize": 24464,
+          "compression": true,
+          "s57Crc": "D1DAE0F9"
+        },
+        "signature": {
+          "name": "1UL22220.000",
+          "hash": "5A1FACDA6749F4702ED8E781269E7767D83F9DEFBD367DBD9CFD697DEED1EE7C",
+          "fileSize": 874
+        },
+        "ancillaryFiles": []
+      },
+      {
+        "dataSetName": "1U422220.001",
+        "productName": "1U422220",
+        "title": "WATERS EASTWARD OF LANYU",
+        "scale": 45000,
+        "usageBand": 4,
+        "editionNumber": 2,
+        "updateNumber": 1,
+        "mayAffectHoldings": false,
+        "contentChange": false,
+        "permit": "ThisWillBeReplacedWithActualPermitFromKeyvault",
+        "providerCode": "2",
+        "providerName": "PRIMAR",
+        "size": "large",
+        "bundle": [
+          {
+            "bundleType": "DVD",
+            "location": "M1;B2"
+          }
+        ],
+        "status": {
+          "statusName": "Suspended",
+          "statusDate": "2024-09-15",
+          "isNewCell": false
+        },
+        "replaces": [],
+        "replacedBy": [],
+        "additionalCoverage": [],
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 22.5,
+            "southLimit": 22,
+            "eastLimit": 122.5,
+            "westLimit": 122
+          },
+          "polygons": []
+        },
+        "inUnitsOfSale": [
+          "1U422220",
+          "PAYSF"
+        ],
+        "s63": {
+          "name": "1U422220.001",
+          "hash": "5B47E3E84BADA31DB935F30C0368B62C07C6238CDB9E9FA35DAA93A4C0C02502",
+          "fileSize": 1592,
+          "compression": true,
+          "s57Crc": "0074B3C0"
+        },
+        "signature": {
+          "name": "1UL22220.001",
+          "hash": "51C62DA431BAACA9F86725CFD333F38025BF54E629AA6D0A8BFBE4B16F94B2EF",
+          "fileSize": 874
+        },
+        "ancillaryFiles": []
+      }
+    ],
+    "unitsOfSale": [
+      {
+        "unitName": "1U319230",
+        "title": "PENGHU ISLANDS AND PASSAGES",
+        "unitOfSaleType": "unit",
+        "unitSize": "large",
+        "unitType": "AVCS Units Coastal",
+        "providerCode": "2",
+        "providerName": "PRIMAR",
+        "status": "ForSale",
+        "isNewUnitOfSale": false,
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 24,
+            "southLimit": 23,
+            "eastLimit": 120,
+            "westLimit": 119
+          },
+          "polygons": []
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "1U320200"
+          ],
+          "removeProducts": []
+        }
+      },
+      {
+        "unitName": "1U320200",
+        "title": "SOUTH CHINA SEA 20N 120E",
+        "unitOfSaleType": "unit",
+        "unitSize": "large",
+        "unitType": "AVCS Units Coastal",
+        "providerCode": "2",
+        "providerName": "PRIMAR",
+        "status": "ForSale",
+        "isNewUnitOfSale": false,
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 21,
+            "southLimit": 20,
+            "eastLimit": 121,
+            "westLimit": 120
+          },
+          "polygons": []
+        },
+        "compositionChanges": {
+          "addProducts": [],
+          "removeProducts": [
+            "1U320200"
+          ]
+        }
+      },
+      {
+        "unitName": "1U422220",
+        "title": "WATERS EASTWARD OF LANYU",
+        "unitOfSaleType": "unit",
+        "unitSize": "large",
+        "unitType": "AVCS Units Approach",
+        "providerCode": "2",
+        "providerName": "PRIMAR",
+        "status": "ForSale",
+        "isNewUnitOfSale": false,
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 22.5,
+            "southLimit": 22,
+            "eastLimit": 122.5,
+            "westLimit": 122
+          },
+          "polygons": []
+        },
+        "compositionChanges": {
+          "addProducts": [],
+          "removeProducts": []
+        }
+      },
+      {
+        "unitName": "PAYSF",
+        "title": "World Folio",
+        "unitOfSaleType": "folio",
+        "unitSize": "large",
+        "unitType": "AVCS Folio Transit",
+        "providerCode": "2",
+        "providerName": "PRIMAR",
+        "status": "ForSale",
+        "isNewUnitOfSale": false,
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 0,
+            "southLimit": 0,
+            "eastLimit": 0,
+            "westLimit": 0
+          },
+          "polygons": []
+        },
+        "compositionChanges": {
+          "addProducts": [],
+          "removeProducts": []
+        }
+      }
+    ]
+  }
+}

@@ -14,10 +14,10 @@ namespace UKHO.ERPFacade.Common.IO.Azure
     public class AzureTableReaderWriter : IAzureTableReaderWriter
     {
         private readonly ILogger<AzureTableReaderWriter> _logger;
-        private readonly IOptions<AzureStorageConfiguration> _azureStorageConfig;               
-        private const string ErpFacadeTableName = "encevents";        
+        private readonly IOptions<AzureStorageConfiguration> _azureStorageConfig;
+        private const string ErpFacadeTableName = "encevents";
         private const string LicenceUpdateTableName = "licenceupdatedevents";
-        private const string RecordOfSaleTableName = "recordofsaleevents";        
+        private const string RecordOfSaleTableName = "recordofsaleevents";
 
         private enum Statuses
         {
@@ -30,7 +30,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
                                         IOptions<ErpFacadeWebJobConfiguration> erpFacadeWebjobConfig)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _azureStorageConfig = azureStorageConfig ?? throw new ArgumentNullException(nameof(azureStorageConfig));           
+            _azureStorageConfig = azureStorageConfig ?? throw new ArgumentNullException(nameof(azureStorageConfig));
         }
 
         public async Task UpsertEntity(string correlationId)
@@ -47,22 +47,22 @@ namespace UKHO.ERPFacade.Common.IO.Azure
                     PartitionKey = Guid.NewGuid().ToString(),
                     Timestamp = DateTime.UtcNow,
                     CorrelationId = correlationId,
-                    RequestDateTime = null                    
+                    RequestDateTime = null
                 };
 
                 await tableClient.AddEntityAsync(eESEvent, CancellationToken.None);
 
-                _logger.LogInformation(EventIds.AddedEncContentPublishedEventInAzureTable.ToEventId(), "ENC content published event is added in azure table successfully.");
+                _logger.LogInformation(EventIds.AddedEntryForEncContentPublishedEventInAzureTable.ToEventId(), "New enccontentpublished event entry is added in azure table successfully.");
             }
             else
             {
-                _logger.LogWarning(EventIds.ReceivedDuplicateEncContentPublishedEvent.ToEventId(), "Duplicate ENC content published event received.");
+                _logger.LogWarning(EventIds.ReceivedDuplicateEncContentPublishedEvent.ToEventId(), "Duplicate enccontentpublished event received.");
 
                 existingEntity.Timestamp = DateTime.UtcNow;
 
                 await tableClient.UpdateEntityAsync(existingEntity, ETag.All, TableUpdateMode.Replace);
 
-                _logger.LogInformation(EventIds.UpdatedEncContentPublishedEventInAzureTable.ToEventId(), "Existing ENC content published event is updated in azure table successfully.");
+                _logger.LogInformation(EventIds.UpdatedEncContentPublishedEventInAzureTable.ToEventId(), "Existing enccontentpublished event entry is updated in azure table successfully.");
             }
         }
 
@@ -110,7 +110,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             }
             return records.FirstOrDefault();
         }
- 
+
         public async Task UpdateRequestTimeEntity(string correlationId)
         {
             TableClient tableClient = GetTableClient(ErpFacadeTableName);
@@ -119,9 +119,9 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             {
                 existingEntity.RequestDateTime = DateTime.UtcNow;
                 await tableClient.UpdateEntityAsync(existingEntity, ETag.All, TableUpdateMode.Replace);
-                _logger.LogInformation(EventIds.UpdateRequestTimeEntitySuccessful.ToEventId(), "RequestDateTime is updated in azure table successfully.");
+                _logger.LogInformation(EventIds.UpdateRequestTimeEntitySuccessful.ToEventId(), "SAP request time for {CorrelationId} is updated in azure table successfully.", correlationId);
             }
-        }       
+        }
 
         public IList<EESEventEntity> GetAllEntityForEESTable()
         {
@@ -214,7 +214,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             {
                 existingEntity.Status = Statuses.Complete.ToString();
                 await tableClient.UpdateEntityAsync(existingEntity, ETag.All, TableUpdateMode.Replace);
-                
+
                 _logger.LogInformation(EventIds.UpdatedStatusOfLicenceUpdatedPublishedEventInAzureTable.ToEventId(), "Status of existing licence updated published event updated in azure table successfully.");
             }
         }
@@ -226,7 +226,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             TableClient tableClient = GetTableClient(RecordOfSaleTableName);
 
             var entities = tableClient.Query<RecordOfSaleEventEntity>(filter: TableClient.CreateQueryFilter($"CorrelationId eq {correlationId}"), maxPerPage: 1);
- 
+
             foreach (var entity in entities)
             {
                 status = entity.Status;

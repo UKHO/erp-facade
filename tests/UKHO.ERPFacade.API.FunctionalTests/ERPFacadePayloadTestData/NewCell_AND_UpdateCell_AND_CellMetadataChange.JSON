@@ -1,0 +1,307 @@
+{
+  "specversion": "1.0",
+  "type": "uk.gov.ukho.encpublishing.enccontentpublished.v2.2",
+  "source": "https://encpublishing.ukho.gov.uk",
+  "id": "3cd90e2d-9b62-4ce6-b741-2554e1cf957d",
+  "time": "2024-09-16T09:17:27.7563358+00:00",
+  "subject": "1U318200,BR400304,GB4DEWRB",
+  "datacontenttype": "application/json",
+  "data": {
+    "correlationId": "ft-da3fad32-b60a-4de6-6679-08dcd62fd4ae",
+    "ukhoWeekNumber": {
+      "year": 2024,
+      "week": 31,
+      "currentWeekAlphaCorrection": false
+    },
+    "products": [
+      {
+        "dataSetName": "1U318200.000",
+        "productName": "1U318200",
+        "title": "SOUTH CHINA SEA 20N 118E",
+        "scale": 180000,
+        "usageBand": 3,
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "contentChange": false,
+        "permit": "ThisWillBeReplacedWithActualPermitFromKeyvault",
+        "providerCode": "2",
+        "providerName": "PRIMAR",
+        "size": "medium",
+        "bundle": [
+          {
+            "bundleType": "DVD",
+            "location": "M1;B2"
+          }
+        ],
+        "status": {
+          "statusName": "New Edition",
+          "statusDate": "2021-09-23",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "replacedBy": [],
+        "additionalCoverage": [],
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 21,
+            "southLimit": 20,
+            "eastLimit": 119,
+            "westLimit": 118
+          },
+          "polygons": []
+        },
+        "inUnitsOfSale": [
+          "1U318200",
+          "PAYSF"
+        ],
+        "s63": {
+          "name": "1U318200.000",
+          "hash": "353C8AF05F6545ED3854481B38A859A451C83CFB186703F82EF0B0B7FF95EF61",
+          "fileSize": 19672,
+          "compression": true,
+          "s57Crc": "7F64CA4B"
+        },
+        "signature": {
+          "name": "1UK18200.000",
+          "hash": "8AB9C8D058E867CE958EA06DEF80956294B27E5BF48B517312908194041DE321",
+          "fileSize": 874
+        },
+        "ancillaryFiles": []
+      },
+      {
+        "dataSetName": "BR400304.000",
+        "productName": "BR400304",
+        "title": "De Mosqueiro a Vila do Conde",
+        "scale": 45000,
+        "usageBand": 4,
+        "editionNumber": 14,
+        "updateNumber": 0,
+        "mayAffectHoldings": false,
+        "contentChange": true,
+        "permit": "ThisWillBeReplacedWithActualPermitFromKeyvault",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "size": "large",
+        "bundle": [
+          {
+            "bundleType": "DVD",
+            "location": "M2;B8"
+          }
+        ],
+        "status": {
+          "statusName": "New Edition",
+          "statusDate": "2024-07-09",
+          "isNewCell": false
+        },
+        "replaces": [],
+        "replacedBy": [],
+        "additionalCoverage": [],
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": -1,
+            "southLimit": -1.8333333,
+            "eastLimit": -48.4166667,
+            "westLimit": -49.0166667
+          },
+          "polygons": []
+        },
+        "inUnitsOfSale": [
+          "BR400304",
+          "PAYSF"
+        ],
+        "s63": {
+          "name": "BR400304.000",
+          "hash": "",
+          "fileSize": 0,
+          "compression": true,
+          "s57Crc": "2C842B6D"
+        },
+        "signature": {
+          "name": "BRL00304.000",
+          "hash": "",
+          "fileSize": 0
+        },
+        "ancillaryFiles": []
+      },
+      {
+        "dataSetName": "GB4DEWRB.000",
+        "productName": "GB4DEWRB",
+        "title": "Blyth",
+        "scale": 22000,
+        "usageBand": 4,
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "contentChange": true,
+        "permit": "ThisWillBeReplacedWithActualPermitFromKeyvault",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "size": "medium",
+        "bundle": [
+          {
+            "bundleType": "DVD",
+            "location": "M1;B3"
+          }
+        ],
+        "status": {
+          "statusName": "New Edition",
+          "statusDate": "2024-06-25",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "replacedBy": [],
+        "additionalCoverage": [],
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 55.2,
+            "southLimit": 55.1,
+            "eastLimit": -1.4,
+            "westLimit": -1.6
+          },
+          "polygons": []
+        },
+        "inUnitsOfSale": [
+          "PAYSF",
+          "GB4DEWRB"
+        ],
+        "s63": {
+          "name": "GB4DEWRB.000",
+          "hash": "",
+          "fileSize": 0,
+          "compression": true,
+          "s57Crc": "8E514740"
+        },
+        "signature": {
+          "name": "GBLDEWRB.000",
+          "hash": "",
+          "fileSize": 0
+        },
+        "ancillaryFiles": [
+          {
+            "name": "GBC8XXXX.TXT",
+            "hash": "B9F8D94A0D29EA8C3900888A1DF074C52E54283EB5F426F41F23775A95336A83",
+            "fileSize": 316
+          },
+          {
+            "name": "GBG1DXXX.TXT",
+            "hash": "0DD997E018EBBC272E8965DC8265DAF51A78B83AEB8EF400C6E09381128EE4AA",
+            "fileSize": 376
+          },
+          {
+            "name": "GBZ1CXXX.TXT",
+            "hash": "08BFF1A5943B0F6D7E76357AEF42465A890FA75DB1ECEBC6029C56F20824BB66",
+            "fileSize": 183
+          },
+          {
+            "name": "GB1B0008.TXT",
+            "hash": "010FE195151EBBFD38967A4D2A3A421B9BF38D8C6A8C4454EAAF2EFADAE9D912",
+            "fileSize": 194
+          }
+        ]
+      }
+    ],
+    "unitsOfSale": [
+      {
+        "unitName": "1U318200",
+        "title": "SOUTH CHINA SEA 20N 118E",
+        "unitOfSaleType": "unit",
+        "unitSize": "large",
+        "unitType": "AVCS Units Coastal",
+        "providerCode": "2",
+        "providerName": "PRIMAR",
+        "status": "ForSale",
+        "isNewUnitOfSale": false,
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 21,
+            "southLimit": 20,
+            "eastLimit": 119,
+            "westLimit": 118
+          },
+          "polygons": []
+        },
+        "compositionChanges": {
+          "addProducts": [],
+          "removeProducts": []
+        }
+      },
+      {
+        "unitName": "BR400304",
+        "title": "De Mosqueiro a Abaetuba",
+        "unitOfSaleType": "unit",
+        "unitSize": "large",
+        "unitType": "AVCS Units Approach",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "status": "ForSale",
+        "isNewUnitOfSale": false,
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": -1,
+            "southLimit": -1.8333333,
+            "eastLimit": -48.4166667,
+            "westLimit": -49.0166667
+          },
+          "polygons": []
+        },
+        "compositionChanges": {
+          "addProducts": [],
+          "removeProducts": []
+        }
+      },
+      {
+        "unitName": "GB4DEWRB",
+        "title": "Blyth",
+        "unitOfSaleType": "unit",
+        "unitSize": "medium",
+        "unitType": "AVCS Units Approach",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 55.2,
+            "southLimit": 55.1,
+            "eastLimit": -1.4,
+            "westLimit": -1.6
+          },
+          "polygons": []
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "GB4DEWRB"
+          ],
+          "removeProducts": []
+        }
+      },
+      {
+        "unitName": "PAYSF",
+        "title": "World Folio",
+        "unitOfSaleType": "folio",
+        "unitSize": "large",
+        "unitType": "AVCS Folio Transit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "status": "ForSale",
+        "isNewUnitOfSale": false,
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 0,
+            "southLimit": 0,
+            "eastLimit": 0,
+            "westLimit": 0
+          },
+          "polygons": []
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "GB4DEWRB"
+          ],
+          "removeProducts": []
+        }
+      }
+    ]
+  }
+}
