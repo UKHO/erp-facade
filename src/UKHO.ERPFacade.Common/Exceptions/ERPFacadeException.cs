@@ -8,10 +8,13 @@ namespace UKHO.ERPFacade.Common.Exceptions
     public class ERPFacadeException : Exception
     {
         public EventId EventId { get; set; }
+        public object[] MessageArguments { get; set; }
 
-        public ERPFacadeException(EventId eventId) : base()
+        public ERPFacadeException(EventId eventId, string message, params object[] messageArguments) : base(message)
         {
             EventId = eventId;
+            MessageArguments = messageArguments ?? [];
         }
     }
 }
+

@@ -1,0 +1,334 @@
+{
+    "specversion": "1.0",
+    "type": "uk.gov.ukho.encpublishing.enccontentpublished.v2.2",
+    "source": "https://encpublishing.ukho.gov.uk",
+    "id": "2e7a5a1c-f86d-4ec9-8623-a885b6d40c3a",
+    "time": "2024-09-13T09:56:57.4064515+00:00",
+    "subject": "US5NY28M,US5NY6HU,US5NY6HV",
+    "datacontenttype": "application/json",
+    "data": {
+        "correlationId": "21e3517a-ff12-4f82-9d05-08dcc128489e",
+        "ukhoWeekNumber": {
+            "year": 2024,
+            "week": 31,
+            "currentWeekAlphaCorrection": false
+        },
+        "products": [
+            {
+                "dataSetName": "US5NY28M.002",
+                "productName": "US5NY28M",
+                "title": "Oswego Harbor",
+                "scale": 10000,
+                "usageBand": 5,
+                "editionNumber": 16,
+                "updateNumber": 2,
+                "mayAffectHoldings": true,
+                "contentChange": true,
+                "permit": "permitString",
+                "providerCode": "1",
+                "providerName": "ICE",
+                "size": "",
+                "bundle": [
+                    {
+                        "bundleType": "DVD",
+                        "location": "M1;B5"
+                    }
+                ],
+                "status": {
+                    "statusName": "Cancellation Update",
+                    "statusDate": "2024-07-07",
+                    "isNewCell": false
+                },
+                "replaces": [],
+                "replacedBy": [
+                    "US5NY6HU",
+                    "US5NY6HV"
+                ],
+                "additionalCoverage": [],
+                "geographicLimit": {
+                    "boundingBox": {
+                        "northLimit": 43.4970538,
+                        "southLimit": 43.4299118,
+                        "eastLimit": -76.4792537,
+                        "westLimit": -76.5562608
+                    },
+                    "polygons": []
+                },
+                "inUnitsOfSale": [],
+                "s63": {
+                    "name": "US5NY28M.002",
+                    "hash": "",
+                    "fileSize": 0,
+                    "compression": true,
+                    "s57Crc": "E6F9DCCE"
+                },
+                "signature": {
+                    "name": "USMNY28M.002",
+                    "hash": "",
+                    "fileSize": 0
+                },
+                "ancillaryFiles": []
+            },
+            {
+                "dataSetName": "US5NY6HU.000",
+                "productName": "US5NY6HU",
+                "title": "Lake Ontario - Oswego Harbor NY",
+                "scale": 12000,
+                "usageBand": 5,
+                "editionNumber": 2,
+                "updateNumber": 0,
+                "mayAffectHoldings": true,
+                "contentChange": true,
+                "permit": "GB1234562024121826A12EE4B22227AF778FAEB926CDFD86F0465D3FDFA7B612",
+                "providerCode": "1",
+                "providerName": "ICE",
+                "size": "medium",
+                "bundle": [
+                    {
+                        "bundleType": "DVD",
+                        "location": "M1;B5"
+                    }
+                ],
+                "status": {
+                    "statusName": "New Edition",
+                    "statusDate": "2024-07-15",
+                    "isNewCell": true
+                },
+                "replaces": [
+                    "US5NY28M"
+                ],
+                "replacedBy": [],
+                "additionalCoverage": [],
+                "geographicLimit": {
+                    "boundingBox": {
+                        "northLimit": 43.5,
+                        "southLimit": 43.425,
+                        "eastLimit": -76.5,
+                        "westLimit": -76.575
+                    },
+                    "polygons": []
+                },
+                "inUnitsOfSale": [
+                    "PAYSF",
+                    "US5NY6HU"
+                ],
+                "s63": {
+                    "name": "US5NY6HU.000",
+                    "hash": "",
+                    "fileSize": 0,
+                    "compression": true,
+                    "s57Crc": "F7069025"
+                },
+                "signature": {
+                    "name": "USMNY6HU.000",
+                    "hash": "",
+                    "fileSize": 0
+                },
+                "ancillaryFiles": [
+                    {
+                        "name": "US386HUD.TXT",
+                        "hash": "58BB9B3E80832BFFBB86B8BF2513BF3755B847BDEA0AF3332BE445FE864E9835",
+                        "fileSize": 293
+                    },
+                    {
+                        "name": "US386HUA.TXT",
+                        "hash": "01D5B3B4408AEC496FD57FD3286CF7B95AC6A035B081671DFD1D02BADA526548",
+                        "fileSize": 5267
+                    },
+                    {
+                        "name": "US386HUC.TXT",
+                        "hash": "A70F53C099FC942C4CE2240CEB5BE6FBCDCFD6098AA4673DC9E55FB024822AEB",
+                        "fileSize": 329
+                    },
+                    {
+                        "name": "US386HUB.TXT",
+                        "hash": "1E8A7357C00BCA2BD384B678BD6B7392150FFD471A220B836BCD0446E64DCBC5",
+                        "fileSize": 838
+                    }
+                ]
+            },
+            {
+                "dataSetName": "US5NY6HV.000",
+                "productName": "US5NY6HV",
+                "title": "Lake Ontario - Oswego NY",
+                "scale": 12000,
+                "usageBand": 5,
+                "editionNumber": 2,
+                "updateNumber": 0,
+                "mayAffectHoldings": true,
+                "contentChange": true,
+                "permit": "GB1234562024121826A12EE4B22227AF778FAEB926CDFD86F0465D3FDFA7B612",
+                "providerCode": "1",
+                "providerName": "ICE",
+                "size": "medium",
+                "bundle": [
+                    {
+                        "bundleType": "DVD",
+                        "location": "M1;B5"
+                    }
+                ],
+                "status": {
+                    "statusName": "New Edition",
+                    "statusDate": "2024-07-15",
+                    "isNewCell": true
+                },
+                "replaces": [
+                    "US5NY28M"
+                ],
+                "replacedBy": [],
+                "additionalCoverage": [],
+                "geographicLimit": {
+                    "boundingBox": {
+                        "northLimit": 43.5,
+                        "southLimit": 43.425,
+                        "eastLimit": -76.425,
+                        "westLimit": -76.5
+                    },
+                    "polygons": []
+                },
+                "inUnitsOfSale": [
+                    "PAYSF",
+                    "US5NY6HV"
+                ],
+                "s63": {
+                    "name": "US5NY6HV.000",
+                    "hash": "",
+                    "fileSize": 0,
+                    "compression": true,
+                    "s57Crc": "FF05E6A0"
+                },
+                "signature": {
+                    "name": "USMNY6HV.000",
+                    "hash": "",
+                    "fileSize": 0
+                },
+                "ancillaryFiles": [
+                    {
+                        "name": "US386HVA.TXT",
+                        "hash": "FF434E362FF07B5EF7A2296DE77197453C5CBF6851A66DCBB4E255F574E9D235",
+                        "fileSize": 4701
+                    },
+                    {
+                        "name": "US386HVC.TXT",
+                        "hash": "58BB9B3E80832BFFBB86B8BF2513BF3755B847BDEA0AF3332BE445FE864E9835",
+                        "fileSize": 293
+                    },
+                    {
+                        "name": "US386HVB.TXT",
+                        "hash": "1E8A7357C00BCA2BD384B678BD6B7392150FFD471A220B836BCD0446E64DCBC5",
+                        "fileSize": 838
+                    }
+                ]
+            }
+        ],
+        "unitsOfSale": [
+            {
+                "unitName": "US5NY28M",
+                "title": "Oswego Harbor",
+                "unitOfSaleType": "folio",
+                "unitSize": "large",
+                "unitType": "AVCS Units Harbour",
+                "providerCode": "1",
+                "providerName": "ICE",
+                "status": "NotForSale",
+                "isNewUnitOfSale": false,
+                "geographicLimit": {
+                    "boundingBox": {
+                        "northLimit": 43.4970538,
+                        "southLimit": 43.4299118,
+                        "eastLimit": -76.4792537,
+                        "westLimit": -76.5562608
+                    },
+                    "polygons": []
+                },
+                "compositionChanges": {
+                    "addProducts": [],
+                    "removeProducts": [
+                        "US5NY28M"
+                    ]
+                }
+            },
+            {
+                "unitName": "US5NY6HU",
+                "title": "Lake Ontario - Oswego Harbor NY",
+                "unitOfSaleType": "unit",
+                "unitSize": "medium",
+                "unitType": "AVCS Units Harbour",
+                "providerCode": "1",
+                "providerName": "ICE",
+                "status": "ForSale",
+                "isNewUnitOfSale": true,
+                "geographicLimit": {
+                    "boundingBox": {
+                        "northLimit": 43.5,
+                        "southLimit": 43.425,
+                        "eastLimit": -76.5,
+                        "westLimit": -76.575
+                    },
+                    "polygons": []
+                },
+                "compositionChanges": {
+                    "addProducts": [
+                        "US5NY6HU"
+                    ],
+                    "removeProducts": []
+                }
+            },
+            {
+                "unitName": "US5NY6HV",
+                "title": "Lake Ontario - Oswego NY",
+                "unitOfSaleType": "unit",
+                "unitSize": "medium",
+                "unitType": "AVCS Units Harbour",
+                "providerCode": "1",
+                "providerName": "ICE",
+                "status": "NotForSale",
+                "isNewUnitOfSale": true,
+                "geographicLimit": {
+                    "boundingBox": {
+                        "northLimit": 43.5,
+                        "southLimit": 43.425,
+                        "eastLimit": -76.425,
+                        "westLimit": -76.5
+                    },
+                    "polygons": []
+                },
+                "compositionChanges": {
+                    "addProducts": [
+                        "US5NY6HV"
+                    ],
+                    "removeProducts": []
+                }
+            },
+            {
+                "unitName": "PAYSF",
+                "title": "World Folio",
+                "unitOfSaleType": "folio",
+                "unitSize": "large",
+                "unitType": "AVCS Folio Transit",
+                "providerCode": "1",
+                "providerName": "ICE",
+                "status": "ForSale",
+                "isNewUnitOfSale": false,
+                "geographicLimit": {
+                    "boundingBox": {
+                        "northLimit": 0,
+                        "southLimit": 0,
+                        "eastLimit": 0,
+                        "westLimit": 0
+                    },
+                    "polygons": []
+                },
+                "compositionChanges": {
+                    "addProducts": [
+                        "US5NY6HU",
+                        "US5NY6HV"
+                    ],
+                    "removeProducts": [
+                        "US5NY28M"
+                    ]
+                }
+            }
+        ]
+    }
+}
