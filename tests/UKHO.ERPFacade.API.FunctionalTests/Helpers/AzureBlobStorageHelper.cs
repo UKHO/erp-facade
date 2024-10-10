@@ -6,24 +6,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
     public class AzureBlobStorageHelper
     {
-        public string DownloadGeneratedXml(string expectedXmLfilePath, string blobContainer)
-        {
-            BlobServiceClient blobServiceClient = new(Config.TestConfig.AzureStorageConfiguration.ConnectionString);
-            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(blobContainer);
-            BlobClient blobClient = containerClient.GetBlobClient("SapXmlPayload.xml");
-            try
-            {
-                BlobDownloadInfo blobDownload = blobClient.Download();
-                using FileStream downloadFileStream = new((expectedXmLfilePath + "\\" + blobContainer + ".xml"), FileMode.Create);
-                blobDownload.Content.CopyTo(downloadFileStream);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(blobContainer + " " + ex.Message);
-            }
-            return (expectedXmLfilePath + "\\" + blobContainer + ".xml");
-        }
-
         public bool VerifyBlobExists(string parentContainerName, string subContainerName)
         {
             BlobServiceClient blobServiceClient = new BlobServiceClient(Config.TestConfig.AzureStorageConfiguration.ConnectionString);
