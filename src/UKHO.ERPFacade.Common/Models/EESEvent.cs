@@ -6,9 +6,6 @@ namespace UKHO.ERPFacade.Common.Models
     [ExcludeFromCodeCoverage]
     public class Product
     {
-        [JsonProperty("productType")]
-        public string ProductType { get; set; }
-
         [JsonProperty("dataSetName")]
         public string DataSetName { get; set; }
 
@@ -25,10 +22,10 @@ namespace UKHO.ERPFacade.Common.Models
         public int UsageBand { get; set; }
 
         [JsonProperty("editionNumber")]
-        public int EditionNumber { get; set; }
+        public int? EditionNumber { get; set; }
 
         [JsonProperty("updateNumber")]
-        public int UpdateNumber { get; set; }
+        public int? UpdateNumber { get; set; }
 
         [JsonProperty("mayAffectHoldings")]
         public bool MayAffectHoldings { get; set; }
@@ -47,9 +44,6 @@ namespace UKHO.ERPFacade.Common.Models
 
         [JsonProperty("size")]
         public string Size { get; set; }
-
-        [JsonProperty("agency")]
-        public string Agency { get; set; }
 
         [JsonProperty("bundle")]
         public List<Bundle> Bundle { get; set; }
@@ -111,6 +105,12 @@ namespace UKHO.ERPFacade.Common.Models
 
         [JsonProperty("compositionChanges")]
         public CompositionChanges CompositionChanges { get; set; }
+
+        [JsonProperty("providerCode")]
+        public string ProviderCode { get; set; }
+
+        [JsonProperty("providerName")]
+        public string ProviderName { get; set; }
     }
 
     [ExcludeFromCodeCoverage]
@@ -168,11 +168,8 @@ namespace UKHO.ERPFacade.Common.Models
         [JsonProperty("hash")]
         public string Hash { get; set; }
 
-        [JsonProperty("location")]
-        public string Location { get; set; }
-
         [JsonProperty("fileSize")]
-        public string FileSize { get; set; }
+        public int FileSize { get; set; }
 
         [JsonProperty("compression")]
         public bool Compression { get; set; }
@@ -190,11 +187,8 @@ namespace UKHO.ERPFacade.Common.Models
         [JsonProperty("hash")]
         public string Hash { get; set; }
 
-        [JsonProperty("location")]
-        public string Location { get; set; }
-
         [JsonProperty("fileSize")]
-        public string FileSize { get; set; }
+        public int FileSize { get; set; }
     }
 
     [ExcludeFromCodeCoverage]
@@ -206,11 +200,8 @@ namespace UKHO.ERPFacade.Common.Models
         [JsonProperty("hash")]
         public string Hash { get; set; }
 
-        [JsonProperty("location")]
-        public string Location { get; set; }
-
         [JsonProperty("fileSize")]
-        public string FileSize { get; set; }
+        public int FileSize { get; set; }
     }
 
     [ExcludeFromCodeCoverage]
