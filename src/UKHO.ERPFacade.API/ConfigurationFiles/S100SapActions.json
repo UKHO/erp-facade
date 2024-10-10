@@ -98,7 +98,7 @@
                 ],
                 "Attributes": [
                     {
-                        "IsRequired": true,
+                        "IsRequired": false,
                         "Section": "Product",
                         "JsonPropertyName": "ProductIdentifier",
                         "XmlNodeName": "PRODTYPE",
@@ -126,14 +126,14 @@
                         "SortingOrder": 4
                     },
                     {
-                        "IsRequired": true,
+                        "IsRequired": false,
                         "Section": "UnitOfSale",
                         "JsonPropertyName": "ProducingAgency",
                         "XmlNodeName": "AGENCY",
                         "SortingOrder": 5
                     },
                     {
-                        "IsRequired": true,
+                        "IsRequired": false,
                         "Section": "UnitOfSale",
                         "JsonPropertyName": "ProviderCode",
                         "XmlNodeName": "PROVIDER",
@@ -162,14 +162,14 @@
                 "Rules": [],
                 "Attributes": [
                     {
-                        "IsRequired": true,
+                        "IsRequired": false,
                         "Section": "Product",
                         "JsonPropertyName": "ProductIdentifier",
                         "XmlNodeName": "PRODTYPE",
                         "SortingOrder": 1
                     },
                     {
-                        "IsRequired": true,
+                        "IsRequired": false,
                         "Section": "UnitOfSale",
                         "JsonPropertyName": "",
                         "XmlNodeName": "CHILDCELL",
@@ -398,7 +398,7 @@
                 ],
                 "Attributes": [
                     {
-                        "IsRequired": true,
+                        "IsRequired": false,
                         "Section": "Product",
                         "JsonPropertyName": "ProductIdentifier",
                         "XmlNodeName": "PRODTYPE",
@@ -426,14 +426,14 @@
                         "SortingOrder": 4
                     },
                     {
-                        "IsRequired": true,
+                        "IsRequired": false,
                         "Section": "UnitOfSale",
                         "JsonPropertyName": "ProducingAgency",
                         "XmlNodeName": "AGENCY",
                         "SortingOrder": 5
                     },
                     {
-                        "IsRequired": true,
+                        "IsRequired": false,
                         "Section": "UnitOfSale",
                         "JsonPropertyName": "ProviderCode",
                         "XmlNodeName": "PROVIDER",
@@ -462,14 +462,14 @@
                 "Rules": [],
                 "Attributes": [
                     {
-                        "IsRequired": true,
+                        "IsRequired": false,
                         "Section": "Product",
                         "JsonPropertyName": "ProductIdentifier",
                         "XmlNodeName": "PRODTYPE",
                         "SortingOrder": 1
                     },
                     {
-                        "IsRequired": true,
+                        "IsRequired": false,
                         "Section": "UnitOfSale",
                         "JsonPropertyName": "",
                         "XmlNodeName": "CHILDCELL",
@@ -600,7 +600,7 @@
             },
             {
                 "ActionNumber": 9,
-                "Action": "CHANGE SHOP UNIT OF SALE",
+                "Action": "CANCEL SHOP UNIT OF SALE",
                 "Product": "SHOP UNIT",
                 "Rules": [
                     {
@@ -609,13 +609,13 @@
                                 "AttributeDataType": "string",
                                 "AttributeName": "Status",
                                 "AttributeValue": "NotForSale"
-                            }
+                            } 
                         ]
                     }
                 ],
                 "Attributes": [
                     {
-                        "IsRequired": true,
+                        "IsRequired": false,
                         "Section": "Product",
                         "JsonPropertyName": "ProductIdentifier",
                         "XmlNodeName": "PRODTYPE",
