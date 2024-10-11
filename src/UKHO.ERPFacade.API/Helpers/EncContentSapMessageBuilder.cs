@@ -285,7 +285,7 @@ namespace UKHO.ERPFacade.API.Helpers
             DecryptedPermit decryptedPermit = null;
 
             // Create main item node
-            var itemNode = soapXml.CreateElement(nameof(Item));
+            var itemNode = soapXml.CreateElement(Item);
 
             // Add basic action-related nodes
             AppendChildNode(itemNode, soapXml, ActionNumber, action.ActionNumber.ToString());
