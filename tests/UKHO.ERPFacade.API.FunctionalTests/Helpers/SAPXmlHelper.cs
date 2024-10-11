@@ -64,8 +64,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 expectedXml = XElement.Load(reader);
             }
 
-            var generatedAttributes = generatedXml.Descendants("Item").ToList();
-            var expectedAttributes = expectedXml.Descendants("Item").ToList();
+            var generatedAttributes = generatedXml.Descendants("item").ToList();
+            var expectedAttributes = expectedXml.Descendants("item").ToList();
 
 
             string activeKey = permitState == "PermitWithSameKey" ? permitWithSameKeyActiveKey : permitWithDifferentKeyActiveKey;
