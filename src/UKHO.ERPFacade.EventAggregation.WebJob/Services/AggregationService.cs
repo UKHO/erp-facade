@@ -78,7 +78,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Services
 
                         _logger.LogInformation(EventIds.RecordOfSalePublishedEventDataPushedToSap.ToEventId(), "The record of sale event data has been sent to SAP successfully. | _X-Correlation-ID : {_X-Correlation-ID} | EventID : {EventID} | StatusCode: {StatusCode}", message.CorrelationId, message.EventId, response.StatusCode);
 
-                        await _azureTableReaderWriter.UpdateEntity(message.CorrelationId, Constants.RecordOfSaleEventContainerName, new[] { new KeyValuePair<string, string>("Status", Status.Complete.ToString()) });
+                        await _azureTableReaderWriter.UpdateEntity(message.CorrelationId, Constants.RecordOfSaleEventTableName, new[] { new KeyValuePair<string, string>("Status", Status.Complete.ToString()) });
                     }
                     else
                     {
