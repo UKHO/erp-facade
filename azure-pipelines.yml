@@ -483,19 +483,7 @@ stages:
       - name: "EnterpriseEventServiceConfiguration.ClientId"
         value: $(EnterpriseEventServiceConfigurationClientId) 
       - name: "PermitConfiguration.PermitDecryptionHardwareId"
-        value: $(PermitDecryptionHardwareId)
-      - name: "PermitWithSameKey.Permit"
-        value: $(PermitWithSameKeyPermit)
-      - name: "PermitWithSameKey.ActiveKey"
-        value: $(PermitWithSameKeyACTIVEKEY)
-      - name: "PermitWithSameKey.NextKey"
-        value: $(PermitWithSameKeyNEXTKEY)
-      - name: "PermitWithDifferentKey.Permit"
-        value: $(PermitWithDifferentKeyPermit)
-      - name: "PermitWithDifferentKey.ActiveKey"
-        value: $(PermitWithDifferentKeyACTIVEKEY)
-      - name: "PermitWithDifferentKey.NextKey"
-        value: $(PermitWithDifferentKeyNEXTKEY)     
+        value: $(PermitDecryptionHardwareId)      
       - name: mockWebAppName
         value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup
@@ -567,7 +555,9 @@ stages:
       - name: "AzureADConfiguration.ClientSecretNoRole"
         value: $(AzureADConfigurationClientSecretNoRole)
       - name: "EnterpriseEventServiceConfiguration.ClientId"
-        value: $(EnterpriseEventServiceConfigurationClientId)            
+        value: $(EnterpriseEventServiceConfigurationClientId) 
+      - name: "PermitConfiguration.PermitDecryptionHardwareId"
+        value: $(PermitDecryptionHardwareId)          
       - name: mockWebAppName
         value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup
@@ -716,7 +706,9 @@ stages:
       - name: "AzureADConfiguration.ClientSecretNoRole"
         value: $(AzureADConfigurationClientSecretNoRole)
       - name: "EnterpriseEventServiceConfiguration.ClientId"
-        value: $(EnterpriseEventServiceConfigurationClientId)      
+        value: $(EnterpriseEventServiceConfigurationClientId)
+      - name: "PermitConfiguration.PermitDecryptionHardwareId"
+        value: $(PermitDecryptionHardwareId)     
       - name: mockWebAppName
         value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup
@@ -788,6 +780,8 @@ stages:
         value: $(AzureADConfigurationAutoTestClientIdNoRole)
       - name: "AzureADConfiguration.ClientSecretNoRole"
         value: $(AzureADConfigurationClientSecretNoRole)
+      - name: "PermitConfiguration.PermitDecryptionHardwareId"
+        value: $(PermitDecryptionHardwareId)
       - name: mockWebAppName
         value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup
