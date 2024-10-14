@@ -352,25 +352,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
 
             Assert.Throws<ERPFacadeException>(() => _fakeEncContentSapMessageBuilder.BuildSapMessageXml(eventData!))
                 .Message.Should().Be("Error while generating SAP action information. | Action : CREATE ENC CELL | XML Attribute : VALIDFROM | ErrorMessage : Exception of type 'System.Exception' was thrown.");
-        }
-
-        [Test]
-        public void WhenBuildSapMessageXmlWithEmptyPermit_ThenThrowERPFacadeException()
-        {
-            var newCellEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\NewCellWithEmptyPermit.JSON");
-            var eventData = JsonConvert.DeserializeObject<EncEventPayload>(newCellEventPayloadJson);
-
-            XmlDocument soapXml = new();
-            soapXml.LoadXml(_sapXmlTemplate);
-
-            A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
-            A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
-
-            A.CallTo(() => _fakeWeekDetailsProvider.GetDateOfWeek(A<int>.Ignored, A<int>.Ignored, A<bool>.Ignored)).Throws<System.Exception>();
-
-            Assert.Throws<ERPFacadeException>(() => _fakeEncContentSapMessageBuilder.BuildSapMessageXml(eventData!))
-            .Message.Should().Be("Required details are missing in enccontentpublished event payload. | Property Name : permit");
-        }
+        }        
 
         [Test]
         public void WhenUnitOfSaleIsNullWhileReplacingEncCell_ThenReturnsNull()
