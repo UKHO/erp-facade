@@ -78,10 +78,10 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             return records;
         }
 
-        public async Task DeleteEntity(string correlationId, string TableName)
+        public async Task DeleteEntity(string correlationId, string tableName)
         {
-            TableClient tableClient = GetTableClient(TableName);
-            TableEntity existingEntity = await GetEntity(correlationId, TableName);
+            TableClient tableClient = GetTableClient(tableName);
+            TableEntity existingEntity = await GetEntity(correlationId, tableName);
             if (existingEntity != null)
             {
                 tableClient.DeleteEntity(existingEntity.PartitionKey, existingEntity.RowKey);
