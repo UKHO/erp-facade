@@ -1,0 +1,151 @@
+openapi: 3.0.1
+info:
+  title: UKHO S100 ERP Facade Service API
+  description: |
+    The UKHO S100 ERP Facade Service API handles callback event received from SAP.
+  contact:
+    name: UKHO
+    email: contact@ukho.co.uk
+  version: 0.0.1
+servers:
+  - url: https://erpfacade-dev-api.azurewebsites.net
+    description: Dev URL
+  
+paths:
+  /s100erpfacade/callback/{correlationId}:
+    get:
+      description: Returns response status for the callback request from SAP.
+      tags:
+        - "S100 ERP Facade"
+      operationId: s100erpfacade
+      parameters:
+      - name: correlationId
+        in: path
+        description: Correlation Id must be an string
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK 
+          headers:
+            X-Correlation-ID:
+              description: GUID for the request for logging/tracing
+              schema:
+                type: string
+        "401":
+          description: Unauthorised - your key is not recognised.
+          headers:
+            X-Correlation-ID:
+              description: GUID for the request for logging/tracing
+              schema:
+                type: string
+          content: {}
+        "404":
+          description: Correlation ID not found.
+          headers:
+            X-Correlation-ID:
+              description: GUID for the request for logging/tracing
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorDescription'
+              example:
+                correlationId: 6c254109-8a0f-4446-8649-721775ba9de2
+                errors:
+                - source: s100erpfacade
+                  description: Correlation ID Not Found.
+        "500":
+          description: Internal Server Error.
+          headers:
+            X-Correlation-ID:
+              description: GUID for the request for logging/tracing
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/exceptionDescription'
+security:
+  - ApiKeyAuth: []
+                
+components:
+  schemas:
+    exceptionDescription:
+      type: object
+      properties:
+        correlationId:
+          type: string
+    errorDescription:
+      type: object
+      properties:
+        correlationId:
+          type: string
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/fieldError'
+    fieldError:
+      type: object
+      properties:
+        source:
+          type: string
+        description:
+          type: string
+    responseMessage:
+      type: string
+  responses:
+    TokenAuthenticationFailed:
+      description: Token Authentication Failed
+      headers:
+        X-Correlation-ID:
+          description: GUID for the request for logging/tracing
+          schema:
+            type: string
+      content: {}
+    NotAcceptable:
+      description: The content type requested in the Accept header can not be provided.
+      headers:
+        X-Correlation-ID:
+          description: GUID for the request for logging/tracing
+          schema:
+            type: string
+      content: {}
+    InternalServerError:
+      description: Internal Server Error.
+      headers:
+        X-Correlation-ID:
+          description: GUID for the request for logging/tracing
+          schema:
+            type: string
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/exceptionDescription'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/exceptionDescription'
+        application/zip:
+          schema:
+            $ref: '#/components/schemas/exceptionDescription'
+        application/enp:
+          schema:
+            $ref: '#/components/schemas/exceptionDescription'
+        application/pdf:
+          schema:
+            $ref: '#/components/schemas/exceptionDescription'
+  parameters:
+    correlationId:
+      name: correlationId
+      in: path
+      description: Unique request identifier
+      required: true
+      schema:
+        type: string
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
