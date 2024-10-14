@@ -142,7 +142,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         {
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, "NewCell.JSON");
             const string permitString = "wwslkC9oG3rNcT4ZrgqX39pg9DuC9oSkBsl4kqiwr5h3nW6t0HUmlSaYhpdLEpO1";  //Invalid permit string to test permit decryption failure.
-            RestResponse response = await WebhookEndpoint.PostWebhookResponseAsyncForXml(filePath, "", await _authToken.GetAzureADToken(false), permitString);
+            RestResponse response = await S57WebhookEndpoint.PostWebhookResponseAsyncForXml(filePath, "", await _authToken.GetAzureADToken(false), permitString);
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.InternalServerError);
         }
     }
