@@ -32,7 +32,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.Services
 
         private void CleanUpEvents(string tableName, string eventContainerName)
         {
-            _logger.LogInformation(EventIds.FetchEESEntities.ToEventId(), "Fetching all records from azure table {0}", tableName);
+            _logger.LogInformation(EventIds.FetchEESEntities.ToEventId(), "Fetching all records from azure table {TableName}", tableName);
 
             var entities = _azureTableReaderWriter.GetAllEntities(tableName);
 
@@ -47,7 +47,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.Services
                 {
                     Task.FromResult(_azureTableReaderWriter.DeleteEntity(entity["CorrelationId"].ToString(), tableName));
 
-                    _logger.LogInformation(EventIds.DeletedContainerSuccessful.ToEventId(), "Deleting directory {0} from {1} container", entity["CorrelationId"].ToString(), eventContainerName);
+                    _logger.LogInformation(EventIds.DeletedContainerSuccessful.ToEventId(), "Deleting directory {CorrelationId} from {EventContainerName} container", entity["CorrelationId"].ToString(), eventContainerName);
 
                     _azureBlobEventWriter.DeleteDirectory(eventContainerName, entity["CorrelationId"].ToString().ToLower());
                 }
