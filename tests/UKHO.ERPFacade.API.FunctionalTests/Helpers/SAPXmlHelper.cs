@@ -39,7 +39,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
             string permit = permitState.Contains("Same") ? Config.TestConfig.PermitWithSameKey.Permit
                 : permitState.Contains("Different") ? Config.TestConfig.PermitWithDifferentKey.Permit
-                : "permitString";
+                : permitState;
 
             foreach (var product in products)
             {
