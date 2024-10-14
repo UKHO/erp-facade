@@ -55,10 +55,10 @@
     <ProjectReference Include="..\UKHO.ERPFacade.Common\UKHO.ERPFacade.Common.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Update="SapXmlTemplates\RosSapRequest.xml">
+    <None Update="SapXmlTemplates\SAPRoSRequest.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="SapXmlTemplates\SAPRequest.xml">
+    <None Update="SapXmlTemplates\SAPS57Request.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

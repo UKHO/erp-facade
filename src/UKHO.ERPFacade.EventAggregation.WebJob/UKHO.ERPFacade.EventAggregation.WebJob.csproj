@@ -46,7 +46,7 @@
     <None Update="disable.job">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="SapXmlTemplates\RosSapRequest.xml">
+    <None Update="SapXmlTemplates\SAPRoSRequest.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

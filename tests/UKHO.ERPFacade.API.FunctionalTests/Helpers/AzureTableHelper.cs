@@ -3,14 +3,12 @@ using Azure.Data.Tables;
 using Azure;
 using UKHO.ERPFacade.Common.Models.TableEntities;
 using UKHO.ERPFacade.API.FunctionalTests.Configuration;
+using UKHO.ERPFacade.Common.Constants;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
     public class AzureTableHelper
     {
-        private const string ErpFacadeTableName = "encevents";
-        private const string RoSEventsTableName = "recordofsaleevents";
-
         //Private Methods
         private static TableClient GetTableClient(string tableName)
         {
@@ -27,10 +25,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return tableClient;
         }
 
-        
+
         public static string GetSapStatus(string correlationId)
         {
-            TableClient tableClient = GetTableClient(RoSEventsTableName);
+            TableClient tableClient = GetTableClient(Constants.RecordOfSaleEventTableName);
             Pageable<RecordOfSaleEventEntity> existingEntity = tableClient.Query<RecordOfSaleEventEntity>(filter: TableClient.CreateQueryFilter($"CorrelationId eq {correlationId}"));
             return existingEntity != null ? existingEntity.FirstOrDefault()?.Status : string.Empty;
         }

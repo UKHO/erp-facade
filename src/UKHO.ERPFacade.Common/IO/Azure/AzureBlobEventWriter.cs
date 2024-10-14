@@ -67,6 +67,21 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             return blobContainerClient.DeleteIfExists();
         }
 
+        public bool DeleteDirectory(string blobContainerName, string directoryName)
+        {
+            BlobContainerClient blobContainerClient = new(_azureStorageConfig.Value.ConnectionString, blobContainerName);
+
+            // List all blobs with the directory prefix
+            foreach (var blobItem in blobContainerClient.GetBlobs(prefix: directoryName))
+            {
+                // Get the BlobClient for each blob and delete it
+                BlobClient blobClient = blobContainerClient.GetBlobClient(blobItem.Name);
+                Console.WriteLine($"Deleting blob: {blobItem.Name}");
+                blobClient.DeleteIfExists();
+            }
+            return true;
+        }
+
         public List<string> GetBlobNamesInFolder(string blobContainerName, string corrId)
         {
             List<string> blobList = new();

@@ -1,5 +1,6 @@
 ﻿using System.Xml;
 using Microsoft.Extensions.Logging;
+using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
@@ -11,15 +12,6 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Helpers
         private readonly ILogger<RecordOfSaleSapMessageBuilder> _logger;
         private readonly IXmlHelper _xmlHelper;
         private readonly IFileSystemHelper _fileSystemHelper;
-
-        private const string SapXmlPath = "SapXmlTemplates\\RosSapRequest.xml";
-        private const string XpathZAddsRos = $"//*[local-name()='Z_ADDS_ROS']";
-        private const string ImOrderNameSpace = "RecordOfSale";
-        private const string MaintainHoldingsType = "MAINTAINHOLDINGS";
-        private const string NewLicenceType = "NEWLICENCE";
-        private const string MigrateNewLicenceType = "MIGRATENEWLICENCE";
-        private const string MigrateExistingLicenceType = "MIGRATEEXISTINGLICENCE";
-        private const string ConvertLicenceType = "CONVERTLICENCE";
 
         public RecordOfSaleSapMessageBuilder(ILogger<RecordOfSaleSapMessageBuilder> logger,
             IXmlHelper xmlHelper,
@@ -35,7 +27,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Helpers
         {
             SapRecordOfSalePayLoad sapRecordOfSalePayLoad = null!;
 
-            string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, SapXmlPath);
+            string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, Constants.RecordOfSaleSapXmlTemplatePath);
 
             if (!_fileSystemHelper.IsFileExists(sapXmlTemplatePath))
             {
@@ -49,19 +41,19 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Helpers
 
             sapRecordOfSalePayLoad = eventDataList[0].Data.RecordsOfSale.TransactionType switch
             {
-                NewLicenceType => BuildNewLicencePayload(eventDataList),
-                MaintainHoldingsType => BuildMaintainHoldingsPayload(eventDataList),
-                MigrateNewLicenceType => BuildMigrateNewLicencePayload(eventDataList),
-                MigrateExistingLicenceType => BuildMigrateExistingLicencePayload(eventDataList),
-                ConvertLicenceType => BuildConvertLicencePayload(eventDataList),
+                Constants.NewLicenceType => BuildNewLicencePayload(eventDataList),
+                Constants.MigrateNewLicenceType => BuildMigrateNewLicencePayload(eventDataList),
+                Constants.MigrateExistingLicenceType => BuildMigrateExistingLicencePayload(eventDataList),
+                Constants.ConvertLicenceType => BuildConvertLicencePayload(eventDataList),
+                Constants.MaintainHoldingsType => BuildMaintainHoldingsPayload(eventDataList),
                 _ => sapRecordOfSalePayLoad
             };
 
             string xml = _xmlHelper.CreateXmlPayLoad(sapRecordOfSalePayLoad);
 
-            string sapXml = xml.Replace(ImOrderNameSpace, "");
+            string sapXml = xml.Replace(Constants.ImOrderNameSpace, "");
 
-            soapXml.SelectSingleNode(XpathZAddsRos)!.InnerXml = sapXml.RemoveNullFields().SetXmlClosingTags();
+            soapXml.SelectSingleNode(Constants.XpathZAddsRos)!.InnerXml = sapXml.RemoveNullFields().SetXmlClosingTags();
 
             _logger.LogInformation(EventIds.CreatedRecordOfSaleSapPayload.ToEventId(), "The record of sale SAP payload created. | _X-Correlation-ID : {_X-Correlation-ID}", correlationId);
 
@@ -333,8 +325,8 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Helpers
                     rosConvertLicencePayload.ECDISMANUF = string.Empty;
                     rosConvertLicencePayload.StartDate = string.Empty;
                     rosConvertLicencePayload.EndDate = string.Empty;
-                    rosConvertLicencePayload.LicenceType = eventData.Data.RecordsOfSale.LicenceType; 
-                    rosConvertLicencePayload.LicenceDuration = eventData.Data.RecordsOfSale.LicenceDuration; 
+                    rosConvertLicencePayload.LicenceType = eventData.Data.RecordsOfSale.LicenceType;
+                    rosConvertLicencePayload.LicenceDuration = eventData.Data.RecordsOfSale.LicenceDuration;
                     rosConvertLicencePayload.FleetName = string.Empty;
 
                     PROD prod = new();
