@@ -1,6 +1,7 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using UKHO.ERPFacade.API.FunctionalTests.Configuration;
+using UKHO.ERPFacade.Common.Constants;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
@@ -25,15 +26,14 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         public string DownloadGeneratedXmlFile(string expectedXmlFilePath, string blobContainer, string parentContainerName)
         {
             string fileName = "";
-            string licenceUpdatedXmlFile = "SapXmlPayload";
             BlobServiceClient blobServiceClient = new BlobServiceClient(Config.TestConfig.AzureStorageConfiguration.ConnectionString);
 
             BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(parentContainerName + "\\" + blobContainer);
-            BlobClient blobClient = containerClient.GetBlobClient(blobContainer + "/" + licenceUpdatedXmlFile + ".xml");
+            BlobClient blobClient = containerClient.GetBlobClient(blobContainer + "/" + Constants.SapXmlPayloadFileName);
             try
             {
                 BlobDownloadInfo blobDownload = blobClient.Download();
-                fileName = expectedXmlFilePath + "\\" + blobContainer + "\\" + licenceUpdatedXmlFile + ".xml";
+                fileName = expectedXmlFilePath + "\\" + blobContainer + "\\" + Constants.SapXmlPayloadFileName;
                 Directory.CreateDirectory(Path.GetDirectoryName(fileName));
                 using FileStream downloadFileStream = new(fileName, FileMode.Create);
                 blobDownload.Content.CopyTo(downloadFileStream);

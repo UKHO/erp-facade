@@ -7,7 +7,12 @@ namespace UKHO.ERPFacade.Common.Constants
     {
         //JSON field keys
         public const string EventIdKey = "id";
+        public const string DataNode = "data";
         public const string CorrelationIdKey = "data.correlationId";
+        public const string ProductsNode = "data.products";
+        public const string UnitsOfSaleNode = "data.unitsOfSale";
+        public const string UKHOWeekNumber = "data.ukhoWeekNumber";
+
 
         //SAP xml payload file name
         public const string SapXmlPayloadFileName = "SapXmlPayload.xml";
@@ -18,6 +23,7 @@ namespace UKHO.ERPFacade.Common.Constants
         //S57 event storage
         public const string S57EventTableName = "encevents";
         public const string S57EventContainerName = "s57events";
+        public const string ErpFacadeExpectedXmlFiles = "ERPFacadeExpectedXmlFiles";
 
         //LicenceUpdated event file name 
         public const string LicenceUpdatedEventFileName = "LicenceUpdatedEvent.json";
@@ -62,6 +68,8 @@ namespace UKHO.ERPFacade.Common.Constants
         public const string UnitOfSaleSection = "UnitOfSale";
         public const string UnitSaleType = "unit";
         public const string UnitOfSaleStatusForSale = "ForSale";
+        public const string Products = "products";
+        public const string UnitsOfSale = "unitsOfSale";
 
         public const string UkhoWeekNumberSection = "UkhoWeekNumber";
         public const string ValidFrom = "VALIDFROM";
@@ -96,11 +104,42 @@ namespace UKHO.ERPFacade.Common.Constants
 
         public const string SapHealthCheckXmlPath = "SapXmlTemplates\\SAPHealthCheckRequest.xml";
         public const string DefaultContentType = "application/json";
+        public const string RosPayloadTestDataFolder = "RoSPayloadTestData";
+
+        public const string SoldToAcc = "SOLDTOACC";
+        public const string LicenceAcc = "LICENSEEACC";
+        public const string StartDate = "STARTDATE";
+        public const string EndDate = "ENDDATE";
+        public const string VName = "VNAME";
+        public const string Imo = "IMO";
+        public const string CallSign = "CALLSIGN";
+        public const string ShoreBased = "SHOREBASED";
+        public const string Fleet = "FLEET";
+        public const string Users = "USERS";
+        public const string EndUserId = "ENDUSERID";
+        public const string EcdisManUf = "ECDISMANUF";
+        public const string LType = "LTYPE";
+        public const string LicDur = "LICDUR";
+        public const string LicNo = "LICNO";
+        public const string Repeat = "REPEAT";
+        public const string ProductOrder = "PO";
+        public const string AdsOrderNumber = "ADSORDNO";
+        public const string Id = "ID";
+        public const string ProductEndDate = "ENDDA";
+        public const string Duration = "DURATION";
+        public const string Renew = "RENEW";
+        public const string SoapEnvelope = "soap:Envelope";
+        public const string SoapBody = "soap:Body";
 
         //Functional Tests
         public const string XpathActionNumber = $"//*[local-name()='ACTIONNUMBER']";
         public const string XpathAction = $"//*[local-name()='ACTION']";
         public const string ReplaceEncCellAction = "REPLACED WITH ENC CELL";
         public const string ChangeEncCellAction = "CHANGE ENC CELL";
+        public const string PermitWithSameKey = "PermitWithSameKey";
+        public const string PermitWithDifferentKey = "PermitWithDifferentKey";
+
+        //LicenseUpdate xml payload nodes
+        public const string LicTransaction = "CHANGELICENCE";
     }
 }

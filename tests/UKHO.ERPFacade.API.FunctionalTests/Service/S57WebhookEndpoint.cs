@@ -76,7 +76,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
                 string generatedXmlFilePath = _azureBlobStorageHelper.DownloadGeneratedXmlFile(generatedXmlFolder, correlationId, "s57events");
 
                 //Expected XML 
-                string xmlFilePath = filePath.Replace(Config.TestConfig.PayloadFolder, "ERPFacadeExpectedXmlFiles").Replace(".JSON", ".xml");
+                string xmlFilePath = filePath.Replace(Config.TestConfig.PayloadFolder, Constants.ErpFacadeExpectedXmlFiles).Replace(".JSON", ".xml");
 
                 Assert.That(SapXmlHelper.VerifyGeneratedXml(generatedXmlFilePath, xmlFilePath, permitState));
             }

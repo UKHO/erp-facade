@@ -14,7 +14,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
         private readonly AzureBlobStorageHelper _azureBlobStorageHelper;
 
         public static string GeneratedCorrelationId = string.Empty;
-        public const string RecordOfSalesContainerName = "recordofsaleblobs";
 
         public RoSWebhookEndpoint()
         {
@@ -52,7 +51,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                bool isBlobCreated = _azureBlobStorageHelper.VerifyBlobExists(RecordOfSalesContainerName, GeneratedCorrelationId);
+                bool isBlobCreated = _azureBlobStorageHelper.VerifyBlobExists(Constants.RecordOfSaleEventContainerName, GeneratedCorrelationId);
                 Assert.That(isBlobCreated, Is.True, $"Blob {GeneratedCorrelationId} not created");
             }
 
@@ -84,29 +83,29 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
 
             if (isFirstEvent)
             {
-                bool isBlobCreated = _azureBlobStorageHelper.VerifyBlobExists(RecordOfSalesContainerName, correlationId);
+                bool isBlobCreated = _azureBlobStorageHelper.VerifyBlobExists(Constants.RecordOfSaleEventContainerName, correlationId);
                 Assert.That(isBlobCreated, Is.True, $"Blob for {correlationId} not created");
             }
 
-            blobList = _azureBlobStorageHelper.GetBlobNamesInFolder(RecordOfSalesContainerName, correlationId);
+            blobList = _azureBlobStorageHelper.GetBlobNamesInFolder(Constants.RecordOfSaleEventContainerName, correlationId);
 
             switch (isLastEvent)
             {
                 case true:
                     DateTime startTime = DateTime.UtcNow;
                     //10minutes polling after every 30 seconds to check if xml payload is generated during webjob execution.
-                    while (!blobList.Contains("SapXmlPayload") && DateTime.UtcNow - startTime < TimeSpan.FromMinutes(10))
+                    while (!blobList.Contains(Constants.SapXmlPayloadFileName) && DateTime.UtcNow - startTime < TimeSpan.FromMinutes(10))
                     {
-                        blobList = _azureBlobStorageHelper.GetBlobNamesInFolder(RecordOfSalesContainerName, correlationId);
+                        blobList = _azureBlobStorageHelper.GetBlobNamesInFolder(Constants.RecordOfSaleEventContainerName, correlationId);
                         await Task.Delay(30000);
                     }
-                    Assert.That(blobList, Does.Contain("SapXmlPayload"), $"XML is not generated for {correlationId} at {DateTime.Now}.");
+                    Assert.That(blobList, Does.Contain(Constants.SapXmlPayloadFileName), $"XML is not generated for {correlationId} at {DateTime.Now}.");
                     string generatedXmlFilePath = _azureBlobStorageHelper.DownloadGeneratedXmlFile(generatedXmlFolder, correlationId, "recordofsaleblobs");
                     Assert.That(RoSXmlHelper.CheckXmlAttributes(generatedXmlFilePath, requestBody, listOfEventJsons).Result, Is.True, "CheckXmlAttributes Failed");
                     Assert.That(AzureTableHelper.GetSapStatus(correlationId), Is.EqualTo("Complete"), $"SAP status is Incomplete for {correlationId}");
                     break;
                 case false:
-                    Assert.That(blobList, Does.Not.Contain("SapXmlPayload"), $"XML is generated for {correlationId} before we receive all related events.");
+                    Assert.That(blobList, Does.Not.Contain(Constants.SapXmlPayloadFileName), $"XML is generated for {correlationId} before we receive all related events.");
                     Assert.That(AzureTableHelper.GetSapStatus(correlationId), Is.EqualTo("Incomplete"), $"SAP status is Complete for {correlationId}");
                     break;
             }

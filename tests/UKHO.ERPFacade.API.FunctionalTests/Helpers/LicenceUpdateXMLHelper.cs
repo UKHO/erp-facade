@@ -5,6 +5,7 @@ using System.Xml.Serialization;
 using System.Xml;
 using UKHO.ERPFacade.API.FunctionalTests.Model;
 using UKHO.ERPFacade.API.FunctionalTests.Configuration;
+using UKHO.ERPFacade.Common.Constants;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
@@ -22,7 +23,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             XmlDocument xmlDoc = new();
             xmlDoc.LoadXml(await File.ReadAllTextAsync(xmlFilePath));
 
-            while (xmlDoc.DocumentElement.Name == "soap:Envelope" || xmlDoc.DocumentElement.Name == "soap:Body")
+            while (xmlDoc.DocumentElement.Name == Constants.SoapEnvelope || xmlDoc.DocumentElement.Name == Constants.SoapBody)
             {
                 string tempXmlString = xmlDoc.DocumentElement.InnerXml;
                 xmlDoc.LoadXml(tempXmlString);
@@ -41,7 +42,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
             if (licResult.SERVICETYPE.Equals(licenceJsonFields.productType))
             {
-                if (licResult.LICTRANSACTION.Equals("CHANGELICENCE"))
+                if (licResult.LICTRANSACTION.Equals(Constants.LicTransaction))
                 {
                     Assert.That(VerifyChangeLicense(licResult, licenceJsonFields), Is.True);
                 }
@@ -75,8 +76,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             if (!licResult.USERS.Equals(licenceFieldsJson.numberLicenceUsers))
                 s_attrNotMatched.Add(nameof(licResult.USERS));
 
-            string[] fieldNames = { "STARTDATE", "ENDDATE", "SHOREBASED", "LTYPE", "LICDUR", "PO", "ADSORDNO" };
-            string[] fieldNamesProduct = { "ID", "ENDDA", "DURATION", "RENEW", "REPEAT" };
+            string[] fieldNames = { Constants.StartDate, Constants.EndDate, Constants.ShoreBased, Constants.LType, Constants.LicDur, Constants.ProductOrder, Constants.AdsOrderNumber };
+            string[] fieldNamesProduct = { Constants.Id, Constants.ProductEndDate, Constants.Duration, Constants.Renew, Constants.Repeat };
             Z_ADDS_ROSIM_ORDERItem[] items = licResult.PROD;
             VerifyBlankFields(licResult, fieldNames);
             VerifyBlankProductFields(items[0], fieldNamesProduct);
