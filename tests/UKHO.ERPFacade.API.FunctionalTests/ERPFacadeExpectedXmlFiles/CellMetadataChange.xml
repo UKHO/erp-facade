@@ -9,7 +9,7 @@
         <RECTIME>014823</RECTIME>
         <ORG>UKHO</ORG>
         <ACTIONITEMS>
-          <Item>
+          <item>
             <ACTIONNUMBER>1</ACTIONNUMBER>
             <ACTION>CHANGE ENC CELL</ACTION>
             <PRODUCT>ENC CELL</PRODUCT>
@@ -30,8 +30,8 @@
             <CORRECTION>N</CORRECTION>
             <ACTIVEKEY />
             <NEXTKEY />
-          </Item>
-          <Item>
+          </item>
+          <item>
             <ACTIONNUMBER>2</ACTIONNUMBER>
             <ACTION>CHANGE ENC CELL</ACTION>
             <PRODUCT>ENC CELL</PRODUCT>
@@ -52,8 +52,8 @@
             <CORRECTION>N</CORRECTION>
             <ACTIVEKEY />
             <NEXTKEY />
-          </Item>
-          <Item>
+          </item>
+          <item>
             <ACTIONNUMBER>3</ACTIONNUMBER>
             <ACTION>CHANGE AVCS UNIT OF SALE</ACTION>
             <PRODUCT>AVCS UNIT</PRODUCT>
@@ -74,8 +74,8 @@
             <CORRECTION>N</CORRECTION>
             <ACTIVEKEY />
             <NEXTKEY />
-          </Item>
-          <Item>
+          </item>
+          <item>
             <ACTIONNUMBER>4</ACTIONNUMBER>
             <ACTION>CHANGE AVCS UNIT OF SALE</ACTION>
             <PRODUCT>AVCS UNIT</PRODUCT>
@@ -96,7 +96,7 @@
             <CORRECTION>N</CORRECTION>
             <ACTIVEKEY />
             <NEXTKEY />
-          </Item>
+          </item>
         </ACTIONITEMS>
       </IM_MATINFO>
     </Z_ADDS_MAT_INFO>

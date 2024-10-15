@@ -3,21 +3,21 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Unicode;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using UKHO.ERPFacade.Common.Constants;
 
 namespace UKHO.ERPFacade.API.Health
 {
     public static class HealthResponseWriter
     {
-        private const string DefaultContentType = "application/json";
 
         private static readonly byte[] _emptyResponse = "{}"u8.ToArray();
         private static readonly Lazy<JsonSerializerOptions> _options = new(CreateJsonOptions);
 
-        public static async Task WriteHealthCheckUiResponse(HttpContext httpContext, HealthReport report) 
+        public static async Task WriteHealthCheckUiResponse(HttpContext httpContext, HealthReport report)
         {
             if (report != null)
             {
-                httpContext.Response.ContentType = DefaultContentType;
+                httpContext.Response.ContentType = Constants.DefaultContentType;
 
                 ErpHealthReport uiReport = ErpHealthReport.CreateFrom(report);
 

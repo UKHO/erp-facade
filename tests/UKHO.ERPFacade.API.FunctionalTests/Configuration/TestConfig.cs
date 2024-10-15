@@ -8,7 +8,6 @@
         public ErpFacadeConfiguration ErpFacadeConfiguration { get; set; }
         public AzureADconfiguration AzureADConfiguration { get; set; }
         public AzureStorageConfiguration AzureStorageConfiguration { get; set; }
-        public string[] XmlActionList { get; set; }
         public string LicenceUpdatedPayloadTestData { get; set; }
         public string[] RosLicenceUpdateXmlList { get; set; }
         public string[] RoSLicenceUpdatedProdXmlList { get; set; }
