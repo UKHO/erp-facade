@@ -138,6 +138,7 @@ namespace UKHO.ERPFacade.Common.Constants
         public const string ChangeEncCellAction = "CHANGE ENC CELL";
         public const string PermitWithSameKey = "PermitWithSameKey";
         public const string PermitWithDifferentKey = "PermitWithDifferentKey";
+        public const string AioKey = "AIO";
 
         //LicenseUpdate xml payload nodes
         public const string LicTransaction = "CHANGELICENCE";
