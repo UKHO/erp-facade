@@ -391,5 +391,27 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
 
             result.Should().Be(expectedValue);
         }
+
+        [Test]
+        [TestCase("ERPTestData\\NewCellWithNullYearInUkhoWeekNumberSection.JSON")]
+        [TestCase("ERPTestData\\NewCellWithoutYearInUkhoWeekNumberSection.JSON")]
+        [TestCase("ERPTestData\\NewCellWithNullcurrentWeekAlphaCorrectionInUkhoWeekNumberSection.JSON")]
+        public void WhenProcessingUkhoWeekNumberAttributes(string jsonPayloadFile)
+        {
+            var cancelCellWithNewCellReplacementPayloadJson = TestHelper.ReadFileData(jsonPayloadFile);
+            var eventData = JsonConvert.DeserializeObject<EncEventPayload>(cancelCellWithNewCellReplacementPayloadJson);
+            var permitKeys = new DecryptedPermit { ActiveKey = "firstkey", NextKey = "nextkey" };
+
+            XmlDocument soapXml = new();
+            soapXml.LoadXml(_sapXmlTemplate);
+
+            A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
+            A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
+            A.CallTo(() => _fakePermitDecryption.Decrypt(A<string>.Ignored)).Returns(permitKeys);
+            A.CallTo(() => _fakeWeekDetailsProvider.GetDateOfWeek(A<int>.Ignored, A<int>.Ignored, A<bool>.Ignored)).Throws<System.Exception>();
+
+            Assert.Throws<ERPFacadeException>(() => _fakeEncContentSapMessageBuilder.BuildSapMessageXml(eventData!))
+                .Message.Should().Be("Error while generating SAP action information. | Action : CREATE ENC CELL | XML Attribute : WEEKNO | ErrorMessage : Required details are missing in enccontentpublished event payload. | Property Name : ");
+        }
     }
 }

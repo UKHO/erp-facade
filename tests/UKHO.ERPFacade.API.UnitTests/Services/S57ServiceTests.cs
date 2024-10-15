@@ -171,7 +171,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Services
         [Test]
         public void WhenPayloadHasAioAndNonAioCells_ThenReturn200OkResponse()
         {
-            var newCellEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\AIO&NonAIOCells.JSON");
+            var newCellEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\AIOAndNonAIOCells.JSON");
             var fakeEncEventJson = JObject.Parse(newCellEventPayloadJson);
 
             _ = _fakeNewEncContentPublishedEventReceived.ProcessS57Event(fakeEncEventJson);
