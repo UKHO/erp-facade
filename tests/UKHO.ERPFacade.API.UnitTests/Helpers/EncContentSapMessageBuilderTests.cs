@@ -75,12 +75,14 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         {
             var cancelReplaceCellEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\CancelCellWithExistingCellReplacement.JSON");
             var eventData = JsonConvert.DeserializeObject<EncEventPayload>(cancelReplaceCellEventPayloadJson);
+            var permitKeys = new DecryptedPermit { ActiveKey = "firstkey", NextKey = "nextkey" };
 
             XmlDocument soapXml = new();
             soapXml.LoadXml(_sapXmlTemplate);
 
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
+            A.CallTo(() => _fakePermitDecryption.Decrypt(A<string>.Ignored)).Returns(permitKeys);
             A.CallTo(() => _fakeWeekDetailsProvider.GetDateOfWeek(A<int>.Ignored, A<int>.Ignored, A<bool>.Ignored)).Returns("20240808");
 
             var result = _fakeEncContentSapMessageBuilder.BuildSapMessageXml(eventData!);
@@ -412,6 +414,25 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
 
             Assert.Throws<ERPFacadeException>(() => _fakeEncContentSapMessageBuilder.BuildSapMessageXml(eventData!))
                 .Message.Should().Be("Error while generating SAP action information. | Action : CREATE ENC CELL | XML Attribute : WEEKNO | ErrorMessage : Required details are missing in enccontentpublished event payload. | Property Name : ");
+        }
+
+        [Test]
+        public void WhenBuildSapMessageXmlWithEmptyPermit_ThenThrowERPFacadeException()
+        {
+            var newCellEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\NewCellWithEmptyPermit.JSON");
+            var eventData = JsonConvert.DeserializeObject<EncEventPayload>(newCellEventPayloadJson);
+
+            XmlDocument soapXml = new();
+            soapXml.LoadXml(_sapXmlTemplate);
+
+            A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
+            A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
+
+            A.CallTo(() => _fakeWeekDetailsProvider.GetDateOfWeek(A<int>.Ignored, A<int>.Ignored, A<bool>.Ignored)).Throws<System.Exception>();
+            A.CallTo(_fakePermitDecryption).Where(call => call.Method.Name == "Decrypt").MustNotHaveHappened();
+
+            Assert.Throws<ERPFacadeException>(() => _fakeEncContentSapMessageBuilder.BuildSapMessageXml(eventData!))
+            .Message.Should().Be("Error while generating SAP action information. | Action : CREATE ENC CELL | XML Attribute : ACTIVEKEY | ErrorMessage : Required details are missing in enccontentpublished event payload. | Property Name : ");
         }
     }
 }
