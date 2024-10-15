@@ -436,7 +436,27 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940086 - Required section not found in JSON payload.
         /// </summary>
-        RequiredSectionNotFoundException = 940086
+        RequiredSectionNotFoundException = 940086,
+
+        /// <summary>
+        /// 940087 - S100 Data content published event options call started.
+        /// </summary>
+        S100DataContentPublishedEventOptionsCallStarted = 940087,
+
+        /// <summary>
+        /// 940088 - S100 Data content published event options call completed.
+        /// </summary>
+        S100DataContentPublishedEventOptionsCallCompleted = 940088,
+
+        /// <summary>
+        /// 940089 - S100 Data content published event received by ERP Facade webhook.
+        /// </summary>
+        S100DataContentPublishedEventReceived = 940089,
+
+        /// <summary>
+        /// 940090 - CorrelationId is missing in S100 Data content published event.
+        /// </summary>
+        CorrelationIdMissingInS100DataContentPublishedEvent = 940090
     }
 
     /// <summary>
