@@ -5,6 +5,6 @@ namespace UKHO.ERPFacade.API.Helpers
 {
     public interface IEncContentSapMessageBuilder
     {
-        XmlDocument BuildSapMessageXml(EncEventPayload eventData, string correlationId);
+        XmlDocument BuildSapMessageXml(EncEventPayload eventData);
     }
 }

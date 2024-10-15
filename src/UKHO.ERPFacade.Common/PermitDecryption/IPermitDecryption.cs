@@ -4,6 +4,6 @@ namespace UKHO.ERPFacade.Common.PermitDecryption
 {
     public interface IPermitDecryption
     {
-        PermitKey GetPermitKeys(string permit);
+        DecryptedPermit Decrypt(string permit);
     }
 }

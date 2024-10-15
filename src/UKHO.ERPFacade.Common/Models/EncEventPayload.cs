@@ -51,12 +51,12 @@ namespace UKHO.ERPFacade.Common.Models
     public class UkhoWeekNumber
     {
         [JsonProperty("year")]
-        public int Year { get; set; }
+        public int? Year { get; set; }
 
         [JsonProperty("week")]
-        public int Week { get; set; }
+        public int? Week { get; set; }
 
         [JsonProperty("currentWeekAlphaCorrection")]
-        public bool CurrentWeekAlphaCorrection { get; set; }
+        public bool? CurrentWeekAlphaCorrection { get; set; }
     }
 }
