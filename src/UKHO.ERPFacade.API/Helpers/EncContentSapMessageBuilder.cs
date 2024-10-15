@@ -6,7 +6,7 @@ using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Providers;
 using UKHO.ERPFacade.Common.PermitDecryption;
 using UKHO.ERPFacade.Common.Exceptions;
-using System;
+using UKHO.ERPFacade.Common.Constants;
 
 namespace UKHO.ERPFacade.API.Helpers
 {
@@ -18,44 +18,6 @@ namespace UKHO.ERPFacade.API.Helpers
         private readonly IOptions<SapActionConfiguration> _sapActionConfig;
         private readonly IWeekDetailsProvider _weekDetailsProvider;
         private readonly IPermitDecryption _permitDecryption;
-
-        private const string SapXmlPath = "SapXmlTemplates\\SAPRequest.xml";
-        private const string XpathImMatInfo = $"//*[local-name()='IM_MATINFO']";
-        private const string XpathActionItems = $"//*[local-name()='ACTIONITEMS']";
-        private const string XpathNoOfActions = $"//*[local-name()='NOOFACTIONS']";
-        private const string XpathCorrId = $"//*[local-name()='CORRID']";
-        private const string XpathRecDate = $"//*[local-name()='RECDATE']";
-        private const string XpathRecTime = $"//*[local-name()='RECTIME']";
-        private const string ActionNumber = "ACTIONNUMBER";
-        private const string Item = "item";
-        private const string Action = "ACTION";
-        private const string Product = "PRODUCT";
-        private const string ProductSection = "Product";
-        private const string ReplacedBy = "REPLACEDBY";
-        private const string ChildCell = "CHILDCELL";
-        private const string ProdType = "PRODTYPE";
-        private const string ProdTypeValue = "S57";
-        private const string UnitOfSaleSection = "UnitOfSale";
-        private const string UnitSaleType = "unit";
-        private const string EncCell = "ENC CELL";
-        private const string AvcsUnit = "AVCS UNIT";
-        private const string RecDateFormat = "yyyyMMdd";
-        private const string RecTimeFormat = "hhmmss";
-        private const string UkhoWeekNumberSection = "UkhoWeekNumber";
-        private const string ValidFrom = "VALIDFROM";
-        private const string WeekNo = "WEEKNO";
-        private const string Correction = "CORRECTION";
-        private const string IsCorrectionTrue = "Y";
-        private const string IsCorrectionFalse = "N";
-        private const string ActiveKey = "ACTIVEKEY";
-        private const string NextKey = "NEXTKEY";
-        private const string UnitOfSaleStatusForSale = "ForSale";
-        private const string Agency = "AGENCY";
-        private const string CreateEncCell = "CREATE ENC CELL";
-        private const string UpdateCell = "UPDATE ENC CELL EDITION UPDATE NUMBER";
-        private const string Permit = "permit";
-        private const int MaxXmlNodeLength = 250;
-        private const int MaxAgencyXmlNodeLength = 2;
 
         public EncContentSapMessageBuilder(ILogger<EncContentSapMessageBuilder> logger,
                                  IXmlHelper xmlHelper,
@@ -80,7 +42,7 @@ namespace UKHO.ERPFacade.API.Helpers
         /// <returns>XmlDocument</returns>
         public XmlDocument BuildSapMessageXml(EncEventPayload eventData)
         {
-            string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, SapXmlPath);
+            string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, Constants.S57SapXmlTemplatePath);
 
             // Check if SAP XML payload template exists
             if (!_fileSystemHelper.IsFileExists(sapXmlTemplatePath))
@@ -90,7 +52,7 @@ namespace UKHO.ERPFacade.API.Helpers
 
             var soapXml = _xmlHelper.CreateXmlDocument(sapXmlTemplatePath);
 
-            var actionItemNode = soapXml.SelectSingleNode(XpathActionItems);
+            var actionItemNode = soapXml.SelectSingleNode(Constants.XpathActionItems);
 
             _logger.LogInformation(EventIds.GenerationOfSapXmlPayloadStarted.ToEventId(), "Generation of SAP XML payload started.");
 
@@ -114,7 +76,7 @@ namespace UKHO.ERPFacade.API.Helpers
 
             foreach (var product in eventData.Data.Products)
             {
-                foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == EncCell))
+                foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == Constants.EncCell))
                 {
                     var unitOfSale = GetUnitOfSale(action.ActionNumber, eventData.Data.UnitsOfSales, product);
 
@@ -164,7 +126,7 @@ namespace UKHO.ERPFacade.API.Helpers
         {
             foreach (var unitOfSale in eventData.Data.UnitsOfSales)
             {
-                foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == AvcsUnit))
+                foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == Constants.AvcsUnit))
                 {
                     if (!ValidateActionRules(action, unitOfSale))
                         continue;
@@ -199,12 +161,12 @@ namespace UKHO.ERPFacade.API.Helpers
         {
             var xmlNode = SortXmlPayload(actionItemNode);
 
-            SetXmlNodeValue(soapXml, XpathCorrId, correlationId);
-            SetXmlNodeValue(soapXml, XpathNoOfActions, xmlNode.ChildNodes.Count.ToString());
-            SetXmlNodeValue(soapXml, XpathRecDate, DateTime.UtcNow.ToString(RecDateFormat));
-            SetXmlNodeValue(soapXml, XpathRecTime, DateTime.UtcNow.ToString(RecTimeFormat));
+            SetXmlNodeValue(soapXml, Constants.XpathCorrId, correlationId);
+            SetXmlNodeValue(soapXml, Constants.XpathNoOfActions, xmlNode.ChildNodes.Count.ToString());
+            SetXmlNodeValue(soapXml, Constants.XpathRecDate, DateTime.UtcNow.ToString(Constants.RecDateFormat));
+            SetXmlNodeValue(soapXml, Constants.XpathRecTime, DateTime.UtcNow.ToString(Constants.RecTimeFormat));
 
-            var IM_MATINFONode = soapXml.SelectSingleNode(XpathImMatInfo);
+            var IM_MATINFONode = soapXml.SelectSingleNode(Constants.XpathImMatInfo);
             IM_MATINFONode.AppendChild(xmlNode);
         }
 
@@ -220,19 +182,19 @@ namespace UKHO.ERPFacade.API.Helpers
             return actionNumber switch
             {
                 //Case 1 : CREATE ENC CELL
-                1 => listOfUnitOfSales.FirstOrDefault(x => x.UnitOfSaleType == UnitSaleType &&
-                                                           x.Status == UnitOfSaleStatusForSale &&
+                1 => listOfUnitOfSales.FirstOrDefault(x => x.UnitOfSaleType == Constants.UnitSaleType &&
+                                                           x.Status == Constants.UnitOfSaleStatusForSale &&
                                                            x.CompositionChanges.AddProducts.Contains(product.ProductName)),
 
                 //Case 4 : REPLACED WITH ENC CELL 
                 //Case 10 : CANCEL ENC CELL
-                4 or 10 => listOfUnitOfSales.FirstOrDefault(x => x.UnitOfSaleType == UnitSaleType &&
+                4 or 10 => listOfUnitOfSales.FirstOrDefault(x => x.UnitOfSaleType == Constants.UnitSaleType &&
                                                             x.CompositionChanges.RemoveProducts.Contains(product.ProductName)),
 
                 //Case 6 : CHANGE ENC CELL
                 //Case 8 : UPDATE ENC CELL EDITION UPDATE NUMBER
-                6 or 8 => listOfUnitOfSales.FirstOrDefault(x => x.UnitOfSaleType == UnitSaleType &&
-                                                                x.Status == UnitOfSaleStatusForSale &&
+                6 or 8 => listOfUnitOfSales.FirstOrDefault(x => x.UnitOfSaleType == Constants.UnitSaleType &&
+                                                                x.Status == Constants.UnitOfSaleStatusForSale &&
                                                                 product.InUnitsOfSale.Contains(x.UnitName)),
                 _ => null,
             };
@@ -285,33 +247,33 @@ namespace UKHO.ERPFacade.API.Helpers
             DecryptedPermit decryptedPermit = null;
 
             // Create main item node
-            var itemNode = soapXml.CreateElement(nameof(Item));
+            var itemNode = soapXml.CreateElement(Constants.Item);
 
             // Add basic action-related nodes
-            AppendChildNode(itemNode, soapXml, ActionNumber, action.ActionNumber.ToString());
-            AppendChildNode(itemNode, soapXml, Action, action.Action.ToString());
-            AppendChildNode(itemNode, soapXml, Product, action.Product.ToString());
-            AppendChildNode(itemNode, soapXml, ProdType, ProdTypeValue);
+            AppendChildNode(itemNode, soapXml, Constants.ActionNumber, action.ActionNumber.ToString());
+            AppendChildNode(itemNode, soapXml, Constants.Action, action.Action.ToString());
+            AppendChildNode(itemNode, soapXml, Constants.Product, action.Product.ToString());
+            AppendChildNode(itemNode, soapXml, Constants.ProdType, Constants.ProdTypeValue);
 
             // Add child cell node
-            AppendChildNode(itemNode, soapXml, ChildCell, childCell);
+            AppendChildNode(itemNode, soapXml, Constants.ChildCell, childCell);
 
             List<(int sortingOrder, XmlElement node)> actionAttributes = new();
 
             // Get permit keys for New cell and Updated cell
-            if (product != null! && !IsPropertyNullOrEmpty(Permit, product.Permit) && (action.Action == CreateEncCell || action.Action == UpdateCell))
+            if (action.Action == Constants.CreateEncCell || action.Action == Constants.UpdateCell)
             {
                 decryptedPermit = _permitDecryption.Decrypt(product.Permit);
             }
 
             // Process ProductSection attributes
-            ProcessAttributes(action.Action, action.Attributes.Where(x => x.Section == ProductSection), soapXml, product, actionAttributes, decryptedPermit, replacedBy);
+            ProcessAttributes(action.Action, action.Attributes.Where(x => x.Section == Constants.ProductSection), soapXml, product, actionAttributes, decryptedPermit, replacedBy);
 
             // Process UnitOfSaleSection attributes
-            ProcessAttributes(action.Action, action.Attributes.Where(x => x.Section == UnitOfSaleSection), soapXml, unitOfSale, actionAttributes, null, null);
+            ProcessAttributes(action.Action, action.Attributes.Where(x => x.Section == Constants.UnitOfSaleSection), soapXml, unitOfSale, actionAttributes, null, null);
 
             // Process UkhoWeekNumberSection attributes
-            ProcessUkhoWeekNumberAttributes(action.Action, action.Attributes.Where(x => x.Section == UkhoWeekNumberSection), soapXml, ukhoWeekNumber, actionAttributes);
+            ProcessUkhoWeekNumberAttributes(action.Action, action.Attributes.Where(x => x.Section == Constants.UkhoWeekNumberSection), soapXml, ukhoWeekNumber, actionAttributes);
 
             // Sort and append attributes to SAP action
             foreach (var (sortingOrder, node) in actionAttributes.OrderBy(x => x.sortingOrder))
@@ -341,16 +303,14 @@ namespace UKHO.ERPFacade.API.Helpers
                     {
                         switch (attribute.XmlNodeName)
                         {
-                            case ReplacedBy:
+                            case Constants.ReplacedBy:
                                 if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, replacedBy)) attributeNode.InnerText = GetXmlNodeValue(replacedBy.ToString(), attribute.XmlNodeName);
                                 break;
-                            case ActiveKey:
-                                attributeNode.InnerText = string.Empty;
-                                if (decryptedPermit != null && !string.IsNullOrEmpty(decryptedPermit.ActiveKey)) attributeNode.InnerText = GetXmlNodeValue(decryptedPermit.ActiveKey, attribute.XmlNodeName);
+                            case Constants.ActiveKey:
+                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, decryptedPermit.ActiveKey)) attributeNode.InnerText = GetXmlNodeValue(decryptedPermit.ActiveKey, attribute.XmlNodeName);
                                 break;
-                            case NextKey:
-                                attributeNode.InnerText = string.Empty;
-                                if (decryptedPermit != null && !string.IsNullOrEmpty(decryptedPermit.NextKey)) attributeNode.InnerText = GetXmlNodeValue(decryptedPermit.NextKey, attribute.XmlNodeName);
+                            case Constants.NextKey:
+                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, decryptedPermit.NextKey)) attributeNode.InnerText = GetXmlNodeValue(decryptedPermit.NextKey, attribute.XmlNodeName);
                                 break;
                             default:
                                 var jsonFieldValue = CommonHelper.ParseXmlNode(attribute.JsonPropertyName, source, source.GetType()).ToString();
@@ -393,16 +353,16 @@ namespace UKHO.ERPFacade.API.Helpers
                         {
                             switch (attribute.XmlNodeName)
                             {
-                                case ValidFrom:
+                                case Constants.ValidFrom:
                                     var validFrom = _weekDetailsProvider.GetDateOfWeek(ukhoWeekNumber.Year.Value, ukhoWeekNumber.Week.Value, ukhoWeekNumber.CurrentWeekAlphaCorrection.Value);
                                     attributeNode.InnerText = GetXmlNodeValue(validFrom, attribute.XmlNodeName);
                                     break;
-                                case WeekNo:
+                                case Constants.WeekNo:
                                     var weekNo = string.Join("", ukhoWeekNumber.Year, ukhoWeekNumber.Week.Value.ToString("D2"));
                                     attributeNode.InnerText = GetXmlNodeValue(weekNo, attribute.XmlNodeName);
                                     break;
-                                case Correction:
-                                    attributeNode.InnerText = GetXmlNodeValue(ukhoWeekNumber.CurrentWeekAlphaCorrection.Value ? IsCorrectionTrue : IsCorrectionFalse, attribute.XmlNodeName);
+                                case Constants.Correction:
+                                    attributeNode.InnerText = GetXmlNodeValue(ukhoWeekNumber.CurrentWeekAlphaCorrection.Value ? Constants.IsCorrectionTrue : Constants.IsCorrectionFalse, attribute.XmlNodeName);
                                     break;
                             }
                         }
@@ -432,7 +392,7 @@ namespace UKHO.ERPFacade.API.Helpers
         private string GetXmlNodeValue(string fieldValue, string xmlNodeName = null)
         {
             // Return first 2 characters if the node is Agency, else limit other nodes to 250 characters
-            return xmlNodeName == Agency ? CommonHelper.ToSubstring(fieldValue, 0, MaxAgencyXmlNodeLength) : CommonHelper.ToSubstring(fieldValue, 0, MaxXmlNodeLength);
+            return xmlNodeName == Constants.Agency ? CommonHelper.ToSubstring(fieldValue, 0, Constants.MaxAgencyXmlNodeLength) : CommonHelper.ToSubstring(fieldValue, 0, Constants.MaxXmlNodeLength);
         }
 
         private XmlNode SortXmlPayload(XmlNode actionItemNode)
@@ -443,13 +403,13 @@ namespace UKHO.ERPFacade.API.Helpers
 
             // Sort based on the ActionNumber
             var sortedActionItems = actionItems
-                .OrderBy(node => Convert.ToInt32(node.SelectSingleNode(ActionNumber)?.InnerText ?? "0"))
+                .OrderBy(node => Convert.ToInt32(node.SelectSingleNode(Constants.ActionNumber)?.InnerText ?? "0"))
                 .ToList();
 
             // Update the sequence number in the sorted list
             foreach (XmlNode actionItem in sortedActionItems)
             {
-                var actionNumberNode = actionItem.SelectSingleNode(ActionNumber);
+                var actionNumberNode = actionItem.SelectSingleNode(Constants.ActionNumber);
                 if (actionNumberNode != null)
                 {
                     actionNumberNode.InnerText = sequenceNumber.ToString();

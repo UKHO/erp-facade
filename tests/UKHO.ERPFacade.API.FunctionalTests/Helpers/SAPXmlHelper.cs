@@ -2,6 +2,8 @@
 using System.Xml.Linq;
 using Newtonsoft.Json.Linq;
 using UKHO.ERPFacade.API.FunctionalTests.Configuration;
+using UKHO.ERPFacade.Common.Constants;
+
 namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 {
     public class SapXmlHelper
@@ -18,32 +20,32 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             randomCorrId = randomCorrId.Insert(5, "-");
             randomCorrId = randomCorrId.Insert(11, "-");
             randomCorrId = randomCorrId.Insert(16, "-");
-            var currentTimeStamp = DateTime.Now.ToString("yyyyMMdd");
+            var currentTimeStamp = DateTime.Now.ToString(Constants.RecDateFormat);
             randomCorrId = "ft-" + currentTimeStamp + "-" + randomCorrId;
             return randomCorrId;
         }
 
         public static string UpdateTimeAndCorrIdField(string requestBody, string generatedCorrelationId)
         {
-            var currentTimeStamp = DateTime.Now.ToString("yyyy-MM-dd");
+            var currentTimeStamp = DateTime.Now.ToString(Constants.RecDateFormat);
             JObject jsonObj = JObject.Parse(requestBody);
             jsonObj["time"] = currentTimeStamp;
-            jsonObj["data"]["correlationId"] = generatedCorrelationId;
+            jsonObj[Constants.DataNode]["correlationId"] = generatedCorrelationId;
             return jsonObj.ToString();
         }
 
         public static string UpdatePermitField(string requestBody, string permitState)
         {
             JObject jsonObj = JObject.Parse(requestBody);
-            var products = jsonObj["data"]["products"];
+            var products = jsonObj[Constants.DataNode][Constants.Products];
 
-            string permit = permitState.Contains("Same") ? Config.TestConfig.PermitWithSameKey.Permit
-                : permitState.Contains("Different") ? Config.TestConfig.PermitWithDifferentKey.Permit
-                : "permitString";
+            string permit = permitState.Contains(Constants.PermitWithSameKey) ? Config.TestConfig.PermitWithSameKey.Permit
+                : permitState.Contains(Constants.PermitWithDifferentKey) ? Config.TestConfig.PermitWithDifferentKey.Permit
+                : permitState;
 
             foreach (var product in products)
             {
-                product["permit"] = permit;
+                product[Constants.Permit] = permit;
             }
 
             return jsonObj.ToString();
@@ -64,12 +66,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 expectedXml = XElement.Load(reader);
             }
 
-            var generatedAttributes = generatedXml.Descendants("Item").ToList();
-            var expectedAttributes = expectedXml.Descendants("Item").ToList();
+            var generatedAttributes = generatedXml.Descendants("item").ToList();
+            var expectedAttributes = expectedXml.Descendants("item").ToList();
 
 
-            string activeKey = permitState == "PermitWithSameKey" ? permitWithSameKeyActiveKey : permitWithDifferentKeyActiveKey;
-            string nextKey = permitState == "PermitWithSameKey" ? permitWithSameKeyNextKey : permitWithDifferentKeyNextKey;
+            string activeKey = permitState == Constants.PermitWithSameKey ? permitWithSameKeyActiveKey : permitWithDifferentKeyActiveKey;
+            string nextKey = permitState == Constants.PermitWithSameKey ? permitWithSameKeyNextKey : permitWithDifferentKeyNextKey;
 
             // Ensure both XMLs have the same number of items
             if (generatedAttributes.Count != expectedAttributes.Count)
@@ -89,7 +91,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 {
                     var expectedAttribute = expectedAction.Element(generatedAttribute.Name);
 
-                    if ((action == "CREATE ENC CELL" || action == "UPDATE ENC CELL EDITION UPDATE NUMBER") && (generatedAttribute.Name == "ACTIVEKEY" || generatedAttribute.Name == "NEXTKEY"))
+                    if ((action == Constants.CreateEncCell || action == Constants.UpdateCell ) && (generatedAttribute.Name == Constants.ActiveKey || generatedAttribute.Name == Constants.NextKey))
                     {
                         string expectedValue = generatedAttribute.Name == "ACTIVEKEY" ? activeKey : nextKey;
 
