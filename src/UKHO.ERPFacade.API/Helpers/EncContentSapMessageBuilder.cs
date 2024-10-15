@@ -10,7 +10,7 @@ using UKHO.ERPFacade.Common.Constants;
 
 namespace UKHO.ERPFacade.API.Helpers
 {
-    public class EncContentSapMessageBuilder : IEncContentSapMessageBuilder
+    public class EncContentSapMessageBuilder : SapMessageBuilder
     {
         private readonly ILogger<EncContentSapMessageBuilder> _logger;
         private readonly IXmlHelper _xmlHelper;
@@ -26,6 +26,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                  IWeekDetailsProvider weekDetailsProvider,
                                  IPermitDecryption permitDecryption
                                  )
+        : base(fileSystemHelper, xmlHelper)
         {
             _logger = logger;
             _xmlHelper = xmlHelper;
@@ -40,17 +41,9 @@ namespace UKHO.ERPFacade.API.Helpers
         /// </summary>
         /// <param name="eventData"></param>        
         /// <returns>XmlDocument</returns>
-        public XmlDocument BuildSapMessageXml(EncEventPayload eventData)
+        public XmlDocument BuildSapMessageXml(EncEventPayload eventData, string templatePath)
         {
-            string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, Constants.S57SapXmlTemplatePath);
-
-            // Check if SAP XML payload template exists
-            if (!_fileSystemHelper.IsFileExists(sapXmlTemplatePath))
-            {
-                throw new ERPFacadeException(EventIds.SapXmlTemplateNotFound.ToEventId(), "The SAP XML payload template does not exist.");
-            }
-
-            var soapXml = _xmlHelper.CreateXmlDocument(sapXmlTemplatePath);
+            var soapXml = CreateXmlDocument(templatePath);
 
             var actionItemNode = soapXml.SelectSingleNode(Constants.XpathActionItems);
 
@@ -157,19 +150,6 @@ namespace UKHO.ERPFacade.API.Helpers
             }
         }
 
-        private void FinalizeSapXmlMessage(XmlDocument soapXml, string correlationId, XmlNode actionItemNode)
-        {
-            var xmlNode = SortXmlPayload(actionItemNode);
-
-            SetXmlNodeValue(soapXml, Constants.XpathCorrId, correlationId);
-            SetXmlNodeValue(soapXml, Constants.XpathNoOfActions, xmlNode.ChildNodes.Count.ToString());
-            SetXmlNodeValue(soapXml, Constants.XpathRecDate, DateTime.UtcNow.ToString(Constants.RecDateFormat));
-            SetXmlNodeValue(soapXml, Constants.XpathRecTime, DateTime.UtcNow.ToString(Constants.RecTimeFormat));
-
-            var IM_MATINFONode = soapXml.SelectSingleNode(Constants.XpathImMatInfo);
-            IM_MATINFONode.AppendChild(xmlNode);
-        }
-
         /// <summary>
         /// Returns primary unit of sale for given product to get ProductName for ENC cell SAP actions.
         /// </summary>
@@ -206,33 +186,6 @@ namespace UKHO.ERPFacade.API.Helpers
         /// <param name="action"></param>
         /// <param name="obj"></param>
         /// <returns></returns>
-        private bool ValidateActionRules(SapAction action, object obj)
-        {
-            bool isConditionSatisfied = false;
-
-            //Return true if no rules for SAP action.
-            if (action.Rules == null!) return true;
-
-            foreach (var rules in action.Rules)
-            {
-                foreach (var conditions in rules.Conditions)
-                {
-                    object jsonFieldValue = CommonHelper.ParseXmlNode(conditions.AttributeName, obj, obj.GetType());
-
-                    if (jsonFieldValue != null! && jsonFieldValue.ToString() == conditions.AttributeValue)
-                    {
-                        isConditionSatisfied = true;
-                    }
-                    else
-                    {
-                        isConditionSatisfied = false;
-                        break;
-                    }
-                }
-                if (isConditionSatisfied) break;
-            }
-            return isConditionSatisfied;
-        }
 
         private void BuildAndAppendActionNode(XmlDocument soapXml, Product product, UnitOfSale unitOfSale, SapAction action, EncEventPayload eventData, XmlNode actionItemNode, string childCell = null, string replacedBy = null)
         {
@@ -267,10 +220,13 @@ namespace UKHO.ERPFacade.API.Helpers
             }
 
             // Process ProductSection attributes
-            ProcessAttributes(action.Action, action.Attributes.Where(x => x.Section == Constants.ProductSection), soapXml, product, actionAttributes, decryptedPermit, replacedBy);
+            ProcessAttributes(action.Action, action.Attributes.Where(x => x.Section == Constants.ProductSection), soapXml, product, actionAttributes, replacedBy);
 
             // Process UnitOfSaleSection attributes
-            ProcessAttributes(action.Action, action.Attributes.Where(x => x.Section == Constants.UnitOfSaleSection), soapXml, unitOfSale, actionAttributes, null, null);
+            ProcessAttributes(action.Action, action.Attributes.Where(x => x.Section == Constants.UnitOfSaleSection), soapXml, unitOfSale, actionAttributes, null);
+
+            //Process PermitSection attributes
+            ProcessPermitAttributes(action.Action, action.Attributes.Where(x => x.Section == "Permit"), soapXml, actionAttributes, decryptedPermit);
 
             // Process UkhoWeekNumberSection attributes
             ProcessUkhoWeekNumberAttributes(action.Action, action.Attributes.Where(x => x.Section == Constants.UkhoWeekNumberSection), soapXml, ukhoWeekNumber, actionAttributes);
@@ -284,14 +240,7 @@ namespace UKHO.ERPFacade.API.Helpers
             return itemNode;
         }
 
-        private void AppendChildNode(XmlElement parentNode, XmlDocument doc, string nodeName, string value)
-        {
-            var childNode = doc.CreateElement(nodeName);
-            childNode.InnerText = value ?? string.Empty;
-            parentNode.AppendChild(childNode);
-        }
-
-        private void ProcessAttributes(string action, IEnumerable<ActionItemAttribute> attributes, XmlDocument soapXml, object source, List<(int, XmlElement)> actionAttributes, DecryptedPermit decryptedPermit = null, string replacedBy = null)
+        private void ProcessPermitAttributes(string action, IEnumerable<ActionItemAttribute> attributes, XmlDocument soapXml, List<(int, XmlElement)> actionAttributes, DecryptedPermit decryptedPermit)
         {
             foreach (var attribute in attributes)
             {
@@ -303,9 +252,6 @@ namespace UKHO.ERPFacade.API.Helpers
                     {
                         switch (attribute.XmlNodeName)
                         {
-                            case Constants.ReplacedBy:
-                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, replacedBy)) attributeNode.InnerText = GetXmlNodeValue(replacedBy.ToString(), attribute.XmlNodeName);
-                                break;
                             case Constants.ActiveKey:
                                 if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, decryptedPermit.ActiveKey)) attributeNode.InnerText = GetXmlNodeValue(decryptedPermit.ActiveKey, attribute.XmlNodeName);
                                 break;
@@ -313,11 +259,6 @@ namespace UKHO.ERPFacade.API.Helpers
                                 if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, decryptedPermit.NextKey)) attributeNode.InnerText = GetXmlNodeValue(decryptedPermit.NextKey, attribute.XmlNodeName);
                                 break;
                             default:
-                                var jsonFieldValue = CommonHelper.ParseXmlNode(attribute.JsonPropertyName, source, source.GetType()).ToString();
-                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, jsonFieldValue))
-                                {
-                                    attributeNode.InnerText = GetXmlNodeValue(jsonFieldValue.ToString(), attribute.XmlNodeName);
-                                }
                                 break;
                         }
                     }
@@ -378,61 +319,6 @@ namespace UKHO.ERPFacade.API.Helpers
                     throw new ERPFacadeException(EventIds.BuildingSapActionInformationException.ToEventId(), $"Error while generating SAP action information. | Action : {action} | XML Attribute : {attribute.XmlNodeName} | ErrorMessage : {ex.Message}");
                 }
             }
-        }
-
-        private void SetXmlNodeValue(XmlDocument xmlDoc, string xPath, string value)
-        {
-            var node = xmlDoc.SelectSingleNode(xPath);
-            if (node != null)
-            {
-                node.InnerText = value;
-            }
-        }
-
-        private string GetXmlNodeValue(string fieldValue, string xmlNodeName = null)
-        {
-            // Return first 2 characters if the node is Agency, else limit other nodes to 250 characters
-            return xmlNodeName == Constants.Agency ? CommonHelper.ToSubstring(fieldValue, 0, Constants.MaxAgencyXmlNodeLength) : CommonHelper.ToSubstring(fieldValue, 0, Constants.MaxXmlNodeLength);
-        }
-
-        private XmlNode SortXmlPayload(XmlNode actionItemNode)
-        {
-            // Extract all action item nodes
-            var actionItems = actionItemNode.Cast<XmlNode>().ToList();
-            int sequenceNumber = 1;
-
-            // Sort based on the ActionNumber
-            var sortedActionItems = actionItems
-                .OrderBy(node => Convert.ToInt32(node.SelectSingleNode(Constants.ActionNumber)?.InnerText ?? "0"))
-                .ToList();
-
-            // Update the sequence number in the sorted list
-            foreach (XmlNode actionItem in sortedActionItems)
-            {
-                var actionNumberNode = actionItem.SelectSingleNode(Constants.ActionNumber);
-                if (actionNumberNode != null)
-                {
-                    actionNumberNode.InnerText = sequenceNumber.ToString();
-                    sequenceNumber++;
-                }
-            }
-
-            // Clear existing children and append sorted action items
-            actionItemNode.RemoveAll();
-            foreach (XmlNode actionItem in sortedActionItems)
-            {
-                actionItemNode.AppendChild(actionItem);
-            }
-            return actionItemNode;
-        }
-
-        private bool IsPropertyNullOrEmpty(string propertyName, string propertyValue)
-        {
-            if (string.IsNullOrEmpty(propertyValue))
-            {
-                throw new ERPFacadeException(EventIds.EmptyEventJsonPropertyException.ToEventId(), $"Required details are missing in enccontentpublished event payload. | Property Name : {propertyName}");
-            }
-            else return false;
         }
     }
 }

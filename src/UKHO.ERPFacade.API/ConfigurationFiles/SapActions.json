@@ -526,7 +526,7 @@
                     {
                         "IsRequired": true,
                         "Section": "Product",
-                        "JsonPropertyName": "",
+                        "JsonPropertyName": "replacedBy",
                         "XmlNodeName": "REPLACEDBY",
                         "SortingOrder": 3
                     },
@@ -602,14 +602,14 @@
                     },
                     {
                         "IsRequired": false,
-                        "Section": "Product",
+                        "Section": "Permit",
                         "JsonPropertyName": "",
                         "XmlNodeName": "ACTIVEKEY",
                         "SortingOrder": 14
                     },
                     {
                         "IsRequired": false,
-                        "Section": "Product",
+                        "Section": "Permit",
                         "JsonPropertyName": "",
                         "XmlNodeName": "NEXTKEY",
                         "SortingOrder": 15

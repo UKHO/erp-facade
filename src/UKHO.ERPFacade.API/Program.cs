@@ -25,6 +25,8 @@ using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Providers;
 using UKHO.ERPFacade.Common.PermitDecryption;
 using UKHO.Logging.EventHubLogProvider;
+using Elastic.Apm.Api;
+using UKHO.ERPFacade.API.Handlers;
 
 namespace UKHO.ERPFacade
 {
@@ -170,7 +172,7 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<IAzureTableReaderWriter, AzureTableReaderWriter>();
             builder.Services.AddScoped<IAzureBlobEventWriter, AzureBlobEventWriter>();
             builder.Services.AddScoped<IAzureQueueHelper, AzureQueueHelper>();
-            builder.Services.AddScoped<IEncContentSapMessageBuilder, EncContentSapMessageBuilder>();
+            builder.Services.AddScoped<SapMessageBuilder, EncContentSapMessageBuilder>();
             builder.Services.AddScoped<IXmlHelper, XmlHelper>();
             builder.Services.AddScoped<IFileSystemHelper, FileSystemHelper>();
             builder.Services.AddScoped<IFileSystem, FileSystem>();
@@ -178,6 +180,9 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<ILicenceUpdatedSapMessageBuilder, LicenceUpdatedSapMessageBuilder>();
             builder.Services.AddScoped<IWeekDetailsProvider, WeekDetailsProvider>();
             builder.Services.AddScoped<IPermitDecryption, PermitDecryption>();
+
+            builder.Services.AddSingleton<IEventHandler, S57EventService>();
+            builder.Services.AddSingleton<IEventHandler, S100EventService>();
 
             ConfigureHealthChecks(builder);
 

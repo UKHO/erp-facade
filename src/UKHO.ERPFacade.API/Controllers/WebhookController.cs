@@ -27,7 +27,7 @@ namespace UKHO.ERPFacade.API.Controllers
         private readonly IAzureBlobEventWriter _azureBlobEventWriter;
         private readonly IAzureQueueHelper _azureQueueHelper;
         private readonly ISapClient _sapClient;
-        private readonly IEncContentSapMessageBuilder _encContentSapMessageBuilder;
+        private readonly EncContentSapMessageBuilder _encContentSapMessageBuilder;
         private readonly IOptions<SapConfiguration> _sapConfig;
         private readonly ILicenceUpdatedSapMessageBuilder _licenceUpdatedSapMessageBuilder;
 
@@ -37,7 +37,7 @@ namespace UKHO.ERPFacade.API.Controllers
                                  IAzureBlobEventWriter azureBlobEventWriter,
                                  IAzureQueueHelper azureQueueHelper,
                                  ISapClient sapClient,
-                                 IEncContentSapMessageBuilder encContentSapMessageBuilder,
+                                 EncContentSapMessageBuilder encContentSapMessageBuilder,
                                  IOptions<SapConfiguration> sapConfig,
                                  ILicenceUpdatedSapMessageBuilder licenceUpdatedSapMessageBuilder)
         : base(contextAccessor)
@@ -100,7 +100,7 @@ namespace UKHO.ERPFacade.API.Controllers
             await _azureBlobEventWriter.UploadEvent(encEventJson.ToString(), Constants.S57EventContainerName, correlationId + '/' + Constants.S57EncEventFileName);
             _logger.LogInformation(EventIds.UploadEncContentPublishedEventInAzureBlobCompleted.ToEventId(), "The enccontentpublished event payload is uploaded in blob storage successfully.");
 
-            var sapPayload = _encContentSapMessageBuilder.BuildSapMessageXml(JsonConvert.DeserializeObject<EncEventPayload>(encEventJson.ToString()));
+            var sapPayload = _encContentSapMessageBuilder.BuildSapMessageXml(JsonConvert.DeserializeObject<EncEventPayload>(encEventJson.ToString()),Constants.S57SapXmlTemplatePath);
 
             _logger.LogInformation(EventIds.UploadSapXmlPayloadInAzureBlobStarted.ToEventId(), "Uploading the SAP XML payload in blob storage.");
             await _azureBlobEventWriter.UploadEvent(sapPayload.ToIndentedString(), Constants.S57EventContainerName, correlationId + '/' + Constants.SapXmlPayloadFileName);
