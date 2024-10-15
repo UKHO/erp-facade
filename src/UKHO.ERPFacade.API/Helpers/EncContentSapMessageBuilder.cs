@@ -7,6 +7,7 @@ using UKHO.ERPFacade.Common.Providers;
 using UKHO.ERPFacade.Common.PermitDecryption;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Constants;
+using System;
 
 namespace UKHO.ERPFacade.API.Helpers
 {
@@ -159,12 +160,12 @@ namespace UKHO.ERPFacade.API.Helpers
 
         private void FinalizeSapXmlMessage(XmlDocument soapXml, string correlationId, XmlNode actionItemNode)
         {
-            var xmlNode = SortXmlPayload(actionItemNode);
+            var xmlNode = SortXmlPayload(actionItemNode);           
 
-            SetXmlNodeValue(soapXml, Constants.XpathCorrId, correlationId);
-            SetXmlNodeValue(soapXml, Constants.XpathNoOfActions, xmlNode.ChildNodes.Count.ToString());
-            SetXmlNodeValue(soapXml, Constants.XpathRecDate, DateTime.UtcNow.ToString(Constants.RecDateFormat));
-            SetXmlNodeValue(soapXml, Constants.XpathRecTime, DateTime.UtcNow.ToString(Constants.RecTimeFormat));
+            soapXml.SelectSingleNode(Constants.XpathCorrId).InnerText = correlationId;
+            soapXml.SelectSingleNode(Constants.XpathNoOfActions).InnerText = xmlNode.ChildNodes.Count.ToString();
+            soapXml.SelectSingleNode(Constants.XpathRecDate).InnerText = DateTime.UtcNow.ToString(Constants.RecDateFormat);
+            soapXml.SelectSingleNode(Constants.XpathRecTime).InnerText = DateTime.UtcNow.ToString(Constants.RecTimeFormat);
 
             var IM_MATINFONode = soapXml.SelectSingleNode(Constants.XpathImMatInfo);
             IM_MATINFONode.AppendChild(xmlNode);
@@ -358,7 +359,7 @@ namespace UKHO.ERPFacade.API.Helpers
                                     attributeNode.InnerText = GetXmlNodeValue(validFrom, attribute.XmlNodeName);
                                     break;
                                 case Constants.WeekNo:
-                                    var weekNo = string.Join("", ukhoWeekNumber.Year, ukhoWeekNumber.Week.Value.ToString("D2"));
+                                    var weekNo = string.Join(Constants.UkhoWeekNoFormatSeparator, ukhoWeekNumber.Year, ukhoWeekNumber.Week.Value.ToString(Constants.UkhoWeekNoFormat));
                                     attributeNode.InnerText = GetXmlNodeValue(weekNo, attribute.XmlNodeName);
                                     break;
                                 case Constants.Correction:
@@ -378,16 +379,7 @@ namespace UKHO.ERPFacade.API.Helpers
                     throw new ERPFacadeException(EventIds.BuildingSapActionInformationException.ToEventId(), $"Error while generating SAP action information. | Action : {action} | XML Attribute : {attribute.XmlNodeName} | ErrorMessage : {ex.Message}");
                 }
             }
-        }
-
-        private void SetXmlNodeValue(XmlDocument xmlDoc, string xPath, string value)
-        {
-            var node = xmlDoc.SelectSingleNode(xPath);
-            if (node != null)
-            {
-                node.InnerText = value;
-            }
-        }
+        }    
 
         private string GetXmlNodeValue(string fieldValue, string xmlNodeName = null)
         {
@@ -403,22 +395,17 @@ namespace UKHO.ERPFacade.API.Helpers
 
             // Sort based on the ActionNumber
             var sortedActionItems = actionItems
-                .OrderBy(node => Convert.ToInt32(node.SelectSingleNode(Constants.ActionNumber)?.InnerText ?? "0"))
+                .OrderBy(node => Convert.ToInt32(node.SelectSingleNode(Constants.ActionNumber)?.InnerText))
                 .ToList();
 
             // Update the sequence number in the sorted list
             foreach (XmlNode actionItem in sortedActionItems)
             {
-                var actionNumberNode = actionItem.SelectSingleNode(Constants.ActionNumber);
-                if (actionNumberNode != null)
-                {
-                    actionNumberNode.InnerText = sequenceNumber.ToString();
-                    sequenceNumber++;
-                }
+                actionItem.SelectSingleNode(Constants.ActionNumber).InnerText = sequenceNumber.ToString();
+                sequenceNumber++;
             }
 
-            // Clear existing children and append sorted action items
-            actionItemNode.RemoveAll();
+            //Append sorted action items
             foreach (XmlNode actionItem in sortedActionItems)
             {
                 actionItemNode.AppendChild(actionItem);

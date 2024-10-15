@@ -156,6 +156,12 @@
     <None Update="ERPFacadePayloadTestData\AdditionalCoverageWithNewEdition.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ERPFacadePayloadTestData\AIONewCell.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\AIOUpdateCell.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ERPFacadePayloadTestData\CancelCellWithExistingCellReplacement.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
