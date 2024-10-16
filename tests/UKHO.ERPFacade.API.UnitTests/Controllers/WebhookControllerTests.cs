@@ -30,28 +30,28 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
     public class WebhookControllerTests
     {
         private IHttpContextAccessor _fakeHttpContextAccessor;
-        private ILogger<WebhookController> _fakeLogger;
+        private ILogger<OldWebhookController> _fakeLogger;
         private IAzureTableReaderWriter _fakeAzureTableReaderWriter;
         private IAzureBlobEventWriter _fakeAzureBlobEventWriter;
         private IAzureQueueHelper _fakeAzureQueueHelper;
         private ISapClient _fakeSapClient;
         private IXmlHelper _fakeXmlHelper;
-        private IEncContentSapMessageBuilder _fakeEncContentSapMessageBuilder;
+        private IS57XmlTransformer _fakeEncContentSapMessageBuilder;
         private IOptions<SapConfiguration> _fakeSapConfig;
-        private WebhookController _fakeWebHookController;
+        private OldWebhookController _fakeWebHookController;
         private ILicenceUpdatedSapMessageBuilder _fakeLicenceUpdatedSapMessageBuilder;
 
         [SetUp]
         public void Setup()
         {
             _fakeHttpContextAccessor = A.Fake<IHttpContextAccessor>();
-            _fakeLogger = A.Fake<ILogger<WebhookController>>();
+            _fakeLogger = A.Fake<ILogger<OldWebhookController>>();
             _fakeAzureTableReaderWriter = A.Fake<IAzureTableReaderWriter>();
             _fakeAzureBlobEventWriter = A.Fake<IAzureBlobEventWriter>();
             _fakeAzureQueueHelper = A.Fake<IAzureQueueHelper>();
             _fakeSapClient = A.Fake<ISapClient>();
             _fakeXmlHelper = A.Fake<IXmlHelper>();
-            _fakeEncContentSapMessageBuilder = A.Fake<IEncContentSapMessageBuilder>();
+            _fakeEncContentSapMessageBuilder = A.Fake<IS57XmlTransformer>();
             _fakeLicenceUpdatedSapMessageBuilder = A.Fake<ILicenceUpdatedSapMessageBuilder>();
             _fakeSapConfig = Options.Create(new SapConfiguration()
             {

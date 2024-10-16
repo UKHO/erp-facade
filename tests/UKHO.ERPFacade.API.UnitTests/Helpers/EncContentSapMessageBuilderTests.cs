@@ -28,22 +28,22 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         private IXmlHelper _fakeXmlHelper;
         private IFileSystemHelper _fakeFileSystemHelper;
         private IOptions<SapActionConfiguration> _fakeSapActionConfig;
-        private ILogger<EncContentSapMessageBuilder> _fakeLogger;
+        private ILogger<S57XmlTransformer> _fakeLogger;
         private IWeekDetailsProvider _fakeWeekDetailsProvider;
         private IPermitDecryption _fakePermitDecryption;
-        private EncContentSapMessageBuilder _fakeEncContentSapMessageBuilder;
+        private S57XmlTransformer _fakeEncContentSapMessageBuilder;
         private string _sapXmlTemplate;
 
         [SetUp]
         public void Setup()
         {
-            _fakeLogger = A.Fake<ILogger<EncContentSapMessageBuilder>>();
+            _fakeLogger = A.Fake<ILogger<S57XmlTransformer>>();
             _fakeXmlHelper = A.Fake<IXmlHelper>();
             _fakeFileSystemHelper = A.Fake<IFileSystemHelper>();
             _fakeSapActionConfig = Options.Create(InitConfiguration().GetSection("SapActionConfiguration").Get<SapActionConfiguration>())!;
             _fakeWeekDetailsProvider = A.Fake<IWeekDetailsProvider>();
             _fakePermitDecryption = A.Fake<IPermitDecryption>();
-            _fakeEncContentSapMessageBuilder = new EncContentSapMessageBuilder(_fakeLogger, _fakeXmlHelper, _fakeFileSystemHelper, _fakeSapActionConfig, _fakeWeekDetailsProvider, _fakePermitDecryption);
+            _fakeEncContentSapMessageBuilder = new S57XmlTransformer(_fakeLogger, _fakeXmlHelper, _fakeFileSystemHelper, _fakeSapActionConfig, _fakeWeekDetailsProvider, _fakePermitDecryption);
             _sapXmlTemplate = TestHelper.ReadFileData(Constants.S57SapXmlTemplatePath);
         }
 
@@ -259,7 +259,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             xmlDoc.LoadXml(sapReqXml);
             var actionItemNode = xmlDoc.SelectSingleNode(Constants.XpathActionItems);
 
-            var sortedXmlPayLoad = typeof(EncContentSapMessageBuilder).GetMethod("SortXmlPayload", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
+            var sortedXmlPayLoad = typeof(S57XmlTransformer).GetMethod("SortXmlPayload", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
             var result = (XmlNode)sortedXmlPayLoad.Invoke(_fakeEncContentSapMessageBuilder, new object[] { actionItemNode! })!;
 
             var firstActionNumber = result.SelectSingleNode(Constants.XpathActionNumber);
@@ -361,7 +361,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             var eventData = JsonConvert.DeserializeObject<EncEventPayload>(cancelCellWithNewCellReplacementPayloadJson);
             var action = _fakeSapActionConfig.Value.SapActions.FirstOrDefault(x => x.Product == Constants.EncCell && x.Action == Constants.ReplaceEncCellAction);
 
-            MethodInfo buildAction = typeof(EncContentSapMessageBuilder).GetMethod("GetUnitOfSale", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
+            MethodInfo buildAction = typeof(S57XmlTransformer).GetMethod("GetUnitOfSale", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
             var result = (XmlElement)buildAction.Invoke(_fakeEncContentSapMessageBuilder, new object[] { action.ActionNumber, eventData.Data.UnitsOfSales!, eventData.Data.Products.FirstOrDefault()! })!;
 
             result.Should().BeNull();
@@ -374,7 +374,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             var eventData = JsonConvert.DeserializeObject<EncEventPayload>(cancelCellWithNewCellReplacementPayloadJson);
             var action = _fakeSapActionConfig.Value.SapActions.FirstOrDefault(x => x.Product == Constants.EncCell && x.Action == Constants.ChangeEncCellAction);
 
-            MethodInfo buildAction = typeof(EncContentSapMessageBuilder).GetMethod("GetUnitOfSale", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
+            MethodInfo buildAction = typeof(S57XmlTransformer).GetMethod("GetUnitOfSale", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
             var result = (XmlElement)buildAction.Invoke(_fakeEncContentSapMessageBuilder, new object[] { action.ActionNumber, eventData.Data.UnitsOfSales!, eventData.Data.Products.LastOrDefault()! })!;
 
             result.Should().BeNull();
@@ -386,7 +386,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         [TestCase("fieldvalue", "", "fieldvalue")]
         public void WhenGetXmlNodeValue(string fieldValue, string xmlNodeName, string expectedValue)
         {
-            MethodInfo buildAction = typeof(EncContentSapMessageBuilder).GetMethod("GetXmlNodeValue", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
+            MethodInfo buildAction = typeof(S57XmlTransformer).GetMethod("GetXmlNodeValue", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
             var result = (string)buildAction.Invoke(_fakeEncContentSapMessageBuilder, new object[] { fieldValue, xmlNodeName })!;
 
             result.Should().Be(expectedValue);

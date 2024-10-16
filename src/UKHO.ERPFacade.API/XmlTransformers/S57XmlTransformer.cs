@@ -7,26 +7,28 @@ using UKHO.ERPFacade.Common.Providers;
 using UKHO.ERPFacade.Common.PermitDecryption;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Constants;
+using UKHO.ERPFacade.API.XmlTransformers;
 
 namespace UKHO.ERPFacade.API.Helpers
 {
-    public class EncContentSapMessageBuilder : SapMessageBuilder
+    public class S57XmlTransformer : IS57XmlTransformer
     {
-        private readonly ILogger<EncContentSapMessageBuilder> _logger;
+        private readonly ILogger<S57XmlTransformer> _logger;
         private readonly IXmlHelper _xmlHelper;
         private readonly IFileSystemHelper _fileSystemHelper;
         private readonly IOptions<SapActionConfiguration> _sapActionConfig;
         private readonly IWeekDetailsProvider _weekDetailsProvider;
         private readonly IPermitDecryption _permitDecryption;
+        private readonly ICommonXmlTransformer _commonXmlTransformer;
 
-        public EncContentSapMessageBuilder(ILogger<EncContentSapMessageBuilder> logger,
+        public S57XmlTransformer(ILogger<S57XmlTransformer> logger,
                                  IXmlHelper xmlHelper,
                                  IFileSystemHelper fileSystemHelper,
                                  IOptions<SapActionConfiguration> sapActionConfig,
                                  IWeekDetailsProvider weekDetailsProvider,
-                                 IPermitDecryption permitDecryption
+                                 IPermitDecryption permitDecryption,
+                                 ICommonXmlTransformer commonXmlTransformer
                                  )
-        : base(fileSystemHelper, xmlHelper)
         {
             _logger = logger;
             _xmlHelper = xmlHelper;
@@ -34,6 +36,7 @@ namespace UKHO.ERPFacade.API.Helpers
             _sapActionConfig = sapActionConfig;
             _weekDetailsProvider = weekDetailsProvider;
             _permitDecryption = permitDecryption;
+            _commonXmlTransformer = commonXmlTransformer;
         }
 
         /// <summary>
@@ -43,7 +46,7 @@ namespace UKHO.ERPFacade.API.Helpers
         /// <returns>XmlDocument</returns>
         public XmlDocument BuildSapMessageXml(EncEventPayload eventData, string templatePath)
         {
-            var soapXml = CreateXmlDocument(templatePath);
+            var soapXml = _xmlHelper.CreateXmlDocument(Path.Combine(Environment.CurrentDirectory, templatePath));
 
             var actionItemNode = soapXml.SelectSingleNode(Constants.XpathActionItems);
 
@@ -56,7 +59,7 @@ namespace UKHO.ERPFacade.API.Helpers
             BuildUnitActions(eventData, soapXml, actionItemNode);
 
             // Finalize SAP XML message
-            FinalizeSapXmlMessage(soapXml, eventData.Data.CorrelationId, actionItemNode);
+            _commonXmlTransformer.FinalizeSapXmlMessage(soapXml, eventData.Data.CorrelationId, actionItemNode);
 
             _logger.LogInformation(EventIds.GenerationOfSapXmlPayloadCompleted.ToEventId(), "Generation of SAP XML payload completed.");
 

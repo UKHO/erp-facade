@@ -2,7 +2,7 @@
 
 namespace UKHO.ERPFacade.API.Handlers
 {
-    public class S100EventService : IEventHandler
+    public class S100EventHandler : IEventHandler
     {
         public string EventType => "uk.gov.UKHO.ENCPublishing.s100DataContentPublished.v1";
 

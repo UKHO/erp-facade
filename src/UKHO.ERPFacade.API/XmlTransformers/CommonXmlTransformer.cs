@@ -1,18 +1,26 @@
 ﻿using System.Xml;
+using Newtonsoft.Json.Linq;
+using UKHO.ERPFacade.API.Handlers;
 using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
 
-namespace UKHO.ERPFacade.API.Helpers
+namespace UKHO.ERPFacade.API.XmlTransformers
 {
-    public class SapMessageBuilder
+    public interface ICommonXmlTransformer
+    {
+        public bool ValidateActionRules(SapAction action, object obj);
+        public void FinalizeSapXmlMessage(XmlDocument soapXml, string correlationId, XmlNode actionItemNode);
+    }
+
+    public class CommonXmlTransformer : ICommonXmlTransformer
     {
         private readonly IFileSystemHelper _fileSystemHelper;
         private readonly IXmlHelper _xmlHelper;
 
-        public SapMessageBuilder(IFileSystemHelper fileSystemHelper, IXmlHelper xmlHelper)
+        public CommonXmlTransformer(IFileSystemHelper fileSystemHelper, IXmlHelper xmlHelper)
         {
             _fileSystemHelper = fileSystemHelper;
             _xmlHelper = xmlHelper;
@@ -61,15 +69,39 @@ namespace UKHO.ERPFacade.API.Helpers
 
         public void FinalizeSapXmlMessage(XmlDocument soapXml, string correlationId, XmlNode actionItemNode)
         {
-            var xmlNode = SortXmlPayload(actionItemNode);
+            // Extract all action item nodes
+            var actionItems = actionItemNode.Cast<XmlNode>().ToList();
+            int sequenceNumber = 1;
 
+            // Sort based on the ActionNumber
+            var sortedActionItems = actionItems
+                .OrderBy(node => Convert.ToInt32(node.SelectSingleNode(Constants.ActionNumber)?.InnerText ?? "0"))
+                .ToList();
+
+            // Update the sequence number in the sorted list
+            foreach (XmlNode actionItem in sortedActionItems)
+            {
+                var actionNumberNode = actionItem.SelectSingleNode(Constants.ActionNumber);
+                if (actionNumberNode != null)
+                {
+                    actionNumberNode.InnerText = sequenceNumber.ToString();
+                    sequenceNumber++;
+                }
+            }
+
+            // Clear existing children and append sorted action items
+            actionItemNode.RemoveAll();
+            foreach (XmlNode actionItem in sortedActionItems)
+            {
+                actionItemNode.AppendChild(actionItem);
+            }
             SetXmlNodeValue(soapXml, Constants.XpathCorrId, correlationId);
-            SetXmlNodeValue(soapXml, Constants.XpathNoOfActions, xmlNode.ChildNodes.Count.ToString());
+            SetXmlNodeValue(soapXml, Constants.XpathNoOfActions, actionItemNode.ChildNodes.Count.ToString());
             SetXmlNodeValue(soapXml, Constants.XpathRecDate, DateTime.UtcNow.ToString(Constants.RecDateFormat));
             SetXmlNodeValue(soapXml, Constants.XpathRecTime, DateTime.UtcNow.ToString(Constants.RecTimeFormat));
 
             var IM_MATINFONode = soapXml.SelectSingleNode(Constants.XpathImMatInfo);
-            IM_MATINFONode.AppendChild(xmlNode);
+            IM_MATINFONode.AppendChild(actionItemNode);
         }
 
         public bool IsPropertyNullOrEmpty(string propertyName, string propertyValue)
@@ -138,37 +170,6 @@ namespace UKHO.ERPFacade.API.Helpers
             {
                 node.InnerText = value;
             }
-        }
-
-        private XmlNode SortXmlPayload(XmlNode actionItemNode)
-        {
-            // Extract all action item nodes
-            var actionItems = actionItemNode.Cast<XmlNode>().ToList();
-            int sequenceNumber = 1;
-
-            // Sort based on the ActionNumber
-            var sortedActionItems = actionItems
-                .OrderBy(node => Convert.ToInt32(node.SelectSingleNode(Constants.ActionNumber)?.InnerText ?? "0"))
-                .ToList();
-
-            // Update the sequence number in the sorted list
-            foreach (XmlNode actionItem in sortedActionItems)
-            {
-                var actionNumberNode = actionItem.SelectSingleNode(Constants.ActionNumber);
-                if (actionNumberNode != null)
-                {
-                    actionNumberNode.InnerText = sequenceNumber.ToString();
-                    sequenceNumber++;
-                }
-            }
-
-            // Clear existing children and append sorted action items
-            actionItemNode.RemoveAll();
-            foreach (XmlNode actionItem in sortedActionItems)
-            {
-                actionItemNode.AppendChild(actionItem);
-            }
-            return actionItemNode;
         }
     }
 }
