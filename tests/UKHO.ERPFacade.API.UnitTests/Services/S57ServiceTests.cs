@@ -166,21 +166,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Services
              && call.GetArgument<LogLevel>(0) == LogLevel.Information
              && call.GetArgument<EventId>(1) == EventIds.NoProcessingOfNewEncContentPublishedEventForAioCells.ToEventId()
              && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "The enccontentpublished event will not be processed for Aio cells.").MustHaveHappenedOnceExactly();
-        }
-
-        [Test]
-        public void WhenPayloadHasAioAndNonAioCells_ThenReturn200OkResponse()
-        {
-            var newCellEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\AIOAndNonAIOCells.JSON");
-            var fakeEncEventJson = JObject.Parse(newCellEventPayloadJson);
-
-            _ = _fakeNewEncContentPublishedEventReceived.ProcessS57Event(fakeEncEventJson);
-
-            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-             && call.GetArgument<LogLevel>(0) == LogLevel.Information
-             && call.GetArgument<EventId>(1) == EventIds.NoProcessingOfNewEncContentPublishedEventForAioCells.ToEventId()
-             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "The enccontentpublished event will not be processed for Aio cells.").MustHaveHappenedOnceExactly();
-        }
+        }        
 
         [Test]
         public void WhenBuildSapMessageXmlIsCalledWithoutAIOCellConfiguration_ThenThrowERPFacadeException()

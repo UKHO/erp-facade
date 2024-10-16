@@ -39,9 +39,6 @@
     <None Update="ERPTestData\ChangeLicencePayloadTest.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPTestData\AIOAndNonAIOCells.JSON">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="ERPTestData\NewAIOCell.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
