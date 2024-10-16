@@ -61,9 +61,16 @@ namespace UKHO.ERPFacade.API.Helpers
 
             // Build SAP actions for Units
             BuildUnitActions(eventData, soapXml, actionItemNode);
+                        
+            var xmlNode = SortXmlPayload(actionItemNode);
 
-            // Finalize SAP XML message
-            FinalizeSapXmlMessage(soapXml, eventData.Data.CorrelationId, actionItemNode);
+            soapXml.SelectSingleNode(Constants.XpathCorrId).InnerText = eventData.Data.CorrelationId;
+            soapXml.SelectSingleNode(Constants.XpathNoOfActions).InnerText = xmlNode.ChildNodes.Count.ToString();
+            soapXml.SelectSingleNode(Constants.XpathRecDate).InnerText = DateTime.UtcNow.ToString(Constants.RecDateFormat);
+            soapXml.SelectSingleNode(Constants.XpathRecTime).InnerText = DateTime.UtcNow.ToString(Constants.RecTimeFormat);
+
+            var IM_MATINFONode = soapXml.SelectSingleNode(Constants.XpathImMatInfo);
+            IM_MATINFONode.AppendChild(xmlNode);
 
             _logger.LogInformation(EventIds.GenerationOfSapXmlPayloadCompleted.ToEventId(), "Generation of SAP XML payload completed.");
 
@@ -156,20 +163,7 @@ namespace UKHO.ERPFacade.API.Helpers
                 }
             }
         }
-
-        private void FinalizeSapXmlMessage(XmlDocument soapXml, string correlationId, XmlNode actionItemNode)
-        {
-            var xmlNode = SortXmlPayload(actionItemNode);           
-
-            soapXml.SelectSingleNode(Constants.XpathCorrId).InnerText = correlationId;
-            soapXml.SelectSingleNode(Constants.XpathNoOfActions).InnerText = xmlNode.ChildNodes.Count.ToString();
-            soapXml.SelectSingleNode(Constants.XpathRecDate).InnerText = DateTime.UtcNow.ToString(Constants.RecDateFormat);
-            soapXml.SelectSingleNode(Constants.XpathRecTime).InnerText = DateTime.UtcNow.ToString(Constants.RecTimeFormat);
-
-            var IM_MATINFONode = soapXml.SelectSingleNode(Constants.XpathImMatInfo);
-            IM_MATINFONode.AppendChild(xmlNode);
-        }
-
+        
         /// <summary>
         /// Returns primary unit of sale for given product to get ProductName for ENC cell SAP actions.
         /// </summary>
@@ -287,7 +281,7 @@ namespace UKHO.ERPFacade.API.Helpers
         private void AppendChildNode(XmlElement parentNode, XmlDocument doc, string nodeName, string value)
         {
             var childNode = doc.CreateElement(nodeName);
-            childNode.InnerText = value ?? string.Empty;
+            childNode.InnerText = value;
             parentNode.AppendChild(childNode);
         }
 
