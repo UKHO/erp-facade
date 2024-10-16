@@ -13,7 +13,6 @@ namespace UKHO.ERPFacade.Common.IO.Azure
     public class AzureQueueHelper : IAzureQueueHelper
     {
         private readonly IOptions<AzureStorageConfiguration> _azureStorageConfig;
-        private const string RecordOfSaleQueueName = "recordofsaleevents";
 
         public AzureQueueHelper(IOptions<AzureStorageConfiguration> azureStorageConfig)
         {
@@ -25,7 +24,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             var rosEventData = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(rosEventJson.ToString());
             string queueMessage = BuildQueueMessage(rosEventData);
 
-            QueueClient queueClient = GetQueueClient(RecordOfSaleQueueName);
+            QueueClient queueClient = GetQueueClient(Constants.Constants.RecordOfSaleQueueName);
 
             await queueClient.SendMessageAsync(queueMessage);
         }

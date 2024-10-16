@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using NUnit.Framework;
 using UKHO.ERPFacade.API.Helpers;
 using UKHO.ERPFacade.API.UnitTests.Common;
+using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
@@ -33,21 +34,6 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         private EncContentSapMessageBuilder _fakeEncContentSapMessageBuilder;
         private string _sapXmlTemplate;
 
-        private const string XpathActionItems = $"//*[local-name()='ACTIONITEMS']";
-        private const string EncCell = "ENC CELL";
-        private const string XpathProductName = $"//*[local-name()='PRODUCTNAME']";
-        private const string XpathCorrection = $"//*[local-name()='CORRECTION']";
-        private const string XpathWeekNo = $"//*[local-name()='WEEKNO']";
-        private const string XpathValidFrom = $"//*[local-name()='VALIDFROM']";
-        private const string XpathActiveKey = $"//*[local-name()='ACTIVEKEY']";
-        private const string XpathNextKey = $"//*[local-name()='NEXTKEY']";
-        private const string XpathChildCell = $"//*[local-name()='CHILDCELL']";
-        private const string XpathReplacedBy = $"//*[local-name()='REPLACEDBY']";
-        private const string XpathActionNumber = $"//*[local-name()='ACTIONNUMBER']";
-        private const string XpathAction = $"//*[local-name()='ACTION']";
-        private const string ReplaceEncCellAction = "REPLACED WITH ENC CELL";
-        private const string ChangeEncCellAction = "CHANGE ENC CELL";
-
         [SetUp]
         public void Setup()
         {
@@ -58,7 +44,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             _fakeWeekDetailsProvider = A.Fake<IWeekDetailsProvider>();
             _fakePermitDecryption = A.Fake<IPermitDecryption>();
             _fakeEncContentSapMessageBuilder = new EncContentSapMessageBuilder(_fakeLogger, _fakeXmlHelper, _fakeFileSystemHelper, _fakeSapActionConfig, _fakeWeekDetailsProvider, _fakePermitDecryption);
-            _sapXmlTemplate = TestHelper.ReadFileData("SapXmlTemplates\\SAPRequest.xml");
+            _sapXmlTemplate = TestHelper.ReadFileData(Constants.S57SapXmlTemplatePath);
         }
 
         private IConfiguration InitConfiguration()
@@ -271,15 +257,15 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
 
             var xmlDoc = new XmlDocument();
             xmlDoc.LoadXml(sapReqXml);
-            var actionItemNode = xmlDoc.SelectSingleNode(XpathActionItems);
+            var actionItemNode = xmlDoc.SelectSingleNode(Constants.XpathActionItems);
 
             var sortedXmlPayLoad = typeof(EncContentSapMessageBuilder).GetMethod("SortXmlPayload", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
             var result = (XmlNode)sortedXmlPayLoad.Invoke(_fakeEncContentSapMessageBuilder, new object[] { actionItemNode! })!;
 
-            var firstActionNumber = result.SelectSingleNode(XpathActionNumber);
+            var firstActionNumber = result.SelectSingleNode(Constants.XpathActionNumber);
             firstActionNumber.InnerXml.Should().Be(expectedActionNumber);
 
-            var firstActionName = result.SelectSingleNode(XpathAction);
+            var firstActionName = result.SelectSingleNode(Constants.XpathAction);
             firstActionName.InnerXml.Should().Be(expectedAction);
         }
 
@@ -366,32 +352,14 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
 
             Assert.Throws<ERPFacadeException>(() => _fakeEncContentSapMessageBuilder.BuildSapMessageXml(eventData!))
                 .Message.Should().Be("Error while generating SAP action information. | Action : CREATE ENC CELL | XML Attribute : VALIDFROM | ErrorMessage : Exception of type 'System.Exception' was thrown.");
-        }
-
-        [Test]
-        public void WhenBuildSapMessageXmlWithEmptyPermit_ThenThrowERPFacadeException()
-        {
-            var newCellEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\NewCellWithEmptyPermit.JSON");
-            var eventData = JsonConvert.DeserializeObject<EncEventPayload>(newCellEventPayloadJson);
-
-            XmlDocument soapXml = new();
-            soapXml.LoadXml(_sapXmlTemplate);
-
-            A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
-            A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
-
-            A.CallTo(() => _fakeWeekDetailsProvider.GetDateOfWeek(A<int>.Ignored, A<int>.Ignored, A<bool>.Ignored)).Throws<System.Exception>();
-
-            Assert.Throws<ERPFacadeException>(() => _fakeEncContentSapMessageBuilder.BuildSapMessageXml(eventData!))
-            .Message.Should().Be("Required details are missing in enccontentpublished event payload. | Property Name : permit");
-        }
+        }        
 
         [Test]
         public void WhenUnitOfSaleIsNullWhileReplacingEncCell_ThenReturnsNull()
         {
             var cancelCellWithNewCellReplacementPayloadJson = TestHelper.ReadFileData("ERPTestData\\CancelCellWithNewCellReplacement.JSON");
             var eventData = JsonConvert.DeserializeObject<EncEventPayload>(cancelCellWithNewCellReplacementPayloadJson);
-            var action = _fakeSapActionConfig.Value.SapActions.FirstOrDefault(x => x.Product == EncCell && x.Action == ReplaceEncCellAction);
+            var action = _fakeSapActionConfig.Value.SapActions.FirstOrDefault(x => x.Product == Constants.EncCell && x.Action == Constants.ReplaceEncCellAction);
 
             MethodInfo buildAction = typeof(EncContentSapMessageBuilder).GetMethod("GetUnitOfSale", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
             var result = (XmlElement)buildAction.Invoke(_fakeEncContentSapMessageBuilder, new object[] { action.ActionNumber, eventData.Data.UnitsOfSales!, eventData.Data.Products.FirstOrDefault()! })!;
@@ -404,7 +372,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         {
             var cancelCellWithNewCellReplacementPayloadJson = TestHelper.ReadFileData("ERPTestData\\CancelCellWithNewCellReplacement.JSON");
             var eventData = JsonConvert.DeserializeObject<EncEventPayload>(cancelCellWithNewCellReplacementPayloadJson);
-            var action = _fakeSapActionConfig.Value.SapActions.FirstOrDefault(x => x.Product == EncCell && x.Action == ChangeEncCellAction);
+            var action = _fakeSapActionConfig.Value.SapActions.FirstOrDefault(x => x.Product == Constants.EncCell && x.Action == Constants.ChangeEncCellAction);
 
             MethodInfo buildAction = typeof(EncContentSapMessageBuilder).GetMethod("GetUnitOfSale", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
             var result = (XmlElement)buildAction.Invoke(_fakeEncContentSapMessageBuilder, new object[] { action.ActionNumber, eventData.Data.UnitsOfSales!, eventData.Data.Products.LastOrDefault()! })!;

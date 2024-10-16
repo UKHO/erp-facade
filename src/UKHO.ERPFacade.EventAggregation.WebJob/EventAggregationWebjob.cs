@@ -2,6 +2,7 @@
 using Azure.Storage.Queues.Models;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
+using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.EventAggregation.WebJob.Services;
 
@@ -12,7 +13,6 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob
     {
         private readonly ILogger<EventAggregationWebjob> _logger;
         private readonly IAggregationService _aggregationService;
-        private const string RecordOfSaleQueueName = "recordofsaleevents";
 
         public EventAggregationWebjob(ILogger<EventAggregationWebjob> logger, IAggregationService aggregationService)
         {
@@ -20,7 +20,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob
             _aggregationService = aggregationService ?? throw new ArgumentNullException(nameof(aggregationService));
         }
 
-        public async Task ProcessQueueMessage([QueueTrigger(RecordOfSaleQueueName)] QueueMessage message)
+        public async Task ProcessQueueMessage([QueueTrigger(Constants.RecordOfSaleQueueName)] QueueMessage message)
         {
             _logger.LogInformation(EventIds.WebjobForEventAggregationStarted.ToEventId(), "Webjob has started to process and merge sliced events.");
             await _aggregationService.MergeRecordOfSaleEvents(message);
