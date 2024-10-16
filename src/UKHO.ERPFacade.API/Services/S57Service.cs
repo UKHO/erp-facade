@@ -24,7 +24,7 @@ namespace UKHO.ERPFacade.API.Services
         private readonly IEncContentSapMessageBuilder _encContentSapMessageBuilder;
         private readonly IOptions<SapConfiguration> _sapConfig;
         private readonly IOptions<AioConfiguration> _aioConfig;
-        private List<string> AioCells = [];
+        private List<string> _aioCells = [];
 
         public S57Service(ILogger<S57Service> logger,
                                  IAzureTableReaderWriter azureTableReaderWriter,
@@ -44,7 +44,7 @@ namespace UKHO.ERPFacade.API.Services
             _sapConfig = sapConfig ?? throw new ArgumentNullException(nameof(sapConfig));
             _aioConfig = aioConfig;
 
-            AioCells = !string.IsNullOrEmpty(_aioConfig.Value.AioCells) ? new(_aioConfig.Value.AioCells.Split(',').Select(s => s.Trim())) :
+            _aioCells = !string.IsNullOrEmpty(_aioConfig.Value.AioCells) ? new(_aioConfig.Value.AioCells.Split(',').Select(s => s.Trim())) :
                 throw new ERPFacadeException(EventIds.AioConfigurationNotFoundException.ToEventId(), "Aio cell configuration not found.");
         }
 
@@ -52,50 +52,48 @@ namespace UKHO.ERPFacade.API.Services
         {
             var eventData = JsonConvert.DeserializeObject<EncEventPayload>(encEventJson.ToString());
 
-            if (CheckForNoAioCells(eventData.Data.Products.Select(x => x.ProductName).ToList()))
-            {
-                EncEventEntity encEventEntity = new()
-                {
-                    RowKey = Guid.NewGuid().ToString(),
-                    PartitionKey = Guid.NewGuid().ToString(),
-                    Timestamp = DateTime.UtcNow,
-                    CorrelationId = eventData.Data.CorrelationId,
-                    RequestDateTime = null
-                };
-
-                _logger.LogInformation(EventIds.AddingEntryForEncContentPublishedEventInAzureTable.ToEventId(), "Adding/Updating entry for enccontentpublished event in azure table.");
-                await _azureTableReaderWriter.UpsertEntity(eventData.Data.CorrelationId, Constants.S57EventTableName, encEventEntity);
-
-                _logger.LogInformation(EventIds.UploadEncContentPublishedEventInAzureBlobStarted.ToEventId(), "Uploading enccontentpublished event payload in blob storage.");
-                await _azureBlobEventWriter.UploadEvent(encEventJson.ToString(), Constants.S57EventContainerName, eventData.Data.CorrelationId + '/' + Constants.S57EncEventFileName);
-                _logger.LogInformation(EventIds.UploadEncContentPublishedEventInAzureBlobCompleted.ToEventId(), "The enccontentpublished event payload is uploaded in blob storage successfully.");
-
-                var sapPayload = _encContentSapMessageBuilder.BuildSapMessageXml(JsonConvert.DeserializeObject<EncEventPayload>(encEventJson.ToString()));
-
-                _logger.LogInformation(EventIds.UploadSapXmlPayloadInAzureBlobStarted.ToEventId(), "Uploading the SAP XML payload in blob storage.");
-                await _azureBlobEventWriter.UploadEvent(sapPayload.ToIndentedString(), Constants.S57EventContainerName, eventData.Data.CorrelationId + '/' + Constants.SapXmlPayloadFileName);
-                _logger.LogInformation(EventIds.UploadSapXmlPayloadInAzureBlobCompleted.ToEventId(), "SAP XML payload is uploaded in blob storage successfully.");
-
-                var response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapEndpointForEncEvent, _sapConfig.Value.SapServiceOperationForEncEvent, _sapConfig.Value.SapUsernameForEncEvent, _sapConfig.Value.SapPasswordForEncEvent);
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    throw new ERPFacadeException(EventIds.RequestToSapFailed.ToEventId(), $"An error occurred while sending a request to SAP. | {response.StatusCode}");
-                }
-                _logger.LogInformation(EventIds.EncUpdateSentToSap.ToEventId(), $"ENC update has been sent to SAP successfully. | {response.StatusCode}");
-
-                await _azureTableReaderWriter.UpdateEntity(eventData.Data.CorrelationId, Constants.S57EventTableName, new[] { new KeyValuePair<string, DateTime>("RequestDateTime", DateTime.UtcNow) });
-
-            }
-            else
+            if (IsAioCell(eventData.Data.Products.Select(x => x.ProductName).ToList()))
             {
                 _logger.LogInformation(EventIds.NoProcessingOfNewEncContentPublishedEventForAioCells.ToEventId(), "The enccontentpublished event will not be processed for Aio cells.");
+                return;
             }
+
+            EncEventEntity encEventEntity = new()
+            {
+                RowKey = Guid.NewGuid().ToString(),
+                PartitionKey = Guid.NewGuid().ToString(),
+                Timestamp = DateTime.UtcNow,
+                CorrelationId = eventData.Data.CorrelationId,
+                RequestDateTime = null
+            };
+
+            _logger.LogInformation(EventIds.AddingEntryForEncContentPublishedEventInAzureTable.ToEventId(), "Adding/Updating entry for enccontentpublished event in azure table.");
+            await _azureTableReaderWriter.UpsertEntity(eventData.Data.CorrelationId, Constants.S57EventTableName, encEventEntity);
+
+            _logger.LogInformation(EventIds.UploadEncContentPublishedEventInAzureBlobStarted.ToEventId(), "Uploading enccontentpublished event payload in blob storage.");
+            await _azureBlobEventWriter.UploadEvent(encEventJson.ToString(), Constants.S57EventContainerName, eventData.Data.CorrelationId + '/' + Constants.S57EncEventFileName);
+            _logger.LogInformation(EventIds.UploadEncContentPublishedEventInAzureBlobCompleted.ToEventId(), "The enccontentpublished event payload is uploaded in blob storage successfully.");
+
+            var sapPayload = _encContentSapMessageBuilder.BuildSapMessageXml(JsonConvert.DeserializeObject<EncEventPayload>(encEventJson.ToString()));
+
+            _logger.LogInformation(EventIds.UploadSapXmlPayloadInAzureBlobStarted.ToEventId(), "Uploading the SAP XML payload in blob storage.");
+            await _azureBlobEventWriter.UploadEvent(sapPayload.ToIndentedString(), Constants.S57EventContainerName, eventData.Data.CorrelationId + '/' + Constants.SapXmlPayloadFileName);
+            _logger.LogInformation(EventIds.UploadSapXmlPayloadInAzureBlobCompleted.ToEventId(), "SAP XML payload is uploaded in blob storage successfully.");
+
+            var response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapEndpointForEncEvent, _sapConfig.Value.SapServiceOperationForEncEvent, _sapConfig.Value.SapUsernameForEncEvent, _sapConfig.Value.SapPasswordForEncEvent);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new ERPFacadeException(EventIds.RequestToSapFailed.ToEventId(), $"An error occurred while sending a request to SAP. | {response.StatusCode}");
+            }
+            _logger.LogInformation(EventIds.EncUpdateSentToSap.ToEventId(), $"ENC update has been sent to SAP successfully. | {response.StatusCode}");
+
+            await _azureTableReaderWriter.UpdateEntity(eventData.Data.CorrelationId, Constants.S57EventTableName, new[] { new KeyValuePair<string, DateTime>("RequestDateTime", DateTime.UtcNow) });
         }
 
-        private bool CheckForNoAioCells(IEnumerable<string> products)
+        private bool IsAioCell(IEnumerable<string> products)
         {
-            return !products.Any(x => AioCells.Contains(x));
+            return products.Any(_aioCells.Contains);
         }
     }
 }
