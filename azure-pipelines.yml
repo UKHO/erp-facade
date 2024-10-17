@@ -895,9 +895,7 @@ stages:
       - name: "AzureADConfiguration.AutoTestClientIdNoRole"
         value: $(AzureADConfigurationAutoTestClientIdNoRole)
       - name: "AzureADConfiguration.ClientSecretNoRole"
-        value: $(AzureADConfigurationClientSecretNoRole)
-      - name: "EnterpriseEventServiceConfiguration.ClientId"
-        value: $(EnterpriseEventServiceConfigurationClientId) 
+        value: $(AzureADConfigurationClientSecretNoRole)      
       - name: "PermitConfiguration.PermitDecryptionHardwareId"
         value: $(PermitDecryptionHardwareId)      
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
