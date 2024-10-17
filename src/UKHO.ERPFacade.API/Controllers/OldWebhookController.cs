@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UKHO.ERPFacade.API.Helpers;
+using UKHO.ERPFacade.API.XmlTransformers;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.Exceptions;
@@ -13,7 +14,6 @@ using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Models.TableEntities;
-using Status = UKHO.ERPFacade.Common.Enums.Status;
 
 namespace UKHO.ERPFacade.API.Controllers
 {
@@ -27,7 +27,7 @@ namespace UKHO.ERPFacade.API.Controllers
         private readonly IAzureBlobEventWriter _azureBlobEventWriter;
         private readonly IAzureQueueHelper _azureQueueHelper;
         private readonly ISapClient _sapClient;
-        private readonly S57XmlTransformer _encContentSapMessageBuilder;
+        private readonly IBaseXmlTransformer _encContentSapMessageBuilder;
         private readonly IOptions<SapConfiguration> _sapConfig;
         private readonly ILicenceUpdatedSapMessageBuilder _licenceUpdatedSapMessageBuilder;
 
@@ -37,7 +37,7 @@ namespace UKHO.ERPFacade.API.Controllers
                                  IAzureBlobEventWriter azureBlobEventWriter,
                                  IAzureQueueHelper azureQueueHelper,
                                  ISapClient sapClient,
-                                 S57XmlTransformer encContentSapMessageBuilder,
+                                 IBaseXmlTransformer encContentSapMessageBuilder,
                                  IOptions<SapConfiguration> sapConfig,
                                  ILicenceUpdatedSapMessageBuilder licenceUpdatedSapMessageBuilder)
         : base(contextAccessor)

@@ -1,10 +1,12 @@
-﻿using Newtonsoft.Json.Linq;
+﻿
+
+using CloudNative.CloudEvents;
 
 namespace UKHO.ERPFacade.API.Handlers
 {
     public interface IEventHandler
     {
         string EventType { get; }
-        Task HandleEventAsync(JObject payload);
+        Task HandleEventAsync(CloudEvent payload);
     }
 }

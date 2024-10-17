@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using CloudNative.CloudEvents;
 
 namespace UKHO.ERPFacade.API.Handlers
 {
@@ -15,9 +15,9 @@ namespace UKHO.ERPFacade.API.Handlers
             }
         }
 
-        public async Task DispatchAsync(JObject payload)
+        public async Task DispatchAsync(CloudEvent payload)
         {
-            var eventType = payload["type"]?.ToString();
+            var eventType = payload.Type;
 
             if (!string.IsNullOrEmpty(eventType) && _eventHandlers.TryGetValue(eventType, out var eventHandler))
             {

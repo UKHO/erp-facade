@@ -182,8 +182,8 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<IEventDispatcher, EventDispatcher>();
             builder.Services.AddScoped<IEventHandler, S57EventHandler>();
             builder.Services.AddScoped<IEventHandler, S100EventHandler>();
-            builder.Services.AddScoped<ICommonXmlTransformer, CommonXmlTransformer>();
-            builder.Services.AddScoped<IS57XmlTransformer, S57XmlTransformer>();
+            builder.Services.AddKeyedScoped<IBaseXmlTransformer, S57XmlTransformer>("S57XmlTransformer");
+            builder.Services.AddKeyedScoped<IBaseXmlTransformer, S100XmlTransformer>("S100XmlTransformer");
 
             ConfigureHealthChecks(builder);
 

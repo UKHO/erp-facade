@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using CloudNative.CloudEvents;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UKHO.ERPFacade.API.Handlers;
 using UKHO.ERPFacade.Common.Logging;
@@ -42,7 +44,8 @@ namespace UKHO.ERPFacade.API.Controllers
         [Authorize(Policy = "EncContentPublishedWebhookCaller")]
         public async Task<IActionResult> ReceiveEvents([FromBody] JObject payload)
         {
-            await _eventDispatcher.DispatchAsync(payload);
+            var cloudEvent = JsonConvert.DeserializeObject<CloudEvent>(payload.ToString());
+            await _eventDispatcher.DispatchAsync(cloudEvent);
             return Ok();
         }
     }

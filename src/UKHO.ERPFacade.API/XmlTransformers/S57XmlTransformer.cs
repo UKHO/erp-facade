@@ -11,7 +11,7 @@ using UKHO.ERPFacade.Common.Providers;
 
 namespace UKHO.ERPFacade.API.Helpers
 {
-    public class S57XmlTransformer : IS57XmlTransformer
+    public class S57XmlTransformer : BaseXmlTransformer
     {
         private readonly ILogger<S57XmlTransformer> _logger;
         private readonly IXmlHelper _xmlHelper;
@@ -19,16 +19,14 @@ namespace UKHO.ERPFacade.API.Helpers
         private readonly IOptions<SapActionConfiguration> _sapActionConfig;
         private readonly IWeekDetailsProvider _weekDetailsProvider;
         private readonly IPermitDecryption _permitDecryption;
-        private readonly ICommonXmlTransformer _commonXmlTransformer;
 
         public S57XmlTransformer(ILogger<S57XmlTransformer> logger,
                                  IXmlHelper xmlHelper,
                                  IFileSystemHelper fileSystemHelper,
                                  IOptions<SapActionConfiguration> sapActionConfig,
                                  IWeekDetailsProvider weekDetailsProvider,
-                                 IPermitDecryption permitDecryption,
-                                 ICommonXmlTransformer commonXmlTransformer
-                                 )
+                                 IPermitDecryption permitDecryption
+                                 ) : base(fileSystemHelper, xmlHelper)
         {
             _logger = logger;
             _xmlHelper = xmlHelper;
@@ -36,7 +34,6 @@ namespace UKHO.ERPFacade.API.Helpers
             _sapActionConfig = sapActionConfig;
             _weekDetailsProvider = weekDetailsProvider;
             _permitDecryption = permitDecryption;
-            _commonXmlTransformer = commonXmlTransformer;
         }
 
         /// <summary>
@@ -44,7 +41,7 @@ namespace UKHO.ERPFacade.API.Helpers
         /// </summary>
         /// <param name="eventData"></param>        
         /// <returns>XmlDocument</returns>
-        public XmlDocument BuildSapMessageXml(EncEventPayload eventData, string templatePath)
+        public override XmlDocument BuildSapMessageXml(EncEventPayload eventData, string templatePath)
         {
             var soapXml = _xmlHelper.CreateXmlDocument(Path.Combine(Environment.CurrentDirectory, templatePath));
 
@@ -59,7 +56,7 @@ namespace UKHO.ERPFacade.API.Helpers
             BuildUnitActions(eventData, soapXml, actionItemNode);
 
             // Finalize SAP XML message
-            _commonXmlTransformer.FinalizeSapXmlMessage(soapXml, eventData.Data.CorrelationId, actionItemNode);
+            FinalizeSapXmlMessage(soapXml, eventData.Data.CorrelationId, actionItemNode);
 
             _logger.LogInformation(EventIds.GenerationOfSapXmlPayloadCompleted.ToEventId(), "Generation of SAP XML payload completed.");
 
@@ -76,7 +73,7 @@ namespace UKHO.ERPFacade.API.Helpers
                 {
                     var unitOfSale = GetUnitOfSale(action.ActionNumber, eventData.Data.UnitsOfSales, product);
 
-                    if (!_commonXmlTransformer.ValidateActionRules(action, product))
+                    if (!ValidateActionRules(action, product))
                         continue;
 
                     switch (action.ActionNumber)
@@ -124,7 +121,7 @@ namespace UKHO.ERPFacade.API.Helpers
             {
                 foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == Constants.AvcsUnit))
                 {
-                    if (!_commonXmlTransformer.ValidateActionRules(action, unitOfSale))
+                    if (!ValidateActionRules(action, unitOfSale))
                         continue;
 
                     switch (action.ActionNumber)
@@ -253,19 +250,19 @@ namespace UKHO.ERPFacade.API.Helpers
                         switch (attribute.XmlNodeName)
                         {
                             case Constants.ReplacedBy:
-                                if (!_commonXmlTransformer.IsPropertyNullOrEmpty(attribute.JsonPropertyName, replacedBy)) attributeNode.InnerText = _commonXmlTransformer.GetXmlNodeValue(replacedBy.ToString(), attribute.XmlNodeName);
+                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, replacedBy)) attributeNode.InnerText = GetXmlNodeValue(replacedBy.ToString(), attribute.XmlNodeName);
                                 break;
                             case Constants.ActiveKey:
-                                if (!_commonXmlTransformer.IsPropertyNullOrEmpty(attribute.JsonPropertyName, decryptedPermit.ActiveKey)) attributeNode.InnerText = _commonXmlTransformer.GetXmlNodeValue(decryptedPermit.ActiveKey, attribute.XmlNodeName);
+                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, decryptedPermit.ActiveKey)) attributeNode.InnerText = GetXmlNodeValue(decryptedPermit.ActiveKey, attribute.XmlNodeName);
                                 break;
                             case Constants.NextKey:
-                                if (!_commonXmlTransformer.IsPropertyNullOrEmpty(attribute.JsonPropertyName, decryptedPermit.NextKey)) attributeNode.InnerText = _commonXmlTransformer.GetXmlNodeValue(decryptedPermit.NextKey, attribute.XmlNodeName);
+                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, decryptedPermit.NextKey)) attributeNode.InnerText = GetXmlNodeValue(decryptedPermit.NextKey, attribute.XmlNodeName);
                                 break;
                             default:
                                 var jsonFieldValue = CommonHelper.ParseXmlNode(attribute.JsonPropertyName, source, source.GetType()).ToString();
-                                if (!_commonXmlTransformer.IsPropertyNullOrEmpty(attribute.JsonPropertyName, jsonFieldValue))
+                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, jsonFieldValue))
                                 {
-                                    attributeNode.InnerText = _commonXmlTransformer.GetXmlNodeValue(jsonFieldValue.ToString(), attribute.XmlNodeName);
+                                    attributeNode.InnerText = GetXmlNodeValue(jsonFieldValue.ToString(), attribute.XmlNodeName);
                                 }
                                 break;
                         }
@@ -304,14 +301,14 @@ namespace UKHO.ERPFacade.API.Helpers
                             {
                                 case Constants.ValidFrom:
                                     var validFrom = _weekDetailsProvider.GetDateOfWeek(ukhoWeekNumber.Year.Value, ukhoWeekNumber.Week.Value, ukhoWeekNumber.CurrentWeekAlphaCorrection.Value);
-                                    attributeNode.InnerText = _commonXmlTransformer.GetXmlNodeValue(validFrom, attribute.XmlNodeName);
+                                    attributeNode.InnerText = GetXmlNodeValue(validFrom, attribute.XmlNodeName);
                                     break;
                                 case Constants.WeekNo:
                                     var weekNo = string.Join("", ukhoWeekNumber.Year, ukhoWeekNumber.Week.Value.ToString("D2"));
-                                    attributeNode.InnerText = _commonXmlTransformer.GetXmlNodeValue(weekNo, attribute.XmlNodeName);
+                                    attributeNode.InnerText = GetXmlNodeValue(weekNo, attribute.XmlNodeName);
                                     break;
                                 case Constants.Correction:
-                                    attributeNode.InnerText = _commonXmlTransformer.GetXmlNodeValue(ukhoWeekNumber.CurrentWeekAlphaCorrection.Value ? Constants.IsCorrectionTrue : Constants.IsCorrectionFalse, attribute.XmlNodeName);
+                                    attributeNode.InnerText = GetXmlNodeValue(ukhoWeekNumber.CurrentWeekAlphaCorrection.Value ? Constants.IsCorrectionTrue : Constants.IsCorrectionFalse, attribute.XmlNodeName);
                                     break;
                             }
                         }

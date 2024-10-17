@@ -7,20 +7,21 @@ using UKHO.ERPFacade.Common.Models;
 
 namespace UKHO.ERPFacade.API.XmlTransformers
 {
-    public interface ICommonXmlTransformer
+    public interface IBaseXmlTransformer
     {
-        public bool ValidateActionRules(SapAction action, object obj);
+        bool ValidateActionRules(SapAction action, object obj);
         bool IsPropertyNullOrEmpty(string propertyName, string propertyValue);
         string GetXmlNodeValue(string fieldValue, string xmlNodeName = null);
-        public void FinalizeSapXmlMessage(XmlDocument soapXml, string correlationId, XmlNode actionItemNode);
+        void FinalizeSapXmlMessage(XmlDocument soapXml, string correlationId, XmlNode actionItemNode);
+        XmlDocument BuildSapMessageXml(EncEventPayload eventData, string templatePath);
     }
 
-    public class CommonXmlTransformer : ICommonXmlTransformer
+    public abstract class BaseXmlTransformer : IBaseXmlTransformer
     {
         private readonly IFileSystemHelper _fileSystemHelper;
         private readonly IXmlHelper _xmlHelper;
 
-        public CommonXmlTransformer(IFileSystemHelper fileSystemHelper, IXmlHelper xmlHelper)
+        public BaseXmlTransformer(IFileSystemHelper fileSystemHelper, IXmlHelper xmlHelper)
         {
             _fileSystemHelper = fileSystemHelper;
             _xmlHelper = xmlHelper;
@@ -154,6 +155,8 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             // Return first 2 characters if the node is Agency, else limit other nodes to 250 characters
             return xmlNodeName == Constants.Agency ? CommonHelper.ToSubstring(fieldValue, 0, Constants.MaxAgencyXmlNodeLength) : CommonHelper.ToSubstring(fieldValue, 0, Constants.MaxXmlNodeLength);
         }
+
+        public abstract XmlDocument BuildSapMessageXml(EncEventPayload eventData, string templatePath);
 
         //private methods
         private void SetXmlNodeValue(XmlDocument xmlDoc, string xPath, string value)
