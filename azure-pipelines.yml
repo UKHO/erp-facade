@@ -633,7 +633,9 @@ stages:
       - name: "AzureADConfiguration.ClientSecretNoRole"
         value: $(AzureADConfigurationClientSecretNoRole)
       - name: "EnterpriseEventServiceConfiguration.ClientId"
-        value: $(EnterpriseEventServiceConfigurationClientId)      
+        value: $(EnterpriseEventServiceConfigurationClientId)
+      - name: "PermitConfiguration.PermitDecryptionHardwareId"
+        value: $(PermitDecryptionHardwareId)      
       - name: mockWebAppName
         value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup
@@ -867,6 +869,7 @@ stages:
               AzureSubscription: "ERP-Facade-Dev-A.011.05.12"              
 
   - stage: Livedeploy
+    dependsOn: PreProdDeploy 
     displayName: "Livedeploy (inc terraform, webapp deploy)"
     variables:
       - group: "ERP-Facade-Live"
@@ -875,8 +878,26 @@ stages:
         value: $(AzureADConfigurationTenantId)
       - name: "AzureADConfiguration.ClientId"
         value: $(AzureADConfigurationClientId)
+      - name: "AzureADConfiguration.AutoTestClientId"
+        value: $(AzureADConfigurationAutoTestClientId)
+      - name: "AzureADConfiguration.ClientSecret"
+        value: $(AzureADConfigurationClientSecret)
+      - name: "AzureADConfiguration.AutoTestClientIdNoRole"
+        value: $(AzureADConfigurationAutoTestClientIdNoRole)
+      - name: "AzureADConfiguration.ClientSecretNoRole"
+        value: $(AzureADConfigurationClientSecretNoRole)
       - name: "EnterpriseEventServiceConfiguration.ClientId"
-        value: $(EnterpriseEventServiceConfigurationClientId)      
+        value: $(EnterpriseEventServiceConfigurationClientId)
+      - name: "AzureADConfiguration.AutoTestClientId"
+        value: $(AzureADConfigurationAutoTestClientId)
+      - name: "AzureADConfiguration.ClientSecret"
+        value: $(AzureADConfigurationClientSecret)
+      - name: "AzureADConfiguration.AutoTestClientIdNoRole"
+        value: $(AzureADConfigurationAutoTestClientIdNoRole)
+      - name: "AzureADConfiguration.ClientSecretNoRole"
+        value: $(AzureADConfigurationClientSecretNoRole)      
+      - name: "PermitConfiguration.PermitDecryptionHardwareId"
+        value: $(PermitDecryptionHardwareId)      
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
     jobs:
       - deployment: LiveDeployTerraform
