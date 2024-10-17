@@ -86,7 +86,7 @@ namespace UKHO.ERPFacade.API.Services
             {
                 throw new ERPFacadeException(EventIds.RequestToSapFailed.ToEventId(), $"An error occurred while sending a request to SAP. | {response.StatusCode}");
             }
-            _logger.LogInformation(EventIds.EncUpdateSentToSap.ToEventId(), $"ENC update has been sent to SAP successfully. | {response.StatusCode}");
+            _logger.LogInformation(EventIds.EncUpdateSentToSap.ToEventId(), "ENC update has been sent to SAP successfully | {StatusCode}", response.StatusCode);
 
             await _azureTableReaderWriter.UpdateEntity(eventData.Data.CorrelationId, Constants.S57EventTableName, new[] { new KeyValuePair<string, DateTime>("RequestDateTime", DateTime.UtcNow) });
         }
