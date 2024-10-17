@@ -1,0 +1,227 @@
+{
+    "specversion": "1.0",
+    "type": "uk.gov.ukho.encpublishing.enccontentpublished.v2.2",
+    "source": "https://encpublishing.ukho.gov.uk",
+    "id": "e7bd473c-a573-4905-9541-77218df10b1b",
+    "time": "2024-09-13T10:22:26.1824904+00:00",
+    "subject": "US5AK2AX,US5AK9DI",
+    "datacontenttype": "application/json",
+    "data": {
+        "correlationId": "ft-e4c9d333-b133-4133-a0aa-08dccb35b407",
+        "ukhoWeekNumber": {
+            "year": 2024,
+            "week": 31,
+            "currentWeekAlphaCorrection": false
+        },
+        "products": [
+            {
+                "dataSetName": "US5AK2AX.000",
+                "productName": "US5AK2AX",
+                "title": "Burnett Inlet AK",
+                "scale": 22000,
+                "usageBand": 5,
+                "editionNumber": 1,
+                "updateNumber": 0,
+                "mayAffectHoldings": true,
+                "contentChange": true,
+                "permit": "ThisWillBeReplacedWithActualPermitFromKeyvault",
+                "providerCode": "1",
+                "providerName": "ICE",
+                "size": "medium",
+                "bundle": [
+                    {
+                        "bundleType": "DVD",
+                        "location": "M1;B5"
+                    }
+                ],
+                "status": {
+                    "statusName": "New Edition",
+                    "statusDate": "2024-07-02",
+                    "isNewCell": true
+                },
+                "replaces": [],
+                "replacedBy": [],
+                "additionalCoverage": [],
+                "geographicLimit": {
+                    "boundingBox": {
+                        "northLimit": 56.1,
+                        "southLimit": 56.025,
+                        "eastLimit": -132.45,
+                        "westLimit": -132.6
+                    },
+                    "polygons": []
+                },
+                "inUnitsOfSale": [
+                    "PAYSF",
+                    "US5AK2AX"
+                ],
+                "s63": {
+                    "name": "US5AK2AX.000",
+                    "hash": "",
+                    "fileSize": 0,
+                    "compression": true,
+                    "s57Crc": "CD8C994B"
+                },
+                "signature": {
+                    "name": "USMAK2AX.000",
+                    "hash": "",
+                    "fileSize": 0
+                },
+                "ancillaryFiles": [
+                    {
+                        "name": "US206AXA.TXT",
+                        "hash": "5DB4326DAA120A113B5EC826F77160415F6CBBAC21C838FFB4678E5828826EA1",
+                        "fileSize": 5102
+                    }
+                ]
+            },
+            {
+                "dataSetName": "US5AK9DI.000",
+                "productName": "US5AK9DI",
+                "title": "Amlia Island - Svechnikof Harbor",
+                "scale": 22000,
+                "usageBand": 5,
+                "editionNumber": 1,
+                "updateNumber": 0,
+                "mayAffectHoldings": true,
+                "contentChange": true,
+                "permit": "ThisWillBeReplacedWithActualPermitFromKeyvault",
+                "providerCode": "1",
+                "providerName": "ICE",
+                "size": "medium",
+                "bundle": [
+                    {
+                        "bundleType": "DVD",
+                        "location": "M1;B5"
+                    }
+                ],
+                "status": {
+                    "statusName": "New Edition",
+                    "statusDate": "2024-07-11",
+                    "isNewCell": true
+                },
+                "replaces": [],
+                "replacedBy": [],
+                "additionalCoverage": [],
+                "geographicLimit": {
+                    "boundingBox": {
+                        "northLimit": 52.125,
+                        "southLimit": 52.05,
+                        "eastLimit": -173.4,
+                        "westLimit": -173.55
+                    },
+                    "polygons": []
+                },
+                "inUnitsOfSale": [
+                    "PAYSF",
+                    "US5AK9DI"
+                ],
+                "s63": {
+                    "name": "US5AK9DI.000",
+                    "hash": "",
+                    "fileSize": 0,
+                    "compression": true,
+                    "s57Crc": "8A46B83F"
+                },
+                "signature": {
+                    "name": "USMAK9DI.000",
+                    "hash": "",
+                    "fileSize": 0
+                },
+                "ancillaryFiles": [
+                    {
+                        "name": "US213DIA.TXT",
+                        "hash": "4E3E678781D95F476C0D099375A71A81FC5570C9D92C6DFFC93EF2C11A029632",
+                        "fileSize": 4008
+                    },
+                    {
+                        "name": "US213DIB.TXT",
+                        "hash": "58BB9B3E80832BFFBB86B8BF2513BF3755B847BDEA0AF3332BE445FE864E9835",
+                        "fileSize": 293
+                    }
+                ]
+            }
+        ],
+        "unitsOfSale": [
+            {
+                "unitName": "US5AK2AX",
+                "title": "Burnett Inlet AK",
+                "unitOfSaleType": "unit",
+                "unitSize": "medium",
+                "unitType": "AVCS Units Harbour",
+                "providerCode": "1",
+                "providerName": "ICE",
+                "status": "ForSale",
+                "isNewUnitOfSale": true,
+                "geographicLimit": {
+                    "boundingBox": {
+                        "northLimit": 56.1,
+                        "southLimit": 56.025,
+                        "eastLimit": -132.45,
+                        "westLimit": -132.6
+                    },
+                    "polygons": []
+                },
+                "compositionChanges": {
+                    "addProducts": [
+                        "US5AK2AX"
+                    ],
+                    "removeProducts": []
+                }
+            },
+            {
+                "unitName": "US5AK9DI",
+                "title": "Amlia Island - Svechnikof Harbor",
+                "unitOfSaleType": "unit",
+                "unitSize": "medium",
+                "unitType": "AVCS Units Harbour",
+                "providerCode": "1",
+                "providerName": "ICE",
+                "status": "ForSale",
+                "isNewUnitOfSale": true,
+                "geographicLimit": {
+                    "boundingBox": {
+                        "northLimit": 52.125,
+                        "southLimit": 52.05,
+                        "eastLimit": -173.4,
+                        "westLimit": -173.55
+                    },
+                    "polygons": []
+                },
+                "compositionChanges": {
+                    "addProducts": [
+                        "US5AK9DI"
+                    ],
+                    "removeProducts": []
+                }
+            },
+            {
+                "unitName": "PAYSF",
+                "title": "World Folio",
+                "unitOfSaleType": "folio",
+                "unitSize": "large",
+                "unitType": "AVCS Folio Transit",
+                "providerCode": "1",
+                "providerName": "ICE",
+                "status": "ForSale",
+                "isNewUnitOfSale": false,
+                "geographicLimit": {
+                    "boundingBox": {
+                        "northLimit": 0,
+                        "southLimit": 0,
+                        "eastLimit": 0,
+                        "westLimit": 0
+                    },
+                    "polygons": []
+                },
+                "compositionChanges": {
+                    "addProducts": [
+                        "US5AK2AX",
+                        "US5AK9DI"
+                    ],
+                    "removeProducts": []
+                }
+            }
+        ]
+    }
+}

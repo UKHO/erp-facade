@@ -23,15 +23,15 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             _client = new RestClient(_options);
         }
 
-        public async Task<RestResponse> OptionWebhookResponseAsync(string token)
+        public async Task<RestResponse> OptionWebhookResponseAsync(string token, string url = Constants.S57RequestEndPoint)
         {
-            var request = new RestRequest(Constants.S57RequestEndPoint);
+            var request = new RestRequest(url);
             request.AddHeader("Authorization", "Bearer " + token);
             var response = await _client.OptionsAsync(request);
             return response;
         }
 
-        public async Task<RestResponse> PostWebhookResponseAsync(string filePath, string token)
+        public async Task<RestResponse> PostWebhookResponseAsync(string filePath, string token, string url = Constants.S57RequestEndPoint)
         {
             string requestBody;
 
@@ -41,7 +41,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             }
             GeneratedCorrelationId = SapXmlHelper.GenerateRandomCorrelationId();
             requestBody = SapXmlHelper.UpdateTimeAndCorrIdField(requestBody, GeneratedCorrelationId);
-            var request = new RestRequest(Constants.S57RequestEndPoint, Method.Post);
+            var request = new RestRequest(url, Method.Post);
             request.AddHeader("Content-Type", "application/json");
             request.AddHeader("Authorization", "Bearer " + token);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
@@ -50,7 +50,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             return response;
         }
 
-        public async Task<RestResponse> PostWebhookResponseAsyncForXml(string filePath, string generatedXmlFolder, string token, string permitState = "permitString")
+        public async Task<RestResponse> PostWebhookResponseAsyncForXml(string filePath, string generatedXmlFolder, string token, string permitState = "permitString", string url = Constants.S57RequestEndPoint)
         {
             string requestBody;
 
@@ -60,7 +60,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             }
             requestBody = SapXmlHelper.UpdatePermitField(requestBody, permitState);
 
-            var request = new RestRequest(Constants.S57RequestEndPoint, Method.Post);
+            var request = new RestRequest(url, Method.Post);
             request.AddHeader("Content-Type", "application/json");
             request.AddHeader("Authorization", "Bearer " + token);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
@@ -76,14 +76,14 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
                 string generatedXmlFilePath = _azureBlobStorageHelper.DownloadGeneratedXmlFile(generatedXmlFolder, correlationId, Constants.S57EventContainerName);
 
                 //Expected XML 
-                string xmlFilePath = filePath.Replace(Config.TestConfig.PayloadFolder, Constants.ErpFacadeExpectedXmlFiles).Replace(".JSON", ".xml");
+                string xmlFilePath = filePath.Replace(Config.TestConfig.PayloadFolder, Constants.ErpFacadeExpectedXmlFiles).Replace(Constants.S100WebhookPayloadFolder, Constants.S100WebhookExpectedXmlFiles).Replace(".JSON", ".xml");
 
                 Assert.That(SapXmlHelper.VerifyGeneratedXml(generatedXmlFilePath, xmlFilePath, permitState));
             }
             return response;
         }
 
-        public async Task<RestResponse> PostWebhookResponseForMandatoryAttributeValidation(string filePath, string token, string attributeName, int index, string action)
+        public async Task<RestResponse> PostWebhookResponseForMandatoryAttributeValidation(string filePath, string token, string attributeName, int index, string action, string url = Constants.S57RequestEndPoint)
         {
             string requestBody;
 
@@ -93,7 +93,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             }
             requestBody = JsonHelper.ModifyMandatoryAttribute(requestBody, attributeName, index, action);
 
-            var request = new RestRequest(Constants.S57RequestEndPoint, Method.Post);
+            var request = new RestRequest(url, Method.Post);
             request.AddHeader("Content-Type", "application/json");
             request.AddHeader("Authorization", "Bearer " + token);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);

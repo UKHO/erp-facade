@@ -24,6 +24,8 @@ namespace UKHO.ERPFacade.Common.Constants
         public const string S57EventTableName = "encevents";
         public const string S57EventContainerName = "s57events";
         public const string ErpFacadeExpectedXmlFiles = "ERPFacadeExpectedXmlFiles";
+        public const string S100WebhookExpectedXmlFiles = "ERPFacadeExpectedXmlFiles";
+        public const string S100WebhookPayloadFolder = "S100WebhookPayloadTestData";
 
         //LicenceUpdated event file name 
         public const string LicenceUpdatedEventFileName = "LicenceUpdatedEvent.json";
@@ -101,6 +103,7 @@ namespace UKHO.ERPFacade.Common.Constants
         public const string S57RequestEndPoint = "/webhook/newenccontentpublishedeventreceived";
         public const string LicenceUpdatedRequestEndPoint = "/webhook/licenceupdatedpublishedeventreceived";
         public const string RoSWebhookRequestEndPoint = "/webhook/recordofsalepublishedeventreceived";
+        public const string S100RequestEndPoint = "/s100webhook/s100datacontentpublishedeventreceived";
 
         public const string SapHealthCheckXmlPath = "SapXmlTemplates\\SAPHealthCheckRequest.xml";
         public const string DefaultContentType = "application/json";
