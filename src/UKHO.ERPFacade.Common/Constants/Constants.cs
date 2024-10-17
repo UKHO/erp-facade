@@ -24,7 +24,7 @@ namespace UKHO.ERPFacade.Common.Constants
         public const string S57EventTableName = "encevents";
         public const string S57EventContainerName = "s57events";
         public const string ErpFacadeExpectedXmlFiles = "ERPFacadeExpectedXmlFiles";
-        public const string S100WebhookExpectedXmlFiles = "ERPFacadeExpectedXmlFiles";
+        public const string S100WebhookExpectedXmlFiles = "S100WebhookExpectedXmlFiles";
         public const string S100WebhookPayloadFolder = "S100WebhookPayloadTestData";
 
         //LicenceUpdated event file name 
