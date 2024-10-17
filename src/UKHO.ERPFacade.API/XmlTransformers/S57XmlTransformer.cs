@@ -1,13 +1,13 @@
 ﻿using System.Xml;
 using Microsoft.Extensions.Options;
+using UKHO.ERPFacade.API.XmlTransformers;
+using UKHO.ERPFacade.Common.Constants;
+using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
-using UKHO.ERPFacade.Common.Providers;
 using UKHO.ERPFacade.Common.PermitDecryption;
-using UKHO.ERPFacade.Common.Exceptions;
-using UKHO.ERPFacade.Common.Constants;
-using UKHO.ERPFacade.API.XmlTransformers;
+using UKHO.ERPFacade.Common.Providers;
 
 namespace UKHO.ERPFacade.API.Helpers
 {
@@ -76,7 +76,7 @@ namespace UKHO.ERPFacade.API.Helpers
                 {
                     var unitOfSale = GetUnitOfSale(action.ActionNumber, eventData.Data.UnitsOfSales, product);
 
-                    if (!ValidateActionRules(action, product))
+                    if (!_commonXmlTransformer.ValidateActionRules(action, product))
                         continue;
 
                     switch (action.ActionNumber)
@@ -124,7 +124,7 @@ namespace UKHO.ERPFacade.API.Helpers
             {
                 foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == Constants.AvcsUnit))
                 {
-                    if (!ValidateActionRules(action, unitOfSale))
+                    if (!_commonXmlTransformer.ValidateActionRules(action, unitOfSale))
                         continue;
 
                     switch (action.ActionNumber)
@@ -206,13 +206,13 @@ namespace UKHO.ERPFacade.API.Helpers
             var itemNode = soapXml.CreateElement(Constants.Item);
 
             // Add basic action-related nodes
-            AppendChildNode(itemNode, soapXml, Constants.ActionNumber, action.ActionNumber.ToString());
-            AppendChildNode(itemNode, soapXml, Constants.Action, action.Action.ToString());
-            AppendChildNode(itemNode, soapXml, Constants.Product, action.Product.ToString());
-            AppendChildNode(itemNode, soapXml, Constants.ProdType, Constants.ProdTypeValue);
+            _xmlHelper.AppendChildNode(itemNode, soapXml, Constants.ActionNumber, action.ActionNumber.ToString());
+            _xmlHelper.AppendChildNode(itemNode, soapXml, Constants.Action, action.Action.ToString());
+            _xmlHelper.AppendChildNode(itemNode, soapXml, Constants.Product, action.Product.ToString());
+            _xmlHelper.AppendChildNode(itemNode, soapXml, Constants.ProdType, Constants.ProdTypeValue);
 
             // Add child cell node
-            AppendChildNode(itemNode, soapXml, Constants.ChildCell, childCell);
+            _xmlHelper.AppendChildNode(itemNode, soapXml, Constants.ChildCell, childCell);
 
             List<(int sortingOrder, XmlElement node)> actionAttributes = new();
 
@@ -223,13 +223,10 @@ namespace UKHO.ERPFacade.API.Helpers
             }
 
             // Process ProductSection attributes
-            ProcessAttributes(action.Action, action.Attributes.Where(x => x.Section == Constants.ProductSection), soapXml, product, actionAttributes, replacedBy);
+            ProcessAttributes(action.Action, action.Attributes.Where(x => x.Section == Constants.ProductSection), soapXml, product, actionAttributes, decryptedPermit, replacedBy);
 
             // Process UnitOfSaleSection attributes
             ProcessAttributes(action.Action, action.Attributes.Where(x => x.Section == Constants.UnitOfSaleSection), soapXml, unitOfSale, actionAttributes, null);
-
-            //Process PermitSection attributes
-            ProcessPermitAttributes(action.Action, action.Attributes.Where(x => x.Section == "Permit"), soapXml, actionAttributes, decryptedPermit);
 
             // Process UkhoWeekNumberSection attributes
             ProcessUkhoWeekNumberAttributes(action.Action, action.Attributes.Where(x => x.Section == Constants.UkhoWeekNumberSection), soapXml, ukhoWeekNumber, actionAttributes);
@@ -243,7 +240,7 @@ namespace UKHO.ERPFacade.API.Helpers
             return itemNode;
         }
 
-        private void ProcessPermitAttributes(string action, IEnumerable<ActionItemAttribute> attributes, XmlDocument soapXml, List<(int, XmlElement)> actionAttributes, DecryptedPermit decryptedPermit)
+        private void ProcessAttributes(string action, IEnumerable<ActionItemAttribute> attributes, XmlDocument soapXml, object source, List<(int, XmlElement)> actionAttributes, DecryptedPermit decryptedPermit = null, string replacedBy = null)
         {
             foreach (var attribute in attributes)
             {
@@ -255,13 +252,21 @@ namespace UKHO.ERPFacade.API.Helpers
                     {
                         switch (attribute.XmlNodeName)
                         {
+                            case Constants.ReplacedBy:
+                                if (!_commonXmlTransformer.IsPropertyNullOrEmpty(attribute.JsonPropertyName, replacedBy)) attributeNode.InnerText = _commonXmlTransformer.GetXmlNodeValue(replacedBy.ToString(), attribute.XmlNodeName);
+                                break;
                             case Constants.ActiveKey:
-                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, decryptedPermit.ActiveKey)) attributeNode.InnerText = GetXmlNodeValue(decryptedPermit.ActiveKey, attribute.XmlNodeName);
+                                if (!_commonXmlTransformer.IsPropertyNullOrEmpty(attribute.JsonPropertyName, decryptedPermit.ActiveKey)) attributeNode.InnerText = _commonXmlTransformer.GetXmlNodeValue(decryptedPermit.ActiveKey, attribute.XmlNodeName);
                                 break;
                             case Constants.NextKey:
-                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, decryptedPermit.NextKey)) attributeNode.InnerText = GetXmlNodeValue(decryptedPermit.NextKey, attribute.XmlNodeName);
+                                if (!_commonXmlTransformer.IsPropertyNullOrEmpty(attribute.JsonPropertyName, decryptedPermit.NextKey)) attributeNode.InnerText = _commonXmlTransformer.GetXmlNodeValue(decryptedPermit.NextKey, attribute.XmlNodeName);
                                 break;
                             default:
+                                var jsonFieldValue = CommonHelper.ParseXmlNode(attribute.JsonPropertyName, source, source.GetType()).ToString();
+                                if (!_commonXmlTransformer.IsPropertyNullOrEmpty(attribute.JsonPropertyName, jsonFieldValue))
+                                {
+                                    attributeNode.InnerText = _commonXmlTransformer.GetXmlNodeValue(jsonFieldValue.ToString(), attribute.XmlNodeName);
+                                }
                                 break;
                         }
                     }
@@ -299,14 +304,14 @@ namespace UKHO.ERPFacade.API.Helpers
                             {
                                 case Constants.ValidFrom:
                                     var validFrom = _weekDetailsProvider.GetDateOfWeek(ukhoWeekNumber.Year.Value, ukhoWeekNumber.Week.Value, ukhoWeekNumber.CurrentWeekAlphaCorrection.Value);
-                                    attributeNode.InnerText = GetXmlNodeValue(validFrom, attribute.XmlNodeName);
+                                    attributeNode.InnerText = _commonXmlTransformer.GetXmlNodeValue(validFrom, attribute.XmlNodeName);
                                     break;
                                 case Constants.WeekNo:
                                     var weekNo = string.Join("", ukhoWeekNumber.Year, ukhoWeekNumber.Week.Value.ToString("D2"));
-                                    attributeNode.InnerText = GetXmlNodeValue(weekNo, attribute.XmlNodeName);
+                                    attributeNode.InnerText = _commonXmlTransformer.GetXmlNodeValue(weekNo, attribute.XmlNodeName);
                                     break;
                                 case Constants.Correction:
-                                    attributeNode.InnerText = GetXmlNodeValue(ukhoWeekNumber.CurrentWeekAlphaCorrection.Value ? Constants.IsCorrectionTrue : Constants.IsCorrectionFalse, attribute.XmlNodeName);
+                                    attributeNode.InnerText = _commonXmlTransformer.GetXmlNodeValue(ukhoWeekNumber.CurrentWeekAlphaCorrection.Value ? Constants.IsCorrectionTrue : Constants.IsCorrectionFalse, attribute.XmlNodeName);
                                     break;
                             }
                         }

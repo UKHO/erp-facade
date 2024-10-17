@@ -8,11 +8,11 @@ namespace UKHO.ERPFacade.API.Handlers
 {
     public class S57EventHandler : IEventHandler
     {
-        private readonly S57XmlTransformer _s57XmlTransformer;
+        private readonly IS57XmlTransformer _s57XmlTransformer;
 
         public string EventType => "uk.gov.ukho.encpublishing.enccontentpublished.v2.2";
 
-        public S57EventHandler(S57XmlTransformer s57XmlTransformer)
+        public S57EventHandler(IS57XmlTransformer s57XmlTransformer)
         {
             _s57XmlTransformer = s57XmlTransformer;
         }

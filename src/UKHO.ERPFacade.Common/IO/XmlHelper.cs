@@ -11,7 +11,7 @@ namespace UKHO.ERPFacade.Common.IO
     {
         private readonly IFileSystemHelper _fileSystemHelper;
 
-        XmlHelper(IFileSystemHelper fileSystemHelper)
+        public XmlHelper(IFileSystemHelper fileSystemHelper)
         {
             _fileSystemHelper = fileSystemHelper;
         }
@@ -51,6 +51,13 @@ namespace UKHO.ERPFacade.Common.IO
             }
 
             return xml;
+        }
+
+        public void AppendChildNode(XmlElement parentNode, XmlDocument doc, string nodeName, string value)
+        {
+            var childNode = doc.CreateElement(nodeName);
+            childNode.InnerText = value ?? string.Empty;
+            parentNode.AppendChild(childNode);
         }
     }
 }

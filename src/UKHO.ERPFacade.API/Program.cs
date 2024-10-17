@@ -4,7 +4,6 @@ using System.Reflection;
 using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
-using Elastic.Apm.AspNetCore;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -14,21 +13,19 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Newtonsoft.Json.Serialization;
 using Serilog;
 using UKHO.ERPFacade.API.Filters;
+using UKHO.ERPFacade.API.Handlers;
 using UKHO.ERPFacade.API.Health;
 using UKHO.ERPFacade.API.Helpers;
+using UKHO.ERPFacade.API.XmlTransformers;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.HealthCheck;
 using UKHO.ERPFacade.Common.HttpClients;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Models;
-using UKHO.ERPFacade.Common.Providers;
 using UKHO.ERPFacade.Common.PermitDecryption;
+using UKHO.ERPFacade.Common.Providers;
 using UKHO.Logging.EventHubLogProvider;
-using Elastic.Apm.Api;
-using UKHO.ERPFacade.API.Handlers;
-using UKHO.ERPFacade.API.Services;
-using UKHO.ERPFacade.API.XmlTransformers;
 
 namespace UKHO.ERPFacade
 {
@@ -174,7 +171,6 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<IAzureTableReaderWriter, AzureTableReaderWriter>();
             builder.Services.AddScoped<IAzureBlobEventWriter, AzureBlobEventWriter>();
             builder.Services.AddScoped<IAzureQueueHelper, AzureQueueHelper>();
-            builder.Services.AddScoped<SapMessageHelper, S57XmlTransformer>();
             builder.Services.AddScoped<IXmlHelper, XmlHelper>();
             builder.Services.AddScoped<IFileSystemHelper, FileSystemHelper>();
             builder.Services.AddScoped<IFileSystem, FileSystem>();
@@ -183,10 +179,11 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<IWeekDetailsProvider, WeekDetailsProvider>();
             builder.Services.AddScoped<IPermitDecryption, PermitDecryption>();
 
-            builder.Services.AddSingleton<IEventHandler, S57EventHandler>();
-            builder.Services.AddSingleton<IEventHandler, S100EventHandler>();
-            builder.Services.AddSingleton<ICommonXmlTransformer, CommonXmlTransformer>();
-            builder.Services.AddSingleton<IS57XmlTransformer, S57XmlTransformer>();
+            builder.Services.AddScoped<IEventDispatcher, EventDispatcher>();
+            builder.Services.AddScoped<IEventHandler, S57EventHandler>();
+            builder.Services.AddScoped<IEventHandler, S100EventHandler>();
+            builder.Services.AddScoped<ICommonXmlTransformer, CommonXmlTransformer>();
+            builder.Services.AddScoped<IS57XmlTransformer, S57XmlTransformer>();
 
             ConfigureHealthChecks(builder);
 

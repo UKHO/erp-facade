@@ -1,6 +1,4 @@
 ﻿using System.Xml;
-using Newtonsoft.Json.Linq;
-using UKHO.ERPFacade.API.Handlers;
 using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.IO;
@@ -12,6 +10,8 @@ namespace UKHO.ERPFacade.API.XmlTransformers
     public interface ICommonXmlTransformer
     {
         public bool ValidateActionRules(SapAction action, object obj);
+        bool IsPropertyNullOrEmpty(string propertyName, string propertyValue);
+        string GetXmlNodeValue(string fieldValue, string xmlNodeName = null);
         public void FinalizeSapXmlMessage(XmlDocument soapXml, string correlationId, XmlNode actionItemNode);
     }
 
@@ -153,13 +153,6 @@ namespace UKHO.ERPFacade.API.XmlTransformers
         {
             // Return first 2 characters if the node is Agency, else limit other nodes to 250 characters
             return xmlNodeName == Constants.Agency ? CommonHelper.ToSubstring(fieldValue, 0, Constants.MaxAgencyXmlNodeLength) : CommonHelper.ToSubstring(fieldValue, 0, Constants.MaxXmlNodeLength);
-        }
-
-        public void AppendChildNode(XmlElement parentNode, XmlDocument doc, string nodeName, string value)
-        {
-            var childNode = doc.CreateElement(nodeName);
-            childNode.InnerText = value ?? string.Empty;
-            parentNode.AppendChild(childNode);
         }
 
         //private methods

@@ -9,21 +9,15 @@ namespace UKHO.ERPFacade.API.Controllers
     public class WebhookController : BaseController<WebhookController>
     {
         private readonly ILogger<WebhookController> _logger;
-        private readonly Dictionary<string, IEventHandler> _eventHandlers;
+        private readonly IEventDispatcher _eventDispatcher;
 
         public WebhookController(IHttpContextAccessor contextAccessor,
-                                          IEnumerable<IEventHandler> eventHandlers,
+                                         IEventDispatcher eventDispatcher,
                                           ILogger<WebhookController> logger)
         : base(contextAccessor)
         {
             _logger = logger;
-
-            _eventHandlers = new Dictionary<string, IEventHandler>();
-
-            foreach (var handler in eventHandlers)
-            {
-                _eventHandlers.Add(handler.EventType, handler);
-            }
+            _eventDispatcher = eventDispatcher;
         }
 
         [HttpOptions]
@@ -48,22 +42,7 @@ namespace UKHO.ERPFacade.API.Controllers
         [Authorize(Policy = "EncContentPublishedWebhookCaller")]
         public async Task<IActionResult> ReceiveEvents([FromBody] JObject payload)
         {
-            var eventType = payload["type"]?.ToString();
-
-            if (string.IsNullOrEmpty(eventType))
-            {
-                return BadRequest("Invalid event type");
-            }
-
-            if (_eventHandlers.TryGetValue(eventType, out var eventHandler))
-            {
-                await eventHandler.HandleEventAsync(payload);
-            }
-            else
-            {
-                return BadRequest($"Unsupported event type: {eventType}");
-            }
-
+            await _eventDispatcher.DispatchAsync(payload);
             return Ok();
         }
     }
