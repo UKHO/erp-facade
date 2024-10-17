@@ -548,4 +548,13 @@
    <packageUrl regex="true">^pkg:nuget/System\.Security\.Cryptography\.Xml@.*$</packageUrl>
    <vulnerabilityName>CVE-2022-34716</vulnerabilityName>
 </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Azure.Core.dll
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:generic/Azure\.Core@.*$</packageUrl>   
+    <cve>CVE-2024-43591</cve>    
+  </suppress> 
 </suppressions>
