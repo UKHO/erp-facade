@@ -534,13 +534,6 @@
     <packageUrl regex="true">^pkg:generic/Elasticsearch\.Net@.*$</packageUrl>
     <cve>CVE-2023-46674</cve>
   </suppress>
-  <suppress>
-   <notes><![CDATA[
-   file name: System.Runtime.Caching:8.0.0
-   ]]></notes>
-   <packageUrl regex="true">^pkg:nuget/System\.Runtime\.Caching@.*$</packageUrl>
-   <vulnerabilityName>CVE-2024-43483</vulnerabilityName>
-</suppress>
 <suppress>
    <notes><![CDATA[
    file name: System.Security.Cryptography.Xml:4.7.0
@@ -592,6 +585,15 @@
    ]]>
     </notes>
     <packageUrl regex="true">^pkg:generic/System\.ClientModel@.*$</packageUrl>
+    <cve>CVE-2024-43591</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Microsoft.Extensions.Azure.dll
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:generic/Microsoft\.Extensions\.Azure@.*$</packageUrl>
     <cve>CVE-2024-43591</cve>
   </suppress>
  
