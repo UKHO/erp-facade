@@ -1,0 +1,87 @@
+{
+    "specversion": "1.0",
+    "type": "uk.gov.ukho.encpublishing.enccontentpublished.v2.2",
+    "source": "https://encpublishing.ukho.gov.uk",
+    "id": "be05a29f-d7af-49d4-87b3-fea74e43fafb",
+    "time": "2024-10-11T14:01:07.2158718+00:00",
+    "subject": "GB800001",
+    "datacontenttype": "application/json",
+    "data": {
+        "correlationId": "52323b16-ed68-4adb-2838-08dce9f35151",
+        "ukhoWeekNumber": {
+            "year": 2024,
+            "week": 28,
+            "currentWeekAlphaCorrection": false
+        },
+        "products": [
+            {
+                "dataSetName": "GB800001.001",
+                "productName": "GB800001",
+                "title": "Admiralty Information Overlay",
+                "scale": 1,
+                "usageBand": 8,
+                "editionNumber": 32,
+                "updateNumber": 1,
+                "mayAffectHoldings": false,
+                "contentChange": true,
+                "permit": "ThisWillBeReplacedWithActualPermitFromKeyvault",
+                "providerCode": "11",
+                "providerName": "VAR Unique",
+                "size": "large",
+                "bundle": [
+                    {
+                        "bundleType": "DVD",
+                        "location": "M1;B3"
+                    }
+                ],
+                "status": {
+                    "statusName": "Update",
+                    "statusDate": "2024-01-18",
+                    "isNewCell": false
+                },
+                "replaces": [],
+                "replacedBy": [],
+                "additionalCoverage": [],
+                "geographicLimit": {
+                    "boundingBox": {
+                        "northLimit": 90,
+                        "southLimit": -90,
+                        "eastLimit": -180,
+                        "westLimit": 180
+                    }
+                },
+                "inUnitsOfSale": [],
+                "s63": {
+                    "name": "GB800001.001",
+                    "hash": "E99CD7B0B0C60709D9A70BF0CCDC2712403824B50111E6242E7D91753365D6AA",
+                    "fileSize": 12048,
+                    "compression": true,
+                    "s57Crc": "E4BADE1C"
+                },
+                "signature": {
+                    "name": "GBP00001.001",
+                    "hash": "2BD7095738E9455F523B99D35AD28588974BFF3EE3B4B04C65B9915E56C8CA7A",
+                    "fileSize": 874
+                },
+                "ancillaryFiles": [
+                    {
+                        "name": "GBNOOVER.TXT",
+                        "hash": "44460F8B9586E7D5FD838F758BD7247B568706B4704E6BFC48217EB454049378",
+                        "fileSize": 317
+                    },
+                    {
+                        "name": "GB240266.TXT",
+                        "hash": "D94CF73BCD9F2EB3107C5A9B3B165A5B8970CFEE1EE547122A8D9DFD08BB0369",
+                        "fileSize": 1328
+                    },
+                    {
+                        "name": "GB240260.TXT",
+                        "hash": "2F8675A364DB96C660CDC3E0230496B56491459B17D69FD8F04940A9FF704ABD",
+                        "fileSize": 499
+                    }
+                ]
+            }
+        ],
+        "unitsOfSale": []
+    }
+}
