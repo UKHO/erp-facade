@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using CloudNative.CloudEvents;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UKHO.ERPFacade.API.Helpers;
+using UKHO.ERPFacade.API.Services;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.Exceptions;
@@ -30,6 +32,7 @@ namespace UKHO.ERPFacade.API.Controllers
         private readonly IEncContentSapMessageBuilder _encContentSapMessageBuilder;
         private readonly IOptions<SapConfiguration> _sapConfig;
         private readonly ILicenceUpdatedSapMessageBuilder _licenceUpdatedSapMessageBuilder;
+        private readonly IWebhookService _webhookService;
 
         public WebhookController(IHttpContextAccessor contextAccessor,
                                  ILogger<WebhookController> logger,
@@ -39,7 +42,8 @@ namespace UKHO.ERPFacade.API.Controllers
                                  ISapClient sapClient,
                                  IEncContentSapMessageBuilder encContentSapMessageBuilder,
                                  IOptions<SapConfiguration> sapConfig,
-                                 ILicenceUpdatedSapMessageBuilder licenceUpdatedSapMessageBuilder)
+                                 ILicenceUpdatedSapMessageBuilder licenceUpdatedSapMessageBuilder,
+                                 IWebhookService webhookService)
         : base(contextAccessor)
         {
             _logger = logger;
@@ -50,6 +54,7 @@ namespace UKHO.ERPFacade.API.Controllers
             _encContentSapMessageBuilder = encContentSapMessageBuilder;
             _licenceUpdatedSapMessageBuilder = licenceUpdatedSapMessageBuilder;
             _sapConfig = sapConfig ?? throw new ArgumentNullException(nameof(sapConfig));
+            _webhookService = webhookService;
         }
 
         [HttpOptions]
@@ -76,45 +81,47 @@ namespace UKHO.ERPFacade.API.Controllers
         {
             _logger.LogInformation(EventIds.NewEncContentPublishedEventReceived.ToEventId(), "ERP Facade webhook has received new enccontentpublished event from EES.");
 
-            var correlationId = encEventJson.SelectToken(Constants.CorrelationIdKey)?.Value<string>();
+            await _webhookService.HandleEvent(encEventJson.ToString(), encEventJson.ToObject<CloudEvent>());
 
-            if (string.IsNullOrEmpty(correlationId))
-            {
-                _logger.LogWarning(EventIds.CorrelationIdMissingInEvent.ToEventId(), "CorrelationId is missing in enccontentpublished event.");
-                return new BadRequestObjectResult(StatusCodes.Status400BadRequest);
-            }
+            //var correlationId = encEventJson.SelectToken(Constants.CorrelationIdKey)?.Value<string>();
 
-            EncEventEntity encEventEntity = new()
-            {
-                RowKey = Guid.NewGuid().ToString(),
-                PartitionKey = Guid.NewGuid().ToString(),
-                Timestamp = DateTime.UtcNow,
-                CorrelationId = correlationId,
-                RequestDateTime = null
-            };
+            //if (string.IsNullOrEmpty(correlationId))
+            //{
+            //    _logger.LogWarning(EventIds.CorrelationIdMissingInEvent.ToEventId(), "CorrelationId is missing in enccontentpublished event.");
+            //    return new BadRequestObjectResult(StatusCodes.Status400BadRequest);
+            //}
 
-            _logger.LogInformation(EventIds.AddingEntryForEncContentPublishedEventInAzureTable.ToEventId(), "Adding/Updating entry for enccontentpublished event in azure table.");
-            await _azureTableReaderWriter.UpsertEntity(correlationId, Constants.S57EventTableName, encEventEntity);
+            //EncEventEntity encEventEntity = new()
+            //{
+            //    RowKey = Guid.NewGuid().ToString(),
+            //    PartitionKey = Guid.NewGuid().ToString(),
+            //    Timestamp = DateTime.UtcNow,
+            //    CorrelationId = correlationId,
+            //    RequestDateTime = null
+            //};
 
-            _logger.LogInformation(EventIds.UploadEncContentPublishedEventInAzureBlobStarted.ToEventId(), "Uploading enccontentpublished event payload in blob storage.");
-            await _azureBlobEventWriter.UploadEvent(encEventJson.ToString(), Constants.S57EventContainerName, correlationId + '/' + Constants.S57EncEventFileName);
-            _logger.LogInformation(EventIds.UploadEncContentPublishedEventInAzureBlobCompleted.ToEventId(), "The enccontentpublished event payload is uploaded in blob storage successfully.");
+            //_logger.LogInformation(EventIds.AddingEntryForEncContentPublishedEventInAzureTable.ToEventId(), "Adding/Updating entry for enccontentpublished event in azure table.");
+            //await _azureTableReaderWriter.UpsertEntity(correlationId, Constants.S57EventTableName, encEventEntity);
 
-            var sapPayload = _encContentSapMessageBuilder.BuildSapMessageXml(JsonConvert.DeserializeObject<EncEventPayload>(encEventJson.ToString()));
+            //_logger.LogInformation(EventIds.UploadEncContentPublishedEventInAzureBlobStarted.ToEventId(), "Uploading enccontentpublished event payload in blob storage.");
+            //await _azureBlobEventWriter.UploadEvent(encEventJson.ToString(), Constants.S57EventContainerName, correlationId + '/' + Constants.S57EncEventFileName);
+            //_logger.LogInformation(EventIds.UploadEncContentPublishedEventInAzureBlobCompleted.ToEventId(), "The enccontentpublished event payload is uploaded in blob storage successfully.");
 
-            _logger.LogInformation(EventIds.UploadSapXmlPayloadInAzureBlobStarted.ToEventId(), "Uploading the SAP XML payload in blob storage.");
-            await _azureBlobEventWriter.UploadEvent(sapPayload.ToIndentedString(), Constants.S57EventContainerName, correlationId + '/' + Constants.SapXmlPayloadFileName);
-            _logger.LogInformation(EventIds.UploadSapXmlPayloadInAzureBlobCompleted.ToEventId(), "SAP XML payload is uploaded in blob storage successfully.");
+            //var sapPayload = _encContentSapMessageBuilder.BuildSapMessageXml(JsonConvert.DeserializeObject<EncEventPayload>(encEventJson.ToString()));
 
-            var response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapEndpointForEncEvent, _sapConfig.Value.SapServiceOperationForEncEvent, _sapConfig.Value.SapUsernameForEncEvent, _sapConfig.Value.SapPasswordForEncEvent);
+            //_logger.LogInformation(EventIds.UploadSapXmlPayloadInAzureBlobStarted.ToEventId(), "Uploading the SAP XML payload in blob storage.");
+            //await _azureBlobEventWriter.UploadEvent(sapPayload.ToIndentedString(), Constants.S57EventContainerName, correlationId + '/' + Constants.SapXmlPayloadFileName);
+            //_logger.LogInformation(EventIds.UploadSapXmlPayloadInAzureBlobCompleted.ToEventId(), "SAP XML payload is uploaded in blob storage successfully.");
 
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new ERPFacadeException(EventIds.RequestToSapFailed.ToEventId(), $"An error occurred while sending a request to SAP. | {response.StatusCode}");
-            }
-            _logger.LogInformation(EventIds.EncUpdateSentToSap.ToEventId(), "ENC update has been sent to SAP successfully. | {StatusCode}", response.StatusCode);
+            //var response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapEndpointForEncEvent, _sapConfig.Value.SapServiceOperationForEncEvent, _sapConfig.Value.SapUsernameForEncEvent, _sapConfig.Value.SapPasswordForEncEvent);
 
-            await _azureTableReaderWriter.UpdateEntity(correlationId, Constants.S57EventTableName, new[] { new KeyValuePair<string, DateTime>("RequestDateTime", DateTime.UtcNow) });
+            //if (!response.IsSuccessStatusCode)
+            //{
+            //    throw new ERPFacadeException(EventIds.RequestToSapFailed.ToEventId(), $"An error occurred while sending a request to SAP. | {response.StatusCode}");
+            //}
+            //_logger.LogInformation(EventIds.EncUpdateSentToSap.ToEventId(), "ENC update has been sent to SAP successfully. | {StatusCode}", response.StatusCode);
+
+            //await _azureTableReaderWriter.UpdateEntity(correlationId, Constants.S57EventTableName, new[] { new KeyValuePair<string, DateTime>("RequestDateTime", DateTime.UtcNow) });
 
             return new OkObjectResult(StatusCodes.Status200OK);
         }

@@ -16,6 +16,7 @@ using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using UKHO.ERPFacade.API.Controllers;
 using UKHO.ERPFacade.API.Helpers;
+using UKHO.ERPFacade.API.Services;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.HttpClients;
@@ -40,6 +41,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         private IOptions<SapConfiguration> _fakeSapConfig;
         private WebhookController _fakeWebHookController;
         private ILicenceUpdatedSapMessageBuilder _fakeLicenceUpdatedSapMessageBuilder;
+        private IWebhookService _fakeWebhookService;
 
         [SetUp]
         public void Setup()
@@ -57,6 +59,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             {
                 SapServiceOperationForEncEvent = "Z_ADDS_MAT_INFO"
             });
+            _fakeWebhookService=A.Fake<IWebhookService>();
 
             _fakeWebHookController = new WebhookController(_fakeHttpContextAccessor,
                 _fakeLogger,
@@ -66,7 +69,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
                 _fakeSapClient,
                 _fakeEncContentSapMessageBuilder,
                 _fakeSapConfig,
-                _fakeLicenceUpdatedSapMessageBuilder);
+                _fakeLicenceUpdatedSapMessageBuilder, _fakeWebhookService);
         }
 
         [Test]
@@ -245,7 +248,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
                                                            _fakeSapClient,
                                                            _fakeEncContentSapMessageBuilder,
                                                            null,
-                                                           _fakeLicenceUpdatedSapMessageBuilder))
+                                                           _fakeLicenceUpdatedSapMessageBuilder,
+                                                           _fakeWebhookService))
              .ParamName
              .Should().Be("sapConfig");
         }

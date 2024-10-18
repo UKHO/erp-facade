@@ -25,6 +25,9 @@ using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Providers;
 using UKHO.ERPFacade.Common.PermitDecryption;
 using UKHO.Logging.EventHubLogProvider;
+using Elastic.Apm.Api;
+using UKHO.ERPFacade.API.Handler;
+using UKHO.ERPFacade.Common.Models.S100Event;
 
 namespace UKHO.ERPFacade
 {
@@ -179,6 +182,9 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<IWeekDetailsProvider, WeekDetailsProvider>();
             builder.Services.AddScoped<IPermitDecryption, PermitDecryption>();
             builder.Services.AddScoped<IS100DataContentSapMessageBuilder, S100DataContentSapMessageBuilder>();
+
+            builder.Services.AddKeyedTransient<IEventHandler, S57EventHandler>("S57");
+            builder.Services.AddKeyedTransient<IEventHandler, S100EventHandler>("S100");
 
             ConfigureHealthChecks(builder);
 
