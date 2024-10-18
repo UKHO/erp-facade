@@ -446,7 +446,17 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940088 - Permit string provided empty in json payload.
         /// </summary>
-        EmptyPermitStringException = 940088
+        EmptyPermitStringException = 940088,
+
+        /// <summary>
+        /// 940087 - Aio configuration is not found.
+        /// </summary>
+        AioConfigurationNotFoundException = 940089,
+
+        /// <summary>
+        /// 940088 - The enccontentpublished event will not be processed for Aio cells.
+        /// </summary>
+        NoProcessingOfNewEncContentPublishedEventForAioCells = 940090
     }
 
     /// <summary>

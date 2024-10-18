@@ -1,0 +1,82 @@
+{
+    "specversion": "1.0",
+    "type": "uk.gov.ukho.encpublishing.enccontentpublished.v2.2",
+    "source": "https://encpublishing.ukho.gov.uk",
+    "id": "47c82948-f389-41bb-a77c-bdd3f8c306d7",
+    "time": "2024-10-11T12:54:30.6083284+00:00",
+    "subject": "GB800001",
+    "datacontenttype": "application/json",
+    "data": {
+        "correlationId": "19cc417e-c2a1-438d-2837-08dce9f35151",
+        "ukhoWeekNumber": {
+            "year": 2024,
+            "week": 28,
+            "currentWeekAlphaCorrection": false
+        },
+        "products": [
+            {
+                "dataSetName": "GB800001.000",
+                "productName": "GB800001",
+                "title": "Admiralty Information Overlay",
+                "scale": 1,
+                "usageBand": 8,
+                "editionNumber": 32,
+                "updateNumber": 0,
+                "mayAffectHoldings": true,
+                "contentChange": true,
+                "permit": "permitString",
+                "providerCode": "11",
+                "providerName": "VAR Unique",
+                "size": "large",
+                "bundle": [
+                    {
+                        "bundleType": "DVD",
+                        "location": "M1;B3"
+                    }
+                ],
+                "status": {
+                    "statusName": "New Edition",
+                    "statusDate": "2024-01-11",
+                    "isNewCell": true
+                },
+                "replaces": [],
+                "replacedBy": [],
+                "additionalCoverage": [],
+                "geographicLimit": {
+                    "boundingBox": {
+                        "northLimit": 90,
+                        "southLimit": -90,
+                        "eastLimit": -180,
+                        "westLimit": 180
+                    }
+                },
+                "inUnitsOfSale": [],
+                "s63": {
+                    "name": "GB800001.000",
+                    "hash": "hash",
+                    "fileSize": 1998768,
+                    "compression": true,
+                    "s57Crc": "DB4A0A77"
+                },
+                "signature": {
+                    "name": "GBP00001.000",
+                    "hash": "hash",
+                    "fileSize": 874
+                },
+                "ancillaryFiles": [
+                    {
+                        "name": "GBNOOVER.TXT",
+                        "hash": "hash",
+                        "fileSize": 317
+                    },
+                    {
+                        "name": "GB196063.TXT",
+                        "hash": "hash",
+                        "fileSize": 719
+                    }
+                ]
+            }
+        ],
+        "unitsOfSale": []
+    }
+}

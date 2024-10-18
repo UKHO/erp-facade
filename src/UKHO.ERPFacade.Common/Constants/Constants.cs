@@ -86,7 +86,8 @@ namespace UKHO.ERPFacade.Common.Constants
 
         public const int MaxXmlNodeLength = 250;
         public const int MaxAgencyXmlNodeLength = 2;
-
+        public const string UkhoWeekNoFormat = "D2";
+        public const string UkhoWeekNoFormatSeparator = "";
 
         //RecordOfSale xml payload builder
         public const string RecordOfSaleSapXmlTemplatePath = "SapXmlTemplates\\SAPRoSRequest.xml";
@@ -138,6 +139,7 @@ namespace UKHO.ERPFacade.Common.Constants
         public const string ChangeEncCellAction = "CHANGE ENC CELL";
         public const string PermitWithSameKey = "PermitWithSameKey";
         public const string PermitWithDifferentKey = "PermitWithDifferentKey";
+        public const string AioKey = "AIO";
 
         //LicenseUpdate xml payload nodes
         public const string LicTransaction = "CHANGELICENCE";
