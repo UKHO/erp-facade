@@ -1,8 +1,40 @@
-﻿using Newtonsoft.Json;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
+using Newtonsoft.Json;
 
-namespace UKHO.ERPFacade.Common.Models
+namespace UKHO.ERPFacade.Common.Models.CloudEvents.S57
 {
+    [ExcludeFromCodeCoverage]
+    public class S57Event(S57EventData s57EventData) : BaseCloudEvent<S57EventData>(s57EventData) { }
+
+    [ExcludeFromCodeCoverage]
+    public class S57EventData
+    {
+        [JsonProperty("correlationId")]
+        public string CorrelationId { get; set; }
+
+        [JsonProperty("ukhoWeekNumber")]
+        public UkhoWeekNumber UkhoWeekNumber { get; set; }
+
+        [JsonProperty("products")]
+        public List<Product> Products { get; set; }
+
+        [JsonProperty("unitsOfSale")]
+        public List<UnitOfSale> UnitsOfSales { get; set; }
+    }
+
+    [ExcludeFromCodeCoverage]
+    public class UkhoWeekNumber
+    {
+        [JsonProperty("year")]
+        public int? Year { get; set; }
+
+        [JsonProperty("week")]
+        public int? Week { get; set; }
+
+        [JsonProperty("currentWeekAlphaCorrection")]
+        public bool? CurrentWeekAlphaCorrection { get; set; }
+    }
+
     [ExcludeFromCodeCoverage]
     public class Product
     {
@@ -94,6 +126,12 @@ namespace UKHO.ERPFacade.Common.Models
         [JsonProperty("unitType")]
         public string UnitType { get; set; }
 
+        [JsonProperty("providerCode")]
+        public string ProviderCode { get; set; }
+
+        [JsonProperty("providerName")]
+        public string ProviderName { get; set; }
+
         [JsonProperty("status")]
         public string Status { get; set; }
 
@@ -105,12 +143,6 @@ namespace UKHO.ERPFacade.Common.Models
 
         [JsonProperty("compositionChanges")]
         public CompositionChanges CompositionChanges { get; set; }
-
-        [JsonProperty("providerCode")]
-        public string ProviderCode { get; set; }
-
-        [JsonProperty("providerName")]
-        public string ProviderName { get; set; }
     }
 
     [ExcludeFromCodeCoverage]
@@ -252,37 +284,5 @@ namespace UKHO.ERPFacade.Common.Models
 
         [JsonProperty("rrp")]
         public decimal Rrp { get; set; }
-    }
-
-    public enum Provider
-    {
-        ICE = 1,
-        ICE_GB = 2,
-        ICE_UK = 3,
-        PRIMAR = 4,
-        VAR_Unique = 5,
-        VAR = 6
-    }
-
-    public enum Size
-    {
-        LARGE = 1,
-        MEDIUM = 2,
-        SMALL = 3
-    }
-
-    public enum BundleType
-    {
-        DVD = 1
-    }
-
-    public enum ProductStatus
-    {
-        NewEdition = 1,
-        Reissue = 2,
-        Update = 3,
-        CancellationUpdate = 4,
-        Withdrawn = 5,
-        Suspended = 6
     }
 }

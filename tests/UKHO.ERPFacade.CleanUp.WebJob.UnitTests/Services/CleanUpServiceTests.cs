@@ -15,8 +15,8 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
     public class CleanUpServiceTests
     {
         private ILogger<CleanUpService> _fakeLogger;
-        private IAzureTableReaderWriter _fakeAzureTableReaderWriter;
-        private IAzureBlobEventWriter _fakeAzureBlobEventWriter;
+        private IAzureTableHelper _fakeAzureTableReaderWriter;
+        private IAzureBlobHelper _fakeAzureBlobEventWriter;
         private CleanUpService _fakeCleanUpService;
         private IOptions<ErpFacadeWebJobConfiguration> _fakeErpFacadeWebjobConfig;
 
@@ -24,8 +24,8 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
         public void Setup()
         {
             _fakeLogger = A.Fake<ILogger<CleanUpService>>();
-            _fakeAzureTableReaderWriter = A.Fake<IAzureTableReaderWriter>();
-            _fakeAzureBlobEventWriter = A.Fake<IAzureBlobEventWriter>();
+            _fakeAzureTableReaderWriter = A.Fake<IAzureTableHelper>();
+            _fakeAzureBlobEventWriter = A.Fake<IAzureBlobHelper>();
             _fakeErpFacadeWebjobConfig = Options.Create(new ErpFacadeWebJobConfiguration()
             {
                 CleanUpDurationInDays = "30"

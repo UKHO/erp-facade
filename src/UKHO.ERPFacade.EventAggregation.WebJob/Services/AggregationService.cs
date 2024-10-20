@@ -20,13 +20,13 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Services
     public class AggregationService : IAggregationService
     {
         private readonly ILogger<AggregationService> _logger;
-        private readonly IAzureTableReaderWriter _azureTableReaderWriter;
-        private readonly IAzureBlobEventWriter _azureBlobEventWriter;
+        private readonly IAzureTableHelper _azureTableReaderWriter;
+        private readonly IAzureBlobHelper _azureBlobEventWriter;
         private readonly ISapClient _sapClient;
         private readonly IOptions<SapConfiguration> _sapConfig;
         private readonly IRecordOfSaleSapMessageBuilder _recordOfSaleSapMessageBuilder;
 
-        public AggregationService(ILogger<AggregationService> logger, IAzureTableReaderWriter azureTableReaderWriter, IAzureBlobEventWriter azureBlobEventWriter,
+        public AggregationService(ILogger<AggregationService> logger, IAzureTableHelper azureTableReaderWriter, IAzureBlobHelper azureBlobEventWriter,
             ISapClient sapClient, IOptions<SapConfiguration> sapConfig,
             IRecordOfSaleSapMessageBuilder recordOfSaleSapMessageBuilder)
         {

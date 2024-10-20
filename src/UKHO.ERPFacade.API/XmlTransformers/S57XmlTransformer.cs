@@ -6,8 +6,11 @@ using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
+using UKHO.ERPFacade.Common.Models.CloudEvents.S57;
 using UKHO.ERPFacade.Common.PermitDecryption;
 using UKHO.ERPFacade.Common.Providers;
+using Product = UKHO.ERPFacade.Common.Models.CloudEvents.S57.Product;
+using UnitOfSale = UKHO.ERPFacade.Common.Models.CloudEvents.S57.UnitOfSale;
 
 namespace UKHO.ERPFacade.API.Helpers
 {
@@ -26,7 +29,8 @@ namespace UKHO.ERPFacade.API.Helpers
                                  IOptions<SapActionConfiguration> sapActionConfig,
                                  IWeekDetailsProvider weekDetailsProvider,
                                  IPermitDecryption permitDecryption
-                                 ) : base(fileSystemHelper, xmlHelper)
+                                 )
+        : base(fileSystemHelper, xmlHelper)
         {
             _logger = logger;
             _xmlHelper = xmlHelper;
@@ -41,37 +45,39 @@ namespace UKHO.ERPFacade.API.Helpers
         /// </summary>
         /// <param name="eventData"></param>        
         /// <returns>XmlDocument</returns>
-        public override XmlDocument BuildSapMessageXml(EncEventPayload eventData, string templatePath)
+        public override XmlDocument BuildXmlPayload<T>(T eventData, string xmlTemplatePath)
         {
-            var soapXml = _xmlHelper.CreateXmlDocument(Path.Combine(Environment.CurrentDirectory, templatePath));
+            S57EventData s57EventPayload = eventData as S57EventData;
+
+            var soapXml = _xmlHelper.CreateXmlDocument(Path.Combine(Environment.CurrentDirectory, xmlTemplatePath));
 
             var actionItemNode = soapXml.SelectSingleNode(Constants.XpathActionItems);
 
             _logger.LogInformation(EventIds.GenerationOfSapXmlPayloadStarted.ToEventId(), "Generation of SAP XML payload started.");
 
             // Build SAP actions for ENC Cell
-            BuildEncCellActions(eventData, soapXml, actionItemNode);
+            BuildEncCellActions(s57EventPayload, soapXml, actionItemNode);
 
             // Build SAP actions for Units
-            BuildUnitActions(eventData, soapXml, actionItemNode);
+            BuildUnitActions(s57EventPayload, soapXml, actionItemNode);
 
             // Finalize SAP XML message
-            FinalizeSapXmlMessage(soapXml, eventData.Data.CorrelationId, actionItemNode);
+            FinalizeSapXmlMessage(soapXml, s57EventPayload.CorrelationId, actionItemNode);
 
             _logger.LogInformation(EventIds.GenerationOfSapXmlPayloadCompleted.ToEventId(), "Generation of SAP XML payload completed.");
 
             return soapXml;
         }
 
-        private void BuildEncCellActions(EncEventPayload eventData, XmlDocument soapXml, XmlNode actionItemNode)
+        private void BuildEncCellActions(S57EventData eventData, XmlDocument soapXml, XmlNode actionItemNode)
         {
             _logger.LogInformation(EventIds.EncCellSapActionGenerationStarted.ToEventId(), "Building ENC cell SAP actions.");
 
-            foreach (var product in eventData.Data.Products)
+            foreach (var product in eventData.Products)
             {
                 foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == Constants.EncCell))
                 {
-                    var unitOfSale = GetUnitOfSale(action.ActionNumber, eventData.Data.UnitsOfSales, product);
+                    var unitOfSale = GetUnitOfSale(action.ActionNumber, eventData.UnitsOfSales, product);
 
                     if (!ValidateActionRules(action, product))
                         continue;
@@ -101,6 +107,8 @@ namespace UKHO.ERPFacade.API.Helpers
                         case 5://ADDITIONAL COVERAGE ENC CELL
                             foreach (var additionalCoverageProduct in product.AdditionalCoverage)
                             {
+                                product.AdditionalCoverage.Add(additionalCoverageProduct);
+
                                 BuildAndAppendActionNode(soapXml, product, null, action, eventData, actionItemNode, product.ProductName, additionalCoverageProduct);
                             }
                             break;
@@ -115,9 +123,9 @@ namespace UKHO.ERPFacade.API.Helpers
             }
         }
 
-        private void BuildUnitActions(EncEventPayload eventData, XmlDocument soapXml, XmlNode actionItemNode)
+        private void BuildUnitActions(S57EventData eventData, XmlDocument soapXml, XmlNode actionItemNode)
         {
-            foreach (var unitOfSale in eventData.Data.UnitsOfSales)
+            foreach (var unitOfSale in eventData.UnitsOfSales)
             {
                 foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == Constants.AvcsUnit))
                 {
@@ -150,14 +158,7 @@ namespace UKHO.ERPFacade.API.Helpers
             }
         }
 
-        /// <summary>
-        /// Returns primary unit of sale for given product to get ProductName for ENC cell SAP actions.
-        /// </summary>
-        /// <param name="actionNumber"></param>
-        /// <param name="listOfUnitOfSales"></param>
-        /// <param name="product"></param>
-        /// <returns></returns>
-        private UnitOfSale? GetUnitOfSale(int actionNumber, List<UnitOfSale> listOfUnitOfSales, Product product)
+        private UnitOfSale? GetUnitOfSale(int actionNumber, List<Common.Models.CloudEvents.S57.UnitOfSale> listOfUnitOfSales, Common.Models.CloudEvents.S57.Product product)
         {
             return actionNumber switch
             {
@@ -180,17 +181,10 @@ namespace UKHO.ERPFacade.API.Helpers
             };
         }
 
-        /// <summary>
-        /// Returns true if given product/unit satisfies rules for given action.
-        /// </summary>
-        /// <param name="action"></param>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-
-        private void BuildAndAppendActionNode(XmlDocument soapXml, Product product, UnitOfSale unitOfSale, SapAction action, EncEventPayload eventData, XmlNode actionItemNode, string childCell = null, string replacedBy = null)
+        private void BuildAndAppendActionNode(XmlDocument soapXml, Product product, UnitOfSale unitOfSale, SapAction action, S57EventData eventData, XmlNode actionItemNode, string childCell = null, string replacedBy = null)
         {
             _logger.LogInformation(EventIds.BuildingSapActionStarted.ToEventId(), "Building SAP action {ActionName}.", action.Action);
-            var actionNode = BuildAction(soapXml, product, unitOfSale, action, eventData.Data.UkhoWeekNumber, childCell, replacedBy);
+            var actionNode = BuildAction(soapXml, product, unitOfSale, action, eventData.UkhoWeekNumber, childCell, replacedBy);
             actionItemNode.AppendChild(actionNode);
             _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
         }
@@ -324,6 +318,12 @@ namespace UKHO.ERPFacade.API.Helpers
                     throw new ERPFacadeException(EventIds.BuildingSapActionInformationException.ToEventId(), $"Error while generating SAP action information. | Action : {action} | XML Attribute : {attribute.XmlNodeName} | ErrorMessage : {ex.Message}");
                 }
             }
+        }
+
+        private string GetXmlNodeValue(string fieldValue, string xmlNodeName = null)
+        {
+            // Return first 2 characters if the node is Agency, else limit other nodes to 250 characters
+            return xmlNodeName == Constants.Agency ? CommonHelper.ToSubstring(fieldValue, 0, Constants.MaxAgencyXmlNodeLength) : CommonHelper.ToSubstring(fieldValue, 0, Constants.MaxXmlNodeLength);
         }
     }
 }

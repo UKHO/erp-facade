@@ -11,13 +11,13 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.Services
     {
         private readonly ILogger<CleanUpService> _logger;
         private readonly IOptions<ErpFacadeWebJobConfiguration> _erpFacadeWebjobConfig;
-        private readonly IAzureTableReaderWriter _azureTableReaderWriter;
-        private readonly IAzureBlobEventWriter _azureBlobEventWriter;
+        private readonly IAzureTableHelper _azureTableReaderWriter;
+        private readonly IAzureBlobHelper _azureBlobEventWriter;
 
         public CleanUpService(ILogger<CleanUpService> logger,
                                IOptions<ErpFacadeWebJobConfiguration> erpFacadeWebjobConfig,
-                               IAzureTableReaderWriter azureTableReaderWriter,
-                               IAzureBlobEventWriter azureBlobEventWriter)
+                               IAzureTableHelper azureTableReaderWriter,
+                               IAzureBlobHelper azureBlobEventWriter)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _erpFacadeWebjobConfig = erpFacadeWebjobConfig ?? throw new ArgumentNullException(nameof(erpFacadeWebjobConfig));

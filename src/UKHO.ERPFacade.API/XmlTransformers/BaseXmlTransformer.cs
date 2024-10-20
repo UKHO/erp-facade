@@ -9,11 +9,10 @@ namespace UKHO.ERPFacade.API.XmlTransformers
 {
     public interface IBaseXmlTransformer
     {
+        XmlDocument BuildXmlPayload<T>(T eventData, string xmlTemplatePath);
         bool ValidateActionRules(SapAction action, object obj);
         bool IsPropertyNullOrEmpty(string propertyName, string propertyValue);
-        string GetXmlNodeValue(string fieldValue, string xmlNodeName = null);
         void FinalizeSapXmlMessage(XmlDocument soapXml, string correlationId, XmlNode actionItemNode);
-        XmlDocument BuildSapMessageXml(EncEventPayload eventData, string templatePath);
     }
 
     public abstract class BaseXmlTransformer : IBaseXmlTransformer
@@ -27,18 +26,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             _xmlHelper = xmlHelper;
         }
 
-        public XmlDocument CreateXmlDocument(string templatePath)
-        {
-            string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, templatePath);
-
-            // Check if SAP XML payload template exists
-            if (!_fileSystemHelper.IsFileExists(sapXmlTemplatePath))
-            {
-                throw new ERPFacadeException(EventIds.SapXmlTemplateNotFound.ToEventId(), "The SAP XML payload template does not exist.");
-            }
-
-            return _xmlHelper.CreateXmlDocument(sapXmlTemplatePath);
-        }
+        public abstract XmlDocument BuildXmlPayload<T>(T eventData, string xmlTemplatePath);
 
         public bool ValidateActionRules(SapAction action, object obj)
         {
@@ -96,11 +84,21 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             {
                 actionItemNode.AppendChild(actionItem);
             }
-            SetXmlNodeValue(soapXml, Constants.XpathCorrId, correlationId);
-            SetXmlNodeValue(soapXml, Constants.XpathNoOfActions, actionItemNode.ChildNodes.Count.ToString());
-            SetXmlNodeValue(soapXml, Constants.XpathRecDate, DateTime.UtcNow.ToString(Constants.RecDateFormat));
-            SetXmlNodeValue(soapXml, Constants.XpathRecTime, DateTime.UtcNow.ToString(Constants.RecTimeFormat));
 
+            //Set basic nodes
+            var corrIdNode = soapXml.SelectSingleNode(Constants.XpathCorrId);
+            corrIdNode.InnerText = correlationId;
+
+            var noOfActionsNode = soapXml.SelectSingleNode(Constants.XpathCorrId);
+            noOfActionsNode.InnerText = actionItemNode.ChildNodes.Count.ToString();
+
+            var recDateNode = soapXml.SelectSingleNode(Constants.XpathRecDate);
+            recDateNode.InnerText = DateTime.UtcNow.ToString(Constants.RecDateFormat);
+
+            var recTimeNode = soapXml.SelectSingleNode(Constants.XpathRecTime);
+            recTimeNode.InnerText = DateTime.UtcNow.ToString(Constants.RecTimeFormat);
+
+            //Set action items
             var IM_MATINFONode = soapXml.SelectSingleNode(Constants.XpathImMatInfo);
             IM_MATINFONode.AppendChild(actionItemNode);
         }
@@ -112,60 +110,6 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                 throw new ERPFacadeException(EventIds.EmptyEventJsonPropertyException.ToEventId(), $"Required details are missing in enccontentpublished event payload. | Property Name : {propertyName}");
             }
             else return false;
-        }
-
-        public void ProcessAttributes(string action, IEnumerable<ActionItemAttribute> attributes, XmlDocument soapXml, object source, List<(int, XmlElement)> actionAttributes, string replacedBy = null)
-        {
-            foreach (var attribute in attributes)
-            {
-                try
-                {
-                    var attributeNode = soapXml.CreateElement(attribute.XmlNodeName);
-
-                    if (attribute.IsRequired)
-                    {
-                        if (attribute.XmlNodeName == Constants.ReplacedBy)
-                        {
-                            if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, replacedBy)) attributeNode.InnerText = GetXmlNodeValue(replacedBy.ToString(), attribute.XmlNodeName);
-                        }
-                        else
-                        {
-                            var jsonFieldValue = CommonHelper.ParseXmlNode(attribute.JsonPropertyName, source, source.GetType()).ToString();
-                            if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, jsonFieldValue))
-                            {
-                                attributeNode.InnerText = GetXmlNodeValue(jsonFieldValue.ToString(), attribute.XmlNodeName);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        attributeNode.InnerText = string.Empty;
-                    }
-                    actionAttributes.Add((attribute.SortingOrder, attributeNode));
-                }
-                catch (Exception ex)
-                {
-                    throw new ERPFacadeException(EventIds.BuildingSapActionInformationException.ToEventId(), $"Error while generating SAP action information. | Action : {action} | XML Attribute : {attribute.XmlNodeName} | ErrorMessage : {ex.Message}");
-                }
-            }
-        }
-
-        public string GetXmlNodeValue(string fieldValue, string xmlNodeName = null)
-        {
-            // Return first 2 characters if the node is Agency, else limit other nodes to 250 characters
-            return xmlNodeName == Constants.Agency ? CommonHelper.ToSubstring(fieldValue, 0, Constants.MaxAgencyXmlNodeLength) : CommonHelper.ToSubstring(fieldValue, 0, Constants.MaxXmlNodeLength);
-        }
-
-        public abstract XmlDocument BuildSapMessageXml(EncEventPayload eventData, string templatePath);
-
-        //private methods
-        private void SetXmlNodeValue(XmlDocument xmlDoc, string xPath, string value)
-        {
-            var node = xmlDoc.SelectSingleNode(xPath);
-            if (node != null)
-            {
-                node.InnerText = value;
-            }
         }
     }
 }

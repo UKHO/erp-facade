@@ -1,12 +1,7 @@
-﻿
-
-using CloudNative.CloudEvents;
-
-namespace UKHO.ERPFacade.API.Handlers
+﻿namespace UKHO.ERPFacade.API.Handlers
 {
-    public interface IEventHandler
+    public interface IEventHandler<T>
     {
-        string EventType { get; }
-        Task HandleEventAsync(CloudEvent payload);
+        Task ProcessEventAsync(T eventPayload);
     }
 }

@@ -1,9 +1,6 @@
-﻿using CloudNative.CloudEvents;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
-using UKHO.ERPFacade.API.Handlers;
+using UKHO.ERPFacade.API.Dispatcher;
 using UKHO.ERPFacade.Common.Logging;
 
 namespace UKHO.ERPFacade.API.Controllers
@@ -14,8 +11,8 @@ namespace UKHO.ERPFacade.API.Controllers
         private readonly IEventDispatcher _eventDispatcher;
 
         public WebhookController(IHttpContextAccessor contextAccessor,
-                                         IEventDispatcher eventDispatcher,
-                                          ILogger<WebhookController> logger)
+                                 IEventDispatcher eventDispatcher,
+                                 ILogger<WebhookController> logger)
         : base(contextAccessor)
         {
             _logger = logger;
@@ -23,8 +20,8 @@ namespace UKHO.ERPFacade.API.Controllers
         }
 
         [HttpOptions]
-        [Route("/webhook/event")]
-        [Authorize(Policy = "EncContentPublishedWebhookCaller")]
+        [Route("api/v2/webhook")]
+        //[Authorize(Policy = "EncContentPublishedWebhookCaller")]
         public IActionResult ReceiveEvents()
         {
             var webhookRequestOrigin = HttpContext.Request.Headers["WebHook-Request-Origin"].FirstOrDefault();
@@ -40,13 +37,12 @@ namespace UKHO.ERPFacade.API.Controllers
         }
 
         [HttpPost]
-        [Route("/webhook/event")]
-        [Authorize(Policy = "EncContentPublishedWebhookCaller")]
-        public async Task<IActionResult> ReceiveEvents([FromBody] JObject payload)
+        [Route("api/v2/webhook")]
+        //[Authorize(Policy = "EncContentPublishedWebhookCaller")]
+        public async Task<IActionResult> ReceiveEventsAsync([FromBody] JObject payload)
         {
-            var cloudEvent = JsonConvert.DeserializeObject<CloudEvent>(payload.ToString());
-            await _eventDispatcher.DispatchAsync(cloudEvent);
-            return Ok();
+            await _eventDispatcher.DispatchEventAsync(payload);
+            return new OkObjectResult(StatusCodes.Status200OK);
         }
     }
 }

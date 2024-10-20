@@ -1,7 +1,6 @@
 ﻿using System.Xml;
 using UKHO.ERPFacade.API.XmlTransformers;
 using UKHO.ERPFacade.Common.IO;
-using UKHO.ERPFacade.Common.Models;
 
 namespace UKHO.ERPFacade.API.Helpers
 {
@@ -24,7 +23,7 @@ namespace UKHO.ERPFacade.API.Helpers
         /// </summary>
         /// <param name="eventData"></param>        
         /// <returns>XmlDocument</returns>
-        public override XmlDocument BuildSapMessageXml(EncEventPayload eventData, string templatePath)
+        public override XmlDocument BuildXmlPayload<T>(T eventData, string templatePath)
         {
             var soapXml = _xmlHelper.CreateXmlDocument(Path.Combine(Environment.CurrentDirectory, templatePath));
             return soapXml;

@@ -24,8 +24,8 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Services
     public class AggregationServiceTests
     {
         private ILogger<AggregationService> _fakeLogger;
-        private IAzureTableReaderWriter _fakeAzureTableReaderWriter;
-        private IAzureBlobEventWriter _fakeAzureBlobEventWriter;
+        private IAzureTableHelper _fakeAzureTableReaderWriter;
+        private IAzureBlobHelper _fakeAzureBlobEventWriter;
         private ISapClient _fakeSapClient;
         private IOptions<SapConfiguration> _fakeSapConfig;
         private IRecordOfSaleSapMessageBuilder _fakeRecordOfSaleSapMessageBuilder;
@@ -35,8 +35,8 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Services
         public void Setup()
         {
             _fakeLogger = A.Fake<ILogger<AggregationService>>();
-            _fakeAzureTableReaderWriter = A.Fake<IAzureTableReaderWriter>();
-            _fakeAzureBlobEventWriter = A.Fake<IAzureBlobEventWriter>();
+            _fakeAzureTableReaderWriter = A.Fake<IAzureTableHelper>();
+            _fakeAzureBlobEventWriter = A.Fake<IAzureBlobHelper>();
             _fakeSapClient = A.Fake<ISapClient>();
             _fakeSapConfig = Options.Create(new SapConfiguration()
             {

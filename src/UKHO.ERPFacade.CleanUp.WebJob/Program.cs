@@ -148,8 +148,8 @@ namespace UKHO.ERPFacade.Monitoring.WebJob
             }
 
             serviceCollection.AddSingleton<CleanUpWebjob>();
-            serviceCollection.AddSingleton<IAzureTableReaderWriter, AzureTableReaderWriter>();
-            serviceCollection.AddSingleton<IAzureBlobEventWriter, AzureBlobEventWriter>();
+            serviceCollection.AddSingleton<IAzureTableHelper, AzureTableHelper>();
+            serviceCollection.AddSingleton<IAzureBlobHelper, AzureBlobHelper>();
             serviceCollection.AddSingleton<ICleanUpService, CleanUpService>();
         }
     }

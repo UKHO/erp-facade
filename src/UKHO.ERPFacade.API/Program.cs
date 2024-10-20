@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Newtonsoft.Json.Serialization;
 using Serilog;
+using UKHO.ERPFacade.API.Dispatcher;
 using UKHO.ERPFacade.API.Filters;
 using UKHO.ERPFacade.API.Handlers;
 using UKHO.ERPFacade.API.Health;
@@ -23,6 +24,8 @@ using UKHO.ERPFacade.Common.HttpClients;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Models;
+using UKHO.ERPFacade.Common.Models.CloudEvents.S100;
+using UKHO.ERPFacade.Common.Models.CloudEvents.S57;
 using UKHO.ERPFacade.Common.PermitDecryption;
 using UKHO.ERPFacade.Common.Providers;
 using UKHO.Logging.EventHubLogProvider;
@@ -168,8 +171,8 @@ namespace UKHO.ERPFacade
 
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-            builder.Services.AddScoped<IAzureTableReaderWriter, AzureTableReaderWriter>();
-            builder.Services.AddScoped<IAzureBlobEventWriter, AzureBlobEventWriter>();
+            builder.Services.AddScoped<IAzureTableHelper, AzureTableHelper>();
+            builder.Services.AddScoped<IAzureBlobHelper, AzureBlobHelper>();
             builder.Services.AddScoped<IAzureQueueHelper, AzureQueueHelper>();
             builder.Services.AddScoped<IXmlHelper, XmlHelper>();
             builder.Services.AddScoped<IFileSystemHelper, FileSystemHelper>();
@@ -180,8 +183,8 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<IPermitDecryption, PermitDecryption>();
 
             builder.Services.AddScoped<IEventDispatcher, EventDispatcher>();
-            builder.Services.AddScoped<IEventHandler, S57EventHandler>();
-            builder.Services.AddScoped<IEventHandler, S100EventHandler>();
+            builder.Services.AddScoped<IEventHandler<S57Event>, S57EventHandler>();
+            builder.Services.AddScoped<IEventHandler<S100Event>, S100EventHandler>();
             builder.Services.AddKeyedScoped<IBaseXmlTransformer, S57XmlTransformer>("S57XmlTransformer");
             builder.Services.AddKeyedScoped<IBaseXmlTransformer, S100XmlTransformer>("S100XmlTransformer");
 
