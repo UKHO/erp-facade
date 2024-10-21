@@ -37,6 +37,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             catch (Exception ex)
             {
                 Console.WriteLine(blobContainer + " " + ex.Message);
+                return "";
             }
             return (expectedXmLfilePath + "\\" + blobContainer + ".xml");
         }
