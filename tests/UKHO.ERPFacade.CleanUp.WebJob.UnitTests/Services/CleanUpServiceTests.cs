@@ -89,7 +89,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
 
             A.CallTo(() => _fakeAzureTableReaderWriter.GetAllEntities(A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureTableReaderWriter.DeleteEntity(A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
-            A.CallTo(() => _fakeAzureBlobEventWriter.DeleteDirectory(A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeAzureBlobEventWriter.DeleteContainer(A<string>.Ignored)).MustHaveHappened();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
@@ -99,7 +99,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
            && call.GetArgument<LogLevel>(0) == LogLevel.Information
            && call.GetArgument<EventId>(1) == EventIds.DeletedContainerSuccessful.ToEventId()
-           && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Deleting directory {CorrelationId} from {EventContainerName} container").MustHaveHappened();
+           && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Event data cleaned up for {CorrelationId} successfully.").MustHaveHappened();
 
         }
 
@@ -158,7 +158,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
 
             A.CallTo(() => _fakeAzureTableReaderWriter.GetAllEntities(A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureTableReaderWriter.DeleteEntity(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
-            A.CallTo(() => _fakeAzureBlobEventWriter.DeleteDirectory(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeAzureBlobEventWriter.DeleteContainer(A<string>.Ignored)).MustNotHaveHappened();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information

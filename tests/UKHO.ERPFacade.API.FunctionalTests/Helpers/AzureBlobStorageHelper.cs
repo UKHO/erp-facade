@@ -23,6 +23,25 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return (from blob in blobs select blob.Name.Split("/") into blobName select blobName[1].Split(".") into fileName select fileName[0]).ToList();
         }
 
+        public string DownloadGeneratedXml(string expectedXmLfilePath, string blobContainer)
+        {
+            BlobServiceClient blobServiceClient = new(Config.TestConfig.AzureStorageConfiguration.ConnectionString);
+            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(blobContainer);
+            BlobClient blobClient = containerClient.GetBlobClient(Constants.SapXmlPayloadFileName);
+            try
+            {
+                BlobDownloadInfo blobDownload = blobClient.Download();
+                using FileStream downloadFileStream = new((expectedXmLfilePath + "\\" + blobContainer + ".xml"), FileMode.Create);
+                blobDownload.Content.CopyTo(downloadFileStream);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(blobContainer + " " + ex.Message);
+                return "";
+            }
+            return (expectedXmLfilePath + "\\" + blobContainer + ".xml");
+        }
+
         public string DownloadGeneratedXmlFile(string expectedXmlFilePath, string blobContainer, string parentContainerName)
         {
             string fileName = "";
