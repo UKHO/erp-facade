@@ -5,20 +5,23 @@ using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Logging;
-using UKHO.ERPFacade.API.Helpers;
 using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.PermitDecryption;
 using UKHO.ERPFacade.Common.Providers;
+using Newtonsoft.Json;
+using UKHO.ERPFacade.Common.Configuration;
 
 namespace UKHO.ERPFacade.API.Handler
 {
-    public class S57EventHandler : EventHandler<S57EventData>
+    public class S57EventHandler : EventHandler<EncEventPayload>
     {
         private readonly ILogger<S57EventHandler> _logger;
-        private readonly IOptions<SapActionConfiguration> _sapActionConfig;
-        private readonly IPermitDecryption _permitDecryption;
+        private readonly IOptions<SapActionConfiguration> _sapActionConfig;        
         private readonly IWeekDetailsProvider _weekDetailsProvider;
+        private readonly IPermitDecryption _permitDecryption;
+        private readonly IOptions<SapConfiguration> _sapConfig;
+
         public S57EventHandler(ILogger<S57EventHandler> logger,
                                     IOptions<SapActionConfiguration> sapActionConfig,
                                     IAzureTableReaderWriter azureTableReaderWriter,
@@ -27,33 +30,37 @@ namespace UKHO.ERPFacade.API.Handler
                                     IXmlHelper xmlHelper,
                                     IFileSystemHelper fileSystemHelper,
                                     IWeekDetailsProvider weekDetailsProvider,
-                                    IPermitDecryption permitDecryption) : base(azureTableReaderWriter, azureBlobEventWriter, sapClient, xmlHelper, fileSystemHelper)
+                                    IPermitDecryption permitDecryption,
+                                    IOptions<SapConfiguration> sapConfig) : base(logger,azureTableReaderWriter,
+                                                                                azureBlobEventWriter, sapClient, xmlHelper, fileSystemHelper)
         {
             _logger = logger;
             _sapActionConfig = sapActionConfig;
             _weekDetailsProvider = weekDetailsProvider;
             _permitDecryption = permitDecryption;
+            _sapConfig = sapConfig;
         }
 
-        public override string EventType
+        public override IEventData PrepareModel(string encEventJson)
         {
-            get
-            {
-                return "uk.gov.ukho.encpublishing.enccontentpublished.v2";
-            }
-        }      
+            IEventData eventData = new S57EventData();
+            eventData.EventData= JsonConvert.DeserializeObject<EncEventPayload>(encEventJson);
+            eventData.SapEndpointForEvent = _sapConfig.Value.SapEndpointForEncEvent;
+            eventData.SapUsernameForEvent = _sapConfig.Value.SapUsernameForEncEvent;
+            eventData.SapPasswordForEvent = _sapConfig.Value.SapPasswordForEncEvent;
+            eventData.SapServiceOperationForEvent = _sapConfig.Value.SapServiceOperationForEncEvent;
+            return eventData;
+        }
 
-        
-        public override async Task BuildEncCellActions(S57EventData eventData, XmlDocument soapXml, XmlNode? actionItemNode)
-        {
-            
+        public override async Task BuildEncCellActions(EncEventPayload eventData, XmlDocument soapXml, XmlNode? actionItemNode)
+        {            
             _logger.LogInformation(EventIds.EncCellSapActionGenerationStarted.ToEventId(), "Building ENC cell SAP actions.");
 
-            foreach (var product in eventData.EventData.Data.Products)
+            foreach (var product in eventData.Data.Products)
             {
                 foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == Constants.EncCell))
                 {
-                    var unitOfSale = GetUnitOfSale(action.ActionNumber, eventData.EventData.Data.UnitsOfSales, product);
+                    var unitOfSale = GetUnitOfSale(action.ActionNumber, eventData.Data.UnitsOfSales, product);
 
                     if (!ValidateActionRules(action, product))
                         continue;
@@ -66,7 +73,7 @@ namespace UKHO.ERPFacade.API.Handler
                             {
                                 throw new ERPFacadeException(EventIds.UnitOfSaleNotFoundException.ToEventId(), $"Required unit not found in event payload to generate {action.Action} action for {product.ProductName}.");
                             }
-                            BuildAndAppendActionNode(soapXml, product, unitOfSale, action, eventData.EventData, actionItemNode, product.ProductName);
+                            BuildAndAppendActionNode(soapXml, product, unitOfSale, action, eventData, actionItemNode, product.ProductName);
                             break;
 
                         case 4://REPLACED WITH ENC CELL
@@ -76,21 +83,21 @@ namespace UKHO.ERPFacade.API.Handler
                             }
                             foreach (var replacedProduct in product.ReplacedBy)
                             {
-                                BuildAndAppendActionNode(soapXml, product, unitOfSale, action, eventData.EventData, actionItemNode, product.ProductName, replacedProduct);
+                                BuildAndAppendActionNode(soapXml, product, unitOfSale, action, eventData, actionItemNode, product.ProductName, replacedProduct);
                             }
                             break;
 
                         case 5://ADDITIONAL COVERAGE ENC CELL
                             foreach (var additionalCoverageProduct in product.AdditionalCoverage)
                             {
-                                BuildAndAppendActionNode(soapXml, product, null, action, eventData.EventData, actionItemNode, product.ProductName, additionalCoverageProduct);
+                                BuildAndAppendActionNode(soapXml, product, null, action, eventData, actionItemNode, product.ProductName, additionalCoverageProduct);
                             }
                             break;
 
                         case 6://CHANGE ENC CELL
                         case 8://UPDATE ENC CELL EDITION UPDATE NUMBER
                             if (unitOfSale is not null)
-                                BuildAndAppendActionNode(soapXml, product, unitOfSale, action, eventData.EventData, actionItemNode, product.ProductName);
+                                BuildAndAppendActionNode(soapXml, product, unitOfSale, action, eventData, actionItemNode, product.ProductName);
                             break;
                     }
                 }
@@ -99,9 +106,9 @@ namespace UKHO.ERPFacade.API.Handler
 
         }
 
-        public override async Task BuildUnitActions(S57EventData eventData, XmlDocument soapXml, XmlNode actionItemNode)
+        public override async Task BuildUnitActions(EncEventPayload eventData, XmlDocument soapXml, XmlNode actionItemNode)
         {
-            foreach (var unitOfSale in eventData.EventData.Data.UnitsOfSales)
+            foreach (var unitOfSale in eventData.Data.UnitsOfSales)
             {
                 foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == Constants.AvcsUnit))
                 {
@@ -113,20 +120,20 @@ namespace UKHO.ERPFacade.API.Handler
                         case 2://CREATE AVCS UNIT OF SALE
                         case 7://CHANGE AVCS UNIT OF SALE
                         case 11://CANCEL AVCS UNIT OF SALE
-                            BuildAndAppendActionNode(soapXml, null, unitOfSale, action, eventData.EventData, actionItemNode);
+                            BuildAndAppendActionNode(soapXml, null, unitOfSale, action, eventData, actionItemNode);
                             break;
 
                         case 3://ASSIGN CELL TO AVCS UNIT OF SALE
                             foreach (var addProduct in unitOfSale.CompositionChanges.AddProducts)
                             {
-                                BuildAndAppendActionNode(soapXml, null, unitOfSale, action, eventData.EventData, actionItemNode, addProduct, null);
+                                BuildAndAppendActionNode(soapXml, null, unitOfSale, action, eventData, actionItemNode, addProduct, null);
                             }
                             break;
 
                         case 9://REMOVE ENC CELL FROM AVCS UNIT OF SALE
                             foreach (var removeProduct in unitOfSale.CompositionChanges.RemoveProducts)
                             {
-                                BuildAndAppendActionNode(soapXml, null, unitOfSale, action, eventData.EventData, actionItemNode, removeProduct, null);
+                                BuildAndAppendActionNode(soapXml, null, unitOfSale, action, eventData, actionItemNode, removeProduct, null);
                             }
                             break;
                     }

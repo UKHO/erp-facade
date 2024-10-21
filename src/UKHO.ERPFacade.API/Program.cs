@@ -28,6 +28,7 @@ using UKHO.Logging.EventHubLogProvider;
 using Elastic.Apm.Api;
 using UKHO.ERPFacade.API.Handler;
 using UKHO.ERPFacade.Common.Models.S100Event;
+using UKHO.ERPFacade.API.Services;
 
 namespace UKHO.ERPFacade
 {
@@ -72,39 +73,39 @@ namespace UKHO.ERPFacade
 
             eventHubLoggingConfiguration = configuration.GetSection("EventHubLoggingConfiguration").Get<EventHubLoggingConfiguration>()!;
 
-            builder.Logging
-                .ClearProviders()
-                .AddEventHub(config =>
-                {
-                    if (!string.IsNullOrWhiteSpace(eventHubLoggingConfiguration.ConnectionString))
-                    {
-                        void ConfigAdditionalValuesProvider(IDictionary<string, object> additionalValues)
-                        {
-                            if (httpContextAccessor.HttpContext != null)
-                            {
-                                additionalValues["_Environment"] = eventHubLoggingConfiguration.Environment;
-                                additionalValues["_System"] = eventHubLoggingConfiguration.System;
-                                additionalValues["_Service"] = eventHubLoggingConfiguration.Service;
-                                additionalValues["_NodeName"] = eventHubLoggingConfiguration.NodeName;
-                                additionalValues["_RemoteIPAddress"] = httpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString();
-                                additionalValues["_User-Agent"] = httpContextAccessor.HttpContext.Request.Headers.UserAgent.FirstOrDefault() ?? string.Empty;
-                                additionalValues["_AssemblyVersion"] = Assembly.GetExecutingAssembly().GetCustomAttributes<AssemblyFileVersionAttribute>().Single().Version;
-                                additionalValues["_X-Correlation-ID"] = httpContextAccessor.HttpContext.Request.Headers?[CorrelationIdMiddleware.XCorrelationIdHeaderKey].FirstOrDefault() ?? string.Empty;
-                            }
-                        }
-                        config.Environment = eventHubLoggingConfiguration.Environment;
-                        config.DefaultMinimumLogLevel =
-                            (LogLevel)Enum.Parse(typeof(LogLevel), eventHubLoggingConfiguration.MinimumLoggingLevel, true);
-                        config.MinimumLogLevels["UKHO"] =
-                            (LogLevel)Enum.Parse(typeof(LogLevel), eventHubLoggingConfiguration.UkhoMinimumLoggingLevel, true);
-                        config.EventHubConnectionString = eventHubLoggingConfiguration.ConnectionString;
-                        config.EventHubEntityPath = eventHubLoggingConfiguration.EntityPath;
-                        config.System = eventHubLoggingConfiguration.System;
-                        config.Service = eventHubLoggingConfiguration.Service;
-                        config.NodeName = eventHubLoggingConfiguration.NodeName;
-                        config.AdditionalValuesProvider = ConfigAdditionalValuesProvider;
-                    }
-                });
+            //builder.Logging
+            //    .ClearProviders()
+            //    .AddEventHub(config =>
+            //    {
+            //        if (!string.IsNullOrWhiteSpace(eventHubLoggingConfiguration.ConnectionString))
+            //        {
+            //            void ConfigAdditionalValuesProvider(IDictionary<string, object> additionalValues)
+            //            {
+            //                if (httpContextAccessor.HttpContext != null)
+            //                {
+            //                    additionalValues["_Environment"] = eventHubLoggingConfiguration.Environment;
+            //                    additionalValues["_System"] = eventHubLoggingConfiguration.System;
+            //                    additionalValues["_Service"] = eventHubLoggingConfiguration.Service;
+            //                    additionalValues["_NodeName"] = eventHubLoggingConfiguration.NodeName;
+            //                    additionalValues["_RemoteIPAddress"] = httpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString();
+            //                    additionalValues["_User-Agent"] = httpContextAccessor.HttpContext.Request.Headers.UserAgent.FirstOrDefault() ?? string.Empty;
+            //                    additionalValues["_AssemblyVersion"] = Assembly.GetExecutingAssembly().GetCustomAttributes<AssemblyFileVersionAttribute>().Single().Version;
+            //                    additionalValues["_X-Correlation-ID"] = httpContextAccessor.HttpContext.Request.Headers?[CorrelationIdMiddleware.XCorrelationIdHeaderKey].FirstOrDefault() ?? string.Empty;
+            //                }
+            //            }
+            //            config.Environment = eventHubLoggingConfiguration.Environment;
+            //            config.DefaultMinimumLogLevel =
+            //                (LogLevel)Enum.Parse(typeof(LogLevel), eventHubLoggingConfiguration.MinimumLoggingLevel, true);
+            //            config.MinimumLogLevels["UKHO"] =
+            //                (LogLevel)Enum.Parse(typeof(LogLevel), eventHubLoggingConfiguration.UkhoMinimumLoggingLevel, true);
+            //            config.EventHubConnectionString = eventHubLoggingConfiguration.ConnectionString;
+            //            config.EventHubEntityPath = eventHubLoggingConfiguration.EntityPath;
+            //            config.System = eventHubLoggingConfiguration.System;
+            //            config.Service = eventHubLoggingConfiguration.Service;
+            //            config.NodeName = eventHubLoggingConfiguration.NodeName;
+            //            config.AdditionalValuesProvider = ConfigAdditionalValuesProvider;
+            //        }
+            //    });
 
             builder.Services.AddLogging(loggingBuilder =>
             {
@@ -182,8 +183,10 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<IWeekDetailsProvider, WeekDetailsProvider>();
             builder.Services.AddScoped<IPermitDecryption, PermitDecryption>();
             builder.Services.AddScoped<IS100DataContentSapMessageBuilder, S100DataContentSapMessageBuilder>();
+            //builder.Services.AddTransient<ServiceProviderService>();
+            builder.Services.AddScoped<IWebhookService, WebhookService>();
 
-            builder.Services.AddKeyedTransient<IEventHandler, S57EventHandler>("S57");
+            builder.Services.AddKeyedTransient<IEventHandler, S57EventHandler>("uk.gov.ukho.encpublishing.enccontentpublished.v2.2");
             builder.Services.AddKeyedTransient<IEventHandler, S100EventHandler>("S100");
 
             ConfigureHealthChecks(builder);

@@ -4,6 +4,6 @@ namespace UKHO.ERPFacade.API.Services
 {
     public interface IWebhookService
     {
-        Task HandleEvent(string payloadJson,CloudEvent payload);        
+        Task HandleEvent(string payloadJson, CloudEvent payload);        
     }
 }

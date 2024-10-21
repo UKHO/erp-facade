@@ -1,6 +1,4 @@
-﻿using UKHO.ERPFacade.Common.Models.S100Event;
-
-namespace UKHO.ERPFacade.Common.Models
+﻿namespace UKHO.ERPFacade.Common.Models
 {
     public class S100EventData : IEventData
     {

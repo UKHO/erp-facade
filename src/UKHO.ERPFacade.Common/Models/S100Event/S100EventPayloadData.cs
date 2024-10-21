@@ -2,7 +2,7 @@
 
 namespace UKHO.ERPFacade.Common.Models.S100Event
 {
-    public class S100EventData
+    public class S100EventPayloadData
     {
         [JsonProperty("correlationId")]
         public string CorrelationId { get; set; }

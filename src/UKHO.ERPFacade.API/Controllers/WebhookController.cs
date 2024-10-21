@@ -21,7 +21,7 @@ namespace UKHO.ERPFacade.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class WebhookController : BaseController<WebhookController>
     {
         private readonly ILogger<WebhookController> _logger;
@@ -59,7 +59,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
         [HttpOptions]
         [Route("/webhook/newenccontentpublishedeventreceived")]
-        [Authorize(Policy = "EncContentPublishedWebhookCaller")]
+        //[Authorize(Policy = "EncContentPublishedWebhookCaller")]
         public IActionResult NewEncContentPublishedEventOptions()
         {
             var webhookRequestOrigin = HttpContext.Request.Headers["WebHook-Request-Origin"].FirstOrDefault();
@@ -76,7 +76,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
         [HttpPost]
         [Route("/webhook/newenccontentpublishedeventreceived")]
-        [Authorize(Policy = "EncContentPublishedWebhookCaller")]
+        //[Authorize(Policy = "EncContentPublishedWebhookCaller")]
         public virtual async Task<IActionResult> NewEncContentPublishedEventReceived([FromBody] JObject encEventJson)
         {
             _logger.LogInformation(EventIds.NewEncContentPublishedEventReceived.ToEventId(), "ERP Facade webhook has received new enccontentpublished event from EES.");

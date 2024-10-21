@@ -1,25 +1,20 @@
-﻿
-using CloudNative.CloudEvents;
+﻿using CloudNative.CloudEvents;
 using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.API.Handler;
-using UKHO.ERPFacade.API.Helpers;
 using UKHO.ERPFacade.Common.Configuration;
-using UKHO.ERPFacade.Common.Models;
-using UKHO.ERPFacade.Common.Models.S100Event;
 
 namespace UKHO.ERPFacade.API.Services
 {
     public class WebhookService : IWebhookService
-    {        
+    {
         private readonly IOptions<SapConfiguration> _sapConfig;
 
-        private readonly IKeyedServiceProvider _serviceProvider;
-        public WebhookService(IKeyedServiceProvider serviceProvider, IOptions<SapConfiguration> sapConfig)
-        {            
+        private readonly IServiceProvider _serviceProvider;
+        public WebhookService(IServiceProvider serviceProvider, IOptions<SapConfiguration> sapConfig)
+        {
             _sapConfig = sapConfig;
             _serviceProvider = serviceProvider;
         }
-
         public async Task HandleEvent(string payloadJson, CloudEvent payload)
         {
             if (string.IsNullOrEmpty(payloadJson))
@@ -32,14 +27,11 @@ namespace UKHO.ERPFacade.API.Services
                 throw new ArgumentNullException(nameof(payload));
             }
 
-            var eventType = payload.Type;            
+            var eventType = payload.Type;
 
-            IEventHandler type = _serviceProvider.GetKeyedService<IEventHandler>(eventType);
-            S57EventData eventData = new S57EventData();
-            
-            eventData.EventData = (EncEventPayload)payload.Data;
+            IEventHandler type = _serviceProvider.GetKeyedService<IEventHandler>(eventType);            
 
-            await type.HandleEvent(payloadJson, eventData);           
-        }        
+            await type.HandleEvent(payloadJson);
+        }
     }
 }

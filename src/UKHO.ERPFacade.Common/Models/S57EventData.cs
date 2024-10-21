@@ -11,7 +11,7 @@
         {
             get
             {
-                return "SapXmlTemplates\\SAPRequest.xml";
+                return "SapXmlTemplates\\SAPS57Request.xml";
             }
         }
 

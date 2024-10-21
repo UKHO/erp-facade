@@ -3,6 +3,6 @@
     public class S100EventPayload
     {
         public string Type { get; set; }
-        public S100EventData S100EventData { get; set; }
+        public S100EventPayloadData S100EventPayloadData { get; set; }
     }
 }

@@ -1,22 +1,18 @@
-﻿using UKHO.ERPFacade.API.Helpers;
-using UKHO.ERPFacade.Common.Exceptions;
+﻿using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models.TableEntities;
 using UKHO.ERPFacade.Common.Models;
-using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Constants;
-using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.HttpClients;
 using UKHO.ERPFacade.Common.IO.Azure;
 using System.Xml;
 using UKHO.ERPFacade.Common.IO;
-using Microsoft.Azure.Amqp;
 
 namespace UKHO.ERPFacade.API.Handler
 {
     public abstract class EventHandler<T>: IEventHandler
     {
-        private readonly ILogger<EventHandler> _logger;
+        private readonly ILogger _logger;
         private readonly IAzureTableReaderWriter _azureTableReaderWriter;
         private readonly IAzureBlobEventWriter _azureBlobEventWriter;
         private readonly ISapClient _sapClient;
@@ -32,24 +28,25 @@ namespace UKHO.ERPFacade.API.Handler
         private const string RecTimeFormat = "hhmmss";
 
 
-        public EventHandler(IAzureTableReaderWriter azureTableReaderWriter,
+        public EventHandler(ILogger logger,
+                                 IAzureTableReaderWriter azureTableReaderWriter,
                                  IAzureBlobEventWriter azureBlobEventWriter,
                                  ISapClient sapClient,
                                  IXmlHelper xmlHelper,
                                  IFileSystemHelper fileSystemHelper
                                     )
         {
+            _logger = logger;
             _azureTableReaderWriter = azureTableReaderWriter;
             _azureBlobEventWriter = azureBlobEventWriter;
             _sapClient = sapClient;
             _xmlHelper = xmlHelper;
             _fileSystemHelper = fileSystemHelper;
         }
-
-        public abstract string EventType { get; }
-
-        public async Task HandleEvent(string encEventJson, IEventData eventData)
+        public async Task HandleEvent(string encEventJson)
         {
+            IEventData eventData = PrepareModel(encEventJson);
+
             EncEventEntity encEventEntity = new()
             {
                 RowKey = Guid.NewGuid().ToString(),
@@ -84,6 +81,7 @@ namespace UKHO.ERPFacade.API.Handler
 
         }
 
+        public abstract IEventData PrepareModel(string encEventJson);
         public async Task<XmlDocument> BuildSapMessageXml(IEventData eventData) 
         {
             string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, eventData.SapXmlPath);
@@ -206,7 +204,6 @@ namespace UKHO.ERPFacade.API.Handler
             childNode.InnerText = value ?? string.Empty;
             parentNode.AppendChild(childNode);
         }
-
         protected void ProcessAttributes(string action, IEnumerable<ActionItemAttribute> attributes, XmlDocument soapXml, object source, List<(int, XmlElement)> actionAttributes, DecryptedPermit decryptedPermit = null, string replacedBy = null)
         {
             foreach (var attribute in attributes)
@@ -249,7 +246,6 @@ namespace UKHO.ERPFacade.API.Handler
                 }
             }
         }
-
         protected string GetXmlNodeValue(string fieldValue, string xmlNodeName = null)
         {
             // Return first 2 characters if the node is Agency, else limit other nodes to 250 characters
