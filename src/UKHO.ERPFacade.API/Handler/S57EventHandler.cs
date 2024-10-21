@@ -52,7 +52,7 @@ namespace UKHO.ERPFacade.API.Handler
             return eventData;
         }
 
-        public override async Task BuildEncCellActions(EncEventPayload eventData, XmlDocument soapXml, XmlNode? actionItemNode)
+        public override void BuildEncCellActions(EncEventPayload eventData, XmlDocument soapXml, XmlNode? actionItemNode)
         {            
             _logger.LogInformation(EventIds.EncCellSapActionGenerationStarted.ToEventId(), "Building ENC cell SAP actions.");
 
@@ -102,11 +102,9 @@ namespace UKHO.ERPFacade.API.Handler
                     }
                 }
             }
-            await Task.FromResult(0);
-
         }
 
-        public override async Task BuildUnitActions(EncEventPayload eventData, XmlDocument soapXml, XmlNode actionItemNode)
+        public override void BuildUnitActions(EncEventPayload eventData, XmlDocument soapXml, XmlNode actionItemNode)
         {
             foreach (var unitOfSale in eventData.Data.UnitsOfSales)
             {
@@ -139,7 +137,6 @@ namespace UKHO.ERPFacade.API.Handler
                     }
                 }
             }
-            await Task.FromResult(0);
         }
 
         /// <summary>

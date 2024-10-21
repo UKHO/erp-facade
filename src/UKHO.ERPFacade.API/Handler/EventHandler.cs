@@ -17,7 +17,7 @@ namespace UKHO.ERPFacade.API.Handler
         private readonly IAzureBlobEventWriter _azureBlobEventWriter;
         private readonly ISapClient _sapClient;
         private readonly IXmlHelper _xmlHelper;
-        private readonly IFileSystemHelper _fileSystemHelper;        
+        private readonly IFileSystemHelper _fileSystemHelper;
 
         private const string ActionNumber = "ACTIONNUMBER";
         private const string XpathCorrId = $"//*[local-name()='CORRID']";
@@ -63,7 +63,7 @@ namespace UKHO.ERPFacade.API.Handler
             await _azureBlobEventWriter.UploadEvent(encEventJson.ToString(), eventData.CorrelationId, Constants.S57EncEventFileName);
             _logger.LogInformation(EventIds.UploadEncContentPublishedEventInAzureBlobCompleted.ToEventId(), "The enccontentpublished event payload is uploaded in blob storage successfully.");
 
-            var sapPayload = await BuildSapMessageXml(eventData);
+            var sapPayload = BuildSapMessageXml(eventData);
 
             _logger.LogInformation(EventIds.UploadSapXmlPayloadInAzureBlobStarted.ToEventId(), "Uploading the SAP XML payload in blob storage.");
             await _azureBlobEventWriter.UploadEvent(sapPayload.ToIndentedString(), eventData.CorrelationId, Constants.SapXmlPayloadFileName);
@@ -82,7 +82,7 @@ namespace UKHO.ERPFacade.API.Handler
         }
 
         public abstract IEventData PrepareModel(string encEventJson);
-        public async Task<XmlDocument> BuildSapMessageXml(IEventData eventData) 
+        public XmlDocument BuildSapMessageXml(IEventData eventData)
         {
             string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, eventData.SapXmlPath);
 
@@ -99,10 +99,10 @@ namespace UKHO.ERPFacade.API.Handler
             _logger.LogInformation(EventIds.GenerationOfSapXmlPayloadStarted.ToEventId(), "Generation of SAP XML payload started.");
 
             //// Build SAP actions for ENC Cell
-            await BuildEncCellActions(eventData.EventData, soapXml, actionItemNode);                   
+            BuildEncCellActions(eventData.EventData, soapXml, actionItemNode);
 
             // Build SAP actions for Units
-            await BuildUnitActions(eventData.EventData, soapXml, actionItemNode);
+            BuildUnitActions(eventData.EventData, soapXml, actionItemNode);
 
             // Finalize SAP XML message
             FinalizeSapXmlMessage(soapXml, eventData.CorrelationId, actionItemNode, eventData.XpathImMatInfo);
@@ -112,8 +112,8 @@ namespace UKHO.ERPFacade.API.Handler
             return soapXml;
         }
 
-        public abstract Task BuildEncCellActions(T eventData, XmlDocument soapXml, XmlNode? actionItemNode);
-        public abstract Task BuildUnitActions(T eventData, XmlDocument soapXml, XmlNode actionItemNode);
+        public abstract void BuildEncCellActions(T eventData, XmlDocument soapXml, XmlNode? actionItemNode);
+        public abstract void BuildUnitActions(T eventData, XmlDocument soapXml, XmlNode actionItemNode);
         private void FinalizeSapXmlMessage(XmlDocument soapXml, string correlationId, XmlNode actionItemNode, string XpathImMatInfo)
         {
             var xmlNode = SortXmlPayload(actionItemNode);

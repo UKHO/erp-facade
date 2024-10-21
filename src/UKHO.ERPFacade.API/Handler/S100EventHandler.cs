@@ -34,12 +34,12 @@ namespace UKHO.ERPFacade.API.Handler
             return eventData;
         }
 
-        public override Task BuildEncCellActions(S100EventData eventData, XmlDocument soapXml, XmlNode? actionItemNode)
+        public override void BuildEncCellActions(S100EventData eventData, XmlDocument soapXml, XmlNode? actionItemNode)
         {
             throw new NotImplementedException();
         }
 
-        public override Task BuildUnitActions(S100EventData eventData, XmlDocument soapXml, XmlNode? actionItemNode)
+        public override void BuildUnitActions(S100EventData eventData, XmlDocument soapXml, XmlNode? actionItemNode)
         {
             throw new NotImplementedException();
         }

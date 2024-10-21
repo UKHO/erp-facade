@@ -186,8 +186,8 @@ namespace UKHO.ERPFacade
             //builder.Services.AddTransient<ServiceProviderService>();
             builder.Services.AddScoped<IWebhookService, WebhookService>();
 
-            builder.Services.AddKeyedTransient<IEventHandler, S57EventHandler>("uk.gov.ukho.encpublishing.enccontentpublished.v2.2");
-            builder.Services.AddKeyedTransient<IEventHandler, S100EventHandler>("S100");
+            builder.Services.AddKeyedScoped<IEventHandler, S57EventHandler>("uk.gov.ukho.encpublishing.enccontentpublished.v2");
+            builder.Services.AddKeyedScoped<IEventHandler, S100EventHandler>("uk.gov.UKHO.ENCPublishing.s100DataContentPublished.v1");
 
             ConfigureHealthChecks(builder);
 
