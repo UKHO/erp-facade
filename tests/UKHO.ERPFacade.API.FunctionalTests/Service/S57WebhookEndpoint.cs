@@ -58,8 +58,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             {
                 requestBody = await streamReader.ReadToEndAsync();
             }
+            GeneratedCorrelationId = SapXmlHelper.GenerateRandomCorrelationId();
+            requestBody = SapXmlHelper.UpdateTimeAndCorrIdField(requestBody, GeneratedCorrelationId);
             requestBody = SapXmlHelper.UpdatePermitField(requestBody, permitState);
-
             var request = new RestRequest(Constants.S57RequestEndPoint, Method.Post);
             request.AddHeader("Content-Type", "application/json");
             request.AddHeader("Authorization", "Bearer " + token);
