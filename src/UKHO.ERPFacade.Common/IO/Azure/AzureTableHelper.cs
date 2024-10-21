@@ -22,13 +22,13 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             _azureStorageConfig = azureStorageConfig ?? throw new ArgumentNullException(nameof(azureStorageConfig));
         }
 
-        public async Task UpsertEntity(string correlationId, ITableEntity entity)
+        public async Task UpsertEntity(ITableEntity entity)
         {
             _logger.LogInformation(EventIds.AddingEntryForEncContentPublishedEventInAzureTable.ToEventId(), "Adding/Updating entry for enccontentpublished event in azure table.");
 
             TableClient tableClient = GetTableClient(Constants.Constants.EventTableName);
 
-            TableEntity existingEntity = await GetEntity(correlationId, entity.PartitionKey);
+            TableEntity existingEntity = await GetEntity(entity.PartitionKey, entity.RowKey);
 
             if (existingEntity == null!)
             {
@@ -42,13 +42,13 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             }
         }
 
-        public async Task<TableEntity> GetEntity(string correlationId, string partitionKey)
+        public async Task<TableEntity> GetEntity(string partitionKey, string rowKey)
         {
             try
             {
                 IList<TableEntity> records = new List<TableEntity>();
                 TableClient tableClient = GetTableClient(Constants.Constants.EventTableName);
-                return await tableClient.GetEntityAsync<TableEntity>(partitionKey, correlationId);
+                return await tableClient.GetEntityAsync<TableEntity>(partitionKey, rowKey);
             }
             catch (RequestFailedException ex) when (ex.Status == 404)
             {
@@ -56,10 +56,10 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             }
         }
 
-        public async Task UpdateEntity<TKey, TValue>(string correlationId, string tableName, KeyValuePair<TKey, TValue>[] entitiesToUpdate)
+        public async Task UpdateEntity<TKey, TValue>(string partitionKey, string rowKey, KeyValuePair<TKey, TValue>[] entitiesToUpdate)
         {
-            TableClient tableClient = GetTableClient(tableName);
-            TableEntity existingEntity = await GetEntity(correlationId, tableName);
+            TableClient tableClient = GetTableClient(Constants.Constants.EventTableName);
+            TableEntity existingEntity = await GetEntity(partitionKey, rowKey);
             if (existingEntity != null)
             {
                 foreach (var entity in entitiesToUpdate)

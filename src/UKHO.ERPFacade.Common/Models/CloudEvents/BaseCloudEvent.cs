@@ -2,7 +2,7 @@
 
 namespace UKHO.ERPFacade.Common.Models.CloudEvents
 {
-    public class BaseCloudEvent<T> where T : class
+    public class BaseCloudEvent
     {
         [JsonProperty("specversion")]
         public string SpecVersion { get; set; }
@@ -26,11 +26,6 @@ namespace UKHO.ERPFacade.Common.Models.CloudEvents
         public string DataContentType { get; set; }
 
         [JsonProperty("data")]
-        public T Data { get; set; }
-
-        public BaseCloudEvent(T data)
-        {
-            Data = data;
-        }
+        public object Data { get; set; }
     }
 }

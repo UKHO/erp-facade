@@ -51,7 +51,7 @@
 //        {
 //            var config = new ConfigurationBuilder()
 //                .SetBasePath(Directory.GetCurrentDirectory() + @"/ConfigurationFiles")
-//                .AddJsonFile("SapActions.json")
+//                .AddJsonFile("S57SapActions.json")
 //                .AddEnvironmentVariables()
 //                .Build();
 

@@ -19,6 +19,8 @@ namespace UKHO.ERPFacade.Common.Models.TableEntities
 
         public DateTime? RequestDateTime { get; set; } = default!;
 
+        public DateTime? ResponseDateTime { get; set; } = default!;
+
         public string Status { get; set; } = default!;
 
     }

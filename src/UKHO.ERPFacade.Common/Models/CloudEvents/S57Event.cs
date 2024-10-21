@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 namespace UKHO.ERPFacade.Common.Models.CloudEvents.S57
 {
     [ExcludeFromCodeCoverage]
-    public class S57Event(S57EventData s57EventData) : BaseCloudEvent<S57EventData>(s57EventData) { }
+    public class S57Event : BaseCloudEvent { }
 
     [ExcludeFromCodeCoverage]
     public class S57EventData

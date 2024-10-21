@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Newtonsoft.Json.Serialization;
 using Serilog;
-using UKHO.ERPFacade.API.Dispatcher;
 using UKHO.ERPFacade.API.Filters;
 using UKHO.ERPFacade.API.Handlers;
 using UKHO.ERPFacade.API.Health;
@@ -24,8 +23,6 @@ using UKHO.ERPFacade.Common.HttpClients;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Models;
-using UKHO.ERPFacade.Common.Models.CloudEvents.S100;
-using UKHO.ERPFacade.Common.Models.CloudEvents.S57;
 using UKHO.ERPFacade.Common.PermitDecryption;
 using UKHO.ERPFacade.Common.Providers;
 using UKHO.Logging.EventHubLogProvider;
@@ -49,7 +46,7 @@ namespace UKHO.ERPFacade
             builder.Configuration.SetBasePath(webHostEnvironment.ContentRootPath)
                 .AddJsonFile("appsettings.json", false, true)
                 .AddJsonFile($"appsettings.{webHostEnvironment.EnvironmentName}.json", true, true)
-                .AddJsonFile("ConfigurationFiles/SapActions.json", true, true)
+                .AddJsonFile("ConfigurationFiles/S57SapActions.json", true, true)
 #if DEBUG
                 //Add development overrides configuration
                 .AddJsonFile("appsettings.local.overrides.json", true, true)
@@ -182,9 +179,9 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<IWeekDetailsProvider, WeekDetailsProvider>();
             builder.Services.AddScoped<IPermitDecryption, PermitDecryption>();
 
-            builder.Services.AddScoped<IEventDispatcher, EventDispatcher>();
-            builder.Services.AddScoped<IEventHandler<S57Event>, S57EventHandler>();
-            builder.Services.AddScoped<IEventHandler<S100Event>, S100EventHandler>();
+            builder.Services.AddKeyedScoped<IEventHandler, S57EventHandler>("uk.gov.ukho.encpublishing.enccontentpublished.v2.2");
+            builder.Services.AddKeyedScoped<IEventHandler, S100EventHandler>("uk.gov.UKHO.ENCPublishing.s100DataContentPublished.v1");
+
             builder.Services.AddKeyedScoped<IBaseXmlTransformer, S57XmlTransformer>("S57XmlTransformer");
             builder.Services.AddKeyedScoped<IBaseXmlTransformer, S100XmlTransformer>("S100XmlTransformer");
 

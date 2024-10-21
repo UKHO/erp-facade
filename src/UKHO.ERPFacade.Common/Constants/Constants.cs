@@ -13,7 +13,6 @@ namespace UKHO.ERPFacade.Common.Constants
         public const string UnitsOfSaleNode = "data.unitsOfSale";
         public const string UKHOWeekNumber = "data.ukhoWeekNumber";
 
-
         //SAP xml payload file name
         public const string SapXmlPayloadFileName = "SapXmlPayload.xml";
 

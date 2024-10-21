@@ -1,7 +1,9 @@
-﻿namespace UKHO.ERPFacade.API.Handlers
+﻿using UKHO.ERPFacade.Common.Models.CloudEvents;
+
+namespace UKHO.ERPFacade.API.Handlers
 {
-    public interface IEventHandler<T>
+    public interface IEventHandler
     {
-        Task ProcessEventAsync(T eventPayload);
+        Task ProcessEventAsync(BaseCloudEvent baseCloudEvent);
     }
 }

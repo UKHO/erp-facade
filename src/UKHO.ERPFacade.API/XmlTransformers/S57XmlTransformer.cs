@@ -40,14 +40,9 @@ namespace UKHO.ERPFacade.API.Helpers
             _permitDecryption = permitDecryption;
         }
 
-        /// <summary>
-        /// Generate SAP message xml file.
-        /// </summary>
-        /// <param name="eventData"></param>        
-        /// <returns>XmlDocument</returns>
         public override XmlDocument BuildXmlPayload<T>(T eventData, string xmlTemplatePath)
         {
-            S57EventData s57EventPayload = eventData as S57EventData;
+            var s57EventData = eventData as S57EventData;
 
             var soapXml = _xmlHelper.CreateXmlDocument(Path.Combine(Environment.CurrentDirectory, xmlTemplatePath));
 
@@ -56,13 +51,13 @@ namespace UKHO.ERPFacade.API.Helpers
             _logger.LogInformation(EventIds.GenerationOfSapXmlPayloadStarted.ToEventId(), "Generation of SAP XML payload started.");
 
             // Build SAP actions for ENC Cell
-            BuildEncCellActions(s57EventPayload, soapXml, actionItemNode);
+            BuildEncCellActions(s57EventData, soapXml, actionItemNode);
 
             // Build SAP actions for Units
-            BuildUnitActions(s57EventPayload, soapXml, actionItemNode);
+            BuildUnitActions(s57EventData, soapXml, actionItemNode);
 
             // Finalize SAP XML message
-            FinalizeSapXmlMessage(soapXml, s57EventPayload.CorrelationId, actionItemNode);
+            FinalizeSapXmlMessage(soapXml, s57EventData.CorrelationId, actionItemNode);
 
             _logger.LogInformation(EventIds.GenerationOfSapXmlPayloadCompleted.ToEventId(), "Generation of SAP XML payload completed.");
 
