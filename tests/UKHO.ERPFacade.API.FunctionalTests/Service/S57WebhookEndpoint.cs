@@ -73,7 +73,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 //Logic to download XML from container using TraceID from JSON
-                string generatedXmlFilePath = _azureBlobStorageHelper.DownloadGeneratedXmlFile(generatedXmlFolder, correlationId, Constants.S57EventContainerName);
+                string generatedXmlFilePath = _azureBlobStorageHelper.DownloadGeneratedXml(generatedXmlFolder, correlationId);
 
                 if (filePath.Contains(Constants.AioKey) && generatedXmlFilePath.Length == 0)
                 {
