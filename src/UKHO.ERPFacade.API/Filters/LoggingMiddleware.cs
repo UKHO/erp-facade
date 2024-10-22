@@ -38,21 +38,9 @@ namespace UKHO.ERPFacade.API.Filters
             httpContext.Response.ContentType = "application/json";
             httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-            var correlationId = httpContext!.Request.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey].FirstOrDefault()!;
-
             _logger.LogError(eventId, exception, message, messageArgs);
 
-            var problemDetails = new ProblemDetails
-            {
-                Status = httpContext.Response.StatusCode,
-                Extensions =
-                {
-                    ["correlationId"] = correlationId,
-                },
-                Detail = message
-            };
-
-            await httpContext.Response.WriteAsJsonAsync(problemDetails);
+            await Task.CompletedTask;
         }
     }
 }
