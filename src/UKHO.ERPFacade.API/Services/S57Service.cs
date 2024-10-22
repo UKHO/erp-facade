@@ -71,13 +71,13 @@ namespace UKHO.ERPFacade.API.Services
             await _azureTableReaderWriter.UpsertEntity(eventData.Data.CorrelationId, Constants.S57EventTableName, encEventEntity);
 
             _logger.LogInformation(EventIds.UploadEncContentPublishedEventInAzureBlobStarted.ToEventId(), "Uploading enccontentpublished event payload in blob storage.");
-            await _azureBlobEventWriter.UploadEvent(encEventJson.ToString(), Constants.S57EventContainerName, eventData.Data.CorrelationId + '/' + Constants.S57EncEventFileName);
+            await _azureBlobEventWriter.UploadEvent(encEventJson.ToString(), eventData.Data.CorrelationId, Constants.S57EncEventFileName);
             _logger.LogInformation(EventIds.UploadEncContentPublishedEventInAzureBlobCompleted.ToEventId(), "The enccontentpublished event payload is uploaded in blob storage successfully.");
 
             var sapPayload = _encContentSapMessageBuilder.BuildSapMessageXml(JsonConvert.DeserializeObject<EncEventPayload>(encEventJson.ToString()));
 
             _logger.LogInformation(EventIds.UploadSapXmlPayloadInAzureBlobStarted.ToEventId(), "Uploading the SAP XML payload in blob storage.");
-            await _azureBlobEventWriter.UploadEvent(sapPayload.ToIndentedString(), Constants.S57EventContainerName, eventData.Data.CorrelationId + '/' + Constants.SapXmlPayloadFileName);
+            await _azureBlobEventWriter.UploadEvent(sapPayload.ToIndentedString(), eventData.Data.CorrelationId, Constants.SapXmlPayloadFileName);
             _logger.LogInformation(EventIds.UploadSapXmlPayloadInAzureBlobCompleted.ToEventId(), "SAP XML payload is uploaded in blob storage successfully.");
 
             var response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapEndpointForEncEvent, _sapConfig.Value.SapServiceOperationForEncEvent, _sapConfig.Value.SapUsernameForEncEvent, _sapConfig.Value.SapPasswordForEncEvent);
