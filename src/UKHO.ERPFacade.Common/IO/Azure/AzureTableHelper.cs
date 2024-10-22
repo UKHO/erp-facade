@@ -10,23 +10,25 @@ using UKHO.ERPFacade.Common.Logging;
 namespace UKHO.ERPFacade.Common.IO.Azure
 {
     [ExcludeFromCodeCoverage]
-    public class AzureTableReaderWriter : IAzureTableReaderWriter
+    public class AzureTableHelper : IAzureTableHelper
     {
-        private readonly ILogger<AzureTableReaderWriter> _logger;
+        private readonly ILogger<AzureTableHelper> _logger;
         private readonly IOptions<AzureStorageConfiguration> _azureStorageConfig;
 
-        public AzureTableReaderWriter(ILogger<AzureTableReaderWriter> logger,
+        public AzureTableHelper(ILogger<AzureTableHelper> logger,
                                         IOptions<AzureStorageConfiguration> azureStorageConfig)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _azureStorageConfig = azureStorageConfig ?? throw new ArgumentNullException(nameof(azureStorageConfig));
         }
 
-        public async Task UpsertEntity(string correlationId, string tableName, ITableEntity entity)
+        public async Task UpsertEntity(ITableEntity entity)
         {
-            TableClient tableClient = GetTableClient(tableName);
+            _logger.LogInformation(EventIds.AddingEntryForEncContentPublishedEventInAzureTable.ToEventId(), "Adding/Updating entry for enccontentpublished event in azure table.");
 
-            TableEntity existingEntity = await GetEntity(correlationId, tableName);
+            TableClient tableClient = GetTableClient(Constants.Constants.EventTableName);
+
+            TableEntity existingEntity = await GetEntity(entity.PartitionKey, entity.RowKey);
 
             if (existingEntity == null!)
             {
@@ -40,22 +42,24 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             }
         }
 
-        public async Task<TableEntity> GetEntity(string correlationId, string tableName)
+        public async Task<TableEntity> GetEntity(string partitionKey, string rowKey)
         {
-            IList<TableEntity> records = new List<TableEntity>();
-            TableClient tableClient = GetTableClient(tableName);
-            var entities = tableClient.QueryAsync<TableEntity>(filter: TableClient.CreateQueryFilter($"CorrelationId eq {correlationId}"), maxPerPage: 1);
-            await foreach (var entity in entities)
+            try
             {
-                records.Add(entity);
+                IList<TableEntity> records = new List<TableEntity>();
+                TableClient tableClient = GetTableClient(Constants.Constants.EventTableName);
+                return await tableClient.GetEntityAsync<TableEntity>(partitionKey, rowKey);
             }
-            return records.FirstOrDefault();
+            catch (RequestFailedException ex) when (ex.Status == 404)
+            {
+                return null;
+            }
         }
 
-        public async Task UpdateEntity<TKey, TValue>(string correlationId, string tableName, KeyValuePair<TKey, TValue>[] entitiesToUpdate)
+        public async Task UpdateEntity<TKey, TValue>(string partitionKey, string rowKey, KeyValuePair<TKey, TValue>[] entitiesToUpdate)
         {
-            TableClient tableClient = GetTableClient(tableName);
-            TableEntity existingEntity = await GetEntity(correlationId, tableName);
+            TableClient tableClient = GetTableClient(Constants.Constants.EventTableName);
+            TableEntity existingEntity = await GetEntity(partitionKey, rowKey);
             if (existingEntity != null)
             {
                 foreach (var entity in entitiesToUpdate)
@@ -99,7 +103,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             if (tableExists == null)
             {
                 serviceClient.GetTableClient(tableName).CreateIfNotExistsAsync();
-                _logger.LogWarning(EventIds.AzureTableNotFound.ToEventId(), "Azure table not found");
+                _logger.LogWarning(EventIds.AzureTableNotFound.ToEventId(), "Azure table not found. Created new azure table.");
             }
 
             TableClient tableClient = serviceClient.GetTableClient(tableName);

@@ -15,8 +15,7 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using UKHO.ERPFacade.API.Controllers;
-using UKHO.ERPFacade.API.Helpers;
-using UKHO.ERPFacade.API.Services;
+using UKHO.ERPFacade.API.XmlTransformers;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.HttpClients;
@@ -37,7 +36,6 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         private IAzureQueueHelper _fakeAzureQueueHelper;
         private ISapClient _fakeSapClient;
         private IXmlHelper _fakeXmlHelper;
-        private IS57Service _fakeS57Service;
         private IOptions<SapConfiguration> _fakeSapConfig;
         private WebhookController _fakeWebHookController;
         private ILicenceUpdatedSapMessageBuilder _fakeLicenceUpdatedSapMessageBuilder;
@@ -52,7 +50,6 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             _fakeAzureQueueHelper = A.Fake<IAzureQueueHelper>();
             _fakeSapClient = A.Fake<ISapClient>();
             _fakeXmlHelper = A.Fake<IXmlHelper>();
-            _fakeS57Service = A.Fake<IS57Service>();
             _fakeLicenceUpdatedSapMessageBuilder = A.Fake<ILicenceUpdatedSapMessageBuilder>();
             _fakeSapConfig = Options.Create(new SapConfiguration()
             {
@@ -65,7 +62,6 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
                 _fakeAzureBlobEventWriter,
                 _fakeAzureQueueHelper,
                 _fakeSapClient,
-                 _fakeS57Service,
                 _fakeSapConfig,
                 _fakeLicenceUpdatedSapMessageBuilder);
         }
@@ -160,7 +156,6 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
                                                            _fakeAzureBlobEventWriter,
                                                            _fakeAzureQueueHelper,
                                                            _fakeSapClient,
-                                                            _fakeS57Service,
                                                            null,
                                                            _fakeLicenceUpdatedSapMessageBuilder))
              .ParamName
@@ -287,7 +282,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
               && call.GetArgument<LogLevel>(0) == LogLevel.Information
               && call.GetArgument<EventId>(1) == EventIds.LicenceUpdatedEventOptionsCallCompleted.ToEventId()
               && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Completed processing the Options request for the Licence updated event for webhook. | WebHook-Request-Origin : {webhookRequestOrigin}").MustHaveHappenedOnceExactly();
-          
+
             Assert.That(responseHeaders.ContainsKey("WebHook-Allowed-Rate"), Is.True);
             Assert.That(responseHeaders["WebHook-Allowed-Rate"], Is.EqualTo("*"));
             Assert.That(responseHeaders.ContainsKey("WebHook-Allowed-Origin"), Is.True);

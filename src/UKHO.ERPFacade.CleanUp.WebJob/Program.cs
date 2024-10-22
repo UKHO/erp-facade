@@ -1,4 +1,6 @@
-﻿using Azure.Extensions.AspNetCore.Configuration.Secrets;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
+using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using Microsoft.ApplicationInsights.Channel;
@@ -7,8 +9,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
-using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
 using UKHO.ERPFacade.CleanUp.WebJob;
 using UKHO.ERPFacade.CleanUp.WebJob.Services;
 using UKHO.ERPFacade.Common.Configuration;
@@ -148,8 +148,8 @@ namespace UKHO.ERPFacade.Monitoring.WebJob
             }
 
             serviceCollection.AddSingleton<CleanUpWebjob>();
-            serviceCollection.AddSingleton<IAzureTableReaderWriter, AzureTableReaderWriter>();
-            serviceCollection.AddSingleton<IAzureBlobEventWriter, AzureBlobEventWriter>();
+            serviceCollection.AddSingleton<IAzureTableHelper, AzureTableHelper>();
+            serviceCollection.AddSingleton<IAzureBlobHelper, AzureBlobHelper>();
             serviceCollection.AddSingleton<ICleanUpService, CleanUpService>();
         }
     }

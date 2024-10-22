@@ -11,18 +11,18 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.Services
     {
         private readonly ILogger<CleanUpService> _logger;
         private readonly IOptions<ErpFacadeWebJobConfiguration> _erpFacadeWebjobConfig;
-        private readonly IAzureTableReaderWriter _azureTableReaderWriter;
-        private readonly IAzureBlobEventWriter _azureBlobEventWriter;
+        private readonly IAzureTableHelper _azureTableHelper;
+        private readonly IAzureBlobHelper _azureBlobHelper;
 
         public CleanUpService(ILogger<CleanUpService> logger,
                                IOptions<ErpFacadeWebJobConfiguration> erpFacadeWebjobConfig,
-                               IAzureTableReaderWriter azureTableReaderWriter,
-                               IAzureBlobEventWriter azureBlobEventWriter)
+                               IAzureTableHelper azureTableHelper,
+                               IAzureBlobHelper azureBlobHelper)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _erpFacadeWebjobConfig = erpFacadeWebjobConfig ?? throw new ArgumentNullException(nameof(erpFacadeWebjobConfig));
-            _azureTableReaderWriter = azureTableReaderWriter ?? throw new ArgumentNullException(nameof(azureTableReaderWriter));
-            _azureBlobEventWriter = azureBlobEventWriter ?? throw new ArgumentNullException(nameof(azureBlobEventWriter));
+            _azureTableHelper = azureTableHelper ?? throw new ArgumentNullException(nameof(azureTableHelper));
+            _azureBlobHelper = azureBlobHelper ?? throw new ArgumentNullException(nameof(azureBlobHelper));
         }
 
         public void CleanUpAzureTableAndBlobs()
@@ -34,7 +34,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.Services
         {
             _logger.LogInformation(EventIds.FetchEESEntities.ToEventId(), "Fetching all records from azure table {TableName}", tableName);
 
-            var entities = _azureTableReaderWriter.GetAllEntities(tableName);
+            var entities = _azureTableHelper.GetAllEntities(tableName);
 
             foreach (var entity in entities)
             {
@@ -45,9 +45,9 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.Services
 
                 if (timediff.Days > int.Parse(_erpFacadeWebjobConfig.Value.CleanUpDurationInDays))
                 {
-                    Task.FromResult(_azureTableReaderWriter.DeleteEntity(entity["CorrelationId"].ToString(), tableName));
+                    Task.FromResult(_azureTableHelper.DeleteEntity(entity["CorrelationId"].ToString(), tableName));
 
-                    _azureBlobEventWriter.DeleteContainer(entity["CorrelationId"].ToString().ToLower());
+                    _azureBlobHelper.DeleteContainer(entity["CorrelationId"].ToString().ToLower());
 
                     _logger.LogInformation(EventIds.DeletedContainerSuccessful.ToEventId(), "Event data cleaned up for {CorrelationId} successfully.", entity["CorrelationId"].ToString());
                 }

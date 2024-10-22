@@ -15,8 +15,8 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
     public class CleanUpServiceTests
     {
         private ILogger<CleanUpService> _fakeLogger;
-        private IAzureTableReaderWriter _fakeAzureTableReaderWriter;
-        private IAzureBlobEventWriter _fakeAzureBlobEventWriter;
+        private IAzureTableHelper _fakeAzureTableHelper;
+        private IAzureBlobHelper _fakeAzureBlobHelper;
         private CleanUpService _fakeCleanUpService;
         private IOptions<ErpFacadeWebJobConfiguration> _fakeErpFacadeWebjobConfig;
 
@@ -24,20 +24,20 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
         public void Setup()
         {
             _fakeLogger = A.Fake<ILogger<CleanUpService>>();
-            _fakeAzureTableReaderWriter = A.Fake<IAzureTableReaderWriter>();
-            _fakeAzureBlobEventWriter = A.Fake<IAzureBlobEventWriter>();
+            _fakeAzureTableHelper = A.Fake<IAzureTableHelper>();
+            _fakeAzureBlobHelper = A.Fake<IAzureBlobHelper>();
             _fakeErpFacadeWebjobConfig = Options.Create(new ErpFacadeWebJobConfiguration()
             {
                 CleanUpDurationInDays = "30"
             });
-            _fakeCleanUpService = new CleanUpService(_fakeLogger, _fakeErpFacadeWebjobConfig, _fakeAzureTableReaderWriter, _fakeAzureBlobEventWriter);
+            _fakeCleanUpService = new CleanUpService(_fakeLogger, _fakeErpFacadeWebjobConfig, _fakeAzureTableHelper, _fakeAzureBlobHelper);
         }
 
         [Test]
         public void Does_Constructor_Throws_ArgumentNullException_When_AzureTableReaderWriter_Parameter_Is_Null()
         {
             Assert.Throws<ArgumentNullException>(
-             () => new CleanUpService(_fakeLogger, _fakeErpFacadeWebjobConfig, null, _fakeAzureBlobEventWriter))
+             () => new CleanUpService(_fakeLogger, _fakeErpFacadeWebjobConfig, null, _fakeAzureBlobHelper))
              .ParamName
              .Should().Be("azureTableReaderWriter");
         }
@@ -46,7 +46,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
         public void Does_Constructor_Throws_ArgumentNullException_When_Logger_Parameter_Is_Null()
         {
             Assert.Throws<ArgumentNullException>(
-             () => new CleanUpService(null, _fakeErpFacadeWebjobConfig, _fakeAzureTableReaderWriter, _fakeAzureBlobEventWriter))
+             () => new CleanUpService(null, _fakeErpFacadeWebjobConfig, _fakeAzureTableHelper, _fakeAzureBlobHelper))
              .ParamName
              .Should().Be("logger");
         }
@@ -55,7 +55,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
         public void Does_Constructor_Throws_ArgumentNullException_When_ErpFacadeWebjobConfig_Parameter_Is_Null()
         {
             Assert.Throws<ArgumentNullException>(
-             () => new CleanUpService(_fakeLogger, null, _fakeAzureTableReaderWriter, _fakeAzureBlobEventWriter))
+             () => new CleanUpService(_fakeLogger, null, _fakeAzureTableHelper, _fakeAzureBlobHelper))
              .ParamName
              .Should().Be("erpFacadeWebjobConfig");
         }
@@ -64,7 +64,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
         public void Does_Constructor_Throws_ArgumentNullException_When_AzureBlobEventWriter_Parameter_Is_Null()
         {
             Assert.Throws<ArgumentNullException>(
-             () => new CleanUpService(_fakeLogger, _fakeErpFacadeWebjobConfig, _fakeAzureTableReaderWriter, null))
+             () => new CleanUpService(_fakeLogger, _fakeErpFacadeWebjobConfig, _fakeAzureTableHelper, null))
              .ParamName
              .Should().Be("azureBlobEventWriter");
         }
@@ -83,13 +83,13 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
             }
             };
 
-            A.CallTo(() => _fakeAzureTableReaderWriter.GetAllEntities(A<string>.Ignored)).Returns(eesEventData);
+            A.CallTo(() => _fakeAzureTableHelper.GetAllEntities(A<string>.Ignored)).Returns(eesEventData);
 
             _fakeCleanUpService.CleanUpAzureTableAndBlobs();
 
-            A.CallTo(() => _fakeAzureTableReaderWriter.GetAllEntities(A<string>.Ignored)).MustHaveHappened();
-            A.CallTo(() => _fakeAzureTableReaderWriter.DeleteEntity(A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
-            A.CallTo(() => _fakeAzureBlobEventWriter.DeleteContainer(A<string>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeAzureTableHelper.GetAllEntities(A<string>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeAzureTableHelper.DeleteEntity(A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeAzureBlobHelper.DeleteContainer(A<string>.Ignored)).MustHaveHappened();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
@@ -117,13 +117,13 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
             }
             };
 
-            A.CallTo(() => _fakeAzureTableReaderWriter.GetAllEntities(A<string>.Ignored)).Returns(eesEventData);
+            A.CallTo(() => _fakeAzureTableHelper.GetAllEntities(A<string>.Ignored)).Returns(eesEventData);
 
             _fakeCleanUpService.CleanUpAzureTableAndBlobs();
 
-            A.CallTo(() => _fakeAzureTableReaderWriter.GetAllEntities(A<string>.Ignored)).MustHaveHappened();
-            A.CallTo(() => _fakeAzureTableReaderWriter.DeleteEntity(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
-            A.CallTo(() => _fakeAzureBlobEventWriter.DeleteDirectory(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeAzureTableHelper.GetAllEntities(A<string>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeAzureTableHelper.DeleteEntity(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeAzureBlobHelper.DeleteDirectory(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
 
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
@@ -152,13 +152,13 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
             }
             };
 
-            A.CallTo(() => _fakeAzureTableReaderWriter.GetAllEntities(A<string>.Ignored)).Returns(eesEventData);
+            A.CallTo(() => _fakeAzureTableHelper.GetAllEntities(A<string>.Ignored)).Returns(eesEventData);
 
             _fakeCleanUpService.CleanUpAzureTableAndBlobs();
 
-            A.CallTo(() => _fakeAzureTableReaderWriter.GetAllEntities(A<string>.Ignored)).MustHaveHappened();
-            A.CallTo(() => _fakeAzureTableReaderWriter.DeleteEntity(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
-            A.CallTo(() => _fakeAzureBlobEventWriter.DeleteContainer(A<string>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeAzureTableHelper.GetAllEntities(A<string>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeAzureTableHelper.DeleteEntity(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeAzureBlobHelper.DeleteContainer(A<string>.Ignored)).MustNotHaveHappened();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information
@@ -186,13 +186,13 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
             }
             };
 
-            A.CallTo(() => _fakeAzureTableReaderWriter.GetAllEntities(A<string>.Ignored)).Returns(eesEventData);
+            A.CallTo(() => _fakeAzureTableHelper.GetAllEntities(A<string>.Ignored)).Returns(eesEventData);
 
             _fakeCleanUpService.CleanUpAzureTableAndBlobs();
 
-            A.CallTo(() => _fakeAzureTableReaderWriter.GetAllEntities(A<string>.Ignored)).MustHaveHappened();
-            A.CallTo(() => _fakeAzureTableReaderWriter.DeleteEntity(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
-            A.CallTo(() => _fakeAzureBlobEventWriter.DeleteDirectory(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeAzureTableHelper.GetAllEntities(A<string>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeAzureTableHelper.DeleteEntity(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeAzureBlobHelper.DeleteDirectory(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information

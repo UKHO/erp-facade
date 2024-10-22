@@ -1,8 +1,21 @@
-﻿using Newtonsoft.Json;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
+using Newtonsoft.Json;
 
-namespace UKHO.ERPFacade.Common.Models
+namespace UKHO.ERPFacade.Common.Models.CloudEvents.S100
 {
+    [ExcludeFromCodeCoverage]
+    public class S100Event : BaseCloudEvent { }
+
+    [ExcludeFromCodeCoverage]
+    public class S100EventData
+    {
+        [JsonProperty("products")]
+        public List<Product> Products { get; set; }
+
+        [JsonProperty("unitsOfSale")]
+        public List<UnitOfSale> UnitsOfSales { get; set; }
+    }
+
     [ExcludeFromCodeCoverage]
     public class Product
     {
@@ -252,37 +265,5 @@ namespace UKHO.ERPFacade.Common.Models
 
         [JsonProperty("rrp")]
         public decimal Rrp { get; set; }
-    }
-
-    public enum Provider
-    {
-        ICE = 1,
-        ICE_GB = 2,
-        ICE_UK = 3,
-        PRIMAR = 4,
-        VAR_Unique = 5,
-        VAR = 6
-    }
-
-    public enum Size
-    {
-        LARGE = 1,
-        MEDIUM = 2,
-        SMALL = 3
-    }
-
-    public enum BundleType
-    {
-        DVD = 1
-    }
-
-    public enum ProductStatus
-    {
-        NewEdition = 1,
-        Reissue = 2,
-        Update = 3,
-        CancellationUpdate = 4,
-        Withdrawn = 5,
-        Suspended = 6
     }
 }

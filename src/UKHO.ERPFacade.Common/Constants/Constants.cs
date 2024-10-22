@@ -20,6 +20,9 @@ namespace UKHO.ERPFacade.Common.Constants
         //S57 event file name
         public const string S57EncEventFileName = "EncPublishingEvent.json";
 
+        //event storage
+        public const string EventTableName = "events";
+
         //S57 event storage
         public const string S57EventTableName = "encevents";
         public const string S57EventContainerName = "s57events";
