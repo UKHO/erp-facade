@@ -5,7 +5,6 @@ using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.HttpClients;
 using UKHO.ERPFacade.Common.Logging;
 
-
 namespace UKHO.ERPFacade.Common.HealthCheck
 {
     public class EESServiceHealthCheck : IHealthCheck

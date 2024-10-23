@@ -85,7 +85,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
 
             A.CallTo(() => _fakeAzureTableHelper.GetAllEntities(A<string>.Ignored)).Returns(eesEventData);
 
-            _fakeCleanUpService.CleanUpAzureTableAndBlobs();
+            _fakeCleanUpService.Clean();
 
             A.CallTo(() => _fakeAzureTableHelper.GetAllEntities(A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureTableHelper.DeleteEntity(A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
@@ -119,7 +119,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
 
             A.CallTo(() => _fakeAzureTableHelper.GetAllEntities(A<string>.Ignored)).Returns(eesEventData);
 
-            _fakeCleanUpService.CleanUpAzureTableAndBlobs();
+            _fakeCleanUpService.Clean();
 
             A.CallTo(() => _fakeAzureTableHelper.GetAllEntities(A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureTableHelper.DeleteEntity(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
@@ -154,7 +154,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
 
             A.CallTo(() => _fakeAzureTableHelper.GetAllEntities(A<string>.Ignored)).Returns(eesEventData);
 
-            _fakeCleanUpService.CleanUpAzureTableAndBlobs();
+            _fakeCleanUpService.Clean();
 
             A.CallTo(() => _fakeAzureTableHelper.GetAllEntities(A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureTableHelper.DeleteEntity(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
@@ -188,7 +188,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
 
             A.CallTo(() => _fakeAzureTableHelper.GetAllEntities(A<string>.Ignored)).Returns(eesEventData);
 
-            _fakeCleanUpService.CleanUpAzureTableAndBlobs();
+            _fakeCleanUpService.Clean();
 
             A.CallTo(() => _fakeAzureTableHelper.GetAllEntities(A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureTableHelper.DeleteEntity(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();

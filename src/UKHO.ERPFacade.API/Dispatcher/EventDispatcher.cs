@@ -1,4 +1,5 @@
 ﻿using UKHO.ERPFacade.API.Handlers;
+using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models.CloudEvents;
 
 namespace UKHO.ERPFacade.API.Dispatcher
@@ -7,6 +8,7 @@ namespace UKHO.ERPFacade.API.Dispatcher
     {
         private readonly ILogger<EventDispatcher> _logger;
         private readonly IServiceProvider _serviceProvider;
+
         public EventDispatcher(ILogger<EventDispatcher> logger, IServiceProvider serviceProvider)
         {
             _logger = logger;
@@ -21,10 +23,9 @@ namespace UKHO.ERPFacade.API.Dispatcher
 
             if (eventHandler is null)
             {
-                _logger.LogWarning("No handler registred for event type {EventType}", eventType);
+                _logger.LogWarning(EventIds.InvalidEventTypeReceived.ToEventId(), "Invalid event type received. No event handler registred for event type {EventType}", eventType);
                 return;
             }
-
             await eventHandler.ProcessEventAsync(baseCloudEvent);
         }
     }

@@ -74,7 +74,7 @@ namespace UKHO.ERPFacade.Common.HealthCheck
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.RequestToSapFailed.ToEventId(), "An error occurred while processing your request in SAP. | {Message}", ex.Message);
+                _logger.LogError(EventIds.S57RequestToSapFailedException.ToEventId(), "An error occurred while processing your request in SAP. | {Message}", ex.Message);
                 return HealthCheckResult.Unhealthy(exception: ex, data: healthCheckData, description: description);
             }
         }

@@ -14,144 +14,139 @@ namespace UKHO.ERPFacade.Common.Logging
         UnhandledException = 940001,
 
         /// <summary>
-        /// 940002 - New ENC content published event options call started.
-        /// </summary>
-        NewEncContentPublishedEventOptionsCallStarted = 940002,
-
-        /// <summary>
-        /// 940003 - New ENC content published event options call completed.
-        /// </summary>
-        NewEncContentPublishedEventOptionsCallCompleted = 940003,
-
-        /// <summary>
-        /// 940004 - New ENC content published event received by ERP Facade webhook.
-        /// </summary>
-        NewEncContentPublishedEventReceived = 940004,
-
-        /// <summary>
-        /// 940005 - CorrelationId is missing in ENC content published event.
-        /// </summary>
-        CorrelationIdMissingInEvent = 940005,
-
-        /// <summary>
-        /// 940006 - Adding or Updating entry for enccontentpublished event in azure table.
-        /// </summary>
-        AddingEntryForEncContentPublishedEventInAzureTable = 940006,
-
-        /// <summary>
-        /// 940007 - ENC content published event in added in azure table successfully.
-        /// </summary>
-        AddedEntryForEncContentPublishedEventInAzureTable = 940007,
-
-        /// <summary>
-        /// 940008 - Duplicate ENC contect published event received.
-        /// </summary>
-        ReceivedDuplicateEncContentPublishedEvent = 940008,
-
-        /// <summary>
-        /// 940009 - Existing ENC content published event updated in azure table successfully.
-        /// </summary>
-        UpdatedEncContentPublishedEventInAzureTable = 940009,
-
-        /// <summary>
-        /// 940010 - Uploading the received ENC content published event in blob storage.
-        /// </summary>
-        UploadEncContentPublishedEventInAzureBlobStarted = 940010,
-
-        /// <summary>
-        /// 940011 - ENC content published event is uploaded in blob storage successfully.
-        /// </summary>
-        UploadEncContentPublishedEventInAzureBlobCompleted = 940011,
-
-        /// <summary>
-        /// 940012 - Request to SAP failed
-        /// </summary>
-        RequestToSapFailed = 940012,
-
-        /// <summary>
-        /// 940013 - ENC Update sent to SAP
-        /// </summary>
-        EncUpdateSentToSap = 940013,
-
-        /// <summary>
-        /// 940014 - Updated RequestTime entity successfully in Azure Table
-        /// </summary>
-        UpdateRequestTimeEntitySuccessful = 940014,
-
-        /// <summary>
         /// 940015 - Sap Xml Template Not Found
         /// </summary>
         SapXmlTemplateNotFound = 940015,
 
         /// <summary>
-        /// 940016 - Generation of SAP xml payload started
+        /// 940002 - ERP facade OPTIONS endpoint requested.
         /// </summary>
-        GenerationOfSapXmlPayloadStarted = 940016,
+        ErpFacadeWebhookOptionsEndPointRequested = 940002,
 
         /// <summary>
-        /// 940017 - Sap Action Created
+        /// 940003 - New cloud event received in ERP facade.
         /// </summary>
-        SapActionCreated = 940017,
+        NewCloudEventReceived = 940003,
 
         /// <summary>
-        /// 940018 - Generation of SAP xml payload completed
+        /// 940004 - Invalid event received in ERP facade.
         /// </summary>
-        GenerationOfSapXmlPayloadCompleted = 940018,
+        InvalidEventTypeReceived = 940004,
 
         /// <summary>
-        /// 940019 - Azure Table Not Found
+        /// 940005 - Aio cell configuration is missing.
         /// </summary>
-        AzureTableNotFound = 940019,
+        AioConfigurationMissingException = 940005,
 
         /// <summary>
-        /// 940020 - Sap Health Check Xml Template Not Found
+        /// 940006 - S57 event processing started.
         /// </summary>
-        SapHealthCheckXmlTemplateNotFound = 940020,
+        S57EventProcessingStarted = 940006,
 
         /// <summary>
-        /// 940021 - SAP Health Check Request Sent To SAP
+        /// 940007 - S57 enccontentpublished event is specific to AIO cells and, as a result, it is not processed.
         /// </summary>
-        SapHealthCheckRequestSentToSap = 940021,
+        S57EventNotProcessedForAioCells = 940007,
 
         /// <summary>
-        /// 940022 - Uploading the SAP xml payload in blob storage.
+        /// 940008 - Request to SAP failed.
         /// </summary>
-        UploadSapXmlPayloadInAzureBlobStarted = 940022,
+        S57RequestToSapFailedException = 940008,
 
         /// <summary>
-        /// 940023 - SAP xml payload is uploaded in blob storage successfully.
+        /// 940009 - S57 enc update sent to SAP.
         /// </summary>
-        UploadSapXmlPayloadInAzureBlobCompleted = 940023,
+        S57EventUpdateSentToSap = 940009,
 
         /// <summary>
-        /// 940024 - Deleted EES entity successfully from Azure Table
+        /// 940010 - S57 event entry is added in azure table successfully.
         /// </summary>
-        DeletedEESEntitySuccessful = 940024,
+        S57EventEntryAddedInAzureTable = 940010,
 
         /// <summary>
-        /// 940025 - Fetching all EES entities from Azure Table.
+        /// 940011 - S57 event json payload is stored in azure blob container.
         /// </summary>
-        FetchEESEntities = 940025,
+        S57EventJsonStoredInAzureBlobContainer = 940011,
 
         /// <summary>
-        /// 940026 - Deleted container successfully.
+        /// 940012 - Generation of SAP xml payload for S57 enccontentpublished event started.
         /// </summary>
-        DeletedContainerSuccessful = 940026,
+        S57EventSapXmlPayloadGenerationStarted = 940012,
 
         /// <summary>
-        /// 940027 - Webjob started cleanup process.
+        /// 940082 - Generation of enc cell SAP actions for S57 enccontentpublished event started.
         /// </summary>
-        WebjobCleanUpEventStarted = 940027,
+        S57EncCellSapActionGenerationStarted = 940082,
 
         /// <summary>
-        /// 940028 - Webjob completed cleanup process.
+        /// 940081 - Required primary unit not found in S57 enccontentpublished event.
         /// </summary>
-        WebjobCleanUpEventCompleted = 940028,
+        RequiredUnitNotFoundException = 940081,
 
         /// <summary>
-        /// 940029 - Error occurred while connecting EES
+        /// 940083 - Generation of SAP action for S57 enccontentpublished event started .
         /// </summary>
-        ErrorOccurredInEES = 940029,
+        S57SapActionGenerationStarted = 940083,
+
+        /// <summary>
+        /// 940083 - Generation of SAP action for S57 enccontentpublished event completed .
+        /// </summary>
+        S57SapActionGenerationCompleted = 940083,
+
+        /// <summary>
+        /// 940087 - Hardware ids configuration missing.
+        /// </summary>
+        HardwareIdsConfigurationMissingException = 940087,
+
+        /// <summary>
+        /// 940088 - Permit string is empty in S57 enccontentpublished event.
+        /// </summary>
+        EmptyPermitStringException = 940088,
+
+        /// <summary>
+        /// 940080 - Permit decryption failed and could not generate ActiveKey and NextKey.
+        /// </summary>
+        PermitDecryptionException = 940080,
+
+        /// <summary>
+        /// 940085 - Error while generating SAP action information for S57 enccontentpublished event.
+        /// </summary>
+        S57SapActionInformationGenerationFailedException = 940085,
+
+        /// <summary>
+        /// 940086 - Required week details not found in JSON payload.
+        /// </summary>
+        RequiredWeekDetailsNotFoundException = 940086,
+
+        /// <summary>
+        /// 940084 - Required SAP property value is missing S57 enccontentpublished event.
+        /// </summary>
+        EmptyEventJsonPropertyException = 940084,
+
+        /// <summary>
+        /// 940013 - Generation of SAP xml payloa for S57 enccontentpublished event completed.
+        /// </summary>
+        S57EventSapXmlPayloadGenerationCompleted = 940013,
+
+        /// <summary>
+        /// 940011 - S57 event xml payload is stored in azure blob container.
+        /// </summary>
+        S57EventXmlStoredInAzureBlobContainer = 940011,
+
+        /// <summary>
+        /// 940027 - Cleanup webjob started.
+        /// </summary>
+        CleanupWebjobStarted = 940027,
+
+        /// <summary>
+        /// 940028 - Cleanup webjob completed.
+        /// </summary>
+        CleanupWebjobCompleted = 940028,
+
+        /// <summary>
+        /// 940026 - Event data clean up completed successfully.
+        /// </summary>
+        EventDataCleanupCompleted = 940026,
 
         /// <summary>
         /// 940030 - EES Health Check Request Sent To EES
@@ -177,6 +172,25 @@ namespace UKHO.ERPFacade.Common.Logging
         /// 940034 - EES Is Unhealty
         /// </summary>
         EESIsUnhealthy = 940034,
+
+        /// <summary>
+        /// 940020 - Sap Health Check Xml Template Not Found
+        /// </summary>
+        SapHealthCheckXmlTemplateNotFound = 940020,
+
+        /// <summary>
+        /// 940021 - SAP Health Check Request Sent To SAP
+        /// </summary>
+        SapHealthCheckRequestSentToSap = 940021,
+
+        /// <summary>
+        /// 940029 - Error occurred while connecting EES
+        /// </summary>
+        ErrorOccurredInEES = 940029,
+
+
+        //Below event ids are for WP - Fleet Manager Record of Sale and Licence Updated events
+
 
         /// <summary>
         /// 940035 - Record of Sale published event options call started.
@@ -401,62 +415,7 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940079 - Dequeue count of message.
         /// </summary>
-        MessageDequeueCount = 940079,
-
-        /// <summary>
-        /// 940080 - Exception occurred while decrypting the permit string.
-        /// </summary>
-        PermitDecryptionException = 940080,
-
-        /// <summary>
-        /// 940081 - Unit of Sale not found.
-        /// </summary>
-        UnitOfSaleNotFoundException = 940081,
-
-        /// <summary>
-        /// 940082 - ENC cell SAP action generation started.
-        /// </summary>
-        EncCellSapActionGenerationStarted = 940082,
-
-        /// <summary>
-        /// 940083 - SAP action generation started.
-        /// </summary>
-        BuildingSapActionStarted = 940083,
-
-        /// <summary>
-        /// 940084 - Required SAP property value is found empty enccontentpublished event.
-        /// </summary>
-        EmptyEventJsonPropertyException = 940084,
-
-        /// <summary>
-        /// 940085 - Error while generating SAP action information.
-        /// </summary>
-        BuildingSapActionInformationException = 940085,
-
-        /// <summary>
-        /// 940086 - Required section not found in JSON payload.
-        /// </summary>
-        RequiredSectionNotFoundException = 940086,
-
-        /// <summary>
-        /// 940087 - Hardware Id not found in configuration.
-        /// </summary>
-        HardwareIdNotFoundException = 940087,
-
-        /// <summary>
-        /// 940088 - Permit string provided empty in json payload.
-        /// </summary>
-        EmptyPermitStringException = 940088,
-
-        /// <summary>
-        /// 940087 - Aio configuration is not found.
-        /// </summary>
-        AioConfigurationNotFoundException = 940089,
-
-        /// <summary>
-        /// 940088 - The enccontentpublished event will not be processed for Aio cells.
-        /// </summary>
-        NoProcessingOfNewEncContentPublishedEventForAioCells = 940090
+        MessageDequeueCount = 940079
     }
 
     /// <summary>

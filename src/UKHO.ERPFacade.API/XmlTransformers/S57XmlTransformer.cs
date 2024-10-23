@@ -17,54 +17,51 @@ namespace UKHO.ERPFacade.API.XmlTransformers
     {
         private readonly ILogger<S57XmlTransformer> _logger;
         private readonly IXmlHelper _xmlHelper;
-        private readonly IOptions<SapActionConfiguration> _sapActionConfig;
         private readonly IWeekDetailsProvider _weekDetailsProvider;
         private readonly IPermitDecryption _permitDecryption;
+        private readonly IOptions<SapActionConfiguration> _sapActionConfig;
 
         public S57XmlTransformer(ILogger<S57XmlTransformer> logger,
                                  IXmlHelper xmlHelper,
                                  IFileSystemHelper fileSystemHelper,
-                                 IOptions<SapActionConfiguration> sapActionConfig,
                                  IWeekDetailsProvider weekDetailsProvider,
-                                 IPermitDecryption permitDecryption
-                                 )
+                                 IPermitDecryption permitDecryption,
+                                 IOptions<SapActionConfiguration> sapActionConfig)
         : base(fileSystemHelper, xmlHelper)
         {
             _logger = logger;
             _xmlHelper = xmlHelper;
-            _sapActionConfig = sapActionConfig;
             _weekDetailsProvider = weekDetailsProvider;
             _permitDecryption = permitDecryption;
+            _sapActionConfig = sapActionConfig;
         }
 
         public override XmlDocument BuildXmlPayload<T>(T eventData, string xmlTemplatePath)
         {
-            var s57EventData = eventData as S57EventData;
+            _logger.LogInformation(EventIds.S57EventSapXmlPayloadGenerationStarted.ToEventId(), "Generation of SAP xml payload for S57 enccontentpublished event started.");
 
-            var soapXml = _xmlHelper.CreateXmlDocument(Path.Combine(Environment.CurrentDirectory, xmlTemplatePath));
+            var s57EventXmlPayload = _xmlHelper.CreateXmlDocument(Path.Combine(Environment.CurrentDirectory, xmlTemplatePath));
 
-            var actionItemNode = soapXml.SelectSingleNode(Constants.XpathActionItems);
+            if (eventData is S57EventData s57EventData)
+            {
+                var actionItemNode = s57EventXmlPayload.SelectSingleNode(Constants.XpathActionItems);
 
-            _logger.LogInformation(EventIds.GenerationOfSapXmlPayloadStarted.ToEventId(), "Generation of SAP XML payload started.");
+                // Build SAP actions for ENC Cell
+                BuildEncCellActions(s57EventData, s57EventXmlPayload, actionItemNode);
 
-            // Build SAP actions for ENC Cell
-            BuildEncCellActions(s57EventData, soapXml, actionItemNode);
+                // Build SAP actions for Units
+                BuildUnitActions(s57EventData, s57EventXmlPayload, actionItemNode);
 
-            // Build SAP actions for Units
-            BuildUnitActions(s57EventData, soapXml, actionItemNode);
+                // Finalize SAP XML message
+                FinalizeSapXmlMessage(s57EventXmlPayload, s57EventData.CorrelationId, actionItemNode);
 
-            // Finalize SAP XML message
-            FinalizeSapXmlMessage(soapXml, s57EventData.CorrelationId, actionItemNode);
-
-            _logger.LogInformation(EventIds.GenerationOfSapXmlPayloadCompleted.ToEventId(), "Generation of SAP XML payload completed.");
-
-            return soapXml;
+                _logger.LogInformation(EventIds.S57EventSapXmlPayloadGenerationCompleted.ToEventId(), "Generation of SAP xml payload for S57 enccontentpublished event completed.");
+            }
+            return s57EventXmlPayload;
         }
 
         private void BuildEncCellActions(S57EventData eventData, XmlDocument soapXml, XmlNode actionItemNode)
         {
-            _logger.LogInformation(EventIds.EncCellSapActionGenerationStarted.ToEventId(), "Building ENC cell SAP actions.");
-
             foreach (var product in eventData.Products)
             {
                 foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == Constants.EncCell))
@@ -80,7 +77,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                         case 10://CANCEL ENC CELL
                             if (unitOfSale is null)
                             {
-                                throw new ERPFacadeException(EventIds.UnitOfSaleNotFoundException.ToEventId(), $"Required unit not found in event payload to generate {action.Action} action for {product.ProductName}.");
+                                throw new ERPFacadeException(EventIds.RequiredUnitNotFoundException.ToEventId(), $"Required unit not found in S57 enccontentpublished event for {product.ProductName} to generate {action.Action} action.");
                             }
                             BuildAndAppendActionNode(soapXml, product, unitOfSale, action, eventData, actionItemNode, product.ProductName);
                             break;
@@ -88,7 +85,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                         case 4://REPLACED WITH ENC CELL
                             if (product.ReplacedBy.Any() && unitOfSale is null)
                             {
-                                throw new ERPFacadeException(EventIds.UnitOfSaleNotFoundException.ToEventId(), $"Required unit not found in event payload to generate {action.Action} action for {product.ProductName}.");
+                                throw new ERPFacadeException(EventIds.RequiredUnitNotFoundException.ToEventId(), $"Required unit not found in S57 enccontentpublished event for {product.ProductName} to generate {action.Action} action.");
                             }
                             foreach (var replacedProduct in product.ReplacedBy)
                             {
@@ -150,7 +147,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             }
         }
 
-        private UnitOfSale? GetUnitOfSale(int actionNumber, List<Common.Models.CloudEvents.S57.UnitOfSale> listOfUnitOfSales, Common.Models.CloudEvents.S57.Product product)
+        private UnitOfSale? GetUnitOfSale(int actionNumber, List<UnitOfSale> listOfUnitOfSales, Product product)
         {
             return actionNumber switch
             {
@@ -175,10 +172,10 @@ namespace UKHO.ERPFacade.API.XmlTransformers
 
         private void BuildAndAppendActionNode(XmlDocument soapXml, Product product, UnitOfSale unitOfSale, SapAction action, S57EventData eventData, XmlNode actionItemNode, string childCell = null, string replacedBy = null)
         {
-            _logger.LogInformation(EventIds.BuildingSapActionStarted.ToEventId(), "Building SAP action {ActionName}.", action.Action);
+            _logger.LogInformation(EventIds.S57SapActionGenerationStarted.ToEventId(), "Generation of {ActionName} action started.", action.Action);
             var actionNode = BuildAction(soapXml, product, unitOfSale, action, eventData.UkhoWeekNumber, childCell, replacedBy);
             actionItemNode.AppendChild(actionNode);
-            _logger.LogInformation(EventIds.SapActionCreated.ToEventId(), "SAP action {ActionName} created.", action.Action);
+            _logger.LogInformation(EventIds.S57SapActionGenerationCompleted.ToEventId(), "Generation of {ActionName} action completed", action.Action);
         }
 
         private XmlElement BuildAction(XmlDocument soapXml, Product product, UnitOfSale unitOfSale, SapAction action, UkhoWeekNumber ukhoWeekNumber, string childCell, string replacedBy = null)
@@ -197,7 +194,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             // Add child cell node
             _xmlHelper.AppendChildNode(itemNode, soapXml, Constants.ChildCell, childCell);
 
-            List<(int sortingOrder, XmlElement node)> actionAttributes = new();
+            List<(int sortingOrder, XmlElement node)> actionAttributes = [];
 
             // Get permit keys for New cell and Updated cell
             if (action.Action == Constants.CreateEncCell || action.Action == Constants.UpdateCell)
@@ -236,19 +233,20 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                         switch (attribute.XmlNodeName)
                         {
                             case Constants.ReplacedBy:
-                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, replacedBy)) attributeNode.InnerText = GetXmlNodeValue(replacedBy.ToString(), attribute.XmlNodeName);
+                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, replacedBy)) attributeNode.InnerText = CommonHelper.ToSubstring(replacedBy.ToString(), 0, Constants.MaxXmlNodeLength);
                                 break;
                             case Constants.ActiveKey:
-                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, decryptedPermit.ActiveKey)) attributeNode.InnerText = GetXmlNodeValue(decryptedPermit.ActiveKey, attribute.XmlNodeName);
+                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, decryptedPermit.ActiveKey)) attributeNode.InnerText = CommonHelper.ToSubstring(decryptedPermit.ActiveKey, 0, Constants.MaxXmlNodeLength);
                                 break;
                             case Constants.NextKey:
-                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, decryptedPermit.NextKey)) attributeNode.InnerText = GetXmlNodeValue(decryptedPermit.NextKey, attribute.XmlNodeName);
+                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, decryptedPermit.NextKey)) attributeNode.InnerText = CommonHelper.ToSubstring(decryptedPermit.NextKey, 0, Constants.MaxXmlNodeLength);
                                 break;
                             default:
                                 var jsonFieldValue = CommonHelper.ParseXmlNode(attribute.JsonPropertyName, source, source.GetType()).ToString();
                                 if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, jsonFieldValue))
                                 {
-                                    attributeNode.InnerText = GetXmlNodeValue(jsonFieldValue.ToString(), attribute.XmlNodeName);
+                                    // Set value as first 2 characters if the node is Agency, else limit other nodes to 250 characters
+                                    attributeNode.InnerText = attribute.XmlNodeName == Constants.Agency ? CommonHelper.ToSubstring(jsonFieldValue, 0, Constants.MaxAgencyXmlNodeLength) : CommonHelper.ToSubstring(jsonFieldValue, 0, Constants.MaxXmlNodeLength);
                                 }
                                 break;
                         }
@@ -261,7 +259,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                 }
                 catch (Exception ex)
                 {
-                    throw new ERPFacadeException(EventIds.BuildingSapActionInformationException.ToEventId(), $"Error while generating SAP action information. | Action : {action} | XML Attribute : {attribute.XmlNodeName} | ErrorMessage : {ex.Message}");
+                    throw new ERPFacadeException(EventIds.S57SapActionInformationGenerationFailedException.ToEventId(), $"Error while generating SAP action information. | Action : {action} | XML Attribute : {attribute.XmlNodeName} | ErrorMessage : {ex.Message}");
                 }
             }
         }
@@ -270,7 +268,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
         {
             if (ukhoWeekNumber == null)
             {
-                throw new ERPFacadeException(EventIds.RequiredSectionNotFoundException.ToEventId(), $"UkhoWeekNumber section not found in enccontentpublished event payload while creating {action} action.");
+                throw new ERPFacadeException(EventIds.RequiredWeekDetailsNotFoundException.ToEventId(), $"UkhoWeekNumber details not found in S57 enccontentpublished event to generate {action} action.");
             }
 
             foreach (var attribute in attributes)
@@ -287,35 +285,29 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                             {
                                 case Constants.ValidFrom:
                                     var validFrom = _weekDetailsProvider.GetDateOfWeek(ukhoWeekNumber.Year.Value, ukhoWeekNumber.Week.Value, ukhoWeekNumber.CurrentWeekAlphaCorrection.Value);
-                                    attributeNode.InnerText = GetXmlNodeValue(validFrom, attribute.XmlNodeName);
+                                    attributeNode.InnerText = CommonHelper.ToSubstring(validFrom, 0, Constants.MaxXmlNodeLength);
                                     break;
                                 case Constants.WeekNo:
                                     var weekNo = string.Join("", ukhoWeekNumber.Year, ukhoWeekNumber.Week.Value.ToString("D2"));
-                                    attributeNode.InnerText = GetXmlNodeValue(weekNo, attribute.XmlNodeName);
+                                    attributeNode.InnerText = CommonHelper.ToSubstring(weekNo, 0, Constants.MaxXmlNodeLength);
                                     break;
                                 case Constants.Correction:
-                                    attributeNode.InnerText = GetXmlNodeValue(ukhoWeekNumber.CurrentWeekAlphaCorrection.Value ? Constants.IsCorrectionTrue : Constants.IsCorrectionFalse, attribute.XmlNodeName);
+                                    attributeNode.InnerText = ukhoWeekNumber.CurrentWeekAlphaCorrection.Value ? Constants.IsCorrectionTrue : Constants.IsCorrectionFalse;
                                     break;
                             }
                         }
                         else
                         {
-                            throw new ERPFacadeException(EventIds.EmptyEventJsonPropertyException.ToEventId(), $"Required details are missing in enccontentpublished event payload. | Property Name : {attribute.JsonPropertyName}");
+                            throw new ERPFacadeException(EventIds.EmptyEventJsonPropertyException.ToEventId(), $"Required property value is empty in enccontentpublished event payload. | Property Name : {attribute.JsonPropertyName}");
                         }
                     }
                     actionAttributes.Add((attribute.SortingOrder, attributeNode));
                 }
                 catch (Exception ex)
                 {
-                    throw new ERPFacadeException(EventIds.BuildingSapActionInformationException.ToEventId(), $"Error while generating SAP action information. | Action : {action} | XML Attribute : {attribute.XmlNodeName} | ErrorMessage : {ex.Message}");
+                    throw new ERPFacadeException(EventIds.S57SapActionInformationGenerationFailedException.ToEventId(), $"Error while generating SAP action information. | Action : {action} | XML Attribute : {attribute.XmlNodeName} | ErrorMessage : {ex.Message}");
                 }
             }
-        }
-
-        private string GetXmlNodeValue(string fieldValue, string xmlNodeName = null)
-        {
-            // Return first 2 characters if the node is Agency, else limit other nodes to 250 characters
-            return xmlNodeName == Constants.Agency ? CommonHelper.ToSubstring(fieldValue, 0, Constants.MaxAgencyXmlNodeLength) : CommonHelper.ToSubstring(fieldValue, 0, Constants.MaxXmlNodeLength);
         }
     }
 }
