@@ -61,13 +61,14 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
 
             _fakeWebHookController = new WebhookController(_fakeHttpContextAccessor,
                 _fakeLogger,
+                _fakeEventDispatcher,
                 _fakeAzureTableHelper,
                 _fakeAzureBlobHelper,
                 _fakeAzureQueueHelper,
-                _fakeSapClient,
-                _fakeSapConfig,
                 _fakeLicenceUpdatedSapMessageBuilder,
-                _fakeEventDispatcher);
+                _fakeSapClient,
+                _fakeSapConfig
+            );
         }
 
         [Test]
@@ -85,14 +86,9 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             result.StatusCode.Should().Be(200);
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-              && call.GetArgument<LogLevel>(0) == LogLevel.Information
-              && call.GetArgument<EventId>(1) == EventIds.NewEncContentPublishedEventOptionsCallStarted.ToEventId()
-              && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Started processing the Options request for the New ENC Content Published event for webhook. | WebHook-Request-Origin : {webhookRequestOrigin}").MustHaveHappenedOnceExactly();
-
-            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-              && call.GetArgument<LogLevel>(0) == LogLevel.Information
-              && call.GetArgument<EventId>(1) == EventIds.NewEncContentPublishedEventOptionsCallCompleted.ToEventId()
-              && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Completed processing the Options request for the New ENC Content Published event for webhook. | WebHook-Request-Origin : {webhookRequestOrigin}").MustHaveHappenedOnceExactly();
+               && call.GetArgument<LogLevel>(0) == LogLevel.Information
+               && call.GetArgument<EventId>(1) == EventIds.ErpFacadeWebhookOptionsEndPointRequested.ToEventId()
+               && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "ERP facade webhook options endpoint requested.").MustHaveHappenedOnceExactly();
 
             Assert.That(responseHeaders.ContainsKey("WebHook-Allowed-Rate"), Is.True);
             Assert.That(responseHeaders["WebHook-Allowed-Rate"], Is.EqualTo("*"));
@@ -116,13 +112,14 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             Assert.Throws<ArgumentNullException>(
                     () => new WebhookController(_fakeHttpContextAccessor,
                         _fakeLogger,
+                        _fakeEventDispatcher,
                         _fakeAzureTableHelper,
                         _fakeAzureBlobHelper,
                         _fakeAzureQueueHelper,
-                        _fakeSapClient,
-                        null,
                         _fakeLicenceUpdatedSapMessageBuilder,
-                        _fakeEventDispatcher))
+                        _fakeSapClient,
+                        null
+                    ))
                 .ParamName
                 .Should().Be("sapConfig");
         }
