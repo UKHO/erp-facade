@@ -218,14 +218,14 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             A.CallTo(() => _fakeAzureQueueHelper.AddMessage(fakeRosEventJson)).MustNotHaveHappened();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-             && call.GetArgument<LogLevel>(0) == LogLevel.Information
-             && call.GetArgument<EventId>(1) == EventIds.RecordOfSalePublishedEventReceived.ToEventId()
-             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "ERP Facade webhook has received record of sale event from EES.").MustHaveHappenedOnceExactly();
+                                                && call.GetArgument<LogLevel>(0) == LogLevel.Information
+                                                && call.GetArgument<EventId>(1) == EventIds.RecordOfSalePublishedEventReceived.ToEventId()
+                                                && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "ERP Facade webhook has received record of sale event from EES.").MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-             && call.GetArgument<LogLevel>(0) == LogLevel.Warning
-             && call.GetArgument<EventId>(1) == EventIds.CorrelationIdMissingInRecordOfSaleEvent.ToEventId()
-             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "CorrelationId is missing in Record of Sale published event.").MustHaveHappenedOnceExactly();
+                                                && call.GetArgument<LogLevel>(0) == LogLevel.Warning
+                                                && call.GetArgument<EventId>(1) == EventIds.CorrelationIdMissingInRecordOfSaleEvent.ToEventId()
+                                                && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "CorrelationId is missing in Record of Sale published event.").MustHaveHappenedOnceExactly();
         }
 
         [Test]
@@ -325,14 +325,14 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             A.CallTo(() => _fakeAzureBlobHelper.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-            && call.GetArgument<LogLevel>(0) == LogLevel.Information
-            && call.GetArgument<EventId>(1) == EventIds.LicenceUpdatedEventPublishedEventReceived.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "ERP Facade webhook has received new licence updated publish event from EES.").MustHaveHappenedOnceExactly();
+                                                && call.GetArgument<LogLevel>(0) == LogLevel.Information
+                                                && call.GetArgument<EventId>(1) == EventIds.LicenceUpdatedEventPublishedEventReceived.ToEventId()
+                                                && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "ERP Facade webhook has received new licence updated publish event from EES.").MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-            && call.GetArgument<LogLevel>(0) == LogLevel.Warning
-            && call.GetArgument<EventId>(1) == EventIds.CorrelationIdMissingInLicenceUpdatedEvent.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "CorrelationId is missing in Licence updated published event.").MustHaveHappenedOnceExactly();
+                                                && call.GetArgument<LogLevel>(0) == LogLevel.Warning
+                                                && call.GetArgument<EventId>(1) == EventIds.CorrelationIdMissingInLicenceUpdatedEvent.ToEventId()
+                                                && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "CorrelationId is missing in Licence updated published event.").MustHaveHappenedOnceExactly();
         }
 
         [Test]
