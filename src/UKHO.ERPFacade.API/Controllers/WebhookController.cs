@@ -19,40 +19,38 @@ using Status = UKHO.ERPFacade.Common.Enums.Status;
 
 namespace UKHO.ERPFacade.API.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     [Authorize]
     public class WebhookController : BaseController<WebhookController>
     {
         private readonly ILogger<WebhookController> _logger;
+        private readonly IEventDispatcher _eventDispatcher;
         private readonly IAzureTableHelper _azureTableHelper;
         private readonly IAzureBlobHelper _azureBlobHelper;
         private readonly IAzureQueueHelper _azureQueueHelper;
+        private readonly ILicenceUpdatedSapMessageBuilder _licenceUpdatedSapMessageBuilder;
         private readonly ISapClient _sapClient;
         private readonly IOptions<SapConfiguration> _sapConfig;
-        private readonly ILicenceUpdatedSapMessageBuilder _licenceUpdatedSapMessageBuilder;
-        private readonly IEventDispatcher _eventDispatcher;
 
         public WebhookController(IHttpContextAccessor contextAccessor,
                                  ILogger<WebhookController> logger,
+                                 IEventDispatcher eventDispatcher,
                                  IAzureTableHelper azureTableHelper,
                                  IAzureBlobHelper azureBlobHelper,
                                  IAzureQueueHelper azureQueueHelper,
-                                 ISapClient sapClient,
-                                 IOptions<SapConfiguration> sapConfig,
                                  ILicenceUpdatedSapMessageBuilder licenceUpdatedSapMessageBuilder,
-                                 IEventDispatcher eventDispatcher)
+                                 ISapClient sapClient,
+                                 IOptions<SapConfiguration> sapConfig)
         : base(contextAccessor)
         {
             _logger = logger;
+            _eventDispatcher = eventDispatcher;
             _azureTableHelper = azureTableHelper;
             _azureBlobHelper = azureBlobHelper;
             _azureQueueHelper = azureQueueHelper;
-            _sapClient = sapClient;
             _licenceUpdatedSapMessageBuilder = licenceUpdatedSapMessageBuilder;
+            _sapClient = sapClient;
             _sapConfig = sapConfig ?? throw new ArgumentNullException(nameof(sapConfig));
-            _eventDispatcher = eventDispatcher;
-
         }
 
         [HttpOptions]
@@ -63,12 +61,10 @@ namespace UKHO.ERPFacade.API.Controllers
         {
             var webhookRequestOrigin = HttpContext.Request.Headers["WebHook-Request-Origin"].FirstOrDefault();
 
-            _logger.LogInformation(EventIds.NewEncContentPublishedEventOptionsCallStarted.ToEventId(), "Started processing the Options request for the New ENC Content Published event for webhook. | WebHook-Request-Origin : {webhookRequestOrigin}", webhookRequestOrigin);
-
             HttpContext.Response.Headers.Append("WebHook-Allowed-Rate", "*");
             HttpContext.Response.Headers.Append("WebHook-Allowed-Origin", webhookRequestOrigin);
 
-            _logger.LogInformation(EventIds.NewEncContentPublishedEventOptionsCallCompleted.ToEventId(), "Completed processing the Options request for the New ENC Content Published event for webhook. | WebHook-Request-Origin : {webhookRequestOrigin}", webhookRequestOrigin);
+            _logger.LogInformation(EventIds.ErpFacadeWebhookOptionsEndPointRequested.ToEventId(), "ERP facade webhook options endpoint requested.");
 
             return new OkObjectResult(StatusCodes.Status200OK);
         }
@@ -79,10 +75,15 @@ namespace UKHO.ERPFacade.API.Controllers
         [Authorize(Policy = "EncContentPublishedWebhookCaller")]
         public virtual async Task<IActionResult> ReceiveEventsAsync([FromBody] JObject cloudEvent)
         {
+            _logger.LogInformation(EventIds.NewCloudEventReceived.ToEventId(), "ERP facade received new cloud event.");
+
             var baseCloudEvent = JsonConvert.DeserializeObject<BaseCloudEvent>(cloudEvent.ToString());
+
             await _eventDispatcher.DispatchEventAsync(baseCloudEvent);
+
             return new OkObjectResult(StatusCodes.Status200OK);
         }
+
 
         [HttpOptions]
         [Route("/webhook/recordofsalepublishedeventreceived")]

@@ -19,6 +19,7 @@ using UKHO.ERPFacade.API.Health;
 using UKHO.ERPFacade.API.Helpers;
 using UKHO.ERPFacade.API.XmlTransformers;
 using UKHO.ERPFacade.Common.Configuration;
+using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.HealthCheck;
 using UKHO.ERPFacade.Common.HttpClients;
 using UKHO.ERPFacade.Common.IO;
@@ -181,9 +182,11 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<IWeekDetailsProvider, WeekDetailsProvider>();
             builder.Services.AddScoped<IPermitDecryption, PermitDecryption>();
 
-            builder.Services.AddKeyedScoped<IEventHandler, S57EventHandler>("uk.gov.ukho.encpublishing.enccontentpublished.v2.2");
-            builder.Services.AddKeyedScoped<IBaseXmlTransformer, S57XmlTransformer>("S57XmlTransformer");
             builder.Services.AddScoped<IEventDispatcher, EventDispatcher>();
+
+            builder.Services.AddKeyedScoped<IEventHandler, S57EventHandler>(Constants.S57EventType);
+
+            builder.Services.AddKeyedScoped<IBaseXmlTransformer, S57XmlTransformer>("S57XmlTransformer");
 
             ConfigureHealthChecks(builder);
 

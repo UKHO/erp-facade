@@ -5,6 +5,10 @@ namespace UKHO.ERPFacade.Common.Constants
     [ExcludeFromCodeCoverage]
     public static class Constants
     {
+        //Event types
+        public const string S57EventType = "uk.gov.ukho.encpublishing.enccontentpublished.v2.2";
+        public const string S100EventType = "uk.gov.ukho.encpublishing.s100datacontentpublished.v1";
+
         //JSON field keys
         public const string EventIdKey = "id";
         public const string DataNode = "data";

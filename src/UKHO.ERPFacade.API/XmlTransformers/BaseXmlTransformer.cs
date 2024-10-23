@@ -107,7 +107,6 @@ namespace UKHO.ERPFacade.API.XmlTransformers
         {
             if (string.IsNullOrEmpty(propertyValue))
             {
-                //check exception message
                 throw new ERPFacadeException(EventIds.EmptyEventJsonPropertyException.ToEventId(), $"Required details are missing in enccontentpublished event payload. | Property Name : {propertyName}");
             }
             else return false;

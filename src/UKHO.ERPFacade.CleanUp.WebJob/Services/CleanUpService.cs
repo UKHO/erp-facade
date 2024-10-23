@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Configuration;
-using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
 
@@ -25,33 +24,32 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.Services
             _azureBlobHelper = azureBlobHelper ?? throw new ArgumentNullException(nameof(azureBlobHelper));
         }
 
-        public void CleanUpAzureTableAndBlobs()
+        public void Clean()
         {
-            CleanUpEvents(Constants.S57EventTableName, Constants.S57EventContainerName);
+            CleanS57Data("S57");
         }
 
-        private void CleanUpEvents(string tableName, string eventContainerName)
+        private void CleanS57Data(string partitionKey)
         {
-            _logger.LogInformation(EventIds.FetchEESEntities.ToEventId(), "Fetching all records from azure table {TableName}", tableName);
-
-            var entities = _azureTableHelper.GetAllEntities(tableName);
+            var entities = _azureTableHelper.GetAllEntities(partitionKey);
 
             foreach (var entity in entities)
             {
                 if (entity["RequestDateTime"] == null)
                     continue;
 
+                var correlationId = entity.RowKey.ToString();
+
                 TimeSpan timediff = DateTime.Now - Convert.ToDateTime(entity["RequestDateTime"].ToString());
 
                 if (timediff.Days > int.Parse(_erpFacadeWebjobConfig.Value.CleanUpDurationInDays))
                 {
-                    Task.FromResult(_azureTableHelper.DeleteEntity(entity["CorrelationId"].ToString(), tableName));
+                    Task.FromResult(_azureTableHelper.DeleteEntity(correlationId));
 
-                    _azureBlobHelper.DeleteContainer(entity["CorrelationId"].ToString().ToLower());
-
-                    _logger.LogInformation(EventIds.DeletedContainerSuccessful.ToEventId(), "Event data cleaned up for {CorrelationId} successfully.", entity["CorrelationId"].ToString());
+                    _azureBlobHelper.DeleteContainer(correlationId);
                 }
             }
+            _logger.LogInformation(EventIds.EventDataCleanupCompleted.ToEventId(), "S57 event data clean up completed successfully.");
         }
     }
 }

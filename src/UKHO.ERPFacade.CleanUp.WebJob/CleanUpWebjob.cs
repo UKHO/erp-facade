@@ -20,9 +20,9 @@ namespace UKHO.ERPFacade.CleanUp.WebJob
 
         public void Start()
         {
-            _logger.LogInformation(EventIds.WebjobCleanUpEventStarted.ToEventId(), "Webjob started for clean up");
-            _cleanUpService.CleanUpAzureTableAndBlobs();
-            _logger.LogInformation(EventIds.WebjobCleanUpEventCompleted.ToEventId(), "Webjob completed clean up");
+            _logger.LogInformation(EventIds.CleanupWebjobStarted.ToEventId(), "Clean up webjob started.");
+            _cleanUpService.Clean();
+            _logger.LogInformation(EventIds.CleanupWebjobCompleted.ToEventId(), "Clean up webjob completed.");
         }
     }
 }
