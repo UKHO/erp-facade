@@ -17,6 +17,8 @@ namespace UKHO.ERPFacade.API.Handlers
 {
     public class S57EventHandler : IEventHandler
     {
+        public string EventType => Constants.S57EventType;
+
         private readonly ILogger<S57EventHandler> _logger;
         private readonly IBaseXmlTransformer _baseXmlTransformer;
         private readonly IAzureTableHelper _azureTableHelper;
