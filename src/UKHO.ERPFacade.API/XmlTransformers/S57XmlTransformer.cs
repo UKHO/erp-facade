@@ -96,8 +96,6 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                         case 5://ADDITIONAL COVERAGE ENC CELL
                             foreach (var additionalCoverageProduct in product.AdditionalCoverage)
                             {
-                                product.AdditionalCoverage.Add(additionalCoverageProduct);
-
                                 BuildAndAppendActionNode(soapXml, product, null, action, eventData, actionItemNode, product.ProductName, additionalCoverageProduct);
                             }
                             break;
@@ -194,7 +192,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             // Add child cell node
             _xmlHelper.AppendChildNode(itemNode, soapXml, Constants.ChildCell, childCell);
 
-            List<(int sortingOrder, XmlElement node)> actionAttributes = [];
+            List<(int sortingOrder, XmlElement node)> actionAttributes = new();
 
             // Get permit keys for New cell and Updated cell
             if (action.Action == Constants.CreateEncCell || action.Action == Constants.UpdateCell)
