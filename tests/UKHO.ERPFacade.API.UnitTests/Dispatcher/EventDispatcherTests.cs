@@ -16,17 +16,17 @@ namespace UKHO.ERPFacade.API.Tests.Dispatcher
     [TestFixture]
     public class EventDispatcherTests
     {
-        private ILogger<EventDispatcher> _fakeLogger;
-        private IServiceProvider _fakeServiceProvider;
-        private EventDispatcher _fakeEventDispatcher;
+        //private ILogger<EventDispatcher> _fakeLogger;
+        //private IServiceProvider _fakeServiceProvider;
+        //private EventDispatcher _fakeEventDispatcher;
 
         [SetUp]
         public void Setup()
         {
-            _fakeLogger = A.Fake<ILogger<EventDispatcher>>();
-            _fakeServiceProvider = A.Fake<IServiceProvider>();
+            //_fakeLogger = A.Fake<ILogger<EventDispatcher>>();
+            //_fakeServiceProvider = A.Fake<IServiceProvider>();
 
-            _fakeEventDispatcher = new EventDispatcher(_fakeLogger, _fakeServiceProvider);
+            //_fakeEventDispatcher = new EventDispatcher(_fakeLogger, _fakeServiceProvider);
         }
 
         //[Test]
