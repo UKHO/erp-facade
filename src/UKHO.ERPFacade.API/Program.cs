@@ -182,6 +182,7 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<IPermitDecryption, PermitDecryption>();
 
             builder.Services.AddKeyedScoped<IEventHandler, S57EventHandler>("uk.gov.ukho.encpublishing.enccontentpublished.v2.2");
+            builder.Services.AddKeyedScoped<IEventHandler, S100EventHandler>("uk.gov.ukho.encpublishing.s100datacontentpublished.v1");
             builder.Services.AddKeyedScoped<IBaseXmlTransformer, S57XmlTransformer>("S57XmlTransformer");
             builder.Services.AddScoped<IEventDispatcher, EventDispatcher>();
 
