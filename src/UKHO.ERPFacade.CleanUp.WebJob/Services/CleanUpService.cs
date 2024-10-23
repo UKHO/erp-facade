@@ -47,9 +47,9 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.Services
                 {
                     Task.FromResult(_azureTableReaderWriter.DeleteEntity(entity["CorrelationId"].ToString(), tableName));
 
-                    _logger.LogInformation(EventIds.DeletedContainerSuccessful.ToEventId(), "Deleting directory {CorrelationId} from {EventContainerName} container", entity["CorrelationId"].ToString(), eventContainerName);
+                    _azureBlobEventWriter.DeleteContainer(entity["CorrelationId"].ToString().ToLower());
 
-                    _azureBlobEventWriter.DeleteDirectory(eventContainerName, entity["CorrelationId"].ToString().ToLower());
+                    _logger.LogInformation(EventIds.DeletedContainerSuccessful.ToEventId(), "Event data cleaned up for {CorrelationId} successfully.", entity["CorrelationId"].ToString());
                 }
             }
         }

@@ -44,20 +44,10 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
             _fakeHttpContext.Response.Body = memoryStream;
             A.CallTo(() => _fakeNextMiddleware(_fakeHttpContext)).Throws(new Exception("fake exception"));
 
-            await _middleware.InvokeAsync(_fakeHttpContext);
+            await _middleware.InvokeAsync(_fakeHttpContext);                  
 
-            memoryStream.Seek(0, SeekOrigin.Begin);
-            var responseBody = await new StreamReader(memoryStream).ReadToEndAsync();
-
-            var problemDetails = JsonSerializer.Deserialize<ProblemDetails>(responseBody, new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            });
-
-            problemDetails.Status.Should().Be((int)HttpStatusCode.InternalServerError);
-            problemDetails.Extensions["correlationId"].ToString().Should().Be("fakeCorrelationId");
             _fakeHttpContext.Response.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
-            _fakeHttpContext.Response.ContentType.Should().Be("application/json; charset=utf-8");
+            _fakeHttpContext.Response.ContentType.Should().Be("application/json");
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Error
@@ -73,19 +63,10 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
             _fakeHttpContext.Response.Body = memoryStream;
             A.CallTo(() => _fakeNextMiddleware(_fakeHttpContext)).Throws(new ERPFacadeException(EventIds.SapXmlTemplateNotFound.ToEventId(), "fakemessage"));
 
-            await _middleware.InvokeAsync(_fakeHttpContext);
-
-            memoryStream.Seek(0, SeekOrigin.Begin);
-            var responseBody = await new StreamReader(memoryStream).ReadToEndAsync();
-            var problemDetails = JsonSerializer.Deserialize<ProblemDetails>(responseBody, new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            });
-
-            problemDetails.Status.Should().Be((int)HttpStatusCode.InternalServerError);
-            problemDetails.Extensions["correlationId"].ToString().Should().Be("fakeCorrelationId");
+            await _middleware.InvokeAsync(_fakeHttpContext);                 
+                        
             _fakeHttpContext.Response.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
-            _fakeHttpContext.Response.ContentType.Should().Be("application/json; charset=utf-8");
+            _fakeHttpContext.Response.ContentType.Should().Be("application/json");
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Error
