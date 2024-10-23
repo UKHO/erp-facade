@@ -9,6 +9,9 @@ namespace UKHO.ERPFacade.Common.Constants
         public const string S57EventType = "uk.gov.ukho.encpublishing.enccontentpublished.v2.2";
         public const string S100EventType = "uk.gov.ukho.encpublishing.s100datacontentpublished.v1";
 
+        //XmlTransformer Types
+        public const string S57XmlTransformer = "S57XmlTransformer";
+
         //JSON field keys
         public const string EventIdKey = "id";
         public const string DataNode = "data";
@@ -150,5 +153,7 @@ namespace UKHO.ERPFacade.Common.Constants
 
         //LicenseUpdate xml payload nodes
         public const string LicTransaction = "CHANGELICENCE";
+
+
     }
 }
