@@ -103,7 +103,7 @@ namespace UKHO.ERPFacade.API.Handlers
         private bool IsAioCell(IEnumerable<string> products)
         {
             var aioCells = !string.IsNullOrEmpty(_aioConfig.AioCells) ? new(_aioConfig.AioCells.Split(',').Select(s => s.Trim())) : new List<string>();
-            return products.Any(_aioCells.Contains);
+            return products.Any(aioCells.Contains);
         }
     }
 }
