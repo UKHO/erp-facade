@@ -1,8 +1,8 @@
 openapi: 3.0.1
 info:
-  title: UKHO S100 ERP Facade Service API
+  title: UKHO ERP Facade Service API
   description: |
-    The UKHO S100 ERP Facade Service API handles callback event received from SAP.
+     UKHO ERP Facade Service shall process S57 and S100 Content publish event received from Enterprise Event Service.
   contact:
     name: UKHO
     email: contact@ukho.co.uk
@@ -10,21 +10,59 @@ info:
 servers:
   - url: https://erpfacade-dev-api.azurewebsites.net
     description: Dev URL
-  
 paths:
-  /s100erpfacade/callback/{correlationId}:
-    get:
-      description: Returns response status for the callback request from SAP.
+  /api/v2/webhook:
+    options:
+      summary: "Handle CloudEvent webhook validation"
       tags:
-        - "S100 ERP Facade"
-      operationId: s100erpfacade
-      parameters:
-      - name: correlationId
-        in: path
-        description: Correlation Id must be an string
+        - "ERP Facade"
+      description: "Handles CloudEvent webhook validation request."
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorised - either you have not provided valid token, or your token is not recognised.
+        "403":
+          description: Forbidden - you have no permission to use this API  
+        "500":
+          description: Internal Server Error.
+    post:
+      summary: "Webhook to receive events from Enterprise Event Service."
+      security:
+        - jwtBearerAuth: []
+      tags:
+        - "ERP Facade"
+      operationId: "eesWebhook"
+      requestBody:
         required: true
-        schema:
-          type: string
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/eventSchema'
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorised - either you have not provided valid token, or your token is not recognised.
+        "403":
+          description: Forbidden - you have no permission to use this API
+        "500":
+          description: Internal Server Error.
+  /api/v2/callback/sap/s100actions/processed:
+    post:
+      tags:
+        - "ERP Facade"
+      summary: Returns response status for the callback request from SAP.
+      security:
+        - ApiKeyAuth: []
+      operationId: sapCallback
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/correlationIdRequest'
+        description: .
       responses:
         "200":
           description: OK 
@@ -55,7 +93,7 @@ paths:
               example:
                 correlationId: 6c254109-8a0f-4446-8649-721775ba9de2
                 errors:
-                - source: s100erpfacade
+                - source: erpfacade
                   description: Correlation ID Not Found.
         "500":
           description: Internal Server Error.
@@ -68,11 +106,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/exceptionDescription'
-security:
-  - ApiKeyAuth: []
-                
 components:
   schemas:
+    correlationIdRequest:
+      type: object
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Id must be a string.
     exceptionDescription:
       type: object
       properties:
@@ -94,8 +135,31 @@ components:
           type: string
         description:
           type: string
-    responseMessage:
-      type: string
+    eventSchema:
+      type: object
+      properties:
+        specversion:
+          type: string
+        type:
+          type: string
+        source:
+          type: string
+        id:
+          type: string
+        time:
+          type: string
+        subject:
+          type: string
+        datacontenttype:
+          type: string
+        data:
+          type: object
+          properties:
+            property1:
+              type: string
+            property2:
+              type: string
+              format: string
   responses:
     TokenAuthenticationFailed:
       description: Token Authentication Failed
@@ -136,15 +200,11 @@ components:
         application/pdf:
           schema:
             $ref: '#/components/schemas/exceptionDescription'
-  parameters:
-    correlationId:
-      name: correlationId
-      in: path
-      description: Unique request identifier
-      required: true
-      schema:
-        type: string
   securitySchemes:
+    jwtBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
     ApiKeyAuth:
       type: apiKey
       in: header
