@@ -27,17 +27,9 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Helpers
         {
             SapRecordOfSalePayLoad sapRecordOfSalePayLoad = null!;
 
-            string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, Constants.RecordOfSaleSapXmlTemplatePath);
-
-            if (!_fileSystemHelper.IsFileExists(sapXmlTemplatePath))
-            {
-                _logger.LogError(EventIds.RecordOfSaleSapXmlTemplateNotFound.ToEventId(), "The record of sale SAP message xml template does not exist. | _X-Correlation-ID : {_X-Correlation-ID}", correlationId);
-                throw new FileNotFoundException();
-            }
-
             _logger.LogInformation(EventIds.CreatingRecordOfSaleSapPayload.ToEventId(), "Creating the record of sale SAP Payload. | _X-Correlation-ID : {_X-Correlation-ID}", correlationId);
 
-            XmlDocument soapXml = _xmlHelper.CreateXmlDocument(sapXmlTemplatePath);
+            XmlDocument soapXml = _xmlHelper.CreateXmlDocument(Path.Combine(Environment.CurrentDirectory, Constants.RecordOfSaleSapXmlTemplatePath));
 
             sapRecordOfSalePayLoad = eventDataList[0].Data.RecordsOfSale.TransactionType switch
             {

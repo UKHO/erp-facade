@@ -84,7 +84,6 @@ namespace UKHO.ERPFacade.API.Controllers
             return new OkObjectResult(StatusCodes.Status200OK);
         }
 
-
         [HttpOptions]
         [Route("/webhook/recordofsalepublishedeventreceived")]
         [Authorize(Policy = "RecordOfSaleWebhookCaller")]
@@ -210,5 +209,6 @@ namespace UKHO.ERPFacade.API.Controllers
 
             return new OkObjectResult(StatusCodes.Status200OK);
         }
+     
     }
 }

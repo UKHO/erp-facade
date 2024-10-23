@@ -62,7 +62,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Services
             Assert.Throws<ArgumentNullException>(
                     () => new AggregationService(_fakeLogger, null!, _fakeAzureBlobHelper, _fakeSapClient, _fakeSapConfig, _fakeRecordOfSaleSapMessageBuilder))
                 .ParamName
-                .Should().Be("azureTableReaderWriter");
+                .Should().Be("azureTableHelper");
         }
 
         [Test]
@@ -71,7 +71,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Services
             Assert.Throws<ArgumentNullException>(
                     () => new AggregationService(_fakeLogger, _fakeAzureTableHelper, null!, _fakeSapClient, _fakeSapConfig, _fakeRecordOfSaleSapMessageBuilder))
                 .ParamName
-                .Should().Be("azureBlobEventWriter");
+                .Should().Be("azureBlobHelper");
         }
 
         [Test]
