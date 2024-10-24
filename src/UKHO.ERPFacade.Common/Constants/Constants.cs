@@ -26,7 +26,7 @@ namespace UKHO.ERPFacade.Common.Constants
 
         //S57 event file name
         public const string S57EncEventFileName = "EncPublishingEvent.json";
-
+        public const string S100DataEventFileName = "S100DataPublishingEvent.json";
         //event storage
         public const string EventTableName = "events";
 
@@ -154,6 +154,7 @@ namespace UKHO.ERPFacade.Common.Constants
         //LicenseUpdate xml payload nodes
         public const string LicTransaction = "CHANGELICENCE";
 
-
+        //Partition Key
+        public const string S100PartitionKey = "S100";
     }
 }
