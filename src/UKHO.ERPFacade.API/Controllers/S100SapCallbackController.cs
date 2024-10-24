@@ -8,7 +8,6 @@ namespace UKHO.ERPFacade.API.Controllers
     {
         public S100SapCallbackController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
-
         }
     }
 }
