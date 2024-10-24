@@ -16,30 +16,37 @@ namespace UKHO.ERPFacade.API.Tests.Dispatcher
     {
         private ILogger<EventDispatcher> _fakeLogger;
         private EventDispatcher _fakeEventDispatcher;
-        private IEnumerable<IEventHandler> eventHandlers;
-        private readonly Dictionary<string, IEventHandler> _eventHandlers = new Dictionary<string, IEventHandler>();
+        private IEventHandler _fakeEventHandler1;
+        private IEventHandler _fakeEventHandler2;
+        private readonly IList<IEventHandler> _eventHandlers = new List<IEventHandler>();
 
-        [SetUp]
+        [OneTimeSetUp]
         public void Setup()
         {
             _fakeLogger = A.Fake<ILogger<EventDispatcher>>();
-            eventHandlers = A.Fake<IEnumerable<IEventHandler>>();
-            _eventHandlers.Add("uk.gov.ukho.encpublishing.enccontentpublished.v2.2", eventHandlers.FirstOrDefault());
-            _fakeEventDispatcher = new EventDispatcher(_fakeLogger, eventHandlers);
+
+            _fakeEventHandler1 = A.Fake<IEventHandler>();
+            A.CallTo(() => _fakeEventHandler1.EventType).Returns("test_eventype_1");
+
+            _fakeEventHandler2 = A.Fake<IEventHandler>();
+            A.CallTo(() => _fakeEventHandler2.EventType).Returns("test_eventype_2");
+
+            _eventHandlers.Add(_fakeEventHandler1);
+            _eventHandlers.Add(_fakeEventHandler2);
+
+            _fakeEventDispatcher = new EventDispatcher(_fakeLogger, _eventHandlers);
         }
 
         [Test]
         public async Task WhenEventHandlerExists_ThenEventDispatcherCallsProcessEventAsync()
         {
-            var eventType = "uk.gov.ukho.encpublishing.enccontentpublished.v2.2";
+            var eventType = "test_eventype_1";
             var baseCloudEvent = new BaseCloudEvent { Type = eventType };
 
             await _fakeEventDispatcher.DispatchEventAsync(baseCloudEvent);
-
-            if (_eventHandlers.TryGetValue(eventType, out var eventHandler))
-            {
-                A.CallTo(() => eventHandler.ProcessEventAsync(baseCloudEvent)).MustHaveHappenedOnceExactly();
-            }
+            
+            A.CallTo(() => _fakeEventHandler1.ProcessEventAsync(baseCloudEvent)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _fakeEventHandler2.ProcessEventAsync(baseCloudEvent)).MustNotHaveHappened();
         }
 
         [Test]
@@ -49,6 +56,9 @@ namespace UKHO.ERPFacade.API.Tests.Dispatcher
             var baseCloudEvent = new BaseCloudEvent { Type = eventType };
 
             await _fakeEventDispatcher.DispatchEventAsync(baseCloudEvent);
+
+            A.CallTo(() => _fakeEventHandler1.ProcessEventAsync(baseCloudEvent)).MustNotHaveHappened();
+            A.CallTo(() => _fakeEventHandler2.ProcessEventAsync(baseCloudEvent)).MustNotHaveHappened();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
               && call.GetArgument<LogLevel>(0) == LogLevel.Warning
