@@ -1,4 +1,4 @@
-﻿namespace UKHO.ERPFacade.Common.EventService
+﻿namespace UKHO.ERPFacade.Common.EventPublishService
 {
     public class UnitOfSaleUpdatedPublish
     {
