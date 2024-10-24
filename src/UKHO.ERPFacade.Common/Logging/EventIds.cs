@@ -436,7 +436,27 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940086 - Required section not found in JSON payload.
         /// </summary>
-        RequiredSectionNotFoundException = 940086
+        RequiredSectionNotFoundException = 940086,
+
+        /// <summary>
+        /// 940087 - Hardware Id not found in configuration.
+        /// </summary>
+        HardwareIdNotFoundException = 940087,
+
+        /// <summary>
+        /// 940088 - Permit string provided empty in json payload.
+        /// </summary>
+        EmptyPermitStringException = 940088,
+
+        /// <summary>
+        /// 940087 - Aio configuration is not found.
+        /// </summary>
+        AioConfigurationNotFoundException = 940089,
+
+        /// <summary>
+        /// 940088 - The enccontentpublished event will not be processed for Aio cells.
+        /// </summary>
+        NoProcessingOfNewEncContentPublishedEventForAioCells = 940090
     }
 
     /// <summary>

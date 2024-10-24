@@ -1,4 +1,5 @@
 ﻿using System.Xml;
+using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
@@ -10,10 +11,6 @@ namespace UKHO.ERPFacade.API.Helpers
         private readonly ILogger<LicenceUpdatedSapMessageBuilder> _logger;
         private readonly IXmlHelper _xmlHelper;
         private readonly IFileSystemHelper _fileSystemHelper;
-
-        private const string SapXmlPath = "SapXmlTemplates\\RosSapRequest.xml";
-        private const string XpathZAddsRos = $"//*[local-name()='Z_ADDS_ROS']";
-        private const string ImOrderNameSpace = "RecordOfSale";
 
         public LicenceUpdatedSapMessageBuilder(ILogger<LicenceUpdatedSapMessageBuilder> logger,
             IXmlHelper xmlHelper,
@@ -27,7 +24,7 @@ namespace UKHO.ERPFacade.API.Helpers
 
         public XmlDocument BuildLicenceUpdatedSapMessageXml(LicenceUpdatedEventPayLoad eventData, string correlationId)
         {
-            string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, SapXmlPath);
+            string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, Constants.RecordOfSaleSapXmlTemplatePath);
 
             if (!_fileSystemHelper.IsFileExists(sapXmlTemplatePath))
             {
@@ -43,9 +40,9 @@ namespace UKHO.ERPFacade.API.Helpers
 
             string xml = _xmlHelper.CreateXmlPayLoad(sapRecordOfSalePayLoad);
 
-            string sapXml = xml.Replace(ImOrderNameSpace, "");
+            string sapXml = xml.Replace(Constants.ImOrderNameSpace, "");
 
-            soapXml.SelectSingleNode(XpathZAddsRos).InnerXml = sapXml.RemoveNullFields().SetXmlClosingTags();
+            soapXml.SelectSingleNode(Constants.XpathZAddsRos).InnerXml = sapXml.RemoveNullFields().SetXmlClosingTags();
 
             _logger.LogInformation(EventIds.CreatedLicenceUpdatedSapPayload.ToEventId(), "Licence updated SAP payload created.");
 

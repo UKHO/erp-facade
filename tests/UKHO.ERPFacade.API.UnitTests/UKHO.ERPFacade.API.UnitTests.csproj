@@ -39,6 +39,18 @@
     <None Update="ERPTestData\ChangeLicencePayloadTest.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ERPTestData\NewAIOCell.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPTestData\NewCellWithNullcurrentWeekAlphaCorrectionInUkhoWeekNumberSection.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPTestData\NewCellWithoutYearInUkhoWeekNumberSection.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPTestData\NewCellWithNullYearInUkhoWeekNumberSection.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ERPTestData\NewCellWithEmptyPermit.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

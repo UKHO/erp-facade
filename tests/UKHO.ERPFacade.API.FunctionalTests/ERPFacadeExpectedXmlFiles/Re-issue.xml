@@ -9,7 +9,7 @@
         <RECTIME>053558</RECTIME>
         <ORG>UKHO</ORG>
         <ACTIONITEMS>
-          <Item>
+          <item>
             <ACTIONNUMBER>1</ACTIONNUMBER>
             <ACTION>CREATE ENC CELL</ACTION>
             <PRODUCT>ENC CELL</PRODUCT>
@@ -30,8 +30,8 @@
             <CORRECTION>N</CORRECTION>
             <ACTIVEKEY>ThisWillBeRetrievedFromKeyVaultBeforeAssertion</ACTIVEKEY>
             <NEXTKEY>ThisWillBeRetrievedFromKeyVaultBeforeAssertion</NEXTKEY>
-          </Item>
-          <Item>
+          </item>
+          <item>
             <ACTIONNUMBER>2</ACTIONNUMBER>
             <ACTION>CREATE AVCS UNIT OF SALE</ACTION>
             <PRODUCT>AVCS UNIT</PRODUCT>
@@ -52,8 +52,8 @@
             <CORRECTION>N</CORRECTION>
             <ACTIVEKEY></ACTIVEKEY>
             <NEXTKEY></NEXTKEY>
-          </Item>
-          <Item>
+          </item>
+          <item>
             <ACTIONNUMBER>3</ACTIONNUMBER>
             <ACTION>ASSIGN CELL TO AVCS UNIT OF SALE</ACTION>
             <PRODUCT>AVCS UNIT</PRODUCT>
@@ -74,8 +74,8 @@
             <CORRECTION>N</CORRECTION>
             <ACTIVEKEY></ACTIVEKEY>
             <NEXTKEY></NEXTKEY>
-          </Item>
-          <Item>
+          </item>
+          <item>
             <ACTIONNUMBER>4</ACTIONNUMBER>
             <ACTION>ASSIGN CELL TO AVCS UNIT OF SALE</ACTION>
             <PRODUCT>AVCS UNIT</PRODUCT>
@@ -96,7 +96,7 @@
             <CORRECTION>N</CORRECTION>
             <ACTIVEKEY></ACTIVEKEY>
             <NEXTKEY></NEXTKEY>
-          </Item>
+          </item>
         </ACTIONITEMS>
       </IM_MATINFO>
     </Z_ADDS_MAT_INFO>

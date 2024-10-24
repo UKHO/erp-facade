@@ -16,6 +16,7 @@ using System.Net;
 using System.Xml;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Models;
+using Azure.Data.Tables;
 
 namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Services
 {
@@ -94,14 +95,21 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Services
                 "{\"type\":\"uk.gov.ukho.shop.recordOfSale.v1\",\"eventId\":\"ad5b0ca4-2668-4345-9699-49d8f2c5a006\",\"correlationId\":\"999ce4a4-1d62-4f56-b359-59e178d77003\",\"relatedEvents\":[\"e744fa37-0c9f-4795-adc9-7f42ad8f005\",\"ad5b0ca4-2668-4345-9699-49d8f2c5a006\"],\"transactionType\":\"NEWLICENCE\"}";
 
             QueueMessage queueMessage = QueuesModelFactory.QueueMessage("12345", "pr1", messageText, 1, DateTimeOffset.UtcNow);
+            TableEntity entity = new TableEntity(){
+                { "CorrelationId", "corrid" },
+                { "Status",  "Complete"},
+                { "PartitionKey", Guid.NewGuid().ToString() },
+                { "RowKey", Guid.NewGuid().ToString() },
+                { "Timestamp", DateTime.Now }
+             };
 
-            A.CallTo(() => _fakeAzureTableReaderWriter.GetEntityStatus(A<string>.Ignored)).Returns("Complete");
+            A.CallTo(() => _fakeAzureTableReaderWriter.GetEntity(A<string>.Ignored, A<string>.Ignored)).Returns(entity);
 
             await _fakeAggregationService.MergeRecordOfSaleEvents(queueMessage);
 
             A.CallTo(() => _fakeAzureBlobEventWriter.GetBlobNamesInFolder(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
             A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
-            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateRecordOfSaleEventStatus(A<string>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntity(A<string>.Ignored, A<string>.Ignored, A<KeyValuePair<string, string>[]>.Ignored)).MustNotHaveHappened();
             A.CallTo(() => _fakeAzureBlobEventWriter.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
@@ -123,15 +131,22 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Services
 
             QueueMessage queueMessage = QueuesModelFactory.QueueMessage("12345", "pr1", messageText, 1, DateTimeOffset.UtcNow);
             RecordOfSaleQueueMessageEntity message = JsonConvert.DeserializeObject<RecordOfSaleQueueMessageEntity>(queueMessage.Body.ToString())!;
+            TableEntity entity = new TableEntity(){
+                { "CorrelationId", "corrid" },
+                { "Status",  "Incomplete"},
+                { "PartitionKey", Guid.NewGuid().ToString() },
+                { "RowKey", Guid.NewGuid().ToString() },
+                { "Timestamp", DateTime.Now }
+             };
 
-            A.CallTo(() => _fakeAzureTableReaderWriter.GetEntityStatus(A<string>.Ignored)).Returns("Incomplete");
+            A.CallTo(() => _fakeAzureTableReaderWriter.GetEntity(A<string>.Ignored, A<string>.Ignored)).Returns(entity);
             A.CallTo(() => _fakeAzureBlobEventWriter.GetBlobNamesInFolder(A<string>.Ignored, A<string>.Ignored)).Returns(blob);
 
             await _fakeAggregationService.MergeRecordOfSaleEvents(queueMessage);
 
             A.CallTo(() => _fakeAzureBlobEventWriter.GetBlobNamesInFolder(A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceExactly();
             A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
-            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateRecordOfSaleEventStatus(A<string>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntity(A<string>.Ignored, A<string>.Ignored, A<KeyValuePair<string, string>[]>.Ignored)).MustNotHaveHappened();
             A.CallTo(() => _fakeAzureBlobEventWriter.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
@@ -155,8 +170,15 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Services
 
             QueueMessage queueMessage = QueuesModelFactory.QueueMessage("12345", "pr1", messageText, 1, DateTimeOffset.UtcNow);
             RecordOfSaleQueueMessageEntity message = JsonConvert.DeserializeObject<RecordOfSaleQueueMessageEntity>(queueMessage.Body.ToString())!;
+            TableEntity entity = new TableEntity(){
+                { "CorrelationId", "corrid" },
+                { "Status",  "Incomplete"},
+                { "PartitionKey", Guid.NewGuid().ToString() },
+                { "RowKey", Guid.NewGuid().ToString() },
+                { "Timestamp", DateTime.Now }
+             };
 
-            A.CallTo(() => _fakeAzureTableReaderWriter.GetEntityStatus(A<string>.Ignored)).Returns("Incomplete");
+            A.CallTo(() => _fakeAzureTableReaderWriter.GetEntity(A<string>.Ignored, A<string>.Ignored)).Returns(entity);
             A.CallTo(() => _fakeAzureBlobEventWriter.GetBlobNamesInFolder(A<string>.Ignored, A<string>.Ignored)).Returns(blob);
 
             A.CallTo(() =>
@@ -174,7 +196,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Services
 
             A.CallTo(() => _fakeAzureBlobEventWriter.GetBlobNamesInFolder(A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceExactly();
             A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceOrMore();
-            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateRecordOfSaleEventStatus(A<string>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntity(A<string>.Ignored, A<string>.Ignored, A<KeyValuePair<string, string>[]>.Ignored)).MustNotHaveHappened();
             A.CallTo(() => _fakeAzureBlobEventWriter.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
@@ -208,8 +230,15 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Services
 
             QueueMessage queueMessage = QueuesModelFactory.QueueMessage("12345", "pr1", messageText, 1, DateTimeOffset.UtcNow);
             RecordOfSaleQueueMessageEntity message = JsonConvert.DeserializeObject<RecordOfSaleQueueMessageEntity>(queueMessage.Body.ToString())!;
+            TableEntity entity = new TableEntity(){
+                { "CorrelationId", "corrid" },
+                { "Status",  "Incomplete"},
+                { "PartitionKey", Guid.NewGuid().ToString() },
+                { "RowKey", Guid.NewGuid().ToString() },
+                { "Timestamp", DateTime.Now }
+             };
 
-            A.CallTo(() => _fakeAzureTableReaderWriter.GetEntityStatus(A<string>.Ignored)).Returns("Incomplete");
+            A.CallTo(() => _fakeAzureTableReaderWriter.GetEntity(A<string>.Ignored, A<string>.Ignored)).Returns(entity);
             A.CallTo(() => _fakeAzureBlobEventWriter.GetBlobNamesInFolder(A<string>.Ignored, A<string>.Ignored)).Returns(blob);
 
             A.CallTo(() =>
@@ -227,7 +256,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Services
 
             A.CallTo(() => _fakeAzureBlobEventWriter.GetBlobNamesInFolder(A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceExactly();
             A.CallTo(() => _fakeAzureBlobEventWriter.DownloadEvent(A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceOrMore();
-            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateRecordOfSaleEventStatus(A<string>.Ignored)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntity(A<string>.Ignored, A<string>.Ignored, A<KeyValuePair<string, string>[]>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureBlobEventWriter.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
@@ -266,8 +295,15 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Services
 
             QueueMessage queueMessage = QueuesModelFactory.QueueMessage("12345", "pr1", messageText, 1, DateTimeOffset.UtcNow);
             RecordOfSaleQueueMessageEntity message = JsonConvert.DeserializeObject<RecordOfSaleQueueMessageEntity>(queueMessage.Body.ToString())!;
+            TableEntity entity = new TableEntity(){
+                { "CorrelationId", "corrid" },
+                { "Status",  "Incomplete"},
+                { "PartitionKey", Guid.NewGuid().ToString() },
+                { "RowKey", Guid.NewGuid().ToString() },
+                { "Timestamp", DateTime.Now }
+             };
 
-            A.CallTo(() => _fakeAzureTableReaderWriter.GetEntityStatus(A<string>.Ignored)).Returns("Incomplete");
+            A.CallTo(() => _fakeAzureTableReaderWriter.GetEntity(A<string>.Ignored, A<string>.Ignored)).Returns(entity);
             A.CallTo(() => _fakeAzureBlobEventWriter.GetBlobNamesInFolder(A<string>.Ignored, A<string>.Ignored)).Returns(blob);
 
             A.CallTo(() =>
