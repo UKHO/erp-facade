@@ -11,6 +11,7 @@ namespace UKHO.ERPFacade.Common.Constants
 
         //XmlTransformer Types
         public const string S57XmlTransformer = "S57XmlTransformer";
+        public const string S100XmlTransformer = "S100XmlTransformer";
 
         //JSON field keys
         public const string EventIdKey = "id";
