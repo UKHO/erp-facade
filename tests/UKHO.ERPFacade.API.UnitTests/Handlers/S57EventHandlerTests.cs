@@ -63,7 +63,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Information
                                                 && call.GetArgument<EventId>(1) == EventIds.S57EventUpdateSentToSap.ToEventId()
-                                                && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "S57 ENC update has been sent to SAP successfully. | {StatusCode}").MustHaveHappenedOnceExactly();
+                                                && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "S57 ENC update has been sent to SAP successfully.").MustHaveHappenedOnceExactly();
         }
 
         [Test]
