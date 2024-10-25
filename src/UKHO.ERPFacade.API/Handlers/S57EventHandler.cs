@@ -92,7 +92,7 @@ namespace UKHO.ERPFacade.API.Handlers
                 throw new ERPFacadeException(EventIds.S57RequestToSapFailedException.ToEventId(), $"An error occurred while sending S57 ENC update to SAP. | {response.StatusCode}");
             }
 
-            _logger.LogInformation(EventIds.S57EventUpdateSentToSap.ToEventId(), "S57 ENC update has been sent to SAP successfully. | {StatusCode}", response.StatusCode);
+            _logger.LogInformation(EventIds.S57EventUpdateSentToSap.ToEventId(), "S57 ENC update has been sent to SAP successfully.");
 
             await _azureTableHelper.UpdateEntity(eventEntity.PartitionKey, eventEntity.RowKey, new[] { new KeyValuePair<string, DateTime>("RequestDateTime", DateTime.UtcNow) });
         }
