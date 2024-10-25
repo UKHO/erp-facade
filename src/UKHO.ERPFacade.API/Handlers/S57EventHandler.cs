@@ -66,7 +66,7 @@ namespace UKHO.ERPFacade.API.Handlers
             EventEntity eventEntity = new()
             {
                 RowKey = s57EventData.CorrelationId,
-                PartitionKey = "S57",
+                PartitionKey = Constants.S57PartitionKey,
                 Timestamp = DateTime.UtcNow,
                 RequestDateTime = null
             };

@@ -122,7 +122,7 @@ namespace UKHO.ERPFacade.API.Controllers
             EventEntity eventEntity = new()
             {
                 RowKey = correlationId,
-                PartitionKey = "ROS",
+                PartitionKey = Constants.ROSPartitionKey,
                 Timestamp = DateTime.UtcNow,
                 Status = Status.Incomplete.ToString()
             };
@@ -178,7 +178,7 @@ namespace UKHO.ERPFacade.API.Controllers
             EventEntity eventEntity = new()
             {
                 RowKey = correlationId,
-                PartitionKey = "ROS",
+                PartitionKey = Constants.ROSPartitionKey,
                 Timestamp = DateTime.UtcNow,
                 Status = Status.Incomplete.ToString()
             };
@@ -209,6 +209,6 @@ namespace UKHO.ERPFacade.API.Controllers
 
             return new OkObjectResult(StatusCodes.Status200OK);
         }
-     
+
     }
 }
