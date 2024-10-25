@@ -62,7 +62,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/correlationIdRequest'
-        description: .
       responses:
         "200":
           description: OK 
