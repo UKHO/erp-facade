@@ -120,6 +120,9 @@
     <None Update="ERPFacadeExpectedXmlFiles\Re-issue.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ERPFacadeExpectedXmlFiles\S100ExpectedXmlFiles\NewCell.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ERPFacadeExpectedXmlFiles\SuspendCell.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -322,6 +325,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPFacadePayloadTestData\RoSPayloadTestData\RoS01_ValidRoSMainHolding.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\S100PayloadTestData\NewCells.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPFacadePayloadTestData\SapMockApiConfigure.xml">
