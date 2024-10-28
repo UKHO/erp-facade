@@ -63,7 +63,7 @@ namespace UKHO.ERPFacade.API.Tests.Dispatcher
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
               && call.GetArgument<LogLevel>(0) == LogLevel.Warning
               && call.GetArgument<EventId>(1) == EventIds.InvalidEventTypeReceived.ToEventId()
-              && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Invalid event type received. No event handler registered for event type {EventType}").MustHaveHappenedOnceExactly();
+              && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Invalid event type received.").MustHaveHappenedOnceExactly();
         }
     }
 }
