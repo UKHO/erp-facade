@@ -27,8 +27,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
     {
         private ILogger<S57EventHandler> _fakeLogger;
         private IBaseXmlTransformer _fakeBaseXmlTransformer;
-        private IAzureTableHelper _fakeAzureTableHelper;
-        private IAzureBlobHelper _fakeAzureBlobHelper;
+        private IAzureTableReaderWriter _fakeAzureTableReaderWriter;
+        private IAzureBlobReaderWriter _fakeAzureBlobReaderWriter;
         private ISapClient _fakeSapClient;
         private IOptions<SapConfiguration> _fakeSapConfig;
         private S57EventHandler _fakeS57EventHandler;
@@ -39,16 +39,16 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
         {
             _fakeLogger = A.Fake<ILogger<S57EventHandler>>();
             _fakeBaseXmlTransformer = A.Fake<IBaseXmlTransformer>();
-            _fakeAzureTableHelper = A.Fake<IAzureTableHelper>();
-            _fakeAzureBlobHelper = A.Fake<IAzureBlobHelper>();
+            _fakeAzureTableReaderWriter = A.Fake<IAzureTableReaderWriter>();
+            _fakeAzureBlobReaderWriter = A.Fake<IAzureBlobReaderWriter>();
             _fakeSapClient = A.Fake<ISapClient>();
             _fakeAioConfig = A.Fake<IOptions<AioConfiguration>>();
             _fakeSapConfig = A.Fake<IOptions<SapConfiguration>>();
             _fakeAioConfig.Value.AioCells = "GB800001,GB800002";
             _fakeS57EventHandler = new S57EventHandler(_fakeBaseXmlTransformer,
                                                        _fakeLogger,
-                                                       _fakeAzureTableHelper,
-                                                       _fakeAzureBlobHelper,
+                                                       _fakeAzureTableReaderWriter,
+                                                       _fakeAzureBlobReaderWriter,
                                                        _fakeSapClient,
                                                        _fakeSapConfig,
                                                        _fakeAioConfig);
@@ -102,8 +102,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
 
             Assert.Throws<ERPFacadeException>(() => new S57EventHandler(_fakeBaseXmlTransformer,
                     _fakeLogger,
-                    _fakeAzureTableHelper,
-                    _fakeAzureBlobHelper,
+                    _fakeAzureTableReaderWriter,
+                    _fakeAzureBlobReaderWriter,
                     _fakeSapClient,
                     _fakeSapConfig,
                     _fakeAioConfig))

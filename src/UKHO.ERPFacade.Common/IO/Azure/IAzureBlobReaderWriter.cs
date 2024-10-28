@@ -1,8 +1,8 @@
 ﻿namespace UKHO.ERPFacade.Common.IO.Azure
 {
-    public interface IAzureBlobHelper
+    public interface IAzureBlobReaderWriter
     {
-        Task UploadEvent(string requestEvent, string blobContainerName, string blobName);
+        Task UploadEventAsync(string requestEvent, string blobContainerName, string blobName);
         bool CheckIfContainerExists(string containerName);
         string DownloadEvent(string blobName, string blobContainerName);
         DateTime GetBlobCreateDate(string blobName, string blobContainerName);

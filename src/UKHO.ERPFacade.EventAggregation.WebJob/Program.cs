@@ -119,8 +119,8 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob
                  services.Configure<SapConfiguration>(ConfigurationBuilder.GetSection("SapConfiguration"));
 
                  services.AddSingleton<IAggregationService, AggregationService>();
-                 services.AddSingleton<IAzureTableHelper, AzureTableHelper>();
-                 services.AddSingleton<IAzureBlobHelper, AzureBlobHelper>();
+                 services.AddSingleton<IAzureTableReaderWriter, AzureTableReaderWriter>();
+                 services.AddSingleton<IAzureBlobReaderWriter, AzureBlobReaderWriter>();
                  services.AddSingleton<IRecordOfSaleSapMessageBuilder, RecordOfSaleSapMessageBuilder>();
                  services.AddSingleton<IXmlHelper, XmlHelper>();
                  services.AddSingleton<IFileSystemHelper, FileSystemHelper>();

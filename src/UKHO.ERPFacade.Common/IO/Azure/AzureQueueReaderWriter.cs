@@ -1,25 +1,25 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Microsoft.Extensions.Options;
-using UKHO.ERPFacade.Common.Configuration;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
-using UKHO.ERPFacade.Common.Models;
 using Azure.Storage.Queues;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using UKHO.ERPFacade.Common.Configuration;
+using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Models.QueueEntities;
 
 namespace UKHO.ERPFacade.Common.IO.Azure
 {
     [ExcludeFromCodeCoverage]
-    public class AzureQueueHelper : IAzureQueueHelper
+    public class AzureQueueReaderWriter : IAzureQueueReaderWriter
     {
         private readonly IOptions<AzureStorageConfiguration> _azureStorageConfig;
 
-        public AzureQueueHelper(IOptions<AzureStorageConfiguration> azureStorageConfig)
+        public AzureQueueReaderWriter(IOptions<AzureStorageConfiguration> azureStorageConfig)
         {
             _azureStorageConfig = azureStorageConfig ?? throw new ArgumentNullException(nameof(azureStorageConfig));
         }
 
-        public async Task AddMessage(JObject rosEventJson)
+        public async Task AddMessageAsync(JObject rosEventJson)
         {
             var rosEventData = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(rosEventJson.ToString());
             string queueMessage = BuildQueueMessage(rosEventData);

@@ -17,13 +17,8 @@ namespace UKHO.ERPFacade.API.XmlTransformers
 
     public abstract class BaseXmlTransformer : IBaseXmlTransformer
     {
-        private readonly IFileSystemHelper _fileSystemHelper;
-        private readonly IXmlHelper _xmlHelper;
-
-        public BaseXmlTransformer(IFileSystemHelper fileSystemHelper, IXmlHelper xmlHelper)
+        public BaseXmlTransformer()
         {
-            _fileSystemHelper = fileSystemHelper;
-            _xmlHelper = xmlHelper;
         }
 
         public abstract XmlDocument BuildXmlPayload<T>(T eventData, string xmlTemplatePath);

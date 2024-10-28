@@ -18,7 +18,7 @@ using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Models.CloudEvents;
-using UKHO.ERPFacade.Common.Models.CloudEvents.S57;
+using UKHO.ERPFacade.Common.Models.CloudEvents.S57Event;
 using UKHO.ERPFacade.Common.PermitDecryption;
 using UKHO.ERPFacade.Common.Providers;
 
@@ -29,7 +29,6 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
     {
         private ILogger<S57XmlTransformer> _fakeLogger;
         private IXmlHelper _fakeXmlHelper;
-        private IFileSystemHelper _fakeFileSystemHelper;
         private IOptions<SapActionConfiguration> _fakeSapActionConfig;
         private IWeekDetailsProvider _fakeWeekDetailsProvider;
         private IPermitDecryption _fakePermitDecryption;
@@ -42,11 +41,10 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
         {
             _fakeLogger = A.Fake<ILogger<S57XmlTransformer>>();
             _fakeXmlHelper = A.Fake<IXmlHelper>();
-            _fakeFileSystemHelper = A.Fake<IFileSystemHelper>();
             _fakeWeekDetailsProvider = A.Fake<IWeekDetailsProvider>();
             _fakePermitDecryption = A.Fake<IPermitDecryption>();
             _fakeSapActionConfig = Options.Create(InitConfiguration().GetSection("SapActionConfiguration").Get<SapActionConfiguration>())!;
-            _fakeS57XmlTransformer = new S57XmlTransformer(_fakeLogger, _fakeXmlHelper, _fakeFileSystemHelper, _fakeWeekDetailsProvider, _fakePermitDecryption, _fakeSapActionConfig);
+            _fakeS57XmlTransformer = new S57XmlTransformer(_fakeLogger, _fakeXmlHelper, _fakeWeekDetailsProvider, _fakePermitDecryption, _fakeSapActionConfig);
             _sapXmlTemplate = TestHelper.ReadFileData(Constants.S57SapXmlTemplatePath);
         }
 
@@ -368,7 +366,6 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
             XmlDocument soapXml = new();
             soapXml.LoadXml(_sapXmlTemplate);
 
-            A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
             A.CallTo(() => _fakePermitDecryption.Decrypt(A<string>.Ignored)).Returns(permitKeys);
             A.CallTo(() => _fakeWeekDetailsProvider.GetDateOfWeek(A<int>.Ignored, A<int>.Ignored, A<bool>.Ignored)).Throws<System.Exception>();
@@ -387,7 +384,6 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
             XmlDocument soapXml = new();
             soapXml.LoadXml(_sapXmlTemplate);
 
-            A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
 
             A.CallTo(() => _fakeWeekDetailsProvider.GetDateOfWeek(A<int>.Ignored, A<int>.Ignored, A<bool>.Ignored)).Throws<System.Exception>();

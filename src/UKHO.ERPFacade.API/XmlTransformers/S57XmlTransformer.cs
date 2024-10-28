@@ -5,11 +5,9 @@ using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
-using UKHO.ERPFacade.Common.Models.CloudEvents.S57;
+using UKHO.ERPFacade.Common.Models.CloudEvents.S57Event;
 using UKHO.ERPFacade.Common.PermitDecryption;
 using UKHO.ERPFacade.Common.Providers;
-using Product = UKHO.ERPFacade.Common.Models.CloudEvents.S57.Product;
-using UnitOfSale = UKHO.ERPFacade.Common.Models.CloudEvents.S57.UnitOfSale;
 
 namespace UKHO.ERPFacade.API.XmlTransformers
 {
@@ -23,11 +21,10 @@ namespace UKHO.ERPFacade.API.XmlTransformers
 
         public S57XmlTransformer(ILogger<S57XmlTransformer> logger,
                                  IXmlHelper xmlHelper,
-                                 IFileSystemHelper fileSystemHelper,
                                  IWeekDetailsProvider weekDetailsProvider,
                                  IPermitDecryption permitDecryption,
                                  IOptions<SapActionConfiguration> sapActionConfig)
-        : base(fileSystemHelper, xmlHelper)
+        : base()
         {
             _logger = logger;
             _xmlHelper = xmlHelper;
@@ -145,7 +142,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             }
         }
 
-        private UnitOfSale? GetUnitOfSale(int actionNumber, List<UnitOfSale> listOfUnitOfSales, Product product)
+        private S57UnitOfSale? GetUnitOfSale(int actionNumber, List<S57UnitOfSale> listOfUnitOfSales, S57Product product)
         {
             return actionNumber switch
             {
@@ -168,7 +165,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             };
         }
 
-        private void BuildAndAppendActionNode(XmlDocument soapXml, Product product, UnitOfSale unitOfSale, SapAction action, S57EventData eventData, XmlNode actionItemNode, string childCell = null, string replacedBy = null)
+        private void BuildAndAppendActionNode(XmlDocument soapXml, S57Product product, S57UnitOfSale unitOfSale, SapAction action, S57EventData eventData, XmlNode actionItemNode, string childCell = null, string replacedBy = null)
         {
             _logger.LogInformation(EventIds.S57SapActionGenerationStarted.ToEventId(), "Generation of {ActionName} action started.", action.Action);
             var actionNode = BuildAction(soapXml, product, unitOfSale, action, eventData.UkhoWeekNumber, childCell, replacedBy);
@@ -176,7 +173,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             _logger.LogInformation(EventIds.S57SapActionGenerationCompleted.ToEventId(), "Generation of {ActionName} action completed", action.Action);
         }
 
-        private XmlElement BuildAction(XmlDocument soapXml, Product product, UnitOfSale unitOfSale, SapAction action, UkhoWeekNumber ukhoWeekNumber, string childCell, string replacedBy = null)
+        private XmlElement BuildAction(XmlDocument soapXml, S57Product product, S57UnitOfSale unitOfSale, SapAction action, S57UkhoWeekNumber ukhoWeekNumber, string childCell, string replacedBy = null)
         {
             DecryptedPermit decryptedPermit = null;
 
@@ -262,7 +259,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             }
         }
 
-        private void ProcessUkhoWeekNumberAttributes(string action, IEnumerable<ActionItemAttribute> attributes, XmlDocument soapXml, UkhoWeekNumber ukhoWeekNumber, List<(int, XmlElement)> actionAttributes)
+        private void ProcessUkhoWeekNumberAttributes(string action, IEnumerable<ActionItemAttribute> attributes, XmlDocument soapXml, S57UkhoWeekNumber ukhoWeekNumber, List<(int, XmlElement)> actionAttributes)
         {
             if (ukhoWeekNumber == null)
             {

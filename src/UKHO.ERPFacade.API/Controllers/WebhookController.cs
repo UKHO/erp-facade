@@ -25,9 +25,9 @@ namespace UKHO.ERPFacade.API.Controllers
     {
         private readonly ILogger<WebhookController> _logger;
         private readonly IEventDispatcher _eventDispatcher;
-        private readonly IAzureTableHelper _azureTableHelper;
-        private readonly IAzureBlobHelper _azureBlobHelper;
-        private readonly IAzureQueueHelper _azureQueueHelper;
+        private readonly IAzureTableReaderWriter _azureTableReaderWriter;
+        private readonly IAzureBlobReaderWriter _azureBlobReaderWriter;
+        private readonly IAzureQueueReaderWriter _azureQueueReaderWriter;
         private readonly ILicenceUpdatedSapMessageBuilder _licenceUpdatedSapMessageBuilder;
         private readonly ISapClient _sapClient;
         private readonly IOptions<SapConfiguration> _sapConfig;
@@ -35,9 +35,9 @@ namespace UKHO.ERPFacade.API.Controllers
         public WebhookController(IHttpContextAccessor contextAccessor,
                                  ILogger<WebhookController> logger,
                                  IEventDispatcher eventDispatcher,
-                                 IAzureTableHelper azureTableHelper,
-                                 IAzureBlobHelper azureBlobHelper,
-                                 IAzureQueueHelper azureQueueHelper,
+                                 IAzureTableReaderWriter azureTableReaderWriter,
+                                 IAzureBlobReaderWriter azureBlobReaderWriter,
+                                 IAzureQueueReaderWriter azureQueueReaderWriter,
                                  ILicenceUpdatedSapMessageBuilder licenceUpdatedSapMessageBuilder,
                                  ISapClient sapClient,
                                  IOptions<SapConfiguration> sapConfig)
@@ -45,9 +45,9 @@ namespace UKHO.ERPFacade.API.Controllers
         {
             _logger = logger;
             _eventDispatcher = eventDispatcher;
-            _azureTableHelper = azureTableHelper;
-            _azureBlobHelper = azureBlobHelper;
-            _azureQueueHelper = azureQueueHelper;
+            _azureTableReaderWriter = azureTableReaderWriter;
+            _azureBlobReaderWriter = azureBlobReaderWriter;
+            _azureQueueReaderWriter = azureQueueReaderWriter;
             _licenceUpdatedSapMessageBuilder = licenceUpdatedSapMessageBuilder;
             _sapClient = sapClient;
             _sapConfig = sapConfig ?? throw new ArgumentNullException(nameof(sapConfig));
@@ -128,14 +128,14 @@ namespace UKHO.ERPFacade.API.Controllers
             };
 
             _logger.LogInformation(EventIds.StoreRecordOfSalePublishedEventInAzureTable.ToEventId(), "Storing the received Record of sale published event in azure table.");
-            await _azureTableHelper.UpsertEntity(eventEntity);
+            await _azureTableReaderWriter.UpsertEntityAsync(eventEntity);
 
             _logger.LogInformation(EventIds.UploadRecordOfSalePublishedEventInAzureBlob.ToEventId(), "Uploading the received Record of sale published event in blob storage.");
-            await _azureBlobHelper.UploadEvent(recordOfSaleEventJson.ToString(), Constants.RecordOfSaleEventContainerName, correlationId + '/' + eventId + Constants.RecordOfSaleEventFileExtension);
+            await _azureBlobReaderWriter.UploadEventAsync(recordOfSaleEventJson.ToString(), Constants.RecordOfSaleEventContainerName, correlationId + '/' + eventId + Constants.RecordOfSaleEventFileExtension);
             _logger.LogInformation(EventIds.UploadedRecordOfSalePublishedEventInAzureBlob.ToEventId(), "Record of sale published event is uploaded in blob storage successfully.");
 
             _logger.LogInformation(EventIds.AddMessageToAzureQueue.ToEventId(), "Adding the received Record of sale published event in queue storage.");
-            await _azureQueueHelper.AddMessage(recordOfSaleEventJson);
+            await _azureQueueReaderWriter.AddMessageAsync(recordOfSaleEventJson);
             _logger.LogInformation(EventIds.AddedMessageToAzureQueue.ToEventId(), "Record of sale published event is added in queue storage successfully.");
 
             return new OkObjectResult(StatusCodes.Status200OK);
@@ -184,16 +184,16 @@ namespace UKHO.ERPFacade.API.Controllers
             };
 
             _logger.LogInformation(EventIds.StoreLicenceUpdatedPublishedEventInAzureTable.ToEventId(), "Storing the received Licence updated published event in azure table.");
-            await _azureTableHelper.UpsertEntity(eventEntity);
+            await _azureTableReaderWriter.UpsertEntityAsync(eventEntity);
 
             _logger.LogInformation(EventIds.UploadLicenceUpdatedPublishedEventInAzureBlob.ToEventId(), "Uploading the received Licence updated  published event in blob storage.");
-            await _azureBlobHelper.UploadEvent(licenceUpdatedEventJson.ToString(), Constants.LicenceUpdatedEventContainerName, correlationId + '/' + Constants.LicenceUpdatedEventFileName);
+            await _azureBlobReaderWriter.UploadEventAsync(licenceUpdatedEventJson.ToString(), Constants.LicenceUpdatedEventContainerName, correlationId + '/' + Constants.LicenceUpdatedEventFileName);
             _logger.LogInformation(EventIds.UploadedLicenceUpdatedPublishedEventInAzureBlob.ToEventId(), "Licence updated  published event is uploaded in blob storage successfully.");
 
             var sapPayload = _licenceUpdatedSapMessageBuilder.BuildLicenceUpdatedSapMessageXml(JsonConvert.DeserializeObject<LicenceUpdatedEventPayLoad>(licenceUpdatedEventJson.ToString()), correlationId);
 
             _logger.LogInformation(EventIds.UploadLicenceUpdatedSapXmlPayloadInAzureBlob.ToEventId(), "Uploading the SAP xml payload for licence updated event in blob storage.");
-            await _azureBlobHelper.UploadEvent(sapPayload.ToIndentedString(), Constants.LicenceUpdatedEventContainerName, correlationId + '/' + Constants.SapXmlPayloadFileName);
+            await _azureBlobReaderWriter.UploadEventAsync(sapPayload.ToIndentedString(), Constants.LicenceUpdatedEventContainerName, correlationId + '/' + Constants.SapXmlPayloadFileName);
             _logger.LogInformation(EventIds.UploadedLicenceUpdatedSapXmlPayloadInAzureBlob.ToEventId(), "SAP xml payload for licence updated event is uploaded in blob storage successfully.");
 
             var response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapEndpointForRecordOfSale, _sapConfig.Value.SapServiceOperationForRecordOfSale, _sapConfig.Value.SapUsernameForRecordOfSale, _sapConfig.Value.SapPasswordForRecordOfSale);
@@ -205,7 +205,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
             _logger.LogInformation(EventIds.LicenceUpdatedPublishedEventUpdatePushedToSap.ToEventId(), "The licence updated event data has been sent to SAP successfully. | {StatusCode}", response.StatusCode);
 
-            await _azureTableHelper.UpdateEntity(correlationId, Constants.LicenceUpdatedEventTableName, new[] { new KeyValuePair<string, string>("Status", Status.Complete.ToString()) });
+            await _azureTableReaderWriter.UpdateEntityAsync(correlationId, Constants.LicenceUpdatedEventTableName, new[] { new KeyValuePair<string, string>("Status", Status.Complete.ToString()) });
 
             return new OkObjectResult(StatusCodes.Status200OK);
         }
