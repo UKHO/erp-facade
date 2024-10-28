@@ -29,7 +29,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Helpers
 
             _logger.LogInformation(EventIds.CreatingRecordOfSaleSapPayload.ToEventId(), "Creating the record of sale SAP Payload. | _X-Correlation-ID : {_X-Correlation-ID}", correlationId);
 
-            XmlDocument soapXml = _xmlHelper.CreateXmlDocument(Path.Combine(Environment.CurrentDirectory, TemplatePaths.RecordOfSaleSapXmlTemplatePath));
+            XmlDocument soapXml = _xmlHelper.CreateXmlDocument(Path.Combine(Environment.CurrentDirectory, XmlTemplateInfo.RecordOfSaleSapXmlTemplatePath));
 
             sapRecordOfSalePayLoad = eventDataList[0].Data.RecordsOfSale.TransactionType switch
             {

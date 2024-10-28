@@ -8,6 +8,6 @@ namespace UKHO.ERPFacade.Common.IO.Azure
         Task UpdateEntityAsync<TKey, TValue>(string partitionKey, string rowKey, KeyValuePair<TKey, TValue>[] entitiesToUpdate);
         Task<TableEntity> GetEntityAsync(string partitionKey, string rowKey);
         IList<TableEntity> GetAllEntities(string partitionKey);
-        Task DeleteEntityAsync(string correlationId);
+        Task DeleteEntityAsync(string partitionKey, string rowKey);
     }
 }

@@ -5,7 +5,7 @@ namespace UKHO.ERPFacade.API.Handlers
 {
     public class S100EventHandler : IEventHandler
     {
-        public string EventType => Events.S100EventType;
+        public string EventType => EventTypes.S100EventType;
         public Task ProcessEventAsync(BaseCloudEvent baseCloudEvent) => throw new NotImplementedException();
     }
 }

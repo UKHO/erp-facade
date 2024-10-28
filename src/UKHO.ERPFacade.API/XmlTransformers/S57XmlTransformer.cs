@@ -41,7 +41,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
 
             if (eventData is S57EventData s57EventData)
             {
-                var actionItemNode = s57EventXmlPayload.SelectSingleNode(Constants.XpathActionItems);
+                var actionItemNode = s57EventXmlPayload.SelectSingleNode(XmlTemplateInfo.XpathActionItems);
 
                 // Build SAP actions for ENC Cell
                 BuildEncCellActions(s57EventData, s57EventXmlPayload, actionItemNode);
@@ -61,7 +61,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
         {
             foreach (var product in eventData.Products)
             {
-                foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == Constants.EncCell))
+                foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == Con.EncCell))
                 {
                     var unitOfSale = GetUnitOfSale(action.ActionNumber, eventData.UnitsOfSales, product);
 
@@ -198,13 +198,13 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             }
 
             // Process ProductSection attributes
-            ProcessAttributes(action.Action, action.Attributes.Where(x => x.Section == Constants.ProductSection), soapXml, product, actionAttributes, decryptedPermit, replacedBy);
+            ProcessAttributes(action.Action, action.Attributes.Where(x => x.Section == ConfigFileFields.ProductSection), soapXml, product, actionAttributes, decryptedPermit, replacedBy);
 
             // Process UnitOfSaleSection attributes
-            ProcessAttributes(action.Action, action.Attributes.Where(x => x.Section == Constants.UnitOfSaleSection), soapXml, unitOfSale, actionAttributes, null);
+            ProcessAttributes(action.Action, action.Attributes.Where(x => x.Section == ConfigFileFields.UnitOfSaleSection), soapXml, unitOfSale, actionAttributes, null);
 
             // Process UkhoWeekNumberSection attributes
-            ProcessUkhoWeekNumberAttributes(action.Action, action.Attributes.Where(x => x.Section == Constants.UkhoWeekNumberSection), soapXml, ukhoWeekNumber, actionAttributes);
+            ProcessUkhoWeekNumberAttributes(action.Action, action.Attributes.Where(x => x.Section == ConfigFileFields.UkhoWeekNumberSection), soapXml, ukhoWeekNumber, actionAttributes);
 
             // Sort and append attributes to SAP action
             foreach (var (sortingOrder, node) in actionAttributes.OrderBy(x => x.sortingOrder))
@@ -227,21 +227,21 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                     {
                         switch (attribute.XmlNodeName)
                         {
-                            case Constants.ReplacedBy:
-                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, replacedBy)) attributeNode.InnerText = CommonHelper.ToSubstring(replacedBy.ToString(), 0, Constants.MaxXmlNodeLength);
+                            case XmlFields.ReplacedBy:
+                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, replacedBy)) attributeNode.InnerText = CommonHelper.ToSubstring(replacedBy.ToString(), 0, XmlFields.MaxXmlNodeLength);
                                 break;
-                            case Constants.ActiveKey:
-                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, decryptedPermit.ActiveKey)) attributeNode.InnerText = CommonHelper.ToSubstring(decryptedPermit.ActiveKey, 0, Constants.MaxXmlNodeLength);
+                            case XmlFields.ActiveKey:
+                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, decryptedPermit.ActiveKey)) attributeNode.InnerText = CommonHelper.ToSubstring(decryptedPermit.ActiveKey, 0, XmlFields.MaxXmlNodeLength);
                                 break;
-                            case Constants.NextKey:
-                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, decryptedPermit.NextKey)) attributeNode.InnerText = CommonHelper.ToSubstring(decryptedPermit.NextKey, 0, Constants.MaxXmlNodeLength);
+                            case XmlFields.NextKey:
+                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, decryptedPermit.NextKey)) attributeNode.InnerText = CommonHelper.ToSubstring(decryptedPermit.NextKey, 0, XmlFields.MaxXmlNodeLength);
                                 break;
                             default:
                                 var jsonFieldValue = CommonHelper.ParseXmlNode(attribute.JsonPropertyName, source, source.GetType()).ToString();
                                 if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, jsonFieldValue))
                                 {
                                     // Set value as first 2 characters if the node is Agency, else limit other nodes to 250 characters
-                                    attributeNode.InnerText = attribute.XmlNodeName == Constants.Agency ? CommonHelper.ToSubstring(jsonFieldValue, 0, Constants.MaxAgencyXmlNodeLength) : CommonHelper.ToSubstring(jsonFieldValue, 0, Constants.MaxXmlNodeLength);
+                                    attributeNode.InnerText = attribute.XmlNodeName == XmlFields.Agency ? CommonHelper.ToSubstring(jsonFieldValue, 0, XmlFields.MaxAgencyXmlNodeLength) : CommonHelper.ToSubstring(jsonFieldValue, 0, XmlFields.MaxXmlNodeLength);
                                 }
                                 break;
                         }
@@ -278,16 +278,16 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                         {
                             switch (attribute.XmlNodeName)
                             {
-                                case Constants.ValidFrom:
+                                case XmlFields.ValidFrom:
                                     var validFrom = _weekDetailsProvider.GetDateOfWeek(ukhoWeekNumber.Year.Value, ukhoWeekNumber.Week.Value, ukhoWeekNumber.CurrentWeekAlphaCorrection.Value);
-                                    attributeNode.InnerText = CommonHelper.ToSubstring(validFrom, 0, Constants.MaxXmlNodeLength);
+                                    attributeNode.InnerText = CommonHelper.ToSubstring(validFrom, 0, XmlFields.MaxXmlNodeLength);
                                     break;
-                                case Constants.WeekNo:
+                                case XmlFields.WeekNo:
                                     var weekNo = string.Join("", ukhoWeekNumber.Year, ukhoWeekNumber.Week.Value.ToString("D2"));
-                                    attributeNode.InnerText = CommonHelper.ToSubstring(weekNo, 0, Constants.MaxXmlNodeLength);
+                                    attributeNode.InnerText = CommonHelper.ToSubstring(weekNo, 0, XmlFields.MaxXmlNodeLength);
                                     break;
-                                case Constants.Correction:
-                                    attributeNode.InnerText = ukhoWeekNumber.CurrentWeekAlphaCorrection.Value ? Constants.IsCorrectionTrue : Constants.IsCorrectionFalse;
+                                case XmlFields.Correction:
+                                    attributeNode.InnerText = ukhoWeekNumber.CurrentWeekAlphaCorrection.Value ? XmlFields.IsCorrectionTrue : XmlFields.IsCorrectionFalse;
                                     break;
                             }
                         }

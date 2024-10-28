@@ -81,20 +81,20 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             }
 
             //Set basic nodes
-            var corrIdNode = soapXml.SelectSingleNode(Constants.XpathCorrId);
+            var corrIdNode = soapXml.SelectSingleNode(XmlTemplateInfo.XpathCorrId);
             corrIdNode.InnerText = correlationId;
 
-            var noOfActionsNode = soapXml.SelectSingleNode(Constants.XpathCorrId);
+            var noOfActionsNode = soapXml.SelectSingleNode(XmlTemplateInfo.XpathCorrId);
             noOfActionsNode.InnerText = actionItemNode.ChildNodes.Count.ToString();
 
-            var recDateNode = soapXml.SelectSingleNode(Constants.XpathRecDate);
-            recDateNode.InnerText = DateTime.UtcNow.ToString(Constants.RecDateFormat);
+            var recDateNode = soapXml.SelectSingleNode(XmlTemplateInfo.XpathRecDate);
+            recDateNode.InnerText = DateTime.UtcNow.ToString(XmlFields.RecDateFormat);
 
-            var recTimeNode = soapXml.SelectSingleNode(Constants.XpathRecTime);
-            recTimeNode.InnerText = DateTime.UtcNow.ToString(Constants.RecTimeFormat);
+            var recTimeNode = soapXml.SelectSingleNode(XmlTemplateInfo.XpathRecTime);
+            recTimeNode.InnerText = DateTime.UtcNow.ToString(XmlFields.RecTimeFormat);
 
             //Set action items
-            var IM_MATINFONode = soapXml.SelectSingleNode(Constants.XpathImMatInfo);
+            var IM_MATINFONode = soapXml.SelectSingleNode(XmlTemplateInfo.XpathImMatInfo);
             IM_MATINFONode.AppendChild(actionItemNode);
         }
 

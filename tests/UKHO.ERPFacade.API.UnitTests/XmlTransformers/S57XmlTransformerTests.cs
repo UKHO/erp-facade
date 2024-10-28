@@ -45,7 +45,7 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
             _fakePermitDecryption = A.Fake<IPermitDecryption>();
             _fakeSapActionConfig = Options.Create(InitConfiguration().GetSection("SapActionConfiguration").Get<SapActionConfiguration>())!;
             _fakeS57XmlTransformer = new S57XmlTransformer(_fakeLogger, _fakeXmlHelper, _fakeWeekDetailsProvider, _fakePermitDecryption, _fakeSapActionConfig);
-            _sapXmlTemplate = TestHelper.ReadFileData(TemplatePaths.S57SapXmlTemplatePath);
+            _sapXmlTemplate = TestHelper.ReadFileData(XmlTemplateInfo.S57SapXmlTemplatePath);
         }
 
         private IConfiguration InitConfiguration()

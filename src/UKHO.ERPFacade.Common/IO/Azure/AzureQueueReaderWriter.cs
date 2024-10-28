@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UKHO.ERPFacade.Common.Configuration;
+using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Models.QueueEntities;
 
@@ -24,7 +25,7 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             var rosEventData = JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(rosEventJson.ToString());
             string queueMessage = BuildQueueMessage(rosEventData);
 
-            QueueClient queueClient = GetQueueClient(Constants.Constants.RecordOfSaleQueueName);
+            QueueClient queueClient = GetQueueClient(AzureStorage.RecordOfSaleQueueName);
 
             await queueClient.SendMessageAsync(queueMessage);
         }

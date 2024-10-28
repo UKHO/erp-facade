@@ -40,7 +40,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.Services
 
                 if (timediff.Days > int.Parse(_cleanupWebjobConfig.Value.CleanUpDurationInDays))
                 {
-                    Task.FromResult(_azureTableReaderWriter.DeleteEntityAsync(correlationId));
+                    Task.FromResult(_azureTableReaderWriter.DeleteEntityAsync(partitionKey, correlationId));
 
                     _azureBlobReaderWriter.DeleteContainer(correlationId);
                 }

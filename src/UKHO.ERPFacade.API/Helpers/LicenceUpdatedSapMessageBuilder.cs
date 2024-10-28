@@ -23,7 +23,7 @@ namespace UKHO.ERPFacade.API.Helpers
 
         public XmlDocument BuildLicenceUpdatedSapMessageXml(LicenceUpdatedEventPayLoad eventData, string correlationId)
         {
-            string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, TemplatePaths.RecordOfSaleSapXmlTemplatePath);
+            string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, XmlTemplateInfo.RecordOfSaleSapXmlTemplatePath);
 
             if (!_fileSystemHelper.IsFileExists(sapXmlTemplatePath))
             {
@@ -41,7 +41,7 @@ namespace UKHO.ERPFacade.API.Helpers
 
             string sapXml = xml.Replace(Constants.ImOrderNameSpace, "");
 
-            soapXml.SelectSingleNode(Constants.XpathZAddsRos).InnerXml = sapXml.RemoveNullFields().SetXmlClosingTags();
+            soapXml.SelectSingleNode(XmlTemplateInfo.XpathZAddsRos).InnerXml = sapXml.RemoveNullFields().SetXmlClosingTags();
 
             _logger.LogInformation(EventIds.CreatedLicenceUpdatedSapPayload.ToEventId(), "Licence updated SAP payload created.");
 

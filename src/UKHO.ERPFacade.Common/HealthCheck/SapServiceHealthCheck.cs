@@ -38,7 +38,7 @@ namespace UKHO.ERPFacade.Common.HealthCheck
 
             try
             {
-                string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, TemplatePaths.SapHealthCheckXmlPath);
+                string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, XmlTemplateInfo.SapHealthCheckXmlPath);
 
                 healthCheckData.Add("SAP Template Path", sapXmlTemplatePath);
 
