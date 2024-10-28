@@ -30,7 +30,7 @@ namespace UKHO.ERPFacade.API.Dispatcher
             }
             else
             {
-                _logger.LogError(EventIds.InvalidEventTypeReceived.ToEventId(), "Invalid event type received. No event handler registered for event type {EventType}", eventType);
+                _logger.LogWarning(EventIds.InvalidEventTypeReceived.ToEventId(), "Invalid event type received. No event handler registered for event type");
                 return;
             }
         }
