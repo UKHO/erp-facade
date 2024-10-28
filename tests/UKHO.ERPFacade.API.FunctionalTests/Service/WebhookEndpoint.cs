@@ -8,7 +8,7 @@ using UKHO.ERPFacade.Common.Constants;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Service
 {
-    public class S57WebhookEndpoint
+    public class WebhookEndpoint
     {
         private readonly RestClient _client;
         private readonly AzureBlobStorageHelper _azureBlobStorageHelper;
@@ -16,7 +16,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
 
         public static string GeneratedCorrelationId = string.Empty;
 
-        public S57WebhookEndpoint()
+        public WebhookEndpoint()
         {
             _azureBlobStorageHelper = new AzureBlobStorageHelper();
             _options = new RestClientOptions(Config.TestConfig.ErpFacadeConfiguration.BaseUrl);

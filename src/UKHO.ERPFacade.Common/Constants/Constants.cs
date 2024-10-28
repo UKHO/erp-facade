@@ -154,7 +154,8 @@ namespace UKHO.ERPFacade.Common.Constants
         //LicenseUpdate xml payload nodes
         public const string LicTransaction = "CHANGELICENCE";
 
-        //Partition Key
+        public const string S57PartitionKey = "S57";
+        public const string ROSPartitionKey = "ROS";
         public const string S100PartitionKey = "S100";
     }
 }

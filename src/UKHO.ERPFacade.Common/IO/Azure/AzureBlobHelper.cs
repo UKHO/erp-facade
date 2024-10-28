@@ -1,10 +1,9 @@
-﻿using Azure.Storage.Blobs;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text;
+using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Microsoft.Extensions.Options;
-using System.Diagnostics.CodeAnalysis;
-using System.Text;
 using UKHO.ERPFacade.Common.Configuration;
-using UKHO.ERPFacade.Common.Logging;
 
 namespace UKHO.ERPFacade.Common.IO.Azure
 {
@@ -20,15 +19,11 @@ namespace UKHO.ERPFacade.Common.IO.Azure
 
         public async Task UploadEvent(string requestEvent, string blobContainerName, string blobName)
         {
-            //_logger.LogInformation(EventIds.UploadEncContentPublishedEventInAzureBlobStarted.ToEventId(), "Uploading enccontentpublished event payload in blob storage.");
-
             BlobClient blobClient = GetBlobClient(blobContainerName, blobName);
 
             Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(requestEvent ?? ""));
 
             await blobClient.UploadAsync(stream, overwrite: true);
-
-            //_logger.LogInformation(EventIds.UploadEncContentPublishedEventInAzureBlobCompleted.ToEventId(), "The enccontentpublished event payload is uploaded in blob storage successfully.");
         }
 
         public string DownloadEvent(string blobName, string blobContainerName)
