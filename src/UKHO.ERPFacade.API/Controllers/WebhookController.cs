@@ -203,7 +203,7 @@ namespace UKHO.ERPFacade.API.Controllers
                 throw new ERPFacadeException(EventIds.ErrorOccurredInSapForLicenceUpdatedPublishedEvent.ToEventId(), $"An error occurred while sending licence updated event data to SAP. | {response.StatusCode}");
             }
 
-            _logger.LogInformation(EventIds.LicenceUpdatedPublishedEventUpdatePushedToSap.ToEventId(), "The licence updated event data has been sent to SAP successfully. | {StatusCode}", response.StatusCode);
+            _logger.LogInformation(EventIds.LicenceUpdatedPublishedEventUpdatePushedToSap.ToEventId(), "The licence updated event data has been sent to SAP successfully.");
 
             await _azureTableHelper.UpdateEntity(correlationId, Constants.LicenceUpdatedEventTableName, new[] { new KeyValuePair<string, string>("Status", Status.Complete.ToString()) });
 
