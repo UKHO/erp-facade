@@ -24,6 +24,9 @@ namespace UKHO.ERPFacade.Common.Constants
         //SAP xml payload file name
         public const string SapXmlPayloadFileName = "SapXmlPayload.xml";
 
+        //S100 folder name
+        public const string S100WebhookPayloadFolder = "S100PayloadTestData";
+
         //S57 event file name
         public const string S57EncEventFileName = "EncPublishingEvent.json";
         public const string S100DataEventFileName = "S100DataPublishingEvent.json";
@@ -112,6 +115,8 @@ namespace UKHO.ERPFacade.Common.Constants
         public const string S57RequestEndPoint = "/webhook/newenccontentpublishedeventreceived";
         public const string LicenceUpdatedRequestEndPoint = "/webhook/licenceupdatedpublishedeventreceived";
         public const string RoSWebhookRequestEndPoint = "/webhook/recordofsalepublishedeventreceived";
+        public const string WebhookEndpoint = "/api/v2/webhook";
+
 
         public const string SapHealthCheckXmlPath = "SapXmlTemplates\\SAPHealthCheckRequest.xml";
         public const string DefaultContentType = "application/json";
