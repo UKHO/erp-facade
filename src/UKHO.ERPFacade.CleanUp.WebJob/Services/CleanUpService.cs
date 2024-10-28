@@ -22,7 +22,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.Services
 
         public void Clean()
         {
-            CleanS57Data(Constants.S57PartitionKey);
+            CleanS57Data(PartitionKeys.S57PartitionKey);
         }
 
         private void CleanS57Data(string partitionKey)

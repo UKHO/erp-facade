@@ -3,6 +3,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Configuration;
+using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.HttpClients;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
@@ -16,8 +17,6 @@ namespace UKHO.ERPFacade.Common.HealthCheck
         private readonly IXmlHelper _xmlHelper;
         private readonly IFileSystemHelper _fileSystemHelper;
         private readonly ILogger<SapServiceHealthCheck> _logger;
-
-        private const string SapHealthCheckXmlPath = "SapXmlTemplates\\SAPHealthCheckRequest.xml";
 
         public SapServiceHealthCheck(ISapClient sapClient,
                                              IOptions<SapConfiguration> sapConfig,
@@ -39,7 +38,7 @@ namespace UKHO.ERPFacade.Common.HealthCheck
 
             try
             {
-                string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, SapHealthCheckXmlPath);
+                string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, TemplatePaths.SapHealthCheckXmlPath);
 
                 healthCheckData.Add("SAP Template Path", sapXmlTemplatePath);
 

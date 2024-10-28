@@ -122,7 +122,7 @@ namespace UKHO.ERPFacade.API.Controllers
             EventEntity eventEntity = new()
             {
                 RowKey = correlationId,
-                PartitionKey = Constants.ROSPartitionKey,
+                PartitionKey = PartitionKeys.ROSPartitionKey,
                 Timestamp = DateTime.UtcNow,
                 Status = Status.Incomplete.ToString()
             };
@@ -178,7 +178,7 @@ namespace UKHO.ERPFacade.API.Controllers
             EventEntity eventEntity = new()
             {
                 RowKey = correlationId,
-                PartitionKey = Constants.ROSPartitionKey,
+                PartitionKey = PartitionKeys.LUPPartitionKey,
                 Timestamp = DateTime.UtcNow,
                 Status = Status.Incomplete.ToString()
             };
@@ -187,13 +187,13 @@ namespace UKHO.ERPFacade.API.Controllers
             await _azureTableReaderWriter.UpsertEntityAsync(eventEntity);
 
             _logger.LogInformation(EventIds.UploadLicenceUpdatedPublishedEventInAzureBlob.ToEventId(), "Uploading the received Licence updated  published event in blob storage.");
-            await _azureBlobReaderWriter.UploadEventAsync(licenceUpdatedEventJson.ToString(), Constants.LicenceUpdatedEventContainerName, correlationId + '/' + Constants.LicenceUpdatedEventFileName);
+            await _azureBlobReaderWriter.UploadEventAsync(licenceUpdatedEventJson.ToString(), Constants.LicenceUpdatedEventContainerName, correlationId + '/' + EventPayloadFiles.LicenceUpdatedEventFileName);
             _logger.LogInformation(EventIds.UploadedLicenceUpdatedPublishedEventInAzureBlob.ToEventId(), "Licence updated  published event is uploaded in blob storage successfully.");
 
             var sapPayload = _licenceUpdatedSapMessageBuilder.BuildLicenceUpdatedSapMessageXml(JsonConvert.DeserializeObject<LicenceUpdatedEventPayLoad>(licenceUpdatedEventJson.ToString()), correlationId);
 
             _logger.LogInformation(EventIds.UploadLicenceUpdatedSapXmlPayloadInAzureBlob.ToEventId(), "Uploading the SAP xml payload for licence updated event in blob storage.");
-            await _azureBlobReaderWriter.UploadEventAsync(sapPayload.ToIndentedString(), Constants.LicenceUpdatedEventContainerName, correlationId + '/' + Constants.SapXmlPayloadFileName);
+            await _azureBlobReaderWriter.UploadEventAsync(sapPayload.ToIndentedString(), Constants.LicenceUpdatedEventContainerName, correlationId + '/' + EventPayloadFiles.SapXmlPayloadFileName);
             _logger.LogInformation(EventIds.UploadedLicenceUpdatedSapXmlPayloadInAzureBlob.ToEventId(), "SAP xml payload for licence updated event is uploaded in blob storage successfully.");
 
             var response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapEndpointForRecordOfSale, _sapConfig.Value.SapServiceOperationForRecordOfSale, _sapConfig.Value.SapUsernameForRecordOfSale, _sapConfig.Value.SapPasswordForRecordOfSale);

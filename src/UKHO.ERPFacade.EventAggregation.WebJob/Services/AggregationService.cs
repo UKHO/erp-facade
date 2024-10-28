@@ -66,7 +66,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Services
                         XmlDocument sapPayload = _recordOfSaleSapMessageBuilder.BuildRecordOfSaleSapMessageXml(rosEventList, message.CorrelationId);
 
                         _logger.LogInformation(EventIds.UploadRecordOfSaleSapXmlPayloadInAzureBlob.ToEventId(), "Uploading the SAP xml payload for record of sale event in blob storage. | _X-Correlation-ID : {_X-Correlation-ID} | EventID : {EventID}", message.CorrelationId, message.EventId);
-                        await _azureBlobReaderWriter.UploadEventAsync(sapPayload.ToIndentedString(), Constants.RecordOfSaleEventContainerName, message.CorrelationId + '/' + Constants.SapXmlPayloadFileName);
+                        await _azureBlobReaderWriter.UploadEventAsync(sapPayload.ToIndentedString(), Constants.RecordOfSaleEventContainerName, message.CorrelationId + '/' + EventPayloadFiles.SapXmlPayloadFileName);
                         _logger.LogInformation(EventIds.UploadedRecordOfSaleSapXmlPayloadInAzureBlob.ToEventId(), "SAP xml payload for record of sale event is uploaded in blob storage successfully. | _X-Correlation-ID : {_X-Correlation-ID} | EventID : {EventID}", message.CorrelationId, message.EventId);
 
                         HttpResponseMessage response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapEndpointForRecordOfSale, _sapConfig.Value.SapServiceOperationForRecordOfSale, _sapConfig.Value.SapUsernameForRecordOfSale, _sapConfig.Value.SapPasswordForRecordOfSale);

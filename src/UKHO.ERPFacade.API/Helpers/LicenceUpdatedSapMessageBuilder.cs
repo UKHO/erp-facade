@@ -23,7 +23,7 @@ namespace UKHO.ERPFacade.API.Helpers
 
         public XmlDocument BuildLicenceUpdatedSapMessageXml(LicenceUpdatedEventPayLoad eventData, string correlationId)
         {
-            string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, Constants.RecordOfSaleSapXmlTemplatePath);
+            string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, TemplatePaths.RecordOfSaleSapXmlTemplatePath);
 
             if (!_fileSystemHelper.IsFileExists(sapXmlTemplatePath))
             {

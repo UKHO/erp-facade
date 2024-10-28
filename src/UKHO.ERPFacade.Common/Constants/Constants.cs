@@ -5,13 +5,6 @@ namespace UKHO.ERPFacade.Common.Constants
     [ExcludeFromCodeCoverage]
     public static class Constants
     {
-        //Event types
-        public const string S57EventType = "uk.gov.ukho.encpublishing.enccontentpublished.v2.2";
-        public const string S100EventType = "uk.gov.ukho.encpublishing.s100datacontentpublished.v1";
-
-        //XmlTransformer Types
-        public const string S57XmlTransformer = "S57XmlTransformer";
-
         //JSON field keys
         public const string EventIdKey = "id";
         public const string DataNode = "data";
@@ -20,13 +13,6 @@ namespace UKHO.ERPFacade.Common.Constants
         public const string UnitsOfSaleNode = "data.unitsOfSale";
         public const string UKHOWeekNumber = "data.ukhoWeekNumber";
 
-
-        //SAP xml payload file name
-        public const string SapXmlPayloadFileName = "SapXmlPayload.xml";
-
-        //S57 event file name
-        public const string S57EncEventFileName = "EncPublishingEvent.json";
-
         //event storage
         public const string EventTableName = "events";
 
@@ -34,9 +20,6 @@ namespace UKHO.ERPFacade.Common.Constants
         public const string S57EventTableName = "encevents";
         public const string S57EventContainerName = "s57events";
         public const string ErpFacadeExpectedXmlFiles = "ERPFacadeExpectedXmlFiles";
-
-        //LicenceUpdated event file name 
-        public const string LicenceUpdatedEventFileName = "LicenceUpdatedEvent.json";
 
         //LicenceUpdated event storage
         public const string LicenceUpdatedEventTableName = "licenceupdatedevents";
@@ -49,7 +32,6 @@ namespace UKHO.ERPFacade.Common.Constants
         public const string RecordOfSaleEventFileExtension = ".json";
 
         //S57 xml template xpath
-        public const string S57SapXmlTemplatePath = "SapXmlTemplates\\SAPS57Request.xml";
         public const string XpathImMatInfo = $"//*[local-name()='IM_MATINFO']";
         public const string XpathActionItems = $"//*[local-name()='ACTIONITEMS']";
         public const string XpathNoOfActions = $"//*[local-name()='NOOFACTIONS']";
@@ -100,7 +82,6 @@ namespace UKHO.ERPFacade.Common.Constants
         public const string UkhoWeekNoFormatSeparator = "";
 
         //RecordOfSale xml payload builder
-        public const string RecordOfSaleSapXmlTemplatePath = "SapXmlTemplates\\SAPRoSRequest.xml";
         public const string XpathZAddsRos = $"//*[local-name()='Z_ADDS_ROS']";
         public const string ImOrderNameSpace = "RecordOfSale";
         public const string MaintainHoldingsType = "MAINTAINHOLDINGS";
@@ -109,11 +90,6 @@ namespace UKHO.ERPFacade.Common.Constants
         public const string MigrateExistingLicenceType = "MIGRATEEXISTINGLICENCE";
         public const string ConvertLicenceType = "CONVERTLICENCE";
 
-        public const string S57RequestEndPoint = "/webhook/newenccontentpublishedeventreceived";
-        public const string LicenceUpdatedRequestEndPoint = "/webhook/licenceupdatedpublishedeventreceived";
-        public const string RoSWebhookRequestEndPoint = "/webhook/recordofsalepublishedeventreceived";
-
-        public const string SapHealthCheckXmlPath = "SapXmlTemplates\\SAPHealthCheckRequest.xml";
         public const string DefaultContentType = "application/json";
         public const string RosPayloadTestDataFolder = "RoSPayloadTestData";
 
@@ -153,8 +129,5 @@ namespace UKHO.ERPFacade.Common.Constants
 
         //LicenseUpdate xml payload nodes
         public const string LicTransaction = "CHANGELICENCE";
-
-        public const string S57PartitionKey = "S57";
-        public const string ROSPartitionKey = "ROS";
     }
 }

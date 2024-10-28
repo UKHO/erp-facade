@@ -17,7 +17,7 @@ namespace UKHO.ERPFacade.API.Handlers
 {
     public class S57EventHandler : IEventHandler
     {
-        public string EventType => Constants.S57EventType;
+        public string EventType => Events.S57EventType;
 
         private readonly ILogger<S57EventHandler> _logger;
         private readonly IBaseXmlTransformer _baseXmlTransformer;
@@ -66,7 +66,7 @@ namespace UKHO.ERPFacade.API.Handlers
             EventEntity eventEntity = new()
             {
                 RowKey = s57EventData.CorrelationId,
-                PartitionKey = Constants.S57PartitionKey,
+                PartitionKey = PartitionKeys.S57PartitionKey,
                 Timestamp = DateTime.UtcNow,
                 RequestDateTime = null
             };
@@ -75,13 +75,13 @@ namespace UKHO.ERPFacade.API.Handlers
 
             _logger.LogInformation(EventIds.S57EventEntryAddedInAzureTable.ToEventId(), "S57 enccontentpublished event entry added in azure table.");
 
-            await _azureBlobHelper.UploadEventAsync(JsonConvert.SerializeObject(baseCloudEvent, Formatting.Indented), s57EventData.CorrelationId, Constants.S57EncEventFileName);
+            await _azureBlobHelper.UploadEventAsync(JsonConvert.SerializeObject(baseCloudEvent, Formatting.Indented), s57EventData.CorrelationId, EventPayloadFiles.S57EncEventFileName);
 
             _logger.LogInformation(EventIds.S57EventJsonStoredInAzureBlobContainer.ToEventId(), "S57 enccontentpublished event json payload is stored in azure blob container.");
 
-            var sapPayload = _baseXmlTransformer.BuildXmlPayload(s57EventData, Constants.S57SapXmlTemplatePath);
+            var sapPayload = _baseXmlTransformer.BuildXmlPayload(s57EventData, TemplatePaths.S57SapXmlTemplatePath);
 
-            await _azureBlobHelper.UploadEventAsync(sapPayload.ToIndentedString(), s57EventData.CorrelationId, Constants.SapXmlPayloadFileName);
+            await _azureBlobHelper.UploadEventAsync(sapPayload.ToIndentedString(), s57EventData.CorrelationId, EventPayloadFiles.SapXmlPayloadFileName);
 
             _logger.LogInformation(EventIds.S57EventJsonStoredInAzureBlobContainer.ToEventId(), "S57 enccontentpublished event xml payload is stored in azure blob container.");
 
