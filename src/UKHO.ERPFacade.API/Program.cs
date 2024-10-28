@@ -25,6 +25,7 @@ using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Providers;
 using UKHO.ERPFacade.Common.PermitDecryption;
 using UKHO.Logging.EventHubLogProvider;
+using UKHO.ERPFacade.API.Services;
 
 namespace UKHO.ERPFacade
 {
@@ -38,26 +39,21 @@ namespace UKHO.ERPFacade
             SapActionConfiguration sapActionConfiguration;
 
             IHttpContextAccessor httpContextAccessor = new HttpContextAccessor();
-            WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-            IConfiguration configuration = builder.Configuration;
-            IWebHostEnvironment webHostEnvironment = builder.Environment;
+            var builder = WebApplication.CreateBuilder(args);
+            var configuration = builder.Configuration;
+            var webHostEnvironment = builder.Environment;
 
-            builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
-            {
-                config.SetBasePath(webHostEnvironment.ContentRootPath)
+            builder.Configuration.SetBasePath(webHostEnvironment.ContentRootPath)
                 .AddJsonFile("appsettings.json", false, true)
                 .AddJsonFile($"appsettings.{webHostEnvironment.EnvironmentName}.json", true, true)
-                .AddJsonFile("ConfigurationFiles/ScenarioRules.json", true, true)
-                .AddJsonFile("ConfigurationFiles/ActionNumbers.json", true, true)
                 .AddJsonFile("ConfigurationFiles/SapActions.json", true, true)
 #if DEBUG
                 //Add development overrides configuration
                 .AddJsonFile("appsettings.local.overrides.json", true, true)
 #endif
                 .AddEnvironmentVariables();
-            });
 
-            string kvServiceUri = configuration["KeyVaultSettings:ServiceUri"];
+            var kvServiceUri = configuration["KeyVaultSettings:ServiceUri"];
             if (!string.IsNullOrWhiteSpace(kvServiceUri))
             {
                 var secretClient = new SecretClient(new Uri(kvServiceUri), new DefaultAzureCredential(
@@ -74,27 +70,26 @@ namespace UKHO.ERPFacade
 
             eventHubLoggingConfiguration = configuration.GetSection("EventHubLoggingConfiguration").Get<EventHubLoggingConfiguration>()!;
 
-            builder.Host.ConfigureLogging(logging =>
-            {
-                logging.ClearProviders();
-                if (!string.IsNullOrWhiteSpace(eventHubLoggingConfiguration.ConnectionString))
+            builder.Logging
+                .ClearProviders()
+                .AddEventHub(config =>
                 {
-                    void ConfigAdditionalValuesProvider(IDictionary<string, object> additionalValues)
+                    if (!string.IsNullOrWhiteSpace(eventHubLoggingConfiguration.ConnectionString))
                     {
-                        if (httpContextAccessor.HttpContext != null)
+                        void ConfigAdditionalValuesProvider(IDictionary<string, object> additionalValues)
                         {
-                            additionalValues["_Environment"] = eventHubLoggingConfiguration.Environment;
-                            additionalValues["_System"] = eventHubLoggingConfiguration.System;
-                            additionalValues["_Service"] = eventHubLoggingConfiguration.Service;
-                            additionalValues["_NodeName"] = eventHubLoggingConfiguration.NodeName;
-                            additionalValues["_RemoteIPAddress"] = httpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString();
-                            additionalValues["_User-Agent"] = httpContextAccessor.HttpContext.Request.Headers["User-Agent"].FirstOrDefault() ?? string.Empty;
-                            additionalValues["_AssemblyVersion"] = Assembly.GetExecutingAssembly().GetCustomAttributes<AssemblyFileVersionAttribute>().Single().Version;
-                            additionalValues["_X-Correlation-ID"] = httpContextAccessor.HttpContext.Request.Headers?[CorrelationIdMiddleware.XCorrelationIdHeaderKey].FirstOrDefault() ?? string.Empty;
+                            if (httpContextAccessor.HttpContext != null)
+                            {
+                                additionalValues["_Environment"] = eventHubLoggingConfiguration.Environment;
+                                additionalValues["_System"] = eventHubLoggingConfiguration.System;
+                                additionalValues["_Service"] = eventHubLoggingConfiguration.Service;
+                                additionalValues["_NodeName"] = eventHubLoggingConfiguration.NodeName;
+                                additionalValues["_RemoteIPAddress"] = httpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString();
+                                additionalValues["_User-Agent"] = httpContextAccessor.HttpContext.Request.Headers.UserAgent.FirstOrDefault() ?? string.Empty;
+                                additionalValues["_AssemblyVersion"] = Assembly.GetExecutingAssembly().GetCustomAttributes<AssemblyFileVersionAttribute>().Single().Version;
+                                additionalValues["_X-Correlation-ID"] = httpContextAccessor.HttpContext.Request.Headers?[CorrelationIdMiddleware.XCorrelationIdHeaderKey].FirstOrDefault() ?? string.Empty;
+                            }
                         }
-                    }
-                    logging.AddEventHub(config =>
-                    {
                         config.Environment = eventHubLoggingConfiguration.Environment;
                         config.DefaultMinimumLogLevel =
                             (LogLevel)Enum.Parse(typeof(LogLevel), eventHubLoggingConfiguration.MinimumLoggingLevel, true);
@@ -106,9 +101,8 @@ namespace UKHO.ERPFacade
                         config.Service = eventHubLoggingConfiguration.Service;
                         config.NodeName = eventHubLoggingConfiguration.NodeName;
                         config.AdditionalValuesProvider = ConfigAdditionalValuesProvider;
-                    });
-                }
-            });
+                    }
+                });
 
             builder.Services.AddLogging(loggingBuilder =>
             {
@@ -136,20 +130,16 @@ namespace UKHO.ERPFacade
                        options.Authority = $"{azureAdConfiguration.MicrosoftOnlineLoginUrl}{azureAdConfiguration.TenantId}";
                    });
 
-            builder.Services.AddAuthorization(options =>
-            {
-                options.DefaultPolicy = new AuthorizationPolicyBuilder()
+            builder.Services.AddAuthorizationBuilder()
+                .SetDefaultPolicy(new AuthorizationPolicyBuilder()
                 .RequireAuthenticatedUser()
                 .AddAuthenticationSchemes("AzureAD")
-                .Build();
-            });
+                .Build());
 
-            builder.Services.AddAuthorization(options =>
-            {
-                options.AddPolicy("EncContentPublishedWebhookCaller", policy => policy.RequireRole("EncContentPublishedWebhookCaller"));
-                options.AddPolicy("RecordOfSaleWebhookCaller", policy => policy.RequireRole("RecordOfSaleWebhookCaller"));
-                options.AddPolicy("LicenceUpdatedWebhookCaller", policy => policy.RequireRole("LicenceUpdatedWebhookCaller"));
-            });
+            builder.Services.AddAuthorizationBuilder()
+                .AddPolicy("EncContentPublishedWebhookCaller", policy => policy.RequireRole("EncContentPublishedWebhookCaller"))
+                .AddPolicy("RecordOfSaleWebhookCaller", policy => policy.RequireRole("RecordOfSaleWebhookCaller"))
+                .AddPolicy("LicenceUpdatedWebhookCaller", policy => policy.RequireRole("LicenceUpdatedWebhookCaller"));
 
             // The following line enables Application Insights telemetry collection.
             var options = new ApplicationInsightsServiceOptions { ConnectionString = configuration.GetValue<string>("ApplicationInsights:ConnectionString") };
@@ -175,6 +165,7 @@ namespace UKHO.ERPFacade
             sapActionConfiguration = configuration.GetSection("SapActionConfiguration").Get<SapActionConfiguration>()!;
             builder.Services.Configure<EESHealthCheckEnvironmentConfiguration>(configuration.GetSection("EESHealthCheckEnvironmentConfiguration"));
             builder.Services.Configure<PermitConfiguration>(configuration.GetSection("PermitConfiguration"));
+            builder.Services.Configure<AioConfiguration>(configuration.GetSection("AioConfiguration"));
 
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -189,6 +180,7 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<ILicenceUpdatedSapMessageBuilder, LicenceUpdatedSapMessageBuilder>();
             builder.Services.AddScoped<IWeekDetailsProvider, WeekDetailsProvider>();
             builder.Services.AddScoped<IPermitDecryption, PermitDecryption>();
+            builder.Services.AddScoped<IS57Service, S57Service>();
 
             ConfigureHealthChecks(builder);
 
@@ -202,6 +194,8 @@ namespace UKHO.ERPFacade
             app.UseHttpsRedirection();
 
             app.UseCorrelationIdMiddleware();
+
+            app.UseLoggingMiddleware();
 
             app.MapControllers();
 

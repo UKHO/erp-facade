@@ -12,6 +12,8 @@ using UKHO.ERPFacade.EventAggregation.WebJob.Helpers;
 using Microsoft.Extensions.Logging;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Exceptions;
+using Status = UKHO.ERPFacade.Common.Enums.Status;
+using UKHO.ERPFacade.Common.Constants;
 
 namespace UKHO.ERPFacade.EventAggregation.WebJob.Services
 {
@@ -23,11 +25,6 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Services
         private readonly ISapClient _sapClient;
         private readonly IOptions<SapConfiguration> _sapConfig;
         private readonly IRecordOfSaleSapMessageBuilder _recordOfSaleSapMessageBuilder;
-
-        private const string RecordOfSaleContainerName = "recordofsaleblobs";
-        private const string SapXmlPayloadFileName = "SapXmlPayload.xml";
-        private const string IncompleteStatus = "Incomplete";
-        private const string JsonFileType = ".json";
 
         public AggregationService(ILogger<AggregationService> logger, IAzureTableReaderWriter azureTableReaderWriter, IAzureBlobEventWriter azureBlobEventWriter,
             ISapClient sapClient, IOptions<SapConfiguration> sapConfig,
@@ -50,11 +47,11 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Services
             {
                 _logger.LogInformation(EventIds.MessageDequeueCount.ToEventId(), "Dequeue Count : {DequeueCount} | _X-Correlation-ID : {_X-Correlation-ID} | EventID : {EventID}", queueMessage.DequeueCount.ToString(), message.CorrelationId, message.EventId);
 
-                string status = _azureTableReaderWriter.GetEntityStatus(message.CorrelationId);
+                var entity = await _azureTableReaderWriter.GetEntity(message.CorrelationId, Constants.RecordOfSaleEventTableName);
 
-                if (status == IncompleteStatus)
+                if (entity["Status"].ToString() == Status.Incomplete.ToString())
                 {
-                    List<string> blob = _azureBlobEventWriter.GetBlobNamesInFolder(RecordOfSaleContainerName, message.CorrelationId);
+                    List<string> blob = _azureBlobEventWriter.GetBlobNamesInFolder(Constants.RecordOfSaleEventContainerName, message.CorrelationId);
 
                     if (message.RelatedEvents.All(x => blob.Contains(x)))
                     {
@@ -62,29 +59,27 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Services
                         {
                             _logger.LogInformation(EventIds.DownloadRecordOfSaleEventFromAzureBlob.ToEventId(), "Webjob has started downloading record of sale events from blob. | _X-Correlation-ID : {_X-Correlation-ID} | EventID : {EventID}", message.CorrelationId, message.EventId);
 
-                            string rosEvent = _azureBlobEventWriter.DownloadEvent(message.CorrelationId + '/' + eventId + JsonFileType, RecordOfSaleContainerName);
+                            string rosEvent = _azureBlobEventWriter.DownloadEvent(message.CorrelationId + '/' + eventId + Constants.RecordOfSaleEventFileExtension, Constants.RecordOfSaleEventContainerName);
                             rosEventList.Add(JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(rosEvent)!);
                         }
 
                         XmlDocument sapPayload = _recordOfSaleSapMessageBuilder.BuildRecordOfSaleSapMessageXml(rosEventList, message.CorrelationId);
 
                         _logger.LogInformation(EventIds.UploadRecordOfSaleSapXmlPayloadInAzureBlob.ToEventId(), "Uploading the SAP xml payload for record of sale event in blob storage. | _X-Correlation-ID : {_X-Correlation-ID} | EventID : {EventID}", message.CorrelationId, message.EventId);
-                        await _azureBlobEventWriter.UploadEvent(sapPayload.ToIndentedString(), RecordOfSaleContainerName, message.CorrelationId + '/' + SapXmlPayloadFileName);
+                        await _azureBlobEventWriter.UploadEvent(sapPayload.ToIndentedString(), Constants.RecordOfSaleEventContainerName, message.CorrelationId + '/' + Constants.SapXmlPayloadFileName);
                         _logger.LogInformation(EventIds.UploadedRecordOfSaleSapXmlPayloadInAzureBlob.ToEventId(), "SAP xml payload for record of sale event is uploaded in blob storage successfully. | _X-Correlation-ID : {_X-Correlation-ID} | EventID : {EventID}", message.CorrelationId, message.EventId);
 
                         HttpResponseMessage response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapEndpointForRecordOfSale, _sapConfig.Value.SapServiceOperationForRecordOfSale, _sapConfig.Value.SapUsernameForRecordOfSale, _sapConfig.Value.SapPasswordForRecordOfSale);
 
                         if (!response.IsSuccessStatusCode)
                         {
-                            _logger.LogError(EventIds.ErrorOccurredInSapForRecordOfSalePublishedEvent.ToEventId(), "An error occurred while sending record of sale event data to SAP. | _X-Correlation-ID : {_X-Correlation-ID} | EventID : {EventID} | StatusCode: {StatusCode}", message.CorrelationId, message.EventId, response.StatusCode);
-                            throw new ERPFacadeException(EventIds.ErrorOccurredInSapForRecordOfSalePublishedEvent.ToEventId());
+                            throw new ERPFacadeException(EventIds.ErrorOccurredInSapForRecordOfSalePublishedEvent.ToEventId(), $"An error occurred while sending record of sale event data to SAP. | _X-Correlation-ID : {message.CorrelationId} | EventID : {message.EventId} | StatusCode: {response.StatusCode}");
                         }
 
                         _logger.LogInformation(EventIds.RecordOfSalePublishedEventDataPushedToSap.ToEventId(), "The record of sale event data has been sent to SAP successfully. | _X-Correlation-ID : {_X-Correlation-ID} | EventID : {EventID} | StatusCode: {StatusCode}", message.CorrelationId, message.EventId, response.StatusCode);
 
-                        await _azureTableReaderWriter.UpdateRecordOfSaleEventStatus(message.CorrelationId);
+                        await _azureTableReaderWriter.UpdateEntity(message.CorrelationId, Constants.RecordOfSaleEventTableName, new[] { new KeyValuePair<string, string>("Status", Status.Complete.ToString()) });
                     }
-
                     else
                     {
                         _logger.LogWarning(EventIds.AllRelatedEventsAreNotPresentInBlob.ToEventId(), "All related events are not present in Azure blob. | _X-Correlation-ID : {_X-Correlation-ID} | EventID : {EventID}", message.CorrelationId, message.EventId);
@@ -97,8 +92,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Services
             }
             catch (Exception)
             {
-                _logger.LogError(EventIds.UnhandledWebJobException.ToEventId(), "Exception occurred while processing Event Aggregation WebJob. | _X-Correlation-ID : {_X-Correlation-ID} | EventID : {EventID}", message.CorrelationId, message.EventId);
-                throw new ERPFacadeException(EventIds.UnhandledWebJobException.ToEventId());
+                throw new ERPFacadeException(EventIds.UnhandledWebJobException.ToEventId(), $"Exception occurred while processing Event Aggregation WebJob. | _X-Correlation-ID : {message.CorrelationId} | EventID : {message.EventId}");
             }
         }
     }

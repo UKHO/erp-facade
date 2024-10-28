@@ -3,6 +3,7 @@ using System.Globalization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Configuration;
+using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
 
@@ -18,30 +19,38 @@ namespace UKHO.ERPFacade.Common.PermitDecryption
         {
             _permitConfiguration = permitConfiguration ?? throw new ArgumentNullException(nameof(permitConfiguration));
             _logger = logger;
+
+            if (string.IsNullOrEmpty(_permitConfiguration.Value.PermitDecryptionHardwareId))
+            {
+                throw new ERPFacadeException(EventIds.HardwareIdNotFoundException.ToEventId(), "Permit decryption Hardware Id not found in configuration.");
+            }
         }
 
-        public PermitKey GetPermitKeys(string permit)
+        public DecryptedPermit Decrypt(string encryptedPermit)
         {
-            if (string.IsNullOrEmpty(permit)) return null;
+            if (string.IsNullOrEmpty(encryptedPermit))
+            {
+                throw new ERPFacadeException(EventIds.EmptyPermitStringException.ToEventId(), "Permit string provided empty in json payload.");
+            }
+
             try
             {
                 byte[] hardwareIds = GetHardwareIds();
                 byte[] firstCellKey = null;
                 byte[] secondCellKey = null;
 
-                S63Crypt.GetEncKeysFromPermit(permit, hardwareIds, ref firstCellKey, ref secondCellKey);
+                S63Crypt.GetEncKeysFromPermit(encryptedPermit, hardwareIds, ref firstCellKey, ref secondCellKey);
 
-                var keys = new PermitKey
+                var decryptedPermit = new DecryptedPermit
                 {
                     ActiveKey = Convert.ToHexString(firstCellKey),
                     NextKey = Convert.ToHexString(secondCellKey)
                 };
-                return keys;
+                return decryptedPermit;
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.PermitDecryptionException.ToEventId(), ex, "An error occurred while decrypting the permit string.");
-                return null;
+                throw new ERPFacadeException(EventIds.PermitDecryptionException.ToEventId(), $"Permit decryption failed and could not generate ActiveKey & NextKey. | Exception : {ex.Message}");
             }
         }
 
