@@ -30,7 +30,7 @@ namespace UKHO.ERPFacade.API.Dispatcher
             }
             else
             {
-                _logger.LogWarning(EventIds.InvalidEventTypeReceived.ToEventId(), "Invalid event type received");
+                _logger.LogWarning(EventIds.InvalidEventTypeReceived.ToEventId(), "Invalid event type received.");
                 return;
             }
         }
