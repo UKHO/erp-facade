@@ -5,28 +5,27 @@ using Azure.Data.Tables.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Configuration;
-using UKHO.ERPFacade.Common.Logging;
 
 namespace UKHO.ERPFacade.Common.IO.Azure
 {
     [ExcludeFromCodeCoverage]
-    public class AzureTableReaderWriter : IAzureTableReaderWriter
+    public class AzureTableHelper : IAzureTableHelper
     {
-        private readonly ILogger<AzureTableReaderWriter> _logger;
+        private readonly ILogger<AzureTableHelper> _logger;
         private readonly IOptions<AzureStorageConfiguration> _azureStorageConfig;
 
-        public AzureTableReaderWriter(ILogger<AzureTableReaderWriter> logger,
+        public AzureTableHelper(ILogger<AzureTableHelper> logger,
                                         IOptions<AzureStorageConfiguration> azureStorageConfig)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _azureStorageConfig = azureStorageConfig ?? throw new ArgumentNullException(nameof(azureStorageConfig));
         }
 
-        public async Task UpsertEntity(string correlationId, string tableName, ITableEntity entity)
+        public async Task UpsertEntity(ITableEntity entity)
         {
-            TableClient tableClient = GetTableClient(tableName);
+            TableClient tableClient = GetTableClient(Constants.Constants.EventTableName);
 
-            TableEntity existingEntity = await GetEntity(correlationId, tableName);
+            TableEntity existingEntity = await GetEntity(entity.PartitionKey, entity.RowKey);
 
             if (existingEntity == null!)
             {
@@ -40,22 +39,23 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             }
         }
 
-        public async Task<TableEntity> GetEntity(string correlationId, string tableName)
+        public async Task<TableEntity> GetEntity(string partitionKey, string rowKey)
         {
-            IList<TableEntity> records = new List<TableEntity>();
-            TableClient tableClient = GetTableClient(tableName);
-            var entities = tableClient.QueryAsync<TableEntity>(filter: TableClient.CreateQueryFilter($"CorrelationId eq {correlationId}"), maxPerPage: 1);
-            await foreach (var entity in entities)
+            TableClient tableClient = GetTableClient(Constants.Constants.EventTableName);
+            try
             {
-                records.Add(entity);
+                return await tableClient.GetEntityAsync<TableEntity>(partitionKey, rowKey);
             }
-            return records.FirstOrDefault();
+            catch (RequestFailedException ex) when (ex.Status == 404)
+            {
+                return null;
+            }
         }
 
-        public async Task UpdateEntity<TKey, TValue>(string correlationId, string tableName, KeyValuePair<TKey, TValue>[] entitiesToUpdate)
+        public async Task UpdateEntity<TKey, TValue>(string partitionKey, string rowKey, KeyValuePair<TKey, TValue>[] entitiesToUpdate)
         {
-            TableClient tableClient = GetTableClient(tableName);
-            TableEntity existingEntity = await GetEntity(correlationId, tableName);
+            TableClient tableClient = GetTableClient(Constants.Constants.EventTableName);
+            TableEntity existingEntity = await GetEntity(partitionKey, rowKey);
             if (existingEntity != null)
             {
                 foreach (var entity in entitiesToUpdate)
@@ -66,11 +66,11 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             }
         }
 
-        public IList<TableEntity> GetAllEntities(string tableName)
+        public IList<TableEntity> GetAllEntities(string partitionKey)
         {
             var records = new List<TableEntity>();
-            TableClient tableClient = GetTableClient(tableName);
-            var entities = tableClient.Query<TableEntity>();
+            TableClient tableClient = GetTableClient(Constants.Constants.EventTableName);
+            var entities = tableClient.Query<TableEntity>(filter: $"PartitionKey eq '{partitionKey}'");
             foreach (var entity in entities)
             {
                 records.Add(entity);
@@ -78,14 +78,13 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             return records;
         }
 
-        public async Task DeleteEntity(string correlationId, string tableName)
+        public async Task DeleteEntity(string correlationId)
         {
-            TableClient tableClient = GetTableClient(tableName);
-            TableEntity existingEntity = await GetEntity(correlationId, tableName);
+            TableClient tableClient = GetTableClient(Constants.Constants.EventTableName);
+            TableEntity existingEntity = await GetEntity(correlationId, Constants.Constants.EventTableName);
             if (existingEntity != null)
             {
                 tableClient.DeleteEntity(existingEntity.PartitionKey, existingEntity.RowKey);
-                _logger.LogInformation(EventIds.DeletedEESEntitySuccessful.ToEventId(), "EES entity is deleted from azure table successfully.");
             }
         }
 
@@ -99,7 +98,6 @@ namespace UKHO.ERPFacade.Common.IO.Azure
             if (tableExists == null)
             {
                 serviceClient.GetTableClient(tableName).CreateIfNotExistsAsync();
-                _logger.LogWarning(EventIds.AzureTableNotFound.ToEventId(), "Azure table not found");
             }
 
             TableClient tableClient = serviceClient.GetTableClient(tableName);

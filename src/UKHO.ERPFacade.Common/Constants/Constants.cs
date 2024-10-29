@@ -5,6 +5,13 @@ namespace UKHO.ERPFacade.Common.Constants
     [ExcludeFromCodeCoverage]
     public static class Constants
     {
+        //Event types
+        public const string S57EventType = "uk.gov.ukho.encpublishing.enccontentpublished.v2.2";
+        public const string S100EventType = "uk.gov.ukho.encpublishing.s100datacontentpublished.v1";
+
+        //XmlTransformer Types
+        public const string S57XmlTransformer = "S57XmlTransformer";
+
         //JSON field keys
         public const string EventIdKey = "id";
         public const string DataNode = "data";
@@ -17,8 +24,14 @@ namespace UKHO.ERPFacade.Common.Constants
         //SAP xml payload file name
         public const string SapXmlPayloadFileName = "SapXmlPayload.xml";
 
+        //S100 folder name
+        public const string S100WebhookPayloadFolder = "S100PayloadTestData";
+
         //S57 event file name
         public const string S57EncEventFileName = "EncPublishingEvent.json";
+        public const string S100DataEventFileName = "S100DataPublishingEvent.json";
+        //event storage
+        public const string EventTableName = "events";
 
         //S57 event storage
         public const string S57EventTableName = "encevents";
@@ -102,6 +115,8 @@ namespace UKHO.ERPFacade.Common.Constants
         public const string S57RequestEndPoint = "/webhook/newenccontentpublishedeventreceived";
         public const string LicenceUpdatedRequestEndPoint = "/webhook/licenceupdatedpublishedeventreceived";
         public const string RoSWebhookRequestEndPoint = "/webhook/recordofsalepublishedeventreceived";
+        public const string WebhookEndpoint = "/api/v2/webhook";
+
 
         public const string SapHealthCheckXmlPath = "SapXmlTemplates\\SAPHealthCheckRequest.xml";
         public const string DefaultContentType = "application/json";
@@ -143,5 +158,9 @@ namespace UKHO.ERPFacade.Common.Constants
 
         //LicenseUpdate xml payload nodes
         public const string LicTransaction = "CHANGELICENCE";
+
+        public const string S57PartitionKey = "S57";
+        public const string ROSPartitionKey = "ROS";
+        public const string S100PartitionKey = "S100";
     }
 }

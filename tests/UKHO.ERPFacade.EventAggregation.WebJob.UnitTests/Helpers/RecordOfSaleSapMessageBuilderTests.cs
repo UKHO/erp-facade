@@ -5,6 +5,7 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NUnit.Framework;
+using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
@@ -68,8 +69,9 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Helpers
         public void Setup()
         {
             _fakeLogger = A.Fake<ILogger<RecordOfSaleSapMessageBuilder>>();
-            _fakeXmlHelper = new XmlHelper();
             _fakeFileSystemHelper = A.Fake<IFileSystemHelper>();
+            _fakeXmlHelper = new XmlHelper(_fakeFileSystemHelper);
+
             _fakeRecordOfSaleSapMessageBuilder = new RecordOfSaleSapMessageBuilder(_fakeLogger, _fakeXmlHelper, _fakeFileSystemHelper);
         }
 
@@ -87,7 +89,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Helpers
             const string correlationId = "123-abc-456-xyz-333";
 
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
-           
+
             var result = _fakeRecordOfSaleSapMessageBuilder.BuildRecordOfSaleSapMessageXml(rosNewLicenceData, correlationId);
 
             result.Should().BeOfType<XmlDocument>();
@@ -134,12 +136,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Helpers
 
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(false);
 
-            Assert.Throws<FileNotFoundException>(() => _fakeRecordOfSaleSapMessageBuilder.BuildRecordOfSaleSapMessageXml(rosNewLicenceData, correlationId));
-
-            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-            && call.GetArgument<LogLevel>(0) == LogLevel.Error
-            && call.GetArgument<EventId>(1) == EventIds.RecordOfSaleSapXmlTemplateNotFound.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "The record of sale SAP message xml template does not exist. | _X-Correlation-ID : {_X-Correlation-ID}").MustHaveHappenedOnceExactly();
+            Assert.Throws<ERPFacadeException>(() => _fakeRecordOfSaleSapMessageBuilder.BuildRecordOfSaleSapMessageXml(rosNewLicenceData, correlationId));
         }
 
         [Test]
@@ -181,7 +178,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Helpers
             const string correlationId = "123-abc-456-xyz-333";
 
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
-          
+
             var result = _fakeRecordOfSaleSapMessageBuilder.BuildRecordOfSaleSapMessageXml(rosMaintainHoldingsData, correlationId);
 
             result.Should().BeOfType<XmlDocument>();
@@ -284,9 +281,9 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Helpers
             };
 
             const string correlationId = "123-abc-456-xyz-333";
-           
+
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
-           
+
             var result = _fakeRecordOfSaleSapMessageBuilder.BuildRecordOfSaleSapMessageXml(rosMigrateNewLicenceData, correlationId);
 
             result.Should().BeOfType<XmlDocument>();
@@ -355,9 +352,9 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Helpers
             };
 
             const string correlationId = "123-abc-456-xyz-333";
-            
+
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
-            
+
             var result = _fakeRecordOfSaleSapMessageBuilder.BuildRecordOfSaleSapMessageXml(rosMigrateExistingLicenceData, correlationId);
 
             result.Should().BeOfType<XmlDocument>();
@@ -463,9 +460,9 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Helpers
             };
 
             const string correlationId = "123-abc-456-xyz-333";
-           
+
             A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
-            
+
             var result = _fakeRecordOfSaleSapMessageBuilder.BuildRecordOfSaleSapMessageXml(rosConvertLicenceData, correlationId);
 
             result.Should().BeOfType<XmlDocument>();

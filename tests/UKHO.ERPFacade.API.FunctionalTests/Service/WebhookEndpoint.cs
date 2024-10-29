@@ -31,7 +31,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             return response;
         }
 
-        public async Task<RestResponse> PostWebhookResponseAsync(string filePath, string token)
+        public async Task<RestResponse> PostWebhookResponseAsync(string filePath, string token, string resource = Constants.S57RequestEndPoint, bool validateJson = false)
         {
             string requestBody;
 
@@ -41,12 +41,19 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             }
             GeneratedCorrelationId = SapXmlHelper.GenerateRandomCorrelationId();
             requestBody = SapXmlHelper.UpdateTimeAndCorrIdField(requestBody, GeneratedCorrelationId);
-            var request = new RestRequest(Constants.S57RequestEndPoint, Method.Post);
+            var request = new RestRequest(resource, Method.Post);
             request.AddHeader("Content-Type", "application/json");
             request.AddHeader("Authorization", "Bearer " + token);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
 
             RestResponse response = await _client.ExecuteAsync(request);
+
+            if (response.IsSuccessful && validateJson)
+            {
+                string content = await _azureBlobStorageHelper.GetGeneratedJson(GeneratedCorrelationId);
+                Assert.That(content.Equals(requestBody));
+            }
+
             return response;
         }
 

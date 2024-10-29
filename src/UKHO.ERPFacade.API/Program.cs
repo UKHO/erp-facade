@@ -4,7 +4,6 @@ using System.Reflection;
 using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
-using Elastic.Apm.AspNetCore;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -13,19 +12,22 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Newtonsoft.Json.Serialization;
 using Serilog;
+using UKHO.ERPFacade.API.Dispatcher;
 using UKHO.ERPFacade.API.Filters;
+using UKHO.ERPFacade.API.Handlers;
 using UKHO.ERPFacade.API.Health;
 using UKHO.ERPFacade.API.Helpers;
+using UKHO.ERPFacade.API.XmlTransformers;
 using UKHO.ERPFacade.Common.Configuration;
+using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.HealthCheck;
 using UKHO.ERPFacade.Common.HttpClients;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Models;
-using UKHO.ERPFacade.Common.Providers;
 using UKHO.ERPFacade.Common.PermitDecryption;
+using UKHO.ERPFacade.Common.Providers;
 using UKHO.Logging.EventHubLogProvider;
-using UKHO.ERPFacade.API.Services;
 
 namespace UKHO.ERPFacade
 {
@@ -46,7 +48,7 @@ namespace UKHO.ERPFacade
             builder.Configuration.SetBasePath(webHostEnvironment.ContentRootPath)
                 .AddJsonFile("appsettings.json", false, true)
                 .AddJsonFile($"appsettings.{webHostEnvironment.EnvironmentName}.json", true, true)
-                .AddJsonFile("ConfigurationFiles/SapActions.json", true, true)
+                .AddJsonFile("ConfigurationFiles/S57SapActions.json", true, true)
 #if DEBUG
                 //Add development overrides configuration
                 .AddJsonFile("appsettings.local.overrides.json", true, true)
@@ -169,10 +171,9 @@ namespace UKHO.ERPFacade
 
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-            builder.Services.AddScoped<IAzureTableReaderWriter, AzureTableReaderWriter>();
-            builder.Services.AddScoped<IAzureBlobEventWriter, AzureBlobEventWriter>();
             builder.Services.AddScoped<IAzureQueueHelper, AzureQueueHelper>();
-            builder.Services.AddScoped<IEncContentSapMessageBuilder, EncContentSapMessageBuilder>();
+            builder.Services.AddScoped<IAzureTableHelper, AzureTableHelper>();
+            builder.Services.AddScoped<IAzureBlobHelper, AzureBlobHelper>();
             builder.Services.AddScoped<IXmlHelper, XmlHelper>();
             builder.Services.AddScoped<IFileSystemHelper, FileSystemHelper>();
             builder.Services.AddScoped<IFileSystem, FileSystem>();
@@ -180,7 +181,12 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<ILicenceUpdatedSapMessageBuilder, LicenceUpdatedSapMessageBuilder>();
             builder.Services.AddScoped<IWeekDetailsProvider, WeekDetailsProvider>();
             builder.Services.AddScoped<IPermitDecryption, PermitDecryption>();
-            builder.Services.AddScoped<IS57Service, S57Service>();
+
+            builder.Services.AddScoped<IEventHandler, S57EventHandler>();
+            builder.Services.AddScoped<IEventHandler, S100EventHandler>();
+
+            builder.Services.AddKeyedScoped<IBaseXmlTransformer, S57XmlTransformer>(Constants.S57XmlTransformer);
+            builder.Services.AddScoped<IEventDispatcher, EventDispatcher>();
 
             ConfigureHealthChecks(builder);
 

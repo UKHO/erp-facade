@@ -1,18 +1,18 @@
-﻿using Azure.Storage.Blobs;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text;
+using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Microsoft.Extensions.Options;
-using System.Diagnostics.CodeAnalysis;
-using System.Text;
 using UKHO.ERPFacade.Common.Configuration;
 
 namespace UKHO.ERPFacade.Common.IO.Azure
 {
     [ExcludeFromCodeCoverage]
-    public class AzureBlobEventWriter : IAzureBlobEventWriter
+    public class AzureBlobHelper : IAzureBlobHelper
     {
         private readonly IOptions<AzureStorageConfiguration> _azureStorageConfig;
 
-        public AzureBlobEventWriter(IOptions<AzureStorageConfiguration> azureStorageConfig)
+        public AzureBlobHelper(IOptions<AzureStorageConfiguration> azureStorageConfig)
         {
             _azureStorageConfig = azureStorageConfig ?? throw new ArgumentNullException(nameof(azureStorageConfig));
         }

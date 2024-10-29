@@ -22,7 +22,7 @@ namespace UKHO.ERPFacade.Common.PermitDecryption
 
             if (string.IsNullOrEmpty(_permitConfiguration.Value.PermitDecryptionHardwareId))
             {
-                throw new ERPFacadeException(EventIds.HardwareIdNotFoundException.ToEventId(), "Permit decryption Hardware Id not found in configuration.");
+                throw new ERPFacadeException(EventIds.HardwareIdsConfigurationMissingException.ToEventId(), "Hardware ids configuration missing.");
             }
         }
 
@@ -30,7 +30,7 @@ namespace UKHO.ERPFacade.Common.PermitDecryption
         {
             if (string.IsNullOrEmpty(encryptedPermit))
             {
-                throw new ERPFacadeException(EventIds.EmptyPermitStringException.ToEventId(), "Permit string provided empty in json payload.");
+                throw new ERPFacadeException(EventIds.EmptyPermitStringException.ToEventId(), "Permit string is empty in S57 enccontentpublished event.");
             }
 
             try
@@ -50,7 +50,7 @@ namespace UKHO.ERPFacade.Common.PermitDecryption
             }
             catch (Exception ex)
             {
-                throw new ERPFacadeException(EventIds.PermitDecryptionException.ToEventId(), $"Permit decryption failed and could not generate ActiveKey & NextKey. | Exception : {ex.Message}");
+                throw new ERPFacadeException(EventIds.PermitDecryptionException.ToEventId(), $"Permit decryption failed and could not generate ActiveKey and NextKey. | Exception : {ex.Message}");
             }
         }
 

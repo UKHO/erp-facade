@@ -3,53 +3,50 @@ using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.IO.Azure;
-using UKHO.ERPFacade.Common.Logging;
 
 namespace UKHO.ERPFacade.CleanUp.WebJob.Services
 {
     public class CleanUpService : ICleanUpService
     {
         private readonly ILogger<CleanUpService> _logger;
-        private readonly IOptions<ErpFacadeWebJobConfiguration> _erpFacadeWebjobConfig;
-        private readonly IAzureTableReaderWriter _azureTableReaderWriter;
-        private readonly IAzureBlobEventWriter _azureBlobEventWriter;
+        private readonly IOptions<CleanupWebJobConfiguration> _cleanupWebjobConfig;
+        private readonly IAzureTableHelper _azureTableHelper;
+        private readonly IAzureBlobHelper _azureBlobHelper;
 
         public CleanUpService(ILogger<CleanUpService> logger,
-                               IOptions<ErpFacadeWebJobConfiguration> erpFacadeWebjobConfig,
-                               IAzureTableReaderWriter azureTableReaderWriter,
-                               IAzureBlobEventWriter azureBlobEventWriter)
+                               IOptions<CleanupWebJobConfiguration> cleanupWebjobConfig,
+                               IAzureTableHelper azureTableHelper,
+                               IAzureBlobHelper azureBlobHelper)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _erpFacadeWebjobConfig = erpFacadeWebjobConfig ?? throw new ArgumentNullException(nameof(erpFacadeWebjobConfig));
-            _azureTableReaderWriter = azureTableReaderWriter ?? throw new ArgumentNullException(nameof(azureTableReaderWriter));
-            _azureBlobEventWriter = azureBlobEventWriter ?? throw new ArgumentNullException(nameof(azureBlobEventWriter));
+            _cleanupWebjobConfig = cleanupWebjobConfig ?? throw new ArgumentNullException(nameof(cleanupWebjobConfig));
+            _azureTableHelper = azureTableHelper ?? throw new ArgumentNullException(nameof(azureTableHelper));
+            _azureBlobHelper = azureBlobHelper ?? throw new ArgumentNullException(nameof(azureBlobHelper));
         }
 
-        public void CleanUpAzureTableAndBlobs()
+        public void Clean()
         {
-            CleanUpEvents(Constants.S57EventTableName, Constants.S57EventContainerName);
+            CleanS57Data(Constants.S57PartitionKey);
         }
 
-        private void CleanUpEvents(string tableName, string eventContainerName)
+        private void CleanS57Data(string partitionKey)
         {
-            _logger.LogInformation(EventIds.FetchEESEntities.ToEventId(), "Fetching all records from azure table {TableName}", tableName);
-
-            var entities = _azureTableReaderWriter.GetAllEntities(tableName);
+            var entities = _azureTableHelper.GetAllEntities(partitionKey);
 
             foreach (var entity in entities)
             {
                 if (entity["RequestDateTime"] == null)
                     continue;
 
+                var correlationId = entity.RowKey.ToString();
+
                 TimeSpan timediff = DateTime.Now - Convert.ToDateTime(entity["RequestDateTime"].ToString());
 
-                if (timediff.Days > int.Parse(_erpFacadeWebjobConfig.Value.CleanUpDurationInDays))
+                if (timediff.Days > int.Parse(_cleanupWebjobConfig.Value.CleanUpDurationInDays))
                 {
-                    Task.FromResult(_azureTableReaderWriter.DeleteEntity(entity["CorrelationId"].ToString(), tableName));
+                    Task.FromResult(_azureTableHelper.DeleteEntity(correlationId));
 
-                    _azureBlobEventWriter.DeleteContainer(entity["CorrelationId"].ToString().ToLower());
-
-                    _logger.LogInformation(EventIds.DeletedContainerSuccessful.ToEventId(), "Event data cleaned up for {CorrelationId} successfully.", entity["CorrelationId"].ToString());
+                    _azureBlobHelper.DeleteContainer(correlationId);
                 }
             }
         }

@@ -13,9 +13,8 @@ namespace UKHO.ERPFacade.API.Helpers
         private readonly IFileSystemHelper _fileSystemHelper;
 
         public LicenceUpdatedSapMessageBuilder(ILogger<LicenceUpdatedSapMessageBuilder> logger,
-            IXmlHelper xmlHelper,
-            IFileSystemHelper fileSystemHelper
-        )
+                                               IXmlHelper xmlHelper,
+                                               IFileSystemHelper fileSystemHelper)
         {
             _logger = logger;
             _xmlHelper = xmlHelper;
