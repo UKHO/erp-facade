@@ -78,6 +78,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
 
             A.CallTo(() => _fakeAzureTableReaderWriter.GetAllEntities(A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureTableReaderWriter.DeleteEntityAsync(A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeAzureBlobReaderWriter.DeleteContainer(A<string>.Ignored)).MustHaveHappened();
         }
 
         [Test]
@@ -101,6 +102,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
 
             A.CallTo(() => _fakeAzureTableReaderWriter.GetAllEntities(A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureTableReaderWriter.DeleteEntityAsync(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeAzureBlobReaderWriter.DeleteDirectory(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
         }
 
         [Test]
@@ -124,6 +126,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
 
             A.CallTo(() => _fakeAzureTableReaderWriter.GetAllEntities(A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureTableReaderWriter.DeleteEntityAsync(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeAzureBlobReaderWriter.DeleteContainer(A<string>.Ignored)).MustNotHaveHappened();
         }
 
         [Test]
@@ -147,6 +150,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
 
             A.CallTo(() => _fakeAzureTableReaderWriter.GetAllEntities(A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureTableReaderWriter.DeleteEntityAsync(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeAzureBlobReaderWriter.DeleteDirectory(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
         }
     }
 }
