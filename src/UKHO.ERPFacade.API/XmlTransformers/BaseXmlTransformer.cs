@@ -84,7 +84,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             var corrIdNode = soapXml.SelectSingleNode(XmlTemplateInfo.XpathCorrId);
             corrIdNode.InnerText = correlationId;
 
-            var noOfActionsNode = soapXml.SelectSingleNode(XmlTemplateInfo.XpathCorrId);
+            var noOfActionsNode = soapXml.SelectSingleNode(XmlTemplateInfo.XpathNoOfActions);
             noOfActionsNode.InnerText = actionItemNode.ChildNodes.Count.ToString();
 
             var recDateNode = soapXml.SelectSingleNode(XmlTemplateInfo.XpathRecDate);
