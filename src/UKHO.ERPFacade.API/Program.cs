@@ -172,9 +172,9 @@ namespace UKHO.ERPFacade
 
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-            builder.Services.AddScoped<IAzureQueueHelper, AzureQueueHelper>();
-            builder.Services.AddScoped<IAzureTableHelper, AzureTableHelper>();
-            builder.Services.AddScoped<IAzureBlobHelper, AzureBlobHelper>();
+            builder.Services.AddScoped<IAzureQueueReaderWriter, AzureQueueReaderWriter>();
+            builder.Services.AddScoped<IAzureTableReaderWriter, AzureTableReaderWriter>();
+            builder.Services.AddScoped<IAzureBlobReaderWriter, AzureBlobReaderWriter>();
             builder.Services.AddScoped<IXmlHelper, XmlHelper>();
             builder.Services.AddScoped<IFileSystemHelper, FileSystemHelper>();
             builder.Services.AddScoped<IFileSystem, FileSystem>();
@@ -186,8 +186,8 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<IEventHandler, S57EventHandler>();
             builder.Services.AddScoped<IEventHandler, S100EventHandler>();
 
-            builder.Services.AddKeyedScoped<IBaseXmlTransformer, S57XmlTransformer>(Constants.S57XmlTransformer);
-            builder.Services.AddKeyedScoped<IBaseXmlTransformer, S100XmlTransformer>(Constants.S100XmlTransformer);
+            builder.Services.AddKeyedScoped<IBaseXmlTransformer, S57XmlTransformer>(XmlTransformers.S57XmlTransformer);
+            builder.Services.AddKeyedScoped<IBaseXmlTransformer, S100XmlTransformer>(XmlTransformers.S100XmlTransformer);
             builder.Services.AddScoped<IEventDispatcher, EventDispatcher>();
 
             ConfigureHealthChecks(builder);

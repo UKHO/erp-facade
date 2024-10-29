@@ -17,13 +17,8 @@ namespace UKHO.ERPFacade.API.XmlTransformers
 
     public abstract class BaseXmlTransformer : IBaseXmlTransformer
     {
-        private readonly IFileSystemHelper _fileSystemHelper;
-        private readonly IXmlHelper _xmlHelper;
-
-        public BaseXmlTransformer(IFileSystemHelper fileSystemHelper, IXmlHelper xmlHelper)
+        public BaseXmlTransformer()
         {
-            _fileSystemHelper = fileSystemHelper;
-            _xmlHelper = xmlHelper;
         }
 
         public abstract XmlDocument BuildXmlPayload<T>(T eventData, string xmlTemplatePath);
@@ -64,13 +59,13 @@ namespace UKHO.ERPFacade.API.XmlTransformers
 
             // Sort based on the ActionNumber
             var sortedActionItems = actionItems
-                .OrderBy(node => Convert.ToInt32(node.SelectSingleNode(Constants.ActionNumber)?.InnerText ?? "0"))
+                .OrderBy(node => Convert.ToInt32(node.SelectSingleNode(XmlFields.ActionNumber)?.InnerText ?? "0"))
                 .ToList();
 
             // Update the sequence number in the sorted list
             foreach (XmlNode actionItem in sortedActionItems)
             {
-                var actionNumberNode = actionItem.SelectSingleNode(Constants.ActionNumber);
+                var actionNumberNode = actionItem.SelectSingleNode(XmlFields.ActionNumber);
                 if (actionNumberNode != null)
                 {
                     actionNumberNode.InnerText = sequenceNumber.ToString();
@@ -86,20 +81,20 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             }
 
             //Set basic nodes
-            var corrIdNode = soapXml.SelectSingleNode(Constants.XpathCorrId);
+            var corrIdNode = soapXml.SelectSingleNode(XmlTemplateInfo.XpathCorrId);
             corrIdNode.InnerText = correlationId;
 
-            var noOfActionsNode = soapXml.SelectSingleNode(Constants.XpathCorrId);
+            var noOfActionsNode = soapXml.SelectSingleNode(XmlTemplateInfo.XpathCorrId);
             noOfActionsNode.InnerText = actionItemNode.ChildNodes.Count.ToString();
 
-            var recDateNode = soapXml.SelectSingleNode(Constants.XpathRecDate);
-            recDateNode.InnerText = DateTime.UtcNow.ToString(Constants.RecDateFormat);
+            var recDateNode = soapXml.SelectSingleNode(XmlTemplateInfo.XpathRecDate);
+            recDateNode.InnerText = DateTime.UtcNow.ToString(XmlFields.RecDateFormat);
 
-            var recTimeNode = soapXml.SelectSingleNode(Constants.XpathRecTime);
-            recTimeNode.InnerText = DateTime.UtcNow.ToString(Constants.RecTimeFormat);
+            var recTimeNode = soapXml.SelectSingleNode(XmlTemplateInfo.XpathRecTime);
+            recTimeNode.InnerText = DateTime.UtcNow.ToString(XmlFields.RecTimeFormat);
 
             //Set action items
-            var IM_MATINFONode = soapXml.SelectSingleNode(Constants.XpathImMatInfo);
+            var IM_MATINFONode = soapXml.SelectSingleNode(XmlTemplateInfo.XpathImMatInfo);
             IM_MATINFONode.AppendChild(actionItemNode);
         }
 

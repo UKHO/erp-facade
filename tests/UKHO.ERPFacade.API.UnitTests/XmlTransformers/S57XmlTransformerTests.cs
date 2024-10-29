@@ -18,7 +18,7 @@ using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Models.CloudEvents;
-using UKHO.ERPFacade.Common.Models.CloudEvents.S57;
+using UKHO.ERPFacade.Common.Models.CloudEvents.S57Event;
 using UKHO.ERPFacade.Common.PermitDecryption;
 using UKHO.ERPFacade.Common.Providers;
 
@@ -29,7 +29,6 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
     {
         private ILogger<S57XmlTransformer> _fakeLogger;
         private IXmlHelper _fakeXmlHelper;
-        private IFileSystemHelper _fakeFileSystemHelper;
         private IOptions<SapActionConfiguration> _fakeSapActionConfig;
         private IWeekDetailsProvider _fakeWeekDetailsProvider;
         private IPermitDecryption _fakePermitDecryption;
@@ -42,12 +41,11 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
         {
             _fakeLogger = A.Fake<ILogger<S57XmlTransformer>>();
             _fakeXmlHelper = A.Fake<IXmlHelper>();
-            _fakeFileSystemHelper = A.Fake<IFileSystemHelper>();
             _fakeWeekDetailsProvider = A.Fake<IWeekDetailsProvider>();
             _fakePermitDecryption = A.Fake<IPermitDecryption>();
             _fakeSapActionConfig = Options.Create(InitConfiguration().GetSection("SapActionConfiguration").Get<SapActionConfiguration>())!;
-            _fakeS57XmlTransformer = new S57XmlTransformer(_fakeLogger, _fakeXmlHelper, _fakeFileSystemHelper, _fakeWeekDetailsProvider, _fakePermitDecryption, _fakeSapActionConfig);
-            _sapXmlTemplate = TestHelper.ReadFileData(Constants.S57SapXmlTemplatePath);
+            _fakeS57XmlTransformer = new S57XmlTransformer(_fakeLogger, _fakeXmlHelper, _fakeWeekDetailsProvider, _fakePermitDecryption, _fakeSapActionConfig);
+            _sapXmlTemplate = TestHelper.ReadFileData(XmlTemplateInfo.S57SapXmlTemplatePath);
         }
 
         private IConfiguration InitConfiguration()
@@ -330,7 +328,7 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
             var cancelCellWithNewCellReplacementPayloadJson = TestHelper.ReadFileData("ERPTestData\\CancelCellWithNewCellReplacement.JSON");
             var baseCloudEvent = JsonConvert.DeserializeObject<BaseCloudEvent>(cancelCellWithNewCellReplacementPayloadJson);
             S57EventData s57EventData = JsonConvert.DeserializeObject<S57EventData>(baseCloudEvent.Data.ToString()!);
-            var action = _fakeSapActionConfig.Value.SapActions.FirstOrDefault(x => x.Product == Constants.EncCell && x.Action == Constants.ReplaceEncCellAction);
+            var action = _fakeSapActionConfig.Value.SapActions.FirstOrDefault(x => x.Product == XmlFields.EncCell && x.Action == ConfigFileFields.ReplaceEncCellAction);
 
             MethodInfo buildAction = typeof(S57XmlTransformer).GetMethod("GetUnitOfSale", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
             var result = (XmlElement)buildAction.Invoke(_fakeS57XmlTransformer, new object[] { action.ActionNumber, s57EventData.UnitsOfSales!, s57EventData.Products.FirstOrDefault()! })!;
@@ -345,7 +343,7 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
             var baseCloudEvent = JsonConvert.DeserializeObject<BaseCloudEvent>(cancelCellWithNewCellReplacementPayloadJson);
             S57EventData s57EventData = JsonConvert.DeserializeObject<S57EventData>(baseCloudEvent.Data.ToString()!);
 
-            var action = _fakeSapActionConfig.Value.SapActions.FirstOrDefault(x => x.Product == Constants.EncCell && x.Action == Constants.ChangeEncCellAction);
+            var action = _fakeSapActionConfig.Value.SapActions.FirstOrDefault(x => x.Product == XmlFields.EncCell && x.Action == ConfigFileFields.ChangeEncCellAction);
 
             MethodInfo buildAction = typeof(S57XmlTransformer).GetMethod("GetUnitOfSale", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
             var result = (XmlElement)buildAction.Invoke(_fakeS57XmlTransformer, new object[] { action.ActionNumber, s57EventData.UnitsOfSales!, s57EventData.Products.LastOrDefault()! })!;
@@ -368,7 +366,6 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
             XmlDocument soapXml = new();
             soapXml.LoadXml(_sapXmlTemplate);
 
-            A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
             A.CallTo(() => _fakePermitDecryption.Decrypt(A<string>.Ignored)).Returns(permitKeys);
             A.CallTo(() => _fakeWeekDetailsProvider.GetDateOfWeek(A<int>.Ignored, A<int>.Ignored, A<bool>.Ignored)).Throws<System.Exception>();
@@ -387,7 +384,6 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
             XmlDocument soapXml = new();
             soapXml.LoadXml(_sapXmlTemplate);
 
-            A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
             A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
 
             A.CallTo(() => _fakeWeekDetailsProvider.GetDateOfWeek(A<int>.Ignored, A<int>.Ignored, A<bool>.Ignored)).Throws<System.Exception>();

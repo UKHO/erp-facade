@@ -23,7 +23,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             XmlDocument xmlDoc = new();
             xmlDoc.LoadXml(await File.ReadAllTextAsync(xmlFilePath));
 
-            while (xmlDoc.DocumentElement.Name == Constants.SoapEnvelope || xmlDoc.DocumentElement.Name == Constants.SoapBody)
+            while (xmlDoc.DocumentElement.Name == XmlTemplateInfo.SoapEnvelope || xmlDoc.DocumentElement.Name == XmlTemplateInfo.SoapBody)
             {
                 string tempXmlString = xmlDoc.DocumentElement.InnerXml;
                 xmlDoc.LoadXml(tempXmlString);
@@ -42,7 +42,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
             if (licResult.SERVICETYPE.Equals(licenceJsonFields.productType))
             {
-                if (licResult.LICTRANSACTION.Equals(Constants.LicTransaction))
+                if (licResult.LICTRANSACTION.Equals(RoSTransactionTypes.LicTransaction))
                 {
                     Assert.That(VerifyChangeLicense(licResult, licenceJsonFields), Is.True);
                 }
@@ -76,8 +76,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             if (!licResult.USERS.Equals(licenceFieldsJson.numberLicenceUsers))
                 s_attrNotMatched.Add(nameof(licResult.USERS));
 
-            string[] fieldNames = { Constants.StartDate, Constants.EndDate, Constants.ShoreBased, Constants.LType, Constants.LicDur, Constants.ProductOrder, Constants.AdsOrderNumber };
-            string[] fieldNamesProduct = { Constants.Id, Constants.ProductEndDate, Constants.Duration, Constants.Renew, Constants.Repeat };
+            string[] fieldNames = { XmlFields.StartDate, XmlFields.EndDate, XmlFields.ShoreBased, XmlFields.LType, XmlFields.LicDur, XmlFields.ProductOrder, XmlFields.AdsOrderNumber };
+            string[] fieldNamesProduct = { XmlFields.Id, XmlFields.ProductEndDate, XmlFields.Duration, XmlFields.Renew, XmlFields.Repeat };
             Z_ADDS_ROSIM_ORDERItem[] items = licResult.PROD;
             VerifyBlankFields(licResult, fieldNames);
             VerifyBlankProductFields(items[0], fieldNamesProduct);

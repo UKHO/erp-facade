@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.IO.Azure;
@@ -8,30 +7,27 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.Services
 {
     public class CleanUpService : ICleanUpService
     {
-        private readonly ILogger<CleanUpService> _logger;
         private readonly IOptions<CleanupWebJobConfiguration> _cleanupWebjobConfig;
-        private readonly IAzureTableHelper _azureTableHelper;
-        private readonly IAzureBlobHelper _azureBlobHelper;
+        private readonly IAzureTableReaderWriter _azureTableReaderWriter;
+        private readonly IAzureBlobReaderWriter _azureBlobReaderWriter;
 
-        public CleanUpService(ILogger<CleanUpService> logger,
-                               IOptions<CleanupWebJobConfiguration> cleanupWebjobConfig,
-                               IAzureTableHelper azureTableHelper,
-                               IAzureBlobHelper azureBlobHelper)
+        public CleanUpService(IOptions<CleanupWebJobConfiguration> cleanupWebjobConfig,
+                               IAzureTableReaderWriter azureTableReaderWriter,
+                               IAzureBlobReaderWriter azureBlobReaderWriter)
         {
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _cleanupWebjobConfig = cleanupWebjobConfig ?? throw new ArgumentNullException(nameof(cleanupWebjobConfig));
-            _azureTableHelper = azureTableHelper ?? throw new ArgumentNullException(nameof(azureTableHelper));
-            _azureBlobHelper = azureBlobHelper ?? throw new ArgumentNullException(nameof(azureBlobHelper));
+            _azureTableReaderWriter = azureTableReaderWriter ?? throw new ArgumentNullException(nameof(azureTableReaderWriter));
+            _azureBlobReaderWriter = azureBlobReaderWriter ?? throw new ArgumentNullException(nameof(azureBlobReaderWriter));
         }
 
         public void Clean()
         {
-            CleanS57Data(Constants.S57PartitionKey);
+            CleanS57Data(PartitionKeys.S57PartitionKey);
         }
 
         private void CleanS57Data(string partitionKey)
         {
-            var entities = _azureTableHelper.GetAllEntities(partitionKey);
+            var entities = _azureTableReaderWriter.GetAllEntities(partitionKey);
 
             foreach (var entity in entities)
             {
@@ -44,9 +40,9 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.Services
 
                 if (timediff.Days > int.Parse(_cleanupWebjobConfig.Value.CleanUpDurationInDays))
                 {
-                    Task.FromResult(_azureTableHelper.DeleteEntity(correlationId));
+                    Task.FromResult(_azureTableReaderWriter.DeleteEntityAsync(partitionKey, correlationId));
 
-                    _azureBlobHelper.DeleteContainer(correlationId);
+                    _azureBlobReaderWriter.DeleteContainer(correlationId);
                 }
             }
         }

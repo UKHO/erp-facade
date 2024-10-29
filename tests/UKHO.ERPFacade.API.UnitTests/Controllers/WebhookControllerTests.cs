@@ -20,7 +20,6 @@ using UKHO.ERPFacade.API.Helpers;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.HttpClients;
-using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
@@ -35,11 +34,10 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         private IHttpContextAccessor _fakeHttpContextAccessor;
         private ILogger<WebhookController> _fakeLogger;
         private IEventDispatcher _fakeEventDispatcher;
-        private IAzureTableHelper _fakeAzureTableHelper;
-        private IAzureBlobHelper _fakeAzureBlobHelper;
-        private IAzureQueueHelper _fakeAzureQueueHelper;
+        private IAzureTableReaderWriter _fakeAzureTableReaderWriter;
+        private IAzureBlobReaderWriter _fakeAzureBlobReaderWriter;
+        private IAzureQueueReaderWriter _fakeAzureQueueReaderWriter;
         private ISapClient _fakeSapClient;
-        private IXmlHelper _fakeXmlHelper;
         private IOptions<SapConfiguration> _fakeSapConfig;
         private WebhookController _fakeWebHookController;
         private ILicenceUpdatedSapMessageBuilder _fakeLicenceUpdatedSapMessageBuilder;
@@ -50,11 +48,10 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             _fakeHttpContextAccessor = A.Fake<IHttpContextAccessor>();
             _fakeLogger = A.Fake<ILogger<WebhookController>>();
             _fakeEventDispatcher = A.Fake<IEventDispatcher>();
-            _fakeAzureTableHelper = A.Fake<IAzureTableHelper>();
-            _fakeAzureBlobHelper = A.Fake<IAzureBlobHelper>();
-            _fakeAzureQueueHelper = A.Fake<IAzureQueueHelper>();
+            _fakeAzureTableReaderWriter = A.Fake<IAzureTableReaderWriter>();
+            _fakeAzureBlobReaderWriter = A.Fake<IAzureBlobReaderWriter>();
+            _fakeAzureQueueReaderWriter = A.Fake<IAzureQueueReaderWriter>();
             _fakeSapClient = A.Fake<ISapClient>();
-            _fakeXmlHelper = A.Fake<IXmlHelper>();
             _fakeLicenceUpdatedSapMessageBuilder = A.Fake<ILicenceUpdatedSapMessageBuilder>();
             _fakeSapConfig = Options.Create(new SapConfiguration()
             {
@@ -64,9 +61,9 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             _fakeWebHookController = new WebhookController(_fakeHttpContextAccessor,
                                                            _fakeLogger,
                                                            _fakeEventDispatcher,
-                                                           _fakeAzureTableHelper,
-                                                           _fakeAzureBlobHelper,
-                                                           _fakeAzureQueueHelper,
+                                                           _fakeAzureTableReaderWriter,
+                                                           _fakeAzureBlobReaderWriter,
+                                                           _fakeAzureQueueReaderWriter,
                                                            _fakeLicenceUpdatedSapMessageBuilder,
                                                            _fakeSapClient,
                                                            _fakeSapConfig);
@@ -120,9 +117,9 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             Assert.Throws<ArgumentNullException>(() => new WebhookController(_fakeHttpContextAccessor,
                                                                              _fakeLogger,
                                                                              _fakeEventDispatcher,
-                                                                             _fakeAzureTableHelper,
-                                                                             _fakeAzureBlobHelper,
-                                                                             _fakeAzureQueueHelper,
+                                                                             _fakeAzureTableReaderWriter,
+                                                                             _fakeAzureBlobReaderWriter,
+                                                                             _fakeAzureQueueReaderWriter,
                                                                              _fakeLicenceUpdatedSapMessageBuilder,
                                                                              _fakeSapClient,
                                                                              null))
@@ -169,9 +166,9 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             var result = (OkObjectResult)await _fakeWebHookController.RecordOfSalePublishedEventReceived(fakeRosEventJson);
             result.StatusCode.Should().Be(200);
 
-            A.CallTo(() => _fakeAzureTableHelper.UpsertEntity(A<ITableEntity>.Ignored)).MustHaveHappenedOnceExactly();
-            A.CallTo(() => _fakeAzureBlobHelper.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceExactly();
-            A.CallTo(() => _fakeAzureQueueHelper.AddMessage(fakeRosEventJson)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpsertEntityAsync(A<ITableEntity>.Ignored)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _fakeAzureBlobReaderWriter.UploadEventAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _fakeAzureQueueReaderWriter.AddMessageAsync(fakeRosEventJson)).MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
              && call.GetArgument<LogLevel>(0) == LogLevel.Information
@@ -213,9 +210,9 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
 
             result.StatusCode.Should().Be(400);
 
-            A.CallTo(() => _fakeAzureTableHelper.UpsertEntity(A<ITableEntity>.Ignored)).MustNotHaveHappened();
-            A.CallTo(() => _fakeAzureBlobHelper.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
-            A.CallTo(() => _fakeAzureQueueHelper.AddMessage(fakeRosEventJson)).MustNotHaveHappened();
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpsertEntityAsync(A<ITableEntity>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeAzureBlobReaderWriter.UploadEventAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeAzureQueueReaderWriter.AddMessageAsync(fakeRosEventJson)).MustNotHaveHappened();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Information
@@ -271,8 +268,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
 
             var result = (OkObjectResult)await _fakeWebHookController.LicenceUpdatedPublishedEventReceived(fakeLicenceUpdatedEventJson);
 
-            A.CallTo(() => _fakeAzureTableHelper.UpsertEntity(A<ITableEntity>.Ignored)).MustHaveHappenedOnceExactly();
-            A.CallTo(() => _fakeAzureBlobHelper.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedTwiceExactly();
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpsertEntityAsync(A<ITableEntity>.Ignored)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _fakeAzureBlobReaderWriter.UploadEventAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedTwiceExactly();
 
             result.StatusCode.Should().Be(200);
 
@@ -321,8 +318,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
 
             result.StatusCode.Should().Be(400);
 
-            A.CallTo(() => _fakeAzureTableHelper.UpsertEntity(A<ITableEntity>.Ignored)).MustNotHaveHappened();
-            A.CallTo(() => _fakeAzureBlobHelper.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpsertEntityAsync(A<ITableEntity>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeAzureBlobReaderWriter.UploadEventAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Information
@@ -355,8 +352,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
 
             Assert.ThrowsAsync<ERPFacadeException>(() => _fakeWebHookController.LicenceUpdatedPublishedEventReceived(fakeLicenceUpdatedEventJson));
 
-            A.CallTo(() => _fakeAzureTableHelper.UpsertEntity(A<ITableEntity>.Ignored)).MustHaveHappened();
-            A.CallTo(() => _fakeAzureBlobHelper.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpsertEntityAsync(A<ITableEntity>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeAzureBlobReaderWriter.UploadEventAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                && call.GetArgument<LogLevel>(0) == LogLevel.Information

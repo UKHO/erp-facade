@@ -8,16 +8,16 @@ using UKHO.ERPFacade.Common.Configuration;
 namespace UKHO.ERPFacade.Common.IO.Azure
 {
     [ExcludeFromCodeCoverage]
-    public class AzureBlobHelper : IAzureBlobHelper
+    public class AzureBlobReaderWriter : IAzureBlobReaderWriter
     {
         private readonly IOptions<AzureStorageConfiguration> _azureStorageConfig;
 
-        public AzureBlobHelper(IOptions<AzureStorageConfiguration> azureStorageConfig)
+        public AzureBlobReaderWriter(IOptions<AzureStorageConfiguration> azureStorageConfig)
         {
             _azureStorageConfig = azureStorageConfig ?? throw new ArgumentNullException(nameof(azureStorageConfig));
         }
 
-        public async Task UploadEvent(string requestEvent, string blobContainerName, string blobName)
+        public async Task UploadEventAsync(string requestEvent, string blobContainerName, string blobName)
         {
             BlobClient blobClient = GetBlobClient(blobContainerName, blobName);
 
