@@ -1,14 +1,14 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.IO.Abstractions;
 
-namespace UKHO.ERPFacade.Common.IO
+namespace UKHO.ERPFacade.Common.Operations.IO
 {
     [ExcludeFromCodeCoverage]
-    public class FileSystemHelper : IFileSystemHelper
+    public class FileOperations : IFileOperations
     {
         private readonly IFileSystem _fileSystem;
 
-        public FileSystemHelper(IFileSystem fileSystem)
+        public FileOperations(IFileSystem fileSystem)
         {
             _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         }

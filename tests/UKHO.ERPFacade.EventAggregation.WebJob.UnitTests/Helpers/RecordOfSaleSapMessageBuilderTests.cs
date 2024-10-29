@@ -9,6 +9,7 @@ using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
+using UKHO.ERPFacade.Common.Operations.IO;
 using UKHO.ERPFacade.EventAggregation.WebJob.Helpers;
 
 namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Helpers
@@ -17,8 +18,8 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Helpers
     public class RecordOfSaleSapMessageBuilderTests
     {
         private ILogger<RecordOfSaleSapMessageBuilder> _fakeLogger;
-        private IXmlHelper _fakeXmlHelper;
-        private IFileSystemHelper _fakeFileSystemHelper;
+        private IXmlOperations _fakeXmlHelper;
+        private IFileOperations _fakeFileSystemHelper;
 
         private RecordOfSaleSapMessageBuilder _fakeRecordOfSaleSapMessageBuilder;
 
@@ -69,7 +70,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Helpers
         public void Setup()
         {
             _fakeLogger = A.Fake<ILogger<RecordOfSaleSapMessageBuilder>>();
-            _fakeFileSystemHelper = A.Fake<IFileSystemHelper>();
+            _fakeFileSystemHelper = A.Fake<IFileOperations>();
             _fakeXmlHelper = new XmlHelper(_fakeFileSystemHelper);
 
             _fakeRecordOfSaleSapMessageBuilder = new RecordOfSaleSapMessageBuilder(_fakeLogger, _fakeXmlHelper, _fakeFileSystemHelper);

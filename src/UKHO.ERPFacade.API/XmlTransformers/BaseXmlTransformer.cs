@@ -1,9 +1,9 @@
 ﻿using System.Xml;
 using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.Exceptions;
-using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
+using UKHO.ERPFacade.Common.Operations;
 
 namespace UKHO.ERPFacade.API.XmlTransformers
 {
@@ -34,7 +34,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             {
                 foreach (var conditions in rules.Conditions)
                 {
-                    object jsonFieldValue = CommonHelper.ParseXmlNode(conditions.AttributeName, obj, obj.GetType());
+                    object jsonFieldValue = CommonOperations.GetPropertyValue(conditions.AttributeName, obj, obj.GetType());
 
                     if (jsonFieldValue != null! && jsonFieldValue.ToString() == conditions.AttributeValue)
                     {

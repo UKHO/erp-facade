@@ -13,6 +13,7 @@ using UKHO.ERPFacade.API.UnitTests.Common;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
+using UKHO.ERPFacade.Common.Operations.IO;
 
 namespace UKHO.ERPFacade.API.UnitTests.Helpers
 {
@@ -20,8 +21,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
     public class LicenceUpdatedSapMessageBuilderTests
     {
         private ILogger<LicenceUpdatedSapMessageBuilder> _fakeLogger;
-        private IXmlHelper _fakeXmlHelper;
-        private IFileSystemHelper _fakeFileSystemHelper;
+        private IXmlOperations _fakeXmlHelper;
+        private IFileOperations _fakeFileSystemHelper;
 
         private LicenceUpdatedSapMessageBuilder _fakeLicenceUpdatedSapMessageBuilder;
         private readonly string XpathZAddsRos = $"//*[local-name()='Z_ADDS_ROS']";
@@ -84,8 +85,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         public void Setup()
         {
             _fakeLogger = A.Fake<ILogger<LicenceUpdatedSapMessageBuilder>>();
-            _fakeXmlHelper = A.Fake<IXmlHelper>();
-            _fakeFileSystemHelper = A.Fake<IFileSystemHelper>();
+            _fakeXmlHelper = A.Fake<IXmlOperations>();
+            _fakeFileSystemHelper = A.Fake<IFileOperations>();
             _fakeLicenceUpdatedSapMessageBuilder = new LicenceUpdatedSapMessageBuilder(_fakeLogger, _fakeXmlHelper, _fakeFileSystemHelper);
         }
 

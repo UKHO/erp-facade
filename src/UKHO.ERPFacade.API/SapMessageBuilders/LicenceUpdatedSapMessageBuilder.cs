@@ -1,20 +1,22 @@
 ﻿using System.Xml;
 using UKHO.ERPFacade.Common.Constants;
+using UKHO.ERPFacade.Common.Extensions;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
+using UKHO.ERPFacade.Common.Operations.IO;
 
-namespace UKHO.ERPFacade.API.Helpers
+namespace UKHO.ERPFacade.API.SapMessageBuilders
 {
     public class LicenceUpdatedSapMessageBuilder : ILicenceUpdatedSapMessageBuilder
     {
         private readonly ILogger<LicenceUpdatedSapMessageBuilder> _logger;
-        private readonly IXmlHelper _xmlHelper;
-        private readonly IFileSystemHelper _fileSystemHelper;
+        private readonly IXmlOperations _xmlHelper;
+        private readonly IFileOperations _fileSystemHelper;
 
         public LicenceUpdatedSapMessageBuilder(ILogger<LicenceUpdatedSapMessageBuilder> logger,
-                                               IXmlHelper xmlHelper,
-                                               IFileSystemHelper fileSystemHelper)
+                                               IXmlOperations xmlHelper,
+                                               IFileOperations fileSystemHelper)
         {
             _logger = logger;
             _xmlHelper = xmlHelper;

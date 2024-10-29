@@ -6,6 +6,7 @@ using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Models.CloudEvents.S57Event;
+using UKHO.ERPFacade.Common.Operations;
 using UKHO.ERPFacade.Common.PermitDecryption;
 using UKHO.ERPFacade.Common.Providers;
 
@@ -14,13 +15,13 @@ namespace UKHO.ERPFacade.API.XmlTransformers
     public class S57XmlTransformer : BaseXmlTransformer
     {
         private readonly ILogger<S57XmlTransformer> _logger;
-        private readonly IXmlHelper _xmlHelper;
+        private readonly IXmlOperations _xmlHelper;
         private readonly IWeekDetailsProvider _weekDetailsProvider;
         private readonly IPermitDecryption _permitDecryption;
         private readonly IOptions<SapActionConfiguration> _sapActionConfig;
 
         public S57XmlTransformer(ILogger<S57XmlTransformer> logger,
-                                 IXmlHelper xmlHelper,
+                                 IXmlOperations xmlHelper,
                                  IWeekDetailsProvider weekDetailsProvider,
                                  IPermitDecryption permitDecryption,
                                  IOptions<SapActionConfiguration> sapActionConfig)
@@ -228,20 +229,20 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                         switch (attribute.XmlNodeName)
                         {
                             case XmlFields.ReplacedBy:
-                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, replacedBy)) attributeNode.InnerText = CommonHelper.ToSubstring(replacedBy.ToString(), 0, XmlFields.MaxXmlNodeLength);
+                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, replacedBy)) attributeNode.InnerText = CommonOperations.ToSubstring(replacedBy.ToString(), 0, XmlFields.MaxXmlNodeLength);
                                 break;
                             case XmlFields.ActiveKey:
-                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, decryptedPermit.ActiveKey)) attributeNode.InnerText = CommonHelper.ToSubstring(decryptedPermit.ActiveKey, 0, XmlFields.MaxXmlNodeLength);
+                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, decryptedPermit.ActiveKey)) attributeNode.InnerText = CommonOperations.ToSubstring(decryptedPermit.ActiveKey, 0, XmlFields.MaxXmlNodeLength);
                                 break;
                             case XmlFields.NextKey:
-                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, decryptedPermit.NextKey)) attributeNode.InnerText = CommonHelper.ToSubstring(decryptedPermit.NextKey, 0, XmlFields.MaxXmlNodeLength);
+                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, decryptedPermit.NextKey)) attributeNode.InnerText = CommonOperations.ToSubstring(decryptedPermit.NextKey, 0, XmlFields.MaxXmlNodeLength);
                                 break;
                             default:
-                                var jsonFieldValue = CommonHelper.ParseXmlNode(attribute.JsonPropertyName, source, source.GetType()).ToString();
+                                var jsonFieldValue = CommonOperations.GetPropertyValue(attribute.JsonPropertyName, source, source.GetType()).ToString();
                                 if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, jsonFieldValue))
                                 {
                                     // Set value as first 2 characters if the node is Agency, else limit other nodes to 250 characters
-                                    attributeNode.InnerText = attribute.XmlNodeName == XmlFields.Agency ? CommonHelper.ToSubstring(jsonFieldValue, 0, XmlFields.MaxAgencyXmlNodeLength) : CommonHelper.ToSubstring(jsonFieldValue, 0, XmlFields.MaxXmlNodeLength);
+                                    attributeNode.InnerText = attribute.XmlNodeName == XmlFields.Agency ? CommonOperations.ToSubstring(jsonFieldValue, 0, XmlFields.MaxAgencyXmlNodeLength) : CommonOperations.ToSubstring(jsonFieldValue, 0, XmlFields.MaxXmlNodeLength);
                                 }
                                 break;
                         }
@@ -280,11 +281,11 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                             {
                                 case XmlFields.ValidFrom:
                                     var validFrom = _weekDetailsProvider.GetDateOfWeek(ukhoWeekNumber.Year.Value, ukhoWeekNumber.Week.Value, ukhoWeekNumber.CurrentWeekAlphaCorrection.Value);
-                                    attributeNode.InnerText = CommonHelper.ToSubstring(validFrom, 0, XmlFields.MaxXmlNodeLength);
+                                    attributeNode.InnerText = CommonOperations.ToSubstring(validFrom, 0, XmlFields.MaxXmlNodeLength);
                                     break;
                                 case XmlFields.WeekNo:
                                     var weekNo = string.Join("", ukhoWeekNumber.Year, ukhoWeekNumber.Week.Value.ToString("D2"));
-                                    attributeNode.InnerText = CommonHelper.ToSubstring(weekNo, 0, XmlFields.MaxXmlNodeLength);
+                                    attributeNode.InnerText = CommonOperations.ToSubstring(weekNo, 0, XmlFields.MaxXmlNodeLength);
                                     break;
                                 case XmlFields.Correction:
                                     attributeNode.InnerText = ukhoWeekNumber.CurrentWeekAlphaCorrection.Value ? XmlFields.IsCorrectionTrue : XmlFields.IsCorrectionFalse;

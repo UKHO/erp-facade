@@ -8,7 +8,7 @@ using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Models.QueueEntities;
 
-namespace UKHO.ERPFacade.Common.IO.Azure
+namespace UKHO.ERPFacade.Common.Operations.IO.Azure
 {
     [ExcludeFromCodeCoverage]
     public class AzureQueueReaderWriter : IAzureQueueReaderWriter

@@ -7,6 +7,7 @@ using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.HttpClients;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
+using UKHO.ERPFacade.Common.Operations.IO;
 
 namespace UKHO.ERPFacade.Common.HealthCheck
 {
@@ -14,14 +15,14 @@ namespace UKHO.ERPFacade.Common.HealthCheck
     {
         private readonly ISapClient _sapClient;
         private readonly IOptions<SapConfiguration> _sapConfig;
-        private readonly IXmlHelper _xmlHelper;
-        private readonly IFileSystemHelper _fileSystemHelper;
+        private readonly IXmlOperations _xmlHelper;
+        private readonly IFileOperations _fileSystemHelper;
         private readonly ILogger<SapServiceHealthCheck> _logger;
 
         public SapServiceHealthCheck(ISapClient sapClient,
                                              IOptions<SapConfiguration> sapConfig,
-                                             IXmlHelper xmlHelper,
-                                             IFileSystemHelper fileSystemHelper,
+                                             IXmlOperations xmlHelper,
+                                             IFileOperations fileSystemHelper,
                                              ILogger<SapServiceHealthCheck> logger)
         {
             _sapClient = sapClient;

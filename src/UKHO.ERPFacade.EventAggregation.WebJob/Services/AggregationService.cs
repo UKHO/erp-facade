@@ -7,11 +7,11 @@ using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.HttpClients;
-using UKHO.ERPFacade.Common.IO;
-using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Models.QueueEntities;
+using UKHO.ERPFacade.Common.Operations.IO;
+using UKHO.ERPFacade.Common.Operations.IO.Azure;
 using UKHO.ERPFacade.EventAggregation.WebJob.Helpers;
 using Status = UKHO.ERPFacade.Common.Enums.Status;
 
@@ -47,7 +47,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Services
             {
                 _logger.LogInformation(EventIds.MessageDequeueCount.ToEventId(), "Dequeue Count : {DequeueCount} | _X-Correlation-ID : {_X-Correlation-ID} | EventID : {EventID}", queueMessage.DequeueCount.ToString(), message.CorrelationId, message.EventId);
 
-                var entity = await _azureTableReaderWriter.GetEntityAsync(PartitionKeys.ROSPartitionKey, message.CorrelationId);
+                var entity = await _azureTableReaderWriter.GetEntityAsync(message.CorrelationId, AzureStorage.EventTableName);
 
                 if (entity["Status"].ToString() == Status.Incomplete.ToString())
                 {

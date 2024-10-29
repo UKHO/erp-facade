@@ -4,18 +4,19 @@ using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
+using UKHO.ERPFacade.Common.Operations.IO;
 
 namespace UKHO.ERPFacade.EventAggregation.WebJob.Helpers
 {
     public class RecordOfSaleSapMessageBuilder : IRecordOfSaleSapMessageBuilder
     {
         private readonly ILogger<RecordOfSaleSapMessageBuilder> _logger;
-        private readonly IXmlHelper _xmlHelper;
-        private readonly IFileSystemHelper _fileSystemHelper;
+        private readonly IXmlOperations _xmlHelper;
+        private readonly IFileOperations _fileSystemHelper;
 
         public RecordOfSaleSapMessageBuilder(ILogger<RecordOfSaleSapMessageBuilder> logger,
-            IXmlHelper xmlHelper,
-            IFileSystemHelper fileSystemHelper
+            IXmlOperations xmlHelper,
+            IFileOperations fileSystemHelper
         )
         {
             _logger = logger;

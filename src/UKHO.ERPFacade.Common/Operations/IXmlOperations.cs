@@ -2,7 +2,7 @@
 
 namespace UKHO.ERPFacade.Common.IO
 {
-    public interface IXmlHelper
+    public interface IXmlOperations
     {
         XmlDocument CreateXmlDocument(string xmlPath);
         string CreateXmlPayLoad<T>(T anyobject);
