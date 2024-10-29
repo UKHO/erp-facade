@@ -1,6 +1,6 @@
 ﻿using System.Xml;
 
-namespace UKHO.ERPFacade.Common.IO
+namespace UKHO.ERPFacade.Common.Operations
 {
     public interface IXmlOperations
     {

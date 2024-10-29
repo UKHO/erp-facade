@@ -15,7 +15,7 @@ using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Models.QueueEntities;
 using UKHO.ERPFacade.Common.Operations.IO.Azure;
-using UKHO.ERPFacade.EventAggregation.WebJob.Helpers;
+using UKHO.ERPFacade.EventAggregation.WebJob.SapMessageBuilders;
 using UKHO.ERPFacade.EventAggregation.WebJob.Services;
 
 namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Services

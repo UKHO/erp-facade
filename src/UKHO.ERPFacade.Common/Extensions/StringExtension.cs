@@ -1,5 +1,8 @@
-﻿namespace UKHO.ERPFacade.Common.Extensions
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace UKHO.ERPFacade.Common.Extensions
 {
+    [ExcludeFromCodeCoverage]
     public static class StringExtension
     {
         public static string ToSubstring(string value, int startIndex, int length)

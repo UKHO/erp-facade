@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 
 namespace UKHO.ERPFacade.Common.Extensions
 {
+    [ExcludeFromCodeCoverage]
     public static class XmlExtension
     {
         public static string ToIndentedString(this XmlDocument doc)

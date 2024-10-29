@@ -16,12 +16,12 @@ using UKHO.ERPFacade.API.Dispatcher;
 using UKHO.ERPFacade.API.Filters;
 using UKHO.ERPFacade.API.Handlers;
 using UKHO.ERPFacade.API.Health;
+using UKHO.ERPFacade.API.SapMessageBuilders;
 using UKHO.ERPFacade.API.XmlTransformers;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.HealthCheck;
 using UKHO.ERPFacade.Common.HttpClients;
-using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Operations;
 using UKHO.ERPFacade.Common.Operations.IO;
@@ -186,7 +186,7 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<IEventHandler, S57EventHandler>();
             builder.Services.AddScoped<IEventHandler, S100EventHandler>();
 
-            builder.Services.AddKeyedScoped<IBaseXmlTransformer, S57XmlTransformer>(Transformers.S57XmlTransformer);
+            builder.Services.AddKeyedScoped<IBaseXmlTransformer, S57XmlTransformer>(XmlTransformers.S57XmlTransformer);
             builder.Services.AddScoped<IEventDispatcher, EventDispatcher>();
 
             ConfigureHealthChecks(builder);

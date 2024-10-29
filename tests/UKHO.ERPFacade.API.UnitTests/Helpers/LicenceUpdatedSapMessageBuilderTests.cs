@@ -8,21 +8,21 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using UKHO.ERPFacade.API.Helpers;
+using UKHO.ERPFacade.API.SapMessageBuilders;
 using UKHO.ERPFacade.API.UnitTests.Common;
-using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
+using UKHO.ERPFacade.Common.Operations;
 using UKHO.ERPFacade.Common.Operations.IO;
 
-namespace UKHO.ERPFacade.API.UnitTests.Helpers
+namespace UKHO.ERPFacade.API.UnitTests.SapMessageBuilders
 {
     [TestFixture]
     public class LicenceUpdatedSapMessageBuilderTests
     {
         private ILogger<LicenceUpdatedSapMessageBuilder> _fakeLogger;
-        private IXmlOperations _fakeXmlHelper;
-        private IFileOperations _fakeFileSystemHelper;
+        private IXmlOperations _fakeXmlOperations;
+        private IFileOperations _fakeFileOperations;
 
         private LicenceUpdatedSapMessageBuilder _fakeLicenceUpdatedSapMessageBuilder;
         private readonly string XpathZAddsRos = $"//*[local-name()='Z_ADDS_ROS']";
@@ -85,9 +85,9 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
         public void Setup()
         {
             _fakeLogger = A.Fake<ILogger<LicenceUpdatedSapMessageBuilder>>();
-            _fakeXmlHelper = A.Fake<IXmlOperations>();
-            _fakeFileSystemHelper = A.Fake<IFileOperations>();
-            _fakeLicenceUpdatedSapMessageBuilder = new LicenceUpdatedSapMessageBuilder(_fakeLogger, _fakeXmlHelper, _fakeFileSystemHelper);
+            _fakeXmlOperations = A.Fake<IXmlOperations>();
+            _fakeFileOperations = A.Fake<IFileOperations>();
+            _fakeLicenceUpdatedSapMessageBuilder = new LicenceUpdatedSapMessageBuilder(_fakeLogger, _fakeXmlOperations, _fakeFileOperations);
         }
 
         [Test]
@@ -100,9 +100,9 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             XmlDocument soapXml = new();
             soapXml.LoadXml(RosSapXmlFile);
 
-            A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
-            A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
-            A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
+            A.CallTo(() => _fakeFileOperations.IsFileExists(A<string>.Ignored)).Returns(true);
+            A.CallTo(() => _fakeXmlOperations.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
+            A.CallTo(() => _fakeXmlOperations.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
 
             var result = _fakeLicenceUpdatedSapMessageBuilder.BuildLicenceUpdatedSapMessageXml(changeLicencePayloadJson!, correlationId);
 
@@ -146,7 +146,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             var changeLicencePayloadJson = JsonConvert.DeserializeObject<LicenceUpdatedEventPayLoad>(changeLicencePayload);
             var correlationId = "123-abc-456-xyz-333";
 
-            A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(false);
+            A.CallTo(() => _fakeFileOperations.IsFileExists(A<string>.Ignored)).Returns(false);
 
             Assert.Throws<FileNotFoundException>(() => _fakeLicenceUpdatedSapMessageBuilder.BuildLicenceUpdatedSapMessageXml(changeLicencePayloadJson!, correlationId));
 
@@ -162,7 +162,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Helpers
             var changeLicencePayloadJson = JsonConvert.DeserializeObject<LicenceUpdatedEventPayLoad>(changeLicencePayload);
             var sapReqXml = TestHelper.ReadFileData("ERPTestData\\ChangeLicencePayloadTest.xml");
 
-            A.CallTo(() => _fakeXmlHelper.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
+            A.CallTo(() => _fakeXmlOperations.CreateXmlPayLoad(A<SapRecordOfSalePayLoad>.Ignored)).Returns(sapReqXml);
 
             MethodInfo methodInfo = typeof(LicenceUpdatedSapMessageBuilder).GetMethod("BuildChangeLicencePayload", BindingFlags.NonPublic | BindingFlags.Instance)!;
             var result = (SapRecordOfSalePayLoad)methodInfo.Invoke(_fakeLicenceUpdatedSapMessageBuilder, new object[] { changeLicencePayloadJson! })!;

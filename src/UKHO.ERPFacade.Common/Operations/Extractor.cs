@@ -1,14 +1,12 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
-using System.Text;
-using System.Xml;
 
 namespace UKHO.ERPFacade.Common.Operations
 {
     [ExcludeFromCodeCoverage]
-    public static class CommonOperations
+    public static class Extractor
     {
-        public static object GetPropertyValue(string name, object obj, Type type)
+        public static object ExtractJsonAttributeValue(string name, object obj, Type type)
         {
             var parts = name.Split('.').ToList();
             var currentPart = parts[0];
@@ -17,7 +15,7 @@ namespace UKHO.ERPFacade.Common.Operations
             if (name.IndexOf(".") > -1)
             {
                 parts.Remove(currentPart);
-                return GetPropertyValue(string.Join(".", parts), info.GetValue(obj, null), info.PropertyType);
+                return ExtractJsonAttributeValue(string.Join(".", parts), info.GetValue(obj, null), info.PropertyType);
             }
             else
             {

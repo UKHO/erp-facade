@@ -34,9 +34,9 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             {
                 foreach (var conditions in rules.Conditions)
                 {
-                    object jsonFieldValue = CommonOperations.GetPropertyValue(conditions.AttributeName, obj, obj.GetType());
+                    object jsonAttributeValue = Extractor.ExtractJsonAttributeValue(conditions.AttributeName, obj, obj.GetType());
 
-                    if (jsonFieldValue != null! && jsonFieldValue.ToString() == conditions.AttributeValue)
+                    if (jsonAttributeValue != null! && jsonAttributeValue.ToString() == conditions.AttributeValue)
                     {
                         isConditionSatisfied = true;
                     }

@@ -6,13 +6,13 @@ using Newtonsoft.Json;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.Exceptions;
+using UKHO.ERPFacade.Common.Extensions;
 using UKHO.ERPFacade.Common.HttpClients;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Models.QueueEntities;
-using UKHO.ERPFacade.Common.Operations.IO;
 using UKHO.ERPFacade.Common.Operations.IO.Azure;
-using UKHO.ERPFacade.EventAggregation.WebJob.Helpers;
+using UKHO.ERPFacade.EventAggregation.WebJob.SapMessageBuilders;
 using Status = UKHO.ERPFacade.Common.Enums.Status;
 
 namespace UKHO.ERPFacade.EventAggregation.WebJob.Services

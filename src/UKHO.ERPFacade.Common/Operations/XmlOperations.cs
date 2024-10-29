@@ -2,7 +2,6 @@
 using System.Xml;
 using System.Xml.Serialization;
 using UKHO.ERPFacade.Common.Exceptions;
-using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Operations.IO;
 

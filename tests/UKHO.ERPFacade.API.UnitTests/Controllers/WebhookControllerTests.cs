@@ -16,7 +16,7 @@ using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using UKHO.ERPFacade.API.Controllers;
 using UKHO.ERPFacade.API.Dispatcher;
-using UKHO.ERPFacade.API.Helpers;
+using UKHO.ERPFacade.API.SapMessageBuilders;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.HttpClients;

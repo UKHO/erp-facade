@@ -1,5 +1,8 @@
-﻿namespace UKHO.ERPFacade.Common.Constants
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace UKHO.ERPFacade.Common.Constants
 {
+    [ExcludeFromCodeCoverage]
     public static class JsonFields
     {
         public const string EventIdKey = "id";

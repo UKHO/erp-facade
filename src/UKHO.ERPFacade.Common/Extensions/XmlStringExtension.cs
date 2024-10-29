@@ -1,7 +1,9 @@
-﻿using System.Xml;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Xml;
 
 namespace UKHO.ERPFacade.Common.Extensions
 {
+    [ExcludeFromCodeCoverage]
     public static class XmlStringExtension
     {
         public static string SetXmlClosingTags(this string xmlString)

@@ -1,27 +1,28 @@
 ﻿using System.Xml;
 using Microsoft.Extensions.Logging;
 using UKHO.ERPFacade.Common.Constants;
-using UKHO.ERPFacade.Common.IO;
+using UKHO.ERPFacade.Common.Extensions;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
+using UKHO.ERPFacade.Common.Operations;
 using UKHO.ERPFacade.Common.Operations.IO;
 
-namespace UKHO.ERPFacade.EventAggregation.WebJob.Helpers
+namespace UKHO.ERPFacade.EventAggregation.WebJob.SapMessageBuilders
 {
     public class RecordOfSaleSapMessageBuilder : IRecordOfSaleSapMessageBuilder
     {
         private readonly ILogger<RecordOfSaleSapMessageBuilder> _logger;
-        private readonly IXmlOperations _xmlHelper;
-        private readonly IFileOperations _fileSystemHelper;
+        private readonly IXmlOperations _xmlOperations;
+        private readonly IFileOperations _fileOperations;
 
         public RecordOfSaleSapMessageBuilder(ILogger<RecordOfSaleSapMessageBuilder> logger,
-            IXmlOperations xmlHelper,
-            IFileOperations fileSystemHelper
+            IXmlOperations xmlOperations,
+            IFileOperations fileOperations
         )
         {
             _logger = logger;
-            _xmlHelper = xmlHelper;
-            _fileSystemHelper = fileSystemHelper;
+            _xmlOperations = xmlOperations;
+            _fileOperations = fileOperations;
         }
 
         public XmlDocument BuildRecordOfSaleSapMessageXml(List<RecordOfSaleEventPayLoad> eventDataList, string correlationId)
@@ -30,7 +31,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Helpers
 
             _logger.LogInformation(EventIds.CreatingRecordOfSaleSapPayload.ToEventId(), "Creating the record of sale SAP Payload. | _X-Correlation-ID : {_X-Correlation-ID}", correlationId);
 
-            XmlDocument soapXml = _xmlHelper.CreateXmlDocument(Path.Combine(Environment.CurrentDirectory, XmlTemplateInfo.RecordOfSaleSapXmlTemplatePath));
+            XmlDocument soapXml = _xmlOperations.CreateXmlDocument(Path.Combine(Environment.CurrentDirectory, XmlTemplateInfo.RecordOfSaleSapXmlTemplatePath));
 
             sapRecordOfSalePayLoad = eventDataList[0].Data.RecordsOfSale.TransactionType switch
             {
@@ -42,7 +43,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Helpers
                 _ => sapRecordOfSalePayLoad
             };
 
-            string xml = _xmlHelper.CreateXmlPayLoad(sapRecordOfSalePayLoad);
+            string xml = _xmlOperations.CreateXmlPayLoad(sapRecordOfSalePayLoad);
 
             string sapXml = xml.Replace(XmlFields.ImOrderNameSpace, "");
 

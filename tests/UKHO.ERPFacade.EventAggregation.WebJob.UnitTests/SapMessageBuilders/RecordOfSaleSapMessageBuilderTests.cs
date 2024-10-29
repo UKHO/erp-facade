@@ -6,20 +6,20 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using UKHO.ERPFacade.Common.Exceptions;
-using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
+using UKHO.ERPFacade.Common.Operations;
 using UKHO.ERPFacade.Common.Operations.IO;
-using UKHO.ERPFacade.EventAggregation.WebJob.Helpers;
+using UKHO.ERPFacade.EventAggregation.WebJob.SapMessageBuilders;
 
-namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Helpers
+namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.SapMessageBuilders
 {
     [TestFixture]
     public class RecordOfSaleSapMessageBuilderTests
     {
         private ILogger<RecordOfSaleSapMessageBuilder> _fakeLogger;
-        private IXmlOperations _fakeXmlHelper;
-        private IFileOperations _fakeFileSystemHelper;
+        private IXmlOperations _fakeXmlOperations;
+        private IFileOperations _fakeFileOperations;
 
         private RecordOfSaleSapMessageBuilder _fakeRecordOfSaleSapMessageBuilder;
 
@@ -70,10 +70,10 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Helpers
         public void Setup()
         {
             _fakeLogger = A.Fake<ILogger<RecordOfSaleSapMessageBuilder>>();
-            _fakeFileSystemHelper = A.Fake<IFileOperations>();
-            _fakeXmlHelper = new XmlHelper(_fakeFileSystemHelper);
+            _fakeFileOperations = A.Fake<IFileOperations>();
+            _fakeXmlOperations = new XmlOperations(_fakeFileOperations);
 
-            _fakeRecordOfSaleSapMessageBuilder = new RecordOfSaleSapMessageBuilder(_fakeLogger, _fakeXmlHelper, _fakeFileSystemHelper);
+            _fakeRecordOfSaleSapMessageBuilder = new RecordOfSaleSapMessageBuilder(_fakeLogger, _fakeXmlOperations, _fakeFileOperations);
         }
 
         [Test]
@@ -89,7 +89,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Helpers
 
             const string correlationId = "123-abc-456-xyz-333";
 
-            A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
+            A.CallTo(() => _fakeFileOperations.IsFileExists(A<string>.Ignored)).Returns(true);
 
             var result = _fakeRecordOfSaleSapMessageBuilder.BuildRecordOfSaleSapMessageXml(rosNewLicenceData, correlationId);
 
@@ -135,7 +135,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Helpers
 
             const string correlationId = "123-abc-456-xyz-333";
 
-            A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(false);
+            A.CallTo(() => _fakeFileOperations.IsFileExists(A<string>.Ignored)).Returns(false);
 
             Assert.Throws<ERPFacadeException>(() => _fakeRecordOfSaleSapMessageBuilder.BuildRecordOfSaleSapMessageXml(rosNewLicenceData, correlationId));
         }
@@ -178,7 +178,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Helpers
 
             const string correlationId = "123-abc-456-xyz-333";
 
-            A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
+            A.CallTo(() => _fakeFileOperations.IsFileExists(A<string>.Ignored)).Returns(true);
 
             var result = _fakeRecordOfSaleSapMessageBuilder.BuildRecordOfSaleSapMessageXml(rosMaintainHoldingsData, correlationId);
 
@@ -283,7 +283,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Helpers
 
             const string correlationId = "123-abc-456-xyz-333";
 
-            A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
+            A.CallTo(() => _fakeFileOperations.IsFileExists(A<string>.Ignored)).Returns(true);
 
             var result = _fakeRecordOfSaleSapMessageBuilder.BuildRecordOfSaleSapMessageXml(rosMigrateNewLicenceData, correlationId);
 
@@ -354,7 +354,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Helpers
 
             const string correlationId = "123-abc-456-xyz-333";
 
-            A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
+            A.CallTo(() => _fakeFileOperations.IsFileExists(A<string>.Ignored)).Returns(true);
 
             var result = _fakeRecordOfSaleSapMessageBuilder.BuildRecordOfSaleSapMessageXml(rosMigrateExistingLicenceData, correlationId);
 
@@ -462,7 +462,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Helpers
 
             const string correlationId = "123-abc-456-xyz-333";
 
-            A.CallTo(() => _fakeFileSystemHelper.IsFileExists(A<string>.Ignored)).Returns(true);
+            A.CallTo(() => _fakeFileOperations.IsFileExists(A<string>.Ignored)).Returns(true);
 
             var result = _fakeRecordOfSaleSapMessageBuilder.BuildRecordOfSaleSapMessageXml(rosConvertLicenceData, correlationId);
 
