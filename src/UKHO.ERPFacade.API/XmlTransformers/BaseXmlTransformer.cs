@@ -59,13 +59,13 @@ namespace UKHO.ERPFacade.API.XmlTransformers
 
             // Sort based on the ActionNumber
             var sortedActionItems = actionItems
-                .OrderBy(node => Convert.ToInt32(node.SelectSingleNode(Constants.ActionNumber)?.InnerText ?? "0"))
+                .OrderBy(node => Convert.ToInt32(node.SelectSingleNode(XmlFields.ActionNumber)?.InnerText ?? "0"))
                 .ToList();
 
             // Update the sequence number in the sorted list
             foreach (XmlNode actionItem in sortedActionItems)
             {
-                var actionNumberNode = actionItem.SelectSingleNode(Constants.ActionNumber);
+                var actionNumberNode = actionItem.SelectSingleNode(XmlFields.ActionNumber);
                 if (actionNumberNode != null)
                 {
                     actionNumberNode.InnerText = sequenceNumber.ToString();

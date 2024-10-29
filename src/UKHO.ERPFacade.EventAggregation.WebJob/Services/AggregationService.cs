@@ -47,11 +47,11 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Services
             {
                 _logger.LogInformation(EventIds.MessageDequeueCount.ToEventId(), "Dequeue Count : {DequeueCount} | _X-Correlation-ID : {_X-Correlation-ID} | EventID : {EventID}", queueMessage.DequeueCount.ToString(), message.CorrelationId, message.EventId);
 
-                var entity = await _azureTableReaderWriter.GetEntityAsync(message.CorrelationId, Constants.RecordOfSaleEventTableName);
+                var entity = await _azureTableReaderWriter.GetEntityAsync(PartitionKeys.ROSPartitionKey, message.CorrelationId);
 
                 if (entity["Status"].ToString() == Status.Incomplete.ToString())
                 {
-                    List<string> blob = _azureBlobReaderWriter.GetBlobNamesInFolder(Constants.RecordOfSaleEventContainerName, message.CorrelationId);
+                    List<string> blob = _azureBlobReaderWriter.GetBlobNamesInFolder(AzureStorage.RecordOfSaleEventContainerName, message.CorrelationId);
 
                     if (message.RelatedEvents.All(x => blob.Contains(x)))
                     {
@@ -59,14 +59,14 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Services
                         {
                             _logger.LogInformation(EventIds.DownloadRecordOfSaleEventFromAzureBlob.ToEventId(), "Webjob has started downloading record of sale events from blob. | _X-Correlation-ID : {_X-Correlation-ID} | EventID : {EventID}", message.CorrelationId, message.EventId);
 
-                            string rosEvent = _azureBlobReaderWriter.DownloadEvent(message.CorrelationId + '/' + eventId + Constants.RecordOfSaleEventFileExtension, Constants.RecordOfSaleEventContainerName);
+                            string rosEvent = _azureBlobReaderWriter.DownloadEvent(message.CorrelationId + '/' + eventId + EventPayloadFiles.RecordOfSaleEventFileExtension, AzureStorage.RecordOfSaleEventContainerName);
                             rosEventList.Add(JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(rosEvent)!);
                         }
 
                         XmlDocument sapPayload = _recordOfSaleSapMessageBuilder.BuildRecordOfSaleSapMessageXml(rosEventList, message.CorrelationId);
 
                         _logger.LogInformation(EventIds.UploadRecordOfSaleSapXmlPayloadInAzureBlob.ToEventId(), "Uploading the SAP xml payload for record of sale event in blob storage. | _X-Correlation-ID : {_X-Correlation-ID} | EventID : {EventID}", message.CorrelationId, message.EventId);
-                        await _azureBlobReaderWriter.UploadEventAsync(sapPayload.ToIndentedString(), Constants.RecordOfSaleEventContainerName, message.CorrelationId + '/' + EventPayloadFiles.SapXmlPayloadFileName);
+                        await _azureBlobReaderWriter.UploadEventAsync(sapPayload.ToIndentedString(), AzureStorage.RecordOfSaleEventContainerName, message.CorrelationId + '/' + EventPayloadFiles.SapXmlPayloadFileName);
                         _logger.LogInformation(EventIds.UploadedRecordOfSaleSapXmlPayloadInAzureBlob.ToEventId(), "SAP xml payload for record of sale event is uploaded in blob storage successfully. | _X-Correlation-ID : {_X-Correlation-ID} | EventID : {EventID}", message.CorrelationId, message.EventId);
 
                         HttpResponseMessage response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapEndpointForRecordOfSale, _sapConfig.Value.SapServiceOperationForRecordOfSale, _sapConfig.Value.SapUsernameForRecordOfSale, _sapConfig.Value.SapPasswordForRecordOfSale);
@@ -78,7 +78,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Services
 
                         _logger.LogInformation(EventIds.RecordOfSalePublishedEventDataPushedToSap.ToEventId(), "The record of sale event data has been sent to SAP successfully. | _X-Correlation-ID : {_X-Correlation-ID} | EventID : {EventID} | StatusCode: {StatusCode}", message.CorrelationId, message.EventId, response.StatusCode);
 
-                        await _azureTableReaderWriter.UpdateEntityAsync(message.CorrelationId, Constants.RecordOfSaleEventTableName, new[] { new KeyValuePair<string, string>("Status", Status.Complete.ToString()) });
+                        await _azureTableReaderWriter.UpdateEntityAsync(PartitionKeys.ROSPartitionKey, message.CorrelationId, new[] { new KeyValuePair<string, string>("Status", Status.Complete.ToString()) });
                     }
                     else
                     {

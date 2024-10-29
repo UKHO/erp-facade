@@ -33,19 +33,19 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Helpers
 
             sapRecordOfSalePayLoad = eventDataList[0].Data.RecordsOfSale.TransactionType switch
             {
-                Constants.NewLicenceType => BuildNewLicencePayload(eventDataList),
-                Constants.MigrateNewLicenceType => BuildMigrateNewLicencePayload(eventDataList),
-                Constants.MigrateExistingLicenceType => BuildMigrateExistingLicencePayload(eventDataList),
-                Constants.ConvertLicenceType => BuildConvertLicencePayload(eventDataList),
-                Constants.MaintainHoldingsType => BuildMaintainHoldingsPayload(eventDataList),
+                RoSTransactionTypes.NewLicenceType => BuildNewLicencePayload(eventDataList),
+                RoSTransactionTypes.MigrateNewLicenceType => BuildMigrateNewLicencePayload(eventDataList),
+                RoSTransactionTypes.MigrateExistingLicenceType => BuildMigrateExistingLicencePayload(eventDataList),
+                RoSTransactionTypes.ConvertLicenceType => BuildConvertLicencePayload(eventDataList),
+                RoSTransactionTypes.MaintainHoldingsType => BuildMaintainHoldingsPayload(eventDataList),
                 _ => sapRecordOfSalePayLoad
             };
 
             string xml = _xmlHelper.CreateXmlPayLoad(sapRecordOfSalePayLoad);
 
-            string sapXml = xml.Replace(Constants.ImOrderNameSpace, "");
+            string sapXml = xml.Replace(XmlFields.ImOrderNameSpace, "");
 
-            soapXml.SelectSingleNode(Constants.XpathZAddsRos)!.InnerXml = sapXml.RemoveNullFields().SetXmlClosingTags();
+            soapXml.SelectSingleNode(XmlTemplateInfo.XpathZAddsRos)!.InnerXml = sapXml.RemoveNullFields().SetXmlClosingTags();
 
             _logger.LogInformation(EventIds.CreatedRecordOfSaleSapPayload.ToEventId(), "The record of sale SAP payload created. | _X-Correlation-ID : {_X-Correlation-ID}", correlationId);
 

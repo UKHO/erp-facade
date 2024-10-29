@@ -1,6 +1,6 @@
 ﻿namespace UKHO.ERPFacade.Common.Constants
 {
-    internal class RoSTransactionTypes
+    public class RoSTransactionTypes
     {
         public const string MaintainHoldingsType = "MAINTAINHOLDINGS";
         public const string NewLicenceType = "NEWLICENCE";

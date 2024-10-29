@@ -61,7 +61,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
         {
             foreach (var product in eventData.Products)
             {
-                foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == Con.EncCell))
+                foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == XmlFields.EncCell))
                 {
                     var unitOfSale = GetUnitOfSale(action.ActionNumber, eventData.UnitsOfSales, product);
 
@@ -111,7 +111,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
         {
             foreach (var unitOfSale in eventData.UnitsOfSales)
             {
-                foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == Constants.AvcsUnit))
+                foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == XmlFields.AvcsUnit))
                 {
                     if (!ValidateActionRules(action, unitOfSale))
                         continue;
@@ -147,19 +147,19 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             return actionNumber switch
             {
                 //Case 1 : CREATE ENC CELL
-                1 => listOfUnitOfSales.FirstOrDefault(x => x.UnitOfSaleType == Constants.UnitSaleType &&
-                                                           x.Status == Constants.UnitOfSaleStatusForSale &&
+                1 => listOfUnitOfSales.FirstOrDefault(x => x.UnitOfSaleType == JsonFields.UnitSaleType &&
+                                                           x.Status == JsonFields.UnitOfSaleStatusForSale &&
                                                            x.CompositionChanges.AddProducts.Contains(product.ProductName)),
 
                 //Case 4 : REPLACED WITH ENC CELL 
                 //Case 10 : CANCEL ENC CELL
-                4 or 10 => listOfUnitOfSales.FirstOrDefault(x => x.UnitOfSaleType == Constants.UnitSaleType &&
+                4 or 10 => listOfUnitOfSales.FirstOrDefault(x => x.UnitOfSaleType == JsonFields.UnitSaleType &&
                                                             x.CompositionChanges.RemoveProducts.Contains(product.ProductName)),
 
                 //Case 6 : CHANGE ENC CELL
                 //Case 8 : UPDATE ENC CELL EDITION UPDATE NUMBER
-                6 or 8 => listOfUnitOfSales.FirstOrDefault(x => x.UnitOfSaleType == Constants.UnitSaleType &&
-                                                                x.Status == Constants.UnitOfSaleStatusForSale &&
+                6 or 8 => listOfUnitOfSales.FirstOrDefault(x => x.UnitOfSaleType == JsonFields.UnitSaleType &&
+                                                                x.Status == JsonFields.UnitOfSaleStatusForSale &&
                                                                 product.InUnitsOfSale.Contains(x.UnitName)),
                 _ => null,
             };
@@ -178,21 +178,21 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             DecryptedPermit decryptedPermit = null;
 
             // Create main item node
-            var itemNode = soapXml.CreateElement(Constants.Item);
+            var itemNode = soapXml.CreateElement(XmlTemplateInfo.Item);
 
             // Add basic action-related nodes
-            _xmlHelper.AppendChildNode(itemNode, soapXml, Constants.ActionNumber, action.ActionNumber.ToString());
-            _xmlHelper.AppendChildNode(itemNode, soapXml, Constants.Action, action.Action.ToString());
-            _xmlHelper.AppendChildNode(itemNode, soapXml, Constants.Product, action.Product.ToString());
-            _xmlHelper.AppendChildNode(itemNode, soapXml, Constants.ProdType, Constants.ProdTypeValue);
+            _xmlHelper.AppendChildNode(itemNode, soapXml, XmlFields.ActionNumber, action.ActionNumber.ToString());
+            _xmlHelper.AppendChildNode(itemNode, soapXml, XmlFields.Action, action.Action.ToString());
+            _xmlHelper.AppendChildNode(itemNode, soapXml, XmlFields.Product, action.Product.ToString());
+            _xmlHelper.AppendChildNode(itemNode, soapXml, XmlFields.ProdType, XmlFields.ProdTypeValue);
 
             // Add child cell node
-            _xmlHelper.AppendChildNode(itemNode, soapXml, Constants.ChildCell, childCell);
+            _xmlHelper.AppendChildNode(itemNode, soapXml, XmlFields.ChildCell, childCell);
 
             List<(int sortingOrder, XmlElement node)> actionAttributes = new();
 
             // Get permit keys for New cell and Updated cell
-            if (action.Action == Constants.CreateEncCell || action.Action == Constants.UpdateCell)
+            if (action.Action == ConfigFileFields.CreateEncCell || action.Action == ConfigFileFields.UpdateCell)
             {
                 decryptedPermit = _permitDecryption.Decrypt(product.Permit);
             }

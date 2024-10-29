@@ -328,7 +328,7 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
             var cancelCellWithNewCellReplacementPayloadJson = TestHelper.ReadFileData("ERPTestData\\CancelCellWithNewCellReplacement.JSON");
             var baseCloudEvent = JsonConvert.DeserializeObject<BaseCloudEvent>(cancelCellWithNewCellReplacementPayloadJson);
             S57EventData s57EventData = JsonConvert.DeserializeObject<S57EventData>(baseCloudEvent.Data.ToString()!);
-            var action = _fakeSapActionConfig.Value.SapActions.FirstOrDefault(x => x.Product == Constants.EncCell && x.Action == Constants.ReplaceEncCellAction);
+            var action = _fakeSapActionConfig.Value.SapActions.FirstOrDefault(x => x.Product == XmlFields.EncCell && x.Action == ConfigFileFields.ReplaceEncCellAction);
 
             MethodInfo buildAction = typeof(S57XmlTransformer).GetMethod("GetUnitOfSale", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
             var result = (XmlElement)buildAction.Invoke(_fakeS57XmlTransformer, new object[] { action.ActionNumber, s57EventData.UnitsOfSales!, s57EventData.Products.FirstOrDefault()! })!;
@@ -343,7 +343,7 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
             var baseCloudEvent = JsonConvert.DeserializeObject<BaseCloudEvent>(cancelCellWithNewCellReplacementPayloadJson);
             S57EventData s57EventData = JsonConvert.DeserializeObject<S57EventData>(baseCloudEvent.Data.ToString()!);
 
-            var action = _fakeSapActionConfig.Value.SapActions.FirstOrDefault(x => x.Product == Constants.EncCell && x.Action == Constants.ChangeEncCellAction);
+            var action = _fakeSapActionConfig.Value.SapActions.FirstOrDefault(x => x.Product == XmlFields.EncCell && x.Action == ConfigFileFields.ChangeEncCellAction);
 
             MethodInfo buildAction = typeof(S57XmlTransformer).GetMethod("GetUnitOfSale", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
             var result = (XmlElement)buildAction.Invoke(_fakeS57XmlTransformer, new object[] { action.ActionNumber, s57EventData.UnitsOfSales!, s57EventData.Products.LastOrDefault()! })!;

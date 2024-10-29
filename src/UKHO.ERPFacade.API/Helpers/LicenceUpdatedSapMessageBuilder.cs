@@ -39,7 +39,7 @@ namespace UKHO.ERPFacade.API.Helpers
 
             string xml = _xmlHelper.CreateXmlPayLoad(sapRecordOfSalePayLoad);
 
-            string sapXml = xml.Replace(Constants.ImOrderNameSpace, "");
+            string sapXml = xml.Replace(XmlFields.ImOrderNameSpace, "");
 
             soapXml.SelectSingleNode(XmlTemplateInfo.XpathZAddsRos).InnerXml = sapXml.RemoveNullFields().SetXmlClosingTags();
 
