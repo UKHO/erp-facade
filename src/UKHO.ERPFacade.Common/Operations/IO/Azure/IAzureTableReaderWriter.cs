@@ -1,6 +1,6 @@
 ﻿using Azure.Data.Tables;
 
-namespace UKHO.ERPFacade.Common.IO.Azure
+namespace UKHO.ERPFacade.Common.Operations.IO.Azure
 {
     public interface IAzureTableReaderWriter
     {

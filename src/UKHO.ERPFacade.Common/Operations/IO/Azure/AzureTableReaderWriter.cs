@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Constants;
 
-namespace UKHO.ERPFacade.Common.IO.Azure
+namespace UKHO.ERPFacade.Common.Operations.IO.Azure
 {
     [ExcludeFromCodeCoverage]
     public class AzureTableReaderWriter : IAzureTableReaderWriter

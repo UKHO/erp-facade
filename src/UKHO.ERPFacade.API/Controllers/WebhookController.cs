@@ -4,17 +4,17 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UKHO.ERPFacade.API.Dispatcher;
-using UKHO.ERPFacade.API.Helpers;
+using UKHO.ERPFacade.API.SapMessageBuilders;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.Exceptions;
+using UKHO.ERPFacade.Common.Extensions;
 using UKHO.ERPFacade.Common.HttpClients;
-using UKHO.ERPFacade.Common.IO;
-using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Models.CloudEvents;
 using UKHO.ERPFacade.Common.Models.TableEntities;
+using UKHO.ERPFacade.Common.Operations.IO.Azure;
 using Status = UKHO.ERPFacade.Common.Enums.Status;
 
 namespace UKHO.ERPFacade.API.Controllers

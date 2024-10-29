@@ -5,8 +5,9 @@ using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.HttpClients;
-using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
+using UKHO.ERPFacade.Common.Operations;
+using UKHO.ERPFacade.Common.Operations.IO;
 
 namespace UKHO.ERPFacade.Common.HealthCheck
 {
@@ -14,20 +15,20 @@ namespace UKHO.ERPFacade.Common.HealthCheck
     {
         private readonly ISapClient _sapClient;
         private readonly IOptions<SapConfiguration> _sapConfig;
-        private readonly IXmlHelper _xmlHelper;
-        private readonly IFileSystemHelper _fileSystemHelper;
+        private readonly IXmlOperations _xmlOperations;
+        private readonly IFileOperations _fileOperations;
         private readonly ILogger<SapServiceHealthCheck> _logger;
 
         public SapServiceHealthCheck(ISapClient sapClient,
                                              IOptions<SapConfiguration> sapConfig,
-                                             IXmlHelper xmlHelper,
-                                             IFileSystemHelper fileSystemHelper,
+                                             IXmlOperations xmlOperations,
+                                             IFileOperations fileOperations,
                                              ILogger<SapServiceHealthCheck> logger)
         {
             _sapClient = sapClient;
             _sapConfig = sapConfig;
-            _xmlHelper = xmlHelper;
-            _fileSystemHelper = fileSystemHelper;
+            _xmlOperations = xmlOperations;
+            _fileOperations = fileOperations;
             _logger = logger;
         }
 
@@ -43,13 +44,13 @@ namespace UKHO.ERPFacade.Common.HealthCheck
                 healthCheckData.Add("SAP Template Path", sapXmlTemplatePath);
 
                 //Check whether template file exists or not
-                if (!_fileSystemHelper.IsFileExists(sapXmlTemplatePath))
+                if (!_fileOperations.IsFileExists(sapXmlTemplatePath))
                 {
                     _logger.LogWarning(EventIds.SapHealthCheckXmlTemplateNotFound.ToEventId(), "The SAP Health Check xml template does not exist.");
                     return HealthCheckResult.Unhealthy(data: healthCheckData, description: description);
                 }
 
-                XmlDocument sapPayload = _xmlHelper.CreateXmlDocument(sapXmlTemplatePath);
+                XmlDocument sapPayload = _xmlOperations.CreateXmlDocument(sapXmlTemplatePath);
 
                 healthCheckData.Add("SAP SOAP endpoint", new Uri(_sapClient.Uri, _sapConfig.Value.SapEndpointForEncEvent));
                 healthCheckData.Add("SAP SOAP operation(ENC)", _sapConfig.Value.SapServiceOperationForEncEvent);
