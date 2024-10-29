@@ -16,7 +16,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         {
             List<JsonInputRoSWebhookEvent> listOfEventJson = new();
 
-            foreach (var filePath in fileNames.Select(fileName => Path.Combine(projectDir, Config.TestConfig.PayloadFolder, Constants.RosPayloadTestDataFolder, fileName)))
+            foreach (var filePath in fileNames.Select(fileName => Path.Combine(projectDir, Config.TestConfig.PayloadFolder, EventPayloadFiles.RosPayloadTestDataFolder, fileName)))
             {
                 string requestBody;
 
@@ -32,17 +32,17 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
         public static string ModifyMandatoryAttribute(string payload, string attributeName, int index, string action)
         {
-            payload = SapXmlHelper.UpdatePermitField(payload, Constants.PermitWithSameKey);
+            payload = SapXmlHelper.UpdatePermitField(payload, JsonFields.PermitWithSameKey);
             JObject jsonObject = JObject.Parse(payload);
 
 
             string[] types = attributeName.Split(".");
 
-            var tokens = types[0] == Constants.Products
-                ? jsonObject.SelectTokens($"$.{Constants.ProductsNode}[{index}].{types[1]}").ToList()
-                : types[0] == Constants.UnitsOfSale
-                    ? jsonObject.SelectTokens($"$.{Constants.UnitsOfSaleNode}[{index}].{types[1]}").ToList()
-                    : jsonObject.SelectTokens($"$.{Constants.UKHOWeekNumber}.{types[0]}").ToList();
+            var tokens = types[0] == JsonFields.Products
+                ? jsonObject.SelectTokens($"$.{JsonFields.ProductsNode}[{index}].{types[1]}").ToList()
+                : types[0] == JsonFields.UnitsOfSale
+                    ? jsonObject.SelectTokens($"$.{JsonFields.UnitsOfSaleNode}[{index}].{types[1]}").ToList()
+                    : jsonObject.SelectTokens($"$.{JsonFields.UKHOWeekNumber}.{types[0]}").ToList();
 
             if (action == "Remove")
             {

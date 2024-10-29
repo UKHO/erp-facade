@@ -76,13 +76,13 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
                 //Logic to download XML from container using TraceID from JSON
                 string generatedXmlFilePath = _azureBlobStorageHelper.DownloadGeneratedXml(generatedXmlFolder, correlationId);
 
-                if (filePath.Contains(Constants.AioKey) && generatedXmlFilePath.Length == 0)
+                if (filePath.Contains(JsonFields.AioKey) && generatedXmlFilePath.Length == 0)
                 {
                     return response;
                 }
                 
                 //Expected XML 
-                string xmlFilePath = filePath.Replace(Config.TestConfig.PayloadFolder, Constants.ErpFacadeExpectedXmlFiles).Replace(".JSON", ".xml");
+                string xmlFilePath = filePath.Replace(Config.TestConfig.PayloadFolder, EventPayloadFiles.ErpFacadeExpectedXmlFiles).Replace(".JSON", ".xml");
 
                 Assert.That(SapXmlHelper.VerifyGeneratedXml(generatedXmlFilePath, xmlFilePath, permitState));
             }

@@ -51,7 +51,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                bool isBlobCreated = _azureBlobStorageHelper.VerifyBlobExists(Constants.RecordOfSaleEventContainerName, GeneratedCorrelationId);
+                bool isBlobCreated = _azureBlobStorageHelper.VerifyBlobExists(AzureStorage.RecordOfSaleEventContainerName, GeneratedCorrelationId);
                 Assert.That(isBlobCreated, Is.True, $"Blob {GeneratedCorrelationId} not created");
             }
 
@@ -83,11 +83,11 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
 
             if (isFirstEvent)
             {
-                bool isBlobCreated = _azureBlobStorageHelper.VerifyBlobExists(Constants.RecordOfSaleEventContainerName, correlationId);
+                bool isBlobCreated = _azureBlobStorageHelper.VerifyBlobExists(AzureStorage.RecordOfSaleEventContainerName, correlationId);
                 Assert.That(isBlobCreated, Is.True, $"Blob for {correlationId} not created");
             }
 
-            blobList = _azureBlobStorageHelper.GetBlobNamesInFolder(Constants.RecordOfSaleEventContainerName, correlationId);
+            blobList = _azureBlobStorageHelper.GetBlobNamesInFolder(AzureStorage.RecordOfSaleEventContainerName, correlationId);
 
             switch (isLastEvent)
             {
@@ -96,7 +96,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
                     //10minutes polling after every 30 seconds to check if xml payload is generated during webjob execution.
                     while (!blobList.Contains(EventPayloadFiles.SapXmlPayloadFileName) && DateTime.UtcNow - startTime < TimeSpan.FromMinutes(10))
                     {
-                        blobList = _azureBlobStorageHelper.GetBlobNamesInFolder(Constants.RecordOfSaleEventContainerName, correlationId);
+                        blobList = _azureBlobStorageHelper.GetBlobNamesInFolder(AzureStorage.RecordOfSaleEventContainerName, correlationId);
                         await Task.Delay(30000);
                     }
                     Assert.That(blobList, Does.Contain(EventPayloadFiles.SapXmlPayloadFileName), $"XML is not generated for {correlationId} at {DateTime.Now}.");
