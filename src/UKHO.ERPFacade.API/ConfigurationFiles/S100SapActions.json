@@ -3,8 +3,8 @@
         "SapActions": [
             {
                 "ActionNumber": 1,
-                "Action": "CREATE SHOP CELL",
-                "Product": "SHOP CELL",
+                "Action": "CREATE PRODUCT",
+                "Product": "PRODUCT",
                 "Rules": [
                     {
                         "Conditions": [
@@ -59,7 +59,7 @@
                         "SortingOrder": 5
                     },
                     {
-                        "IsRequired": true,
+                        "IsRequired": false,
                         "Section": "Product",
                         "JsonPropertyName": "ProviderCode",
                         "XmlNodeName": "PROVIDER",
@@ -83,8 +83,8 @@
             },
             {
                 "ActionNumber": 2,
-                "Action": "CREATE SHOP UNIT OF SALE",
-                "Product": "SHOP UNIT",
+                "Action": "CREATE UNIT OF SALE",
+                "Product": "UNIT OF SALE",
                 "Rules": [
                     {
                         "Conditions": [
@@ -157,8 +157,8 @@
             },
             {
                 "ActionNumber": 3,
-                "Action": "ASSIGN CELL TO SHOP UNIT OF SALE",
-                "Product": "SHOP UNIT",
+                "Action": "ASSIGN PRODUCT TO UNIT OF SALE",
+                "Product": "UNIT OF SALE",
                 "Rules": [],
                 "Attributes": [
                     {
@@ -221,8 +221,8 @@
             },
             {
                 "ActionNumber": 4,
-                "Action": "REPLACED WITH SHOP CELL",
-                "Product": "SHOP CELL",
+                "Action": "REPLACED WITH PRODUCT",
+                "Product": "PRODUCT",
                 "Rules": [
                     {
                         "Conditions": [
@@ -294,92 +294,9 @@
                 ]
             },
             {
-                "ActionNumber": 5,
-                "Action": "CHANGE SHOP CELL",
-                "Product": "SHOP CELL",
-                "Rules": [
-                    {
-                        "Conditions": [
-                            {
-                                "AttributeDataType": "bool",
-                                "AttributeName": "ContentChange",
-                                "AttributeValue": "False"
-                            }
-                        ]
-                    },
-                    {
-                        "Conditions": [
-                            {
-                                "AttributeDataType": "bool",
-                                "AttributeName": "Status.IsNewCell",
-                                "AttributeValue": "False"
-                            }
-                        ]
-                    }
-                ],
-                "Attributes": [
-                    {
-                        "IsRequired": true,
-                        "Section": "Product",
-                        "JsonPropertyName": "ProductIdentifier",
-                        "XmlNodeName": "PRODTYPE",
-                        "SortingOrder": 1
-                    },
-                    {
-                        "IsRequired": true,
-                        "Section": "Product",
-                        "JsonPropertyName": "ProductName",
-                        "XmlNodeName": "CHILDCELL",
-                        "SortingOrder": 2
-                    },
-                    {
-                        "IsRequired": true,
-                        "Section": "UnitOfSale",
-                        "JsonPropertyName": "UnitName",
-                        "XmlNodeName": "PRODUCTNAME",
-                        "SortingOrder": 3
-                    },
-                    {
-                        "IsRequired": false,
-                        "Section": "Product",
-                        "JsonPropertyName": "",
-                        "XmlNodeName": "REPLACEDBY",
-                        "SortingOrder": 4
-                    },
-                    {
-                        "IsRequired": true,
-                        "Section": "Product",
-                        "JsonPropertyName": "ProducingAgency",
-                        "XmlNodeName": "AGENCY",
-                        "SortingOrder": 5
-                    },
-                    {
-                        "IsRequired": true,
-                        "Section": "Product",
-                        "JsonPropertyName": "ProviderCode",
-                        "XmlNodeName": "PROVIDER",
-                        "SortingOrder": 6
-                    },
-                    {
-                        "IsRequired": true,
-                        "Section": "Product",
-                        "JsonPropertyName": "FileSize",
-                        "XmlNodeName": "ENCSIZE",
-                        "SortingOrder": 7
-                    },
-                    {
-                        "IsRequired": false,
-                        "Section": "Product",
-                        "JsonPropertyName": "",
-                        "XmlNodeName": "TITLE",
-                        "SortingOrder": 8
-                    }
-                ]
-            },
-            {
                 "ActionNumber": 6,
-                "Action": "CHANGE SHOP UNIT OF SALE",
-                "Product": "SHOP UNIT",
+                "Action": "CHANGE UNIT OF SALE",
+                "Product": "UNIT OF SALE",
                 "Rules": [
                     {
                         "Conditions": [
@@ -457,8 +374,91 @@
             },
             {
                 "ActionNumber": 7,
-                "Action": "REMOVE SHOP CELL FROM SHOP UNIT OF SALE",
-                "Product": "SHOP UNIT",
+                "Action": "CHANGE PRODUCT",
+                "Product": "PRODUCT",
+                "Rules": [
+                    {
+                        "Conditions": [
+                            {
+                                "AttributeDataType": "bool",
+                                "AttributeName": "ContentChange",
+                                "AttributeValue": "False"
+                            }
+                        ]
+                    },
+                    {
+                        "Conditions": [
+                            {
+                                "AttributeDataType": "bool",
+                                "AttributeName": "Status.IsNewCell",
+                                "AttributeValue": "False"
+                            }
+                        ]
+                    }
+                ],
+                "Attributes": [
+                    {
+                        "IsRequired": true,
+                        "Section": "Product",
+                        "JsonPropertyName": "ProductIdentifier",
+                        "XmlNodeName": "PRODTYPE",
+                        "SortingOrder": 1
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "Product",
+                        "JsonPropertyName": "ProductName",
+                        "XmlNodeName": "CHILDCELL",
+                        "SortingOrder": 2
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UnitOfSale",
+                        "JsonPropertyName": "UnitName",
+                        "XmlNodeName": "PRODUCTNAME",
+                        "SortingOrder": 3
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "REPLACEDBY",
+                        "SortingOrder": 4
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "Product",
+                        "JsonPropertyName": "ProducingAgency",
+                        "XmlNodeName": "AGENCY",
+                        "SortingOrder": 5
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "ProviderCode",
+                        "XmlNodeName": "PROVIDER",
+                        "SortingOrder": 6
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "Product",
+                        "JsonPropertyName": "FileSize",
+                        "XmlNodeName": "ENCSIZE",
+                        "SortingOrder": 7
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "TITLE",
+                        "SortingOrder": 8
+                    }
+                ]
+            },
+            {
+                "ActionNumber": 9,
+                "Action": "REMOVE PRODUCT FROM UNIT OF SALE",
+                "Product": "UNIT OF SALE",
                 "Rules": [],
                 "Attributes": [
                     {
@@ -520,9 +520,9 @@
                 ]
             },
             {
-                "ActionNumber": 8,
-                "Action": "CANCEL SHOP CELL",
-                "Product": "SHOP CELL",
+                "ActionNumber": 10,
+                "Action": "CANCEL PRODUCT",
+                "Product": "PRODUCT",
                 "Rules": [
                     {
                         "Conditions": [
@@ -599,9 +599,9 @@
                 ]
             },
             {
-                "ActionNumber": 9,
-                "Action": "CANCEL SHOP UNIT OF SALE",
-                "Product": "SHOP UNIT",
+                "ActionNumber": 11,
+                "Action": "CANCEL UNIT OF SALE",
+                "Product": "UNIT OF SALE",
                 "Rules": [
                     {
                         "Conditions": [
@@ -609,7 +609,7 @@
                                 "AttributeDataType": "string",
                                 "AttributeName": "Status",
                                 "AttributeValue": "NotForSale"
-                            } 
+                            }
                         ]
                     }
                 ],

@@ -39,6 +39,7 @@ namespace UKHO.ERPFacade
         {
             EventHubLoggingConfiguration eventHubLoggingConfiguration;
             SapActionConfiguration sapActionConfiguration;
+            S100SapActionConfiguration s100SapActionConfiguration;
 
             IHttpContextAccessor httpContextAccessor = new HttpContextAccessor();
             var builder = WebApplication.CreateBuilder(args);
@@ -166,6 +167,8 @@ namespace UKHO.ERPFacade
             builder.Services.Configure<SapConfiguration>(configuration.GetSection("SapConfiguration"));
             builder.Services.Configure<SapActionConfiguration>(configuration.GetSection("SapActionConfiguration"));
             sapActionConfiguration = configuration.GetSection("SapActionConfiguration").Get<SapActionConfiguration>()!;
+            builder.Services.Configure<S100SapActionConfiguration>(configuration.GetSection("S100SapActionConfiguration"));
+            s100SapActionConfiguration = configuration.GetSection("S100SapActionConfiguration").Get<S100SapActionConfiguration>()!;
             builder.Services.Configure<EESHealthCheckEnvironmentConfiguration>(configuration.GetSection("EESHealthCheckEnvironmentConfiguration"));
             builder.Services.Configure<PermitConfiguration>(configuration.GetSection("PermitConfiguration"));
             builder.Services.Configure<AioConfiguration>(configuration.GetSection("AioConfiguration"));
