@@ -28,8 +28,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
         public static string GetSapStatus(string correlationId)
         {
-            TableClient tableClient = GetTableClient(Constants.RecordOfSaleEventTableName);
-            Pageable<RecordOfSaleEventEntity> existingEntity = tableClient.Query<RecordOfSaleEventEntity>(filter: TableClient.CreateQueryFilter($"CorrelationId eq {correlationId}"));
+            TableClient tableClient = GetTableClient(AzureStorage.EventTableName);
+            Pageable<EventEntity> existingEntity = tableClient.Query<EventEntity>(filter: TableClient.CreateQueryFilter($"RowKey eq {correlationId}"));
             return existingEntity != null ? existingEntity.FirstOrDefault()?.Status : string.Empty;
         }
     }

@@ -5,7 +5,7 @@ using Azure.Security.KeyVault.Secrets;
 using Newtonsoft.Json.Serialization;
 using SoapCore;
 using UKHO.ERPFacade.Common.Configuration;
-using UKHO.ERPFacade.Common.IO.Azure;
+using UKHO.ERPFacade.Common.Operations.IO.Azure;
 using UKHO.SAP.MockAPIService.Filters;
 using UKHO.SAP.MockAPIService.Services;
 
@@ -50,9 +50,9 @@ namespace UKHO.SAP.MockAPIService
 
             builder.Services.AddSingleton<Iz_adds_mat_info, z_adds_mat_info>();
             builder.Services.AddSingleton<Iz_adds_ros, z_adds_ros>();
-            builder.Services.AddSingleton<IAzureBlobEventWriter, AzureBlobEventWriter>();            
+            builder.Services.AddSingleton<IAzureBlobReaderWriter, AzureBlobReaderWriter>();
             builder.Services.AddHealthChecks();
-            
+
             builder.Services.AddControllers(o =>
             {
                 o.AllowEmptyInputInBodyModelBinding = true;
@@ -65,11 +65,11 @@ namespace UKHO.SAP.MockAPIService
 
             app.UseHttpsRedirection();
 
-            app.UseWhen(context => (!context.Request.Path.StartsWithSegments("/api")&&
+            app.UseWhen(context => (!context.Request.Path.StartsWithSegments("/api") &&
                    !context.Request.Path.StartsWithSegments("/health")), appBuilder =>
             {
                 appBuilder.BasicAuthCustomMiddleware();
-            });            
+            });
 
             app.UseRouting();
 

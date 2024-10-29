@@ -27,7 +27,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
         {
             BlobServiceClient blobServiceClient = new(Config.TestConfig.AzureStorageConfiguration.ConnectionString);
             BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(blobContainer);
-            BlobClient blobClient = containerClient.GetBlobClient(Constants.SapXmlPayloadFileName);
+            BlobClient blobClient = containerClient.GetBlobClient(EventPayloadFiles.SapXmlPayloadFileName);
             try
             {
                 BlobDownloadInfo blobDownload = blobClient.Download();
@@ -48,11 +48,11 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             BlobServiceClient blobServiceClient = new BlobServiceClient(Config.TestConfig.AzureStorageConfiguration.ConnectionString);
 
             BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(parentContainerName + "\\" + blobContainer);
-            BlobClient blobClient = containerClient.GetBlobClient(blobContainer + "/" + Constants.SapXmlPayloadFileName);
+            BlobClient blobClient = containerClient.GetBlobClient(blobContainer + "/" + EventPayloadFiles.SapXmlPayloadFileName);
             try
             {
                 BlobDownloadInfo blobDownload = blobClient.Download();
-                fileName = expectedXmlFilePath + "\\" + blobContainer + "\\" + Constants.SapXmlPayloadFileName;
+                fileName = expectedXmlFilePath + "\\" + blobContainer + "\\" + EventPayloadFiles.SapXmlPayloadFileName;
                 Directory.CreateDirectory(Path.GetDirectoryName(fileName));
                 using FileStream downloadFileStream = new(fileName, FileMode.Create);
                 blobDownload.Content.CopyTo(downloadFileStream);
