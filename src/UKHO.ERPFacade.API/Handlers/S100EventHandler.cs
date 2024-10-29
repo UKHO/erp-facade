@@ -1,26 +1,27 @@
 ﻿using Newtonsoft.Json;
 using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.Enums;
-using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models.CloudEvents;
-using UKHO.ERPFacade.Common.Models.CloudEvents.S100;
+using UKHO.ERPFacade.Common.Models.CloudEvents.S100Event;
 using UKHO.ERPFacade.Common.Models.TableEntities;
+using UKHO.ERPFacade.Common.Operations.IO.Azure;
 
 namespace UKHO.ERPFacade.API.Handlers
 {
     public class S100EventHandler : IEventHandler
     {
-        public string EventType => Constants.S100EventType;
-        private readonly ILogger<S100EventHandler> _logger;
-        private readonly IAzureTableHelper _azureTableHelper;
-        private readonly IAzureBlobHelper _azureBlobHelper;
+        public string EventType => EventTypes.S100EventType;
 
-        public S100EventHandler(ILogger<S100EventHandler> logger, IAzureTableHelper azureTableHelper, IAzureBlobHelper azureBlobHelper)
+        private readonly ILogger<S100EventHandler> _logger;
+        private readonly IAzureTableReaderWriter _azureTableReaderWriter;
+        private readonly IAzureBlobReaderWriter _azureBlobReaderWriter;
+
+        public S100EventHandler(ILogger<S100EventHandler> logger, IAzureTableReaderWriter azureTableReaderWriter, IAzureBlobReaderWriter azureBlobReaderWriter)
         {
             _logger = logger;
-            _azureTableHelper = azureTableHelper;
-            _azureBlobHelper = azureBlobHelper;
+            _azureTableReaderWriter = azureTableReaderWriter;
+            _azureBlobReaderWriter = azureBlobReaderWriter;
         }
 
         public async Task ProcessEventAsync(BaseCloudEvent baseCloudEvent)
@@ -32,18 +33,18 @@ namespace UKHO.ERPFacade.API.Handlers
             EventEntity eventEntity = new()
             {
                 RowKey = s100EventData.CorrelationId,
-                PartitionKey = Constants.S100PartitionKey,
+                PartitionKey = PartitionKeys.S100PartitionKey,
                 Timestamp = DateTime.UtcNow,
                 RequestDateTime = null,
                 ResponseDateTime = null,
                 Status = Status.Incomplete.ToString()
             };
 
-            await _azureTableHelper.UpsertEntity(eventEntity);
+            await _azureTableReaderWriter.UpsertEntityAsync(eventEntity);
 
             _logger.LogInformation(EventIds.S100EventEntryAddedInAzureTable.ToEventId(), "S100 data content published event entry added in azure table.");
 
-            await _azureBlobHelper.UploadEvent(JsonConvert.SerializeObject(baseCloudEvent, Formatting.Indented), s100EventData.CorrelationId, Constants.S100DataEventFileName);
+            await _azureBlobReaderWriter.UploadEventAsync(JsonConvert.SerializeObject(baseCloudEvent, Formatting.Indented), s100EventData.CorrelationId, EventPayloadFiles.S100DataEventFileName);
 
             _logger.LogInformation(EventIds.S100EventJsonStoredInAzureBlobContainer.ToEventId(), "S100 data content published event json payload is stored in azure blob container.");
         }

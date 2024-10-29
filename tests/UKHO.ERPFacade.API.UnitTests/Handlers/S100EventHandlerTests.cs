@@ -7,9 +7,9 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using UKHO.ERPFacade.API.Handlers;
-using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models.CloudEvents;
+using UKHO.ERPFacade.Common.Operations.IO.Azure;
 
 namespace UKHO.ERPFacade.API.UnitTests.Handlers
 {
@@ -17,17 +17,18 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
     public class S100EventHandlerTests
     {
         private ILogger<S100EventHandler> _fakeLogger;
-        private IAzureTableHelper _fakeAzureTableHelper;
-        private IAzureBlobHelper _fakeAzureBlobHelper;
+        private IAzureTableReaderWriter _fakeAzureTableReaderWriter;
+        private IAzureBlobReaderWriter _fakeAzureBlobReaderWriter;
         private S100EventHandler _fakes100EventHandler;
 
         [SetUp]
         public void Setup()
         {
             _fakeLogger = A.Fake<ILogger<S100EventHandler>>();
-            _fakeAzureTableHelper = A.Fake<IAzureTableHelper>();
-            _fakeAzureBlobHelper = A.Fake<IAzureBlobHelper>();
-            _fakes100EventHandler = new S100EventHandler(_fakeLogger, _fakeAzureTableHelper, _fakeAzureBlobHelper);
+            _fakeAzureTableReaderWriter = A.Fake<IAzureTableReaderWriter>();
+            _fakeAzureBlobReaderWriter = A.Fake<IAzureBlobReaderWriter>();
+
+            _fakes100EventHandler = new S100EventHandler(_fakeLogger, _fakeAzureTableReaderWriter, _fakeAzureBlobReaderWriter);
         }
 
         [Test]
@@ -41,13 +42,13 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
                                                 && call.GetArgument<EventId>(1) == EventIds.S100EventProcessingStarted.ToEventId()
                                                 && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "S100 data content published event processing started.").MustHaveHappenedOnceExactly();
 
-            A.CallTo(() => _fakeAzureTableHelper.UpsertEntity(A<ITableEntity>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpsertEntityAsync(A<ITableEntity>.Ignored)).MustHaveHappened();
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Information
                                                 && call.GetArgument<EventId>(1) == EventIds.S100EventEntryAddedInAzureTable.ToEventId()
                                                 && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "S100 data content published event entry added in azure table.").MustHaveHappenedOnceExactly();
 
-            A.CallTo(() => _fakeAzureBlobHelper.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened(1, Times.Exactly);
+            A.CallTo(() => _fakeAzureBlobReaderWriter.UploadEventAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened(1, Times.Exactly);
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Information
                                                 && call.GetArgument<EventId>(1) == EventIds.S100EventJsonStoredInAzureBlobContainer.ToEventId()

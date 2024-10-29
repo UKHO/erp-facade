@@ -2,35 +2,34 @@
 using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.Exceptions;
-using UKHO.ERPFacade.Common.IO;
+using UKHO.ERPFacade.Common.Extensions;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
-using UKHO.ERPFacade.Common.Models.CloudEvents.S57;
+using UKHO.ERPFacade.Common.Models.CloudEvents.S57Event;
+using UKHO.ERPFacade.Common.Operations;
+using UKHO.ERPFacade.Common.Operations.IO;
 using UKHO.ERPFacade.Common.PermitDecryption;
 using UKHO.ERPFacade.Common.Providers;
-using Product = UKHO.ERPFacade.Common.Models.CloudEvents.S57.Product;
-using UnitOfSale = UKHO.ERPFacade.Common.Models.CloudEvents.S57.UnitOfSale;
 
 namespace UKHO.ERPFacade.API.XmlTransformers
 {
     public class S57XmlTransformer : BaseXmlTransformer
     {
         private readonly ILogger<S57XmlTransformer> _logger;
-        private readonly IXmlHelper _xmlHelper;
+        private readonly IXmlOperations _xmlOperations;
         private readonly IWeekDetailsProvider _weekDetailsProvider;
         private readonly IPermitDecryption _permitDecryption;
         private readonly IOptions<SapActionConfiguration> _sapActionConfig;
 
         public S57XmlTransformer(ILogger<S57XmlTransformer> logger,
-                                 IXmlHelper xmlHelper,
-                                 IFileSystemHelper fileSystemHelper,
+                                 IXmlOperations xmlOperations,
                                  IWeekDetailsProvider weekDetailsProvider,
                                  IPermitDecryption permitDecryption,
                                  IOptions<SapActionConfiguration> sapActionConfig)
-        : base(fileSystemHelper, xmlHelper)
+        : base()
         {
             _logger = logger;
-            _xmlHelper = xmlHelper;
+            _xmlOperations = xmlOperations;
             _weekDetailsProvider = weekDetailsProvider;
             _permitDecryption = permitDecryption;
             _sapActionConfig = sapActionConfig;
@@ -40,11 +39,11 @@ namespace UKHO.ERPFacade.API.XmlTransformers
         {
             _logger.LogInformation(EventIds.S57EventSapXmlPayloadGenerationStarted.ToEventId(), "Generation of SAP xml payload for S57 enccontentpublished event started.");
 
-            var s57EventXmlPayload = _xmlHelper.CreateXmlDocument(Path.Combine(Environment.CurrentDirectory, xmlTemplatePath));
+            var s57EventXmlPayload = _xmlOperations.CreateXmlDocument(Path.Combine(Environment.CurrentDirectory, xmlTemplatePath));
 
             if (eventData is S57EventData s57EventData)
             {
-                var actionItemNode = s57EventXmlPayload.SelectSingleNode(Constants.XpathActionItems);
+                var actionItemNode = s57EventXmlPayload.SelectSingleNode(XmlTemplateInfo.XpathActionItems);
 
                 // Build SAP actions for ENC Cell
                 BuildEncCellActions(s57EventData, s57EventXmlPayload, actionItemNode);
@@ -64,7 +63,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
         {
             foreach (var product in eventData.Products)
             {
-                foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == Constants.EncCell))
+                foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == XmlFields.EncCell))
                 {
                     var unitOfSale = GetUnitOfSale(action.ActionNumber, eventData.UnitsOfSales, product);
 
@@ -114,7 +113,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
         {
             foreach (var unitOfSale in eventData.UnitsOfSales)
             {
-                foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == Constants.AvcsUnit))
+                foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == XmlFields.AvcsUnit))
                 {
                     if (!ValidateActionRules(action, unitOfSale))
                         continue;
@@ -145,30 +144,30 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             }
         }
 
-        private UnitOfSale? GetUnitOfSale(int actionNumber, List<UnitOfSale> listOfUnitOfSales, Product product)
+        private S57UnitOfSale? GetUnitOfSale(int actionNumber, List<S57UnitOfSale> listOfUnitOfSales, S57Product product)
         {
             return actionNumber switch
             {
                 //Case 1 : CREATE ENC CELL
-                1 => listOfUnitOfSales.FirstOrDefault(x => x.UnitOfSaleType == Constants.UnitSaleType &&
-                                                           x.Status == Constants.UnitOfSaleStatusForSale &&
+                1 => listOfUnitOfSales.FirstOrDefault(x => x.UnitOfSaleType == JsonFields.UnitSaleType &&
+                                                           x.Status == JsonFields.UnitOfSaleStatusForSale &&
                                                            x.CompositionChanges.AddProducts.Contains(product.ProductName)),
 
                 //Case 4 : REPLACED WITH ENC CELL 
                 //Case 10 : CANCEL ENC CELL
-                4 or 10 => listOfUnitOfSales.FirstOrDefault(x => x.UnitOfSaleType == Constants.UnitSaleType &&
+                4 or 10 => listOfUnitOfSales.FirstOrDefault(x => x.UnitOfSaleType == JsonFields.UnitSaleType &&
                                                             x.CompositionChanges.RemoveProducts.Contains(product.ProductName)),
 
                 //Case 6 : CHANGE ENC CELL
                 //Case 8 : UPDATE ENC CELL EDITION UPDATE NUMBER
-                6 or 8 => listOfUnitOfSales.FirstOrDefault(x => x.UnitOfSaleType == Constants.UnitSaleType &&
-                                                                x.Status == Constants.UnitOfSaleStatusForSale &&
+                6 or 8 => listOfUnitOfSales.FirstOrDefault(x => x.UnitOfSaleType == JsonFields.UnitSaleType &&
+                                                                x.Status == JsonFields.UnitOfSaleStatusForSale &&
                                                                 product.InUnitsOfSale.Contains(x.UnitName)),
                 _ => null,
             };
         }
 
-        private void BuildAndAppendActionNode(XmlDocument soapXml, Product product, UnitOfSale unitOfSale, SapAction action, S57EventData eventData, XmlNode actionItemNode, string childCell = null, string replacedBy = null)
+        private void BuildAndAppendActionNode(XmlDocument soapXml, S57Product product, S57UnitOfSale unitOfSale, SapAction action, S57EventData eventData, XmlNode actionItemNode, string childCell = null, string replacedBy = null)
         {
             _logger.LogInformation(EventIds.S57SapActionGenerationStarted.ToEventId(), "Generation of {ActionName} action started.", action.Action);
             var actionNode = BuildAction(soapXml, product, unitOfSale, action, eventData.UkhoWeekNumber, childCell, replacedBy);
@@ -176,38 +175,38 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             _logger.LogInformation(EventIds.S57SapActionGenerationCompleted.ToEventId(), "Generation of {ActionName} action completed", action.Action);
         }
 
-        private XmlElement BuildAction(XmlDocument soapXml, Product product, UnitOfSale unitOfSale, SapAction action, UkhoWeekNumber ukhoWeekNumber, string childCell, string replacedBy = null)
+        private XmlElement BuildAction(XmlDocument soapXml, S57Product product, S57UnitOfSale unitOfSale, SapAction action, S57UkhoWeekNumber ukhoWeekNumber, string childCell, string replacedBy = null)
         {
             DecryptedPermit decryptedPermit = null;
 
             // Create main item node
-            var itemNode = soapXml.CreateElement(Constants.Item);
+            var itemNode = soapXml.CreateElement(XmlTemplateInfo.Item);
 
             // Add basic action-related nodes
-            _xmlHelper.AppendChildNode(itemNode, soapXml, Constants.ActionNumber, action.ActionNumber.ToString());
-            _xmlHelper.AppendChildNode(itemNode, soapXml, Constants.Action, action.Action.ToString());
-            _xmlHelper.AppendChildNode(itemNode, soapXml, Constants.Product, action.Product.ToString());
-            _xmlHelper.AppendChildNode(itemNode, soapXml, Constants.ProdType, Constants.ProdTypeValue);
+            _xmlOperations.AppendChildNode(itemNode, soapXml, XmlFields.ActionNumber, action.ActionNumber.ToString());
+            _xmlOperations.AppendChildNode(itemNode, soapXml, XmlFields.Action, action.Action.ToString());
+            _xmlOperations.AppendChildNode(itemNode, soapXml, XmlFields.Product, action.Product.ToString());
+            _xmlOperations.AppendChildNode(itemNode, soapXml, XmlFields.ProdType, XmlFields.ProdTypeValue);
 
             // Add child cell node
-            _xmlHelper.AppendChildNode(itemNode, soapXml, Constants.ChildCell, childCell);
+            _xmlOperations.AppendChildNode(itemNode, soapXml, XmlFields.ChildCell, childCell);
 
             List<(int sortingOrder, XmlElement node)> actionAttributes = new();
 
             // Get permit keys for New cell and Updated cell
-            if (action.Action == Constants.CreateEncCell || action.Action == Constants.UpdateCell)
+            if (action.Action == ConfigFileFields.CreateEncCell || action.Action == ConfigFileFields.UpdateCell)
             {
                 decryptedPermit = _permitDecryption.Decrypt(product.Permit);
             }
 
             // Process ProductSection attributes
-            ProcessAttributes(action.Action, action.Attributes.Where(x => x.Section == Constants.ProductSection), soapXml, product, actionAttributes, decryptedPermit, replacedBy);
+            ProcessAttributes(action.Action, action.Attributes.Where(x => x.Section == ConfigFileFields.ProductSection), soapXml, product, actionAttributes, decryptedPermit, replacedBy);
 
             // Process UnitOfSaleSection attributes
-            ProcessAttributes(action.Action, action.Attributes.Where(x => x.Section == Constants.UnitOfSaleSection), soapXml, unitOfSale, actionAttributes, null);
+            ProcessAttributes(action.Action, action.Attributes.Where(x => x.Section == ConfigFileFields.UnitOfSaleSection), soapXml, unitOfSale, actionAttributes, null);
 
             // Process UkhoWeekNumberSection attributes
-            ProcessUkhoWeekNumberAttributes(action.Action, action.Attributes.Where(x => x.Section == Constants.UkhoWeekNumberSection), soapXml, ukhoWeekNumber, actionAttributes);
+            ProcessUkhoWeekNumberAttributes(action.Action, action.Attributes.Where(x => x.Section == ConfigFileFields.UkhoWeekNumberSection), soapXml, ukhoWeekNumber, actionAttributes);
 
             // Sort and append attributes to SAP action
             foreach (var (sortingOrder, node) in actionAttributes.OrderBy(x => x.sortingOrder))
@@ -230,21 +229,21 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                     {
                         switch (attribute.XmlNodeName)
                         {
-                            case Constants.ReplacedBy:
-                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, replacedBy)) attributeNode.InnerText = CommonHelper.ToSubstring(replacedBy.ToString(), 0, Constants.MaxXmlNodeLength);
+                            case XmlFields.ReplacedBy:
+                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, replacedBy)) attributeNode.InnerText = StringExtension.ToSubstring(replacedBy.ToString(), 0, XmlFields.MaxXmlNodeLength);
                                 break;
-                            case Constants.ActiveKey:
-                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, decryptedPermit.ActiveKey)) attributeNode.InnerText = CommonHelper.ToSubstring(decryptedPermit.ActiveKey, 0, Constants.MaxXmlNodeLength);
+                            case XmlFields.ActiveKey:
+                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, decryptedPermit.ActiveKey)) attributeNode.InnerText = StringExtension.ToSubstring(decryptedPermit.ActiveKey, 0, XmlFields.MaxXmlNodeLength);
                                 break;
-                            case Constants.NextKey:
-                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, decryptedPermit.NextKey)) attributeNode.InnerText = CommonHelper.ToSubstring(decryptedPermit.NextKey, 0, Constants.MaxXmlNodeLength);
+                            case XmlFields.NextKey:
+                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, decryptedPermit.NextKey)) attributeNode.InnerText = StringExtension.ToSubstring(decryptedPermit.NextKey, 0, XmlFields.MaxXmlNodeLength);
                                 break;
                             default:
-                                var jsonFieldValue = CommonHelper.ParseXmlNode(attribute.JsonPropertyName, source, source.GetType()).ToString();
-                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, jsonFieldValue))
+                                var jsonAttributeValue = Extractor.ExtractJsonAttributeValue(attribute.JsonPropertyName, source, source.GetType()).ToString();
+                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, jsonAttributeValue))
                                 {
                                     // Set value as first 2 characters if the node is Agency, else limit other nodes to 250 characters
-                                    attributeNode.InnerText = attribute.XmlNodeName == Constants.Agency ? CommonHelper.ToSubstring(jsonFieldValue, 0, Constants.MaxAgencyXmlNodeLength) : CommonHelper.ToSubstring(jsonFieldValue, 0, Constants.MaxXmlNodeLength);
+                                    attributeNode.InnerText = attribute.XmlNodeName == XmlFields.Agency ? StringExtension.ToSubstring(jsonAttributeValue, 0, XmlFields.MaxAgencyXmlNodeLength) : StringExtension.ToSubstring(jsonAttributeValue, 0, XmlFields.MaxXmlNodeLength);
                                 }
                                 break;
                         }
@@ -262,7 +261,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             }
         }
 
-        private void ProcessUkhoWeekNumberAttributes(string action, IEnumerable<ActionItemAttribute> attributes, XmlDocument soapXml, UkhoWeekNumber ukhoWeekNumber, List<(int, XmlElement)> actionAttributes)
+        private void ProcessUkhoWeekNumberAttributes(string action, IEnumerable<ActionItemAttribute> attributes, XmlDocument soapXml, S57UkhoWeekNumber ukhoWeekNumber, List<(int, XmlElement)> actionAttributes)
         {
             if (ukhoWeekNumber == null)
             {
@@ -281,16 +280,16 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                         {
                             switch (attribute.XmlNodeName)
                             {
-                                case Constants.ValidFrom:
+                                case XmlFields.ValidFrom:
                                     var validFrom = _weekDetailsProvider.GetDateOfWeek(ukhoWeekNumber.Year.Value, ukhoWeekNumber.Week.Value, ukhoWeekNumber.CurrentWeekAlphaCorrection.Value);
-                                    attributeNode.InnerText = CommonHelper.ToSubstring(validFrom, 0, Constants.MaxXmlNodeLength);
+                                    attributeNode.InnerText = StringExtension.ToSubstring(validFrom, 0, XmlFields.MaxXmlNodeLength);
                                     break;
-                                case Constants.WeekNo:
+                                case XmlFields.WeekNo:
                                     var weekNo = string.Join("", ukhoWeekNumber.Year, ukhoWeekNumber.Week.Value.ToString("D2"));
-                                    attributeNode.InnerText = CommonHelper.ToSubstring(weekNo, 0, Constants.MaxXmlNodeLength);
+                                    attributeNode.InnerText = StringExtension.ToSubstring(weekNo, 0, XmlFields.MaxXmlNodeLength);
                                     break;
-                                case Constants.Correction:
-                                    attributeNode.InnerText = ukhoWeekNumber.CurrentWeekAlphaCorrection.Value ? Constants.IsCorrectionTrue : Constants.IsCorrectionFalse;
+                                case XmlFields.Correction:
+                                    attributeNode.InnerText = ukhoWeekNumber.CurrentWeekAlphaCorrection.Value ? XmlFields.IsCorrectionTrue : XmlFields.IsCorrectionFalse;
                                     break;
                             }
                         }

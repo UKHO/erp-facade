@@ -3,8 +3,8 @@ using FluentAssertions;
 using UKHO.ERPFacade.API.FunctionalTests.Configuration;
 using UKHO.ERPFacade.API.FunctionalTests.Helpers;
 using UKHO.ERPFacade.API.FunctionalTests.Service;
-using Constants = UKHO.ERPFacade.Common.Constants.Constants;
 using RestSharp;
+using UKHO.ERPFacade.Common.Constants;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 {
@@ -30,8 +30,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
         public async Task WhenValidS100DataContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponse(string payload)
         {
-            string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Constants.S100WebhookPayloadFolder, payload);
-            RestResponse response = await _webhookEndpoint.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(false), Constants.WebhookEndpoint, true);
+            string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, EventPayloadFiles.S100WebhookPayloadFolder, payload);
+            RestResponse response = await _webhookEndpoint.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(false), true);
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
     }

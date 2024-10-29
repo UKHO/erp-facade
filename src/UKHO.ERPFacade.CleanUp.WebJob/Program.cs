@@ -12,7 +12,7 @@ using Serilog;
 using UKHO.ERPFacade.CleanUp.WebJob;
 using UKHO.ERPFacade.CleanUp.WebJob.Services;
 using UKHO.ERPFacade.Common.Configuration;
-using UKHO.ERPFacade.Common.IO.Azure;
+using UKHO.ERPFacade.Common.Operations.IO.Azure;
 using UKHO.Logging.EventHubLogProvider;
 
 namespace UKHO.ERPFacade.Monitoring.WebJob
@@ -148,8 +148,8 @@ namespace UKHO.ERPFacade.Monitoring.WebJob
             }
 
             serviceCollection.AddSingleton<CleanUpWebjob>();
-            serviceCollection.AddSingleton<IAzureTableHelper, AzureTableHelper>();
-            serviceCollection.AddSingleton<IAzureBlobHelper, AzureBlobHelper>();
+            serviceCollection.AddSingleton<IAzureTableReaderWriter, AzureTableReaderWriter>();
+            serviceCollection.AddSingleton<IAzureBlobReaderWriter, AzureBlobReaderWriter>();
             serviceCollection.AddSingleton<ICleanUpService, CleanUpService>();
         }
     }
