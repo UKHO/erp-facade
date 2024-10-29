@@ -415,7 +415,42 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940083 - Dequeue count of message.
         /// </summary>
-        MessageDequeueCount = 940083
+        MessageDequeueCount = 940083,
+
+        /// <summary>
+        /// 940087 - Generation of SAP xml payload for S100 data content published event started.
+        /// </summary>
+        S100EventSapXmlPayloadGenerationStarted = 940087,
+
+        /// <summary>
+        /// 940088 - Generation of SAP xml payload for S100 data content published event completed.
+        /// </summary>
+        S100EventSapXmlPayloadGenerationCompleted = 940088,
+
+        /// <summary>
+        /// 940089 - Generation of SAP action for S100 data content published event started.
+        /// </summary>
+        S100SapActionGenerationStarted = 940089,
+
+        /// <summary>
+        /// 940090 - Generation of SAP action for S100 data content published event completed.
+        /// </summary>
+        S100SapActionGenerationCompleted = 940090,
+
+        /// <summary>
+        /// 940091 - Product SapAction Generation Started.
+        /// </summary>
+        ProductSapActionGenerationStarted = 940091,
+
+        /// <summary>
+        /// 940092 - Product SapAction Generation Completed.
+        /// </summary>
+        ProductSapActionGenerationCompleted = 940092,
+
+        /// <summary>
+        /// 940093 - S100SapAction Information Generation Failed Exception.
+        /// </summary>
+        S100SapActionInformationGenerationFailedException = 940093
     }
 
     /// <summary>

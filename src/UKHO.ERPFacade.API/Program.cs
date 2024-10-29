@@ -40,6 +40,7 @@ namespace UKHO.ERPFacade
         {
             EventHubLoggingConfiguration eventHubLoggingConfiguration;
             SapActionConfiguration sapActionConfiguration;
+            S100SapActionConfiguration s100SapActionConfiguration;
 
             IHttpContextAccessor httpContextAccessor = new HttpContextAccessor();
             var builder = WebApplication.CreateBuilder(args);
@@ -50,6 +51,7 @@ namespace UKHO.ERPFacade
                 .AddJsonFile("appsettings.json", false, true)
                 .AddJsonFile($"appsettings.{webHostEnvironment.EnvironmentName}.json", true, true)
                 .AddJsonFile("ConfigurationFiles/S57SapActions.json", true, true)
+                .AddJsonFile("ConfigurationFiles/S100SapActions.json", true, true)
 #if DEBUG
                 //Add development overrides configuration
                 .AddJsonFile("appsettings.local.overrides.json", true, true)
@@ -166,6 +168,8 @@ namespace UKHO.ERPFacade
             builder.Services.Configure<SapConfiguration>(configuration.GetSection("SapConfiguration"));
             builder.Services.Configure<SapActionConfiguration>(configuration.GetSection("SapActionConfiguration"));
             sapActionConfiguration = configuration.GetSection("SapActionConfiguration").Get<SapActionConfiguration>()!;
+            builder.Services.Configure<S100SapActionConfiguration>(configuration.GetSection("S100SapActionConfiguration"));
+            s100SapActionConfiguration = configuration.GetSection("S100SapActionConfiguration").Get<S100SapActionConfiguration>()!;
             builder.Services.Configure<EESHealthCheckEnvironmentConfiguration>(configuration.GetSection("EESHealthCheckEnvironmentConfiguration"));
             builder.Services.Configure<PermitConfiguration>(configuration.GetSection("PermitConfiguration"));
             builder.Services.Configure<AioConfiguration>(configuration.GetSection("AioConfiguration"));
@@ -187,6 +191,7 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<IEventHandler, S100EventHandler>();
 
             builder.Services.AddKeyedScoped<IBaseXmlTransformer, S57XmlTransformer>(XmlTransformers.S57XmlTransformer);
+            builder.Services.AddKeyedScoped<IBaseXmlTransformer, S100XmlTransformer>(XmlTransformers.S100XmlTransformer);
             builder.Services.AddScoped<IEventDispatcher, EventDispatcher>();
 
             ConfigureHealthChecks(builder);

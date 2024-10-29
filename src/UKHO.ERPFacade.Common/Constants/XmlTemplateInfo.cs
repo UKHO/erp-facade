@@ -22,5 +22,7 @@ namespace UKHO.ERPFacade.Common.Constants
         public const string XpathRecDate = $"//*[local-name()='RECDATE']";
         public const string XpathRecTime = $"//*[local-name()='RECTIME']";
         public const string Item = "item";
+
+        public const string S100SapXmlTemplatePath = "SapXmlTemplates\\SAPS100Request.xml";
     }
 }
