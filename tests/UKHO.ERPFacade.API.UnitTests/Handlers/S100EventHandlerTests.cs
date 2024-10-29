@@ -1,12 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Xml;
 using Azure.Data.Tables;
 using FakeItEasy;
+using Microsoft.AspNetCore.Mvc.Diagnostics;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using UKHO.ERPFacade.API.Handlers;
+using UKHO.ERPFacade.API.XmlTransformers;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models.CloudEvents;
@@ -20,14 +23,16 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
         private IAzureTableHelper _fakeAzureTableHelper;
         private IAzureBlobHelper _fakeAzureBlobHelper;
         private S100EventHandler _fakes100EventHandler;
+        private IBaseXmlTransformer _fakeBaseXmlTransformer;
 
         [SetUp]
         public void Setup()
         {
             _fakeLogger = A.Fake<ILogger<S100EventHandler>>();
+            _fakeBaseXmlTransformer = A.Fake<IBaseXmlTransformer>();
             _fakeAzureTableHelper = A.Fake<IAzureTableHelper>();
             _fakeAzureBlobHelper = A.Fake<IAzureBlobHelper>();
-            _fakes100EventHandler = new S100EventHandler(_fakeLogger, _fakeAzureTableHelper, _fakeAzureBlobHelper);
+            _fakes100EventHandler = new S100EventHandler(_fakeBaseXmlTransformer, _fakeLogger, _fakeAzureTableHelper, _fakeAzureBlobHelper);
         }
 
         [Test]
@@ -47,11 +52,18 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
                                                 && call.GetArgument<EventId>(1) == EventIds.S100EventEntryAddedInAzureTable.ToEventId()
                                                 && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "S100 data content published event entry added in azure table.").MustHaveHappenedOnceExactly();
 
-            A.CallTo(() => _fakeAzureBlobHelper.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened(1, Times.Exactly);
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Information
                                                 && call.GetArgument<EventId>(1) == EventIds.S100EventJsonStoredInAzureBlobContainer.ToEventId()
                                                 && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "S100 data content published event json payload is stored in azure blob container.").MustHaveHappenedOnceExactly();
+
+            A.CallTo(() => _fakeBaseXmlTransformer.BuildXmlPayload(A<EventData>.Ignored, A<string>.Ignored)).Returns(new XmlDocument());
+            A.CallTo(() => _fakeAzureBlobHelper.UploadEvent(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened(2, Times.Exactly);
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+                                                && call.GetArgument<LogLevel>(0) == LogLevel.Information
+                                                && call.GetArgument<EventId>(1) == EventIds.S100EventXMLStoredInAzureBlobContainer.ToEventId()
+                                                && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "S100 data content published event xml payload is stored in azure blob container.").MustHaveHappenedOnceExactly();
+
         }
     }
 }

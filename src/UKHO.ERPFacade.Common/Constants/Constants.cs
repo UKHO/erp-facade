@@ -11,6 +11,7 @@ namespace UKHO.ERPFacade.Common.Constants
 
         //XmlTransformer Types
         public const string S57XmlTransformer = "S57XmlTransformer";
+        public const string S100XmlTransformer = "S100XmlTransformer";
 
         //JSON field keys
         public const string EventIdKey = "id";
@@ -162,5 +163,8 @@ namespace UKHO.ERPFacade.Common.Constants
         public const string S57PartitionKey = "S57";
         public const string ROSPartitionKey = "ROS";
         public const string S100PartitionKey = "S100";
+
+        //S100 xml template xpath
+        public const string S100SapXmlTemplatePath = "SapXmlTemplates\\SAPS100Request.xml";
     }
 }

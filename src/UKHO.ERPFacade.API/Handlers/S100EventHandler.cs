@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
+using UKHO.ERPFacade.API.XmlTransformers;
 using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.Enums;
+using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models.CloudEvents;
@@ -15,12 +17,17 @@ namespace UKHO.ERPFacade.API.Handlers
         private readonly ILogger<S100EventHandler> _logger;
         private readonly IAzureTableHelper _azureTableHelper;
         private readonly IAzureBlobHelper _azureBlobHelper;
+        private readonly IBaseXmlTransformer _baseXmlTransformer;
 
-        public S100EventHandler(ILogger<S100EventHandler> logger, IAzureTableHelper azureTableHelper, IAzureBlobHelper azureBlobHelper)
+        public S100EventHandler([FromKeyedServices("S57XmlTransformer")] IBaseXmlTransformer baseXmlTransformer,
+            ILogger<S100EventHandler> logger,
+            IAzureTableHelper azureTableReaderWriter,
+            IAzureBlobHelper azureBlobEventWriter)
         {
             _logger = logger;
-            _azureTableHelper = azureTableHelper;
-            _azureBlobHelper = azureBlobHelper;
+            _baseXmlTransformer = baseXmlTransformer;
+            _azureTableHelper = azureTableReaderWriter;
+            _azureBlobHelper = azureBlobEventWriter;
         }
 
         public async Task ProcessEventAsync(BaseCloudEvent baseCloudEvent)
@@ -46,6 +53,12 @@ namespace UKHO.ERPFacade.API.Handlers
             await _azureBlobHelper.UploadEvent(JsonConvert.SerializeObject(baseCloudEvent, Formatting.Indented), s100EventData.CorrelationId, Constants.S100DataEventFileName);
 
             _logger.LogInformation(EventIds.S100EventJsonStoredInAzureBlobContainer.ToEventId(), "S100 data content published event json payload is stored in azure blob container.");
+
+            var sapPayload = _baseXmlTransformer.BuildXmlPayload(s100EventData, Constants.S100SapXmlTemplatePath);
+
+            await _azureBlobHelper.UploadEvent(sapPayload.ToIndentedString(), s100EventData.CorrelationId, Constants.SapXmlPayloadFileName);
+
+            _logger.LogInformation(EventIds.S100EventXMLStoredInAzureBlobContainer.ToEventId(), "S100 data content published event xml payload is stored in azure blob container.");
         }
     }
 }
