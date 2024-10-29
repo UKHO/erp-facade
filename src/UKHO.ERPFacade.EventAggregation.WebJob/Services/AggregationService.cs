@@ -47,13 +47,13 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Services
             {
                 _logger.LogInformation(EventIds.MessageDequeueCount.ToEventId(), "Dequeue Count : {DequeueCount} | _X-Correlation-ID : {_X-Correlation-ID} | EventID : {EventID}", queueMessage.DequeueCount.ToString(), message.CorrelationId, message.EventId);
 
-                var entity = await _azureTableReaderWriter.GetEntityAsync(message.CorrelationId, AzureStorage.EventTableName);
+                var entity = await _azureTableReaderWriter.GetEntityAsync(PartitionKeys.ROSPartitionKey, message.CorrelationId);
 
                 if (entity["Status"].ToString() == Status.Incomplete.ToString())
                 {
                     List<string> blob = _azureBlobReaderWriter.GetBlobNamesInFolder(AzureStorage.RecordOfSaleEventContainerName, message.CorrelationId);
 
-                    if (message.RelatedEvents.All(x => blob.Contains(x)))
+                    if (message.RelatedEvents.All(blob.Contains))
                     {
                         foreach (string eventId in message.RelatedEvents)
                         {
