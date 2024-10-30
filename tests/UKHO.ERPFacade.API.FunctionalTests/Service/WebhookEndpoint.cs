@@ -51,6 +51,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             if (response.IsSuccessful && validateJson)
             {
                 string content = await _azureBlobStorageHelper.GetGeneratedJson(GeneratedCorrelationId);
+                Console.WriteLine(content);
+                Console.WriteLine("--------------------------------------------------");
+                Console.WriteLine(requestBody);
                 Assert.That(content.Equals(requestBody));
             }
 
