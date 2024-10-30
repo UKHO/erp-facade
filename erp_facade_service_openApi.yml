@@ -42,6 +42,24 @@ paths:
       responses:
         "200":
           description: OK
+        "400":
+          description: Bad Request - The request is incomplete or fails validation:<br /> - Unknown event type received in payload.<br /> - CorrelationId is missing in the event.
+          headers:
+            X-Correlation-ID:
+              description: GUID for the request for logging/tracing
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorDescription'
+              example:
+                correlationId: 6c254109-8a0f-4446-8649-721775ba9de2
+                errors:
+                  - source: erpfacade
+                    description: Unknown event type received in payload.
+                  - source: erpfacade
+                    description: CorrelationId is missing in the event. 
         "401":
           description: Unauthorised - either you have not provided valid token, or your token is not recognised.
         "403":
@@ -52,7 +70,7 @@ paths:
     post:
       tags:
         - "ERP Facade"
-      summary: Returns response status for the callback request from SAP.
+      summary: Callback endpoint for SAP to report completion of processing.
       security:
         - ApiKeyAuth: []
       operationId: sapCallback
@@ -153,12 +171,7 @@ components:
           type: string
         data:
           type: object
-          properties:
-            property1:
-              type: string
-            property2:
-              type: string
-              format: string
+          description: The event payload. This specification does not place any restriction on the type of this information.
   responses:
     TokenAuthenticationFailed:
       description: Token Authentication Failed
