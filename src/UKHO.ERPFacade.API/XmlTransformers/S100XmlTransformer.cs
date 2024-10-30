@@ -57,7 +57,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             _logger.LogInformation(EventIds.ProductSapActionGenerationStarted.ToEventId(), "Product SapAction Generation Started.");
             foreach (var product in eventData.Products)
             {
-                foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == S100Fields.Product))
+                foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == XmlFields.Product))
                 {
                     var unitOfSale = GetUnitOfSale(action.ActionNumber, eventData.UnitsOfSales, product);
 
@@ -67,28 +67,28 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                     switch (action.ActionNumber)
                     {
                         case 1://CREATE PRODUCT
-                        case 5://CANCEL PRODUCT
+                        case 10://CANCEL PRODUCT
                             if (unitOfSale is null)
                             {
                                 throw new ERPFacadeException(EventIds.RequiredUnitNotFoundException.ToEventId(), $"Required unit not found in S100 data content published event for {product.ProductName} to generate {action.Action} action.");
                             }
-                            BuildAndAppendActionNode(soapXml, product, unitOfSale, action, eventData, actionItemNode);
+                            BuildAndAppendActionNode(soapXml, product, unitOfSale, action, actionItemNode, product.ProductName);
                             break;
 
-                        case 9://REPLACED WITH PRODUCT
-                            if (product.Replaces.Any() && unitOfSale is null)
+                        case 4://REPLACED WITH PRODUCT
+                            if (product.DataReplacement.Any() && unitOfSale is null)
                             {
                                 throw new ERPFacadeException(EventIds.RequiredUnitNotFoundException.ToEventId(), $"Required unit not found in S100 data content published event for {product.ProductName} to generate {action.Action} action.");
                             }
-                            foreach (var replacedProduct in product.Replaces)
+                            foreach (var replacedProduct in product.DataReplacement)
                             {
-                                BuildAndAppendActionNode(soapXml, product, unitOfSale, action, eventData, actionItemNode, replacedProduct);
+                                BuildAndAppendActionNode(soapXml, product, unitOfSale, action, actionItemNode, product.ProductName, replacedProduct);
                             }
                             break;
 
-                        case 14://CHANGE PRODUCT
+                        case 7://CHANGE PRODUCT
                             if (unitOfSale is not null)
-                                BuildAndAppendActionNode(soapXml, product, unitOfSale, action, eventData, actionItemNode);
+                                BuildAndAppendActionNode(soapXml, product, unitOfSale, action, actionItemNode, product.ProductName);
                             break;
                     }
                 }
@@ -103,25 +103,25 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                 //Case 1 : CREATE PRODUCT
                 1 => listOfUnitOfSales.FirstOrDefault(x => x.Status == JsonFields.UnitOfSaleStatusForSale && x.CompositionChanges.AddProducts.Contains(product.ProductName)),
 
-                //Case 9 : REPLACED WITH PRODUCT
-                //Case 5 : CANCEL PRODUCT
-                5 or 9 => listOfUnitOfSales.FirstOrDefault(x => x.CompositionChanges.RemoveProducts.Contains(product.ProductName)),
+                //Case 4 : REPLACED WITH PRODUCT
+                //Case 10 : CANCEL PRODUCT
+                4 or 10 => listOfUnitOfSales.FirstOrDefault(x => x.CompositionChanges.RemoveProducts.Contains(product.ProductName)),
 
-                //Case 14 : CHANGE PRODUCT
-                14 => listOfUnitOfSales.FirstOrDefault(x => x.Status == JsonFields.UnitOfSaleStatusForSale && product.InUnitsOfSale.Contains(x.UnitName)),
+                //Case 7 : CHANGE PRODUCT
+                7 => listOfUnitOfSales.FirstOrDefault(x => x.Status == JsonFields.UnitOfSaleStatusForSale && product.InUnitsOfSale.Contains(x.UnitName)),
                 _ => null,
             };
         }
 
-        private void BuildAndAppendActionNode(XmlDocument soapXml, S100Product product, S100UnitOfSale unitOfSale, SapAction action, S100EventData eventData, XmlNode actionItemNode, string replacedBy = null)
+        private void BuildAndAppendActionNode(XmlDocument soapXml, S100Product product, S100UnitOfSale unitOfSale, SapAction action, XmlNode actionItemNode, string childCell = null, string replacedBy = null)
         {
             _logger.LogInformation(EventIds.S100SapActionGenerationStarted.ToEventId(), "Generation of {ActionName} action started.", action.Action);
-            var actionNode = BuildAction(soapXml, product, unitOfSale, action, replacedBy);
+            var actionNode = BuildAction(soapXml, product, unitOfSale, action, childCell, replacedBy);
             actionItemNode.AppendChild(actionNode);
             _logger.LogInformation(EventIds.S100SapActionGenerationCompleted.ToEventId(), "Generation of {ActionName} action completed", action.Action);
         }
 
-        private XmlElement BuildAction(XmlDocument soapXml, S100Product product, S100UnitOfSale unitOfSale, SapAction action, string replacedBy = null)
+        private XmlElement BuildAction(XmlDocument soapXml, S100Product product, S100UnitOfSale unitOfSale, SapAction action, string childCell, string replacedBy = null)
         {
             // Create main item node
             var itemNode = soapXml.CreateElement(XmlTemplateInfo.Item);
@@ -130,6 +130,9 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             _xmlHelper.AppendChildNode(itemNode, soapXml, XmlFields.ActionNumber, action.ActionNumber.ToString());
             _xmlHelper.AppendChildNode(itemNode, soapXml, XmlFields.Action, action.Action.ToString());
             _xmlHelper.AppendChildNode(itemNode, soapXml, XmlFields.Product, action.Product.ToString());
+
+            // Add child cell node
+            _xmlHelper.AppendChildNode(itemNode, soapXml, XmlFields.ChildCell, childCell);
 
             List<(int sortingOrder, XmlElement node)> actionAttributes = new();
 
@@ -158,7 +161,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
 
                     if (attribute.IsRequired)
                     {
-                        if (attribute.XmlNodeName == replacedBy && !IsPropertyNullOrEmpty(attribute.JsonPropertyName, replacedBy))
+                        if (attribute.XmlNodeName == XmlFields.ReplacedBy && !IsPropertyNullOrEmpty(attribute.JsonPropertyName, replacedBy))
                         {
                             attributeNode.InnerText = CommonHelper.ToSubstring(replacedBy.ToString(), 0, XmlFields.MaxXmlNodeLength);
                         }
