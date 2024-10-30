@@ -43,7 +43,7 @@ paths:
         "200":
           description: OK
         "400":
-          description: Bad Request - The request is incomplete or fails validation:<br /> - Unknown event type received in payload.<br /> - CorrelationId is missing in the event.
+          description: Bad Request - The request is incomplete or fails validation. E.g. <br /> - Unknown event type received in payload.<br /> - CorrelationId is missing in the event.
           headers:
             X-Correlation-ID:
               description: GUID for the request for logging/tracing
