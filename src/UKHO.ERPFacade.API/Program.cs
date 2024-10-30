@@ -50,6 +50,7 @@ namespace UKHO.ERPFacade
                 .AddJsonFile("appsettings.json", false, true)
                 .AddJsonFile($"appsettings.{webHostEnvironment.EnvironmentName}.json", true, true)
                 .AddJsonFile("ConfigurationFiles/S57SapActions.json", true, true)
+                .AddJsonFile("ConfigurationFiles/S100SapActions.json", true, true)
 #if DEBUG
                 //Add development overrides configuration
                 .AddJsonFile("appsettings.local.overrides.json", true, true)
@@ -187,6 +188,7 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<IEventHandler, S100EventHandler>();
 
             builder.Services.AddKeyedScoped<IBaseXmlTransformer, S57XmlTransformer>(XmlTransformers.S57XmlTransformer);
+            builder.Services.AddKeyedScoped<IBaseXmlTransformer, S100XmlTransformer>(XmlTransformers.S100XmlTransformer);
             builder.Services.AddScoped<IEventDispatcher, EventDispatcher>();
 
             ConfigureHealthChecks(builder);
