@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Constants;
-using UKHO.ERPFacade.Common.IO.Azure;
+using UKHO.ERPFacade.Common.Operations.IO.Azure;
 
 namespace UKHO.ERPFacade.CleanUp.WebJob.Services
 {

@@ -5,7 +5,7 @@ using Azure.Security.KeyVault.Secrets;
 using Newtonsoft.Json.Serialization;
 using SoapCore;
 using UKHO.ERPFacade.Common.Configuration;
-using UKHO.ERPFacade.Common.IO.Azure;
+using UKHO.ERPFacade.Common.Operations.IO.Azure;
 using UKHO.SAP.MockAPIService.Filters;
 using UKHO.SAP.MockAPIService.Services;
 

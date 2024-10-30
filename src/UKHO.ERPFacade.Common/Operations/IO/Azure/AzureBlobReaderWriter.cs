@@ -5,7 +5,7 @@ using Azure.Storage.Blobs.Models;
 using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Configuration;
 
-namespace UKHO.ERPFacade.Common.IO.Azure
+namespace UKHO.ERPFacade.Common.Operations.IO.Azure
 {
     [ExcludeFromCodeCoverage]
     public class AzureBlobReaderWriter : IAzureBlobReaderWriter

@@ -3,23 +3,24 @@ using System.Xml;
 using System.Xml.Serialization;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Logging;
+using UKHO.ERPFacade.Common.Operations.IO;
 
-namespace UKHO.ERPFacade.Common.IO
+namespace UKHO.ERPFacade.Common.Operations
 {
     [ExcludeFromCodeCoverage]
-    public class XmlHelper : IXmlHelper
+    public class XmlOperations : IXmlOperations
     {
-        private readonly IFileSystemHelper _fileSystemHelper;
+        private readonly IFileOperations _fileOperations;
 
-        public XmlHelper(IFileSystemHelper fileSystemHelper)
+        public XmlOperations(IFileOperations fileOperations)
         {
-            _fileSystemHelper = fileSystemHelper;
+            _fileOperations = fileOperations;
         }
 
         public XmlDocument CreateXmlDocument(string xmlPath)
         {
             // Check if SAP XML payload template exists
-            if (!_fileSystemHelper.IsFileExists(xmlPath))
+            if (!_fileOperations.IsFileExists(xmlPath))
             {
                 throw new ERPFacadeException(EventIds.SapXmlTemplateNotFound.ToEventId(), "The SAP XML payload template does not exist.");
             }

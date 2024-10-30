@@ -187,5 +187,6 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             }
         }
 
+        public override XmlDocument BuildXmlPayload<T>(T eventData, string xmlTemplatePath) => throw new NotImplementedException();
     }
 }

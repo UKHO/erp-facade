@@ -1,5 +1,8 @@
-﻿namespace UKHO.ERPFacade.Common.Constants
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace UKHO.ERPFacade.Common.Constants
 {
+    [ExcludeFromCodeCoverage]
     public static class EventTypes
     {
         public const string S57EventType = "uk.gov.ukho.encpublishing.enccontentpublished.v2.2";

@@ -1,7 +1,7 @@
 ﻿using System.Xml;
 using UKHO.ERPFacade.Common.Models;
 
-namespace UKHO.ERPFacade.EventAggregation.WebJob.Helpers
+namespace UKHO.ERPFacade.EventAggregation.WebJob.SapMessageBuilders
 {
     public interface IRecordOfSaleSapMessageBuilder
     {

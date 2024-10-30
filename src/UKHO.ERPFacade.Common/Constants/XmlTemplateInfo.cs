@@ -1,5 +1,8 @@
-﻿namespace UKHO.ERPFacade.Common.Constants
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace UKHO.ERPFacade.Common.Constants
 {
+    [ExcludeFromCodeCoverage]
     public class XmlTemplateInfo
     {
         public const string S57SapXmlTemplatePath = "SapXmlTemplates\\SAPS57Request.xml";

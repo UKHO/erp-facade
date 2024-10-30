@@ -2,10 +2,12 @@
 using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.Exceptions;
-using UKHO.ERPFacade.Common.IO;
+using UKHO.ERPFacade.Common.Extensions;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Models.CloudEvents.S57Event;
+using UKHO.ERPFacade.Common.Operations;
+using UKHO.ERPFacade.Common.Operations.IO;
 using UKHO.ERPFacade.Common.PermitDecryption;
 using UKHO.ERPFacade.Common.Providers;
 
@@ -14,20 +16,20 @@ namespace UKHO.ERPFacade.API.XmlTransformers
     public class S57XmlTransformer : BaseXmlTransformer
     {
         private readonly ILogger<S57XmlTransformer> _logger;
-        private readonly IXmlHelper _xmlHelper;
+        private readonly IXmlOperations _xmlOperations;
         private readonly IWeekDetailsProvider _weekDetailsProvider;
         private readonly IPermitDecryption _permitDecryption;
         private readonly IOptions<SapActionConfiguration> _sapActionConfig;
 
         public S57XmlTransformer(ILogger<S57XmlTransformer> logger,
-                                 IXmlHelper xmlHelper,
+                                 IXmlOperations xmlOperations,
                                  IWeekDetailsProvider weekDetailsProvider,
                                  IPermitDecryption permitDecryption,
                                  IOptions<SapActionConfiguration> sapActionConfig)
         : base()
         {
             _logger = logger;
-            _xmlHelper = xmlHelper;
+            _xmlOperations = xmlOperations;
             _weekDetailsProvider = weekDetailsProvider;
             _permitDecryption = permitDecryption;
             _sapActionConfig = sapActionConfig;
@@ -37,7 +39,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
         {
             _logger.LogInformation(EventIds.S57EventSapXmlPayloadGenerationStarted.ToEventId(), "Generation of SAP xml payload for S57 enccontentpublished event started.");
 
-            var s57EventXmlPayload = _xmlHelper.CreateXmlDocument(Path.Combine(Environment.CurrentDirectory, xmlTemplatePath));
+            var s57EventXmlPayload = _xmlOperations.CreateXmlDocument(Path.Combine(Environment.CurrentDirectory, xmlTemplatePath));
 
             if (eventData is S57EventData s57EventData)
             {
@@ -181,13 +183,13 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             var itemNode = soapXml.CreateElement(XmlTemplateInfo.Item);
 
             // Add basic action-related nodes
-            _xmlHelper.AppendChildNode(itemNode, soapXml, XmlFields.ActionNumber, action.ActionNumber.ToString());
-            _xmlHelper.AppendChildNode(itemNode, soapXml, XmlFields.Action, action.Action.ToString());
-            _xmlHelper.AppendChildNode(itemNode, soapXml, XmlFields.Product, action.Product.ToString());
-            _xmlHelper.AppendChildNode(itemNode, soapXml, XmlFields.ProdType, XmlFields.ProdTypeValue);
+            _xmlOperations.AppendChildNode(itemNode, soapXml, XmlFields.ActionNumber, action.ActionNumber.ToString());
+            _xmlOperations.AppendChildNode(itemNode, soapXml, XmlFields.Action, action.Action.ToString());
+            _xmlOperations.AppendChildNode(itemNode, soapXml, XmlFields.Product, action.Product.ToString());
+            _xmlOperations.AppendChildNode(itemNode, soapXml, XmlFields.ProdType, XmlFields.ProdTypeValue);
 
             // Add child cell node
-            _xmlHelper.AppendChildNode(itemNode, soapXml, XmlFields.ChildCell, childCell);
+            _xmlOperations.AppendChildNode(itemNode, soapXml, XmlFields.ChildCell, childCell);
 
             List<(int sortingOrder, XmlElement node)> actionAttributes = new();
 
@@ -228,20 +230,20 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                         switch (attribute.XmlNodeName)
                         {
                             case XmlFields.ReplacedBy:
-                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, replacedBy)) attributeNode.InnerText = CommonHelper.ToSubstring(replacedBy.ToString(), 0, XmlFields.MaxXmlNodeLength);
+                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, replacedBy)) attributeNode.InnerText = StringExtension.ToSubstring(replacedBy.ToString(), 0, XmlFields.MaxXmlNodeLength);
                                 break;
                             case XmlFields.ActiveKey:
-                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, decryptedPermit.ActiveKey)) attributeNode.InnerText = CommonHelper.ToSubstring(decryptedPermit.ActiveKey, 0, XmlFields.MaxXmlNodeLength);
+                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, decryptedPermit.ActiveKey)) attributeNode.InnerText = StringExtension.ToSubstring(decryptedPermit.ActiveKey, 0, XmlFields.MaxXmlNodeLength);
                                 break;
                             case XmlFields.NextKey:
-                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, decryptedPermit.NextKey)) attributeNode.InnerText = CommonHelper.ToSubstring(decryptedPermit.NextKey, 0, XmlFields.MaxXmlNodeLength);
+                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, decryptedPermit.NextKey)) attributeNode.InnerText = StringExtension.ToSubstring(decryptedPermit.NextKey, 0, XmlFields.MaxXmlNodeLength);
                                 break;
                             default:
-                                var jsonFieldValue = CommonHelper.ParseXmlNode(attribute.JsonPropertyName, source, source.GetType()).ToString();
-                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, jsonFieldValue))
+                                var jsonAttributeValue = Extractor.ExtractJsonAttributeValue(attribute.JsonPropertyName, source, source.GetType()).ToString();
+                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, jsonAttributeValue))
                                 {
                                     // Set value as first 2 characters if the node is Agency, else limit other nodes to 250 characters
-                                    attributeNode.InnerText = attribute.XmlNodeName == XmlFields.Agency ? CommonHelper.ToSubstring(jsonFieldValue, 0, XmlFields.MaxAgencyXmlNodeLength) : CommonHelper.ToSubstring(jsonFieldValue, 0, XmlFields.MaxXmlNodeLength);
+                                    attributeNode.InnerText = attribute.XmlNodeName == XmlFields.Agency ? StringExtension.ToSubstring(jsonAttributeValue, 0, XmlFields.MaxAgencyXmlNodeLength) : StringExtension.ToSubstring(jsonAttributeValue, 0, XmlFields.MaxXmlNodeLength);
                                 }
                                 break;
                         }
@@ -280,11 +282,11 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                             {
                                 case XmlFields.ValidFrom:
                                     var validFrom = _weekDetailsProvider.GetDateOfWeek(ukhoWeekNumber.Year.Value, ukhoWeekNumber.Week.Value, ukhoWeekNumber.CurrentWeekAlphaCorrection.Value);
-                                    attributeNode.InnerText = CommonHelper.ToSubstring(validFrom, 0, XmlFields.MaxXmlNodeLength);
+                                    attributeNode.InnerText = StringExtension.ToSubstring(validFrom, 0, XmlFields.MaxXmlNodeLength);
                                     break;
                                 case XmlFields.WeekNo:
                                     var weekNo = string.Join("", ukhoWeekNumber.Year, ukhoWeekNumber.Week.Value.ToString("D2"));
-                                    attributeNode.InnerText = CommonHelper.ToSubstring(weekNo, 0, XmlFields.MaxXmlNodeLength);
+                                    attributeNode.InnerText = StringExtension.ToSubstring(weekNo, 0, XmlFields.MaxXmlNodeLength);
                                     break;
                                 case XmlFields.Correction:
                                     attributeNode.InnerText = ukhoWeekNumber.CurrentWeekAlphaCorrection.Value ? XmlFields.IsCorrectionTrue : XmlFields.IsCorrectionFalse;

@@ -1,31 +1,33 @@
 ﻿using System.Xml;
 using UKHO.ERPFacade.Common.Constants;
-using UKHO.ERPFacade.Common.IO;
+using UKHO.ERPFacade.Common.Extensions;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
+using UKHO.ERPFacade.Common.Operations;
+using UKHO.ERPFacade.Common.Operations.IO;
 
-namespace UKHO.ERPFacade.API.Helpers
+namespace UKHO.ERPFacade.API.SapMessageBuilders
 {
     public class LicenceUpdatedSapMessageBuilder : ILicenceUpdatedSapMessageBuilder
     {
         private readonly ILogger<LicenceUpdatedSapMessageBuilder> _logger;
-        private readonly IXmlHelper _xmlHelper;
-        private readonly IFileSystemHelper _fileSystemHelper;
+        private readonly IXmlOperations _xmlOperations;
+        private readonly IFileOperations _fileOperations;
 
         public LicenceUpdatedSapMessageBuilder(ILogger<LicenceUpdatedSapMessageBuilder> logger,
-                                               IXmlHelper xmlHelper,
-                                               IFileSystemHelper fileSystemHelper)
+                                               IXmlOperations xmlOperations,
+                                               IFileOperations fileOperations)
         {
             _logger = logger;
-            _xmlHelper = xmlHelper;
-            _fileSystemHelper = fileSystemHelper;
+            _xmlOperations = xmlOperations;
+            _fileOperations = fileOperations;
         }
 
         public XmlDocument BuildLicenceUpdatedSapMessageXml(LicenceUpdatedEventPayLoad eventData, string correlationId)
         {
             string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, XmlTemplateInfo.RecordOfSaleSapXmlTemplatePath);
 
-            if (!_fileSystemHelper.IsFileExists(sapXmlTemplatePath))
+            if (!_fileOperations.IsFileExists(sapXmlTemplatePath))
             {
                 _logger.LogError(EventIds.LicenceUpdatedSapXmlTemplateNotFound.ToEventId(), "The licence updated SAP message xml template does not exist.");
                 throw new FileNotFoundException();
@@ -33,11 +35,11 @@ namespace UKHO.ERPFacade.API.Helpers
 
             _logger.LogInformation(EventIds.CreatingLicenceUpdatedSapPayload.ToEventId(), "Creating licence updated SAP Payload.");
 
-            XmlDocument soapXml = _xmlHelper.CreateXmlDocument(sapXmlTemplatePath);
+            XmlDocument soapXml = _xmlOperations.CreateXmlDocument(sapXmlTemplatePath);
 
             var sapRecordOfSalePayLoad = BuildChangeLicencePayload(eventData);
 
-            string xml = _xmlHelper.CreateXmlPayLoad(sapRecordOfSalePayLoad);
+            string xml = _xmlOperations.CreateXmlPayLoad(sapRecordOfSalePayLoad);
 
             string sapXml = xml.Replace(XmlFields.ImOrderNameSpace, "");
 
