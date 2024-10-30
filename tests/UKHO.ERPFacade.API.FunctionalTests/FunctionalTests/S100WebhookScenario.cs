@@ -26,7 +26,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         }
 
         [Test]
-        [TestCase("NewCells.JSON", TestName = "WhenValidS100DataContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponse")]
+        [TestCase("NewCells.JSON", TestName = "WhenValidS100DataContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkAndPayloadShouldBeStoredInBlobContainer")]
 
         public async Task WhenValidS100DataContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponse(string payload)
         {
