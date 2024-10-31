@@ -169,6 +169,7 @@ namespace UKHO.ERPFacade
             builder.Services.Configure<EESHealthCheckEnvironmentConfiguration>(configuration.GetSection("EESHealthCheckEnvironmentConfiguration"));
             builder.Services.Configure<PermitConfiguration>(configuration.GetSection("PermitConfiguration"));
             builder.Services.Configure<AioConfiguration>(configuration.GetSection("AioConfiguration"));
+            builder.Services.Configure<SharedApiKeyConfiguration>(configuration.GetSection("SharedApiKeyConfiguration"));
 
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -188,6 +189,7 @@ namespace UKHO.ERPFacade
 
             builder.Services.AddKeyedScoped<IBaseXmlTransformer, S57XmlTransformer>(XmlTransformers.S57XmlTransformer);
             builder.Services.AddScoped<IEventDispatcher, EventDispatcher>();
+            builder.Services.AddScoped<SharedApiKeyAuthFilter>();
 
             ConfigureHealthChecks(builder);
 

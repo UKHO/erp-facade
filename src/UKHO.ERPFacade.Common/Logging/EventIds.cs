@@ -415,7 +415,22 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940083 - Dequeue count of message.
         /// </summary>
-        MessageDequeueCount = 940083
+        MessageDequeueCount = 940083,
+
+        /// <summary>
+        /// 940084 - Shared key is missing in request.
+        /// </summary>
+        SharedApiKeyMissingInRequest = 940084,
+
+        /// <summary>
+        /// 940085 - Invalid shared key.
+        /// </summary>
+        InvalidSharedApiKey = 940085,
+
+        /// <summary>
+        /// 940086 - Shared API Key Configuration is missing.
+        /// </summary>
+        SharedApiKeyConfigurationMissing = 940086,
     }
 
     /// <summary>
