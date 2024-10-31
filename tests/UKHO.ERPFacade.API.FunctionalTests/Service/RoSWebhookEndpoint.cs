@@ -1,31 +1,39 @@
-﻿using NUnit.Framework;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using NUnit.Framework;
 using RestSharp;
 using System.Net;
 using UKHO.ERPFacade.API.FunctionalTests.Configuration;
-using UKHO.ERPFacade.API.FunctionalTests.Helpers;
 using UKHO.ERPFacade.API.FunctionalTests.Model;
+using UKHO.ERPFacade.API.FunctionalTests.Modifiers;
+using UKHO.ERPFacade.API.FunctionalTests.Operations;
+using UKHO.ERPFacade.API.FunctionalTests.Validators;
 using UKHO.ERPFacade.Common.Constants;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Service
 {
-    public class RoSWebhookEndpoint
+    public class RoSWebhookEndpoint : TestFixtureBase
     {
         private readonly RestClient _client;
-        private readonly AzureBlobStorageHelper _azureBlobStorageHelper;
-
-        public static string GeneratedCorrelationId = string.Empty;
+        private readonly RestClientOptions _options;
+        private readonly AzureBlobReaderWriter _azureBlobStorageHelper;
+        private readonly AzureTableReaderWriter _azureTableReaderWriter;
+        private readonly ErpFacadeConfiguration _erpFacadeConfiguration;
 
         public RoSWebhookEndpoint()
         {
-            RestClientOptions options = new(Config.TestConfig.ErpFacadeConfiguration.BaseUrl);
+            var serviceProvider = GetServiceProvider();
+            _erpFacadeConfiguration = serviceProvider!.GetRequiredService<IOptions<ErpFacadeConfiguration>>().Value;
 
-            _client = new RestClient(options);
-            _azureBlobStorageHelper = new AzureBlobStorageHelper();
+            _options = new RestClientOptions(_erpFacadeConfiguration.BaseUrl);
+            _client = new RestClient(_options);
+            _azureBlobStorageHelper = new AzureBlobReaderWriter();
+            _azureTableReaderWriter = new AzureTableReaderWriter();
         }
 
         public async Task<RestResponse> OptionRosWebhookResponseAsync(string token)
         {
-            var request = new RestRequest(RequestEndPoints.RoSWebhookRequestEndPoint, Method.Options);
+            var request = new RestRequest(_erpFacadeConfiguration.RoSWebhookRequestEndPoint, Method.Options);
             request.AddHeader("Authorization", "Bearer " + token);
             RestResponse response = await _client.ExecuteAsync(request);
             return response;
@@ -34,16 +42,16 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
         public async Task<RestResponse> PostWebhookResponseAsync(string payloadFilePath, string token)
         {
             string requestBody;
-
+            string correlationId;
             using (StreamReader streamReader = new(payloadFilePath))
             {
                 requestBody = await streamReader.ReadToEndAsync();
             }
 
-            GeneratedCorrelationId = SapXmlHelper.GenerateRandomCorrelationId();
-            requestBody = SapXmlHelper.UpdateTimeAndCorrIdField(requestBody, GeneratedCorrelationId);
+            requestBody = JsonModifier.UpdateTime(requestBody);
+            (requestBody, correlationId) = JsonModifier.UpdateCorrelationId(requestBody);
 
-            var request = new RestRequest(RequestEndPoints.RoSWebhookRequestEndPoint, Method.Post);
+            var request = new RestRequest(_erpFacadeConfiguration.RoSWebhookRequestEndPoint, Method.Post);
             request.AddHeader("Content-Type", "application/json");
             request.AddHeader("Authorization", "Bearer " + token);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
@@ -51,16 +59,17 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                bool isBlobCreated = _azureBlobStorageHelper.VerifyBlobExists(AzureStorage.RecordOfSaleEventContainerName, GeneratedCorrelationId);
-                Assert.That(isBlobCreated, Is.True, $"Blob {GeneratedCorrelationId} not created");
+                bool isBlobCreated = _azureBlobStorageHelper.VerifyBlobExists(AzureStorage.RecordOfSaleEventContainerName, correlationId);
+                Assert.That(isBlobCreated, Is.True, $"Blob {correlationId} not created");
             }
 
             return response;
         }
 
-        public async Task<RestResponse> PostWebhookResponseAsyncForXml(string correlationId, string payloadFilePath, bool isFirstEvent, bool isLastEvent, string generatedXmlFolder, List<JsonInputRoSWebhookEvent> listOfEventJsons, string token)
+        public async Task<RestResponse> PostWebhookResponseAsyncForXml(string payloadFilePath, bool isFirstEvent, bool isLastEvent, string generatedXmlFolder, List<JsonInputRoSWebhookEvent> listOfEventJsons, string token)
         {
             string requestBody;
+            string correlationId;
             List<string> blobList = new();
 
             using (StreamReader streamReader = new(payloadFilePath))
@@ -68,9 +77,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
                 requestBody = await streamReader.ReadToEndAsync();
             }
 
-            requestBody = SapXmlHelper.UpdateTimeAndCorrIdField(requestBody, correlationId);
+            requestBody = JsonModifier.UpdateTime(requestBody);
+            (requestBody, correlationId) = JsonModifier.UpdateCorrelationId(requestBody);
 
-            var request = new RestRequest(RequestEndPoints.RoSWebhookRequestEndPoint, Method.Post);
+            var request = new RestRequest(_erpFacadeConfiguration.RoSWebhookRequestEndPoint, Method.Post);
             request.AddHeader("Content-Type", "application/json");
             request.AddHeader("Authorization", "Bearer " + token);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
@@ -100,13 +110,13 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
                         await Task.Delay(30000);
                     }
                     Assert.That(blobList, Does.Contain(EventPayloadFiles.SapXmlPayloadFileName), $"XML is not generated for {correlationId} at {DateTime.Now}.");
-                    string generatedXmlFilePath = _azureBlobStorageHelper.DownloadGeneratedXmlFile(generatedXmlFolder, correlationId, "recordofsaleblobs");
-                    Assert.That(RoSXmlHelper.CheckXmlAttributes(generatedXmlFilePath, requestBody, listOfEventJsons).Result, Is.True, "CheckXmlAttributes Failed");
-                    Assert.That(AzureTableHelper.GetSapStatus(correlationId), Is.EqualTo("Complete"), $"SAP status is Incomplete for {correlationId}");
+                    string generatedXmlFilePath = _azureBlobStorageHelper.DownloadDirectoryFile(generatedXmlFolder, correlationId, AzureStorage.RecordOfSaleEventContainerName);
+                    Assert.That(RoSXMLValidator.CheckXmlAttributes(generatedXmlFilePath, requestBody, listOfEventJsons).Result, Is.True, "CheckXmlAttributes Failed");
+                    Assert.That(_azureTableReaderWriter.GetSapStatus(correlationId), Is.EqualTo("Complete"), $"SAP status is Incomplete for {correlationId}");
                     break;
                 case false:
                     Assert.That(blobList, Does.Not.Contain(EventPayloadFiles.SapXmlPayloadFileName), $"XML is generated for {correlationId} before we receive all related events.");
-                    Assert.That(AzureTableHelper.GetSapStatus(correlationId), Is.EqualTo("Incomplete"), $"SAP status is Complete for {correlationId}");
+                    Assert.That(_azureTableReaderWriter.GetSapStatus(correlationId), Is.EqualTo("Incomplete"), $"SAP status is Complete for {correlationId}");
                     break;
             }
             return response;
@@ -125,7 +135,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             {
                 case "Bad Request":
                     {
-                        var request = new RestRequest(RequestEndPoints.RoSWebhookRequestEndPoint, Method.Post);
+                        var request = new RestRequest(_erpFacadeConfiguration.RoSWebhookRequestEndPoint, Method.Post);
                         request.AddHeader("Content-Type", "application/json");
                         request.AddHeader("Authorization", "Bearer " + token);
                         request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
@@ -134,7 +144,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
                     }
                 case "Unsupported Media Type":
                     {
-                        var request = new RestRequest(RequestEndPoints.RoSWebhookRequestEndPoint, Method.Post);
+                        var request = new RestRequest(_erpFacadeConfiguration.RoSWebhookRequestEndPoint, Method.Post);
                         request.AddHeader("Content-Type", "application/xml");
                         request.AddHeader("Authorization", "Bearer " + token);
                         request.AddParameter("application/xml", requestBody, ParameterType.RequestBody);

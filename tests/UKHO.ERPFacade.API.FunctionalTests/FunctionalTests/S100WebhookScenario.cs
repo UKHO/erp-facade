@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using UKHO.ERPFacade.API.FunctionalTests.Helpers;
+using UKHO.ERPFacade.API.FunctionalTests.Auth;
 using UKHO.ERPFacade.API.FunctionalTests.Service;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
@@ -8,7 +8,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
     public class S100WebhookScenarios
     {
         private WebhookEndpoint _webhookEndpoint;
-        private readonly ADAuthTokenProvider _authToken = new();
+        private AuthTokenProvider _authTokenProvider;
 
         private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
         //for local
@@ -19,6 +19,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         public void Setup()
         {
             _webhookEndpoint = new WebhookEndpoint();
+            _authTokenProvider = new AuthTokenProvider();
         }
     }
 

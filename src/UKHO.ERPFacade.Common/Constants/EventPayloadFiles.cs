@@ -13,5 +13,11 @@ namespace UKHO.ERPFacade.Common.Constants
 
         public const string ErpFacadeExpectedXmlFiles = "ERPFacadeExpectedXmlFiles";
         public const string RosPayloadTestDataFolder = "RoSPayloadTestData";
+        public const string LicenceUpdatedPayloadTestData = "LicenceUpdatedPayloadTestData";
+        public const string PayloadFolder = "ERPFacadePayloadTestData";
+        public const string S57PayloadFolder = "S57PayloadTestData";
+        public const string WebhookPayloadFileName = "WebhookPayload.JSON";
+
+        public const string GeneratedXmlFolder = "ERPFacadeGeneratedXmlFiles";
     }
 }

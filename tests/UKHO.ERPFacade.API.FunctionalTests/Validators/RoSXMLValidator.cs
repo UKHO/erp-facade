@@ -6,14 +6,26 @@ using System.Xml;
 using UKHO.ERPFacade.API.FunctionalTests.Model;
 using UKHO.ERPFacade.API.FunctionalTests.Configuration;
 using UKHO.ERPFacade.Common.Constants;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
+namespace UKHO.ERPFacade.API.FunctionalTests.Validators
 {
     [TestFixture]
-    public class RoSXmlHelper
+    public class RoSXMLValidator : TestFixtureBase
     {
         private static JsonInputRoSWebhookEvent jsonPayload;
         private static readonly List<string> s_attrNotMatched = new();
+        private readonly ErpFacadeConfiguration _erpFacadeConfiguration;
+        private static List<string> actionAttributesSeqProd;
+        private static List<string> actionAttributesSeq;
+
+        public RoSXMLValidator()
+        {
+            _erpFacadeConfiguration = GetServiceProvider().GetRequiredService<IOptions<ErpFacadeConfiguration>>().Value;
+            actionAttributesSeq = _erpFacadeConfiguration.RosLicenceUpdateXmlList.ToList();
+            actionAttributesSeqProd = _erpFacadeConfiguration.RoSLicenceUpdatedProdXmlList.ToList();
+        }
 
         public static async Task<bool> CheckXmlAttributes(string generatedXmlFilePath, string requestBody, List<JsonInputRoSWebhookEvent> listOfEventJson)
         {
@@ -307,7 +319,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
         public static async Task<bool> VerifyPresenseOfMandatoryXMLAtrributes(Z_ADDS_ROSIM_ORDER order)
         {
-            List<string> actionAttributesSeq = Config.TestConfig.RosLicenceUpdateXmlList.ToList<string>();
             List<string> currentActionAttributes = new();
             currentActionAttributes.Clear();
             Type arrayType = order.GetType();
@@ -323,7 +334,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 }
             }
 
-            List<string> actionAttributesSeqProd = Config.TestConfig.RoSLicenceUpdatedProdXmlList.ToList<string>();
             List<string> currentActionAttributesProd = new();
             currentActionAttributesProd.Clear();
             Z_ADDS_ROSIM_ORDERItem[] items = order.PROD;
