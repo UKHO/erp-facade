@@ -415,7 +415,24 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940083 - Dequeue count of message.
         /// </summary>
-        MessageDequeueCount = 940083
+        MessageDequeueCount = 940083,
+
+        //Below event ids for - S100
+
+        /// <summary>
+        /// 940084 - S100 event processing started.
+        /// </summary>
+        S100EventProcessingStarted = 940084,
+
+        /// <summary>
+        /// 940085 - S100 event entry is added in azure table successfully.
+        /// </summary>
+        S100EventEntryAddedInAzureTable = 940085,
+
+        /// <summary>
+        /// 940086 - S100 event json payload is stored in azure blob container.
+        /// </summary>
+        S100EventJsonStoredInAzureBlobContainer = 940086
     }
 
     /// <summary>
