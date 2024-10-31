@@ -432,7 +432,12 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940086 - S100 event json payload is stored in azure blob container.
         /// </summary>
-        S100EventJsonStoredInAzureBlobContainer = 940086
+        S100EventJsonStoredInAzureBlobContainer = 940086,
+
+        /// <summary>
+        /// 940087 - S100 event XML payload is stored in azure blob container.
+        /// </summary>
+        S100EventXMLStoredInAzureBlobContainer = 940087
     }
 
     /// <summary>
