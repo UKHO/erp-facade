@@ -63,19 +63,5 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             }
             return fileName;
         }
-
-        public async Task<string> GetGeneratedJson(string blobContainer)
-        {
-            BlobServiceClient blobServiceClient = new(Config.TestConfig.AzureStorageConfiguration.ConnectionString);
-            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(blobContainer);
-            BlobClient blobClient = containerClient.GetBlobClient(EventPayloadFiles.S100DataEventFileName);
-            BlobDownloadInfo blobDownload = await blobClient.DownloadAsync();
-            string content = "";
-            using (var reader = new StreamReader(blobDownload.Content))
-            {
-                content = await reader.ReadToEndAsync();
-            }
-            return content;
-        }
     }
 }

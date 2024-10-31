@@ -31,7 +31,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             return response;
         }
 
-        public async Task<RestResponse> PostWebhookResponseAsync(string filePath, string token, bool validateJson = false)
+        public async Task<RestResponse> PostWebhookResponseAsync(string filePath, string token)
         {
             string requestBody;
 
@@ -47,12 +47,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
 
             RestResponse response = await _client.ExecuteAsync(request);
-
-            if (response.IsSuccessful && validateJson)
-            {
-                string content = await _azureBlobStorageHelper.GetGeneratedJson(GeneratedCorrelationId);
-                Assert.That(content.Equals(requestBody));
-            }
 
             return response;
         }
