@@ -11,7 +11,8 @@ namespace UKHO.ERPFacade.Common.Constants
 
         public const string RecordOfSaleEventFileExtension = ".json";
 
-        public const string ErpFacadeExpectedXmlFiles = "ERPFacadeExpectedXmlFiles";
+        public const string ErpFacadeExpectedXmlFolder = "ERPFacadeExpectedXmlFiles";
+        public const string S57ExpectedXmlFolder = "S57ExpectedXmlFiles";
         public const string RosPayloadTestDataFolder = "RoSPayloadTestData";
         public const string LicenceUpdatedPayloadTestData = "LicenceUpdatedPayloadTestData";
         public const string PayloadFolder = "ERPFacadePayloadTestData";

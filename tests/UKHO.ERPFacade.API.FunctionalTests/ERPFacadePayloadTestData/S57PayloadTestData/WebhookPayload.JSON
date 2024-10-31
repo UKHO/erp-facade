@@ -1,198 +1,110 @@
 {
     "specversion": "1.0",
-    "type": "uk.gov.ukho.encpublishing.enccontentpublished.v2.1",
+    "type": "uk.gov.ukho.encpublishing.enccontentpublished.v2.2",
     "source": "https://encpublishing.ukho.gov.uk",
-    "id": "2f03a25f-28b3-46ea-b009-5943250a9a41",
-    "time": "2020-10-13T12:08:03.4880776Z",
-    "subject": "MX545010",
+    "id": "f206ec1c-0b83-43a2-b11c-cca1d981c2a4",
+    "time": "2024-09-13T05:34:42.4904747+00:00",
+    "subject": "US5AK9DI",
     "datacontenttype": "application/json",
     "data": {
-        "correlationId": "ft-367ce4a4-1d62-4f56-b359-59e178dsk24",
+        "correlationId": "ft-5004bc72-5beb-42c1-5037-08dcc74c342e",
         "ukhoWeekNumber": {
             "year": 2024,
-            "week": 3,
+            "week": 31,
             "currentWeekAlphaCorrection": false
         },
         "products": [
             {
-                "dataSetName": "MX545010.001",
-                "productName": "MX545010",
-                "title": "Isla Clarion",
-                "scale": 90000,
+                "dataSetName": "US5AK9DI.000",
+                "productName": "US5AK9DI",
+                "title": "Amlia Island - Svechnikof Harbor",
+                "scale": 22000,
                 "usageBand": 5,
                 "editionNumber": 1,
                 "updateNumber": 0,
                 "mayAffectHoldings": true,
-                "contentChange": false,
+                "contentChange": true,
                 "permit": "ThisWillBeReplacedWithActualPermitFromKeyvault",
                 "providerCode": "1",
                 "providerName": "ICE",
-                "_ENUM": [
-                    "ICE",
-                    "ICE_GB",
-                    "ICE_UK",
-                    "PRIMAR",
-                    "VAR Unique",
-                    "VAR"
-                ],
                 "size": "medium",
-                "_ENUM": [
-                    "large",
-                    "medium",
-                    "small"
-                ],
                 "bundle": [
                     {
                         "bundleType": "DVD",
-                        "_ENUM": [
-                            "DVD"
-                        ],
-                        "location": "M1;B1"
+                        "location": "M1;B5"
                     }
                 ],
                 "status": {
                     "statusName": "New Edition",
-                    "_ENUM": [
-                        "New Edition",
-                        "Re-issue",
-                        "Update",
-                        "Cancellation Update",
-                        "Withdrawn",
-                        "Suspended"
-                    ],
-                    "statusDate": "2023-03-03T00:00:00.00+01:00",
-                    "isNewCell": false
+                    "statusDate": "2024-07-11",
+                    "isNewCell": true
                 },
                 "replaces": [],
                 "replacedBy": [],
                 "additionalCoverage": [],
                 "geographicLimit": {
                     "boundingBox": {
-                        "northLimit": 24.0,
-                        "southLimit": 22.0,
-                        "eastLimit": 120.0,
-                        "westLimit": 119.0
+                        "northLimit": 52.125,
+                        "southLimit": 52.05,
+                        "eastLimit": -173.4,
+                        "westLimit": -173.55
                     },
                     "polygons": []
                 },
                 "inUnitsOfSale": [
-                    "MX545010",
-                    "MX509226",
-                    "AVCSO",
-                    "PAYSF"
+                    "PAYSF",
+                    "US5AK9DI"
                 ],
                 "s63": {
-                    "name": "XXXXXXXX.001",
-                    "hash": "5160204288db0a543850da177ec637b71ed55946e7f3843e6180b1906ee4f4ea",
-                    "fileSize": "4500",
+                    "name": "US5AK9DI.000",
+                    "hash": "",
+                    "fileSize": 0,
                     "compression": true,
-                    "s57Crc": "5C06E104"
+                    "s57Crc": "8A46B83F"
                 },
                 "signature": {
-                    "name": "XXXXXXXX.001",
-                    "hash": "fd0c9e5f95c0b664a1a27c2ff98812c648ebd113b117f5639f74536c397fbac9",
-                    "location": "0ecf2f38-a876-4d77-bd0e-0d901d3a0e73",
-                    "fileSize": "2500"
+                    "name": "USMAK9DI.000",
+                    "hash": "",
+                    "fileSize": 0
                 },
                 "ancillaryFiles": [
                     {
-                        "name": "GBXXXXXXXX_04.TXT",
-                        "hash": "d030b93ad8a0801e6955e4f52599f6200d01310155882a1b80eec78c9b93662b",
-                        "location": "2a29932e-dcb8-4e3a-b8a2-b3cfc335ede5",
-                        "fileSize": "1240"
+                        "name": "US213DIA.TXT",
+                        "hash": "4E3E678781D95F476C0D099375A71A81FC5570C9D92C6DFFC93EF2C11A029632",
+                        "fileSize": 4008
                     },
                     {
-                        "name": "GBXXXXXXXX_01.TXT",
-                        "hash": "bb8042082bd1d37236801837585fa0df5e96097fb8d2281b41888af2b23ceb0b",
-                        "location": "1ad0f9c3-8c93-495a-99a1-06a36410faa9",
-                        "fileSize": "1360"
-                    },
-                    {
-                        "name": "GBXXXXXXXX_01.TXT",
-                        "hash": "81470666f387a9035f6b33f59fb9bbf0872e9c296fecee58c4e919d6a1d87ab6",
-                        "location": "eb443aad-394c-4eb0-b391-415a261605a1",
-                        "fileSize": "1360"
+                        "name": "US213DIB.TXT",
+                        "hash": "58BB9B3E80832BFFBB86B8BF2513BF3755B847BDEA0AF3332BE445FE864E9835",
+                        "fileSize": 293
                     }
                 ]
             }
         ],
         "unitsOfSale": [
             {
-                "unitName": "MX545010",
-                "title": "Isla Clarion",
+                "unitName": "US5AK9DI",
+                "title": "Amlia Island - Svechnikof Harbor",
                 "unitOfSaleType": "unit",
-                "unitSize": "large",
-                "unitType": "AVCS Units Coastal",
-                "providerCode": "2",
-                "providerName": "PRIMAR",
+                "unitSize": "medium",
+                "unitType": "AVCS Units Harbour",
+                "providerCode": "1",
+                "providerName": "ICE",
                 "status": "ForSale",
-                "_ENUM": [
-                    "ForSale",
-                    "NotForSale"
-                ],
-                "isNewUnitOfSale": false,
+                "isNewUnitOfSale": true,
                 "geographicLimit": {
                     "boundingBox": {
-                        "northLimit": 24.146815,
-                        "southLimit": 22.581615,
-                        "eastLimit": 120.349635,
-                        "westLimit": 119.39142
-                    },
-                    "polygons": []
-                },
-                "compositionChanges": {
-                    "addProducts": [],
-                    "removeProducts": [
-                        "MX545010"
-                    ]
-                }
-            },
-            {
-                "unitName": "MX509226",
-                "title": "Playa del Carmen",
-                "unitOfSaleType": "unit",
-                "unitSize": "large",
-                "unitType": "AVCS Units Coastal",
-                "providerCode": "2",
-                "providerName": "PRIMAR",
-                "status": "ForSale",
-                "_ENUM": [
-                    "ForSale",
-                    "NotForSale"
-                ],
-                "isNewUnitOfSale": false,
-                "geographicLimit": {
-                    "boundingBox": {
-                        "northLimit": 24.146815,
-                        "southLimit": 22.581615,
-                        "eastLimit": 120.349635,
-                        "westLimit": 119.39142
+                        "northLimit": 52.125,
+                        "southLimit": 52.05,
+                        "eastLimit": -173.4,
+                        "westLimit": -173.55
                     },
                     "polygons": []
                 },
                 "compositionChanges": {
                     "addProducts": [
-                        "MX545010"
+                        "US5AK9DI"
                     ],
-                    "removeProducts": []
-                }
-            },
-            {
-                "unitName": "AVCSO",
-                "title": "AVCS Online Folio Some Title",
-                "unitOfSaleType": "folio",
-                "unitSize": "large",
-                "unitType": "AVCS Online Folio",
-                "providerCode": "2",
-                "providerName": "PRIMAR",
-                "status": "ForSale",
-                "isNewUnitOfSale": false,
-                "geographicLimit": {
-                    "boundingBox": {},
-                    "polygons": []
-                },
-                "compositionChanges": {
-                    "addProducts": [],
                     "removeProducts": []
                 }
             },
@@ -202,16 +114,23 @@
                 "unitOfSaleType": "folio",
                 "unitSize": "large",
                 "unitType": "AVCS Folio Transit",
-                "providerCode": "2",
-                "providerName": "PRIMAR",
+                "providerCode": "1",
+                "providerName": "ICE",
                 "status": "ForSale",
                 "isNewUnitOfSale": false,
                 "geographicLimit": {
-                    "boundingBox": {},
+                    "boundingBox": {
+                        "northLimit": 0,
+                        "southLimit": 0,
+                        "eastLimit": 0,
+                        "westLimit": 0
+                    },
                     "polygons": []
                 },
                 "compositionChanges": {
-                    "addProducts": [],
+                    "addProducts": [
+                        "US5AK9DI"
+                    ],
                     "removeProducts": []
                 }
             }

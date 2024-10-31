@@ -1,4 +1,5 @@
-﻿using Azure.Storage.Blobs;
+﻿using Azure;
+using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -43,10 +44,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Operations
                 using FileStream downloadFileStream = new(expectedfilePath + "\\" + containerName + fileExtenstion, FileMode.Create);
                 blobDownload.Content.CopyTo(downloadFileStream);
             }
-            catch (Exception ex)
+            catch (RequestFailedException ex) when (ex.Status == 404)
             {
                 Console.WriteLine(containerName + " " + ex.Message);
-                return "";
+                return string.Empty;
             }
             return expectedfilePath + "\\" + containerName + ".xml";
         }

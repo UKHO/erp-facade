@@ -19,8 +19,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Modifiers
             //Generate a random correlation ID
             string correlationId = Guid.NewGuid().ToString("N").Substring(0, 21);
             correlationId = correlationId.Insert(5, "-").Insert(11, "-").Insert(16, "-");
-            string timestamp = DateTime.Now.ToString("yyyyMMddTHHmmss");
-            correlationId = $"ft-{timestamp}-{correlationId}";
+            correlationId = $"ft-{correlationId}";
             JObject jsonObj = JObject.Parse(requestBody);
             jsonObj[JsonFields.DataNode]["correlationId"] = correlationId;
             return (jsonObj.ToString(), correlationId);

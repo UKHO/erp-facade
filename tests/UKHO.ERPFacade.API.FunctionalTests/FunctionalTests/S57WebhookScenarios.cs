@@ -141,7 +141,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             Console.WriteLine("Scenario:" + jsonPayloadFileName + "\n");
 
             string jsonPayloadFilePath = Path.Combine(_projectDir, EventPayloadFiles.PayloadFolder, EventPayloadFiles.S57PayloadFolder, jsonPayloadFileName);
-            string xmlPayloadFilePath = jsonPayloadFilePath.Replace(EventPayloadFiles.PayloadFolder, EventPayloadFiles.ErpFacadeExpectedXmlFiles).Replace(".JSON", ".xml");
+            string xmlPayloadFilePath = jsonPayloadFilePath.Replace(EventPayloadFiles.PayloadFolder, EventPayloadFiles.ErpFacadeExpectedXmlFolder)
+                                                           .Replace(EventPayloadFiles.S57PayloadFolder, EventPayloadFiles.S57ExpectedXmlFolder)
+                                                           .Replace(".JSON", ".xml");
 
             string requestBody = await File.ReadAllTextAsync(jsonPayloadFilePath);
 
@@ -174,17 +176,24 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
         public async Task WhenWebhookPostEndpointReceivesEventWithValidAioCellScenario_ThenWebhookReturns200OkResponse(string jsonPayloadFileName, string permitState)
         {
+            string correlationId = null;
+
             Console.WriteLine("Scenario:" + jsonPayloadFileName + "\n");
 
             string requestPayloadFilePath = Path.Combine(_projectDir, EventPayloadFiles.PayloadFolder, EventPayloadFiles.S57PayloadFolder, jsonPayloadFileName);
 
-            //Logic to modify permit string
+            string requestBody = await File.ReadAllTextAsync(requestPayloadFilePath);
 
-            RestResponse response = await _webhookEndpoint.PostWebhookResponseAsync(requestPayloadFilePath, await _authTokenProvider.GetAzureADToken(false));
+            requestBody = JsonModifier.UpdateTime(requestBody);
+            (requestBody, correlationId) = JsonModifier.UpdateCorrelationId(requestBody);
+
+            RestResponse response = await _webhookEndpoint.PostWebhookResponseAsync(requestBody, await _authTokenProvider.GetAzureADToken(false));
 
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-            //Assert to validate that no XML is generated
+            string generatedXmlFilePath = _azureBlobReaderWriter.DownloadContainerFile(Path.Combine(_projectDir, EventPayloadFiles.GeneratedXmlFolder), correlationId, ".xml");
+
+            generatedXmlFilePath.Should().BeNullOrEmpty();
         }
 
         [Test]
@@ -229,7 +238,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [Test]
         public async Task WhenPermitDecryptionFails_ThenWebhookReturnsInternalServerErrorResponse()
         {
-            string requestPayload = await File.ReadAllTextAsync(Path.Combine(_projectDir, EventPayloadFiles.PayloadFolder, EventPayloadFiles.WebhookPayloadFileName));
+            string requestPayload = await File.ReadAllTextAsync(Path.Combine(_projectDir, EventPayloadFiles.PayloadFolder, EventPayloadFiles.S57PayloadFolder, EventPayloadFiles.WebhookPayloadFileName));
 
             RestResponse response = await _webhookEndpoint.PostWebhookResponseAsync(requestPayload, await _authTokenProvider.GetAzureADToken(false));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.InternalServerError);
