@@ -8,6 +8,7 @@ using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Models.CloudEvents.S100Event;
 using UKHO.ERPFacade.Common.Operations;
+using UKHO.ERPFacade.Common.Operations.IO;
 
 namespace UKHO.ERPFacade.API.XmlTransformers
 {
@@ -162,5 +163,6 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             }
         }
 
+        public override XmlDocument BuildXmlPayload<T>(T eventData, string xmlTemplatePath) => throw new NotImplementedException();
     }
 }
