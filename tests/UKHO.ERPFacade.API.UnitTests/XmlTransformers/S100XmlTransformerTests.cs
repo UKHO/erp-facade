@@ -13,11 +13,11 @@ using UKHO.ERPFacade.API.UnitTests.Common;
 using UKHO.ERPFacade.API.XmlTransformers;
 using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.Exceptions;
-using UKHO.ERPFacade.Common.IO;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Models.CloudEvents;
 using UKHO.ERPFacade.Common.Models.CloudEvents.S100Event;
+using UKHO.ERPFacade.Common.Operations;
 
 namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
 {
@@ -25,7 +25,7 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
     public class S100XmlTransformerTests
     {
         private ILogger<S100XmlTransformer> _fakeLogger;
-        private IXmlHelper _fakeXmlHelper;
+        private IXmlOperations _fakeXmlOperations;
         private IOptions<S100SapActionConfiguration> _fakeSapActionConfig;
         private S100XmlTransformer _fakeS100XmlTransformer;
         private string _sapXmlTemplate;
@@ -33,9 +33,9 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
         public void Setup()
         {
             _fakeLogger = A.Fake<ILogger<S100XmlTransformer>>();
-            _fakeXmlHelper = A.Fake<IXmlHelper>();
+            _fakeXmlOperations = A.Fake<IXmlOperations>();
             _fakeSapActionConfig = Options.Create(InitConfiguration().GetSection("S100SapActionConfiguration").Get<S100SapActionConfiguration>())!;
-            _fakeS100XmlTransformer = new S100XmlTransformer(_fakeLogger, _fakeXmlHelper, _fakeSapActionConfig);
+            _fakeS100XmlTransformer = new S100XmlTransformer(_fakeLogger, _fakeXmlOperations, _fakeSapActionConfig);
             _sapXmlTemplate = TestHelper.ReadFileData(XmlTemplateInfo.S100SapXmlTemplatePath);
         }
         private IConfiguration InitConfiguration()
@@ -55,7 +55,7 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
             var newProductEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\S100TestData\\NewProduct.JSON");
             var eventData = JsonConvert.DeserializeObject<S100Event>(newProductEventPayloadJson);
 
-            A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Throws(new ERPFacadeException(EventIds.SapXmlTemplateNotFound.ToEventId(), "The SAP XML payload template does not exist."));
+            A.CallTo(() => _fakeXmlOperations.CreateXmlDocument(A<string>.Ignored)).Throws(new ERPFacadeException(EventIds.SapXmlTemplateNotFound.ToEventId(), "The SAP XML payload template does not exist."));
 
             Assert.Throws<ERPFacadeException>(() => _fakeS100XmlTransformer.BuildXmlPayload(eventData!, _sapXmlTemplate))
                 .Message.Should().Be("The SAP XML payload template does not exist.");
@@ -71,7 +71,7 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
             XmlDocument soapXml = new();
             soapXml.LoadXml(_sapXmlTemplate);
 
-            A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
+            A.CallTo(() => _fakeXmlOperations.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
             var result = _fakeS100XmlTransformer.BuildXmlPayload(s100EventData, _sapXmlTemplate);
 
             result.Should().BeOfType<XmlDocument>();
@@ -118,7 +118,7 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
             XmlDocument soapXml = new();
             soapXml.LoadXml(_sapXmlTemplate);
 
-            A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
+            A.CallTo(() => _fakeXmlOperations.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
 
             Assert.Throws<ERPFacadeException>(() => _fakeS100XmlTransformer.BuildXmlPayload(s100EventData, _sapXmlTemplate))
                 .Message.Should().Be("Required unit not found in S100 data content published event for 101GB7645JTHG83 to generate CREATE PRODUCT action.");
@@ -134,7 +134,7 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
             XmlDocument soapXml = new();
             soapXml.LoadXml(_sapXmlTemplate);
 
-            A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
+            A.CallTo(() => _fakeXmlOperations.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
            
             Assert.Throws<ERPFacadeException>(() => _fakeS100XmlTransformer.BuildXmlPayload(s100EventData, _sapXmlTemplate))
                 .Message.Should().Be("Required unit not found in S100 data content published event for 101GB1111111A to generate REPLACED WITH PRODUCT action.");
@@ -150,7 +150,7 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
             XmlDocument soapXml = new();
             soapXml.LoadXml(_sapXmlTemplate);
 
-            A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
+            A.CallTo(() => _fakeXmlOperations.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
 
             Assert.Throws<ERPFacadeException>(() => _fakeS100XmlTransformer.BuildXmlPayload(s100EventData, _sapXmlTemplate))
                 .Message.Should().Be("Error while generating SAP action information. | Action : CREATE PRODUCT | XML Attribute : AGENCY | ErrorMessage : Object reference not set to an instance of an object.");
@@ -166,7 +166,7 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
             XmlDocument soapXml = new();
             soapXml.LoadXml(_sapXmlTemplate);
 
-            A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
+            A.CallTo(() => _fakeXmlOperations.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
             var result = _fakeS100XmlTransformer.BuildXmlPayload(s100EventData, _sapXmlTemplate);
 
             result.Should().BeOfType<XmlDocument>();
@@ -213,7 +213,7 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
             XmlDocument soapXml = new();
             soapXml.LoadXml(_sapXmlTemplate);
 
-            A.CallTo(() => _fakeXmlHelper.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
+            A.CallTo(() => _fakeXmlOperations.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
             var result = _fakeS100XmlTransformer.BuildXmlPayload(s100EventData, _sapXmlTemplate);
 
             result.Should().BeOfType<XmlDocument>();

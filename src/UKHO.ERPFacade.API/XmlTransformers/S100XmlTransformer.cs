@@ -2,24 +2,25 @@
 using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.Exceptions;
-using UKHO.ERPFacade.Common.IO;
+using UKHO.ERPFacade.Common.Extensions;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Models.CloudEvents.S100Event;
+using UKHO.ERPFacade.Common.Operations;
 
 namespace UKHO.ERPFacade.API.XmlTransformers
 {
     public class S100XmlTransformer : BaseXmlTransformer
     {
         private readonly ILogger<S100XmlTransformer> _logger;
-        private readonly IXmlHelper _xmlHelper;
+        private readonly IXmlOperations _xmlOperations;
         private readonly IOptions<S100SapActionConfiguration> _sapActionConfig;
         public S100XmlTransformer(ILogger<S100XmlTransformer> logger,
-                                  IXmlHelper xmlHelper,
+                                  IXmlOperations xmlOperations,
                                   IOptions<S100SapActionConfiguration> sapActionConfig)
         {
             _logger = logger;
-            _xmlHelper = xmlHelper;
+            _xmlOperations = xmlOperations;
             _sapActionConfig = sapActionConfig;
         }
 
@@ -32,7 +33,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
         {
             _logger.LogInformation(EventIds.S100EventSapXmlPayloadGenerationStarted.ToEventId(), "Generation of SAP xml payload for S100 data content published event started.");
 
-            var s100EventXmlPayload = _xmlHelper.CreateXmlDocument(Path.Combine(Environment.CurrentDirectory, xmlTemplatePath));
+            var s100EventXmlPayload = _xmlOperations.CreateXmlDocument(Path.Combine(Environment.CurrentDirectory, xmlTemplatePath));
 
             if (eventData is S100EventData s100EventData)
             {
@@ -127,12 +128,12 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             var itemNode = soapXml.CreateElement(XmlTemplateInfo.Item);
 
             // Add basic action-related nodes
-            _xmlHelper.AppendChildNode(itemNode, soapXml, XmlFields.ActionNumber, action.ActionNumber.ToString());
-            _xmlHelper.AppendChildNode(itemNode, soapXml, XmlFields.Action, action.Action.ToString());
-            _xmlHelper.AppendChildNode(itemNode, soapXml, XmlFields.Product, action.Product.ToString());
+            _xmlOperations.AppendChildNode(itemNode, soapXml, XmlFields.ActionNumber, action.ActionNumber.ToString());
+            _xmlOperations.AppendChildNode(itemNode, soapXml, XmlFields.Action, action.Action.ToString());
+            _xmlOperations.AppendChildNode(itemNode, soapXml, XmlFields.Product, action.Product.ToString());
 
             // Add child cell node
-            _xmlHelper.AppendChildNode(itemNode, soapXml, XmlFields.ChildCell, childCell);
+            _xmlOperations.AppendChildNode(itemNode, soapXml, XmlFields.ChildCell, childCell);
 
             List<(int sortingOrder, XmlElement node)> actionAttributes = new();
 
@@ -163,14 +164,14 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                     {
                         if (attribute.XmlNodeName == XmlFields.ReplacedBy && !IsPropertyNullOrEmpty(attribute.JsonPropertyName, replacedBy))
                         {
-                            attributeNode.InnerText = CommonHelper.ToSubstring(replacedBy.ToString(), 0, XmlFields.MaxXmlNodeLength);
+                            attributeNode.InnerText = StringExtension.ToSubstring(replacedBy.ToString(), 0, XmlFields.MaxXmlNodeLength);
                         }
                         else
                         {
-                            var jsonFieldValue = CommonHelper.ParseXmlNode(attribute.JsonPropertyName, source, source.GetType()).ToString();
+                            var jsonFieldValue = Extractor.ExtractJsonAttributeValue(attribute.JsonPropertyName, source, source.GetType()).ToString();
                             if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, jsonFieldValue))
                             {
-                                attributeNode.InnerText = CommonHelper.ToSubstring(jsonFieldValue, 0, XmlFields.MaxXmlNodeLength);
+                                attributeNode.InnerText = StringExtension.ToSubstring(jsonFieldValue, 0, XmlFields.MaxXmlNodeLength);
                             }
                         }
                     }
@@ -186,7 +187,5 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                 }
             }
         }
-
-        public override XmlDocument BuildXmlPayload<T>(T eventData, string xmlTemplatePath) => throw new NotImplementedException();
     }
 }
