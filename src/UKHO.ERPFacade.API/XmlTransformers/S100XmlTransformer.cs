@@ -3,12 +3,10 @@ using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Extensions;
-
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Models.CloudEvents.S100Event;
 using UKHO.ERPFacade.Common.Operations;
-using UKHO.ERPFacade.Common.Operations.IO;
 
 namespace UKHO.ERPFacade.API.XmlTransformers
 {
@@ -137,7 +135,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
 
                     if (attribute.IsRequired)
                     {
-                        if (attribute.XmlNodeName == replacedBy && !IsPropertyNullOrEmpty(attribute.JsonPropertyName, replacedBy))
+                        if (attribute.XmlNodeName == XmlFields.ReplacedBy && !IsPropertyNullOrEmpty(attribute.JsonPropertyName, replacedBy))
                         {
                             attributeNode.InnerText = StringExtension.ToSubstring(replacedBy.ToString(), 0, XmlFields.MaxXmlNodeLength);
                         }
@@ -162,7 +160,5 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                 }
             }
         }
-
-        public override XmlDocument BuildXmlPayload<T>(T eventData, string xmlTemplatePath) => throw new NotImplementedException();
     }
 }
