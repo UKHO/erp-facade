@@ -17,7 +17,9 @@
                 "updateNumber": 0,
                 "mayAffectHoldings": false,
                 "contentChange": true,
+                "providerCode": "1",
                 "providerName": "ICE",
+                "size": "large",
                 "producingAgency": "GB",
                 "status": {
                     "statusName": "Update",
@@ -52,7 +54,7 @@
                     "westLimit": 7.75
                 },
                 "compositionChanges": {
-                    "addProducts": [],
+                    "addProducts": ["AU421115"],
                     "removeProducts": []
                 }
             }

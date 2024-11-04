@@ -52,7 +52,7 @@
                         "SortingOrder": 4
                     },
                     {
-                        "IsRequired": false,
+                        "IsRequired": true,
                         "Section": "Product",
                         "JsonPropertyName": "ProviderCode",
                         "XmlNodeName": "PROVIDER",
@@ -61,7 +61,7 @@
                     {
                         "IsRequired": true,
                         "Section": "Product",
-                        "JsonPropertyName": "FileSize",
+                        "JsonPropertyName": "Size",
                         "XmlNodeName": "ENCSIZE",
                         "SortingOrder": 6
                     },
@@ -231,7 +231,7 @@
                     {
                         "IsRequired": true,
                         "Section": "Product",
-                        "JsonPropertyName": "DataReplacement",
+                        "JsonPropertyName": "",
                         "XmlNodeName": "REPLACEDBY",
                         "SortingOrder": 3
                     },
@@ -391,7 +391,7 @@
                         "SortingOrder": 4
                     },
                     {
-                        "IsRequired": false,
+                        "IsRequired": true,
                         "Section": "Product",
                         "JsonPropertyName": "ProviderCode",
                         "XmlNodeName": "PROVIDER",
@@ -400,7 +400,7 @@
                     {
                         "IsRequired": true,
                         "Section": "Product",
-                        "JsonPropertyName": "FileSize",
+                        "JsonPropertyName": "Size",
                         "XmlNodeName": "ENCSIZE",
                         "SortingOrder": 6
                     },
