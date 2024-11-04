@@ -119,7 +119,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             _logger.LogInformation(EventIds.S100SapActionGenerationStarted.ToEventId(), "Generation of {ActionName} action started.", action.Action);
             var actionNode = BuildAction(soapXml, product, unitOfSale, action, childCell, replacedBy);
             actionItemNode.AppendChild(actionNode);
-            _logger.LogInformation(EventIds.S100SapActionGenerationCompleted.ToEventId(), "Generation of {ActionName} action completed", action.Action);
+            _logger.LogInformation(EventIds.S100SapActionGenerationCompleted.ToEventId(), "Generation of {ActionName} action completed.", action.Action);
         }
 
         private XmlElement BuildAction(XmlDocument soapXml, S100Product product, S100UnitOfSale unitOfSale, SapAction action, string childCell, string replacedBy = null)

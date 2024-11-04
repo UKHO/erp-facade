@@ -52,16 +52,16 @@
                         "SortingOrder": 4
                     },
                     {
-                        "IsRequired": false,
+                        "IsRequired": true,
                         "Section": "Product",
                         "JsonPropertyName": "ProviderCode",
                         "XmlNodeName": "PROVIDER",
                         "SortingOrder": 5
                     },
                     {
-                        "IsRequired": false,
+                        "IsRequired": true,
                         "Section": "Product",
-                        "JsonPropertyName": "",
+                        "JsonPropertyName": "Size",
                         "XmlNodeName": "ENCSIZE",
                         "SortingOrder": 6
                     },
@@ -391,16 +391,16 @@
                         "SortingOrder": 4
                     },
                     {
-                        "IsRequired": false,
+                        "IsRequired": true,
                         "Section": "Product",
                         "JsonPropertyName": "ProviderCode",
                         "XmlNodeName": "PROVIDER",
                         "SortingOrder": 5
                     },
                     {
-                        "IsRequired": false,
+                        "IsRequired": true,
                         "Section": "Product",
-                        "JsonPropertyName": "",
+                        "JsonPropertyName": "Size",
                         "XmlNodeName": "ENCSIZE",
                         "SortingOrder": 6
                     },

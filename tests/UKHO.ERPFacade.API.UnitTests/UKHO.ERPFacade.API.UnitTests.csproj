@@ -72,13 +72,13 @@
     <None Update="ERPTestData\S100TestData\ChangeProduct.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPTestData\S100TestData\NewProductWithNoUnitOfSaleStatusandAddProducts.json">
+    <None Update="ERPTestData\S100TestData\NewProductWithNoUnitOfSaleStatusAndAddProducts.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPTestData\S100TestData\NewProductWithoutProviderCodeAttributes.json">
+    <None Update="ERPTestData\S100TestData\NewProductWithoutProducingAgencyAttributes.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPTestData\S100TestData\CancelProductWithNewProductReplacement.json">
+    <None Update="ERPTestData\S100TestData\CancelProductsAndReplacedWithProduct.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPTestData\S100TestData\ReplaceProductWithNoUnitOfSaleRemoveProducts.json">

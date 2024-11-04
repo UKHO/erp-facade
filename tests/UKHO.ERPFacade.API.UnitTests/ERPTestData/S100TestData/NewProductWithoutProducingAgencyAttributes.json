@@ -17,7 +17,9 @@
                 "updateNumber": 0,
                 "mayAffectHoldings": true,
                 "contentChange": true,
+                "providerCode": "1",
                 "providerName": "ICE",
+                "size": "medium",
                 "status": {
                     "statusName": "newDataset",
                     "statusDate": "2024-07-16T19:20:30.45+01:00",
