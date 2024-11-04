@@ -17,17 +17,14 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Validators
         private static JsonInputRoSWebhookEvent jsonPayload;
         private static readonly List<string> s_attrNotMatched = new();
         private readonly ErpFacadeConfiguration _erpFacadeConfiguration;
-        private static List<string> actionAttributesSeqProd;
-        private static List<string> actionAttributesSeq;
+
 
         public RoSXMLValidator()
         {
             _erpFacadeConfiguration = GetServiceProvider().GetRequiredService<IOptions<ErpFacadeConfiguration>>().Value;
-            actionAttributesSeq = _erpFacadeConfiguration.RosLicenceUpdateXmlList.ToList();
-            actionAttributesSeqProd = _erpFacadeConfiguration.RoSLicenceUpdatedProdXmlList.ToList();
         }
 
-        public static async Task<bool> CheckXmlAttributes(string generatedXmlFilePath, string requestBody, List<JsonInputRoSWebhookEvent> listOfEventJson)
+        public static async Task<bool> CheckXmlAttributes(string generatedXmlFilePath, string requestBody, List<JsonInputRoSWebhookEvent> listOfEventJson, List<string> actionAttributesSeq, List<string> actionAttributesSeqProd)
         {
             jsonPayload = JsonConvert.DeserializeObject<JsonInputRoSWebhookEvent>(requestBody);
 
@@ -56,7 +53,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Validators
             Assert.Multiple(() =>
             {
                 Assert.That(jsonPayload.data.correlationId, Is.EqualTo(rosXmlPayload.GUID), "GUID in xml is same a corrid as in EES JSON");
-                Assert.That(VerifyPresenseOfMandatoryXMLAtrributes(rosXmlPayload).Result, Is.True);
+                Assert.That(VerifyPresenseOfMandatoryXMLAtrributes(rosXmlPayload, actionAttributesSeq, actionAttributesSeqProd).Result, Is.True);
             });
 
             JsonInputRoSWebhookEvent.Recordsofsale roSJsonFields = jsonPayload.data.recordsOfSale;
@@ -317,7 +314,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Validators
             }
         }
 
-        public static async Task<bool> VerifyPresenseOfMandatoryXMLAtrributes(Z_ADDS_ROSIM_ORDER order)
+        public static async Task<bool> VerifyPresenseOfMandatoryXMLAtrributes(Z_ADDS_ROSIM_ORDER order, List<string> actionAttributesSeq, List<string> actionAttributesSeqProd)
         {
             List<string> currentActionAttributes = new();
             currentActionAttributes.Clear();

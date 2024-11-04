@@ -22,7 +22,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Operations
         {
             BlobServiceClient blobServiceClient = new BlobServiceClient(_azureStorageConfiguration.ConnectionString);
             BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(parentContainerName);
-            return containerClient.GetBlobs().Any(blobItem => blobItem.Name.Substring(0, 36) == subContainerName);
+            return containerClient.GetBlobs().Any(blobItem => blobItem.Name.Contains(subContainerName));
         }
 
         public List<string> GetBlobNamesInFolder(string blobContainerName, string corrId)

@@ -8,21 +8,27 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Modifiers
         public static string UpdateTime(string requestBody)
         {
             //Create timestamp using the current date and time
-            var currentTimeStamp = DateTime.Now.ToString(XmlFields.RecDateFormat);
+            var currentTimeStamp = DateTime.Now.ToString(XmlFields.EventJsonDateTimeFormat);
             JObject jsonObj = JObject.Parse(requestBody);
             jsonObj["time"] = currentTimeStamp;
             return jsonObj.ToString();
         }
 
-        public static (string, string) UpdateCorrelationId(string requestBody)
+        public static (string, string) UpdateCorrelationId(string requestBody, string correlationId = null)
         {
-            //Generate a random correlation ID
-            string correlationId = Guid.NewGuid().ToString("N").Substring(0, 21);
-            correlationId = correlationId.Insert(5, "-").Insert(11, "-").Insert(16, "-");
-            correlationId = $"ft-{correlationId}";
             JObject jsonObj = JObject.Parse(requestBody);
-            jsonObj[JsonFields.DataNode]["correlationId"] = correlationId;
-            return (jsonObj.ToString(), correlationId);
+
+            if (!string.IsNullOrEmpty(correlationId))
+            {
+                jsonObj[JsonFields.DataNode]["correlationId"] = correlationId;
+                return (jsonObj.ToString(), correlationId);
+            }
+            //Generate a new correlation ID
+            string newCorrelationId = Guid.NewGuid().ToString("N").Substring(0, 21);
+            newCorrelationId = newCorrelationId.Insert(5, "-").Insert(11, "-").Insert(16, "-");
+            newCorrelationId = $"ft-{newCorrelationId}";
+            jsonObj[JsonFields.DataNode]["correlationId"] = newCorrelationId;
+            return (jsonObj.ToString(), newCorrelationId);
         }
 
         public static string UpdatePermitField(string requestBody, string permit)

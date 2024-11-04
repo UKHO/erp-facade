@@ -66,10 +66,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             return response;
         }
 
-        public async Task<RestResponse> PostWebhookResponseAsyncForXml(string payloadFilePath, bool isFirstEvent, bool isLastEvent, string generatedXmlFolder, List<JsonInputRoSWebhookEvent> listOfEventJsons, string token)
+        public async Task<RestResponse> PostWebhookResponseAsyncForXml(string payloadFilePath, string correlationId, bool isFirstEvent, bool isLastEvent, string generatedXmlFolder, List<JsonInputRoSWebhookEvent> listOfEventJsons, string token)
         {
             string requestBody;
-            string correlationId;
             List<string> blobList = new();
 
             using (StreamReader streamReader = new(payloadFilePath))
@@ -78,7 +77,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             }
 
             requestBody = JsonModifier.UpdateTime(requestBody);
-            (requestBody, correlationId) = JsonModifier.UpdateCorrelationId(requestBody);
+            (requestBody, correlationId) = JsonModifier.UpdateCorrelationId(requestBody, correlationId);
 
             var request = new RestRequest(_erpFacadeConfiguration.RoSWebhookRequestEndPoint, Method.Post);
             request.AddHeader("Content-Type", "application/json");
@@ -104,14 +103,16 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
                 case true:
                     DateTime startTime = DateTime.UtcNow;
                     //10minutes polling after every 30 seconds to check if xml payload is generated during webjob execution.
-                    while (!blobList.Contains(EventPayloadFiles.SapXmlPayloadFileName) && DateTime.UtcNow - startTime < TimeSpan.FromMinutes(10))
+                    while (!blobList.Contains(Path.GetFileNameWithoutExtension(EventPayloadFiles.SapXmlPayloadFileName)) && DateTime.UtcNow - startTime < TimeSpan.FromMinutes(10))
                     {
                         blobList = _azureBlobStorageHelper.GetBlobNamesInFolder(AzureStorage.RecordOfSaleEventContainerName, correlationId);
-                        await Task.Delay(30000);
+                        await Task.Delay(3000);
                     }
-                    Assert.That(blobList, Does.Contain(EventPayloadFiles.SapXmlPayloadFileName), $"XML is not generated for {correlationId} at {DateTime.Now}.");
+                    Assert.That(blobList, Does.Contain(Path.GetFileNameWithoutExtension(EventPayloadFiles.SapXmlPayloadFileName)), $"XML is not generated for {correlationId} at {DateTime.Now}.");
                     string generatedXmlFilePath = _azureBlobStorageHelper.DownloadDirectoryFile(generatedXmlFolder, correlationId, AzureStorage.RecordOfSaleEventContainerName);
-                    Assert.That(RoSXMLValidator.CheckXmlAttributes(generatedXmlFilePath, requestBody, listOfEventJsons).Result, Is.True, "CheckXmlAttributes Failed");
+                    List<string> actionAttributesSeq = _erpFacadeConfiguration.RosLicenceUpdateXmlList.ToList();
+                    List<string> actionAttributesSeqProd = _erpFacadeConfiguration.RoSLicenceUpdatedProdXmlList.ToList();
+                    Assert.That(RoSXMLValidator.CheckXmlAttributes(generatedXmlFilePath, requestBody, listOfEventJsons, actionAttributesSeq, actionAttributesSeqProd).Result, Is.True, "CheckXmlAttributes Failed");
                     Assert.That(_azureTableReaderWriter.GetSapStatus(correlationId), Is.EqualTo("Complete"), $"SAP status is Incomplete for {correlationId}");
                     break;
                 case false:

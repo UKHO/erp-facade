@@ -131,7 +131,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             Console.WriteLine("Scenario: Merging ROS Events - " + firstEventPayloadJsonFileName + " & " + lastEventPayloadJsonFileName + "\n");
 
             string generatedXmlFolder = Path.Combine(_projectDir, EventPayloadFiles.GeneratedXmlFolder, EventPayloadFiles.RosPayloadTestDataFolder);
-
+            string correlationId = "ft-" + Guid.NewGuid();
             List<string> fileNames = new List<string> { firstEventPayloadJsonFileName, lastEventPayloadJsonFileName };
             List<JsonInputRoSWebhookEvent> listOfEventJsons = new();
 
@@ -149,14 +149,14 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
             //Send first event
             string firstEventPayloadJsonFilePath = Path.Combine(_projectDir, EventPayloadFiles.PayloadFolder, EventPayloadFiles.RosPayloadTestDataFolder, firstEventPayloadJsonFileName);
-            RestResponse firstEventResponse = await _rosWebhookEndpoint.PostWebhookResponseAsyncForXml(firstEventPayloadJsonFilePath, true, false, generatedXmlFolder, null, await _authTokenProvider.GetAzureADToken(false));
+            RestResponse firstEventResponse = await _rosWebhookEndpoint.PostWebhookResponseAsyncForXml(firstEventPayloadJsonFilePath, correlationId, true, false, generatedXmlFolder, null, await _authTokenProvider.GetAzureADToken(false));
 
             //Assert if ROS webhook returns OK
             firstEventResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
             //Send last event  - Additionally we need to send list of all json files to compare total unitofsales items with final XML payload
             string lastEventPayloadJsonFilePath = Path.Combine(_projectDir, EventPayloadFiles.PayloadFolder, EventPayloadFiles.RosPayloadTestDataFolder, lastEventPayloadJsonFileName);
-            RestResponse lastEventResponse = await _rosWebhookEndpoint.PostWebhookResponseAsyncForXml(lastEventPayloadJsonFilePath, false, true, generatedXmlFolder, listOfEventJsons, await _authTokenProvider.GetAzureADToken(false));
+            RestResponse lastEventResponse = await _rosWebhookEndpoint.PostWebhookResponseAsyncForXml(lastEventPayloadJsonFilePath, correlationId, false, true, generatedXmlFolder, listOfEventJsons, await _authTokenProvider.GetAzureADToken(false));
 
             //Assert if ROS webhook returns OK
             lastEventResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
@@ -170,7 +170,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             Console.WriteLine("Scenario: Merging ROS Events - " + firstEventPayloadJsonFileName + " & " + "\n");
 
             string generatedXmlFolder = Path.Combine(_projectDir, EventPayloadFiles.GeneratedXmlFolder, EventPayloadFiles.RosPayloadTestDataFolder);
-
+            string correlationId = "ft-" + Guid.NewGuid();
             List<string> fileNames = new List<string> { firstEventPayloadJsonFileName };
             List<JsonInputRoSWebhookEvent> listOfEventJsons = new();
 
@@ -187,7 +187,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             }
 
             string firstEventPayloadJsonFilePath = Path.Combine(_projectDir, EventPayloadFiles.PayloadFolder, EventPayloadFiles.RosPayloadTestDataFolder, firstEventPayloadJsonFileName);
-            RestResponse firstEventResponse = await _rosWebhookEndpoint.PostWebhookResponseAsyncForXml(firstEventPayloadJsonFilePath, true, true, generatedXmlFolder, listOfEventJsons, await _authTokenProvider.GetAzureADToken(false));
+            RestResponse firstEventResponse = await _rosWebhookEndpoint.PostWebhookResponseAsyncForXml(firstEventPayloadJsonFilePath, correlationId, true, true, generatedXmlFolder, listOfEventJsons, await _authTokenProvider.GetAzureADToken(false));
             firstEventResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
     }

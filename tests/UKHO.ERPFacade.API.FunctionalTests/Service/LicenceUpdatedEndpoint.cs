@@ -20,8 +20,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
         private readonly AzureBlobReaderWriter _azureBlobStorageHelper;
         private readonly ErpFacadeConfiguration _erpFacadeConfiguration;
 
-        public static string GeneratedCorrelationId = string.Empty;
-
         public LicenceUpdatedEndpoint()
         {
             var serviceProvider = GetServiceProvider();
@@ -61,8 +59,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                bool isBlobCreated = _azureBlobStorageHelper.VerifyBlobExists(AzureStorage.LicenceUpdatedEventContainerName, GeneratedCorrelationId);
-                Assert.That(isBlobCreated, Is.True, $"Blob {GeneratedCorrelationId} not created in licenceupdatedblobs");
+                bool isBlobCreated = _azureBlobStorageHelper.VerifyBlobExists(AzureStorage.LicenceUpdatedEventContainerName, correlationId);
+                Assert.That(isBlobCreated, Is.True, $"Blob {correlationId} not created in licenceupdatedblobs");
             }
 
             return response;
