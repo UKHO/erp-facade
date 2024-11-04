@@ -59,9 +59,9 @@
                         "SortingOrder": 5
                     },
                     {
-                        "IsRequired": true,
+                        "IsRequired": false,
                         "Section": "Product",
-                        "JsonPropertyName": "FileSize",
+                        "JsonPropertyName": "",
                         "XmlNodeName": "ENCSIZE",
                         "SortingOrder": 6
                     },
@@ -398,9 +398,9 @@
                         "SortingOrder": 5
                     },
                     {
-                        "IsRequired": true,
+                        "IsRequired": false,
                         "Section": "Product",
-                        "JsonPropertyName": "FileSize",
+                        "JsonPropertyName": "",
                         "XmlNodeName": "ENCSIZE",
                         "SortingOrder": 6
                     },
