@@ -24,8 +24,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Modifiers
                 return (jsonObj.ToString(), correlationId);
             }
             //Generate a new correlation ID
-            string newCorrelationId = Guid.NewGuid().ToString("N").Substring(0, 21);
-            newCorrelationId = newCorrelationId.Insert(5, "-").Insert(11, "-").Insert(16, "-");
+            string newCorrelationId = Guid.NewGuid().ToString();
             newCorrelationId = $"ft-{newCorrelationId}";
             jsonObj[JsonFields.DataNode]["correlationId"] = newCorrelationId;
             return (jsonObj.ToString(), newCorrelationId);

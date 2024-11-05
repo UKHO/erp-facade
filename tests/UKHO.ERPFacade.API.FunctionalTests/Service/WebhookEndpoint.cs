@@ -22,11 +22,11 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
 
         public async Task<RestResponse> OptionWebhookResponseAsync(string token)
         {
-            var request = new RestRequest(_erpFacadeConfiguration.WebhookEndpointUrl);
+            var request = new RestRequest(_erpFacadeConfiguration.WebhookEndpointUrl, Method.Options);
 
             request.AddHeader("Authorization", "Bearer " + token);
 
-            return await _client.OptionsAsync(request);
+            return await _client.ExecuteAsync(request);
         }
 
         public async Task<RestResponse> PostWebhookResponseAsync(string requestBody, string token)

@@ -40,52 +40,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             _azureBlobReaderWriter = new AzureBlobReaderWriter();
         }
 
-        [Test(Description = "WhenWebhookOptionsEndpointRequestedWithValidToken_ThenWebhookReturns200OkResponse"), Order(0)]
-        public async Task WhenWebhookOptionsEndpointRequestedWithValidToken_ThenWebhookReturns200OkResponse()
-        {
-            var token = await _authTokenProvider.GetAzureADToken(false);
-            var response = await _webhookEndpoint.OptionWebhookResponseAsync(token);
-            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-        }
-
-        [Test(Description = "WhenWebhookOptionsEndpointRequestedWithInvalidToken_ThenWebhookReturns401UnauthorizedResponse"), Order(0)]
-        public async Task WhenWebhookOptionsEndpointRequestedWithInvalidToken_ThenWebhookReturns401UnauthorizedResponse()
-        {
-            var response = await _webhookEndpoint.OptionWebhookResponseAsync("InvalidToken");
-            response.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
-        }
-
-        [Test(Description = "WhenWebhookOptionsEndpointRequestedWithValidTokenWithNoRole_ThenWebhookReturns403ForbiddenResponse"), Order(0)]
-        public async Task WhenWebhookOptionsEndpointRequestedWithValidTokenWithNoRole_ThenWebhookReturns403ForbiddenResponse()
-        {
-            var response = await _webhookEndpoint.OptionWebhookResponseAsync(await _authTokenProvider.GetAzureADToken(true));
-            response.StatusCode.Should().Be(System.Net.HttpStatusCode.Forbidden);
-        }
-
-        [Test(Description = "WhenWebhookPostEndpointReceivesEventWithValidToken_ThenWebhookReturns200OkResponse"), Order(0)]
-        public async Task WhenWebhookPostEndpointReceivesEventWithValidToken_ThenWebhookReturns200OkResponse()
-        {
-            string requestPayload = await File.ReadAllTextAsync(Path.Combine(_projectDir, EventPayloadFiles.PayloadFolder, EventPayloadFiles.S57PayloadFolder, EventPayloadFiles.WebhookPayloadFileName));
-            var response = await _webhookEndpoint.PostWebhookResponseAsync(requestPayload, await _authTokenProvider.GetAzureADToken(false));
-            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-        }
-
-        [Test(Description = "WhenWebhookPostEndpointReceivesEventWithInvalidToken_ThenWebhookReturns401UnauthorizedResponse"), Order(2)]
-        public async Task WhenWebhookPostEndpointReceivesEventWithInvalidToken_ThenWebhookReturns401UnauthorizedResponse()
-        {
-            string requestPayload = await File.ReadAllTextAsync(Path.Combine(_projectDir, EventPayloadFiles.PayloadFolder, EventPayloadFiles.S57PayloadFolder, EventPayloadFiles.WebhookPayloadFileName));
-            var response = await _webhookEndpoint.PostWebhookResponseAsync(requestPayload, "InvalidToken");
-            response.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
-        }
-
-        [Test(Description = "WhenWebhookPostEndpointReceivesEventWithValidTokenWithNoRole_ThenWebhookReturns403ForbiddenResponse"), Order(4)]
-        public async Task WhenWebhookPostEndpointReceivesEventWithValidTokenWithNoRole_ThenWebhookReturns403ForbiddenResponse()
-        {
-            string requestPayload = await File.ReadAllTextAsync(Path.Combine(_projectDir, EventPayloadFiles.PayloadFolder, EventPayloadFiles.S57PayloadFolder, EventPayloadFiles.WebhookPayloadFileName));
-            var response = await _webhookEndpoint.PostWebhookResponseAsync(requestPayload, await _authTokenProvider.GetAzureADToken(true));
-            response.StatusCode.Should().Be(System.Net.HttpStatusCode.Forbidden);
-        }
-
         [Test, Order(1)]
         //New Cell
         [TestCase("NewCell.JSON", "PermitWithSameKey", TestName = "WhenICallTheWebhookWithNewCellScenario_ThenWebhookReturns200Response")]
@@ -146,18 +100,19 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
                                                            .Replace(".JSON", ".xml");
 
             string requestBody = await File.ReadAllTextAsync(jsonPayloadFilePath);
+            requestBody = JsonModifier.UpdateTime(requestBody);
+            (requestBody, correlationId) = JsonModifier.UpdateCorrelationId(requestBody);
 
             if (permitState == JsonFields.PermitWithSameKey)
             {
                 permitWithSameKey = new PermitWithSameKey() { Permit = _erpFacadeConfiguration.PermitWithSameKey.Permit, ActiveKey = _erpFacadeConfiguration.PermitWithSameKey.ActiveKey, NextKey = _erpFacadeConfiguration.PermitWithSameKey.NextKey };
+                requestBody = JsonModifier.UpdatePermitField(requestBody, permitWithSameKey.Permit);
             }
             else
             {
                 permitWithDifferentKey = new PermitWithDifferentKey() { Permit = _erpFacadeConfiguration.PermitWithDifferentKey.Permit, ActiveKey = _erpFacadeConfiguration.PermitWithDifferentKey.ActiveKey, NextKey = _erpFacadeConfiguration.PermitWithDifferentKey.NextKey };
-            }
-
-            requestBody = JsonModifier.UpdateTime(requestBody);
-            (requestBody, correlationId) = JsonModifier.UpdateCorrelationId(requestBody);
+                requestBody = JsonModifier.UpdatePermitField(requestBody, permitWithDifferentKey.Permit);
+            }            
 
             requestBody = JsonModifier.UpdatePermitField(requestBody, permitState == JsonFields.PermitWithSameKey ? permitWithSameKey.Permit : permitWithDifferentKey.Permit);
 
@@ -167,14 +122,14 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
             string generatedXmlFilePath = _azureBlobReaderWriter.DownloadContainerFile(Path.Combine(_projectDir, EventPayloadFiles.GeneratedXmlFolder), correlationId, ".xml");
 
-            Assert.That(S57XmlValidator.VerifyXmlAttributes(generatedXmlFilePath, xmlPayloadFilePath, permitState == JsonFields.PermitWithSameKey ? permitWithSameKey.ActiveKey : permitWithDifferentKey.ActiveKey, permitState == JsonFields.PermitWithSameKey ? permitWithSameKey.NextKey : permitWithDifferentKey.NextKey));
+            Assert.That(S57XmlValidator.VerifyXmlAttributes(generatedXmlFilePath, xmlPayloadFilePath, correlationId, permitState == JsonFields.PermitWithSameKey ? permitWithSameKey.ActiveKey : permitWithDifferentKey.ActiveKey, permitState == JsonFields.PermitWithSameKey ? permitWithSameKey.NextKey : permitWithDifferentKey.NextKey));
         }
 
         //AIO-cell scenarios
-        [TestCase("AIOUpdateCell.JSON", "PermitWithSameKey", TestName = "WhenICallTheWebhookWithAIOUpdateCellScenario_ThenWebhookReturns200Response")]
-        [TestCase("AIONewCell.JSON", "PermitWithSameKey", TestName = "WhenICallTheWebhookWithAIONewCellScenario_ThenWebhookReturns200Response")]
+        [TestCase("AIOUpdateCell.JSON", TestName = "WhenICallTheWebhookWithAIOUpdateCellScenario_ThenWebhookReturns200Response")]
+        [TestCase("AIONewCell.JSON", TestName = "WhenICallTheWebhookWithAIONewCellScenario_ThenWebhookReturns200Response")]
 
-        public async Task WhenWebhookPostEndpointReceivesEventWithValidAioCellScenario_ThenWebhookReturns200OkResponse(string jsonPayloadFileName, string permitState)
+        public async Task WhenWebhookPostEndpointReceivesEventWithValidAioCellScenario_ThenWebhookReturns200OkResponse(string jsonPayloadFileName)
         {
             string correlationId = null;
 

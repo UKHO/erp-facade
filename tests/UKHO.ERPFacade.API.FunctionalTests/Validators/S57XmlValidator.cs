@@ -6,7 +6,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Validators
 {
     public static class S57XmlValidator
     {
-        public static bool VerifyXmlAttributes(string generatedXmlFilePath, string actualXmlFilePath, string activeKey, string nextKey)
+        public static bool VerifyXmlAttributes(string generatedXmlFilePath, string actualXmlFilePath, string correlationId, string activeKey, string nextKey)
         {
             XElement generatedXml;
             XElement expectedXml;
@@ -19,6 +19,11 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Validators
             using (StreamReader reader = new StreamReader(actualXmlFilePath, Encoding.UTF8))
             {
                 expectedXml = XElement.Load(reader);
+            }
+
+            if(!VerifyRootElements(generatedXml, expectedXml, correlationId))
+            {
+                return false;
             }
 
             var generatedAttributes = generatedXml.Descendants("item").ToList();
@@ -61,6 +66,45 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Validators
                 }
             }
             return true;
+        }
+
+        private static bool VerifyRootElements(XElement generatedXml, XElement expectedXml, string expectedCorrelationId)
+        {
+            var generatedRootElements = GetRootElementValues(generatedXml);
+            var expectedRootElements = GetRootElementValues(expectedXml);
+
+            if (generatedRootElements.Count == 0 || generatedRootElements[0] != expectedCorrelationId)
+            {
+                return false;
+            }
+
+            if (generatedRootElements[1] != DateTime.Now.ToString("yyyyMMdd"))
+            {
+                return false;
+            }
+
+            for (int i = 2; i < generatedRootElements.Count; i++)
+            {
+                if (i >= expectedRootElements.Count || generatedRootElements[i] != expectedRootElements[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private static List<string> GetRootElementValues(XElement xml)
+        {
+            var imMatInfo = xml.Descendants().FirstOrDefault(e => e.Name.LocalName == "IM_MATINFO");
+
+            return imMatInfo == null ? new List<string>() : new List<string>
+            {
+                imMatInfo.Element("CORRID")?.Value,
+                imMatInfo.Element("RECDATE")?.Value,
+                imMatInfo.Element("NOOFACTIONS")?.Value,
+                imMatInfo.Element("ORG")?.Value
+            };
         }
     }
 }
