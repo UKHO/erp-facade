@@ -417,20 +417,37 @@ namespace UKHO.ERPFacade.Common.Logging
         /// </summary>
         MessageDequeueCount = 940083,
 
-        /// <summary>
-        /// 940084 - Shared key is missing in request.
-        /// </summary>
-        SharedApiKeyMissingInRequest = 940084,
+        //Below event ids for - S100
 
         /// <summary>
-        /// 940085 - Invalid shared key.
+        /// 940084 - S100 event processing started.
         /// </summary>
-        InvalidSharedApiKey = 940085,
+        S100EventProcessingStarted = 940084,
 
         /// <summary>
-        /// 940086 - Shared API Key Configuration is missing.
+        /// 940085 - S100 event entry is added in azure table successfully.
         /// </summary>
-        SharedApiKeyConfigurationMissing = 940086,
+        S100EventEntryAddedInAzureTable = 940085,
+
+        /// <summary>
+        /// 940086 - S100 event json payload is stored in azure blob container.
+        /// </summary>
+        S100EventJsonStoredInAzureBlobContainer = 940086,
+
+        /// <summary>
+        /// 940087 - Shared key is missing in request.
+        /// </summary>
+        SharedApiKeyMissingInRequest = 940087,
+
+        /// <summary>
+        /// 940088 - Invalid shared key.
+        /// </summary>
+        InvalidSharedApiKey = 940088,
+
+        /// <summary>
+        /// 940089 - Shared API Key Configuration is missing.
+        /// </summary>
+        SharedApiKeyConfigurationMissing = 940089
     }
 
     /// <summary>

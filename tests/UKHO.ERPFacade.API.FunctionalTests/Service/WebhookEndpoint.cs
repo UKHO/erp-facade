@@ -47,6 +47,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
 
             RestResponse response = await _client.ExecuteAsync(request);
+
             return response;
         }
 
@@ -80,7 +81,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
                 {
                     return response;
                 }
-                
+
                 //Expected XML 
                 string xmlFilePath = filePath.Replace(Config.TestConfig.PayloadFolder, EventPayloadFiles.ErpFacadeExpectedXmlFiles).Replace(".JSON", ".xml");
 
