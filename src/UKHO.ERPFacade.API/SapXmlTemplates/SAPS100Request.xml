@@ -2,7 +2,7 @@
 <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
   <soap:Body>
     <Z_SHOP_MAT_INFO xmlns="urn:sap-com:document:sap:rfc:functions">
-      <IM_MATINFO xmlns="">
+      <ZSHOPMAT_INFO xmlns="">
         <CORRID></CORRID>
         <NOOFACTIONS></NOOFACTIONS>
         <RECDATE></RECDATE>
@@ -10,7 +10,7 @@
         <ORG>UKHO</ORG>
         <ACTIONITEMS>
         </ACTIONITEMS>
-      </IM_MATINFO>
+      </ZSHOPMAT_INFO>
     </Z_SHOP_MAT_INFO>
   </soap:Body>
 </soap:Envelope>
