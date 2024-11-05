@@ -14,9 +14,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         private WebhookEndpoint _webhookEndpoint;
         private readonly ADAuthTokenProvider _authToken = new();
 
-        //private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
+        private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
         //for local
-        private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
+        //private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
 
 
         [SetUp]
