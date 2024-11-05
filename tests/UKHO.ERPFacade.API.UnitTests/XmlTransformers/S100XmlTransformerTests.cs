@@ -206,7 +206,7 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
         [Test]
         public void WhenBuildXmlPayloadIsCalledForCancelProductsAndReplacedWithProductScenario_ThenReturnXMLDocument()
         {
-            var newProductEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\S100TestData\\CancelProductsAndReplacedWithProduct.JSON");
+            var newProductEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\S100TestData\\CancellationAndReplacement.JSON");
             var baseCloudEvent = JsonConvert.DeserializeObject<BaseCloudEvent>(newProductEventPayloadJson);
             S100EventData s100EventData = JsonConvert.DeserializeObject<S100EventData>(baseCloudEvent.Data.ToString()!);
 

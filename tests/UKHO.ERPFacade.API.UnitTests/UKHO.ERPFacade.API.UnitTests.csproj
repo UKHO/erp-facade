@@ -78,7 +78,7 @@
     <None Update="ERPTestData\S100TestData\NewProductWithoutProducingAgencyAttributes.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPTestData\S100TestData\CancelProductsAndReplacedWithProduct.json">
+    <None Update="ERPTestData\S100TestData\CancellationAndReplacement.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPTestData\S100TestData\ReplaceProductWithNoUnitOfSaleRemoveProducts.json">

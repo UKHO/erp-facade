@@ -87,7 +87,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                             }
                             break;
 
-                        case 7://CHANGE PRODUCT
+                        case 6://CHANGE PRODUCT
                             if (unitOfSale is not null)
                                 BuildAndAppendActionNode(soapXml, product, unitOfSale, action, actionItemNode, product.ProductName);
                             break;
@@ -108,8 +108,8 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                 //Case 10 : CANCEL PRODUCT
                 4 or 10 => listOfUnitOfSales.FirstOrDefault(x => x.CompositionChanges.RemoveProducts.Contains(product.ProductName)),
 
-                //Case 7 : CHANGE PRODUCT
-                7 => listOfUnitOfSales.FirstOrDefault(x => x.Status == JsonFields.UnitOfSaleStatusForSale && product.InUnitsOfSale.Contains(x.UnitName)),
+                //Case 6 : CHANGE PRODUCT
+                6 => listOfUnitOfSales.FirstOrDefault(x => x.Status == JsonFields.UnitOfSaleStatusForSale && product.InUnitsOfSale.Contains(x.UnitName)),
                 _ => null,
             };
         }
