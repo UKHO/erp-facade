@@ -2,28 +2,29 @@
     "specversion": "1.0",
     "type": "uk.gov.ukho.encpublishing.s100datacontentpublished.v1",
     "source": "https://encpublishing.ukho.gov.uk",
-    "id": "5f03a25f-28b3-46ea-b009-5943250a9a42",
+    "id": "5f03a25f-28b3-46ea-b009-5943250a9a41",
     "time": "2024-08-13T12:08:03.4880776Z",
-    "subject": "DE416080",
     "datacontenttype": "application/json",
     "data": {
-        "correlationId": "ft-e4c9d333-b133-4133-a0aa-08dccb35b407",
+        "correlationId": "165ce4a4-1d62-4f56-b359-59e178d77108",
         "products": [
             {
-                "productType": "S101",
-                "productIdentifier": "S101",
-                "productName": "AU5GCA02",
+
+                "productType": "S100",
+                "productIdentifier": "S-102",
+                "productName": "102IN1111111",
                 "editionNumber": 1,
                 "updateNumber": 0,
-                "mayAffectHoldings": true,
-                "contentChange": true,
-                "providerCode": 1,
-                "providerName": "ICE",
-                "producingAgency": "AU",
+                "mayAffectHoldings": false,
+                "contentChange": false,
+                "providerName": "PRIMAR",
+                "providerCode": "2",
+                "size": "medium",
+                "producingAgency": "IN",
                 "status": {
-                    "statusName": "newDataset",
-                    "statusDate": "2024-07-16T19:20:30",
-                    "isNewCell": true
+                    "statusName": "newEditon",
+                    "statusDate": "2024-07-16T19:20:30.45+01:00",
+                    "isNewCell": false
                 },
                 "replaces": [],
                 "dataReplacement": [],
@@ -34,21 +35,17 @@
                     "westLimit": 7.75
                 },
                 "fileSize": 3456,
-                "inUnitsOfSale": [
-                    "US5AK9DI"
-                ]
+                "inUnitsOfSale": [ "102IN1111111UNIT" ]
+
             }
         ],
         "unitsOfSale": [
             {
-                "unitName": "US5AK9DI",
-                "title": "A test S-101 cell from GB authority in its own unit of sale",
-                "unitType": "C15",
-                "unitSize": "LARGE",
+                "unitName": "102IN1111111UNIT",
+                "title": "A test S-102 cell from GB authority in its own unit of sale",
+                "unitSize": "large",
                 "status": "ForSale",
-                "isNewUnitOfSale": true,
-                "providerCode": 1,
-                "producingAgency": "AU",
+                "isNewUnitOfSale": false,
                 "boundingBox": {
                     "northLimit": 63.25,
                     "southLimit": 63,
@@ -56,9 +53,11 @@
                     "westLimit": 7.75
                 },
                 "compositionChanges": {
-                    "addProducts": [ "AU5GCA02" ],
+                    "addProducts": [],
                     "removeProducts": []
+
                 }
+
             }
         ]
     }

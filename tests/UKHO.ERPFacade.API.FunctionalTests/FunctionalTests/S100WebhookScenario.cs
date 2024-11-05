@@ -14,9 +14,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         private WebhookEndpoint _webhookEndpoint;
         private readonly ADAuthTokenProvider _authToken = new();
 
-        private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
+        //private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
         //for local
-        //private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
+        private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
 
 
         [SetUp]
@@ -26,14 +26,20 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         }
 
         [Test]
-        [TestCase("NewCells.JSON", TestName = "WhenValidS100DataContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkAndPayloadShouldBeStoredInBlobContainer")]
+        [TestCase("NewCell.JSON", TestName = "WhenICallTheWebhookWithNewCellScenario_ThenWebhookReturns200Response")]
+        [TestCase("CancellationAndReplacement.JSON", TestName = "WhenICallTheWebhookWithCancellationAndReplacementScenario_ThenWebhookReturns200Response")]
+        [TestCase("NewCellAndEdition.JSON", TestName = "WhenICallTheWebhookWithNewCellAndEditionScenario_ThenWebhookReturns200Response")]
+        [TestCase("SimpleUpdate.JSON", TestName = "WhenICallTheWebhookWithSimpleUpdateScenario_ThenWebhookReturns200Response")]
+        [TestCase("SupplierChange.JSON", TestName = "WhenICallTheWebhookWithSupplierChangeScenario_ThenWebhookReturns200Response")]
+        [TestCase("SupplierDefinedReleasability.JSON", TestName = "WhenICallTheWebhookWithSupplierDefinedReleasabilityScenario_ThenWebhookReturns200Response")]
+        [TestCase("SupplierDefinedUnitChange.JSON", TestName = "WhenICallTheWebhookWithSupplierDefinedUnitChangeScenario_ThenWebhookReturns200Response")]
 
         public async Task WhenValidS100DataContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponse(string payload)
         {
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, EventPayloadFiles.S100WebhookPayloadFolder, payload);
-            RestResponse response = await _webhookEndpoint.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(false));
+            string generatedXmlFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXmlFolder);
+            RestResponse response = await _webhookEndpoint.PostWebhookResponseAsyncForXml(filePath, generatedXmlFolder, await _authToken.GetAzureADToken(false));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
     }
-
 }
