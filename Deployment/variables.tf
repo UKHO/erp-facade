@@ -16,6 +16,11 @@ variable "hub_subscription_id" {
   type = string
 }
 
+variable "dns_zone_rg" {
+  type = string
+  
+}
+
 variable "sku_name" {
   type = map(any)
   default = {
