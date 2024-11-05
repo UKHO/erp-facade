@@ -4,7 +4,7 @@
             {
                 "ActionNumber": 1,
                 "Action": "CREATE PRODUCT",
-                "Product": "PRODUCT",
+                "Product": "SHOP CELL",
                 "Rules": [
                     {
                         "Conditions": [
@@ -77,7 +77,7 @@
             {
                 "ActionNumber": 2,
                 "Action": "CREATE UNIT OF SALE",
-                "Product": "UNIT OF SALE",
+                "Product": "SHOP UNIT",
                 "Rules": [
                     {
                         "Conditions": [
@@ -144,7 +144,7 @@
             {
                 "ActionNumber": 3,
                 "Action": "ASSIGN PRODUCT TO UNIT OF SALE",
-                "Product": "UNIT OF SALE",
+                "Product": "SHOP UNIT",
                 "Rules": [],
                 "Attributes": [
                     {
@@ -201,7 +201,7 @@
             {
                 "ActionNumber": 4,
                 "Action": "REPLACED WITH PRODUCT",
-                "Product": "PRODUCT",
+                "Product": "SHOP CELL",
                 "Rules": [
                     {
                         "Conditions": [
@@ -268,7 +268,7 @@
             {
                 "ActionNumber": 6,
                 "Action": "CHANGE UNIT OF SALE",
-                "Product": "UNIT OF SALE",
+                "Product": "SHOP UNIT",
                 "Rules": [
                     {
                         "Conditions": [
@@ -340,7 +340,7 @@
             {
                 "ActionNumber": 7,
                 "Action": "CHANGE PRODUCT",
-                "Product": "PRODUCT",
+                "Product": "SHOP CELL",
                 "Rules": [
                     {
                         "Conditions": [
@@ -416,7 +416,7 @@
             {
                 "ActionNumber": 9,
                 "Action": "REMOVE PRODUCT FROM UNIT OF SALE",
-                "Product": "UNIT OF SALE",
+                "Product": "SHOP UNIT",
                 "Rules": [],
                 "Attributes": [
                     {
@@ -473,7 +473,7 @@
             {
                 "ActionNumber": 10,
                 "Action": "CANCEL PRODUCT",
-                "Product": "PRODUCT",
+                "Product": "SHOP CELL",
                 "Rules": [
                     {
                         "Conditions": [
@@ -545,7 +545,7 @@
             {
                 "ActionNumber": 11,
                 "Action": "CANCEL UNIT OF SALE",
-                "Product": "UNIT OF SALE",
+                "Product": "SHOP UNIT",
                 "Rules": [
                     {
                         "Conditions": [

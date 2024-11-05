@@ -58,5 +58,6 @@ namespace UKHO.ERPFacade.Common.Constants
         public const string UkhoWeekNoFormatSeparator = "";
         public const string ProdTypeValue = "S57";
 
+        public const string ShopCell = "SHOP CELL";
     }
 }

@@ -46,7 +46,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
 
 
                 // Finalize SAP XML message
-                FinalizeSapXmlMessage(s100EventXmlPayload, s100EventData.CorrelationId, actionItemNode);
+                FinalizeSapXmlMessage(s100EventXmlPayload, s100EventData.CorrelationId, actionItemNode, XmlTemplateInfo.S100XpathZShopMatInfo);
 
                 _logger.LogInformation(EventIds.S100EventSapXmlPayloadGenerationCompleted.ToEventId(), "Generation of SAP xml payload for S100 data content published event completed.");
             }
@@ -58,7 +58,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             _logger.LogInformation(EventIds.ProductSapActionGenerationStarted.ToEventId(), "Product SapAction Generation Started.");
             foreach (var product in eventData.Products)
             {
-                foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == XmlFields.Product))
+                foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == XmlFields.ShopCell))
                 {
                     var unitOfSale = GetUnitOfSale(action.ActionNumber, eventData.UnitsOfSales, product);
 

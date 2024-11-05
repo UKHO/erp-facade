@@ -98,6 +98,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         public async Task WhenValidCloudEventReceived_ThenWebhookReturnsOkResponse()
         {
             var fakeCloudEvent = JObject.Parse(@"{""data"":{""correlationId"":""123""}}");
+            A.CallTo(() => _fakeEventDispatcher.DispatchEventAsync(A<BaseCloudEvent>.Ignored)).Returns(true);
 
             var result = (OkObjectResult)await _fakeWebHookController.ReceiveEventsAsync(fakeCloudEvent);
 
@@ -109,6 +110,23 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
              && call.GetArgument<LogLevel>(0) == LogLevel.Information
              && call.GetArgument<EventId>(1) == EventIds.NewCloudEventReceived.ToEventId()
              && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "ERP facade received new cloud event.").MustHaveHappenedOnceExactly();
+        }
+        [Test]
+        public async Task WhenInValidCloudEventReceived_ThenWebhookReturnsBadRequestResponse()
+        {
+            var fakeCloudEvent = JObject.Parse(@"{""data"":{""correlationId"":""123""}}");
+            A.CallTo(() => _fakeEventDispatcher.DispatchEventAsync(A<BaseCloudEvent>.Ignored)).Returns(false);
+
+            var result = (BadRequestObjectResult)await _fakeWebHookController.ReceiveEventsAsync(fakeCloudEvent);
+
+            Assert.That(StatusCodes.Status400BadRequest, Is.EqualTo(result.StatusCode));
+
+            A.CallTo(() => _fakeEventDispatcher.DispatchEventAsync(A<BaseCloudEvent>.Ignored)).MustHaveHappenedOnceExactly();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+                                                && call.GetArgument<LogLevel>(0) == LogLevel.Information
+                                                && call.GetArgument<EventId>(1) == EventIds.NewCloudEventReceived.ToEventId()
+                                                && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "ERP facade received new cloud event.").MustHaveHappenedOnceExactly();
         }
 
         [Test]
