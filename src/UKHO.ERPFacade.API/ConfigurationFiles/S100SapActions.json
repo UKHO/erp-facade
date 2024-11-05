@@ -267,78 +267,6 @@
             },
             {
                 "ActionNumber": 6,
-                "Action": "CHANGE UNIT OF SALE",
-                "Product": "SHOP UNIT",
-                "Rules": [
-                    {
-                        "Conditions": [
-                            {
-                                "AttributeDataType": "bool",
-                                "AttributeName": "IsNewUnitOfSale",
-                                "AttributeValue": "False"
-                            },
-                            {
-                                "AttributeDataType": "bool",
-                                "AttributeName": "Status",
-                                "AttributeValue": "ForSale"
-                            }
-                        ]
-                    }
-                ],
-                "Attributes": [
-                    {
-                        "IsRequired": false,
-                        "Section": "Product",
-                        "JsonPropertyName": "ProductIdentifier",
-                        "XmlNodeName": "PRODTYPE",
-                        "SortingOrder": 1
-                    },
-                    {
-                        "IsRequired": true,
-                        "Section": "UnitOfSale",
-                        "JsonPropertyName": "UnitName",
-                        "XmlNodeName": "PRODUCTNAME",
-                        "SortingOrder": 2
-                    },
-                    {
-                        "IsRequired": false,
-                        "Section": "Product",
-                        "JsonPropertyName": "",
-                        "XmlNodeName": "REPLACEDBY",
-                        "SortingOrder": 3
-                    },
-                    {
-                        "IsRequired": false,
-                        "Section": "UnitOfSale",
-                        "JsonPropertyName": "ProducingAgency",
-                        "XmlNodeName": "AGENCY",
-                        "SortingOrder": 4
-                    },
-                    {
-                        "IsRequired": false,
-                        "Section": "UnitOfSale",
-                        "JsonPropertyName": "ProviderCode",
-                        "XmlNodeName": "PROVIDER",
-                        "SortingOrder": 5
-                    },
-                    {
-                        "IsRequired": true,
-                        "Section": "UnitOfSale",
-                        "JsonPropertyName": "UnitSize",
-                        "XmlNodeName": "ENCSIZE",
-                        "SortingOrder": 6
-                    },
-                    {
-                        "IsRequired": false,
-                        "Section": "UnitOfSale",
-                        "JsonPropertyName": "",
-                        "XmlNodeName": "TITLE",
-                        "SortingOrder": 7
-                    }
-                ]
-            },
-            {
-                "ActionNumber": 7,
                 "Action": "CHANGE PRODUCT",
                 "Product": "SHOP CELL",
                 "Rules": [
@@ -407,6 +335,78 @@
                     {
                         "IsRequired": false,
                         "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "TITLE",
+                        "SortingOrder": 7
+                    }
+                ]
+            },
+            {
+                "ActionNumber": 7,
+                "Action": "CHANGE UNIT OF SALE",
+                "Product": "SHOP UNIT",
+                "Rules": [
+                    {
+                        "Conditions": [
+                            {
+                                "AttributeDataType": "bool",
+                                "AttributeName": "IsNewUnitOfSale",
+                                "AttributeValue": "False"
+                            },
+                            {
+                                "AttributeDataType": "bool",
+                                "AttributeName": "Status",
+                                "AttributeValue": "ForSale"
+                            }
+                        ]
+                    }
+                ],
+                "Attributes": [
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "ProductIdentifier",
+                        "XmlNodeName": "PRODTYPE",
+                        "SortingOrder": 1
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UnitOfSale",
+                        "JsonPropertyName": "UnitName",
+                        "XmlNodeName": "PRODUCTNAME",
+                        "SortingOrder": 2
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "REPLACEDBY",
+                        "SortingOrder": 3
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "UnitOfSale",
+                        "JsonPropertyName": "ProducingAgency",
+                        "XmlNodeName": "AGENCY",
+                        "SortingOrder": 4
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "UnitOfSale",
+                        "JsonPropertyName": "ProviderCode",
+                        "XmlNodeName": "PROVIDER",
+                        "SortingOrder": 5
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UnitOfSale",
+                        "JsonPropertyName": "UnitSize",
+                        "XmlNodeName": "ENCSIZE",
+                        "SortingOrder": 6
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "UnitOfSale",
                         "JsonPropertyName": "",
                         "XmlNodeName": "TITLE",
                         "SortingOrder": 7
