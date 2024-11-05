@@ -69,6 +69,18 @@
     <None Update="ERPTestData\ReplaceCellWithNoUnitOfSaleHavingTypeIsUnit.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ERPTestData\S100TestData\CancelUnitofSale.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPTestData\S100TestData\ChangeUnitofSaleAndRemoveProductfromUnitofSale.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPTestData\S100TestData\NewUnitOfSalesWithoutUnitSize.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPTestData\S100TestData\NewUnitOfSalesAndAssignProductToUnitOfSale.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ERPTestData\S100TestData\ChangeProduct.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
