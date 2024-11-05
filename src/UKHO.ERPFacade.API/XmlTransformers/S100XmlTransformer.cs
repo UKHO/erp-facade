@@ -56,7 +56,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
         {
             foreach (var unitOfSale in eventData.UnitsOfSales)
             {
-                foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == XmlFields.S100UnitOfSale))
+                foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == XmlFields.ShopUnit))
                 {
                     if (!ValidateActionRules(action, unitOfSale))
                         continue;
@@ -64,7 +64,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                     switch (action.ActionNumber)
                     {
                         case 2://CREATE UNIT OF SALE
-                        case 6://CHANGE UNIT OF SALE
+                        case 7://CHANGE UNIT OF SALE
                         case 11://CANCEL UNIT OF SALE
                             BuildAndAppendActionNode(soapXml, null, unitOfSale, action, actionItemNode);
                             break;

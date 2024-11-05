@@ -7,7 +7,6 @@ using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Models.CloudEvents.S57Event;
 using UKHO.ERPFacade.Common.Operations;
-using UKHO.ERPFacade.Common.Operations.IO;
 using UKHO.ERPFacade.Common.PermitDecryption;
 using UKHO.ERPFacade.Common.Providers;
 
