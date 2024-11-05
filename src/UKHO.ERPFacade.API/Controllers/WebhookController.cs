@@ -79,8 +79,12 @@ namespace UKHO.ERPFacade.API.Controllers
 
             var baseCloudEvent = JsonConvert.DeserializeObject<BaseCloudEvent>(cloudEvent.ToString());
 
-            await _eventDispatcher.DispatchEventAsync(baseCloudEvent);
+            var isEventDispatched = await _eventDispatcher.DispatchEventAsync(baseCloudEvent);
 
+            if (!isEventDispatched)
+            {
+                return new BadRequestObjectResult(StatusCodes.Status400BadRequest);
+            }
             return new OkObjectResult(StatusCodes.Status200OK);
         }
 

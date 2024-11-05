@@ -20,19 +20,17 @@ namespace UKHO.ERPFacade.API.Dispatcher
             }
         }
 
-        public async Task DispatchEventAsync(BaseCloudEvent baseCloudEvent)
+        public async Task<bool> DispatchEventAsync(BaseCloudEvent baseCloudEvent)
         {
             var eventType = baseCloudEvent.Type;
 
-            if (_eventHandlers.TryGetValue(eventType, out var eventHandler))
-            {
-                await eventHandler.ProcessEventAsync(baseCloudEvent);
-            }
-            else
+            if (!_eventHandlers.TryGetValue(eventType, out var eventHandler))
             {
                 _logger.LogWarning(EventIds.InvalidEventTypeReceived.ToEventId(), "Invalid event type received.");
-                return;
+                return false;
             }
+            await eventHandler.ProcessEventAsync(baseCloudEvent);
+            return true;
         }
     }
 }
