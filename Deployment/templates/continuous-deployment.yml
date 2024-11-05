@@ -27,5 +27,5 @@ steps:
       TF_VAR_pe_vnet_name: $(peVnetName)
       TF_VAR_pe_subnet_name: $(peSubnetName)
       TF_VAR_pe_rg: $(peRG)
-      TF_VAR_dns_zone_rg: $(dnsZoneRg)
+      TF_VAR_dns_zone_rg: $(dnsZoneRG)
       
