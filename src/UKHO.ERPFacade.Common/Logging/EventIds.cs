@@ -465,7 +465,17 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940094 - S100 event XML payload is stored in azure blob container.
         /// </summary>
-        S100EventXMLStoredInAzureBlobContainer = 940094
+        S100EventXMLStoredInAzureBlobContainer = 940094,
+
+        /// <summary>
+        /// 940095 - Unit of sale SapAction Generation Started.
+        /// </summary>
+        UnitOfSaleSapActionGenerationStarted = 940095,
+
+        /// <summary>
+        /// 940096 - Unit of sale SapAction Generation Completed.
+        /// </summary>
+        UnitOfSaleSapActionGenerationCompleted = 940096,
     }
 
     /// <summary>

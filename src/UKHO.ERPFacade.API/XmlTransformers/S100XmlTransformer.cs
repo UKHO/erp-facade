@@ -99,6 +99,8 @@ namespace UKHO.ERPFacade.API.XmlTransformers
 
         private void BuildUnitActions(S100EventData eventData, XmlDocument soapXml, XmlNode actionItemNode)
         {
+            _logger.LogInformation(EventIds.UnitOfSaleSapActionGenerationStarted.ToEventId(), "Unit Of Sale SapAction Generation Started.");
+
             foreach (var unitOfSale in eventData.UnitsOfSales)
             {
                 foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == XmlFields.ShopUnit))
@@ -130,6 +132,8 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                     }
                 }
             }
+
+            _logger.LogInformation(EventIds.UnitOfSaleSapActionGenerationCompleted.ToEventId(), "Unit Of Sale SapAction Generation Completed.");
         }
 
 
