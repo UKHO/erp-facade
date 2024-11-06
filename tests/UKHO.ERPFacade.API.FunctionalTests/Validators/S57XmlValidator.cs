@@ -78,7 +78,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Validators
                 return false;
             }
 
-            if (generatedRootElements[1] != DateTime.Now.ToString("yyyyMMdd"))
+            if (generatedRootElements[1] != DateTime.Now.ToString(XmlFields.RecDateFormat))
             {
                 return false;
             }
