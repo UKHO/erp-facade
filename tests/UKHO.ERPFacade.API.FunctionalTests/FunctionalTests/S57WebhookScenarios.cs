@@ -23,8 +23,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         private AzureBlobReaderWriter _azureBlobReaderWriter;
 
         private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
-        //for local
-        //private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
 
         public S57WebhookScenarios()
         {
