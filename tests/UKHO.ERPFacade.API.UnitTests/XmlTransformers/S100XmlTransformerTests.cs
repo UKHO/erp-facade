@@ -1,23 +1,23 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using NUnit.Framework;
 using UKHO.ERPFacade.API.UnitTests.Common;
 using UKHO.ERPFacade.API.XmlTransformers;
 using UKHO.ERPFacade.Common.Constants;
+using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
-using UKHO.ERPFacade.Common.Models.CloudEvents.S100Event;
 using UKHO.ERPFacade.Common.Models.CloudEvents;
+using UKHO.ERPFacade.Common.Models.CloudEvents.S100Event;
 using UKHO.ERPFacade.Common.Operations;
-using Newtonsoft.Json;
-using System.Linq;
-using UKHO.ERPFacade.Common.Exceptions;
 
 namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
 {
@@ -134,6 +134,11 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
                                                 && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Generation of SAP xml payload for S100 data content published event started.").MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+                                    && call.GetArgument<LogLevel>(0) == LogLevel.Information
+                                    && call.GetArgument<EventId>(1) == EventIds.UnitOfSaleSapActionGenerationStarted.ToEventId()
+                                    && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Unit Of Sale SapAction Generation Started.").MustHaveHappened(1, Times.Exactly);
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Information
                                                 && call.GetArgument<EventId>(1) == EventIds.S100SapActionGenerationStarted.ToEventId()
                                                 && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Generation of {ActionName} action started.").MustHaveHappened(2, Times.Exactly);
@@ -142,6 +147,11 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Information
                                                 && call.GetArgument<EventId>(1) == EventIds.S100SapActionGenerationCompleted.ToEventId()
                                                 && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Generation of {ActionName} action completed.").MustHaveHappened(2, Times.Exactly);
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+                                   && call.GetArgument<LogLevel>(0) == LogLevel.Information
+                                   && call.GetArgument<EventId>(1) == EventIds.UnitOfSaleSapActionGenerationCompleted.ToEventId()
+                                   && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Unit Of Sale SapAction Generation Completed.").MustHaveHappened(1, Times.Exactly);
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Information
@@ -171,6 +181,11 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Information
+                                                && call.GetArgument<EventId>(1) == EventIds.UnitOfSaleSapActionGenerationStarted.ToEventId()
+                                                && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Unit Of Sale SapAction Generation Started.").MustHaveHappened(1, Times.Exactly);
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+                                                && call.GetArgument<LogLevel>(0) == LogLevel.Information
                                                 && call.GetArgument<EventId>(1) == EventIds.S100SapActionGenerationStarted.ToEventId()
                                                 && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Generation of {ActionName} action started.").MustHaveHappened(1, Times.Exactly);
 
@@ -178,6 +193,11 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Information
                                                 && call.GetArgument<EventId>(1) == EventIds.S100SapActionGenerationCompleted.ToEventId()
                                                 && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Generation of {ActionName} action completed.").MustHaveHappened(1, Times.Exactly);
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+                                               && call.GetArgument<LogLevel>(0) == LogLevel.Information
+                                               && call.GetArgument<EventId>(1) == EventIds.UnitOfSaleSapActionGenerationCompleted.ToEventId()
+                                               && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Unit Of Sale SapAction Generation Completed.").MustHaveHappened(1, Times.Exactly);
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Information

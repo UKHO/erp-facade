@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using UKHO.ERPFacade.API.Handlers;
+using UKHO.ERPFacade.API.XmlTransformers;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models.CloudEvents;
 using UKHO.ERPFacade.Common.Operations.IO.Azure;
@@ -19,6 +20,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
         private ILogger<S100EventHandler> _fakeLogger;
         private IAzureTableReaderWriter _fakeAzureTableReaderWriter;
         private IAzureBlobReaderWriter _fakeAzureBlobReaderWriter;
+        private IBaseXmlTransformer _fakeBaseXmlTransformer;
         private S100EventHandler _fakes100EventHandler;
 
         [SetUp]
@@ -27,8 +29,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
             _fakeLogger = A.Fake<ILogger<S100EventHandler>>();
             _fakeAzureTableReaderWriter = A.Fake<IAzureTableReaderWriter>();
             _fakeAzureBlobReaderWriter = A.Fake<IAzureBlobReaderWriter>();
-
-            _fakes100EventHandler = new S100EventHandler(_fakeLogger, _fakeAzureTableReaderWriter, _fakeAzureBlobReaderWriter);
+            _fakeBaseXmlTransformer = A.Fake<IBaseXmlTransformer>();
+            _fakes100EventHandler = new S100EventHandler(_fakeLogger, _fakeAzureTableReaderWriter, _fakeAzureBlobReaderWriter, _fakeBaseXmlTransformer);
         }
 
         [Test]
