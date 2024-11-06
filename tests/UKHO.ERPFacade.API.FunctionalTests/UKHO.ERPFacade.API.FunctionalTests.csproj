@@ -28,7 +28,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
-    <PackageReference Include="Microsoft.Identity.Client" Version="4.66.0" />
+    <PackageReference Include="Microsoft.Identity.Client" Version="4.66.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
     <PackageReference Include="NUnit" Version="4.2.2" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
@@ -93,6 +93,90 @@
     <None Update="ERPFacadeExpectedXmlFiles\CellMetadataChange_AND_SuspendCell.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ERPFacadeExpectedXmlFiles\MoveCell.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadeExpectedXmlFiles\MoveCell_AND_SuspendCell.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadeExpectedXmlFiles\MultipleCellsInSingleUnit.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadeExpectedXmlFiles\NewCell.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadeExpectedXmlFiles\NewCell_AND_CancelCellWithNewCellReplacement.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadeExpectedXmlFiles\NewCell_AND_MoveCell.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadeExpectedXmlFiles\NewCell_AND_UoSMetadataChange.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadeExpectedXmlFiles\NewCell_AND_UpdateCell_AND_CellMetadataChange.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadeExpectedXmlFiles\Re-issue.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadeExpectedXmlFiles\SuspendCell.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadeExpectedXmlFiles\SuspendCell_AND_WithdrawCell.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadeExpectedXmlFiles\UoSMetadataChange.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadeExpectedXmlFiles\UpdateCell.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadeExpectedXmlFiles\UpdateCellsWithDifferentStatusName.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadeExpectedXmlFiles\3AdditionalCoverageCell.xml">
+    <None Update="ERPFacadeExpectedXmlFiles\UpdateCellWithNewEdition.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadeExpectedXmlFiles\3AdditionalCoverageCell_AND_CancelCellWithNewCellReplacement.xml">
+    <None Update="ERPFacadeExpectedXmlFiles\WithdrawCell.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadeExpectedXmlFiles\AdditionalCoverageWithNewEdition.xml">
+    <None Update="ERPFacadeGeneratedXmlFiles\we123s-sds3-df333-d3d.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\2NewCells.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\ID14_moveOneCell.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadeExpectedXmlFiles\CancelCellWithNewCellReplacement_AND_CellMetadataChange_AND_MoveCell.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadeExpectedXmlFiles\CancelCellWithNewCellReplacement_AND_UpdateCell.xml">
+    <None Update="ERPFacadePayloadTestData\AdditionalCoverageWithNewEdition.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\AIONewCell.JSON">
+    <None Update="ERPFacadeExpectedXmlFiles\CancelCellWithoutCellReplacement.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadeExpectedXmlFiles\CellMetadataChange.xml">
+    <None Update="ERPFacadePayloadTestData\AIOUpdateCell.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\CancelCellWithExistingCellReplacement.JSON">
+    <None Update="ERPFacadeExpectedXmlFiles\CellMetadataChangeWithNewCell.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadeExpectedXmlFiles\CellMetadataChange_AND_SuspendCell.xml">
+    <None Update="ERPFacadePayloadTestData\CancelCellWithNewCellReplacement.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\CancelCellWithNewCellReplacement_AND_CellMetadataChange_AND_MoveCell.JSON">
     <None Update="ERPFacadeExpectedXmlFiles\MoveCell.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
