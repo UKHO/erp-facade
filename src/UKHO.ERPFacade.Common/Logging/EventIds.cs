@@ -435,19 +435,24 @@ namespace UKHO.ERPFacade.Common.Logging
         S100EventJsonStoredInAzureBlobContainer = 940086,
 
         /// <summary>
-        /// 940087 - Shared key is missing in request.
+        /// 940087 - S100 event XML payload is stored in azure blob container.
         /// </summary>
-        SharedApiKeyMissingInRequest = 940087,
+        S100EventXMLStoredInAzureBlobContainer = 940087,
 
         /// <summary>
-        /// 940088 - Invalid shared key.
+        /// 940088 - Shared key is missing in request.
         /// </summary>
-        InvalidSharedApiKey = 940088,
+        SharedApiKeyMissingInRequest = 940088,
 
         /// <summary>
-        /// 940089 - Shared API Key Configuration is missing.
+        /// 940089 - Invalid shared key.
         /// </summary>
-        SharedApiKeyConfigurationMissing = 940089
+        InvalidSharedApiKey = 940089,
+
+        /// <summary>
+        /// 940090 - Shared API Key Configuration is missing.
+        /// </summary>
+        SharedApiKeyConfigurationMissing = 940090
     }
 
     /// <summary>
