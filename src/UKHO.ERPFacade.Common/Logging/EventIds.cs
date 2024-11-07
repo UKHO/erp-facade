@@ -457,7 +457,12 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940093 - S100SapAction Information Generation Failed Exception.
         /// </summary>
-        S100SapActionInformationGenerationFailedException = 940093
+        S100SapActionInformationGenerationFailedException = 940091,
+
+        /// <summary>
+        /// 940087 - S100 event XML payload is stored in azure blob container.
+        /// </summary>
+        S100EventXMLStoredInAzureBlobContainer = 940092
     }
 
     /// <summary>
