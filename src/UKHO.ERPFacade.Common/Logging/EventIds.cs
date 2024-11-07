@@ -455,29 +455,9 @@ namespace UKHO.ERPFacade.Common.Logging
         S100SapActionGenerationCompleted = 940090,
 
         /// <summary>
-        /// 940091 - Product SapAction Generation Started.
-        /// </summary>
-        ProductSapActionGenerationStarted = 940091,
-
-        /// <summary>
-        /// 940092 - Product SapAction Generation Completed.
-        /// </summary>
-        ProductSapActionGenerationCompleted = 940092,
-
-        /// <summary>
         /// 940093 - S100SapAction Information Generation Failed Exception.
         /// </summary>
-        S100SapActionInformationGenerationFailedException = 940093,
-
-        /// <summary>
-        /// 940095 - Unit of sale SapAction Generation Started.
-        /// </summary>
-        UnitOfSaleSapActionGenerationStarted = 940095,
-
-        /// <summary>
-        /// 940096 - Unit of sale SapAction Generation Completed.
-        /// </summary>
-        UnitOfSaleSapActionGenerationCompleted = 940096
+        S100SapActionInformationGenerationFailedException = 940093
     }
 
     /// <summary>
