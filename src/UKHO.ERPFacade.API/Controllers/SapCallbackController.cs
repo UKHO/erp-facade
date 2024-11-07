@@ -4,7 +4,7 @@ using UKHO.ERPFacade.API.Filters;
 
 namespace UKHO.ERPFacade.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api")]
     [ApiController]
     public class SapCallbackController : BaseController<SapCallbackController>
     {
@@ -14,7 +14,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
         [HttpPost]
         [ServiceFilter(typeof(SharedApiKeyAuthFilter))]
-        [Route("/api/v2/callback/sap/s100actions/processed")]
+        [Route("v2/callback/sap/s100actions/processed")]
         public virtual async Task<IActionResult> S100ErpFacadeCallBack([FromBody] JObject sapCallBackJson)
         {
             return new OkObjectResult(StatusCodes.Status200OK);

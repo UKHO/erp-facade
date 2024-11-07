@@ -12,6 +12,7 @@ using Microsoft.Extensions.Options;
 using NUnit.Framework;
 using UKHO.ERPFacade.API.Filters;
 using UKHO.ERPFacade.Common.Configuration;
+using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Logging;
 
@@ -29,7 +30,6 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
         private HeaderDictionary _fakeHeaderDictionary;
         private RouteData _fakeRouteData;
         private ActionDescriptor _fakeActionDescriptor;
-        private const string _apiKeyName = "X-API-Key";
 
         [SetUp]
         public void SetUp()
@@ -53,12 +53,9 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
         [Test]
         public void WhenInValidSharedApiKeyInRequestedHeader_ThenSharedApiKeyAuthFilterUnAuthorizedTheSapCallBack()
         {
-            var headers = new HeaderDictionary
-            {            { _apiKeyName, "xyz" }
-            };
             A.CallTo(() => _fakeHttpContext.Response.Headers).Returns(_fakeHeaderDictionary);
             A.CallTo(() => _fakeHttpContextAccessor.HttpContext).Returns(_fakeHttpContext);
-            A.CallTo(() => _fakeHttpContext.Request.Headers).Returns(headers);
+            A.CallTo(() => _fakeHttpContext.Request.Headers[ConfigFileFields.HeaderApiKeyName]).Returns(new[] { "xyz-123" });
 
             _fakeSharedApiKeyAuthFilter.OnAuthorization(_fakeAuthorizationFilterContext);
 
@@ -71,12 +68,9 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
         [Test]
         public void WhenEmptySharedApiKeyInRequestedHeader_ThenSharedApiKeyAuthFilterUnAuthorizedTheSapCallBack()
         {
-            var headers = new HeaderDictionary
-            {            { _apiKeyName, "" }
-            };
             A.CallTo(() => _fakeHttpContext.Response.Headers).Returns(_fakeHeaderDictionary);
             A.CallTo(() => _fakeHttpContextAccessor.HttpContext).Returns(_fakeHttpContext);
-            A.CallTo(() => _fakeHttpContext.Request.Headers).Returns(headers);
+            A.CallTo(() => _fakeHttpContext.Request.Headers[ConfigFileFields.HeaderApiKeyName]).Returns(new[] { "" });
 
             _fakeSharedApiKeyAuthFilter.OnAuthorization(_fakeAuthorizationFilterContext);
 
@@ -89,12 +83,9 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
         [Test]
         public void WhenValidSharedApiKeyInRequestedHeader_ThenSharedApiKeyAuthFilterAuthorizedTheSapCallBack()
         {
-            var headers = new HeaderDictionary
-            {            { _apiKeyName, "abc-123" }
-            };
             A.CallTo(() => _fakeHttpContext.Response.Headers).Returns(_fakeHeaderDictionary);
             A.CallTo(() => _fakeHttpContextAccessor.HttpContext).Returns(_fakeHttpContext);
-            A.CallTo(() => _fakeHttpContext.Request.Headers).Returns(headers);
+            A.CallTo(() => _fakeHttpContext.Request.Headers[ConfigFileFields.HeaderApiKeyName]).Returns(new[] { "abc-123" });
 
             _fakeSharedApiKeyAuthFilter.OnAuthorization(_fakeAuthorizationFilterContext);
 

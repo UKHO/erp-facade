@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Configuration;
+using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Logging;
 
@@ -11,7 +12,6 @@ namespace UKHO.ERPFacade.API.Filters
     {
         private readonly ILogger<SharedApiKeyAuthFilter> _logger;
         private readonly SharedApiKeyConfiguration _sharedApiKeyConfiguration;
-        private readonly string _apiKeyName = "X-API-Key";
 
         public SharedApiKeyAuthFilter(ILogger<SharedApiKeyAuthFilter> logger, IOptions<SharedApiKeyConfiguration> sharedApiKeyConfiguration)
         {
@@ -26,18 +26,18 @@ namespace UKHO.ERPFacade.API.Filters
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            if (context.HttpContext.Request.Headers.TryGetValue(_apiKeyName, out var sharedApiKey) && !string.IsNullOrWhiteSpace(sharedApiKey))
-            {
-                if (!_sharedApiKeyConfiguration.SharedApiKey.Equals(sharedApiKey))
-                {
-                    _logger.LogWarning(EventIds.InvalidSharedApiKey.ToEventId(), "Invalid shared key");
-                    context.Result = new UnauthorizedObjectResult("Invalid shared key");
-                }
-            }
-            else
+            string sharedApiKey = context.HttpContext.Request.Headers[ConfigFileFields.HeaderApiKeyName];
+            if (string.IsNullOrWhiteSpace(sharedApiKey))
             {
                 _logger.LogWarning(EventIds.SharedApiKeyMissingInRequest.ToEventId(), "Shared key is missing in request");
                 context.Result = new UnauthorizedObjectResult("Shared key is missing in request");
+                return;
+            }
+
+            if (!_sharedApiKeyConfiguration.SharedApiKey.Equals(sharedApiKey))
+            {
+                _logger.LogWarning(EventIds.InvalidSharedApiKey.ToEventId(), "Invalid shared key");
+                context.Result = new UnauthorizedObjectResult("Invalid shared key");
             }
         }
     }
