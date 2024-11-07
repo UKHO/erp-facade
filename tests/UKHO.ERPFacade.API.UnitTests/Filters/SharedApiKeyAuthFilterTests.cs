@@ -29,6 +29,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
         private HeaderDictionary _fakeHeaderDictionary;
         private RouteData _fakeRouteData;
         private ActionDescriptor _fakeActionDescriptor;
+        private const string _apiKey = "X-API-Key";
 
         [SetUp]
         public void SetUp()
@@ -52,9 +53,12 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
         [Test]
         public void WhenInValidSharedApiKeyInRequestedHeader_ThenSharedApiKeyAuthFilterUnAuthorizedTheSapCallBack()
         {
+            var headers = new HeaderDictionary
+            {            { _apiKey, "xyz" }
+            };
             A.CallTo(() => _fakeHttpContext.Response.Headers).Returns(_fakeHeaderDictionary);
             A.CallTo(() => _fakeHttpContextAccessor.HttpContext).Returns(_fakeHttpContext);
-            A.CallTo(() => _fakeHttpContext.Request.Headers["X-API-Key"]).Returns(new[] { "xyz-123" });
+            A.CallTo(() => _fakeHttpContext.Request.Headers).Returns(headers);
 
             _fakeSharedApiKeyAuthFilter.OnAuthorization(_fakeAuthorizationFilterContext);
 
@@ -67,9 +71,12 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
         [Test]
         public void WhenEmptySharedApiKeyInRequestedHeader_ThenSharedApiKeyAuthFilterUnAuthorizedTheSapCallBack()
         {
+            var headers = new HeaderDictionary
+            {            { _apiKey, "" }
+            };
             A.CallTo(() => _fakeHttpContext.Response.Headers).Returns(_fakeHeaderDictionary);
             A.CallTo(() => _fakeHttpContextAccessor.HttpContext).Returns(_fakeHttpContext);
-            A.CallTo(() => _fakeHttpContext.Request.Headers["X-API-Key"]).Returns(new[] { "" });
+            A.CallTo(() => _fakeHttpContext.Request.Headers).Returns(headers);
 
             _fakeSharedApiKeyAuthFilter.OnAuthorization(_fakeAuthorizationFilterContext);
 
@@ -82,9 +89,12 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
         [Test]
         public void WhenValidSharedApiKeyInRequestedHeader_ThenSharedApiKeyAuthFilterAuthorizedTheSapCallBack()
         {
+            var headers = new HeaderDictionary
+            {            { _apiKey, "abc-123" }
+            };
             A.CallTo(() => _fakeHttpContext.Response.Headers).Returns(_fakeHeaderDictionary);
             A.CallTo(() => _fakeHttpContextAccessor.HttpContext).Returns(_fakeHttpContext);
-            A.CallTo(() => _fakeHttpContext.Request.Headers["X-API-Key"]).Returns(new[] { "abc-123" });
+            A.CallTo(() => _fakeHttpContext.Request.Headers).Returns(headers);
 
             _fakeSharedApiKeyAuthFilter.OnAuthorization(_fakeAuthorizationFilterContext);
 

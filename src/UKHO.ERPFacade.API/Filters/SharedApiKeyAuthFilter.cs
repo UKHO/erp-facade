@@ -26,18 +26,18 @@ namespace UKHO.ERPFacade.API.Filters
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            string sharedApiKey = context.HttpContext.Request.Headers[_apiKey];
-            if (string.IsNullOrWhiteSpace(sharedApiKey))
+            if (context.HttpContext.Request.Headers.TryGetValue(_apiKey, out var sharedApiKey) && !string.IsNullOrWhiteSpace(sharedApiKey))
+            {
+                if (!_sharedApiKeyConfiguration.SharedApiKey.Equals(sharedApiKey))
+                {
+                    _logger.LogWarning(EventIds.InvalidSharedApiKey.ToEventId(), "Invalid shared key");
+                    context.Result = new UnauthorizedObjectResult("Invalid shared key");
+                }
+            }
+            else
             {
                 _logger.LogWarning(EventIds.SharedApiKeyMissingInRequest.ToEventId(), "Shared key is missing in request");
                 context.Result = new UnauthorizedObjectResult("Shared key is missing in request");
-                return;
-            }
-
-            if (!_sharedApiKeyConfiguration.SharedApiKey.Equals(sharedApiKey))
-            {
-                _logger.LogWarning(EventIds.InvalidSharedApiKey.ToEventId(), "Invalid shared key");
-                context.Result = new UnauthorizedObjectResult("Invalid shared key");
             }
         }
     }
