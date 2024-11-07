@@ -6,6 +6,7 @@ namespace UKHO.ERPFacade.Common.Constants
     public class XmlTemplateInfo
     {
         public const string S57SapXmlTemplatePath = "SapXmlTemplates\\SAPS57Request.xml";
+        public const string S100SapXmlTemplatePath = "SapXmlTemplates\\SAPS100Request.xml";
         public const string RecordOfSaleSapXmlTemplatePath = "SapXmlTemplates\\SAPRoSRequest.xml";
         public const string SapHealthCheckXmlPath = "SapXmlTemplates\\SAPHealthCheckRequest.xml";
 
