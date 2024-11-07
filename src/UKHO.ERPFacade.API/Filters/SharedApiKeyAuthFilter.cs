@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Configuration;
-using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Logging;
 
@@ -12,6 +11,7 @@ namespace UKHO.ERPFacade.API.Filters
     {
         private readonly ILogger<SharedApiKeyAuthFilter> _logger;
         private readonly SharedApiKeyConfiguration _sharedApiKeyConfiguration;
+        private readonly string _apiKey = "X-API-Key";
 
         public SharedApiKeyAuthFilter(ILogger<SharedApiKeyAuthFilter> logger, IOptions<SharedApiKeyConfiguration> sharedApiKeyConfiguration)
         {
@@ -26,7 +26,7 @@ namespace UKHO.ERPFacade.API.Filters
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            string sharedApiKey = context.HttpContext.Request.Headers[ConfigFileFields.XAPIKey];
+            string sharedApiKey = context.HttpContext.Request.Headers[_apiKey];
             if (string.IsNullOrWhiteSpace(sharedApiKey))
             {
                 _logger.LogWarning(EventIds.SharedApiKeyMissingInRequest.ToEventId(), "Shared key is missing in request");
