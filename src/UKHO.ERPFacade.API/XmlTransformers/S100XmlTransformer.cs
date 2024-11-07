@@ -31,7 +31,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
         /// <returns>XmlDocument</returns>
         public override XmlDocument BuildXmlPayload<T>(T eventData, string xmlTemplatePath)
         {
-            _logger.LogInformation(EventIds.S100EventSapXmlPayloadGenerationStarted.ToEventId(), "Generation of SAP xml payload for S100 data content published event started.");
+            _logger.LogInformation(EventIds.S100EventSapXmlPayloadGenerationStarted.ToEventId(), "Generation of SAP xml payload for S-100 data content published event started.");
 
             var s100EventXmlPayload = _xmlOperations.CreateXmlDocument(Path.Combine(Environment.CurrentDirectory, xmlTemplatePath));
 
@@ -48,14 +48,13 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                 // Finalize SAP XML message
                 FinalizeSapXmlMessage(s100EventXmlPayload, s100EventData.CorrelationId, actionItemNode, XmlTemplateInfo.S100XpathZShopMatInfo);
 
-                _logger.LogInformation(EventIds.S100EventSapXmlPayloadGenerationCompleted.ToEventId(), "Generation of SAP xml payload for S100 data content published event completed.");
+                _logger.LogInformation(EventIds.S100EventSapXmlPayloadGenerationCompleted.ToEventId(), "Generation of SAP xml payload for S-100 data content published event completed.");
             }
             return s100EventXmlPayload;
         }
 
         private void BuildProductActions(S100EventData eventData, XmlDocument soapXml, XmlNode actionItemNode)
         {
-            _logger.LogInformation(EventIds.ProductSapActionGenerationStarted.ToEventId(), "Product SapAction Generation Started.");
             foreach (var product in eventData.Products)
             {
                 foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == XmlFields.ShopCell))
@@ -71,7 +70,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                         case 10://CANCEL PRODUCT
                             if (unitOfSale is null)
                             {
-                                throw new ERPFacadeException(EventIds.RequiredUnitNotFoundException.ToEventId(), $"Required unit not found in S100 data content published event for {product.ProductName} to generate {action.Action} action.");
+                                throw new ERPFacadeException(EventIds.RequiredUnitNotFoundException.ToEventId(), $"Required unit not found in S-100 data content published event for {product.ProductName} to generate {action.Action} action.");
                             }
                             BuildAndAppendActionNode(soapXml, product, unitOfSale, action, actionItemNode, product.ProductName);
                             break;
@@ -79,7 +78,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                         case 4://REPLACED WITH PRODUCT
                             if (product.DataReplacement.Any() && unitOfSale is null)
                             {
-                                throw new ERPFacadeException(EventIds.RequiredUnitNotFoundException.ToEventId(), $"Required unit not found in S100 data content published event for {product.ProductName} to generate {action.Action} action.");
+                                throw new ERPFacadeException(EventIds.RequiredUnitNotFoundException.ToEventId(), $"Required unit not found in S-100 data content published event for {product.ProductName} to generate {action.Action} action.");
                             }
                             foreach (var replacedProduct in product.DataReplacement)
                             {
@@ -94,7 +93,6 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                     }
                 }
             }
-            _logger.LogInformation(EventIds.ProductSapActionGenerationCompleted.ToEventId(), "Product SapAction Generation Completed.");
         }
 
         private S100UnitOfSale? GetUnitOfSale(int actionNumber, List<S100UnitOfSale> listOfUnitOfSales, S100Product product)
