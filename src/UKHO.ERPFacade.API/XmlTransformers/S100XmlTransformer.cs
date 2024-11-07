@@ -31,7 +31,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
         /// <returns>XmlDocument</returns>
         public override XmlDocument BuildXmlPayload<T>(T eventData, string xmlTemplatePath)
         {
-            _logger.LogInformation(EventIds.S100EventSapXmlPayloadGenerationStarted.ToEventId(), "Generation of SAP xml payload for S100 data content published event started.");
+            _logger.LogInformation(EventIds.S100EventSapXmlPayloadGenerationStarted.ToEventId(), "Generation of SAP xml payload for S-100 data content published event started.");
 
             var s100EventXmlPayload = _xmlOperations.CreateXmlDocument(Path.Combine(Environment.CurrentDirectory, xmlTemplatePath));
 
@@ -47,14 +47,13 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                 // Finalize SAP XML message
                 FinalizeSapXmlMessage(s100EventXmlPayload, s100EventData.CorrelationId, actionItemNode);
 
-                _logger.LogInformation(EventIds.S100EventSapXmlPayloadGenerationCompleted.ToEventId(), "Generation of SAP xml payload for S100 data content published event completed.");
+                _logger.LogInformation(EventIds.S100EventSapXmlPayloadGenerationCompleted.ToEventId(), "Generation of SAP xml payload for S-100 data content published event completed.");
             }
             return s100EventXmlPayload;
         }
 
         private void BuildUnitActions(S100EventData eventData, XmlDocument soapXml, XmlNode actionItemNode)
         {
-            _logger.LogInformation(EventIds.UnitOfSaleSapActionGenerationStarted.ToEventId(), "Unit Of Sale SapAction Generation Started.");
             foreach (var unitOfSale in eventData.UnitsOfSales)
             {
                 foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == XmlFields.ShopUnit))
@@ -86,7 +85,6 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                     }
                 }
             }
-            _logger.LogInformation(EventIds.UnitOfSaleSapActionGenerationCompleted.ToEventId(), "Unit Of Sale SapAction Generation Completed.");
         }
 
         private void BuildAndAppendActionNode(XmlDocument soapXml, S100Product product, S100UnitOfSale unitOfSale, SapAction action, XmlNode actionItemNode, string childProduct = null, string replacedBy = null)
