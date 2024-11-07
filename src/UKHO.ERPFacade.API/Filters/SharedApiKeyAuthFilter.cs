@@ -11,7 +11,7 @@ namespace UKHO.ERPFacade.API.Filters
     {
         private readonly ILogger<SharedApiKeyAuthFilter> _logger;
         private readonly SharedApiKeyConfiguration _sharedApiKeyConfiguration;
-        private readonly string _apiKey = "X-API-Key";
+        private readonly string _apiKeyName = "X-API-Key";
 
         public SharedApiKeyAuthFilter(ILogger<SharedApiKeyAuthFilter> logger, IOptions<SharedApiKeyConfiguration> sharedApiKeyConfiguration)
         {
@@ -26,7 +26,7 @@ namespace UKHO.ERPFacade.API.Filters
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            if (context.HttpContext.Request.Headers.TryGetValue(_apiKey, out var sharedApiKey) && !string.IsNullOrWhiteSpace(sharedApiKey))
+            if (context.HttpContext.Request.Headers.TryGetValue(_apiKeyName, out var sharedApiKey) && !string.IsNullOrWhiteSpace(sharedApiKey))
             {
                 if (!_sharedApiKeyConfiguration.SharedApiKey.Equals(sharedApiKey))
                 {
