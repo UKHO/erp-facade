@@ -8,6 +8,9 @@ namespace UKHO.ERPFacade.API.XmlTransformers
     {
         public S100XmlTransformer(IXmlOperations xmlOperations, IFileOperations fileOperations) : base() { }
 
-        public override XmlDocument BuildXmlPayload<T>(T eventData, string xmlTemplatePath) => throw new NotImplementedException();
+        public override XmlDocument BuildXmlPayload<T>(T eventData, string xmlTemplatePath)
+        {
+            return new XmlDocument();
+        }
     }
 }
