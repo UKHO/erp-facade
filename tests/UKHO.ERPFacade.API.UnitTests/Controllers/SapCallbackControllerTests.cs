@@ -27,7 +27,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         {
             var fakeSapCallBackJson = JObject.Parse(@"{""data"":{""corId"":""123""}}");
 
-            var result = (OkObjectResult)await _fakeSapCallbackController.S100ErpFacadeCallBack(fakeSapCallBackJson);
+            var result = (OkObjectResult)await _fakeSapCallbackController.S100SapCallBack(fakeSapCallBackJson);
 
             result.StatusCode.Should().Be(200);
         }

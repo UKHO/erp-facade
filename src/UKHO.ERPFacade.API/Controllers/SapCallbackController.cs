@@ -15,7 +15,7 @@ namespace UKHO.ERPFacade.API.Controllers
         [HttpPost]
         [ServiceFilter(typeof(SharedApiKeyAuthFilter))]
         [Route("v2/callback/sap/s100actions/processed")]
-        public virtual async Task<IActionResult> S100ErpFacadeCallBack([FromBody] JObject sapCallBackJson)
+        public virtual async Task<IActionResult> S100SapCallBack([FromBody] JObject sapCallBackJson)
         {
             return new OkObjectResult(StatusCodes.Status200OK);
         }
