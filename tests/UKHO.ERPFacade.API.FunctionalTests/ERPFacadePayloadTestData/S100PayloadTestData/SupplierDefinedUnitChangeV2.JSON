@@ -4,6 +4,7 @@
     "source": "https://encpublishing.ukho.gov.uk",
     "id": "5f03a25f-28b3-46ea-b009-5943250a9a41",
     "time": "2024-08-13T12:08:03.4880776Z",
+    "subject": "",
     "datacontenttype": "application/json",
     "data": {
         "correlationId": "165ce4a4-1d62-4f56-b359-59e178d77110",
@@ -44,7 +45,7 @@
                 "unitName": "104CA123456UNIT",
                 "title": "A test S-104 cell from GB authority in its own unit of sale",
                 "unitSize": "large",
-                "status": "ForSale",
+                "status": "NotForSale",
                 "isNewUnitOfSale": false,
                 "boundingBox": {
                     "northLimit": 63.25,

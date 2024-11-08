@@ -41,9 +41,8 @@ namespace UKHO.ERPFacade.API.XmlTransformers
 
                 // Build SAP actions for Product
                 BuildProductActions(s100EventData, s100EventXmlPayload, actionItemNode);
-
                 // Build SAP actions for Unit Of Sale
-
+                BuildUnitActions(s100EventData, s100EventXmlPayload, actionItemNode);
 
                 // Finalize SAP XML message
                 FinalizeSapXmlMessage(s100EventXmlPayload, s100EventData.CorrelationId, actionItemNode, XmlTemplateInfo.S100XpathZShopMatInfo);
@@ -89,6 +88,41 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                         case 6://CHANGE PRODUCT
                             if (unitOfSale is not null)
                                 BuildAndAppendActionNode(soapXml, product, unitOfSale, action, actionItemNode, product.ProductName);
+                            break;
+                    }
+                }
+            }
+        }
+
+        private void BuildUnitActions(S100EventData eventData, XmlDocument soapXml, XmlNode actionItemNode)
+        {
+            foreach (var unitOfSale in eventData.UnitsOfSales)
+            {
+                foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == XmlFields.ShopUnit))
+                {
+                    if (!ValidateActionRules(action, unitOfSale))
+                        continue;
+
+                    switch (action.ActionNumber)
+                    {
+                        case 2://CREATE UNIT OF SALE
+                        case 7://CHANGE UNIT OF SALE
+                        case 11://CANCEL UNIT OF SALE
+                            BuildAndAppendActionNode(soapXml, null, unitOfSale, action, actionItemNode);
+                            break;
+
+                        case 3://ASSIGN PRODUCT TO UNIT OF SALE
+                            foreach (var addProduct in unitOfSale.CompositionChanges.AddProducts)
+                            {
+                                BuildAndAppendActionNode(soapXml, null, unitOfSale, action, actionItemNode, addProduct);
+                            }
+                            break;
+
+                        case 9://REMOVE PRODUCT FROM UNIT OF SALE
+                            foreach (var removeProduct in unitOfSale.CompositionChanges.RemoveProducts)
+                            {
+                                BuildAndAppendActionNode(soapXml, null, unitOfSale, action, actionItemNode, removeProduct);
+                            }
                             break;
                     }
                 }

@@ -1,0 +1,66 @@
+{
+    "specversion": "1.0",
+    "type": "uk.gov.ukho.encpublishing.s100datacontentpublished.v1",
+    "source": "https://encpublishing.ukho.gov.uk",
+    "id": "5f03a25f-28b3-46ea-b009-5943250a9a42",
+    "time": "2024-08-13T12:08:03.4880776Z",
+    "subject": "DE416080",
+    "datacontenttype": "application/json",
+    "data": {
+        "correlationId": "ft-e4c9d333-b133-4133-a0aa-08dccb35b407",
+        "products": [
+            {
+                "productType": "S100",
+                "productIdentifier": "S101",
+                "productName": "104CA123456UNIB",
+                "editionNumber": 1,
+                "updateNumber": 0,
+                "mayAffectHoldings": true,
+                "contentChange": false,
+                "providerCode": 1,
+                "providerName": "ICE",
+                "size":  "medium",
+                "producingAgency": "AU",
+                "status": {
+                    "statusName": "withdrawn",
+                    "statusDate": "2024-07-16T19:20:30",
+                    "isNewCell": false
+                },
+                "replaces": [],
+                "dataReplacement": [],
+                "boundingBox": {
+                    "northLimit": 63.25,
+                    "southLimit": 63,
+                    "eastLimit": 8,
+                    "westLimit": 7.75
+                },
+                "fileSize": 3456,
+                "inUnitsOfSale": [
+
+                ]
+            }
+        ],
+        "unitsOfSale": [
+            {
+                "unitName": "104CA123456UNIB",
+                "title": "A test S-101 cell from GB authority in its own unit of sale",
+                "unitType": "C15",
+                "unitSize": "LARGE",
+                "status": "NotForSale",
+                "isNewUnitOfSale": false,
+                "providerCode": 1,
+                "producingAgency": "AU",
+                "boundingBox": {
+                    "northLimit": 63.25,
+                    "southLimit": 63,
+                    "eastLimit": 8,
+                    "westLimit": 7.75
+                },
+                "compositionChanges": {
+                    "addProducts": [],
+                    "removeProducts": [ "104CA123456UNIB" ]
+                }
+            }
+        ]
+    }
+}

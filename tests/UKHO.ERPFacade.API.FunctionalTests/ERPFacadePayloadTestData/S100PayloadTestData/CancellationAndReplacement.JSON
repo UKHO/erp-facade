@@ -12,7 +12,7 @@
             {
                 "productType": "S100",
                 "productIdentifier": "S-101",
-                "productName": "104CA123456UNIA",
+                "productName": "101CA123456UNIA",
                 "editionNumber": 1,
                 "updateNumber": 0,
                 "mayAffectHoldings": true,
@@ -28,8 +28,8 @@
                 },
                 "replaces": [],
                 "dataReplacement": [
-                    "104CA123456UNIB",
-                    "104CA123456UNIC"
+                    "101CA123456UNIB",
+                    "101CA123456UNIC"
                 ],
                 "boundingBox": {
                     "northLimit": 63.25,
@@ -43,7 +43,7 @@
             {
                 "productType": "S100",
                 "productIdentifier": "S-101",
-                "productName": "104CA123456UNIB",
+                "productName": "101CA123456UNIB",
                 "editionNumber": 1,
                 "updateNumber": 0,
                 "mayAffectHoldings": true,
@@ -58,7 +58,7 @@
                     "isNewCell": true
                 },
                 "replaces": [
-                    "104CA123456UNIA"
+                    "101CA123456UNIA"
                 ],
                 "dataReplacement": [],
                 "boundingBox": {
@@ -69,13 +69,13 @@
                 },
                 "fileSize": 3456,
                 "inUnitsOfSale": [
-                    "104CA123456UNIB"
+                    "101CA123456UNIB"
                 ]
             },
             {
                 "productType": "S100",
                 "productIdentifier": "S-101",
-                "productName": "104CA123456UNIC",
+                "productName": "101CA123456UNIC",
                 "editionNumber": 1,
                 "updateNumber": 0,
                 "mayAffectHoldings": true,
@@ -90,7 +90,7 @@
                     "isNewCell": true
                 },
                 "replaces": [
-                    "104CA123456UNIA"
+                    "101CA123456UNIA"
                 ],
                 "dataReplacement": [],
                 "boundingBox": {
@@ -101,13 +101,13 @@
                 },
                 "fileSize": 3456,
                 "inUnitsOfSale": [
-                    "104CA123456UNIC"
+                    "101CA123456UNIC"
                 ]
             }
         ],
         "unitsOfSale": [
             {
-                "unitName": "104CA123456UNIA",
+                "unitName": "101CA123456UNIA",
                 "title": "A test S-101 cell from GB authority in its own unit of sale",
                 "unitSize": "large",
                 "status": "NotForSale",
@@ -121,12 +121,12 @@
                 "compositionChanges": {
                     "addProducts": [],
                     "removeProducts": [
-                        "104CA123456UNIA"
+                        "101CA123456UNIA"
                     ]
                 }
             },
             {
-                "unitName": "104CA123456UNIB",
+                "unitName": "101CA123456UNIB",
                 "title": "A test S-101 cell from GB authority in its own unit of sale",
                 "unitSize": "large",
                 "status": "ForSale",
@@ -139,13 +139,13 @@
                 },
                 "compositionChanges": {
                     "addProducts": [
-                        "104CA123456UNIB"
+                        "101CA123456UNIB"
                     ],
                     "removeProducts": []
                 }
             },
             {
-                "unitName": "104CA123456UNIC",
+                "unitName": "101CA123456UNIC",
                 "title": "A test S-101 cell from GB authority in its own unit of sale",
                 "unitSize": "large",
                 "status": "ForSale",
@@ -157,7 +157,7 @@
                     "westLimit": 7.75
                 },
                 "compositionChanges": {
-                    "addProducts": [ "104CA123456UNIC" ],
+                    "addProducts": [ "101CA123456UNIC" ],
                     "removeProducts": [
                     ]
                 }
