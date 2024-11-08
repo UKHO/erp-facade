@@ -51,7 +51,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                 BuildUnitActions(s57EventData, s57EventXmlPayload, actionItemNode);
 
                 // Finalize SAP XML message
-                FinalizeSapXmlMessage(s57EventXmlPayload, s57EventData.CorrelationId, actionItemNode);
+                FinalizeSapXmlMessage(s57EventXmlPayload, s57EventData.CorrelationId, actionItemNode, XmlTemplateInfo.XpathImMatInfo);
 
                 _logger.LogInformation(EventIds.S57EventSapXmlPayloadGenerationCompleted.ToEventId(), "Generation of SAP xml payload for S57 enccontentpublished event completed.");
             }

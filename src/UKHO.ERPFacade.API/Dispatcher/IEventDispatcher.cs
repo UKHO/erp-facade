@@ -4,6 +4,6 @@ namespace UKHO.ERPFacade.API.Dispatcher
 {
     public interface IEventDispatcher
     {
-        Task DispatchEventAsync(BaseCloudEvent cloudEvent);
+        Task<bool> DispatchEventAsync(BaseCloudEvent cloudEvent);
     }
 }

@@ -40,16 +40,58 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                 var actionItemNode = s100EventXmlPayload.SelectSingleNode(XmlTemplateInfo.XpathActionItems);
 
                 // Build SAP actions for Product
-
+                BuildProductActions(s100EventData, s100EventXmlPayload, actionItemNode);
                 // Build SAP actions for Unit Of Sale
                 BuildUnitActions(s100EventData, s100EventXmlPayload, actionItemNode);
 
                 // Finalize SAP XML message
-                FinalizeSapXmlMessage(s100EventXmlPayload, s100EventData.CorrelationId, actionItemNode);
+                FinalizeSapXmlMessage(s100EventXmlPayload, s100EventData.CorrelationId, actionItemNode, XmlTemplateInfo.S100XpathZShopMatInfo);
 
                 _logger.LogInformation(EventIds.S100EventSapXmlPayloadGenerationCompleted.ToEventId(), "Generation of SAP xml payload for S-100 data content published event completed.");
             }
             return s100EventXmlPayload;
+        }
+
+        private void BuildProductActions(S100EventData eventData, XmlDocument soapXml, XmlNode actionItemNode)
+        {
+            foreach (var product in eventData.Products)
+            {
+                foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == XmlFields.ShopCell))
+                {
+                    var unitOfSale = GetUnitOfSale(action.ActionNumber, eventData.UnitsOfSales, product);
+
+                    if (!ValidateActionRules(action, product))
+                        continue;
+
+                    switch (action.ActionNumber)
+                    {
+                        case 1://CREATE PRODUCT
+                        case 10://CANCEL PRODUCT
+                            if (unitOfSale is null)
+                            {
+                                throw new ERPFacadeException(EventIds.RequiredUnitNotFoundException.ToEventId(), $"Required unit not found in S-100 data content published event for {product.ProductName} to generate {action.Action} action.");
+                            }
+                            BuildAndAppendActionNode(soapXml, product, unitOfSale, action, actionItemNode, product.ProductName);
+                            break;
+
+                        case 4://REPLACED WITH PRODUCT
+                            if (product.DataReplacement.Any() && unitOfSale is null)
+                            {
+                                throw new ERPFacadeException(EventIds.RequiredUnitNotFoundException.ToEventId(), $"Required unit not found in S-100 data content published event for {product.ProductName} to generate {action.Action} action.");
+                            }
+                            foreach (var replacedProduct in product.DataReplacement)
+                            {
+                                BuildAndAppendActionNode(soapXml, product, unitOfSale, action, actionItemNode, product.ProductName, replacedProduct);
+                            }
+                            break;
+
+                        case 6://CHANGE PRODUCT
+                            if (unitOfSale is not null)
+                                BuildAndAppendActionNode(soapXml, product, unitOfSale, action, actionItemNode, product.ProductName);
+                            break;
+                    }
+                }
+            }
         }
 
         private void BuildUnitActions(S100EventData eventData, XmlDocument soapXml, XmlNode actionItemNode)
@@ -87,15 +129,32 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             }
         }
 
-        private void BuildAndAppendActionNode(XmlDocument soapXml, S100Product product, S100UnitOfSale unitOfSale, SapAction action, XmlNode actionItemNode, string childProduct = null, string replacedBy = null)
+        private S100UnitOfSale? GetUnitOfSale(int actionNumber, List<S100UnitOfSale> listOfUnitOfSales, S100Product product)
+        {
+            return actionNumber switch
+            {
+                //Case 1 : CREATE PRODUCT
+                1 => listOfUnitOfSales.FirstOrDefault(x => x.Status == JsonFields.UnitOfSaleStatusForSale && x.CompositionChanges.AddProducts.Contains(product.ProductName)),
+
+                //Case 4 : REPLACED WITH PRODUCT
+                //Case 10 : CANCEL PRODUCT
+                4 or 10 => listOfUnitOfSales.FirstOrDefault(x => x.CompositionChanges.RemoveProducts.Contains(product.ProductName)),
+
+                //Case 6 : CHANGE PRODUCT
+                6 => listOfUnitOfSales.FirstOrDefault(x => x.Status == JsonFields.UnitOfSaleStatusForSale && product.InUnitsOfSale.Contains(x.UnitName)),
+                _ => null,
+            };
+        }
+
+        private void BuildAndAppendActionNode(XmlDocument soapXml, S100Product product, S100UnitOfSale unitOfSale, SapAction action, XmlNode actionItemNode, string childCell = null, string replacedBy = null)
         {
             _logger.LogInformation(EventIds.S100SapActionGenerationStarted.ToEventId(), "Generation of {ActionName} action started.", action.Action);
-            var actionNode = BuildAction(soapXml, product, unitOfSale, action, childProduct, replacedBy);
+            var actionNode = BuildAction(soapXml, product, unitOfSale, action, childCell, replacedBy);
             actionItemNode.AppendChild(actionNode);
             _logger.LogInformation(EventIds.S100SapActionGenerationCompleted.ToEventId(), "Generation of {ActionName} action completed.", action.Action);
         }
 
-        private XmlElement BuildAction(XmlDocument soapXml, S100Product product, S100UnitOfSale unitOfSale, SapAction action, string childProduct = null, string replacedBy = null)
+        private XmlElement BuildAction(XmlDocument soapXml, S100Product product, S100UnitOfSale unitOfSale, SapAction action, string childCell, string replacedBy = null)
         {
             // Create main item node
             var itemNode = soapXml.CreateElement(XmlTemplateInfo.Item);
@@ -106,7 +165,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             _xmlOperations.AppendChildNode(itemNode, soapXml, XmlFields.Product, action.Product.ToString());
 
             // Add child cell node
-            _xmlOperations.AppendChildNode(itemNode, soapXml, XmlFields.ChildCell, childProduct);
+            _xmlOperations.AppendChildNode(itemNode, soapXml, XmlFields.ChildCell, childCell);
 
             List<(int sortingOrder, XmlElement node)> actionAttributes = new();
 

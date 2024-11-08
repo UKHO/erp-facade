@@ -1,0 +1,112 @@
+{
+    "specversion": "1.0",
+    "type": "uk.gov.ukho.encpublishing.s100datacontentpublished.v1",
+    "source": "https://encpublishing.ukho.gov.uk",
+    "id": "5f03a25f-28b3-46ea-b009-5943250a9a41",
+    "time": "2024-08-13T12:08:03.4880776Z",
+    "subject": "101CA7777777",
+    "datacontenttype": "application/json",
+    "data": {
+        "correlationId": "165ce4a4-1d62-4f56-b359-59e178d77106",
+        "products": [
+            {
+                "productType": "S100",
+                "productIdentifier": "S-101",
+                "productName": "101CA7777777",
+                "editionNumber": 3,
+                "updateNumber": 0,
+                "mayAffectHoldings": true,
+                "contentChange": true,
+                "providerCode": "1",
+                "providerName": "ICE",
+                "size": "medium",
+                "producingAgency": "CA",
+                "status": {
+                    "statusName": "newEditon",
+                    "statusDate": "2024-07-16T19:20:30.45+01:00",
+                    "isNewCell": false
+                },
+                "replaces": [],
+                "dataReplacement": [],
+                "boundingBox": {
+                    "northLimit": 63.25,
+                    "southLimit": 63,
+                    "eastLimit": 8,
+                    "westLimit": 7.75
+                },
+                "fileSize": 3456,
+                "inUnitsOfSale": [
+                    "101CA7777777"
+                ]
+            },
+            {
+                "productType": "S100",
+                "productIdentifier": "S-101",
+                "productName": "101CA8888888",
+                "editionNumber": 1,
+                "updateNumber": 0,
+                "mayAffectHoldings": true,
+                "contentChange": true,
+                "providerCode": "1",
+                "providerName": "ICE",
+                "size": "medium",
+                "producingAgency": "CA",
+                "status": {
+                    "statusName": "newEditon",
+                    "statusDate": "2024-07-16T19:20:30.45+01:00",
+                    "isNewCell": true
+                },
+                "replaces": [],
+                "dataReplacement": [],
+                "boundingBox": {
+                    "northLimit": 63.25,
+                    "southLimit": 63,
+                    "eastLimit": 8,
+                    "westLimit": 7.75
+                },
+                "fileSize": 3456,
+                "inUnitsOfSale": [
+                    "101CA8888888"
+                ]
+            }
+        ],
+        "unitsOfSale": [
+            {
+                "unitName": "101CA8888888",
+                "title": "A test S-101 cell from GB authority in its own unit of sale",
+                "unitSize": "large",
+                "status": "ForSale",
+                "isNewUnitOfSale": true,
+                "boundingBox": {
+                    "northLimit": 63.25,
+                    "southLimit": 63,
+                    "eastLimit": 8,
+                    "westLimit": 7.75
+                },
+                "compositionChanges": {
+                    "addProducts": [
+                        "101CA8888888"
+                    ],
+                    "removeProducts": []
+                }
+            },
+            {
+                "unitName": "101CA7777777",
+                "title": "A test S-101 cell from GB authority in its own unit of sale",
+                "unitSize": "large",
+                "status": "ForSale",
+                "isNewUnitOfSale": false,
+                "boundingBox": {
+                    "northLimit": 63.25,
+                    "southLimit": 63,
+                    "eastLimit": 8,
+                    "westLimit": 7.75
+                },
+                "compositionChanges": {
+                    "addProducts": [],
+                    "removeProducts": []
+                }
+            }
+        ]
+    }
+}

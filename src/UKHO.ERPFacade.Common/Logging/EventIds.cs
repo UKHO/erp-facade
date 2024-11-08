@@ -435,32 +435,32 @@ namespace UKHO.ERPFacade.Common.Logging
         S100EventJsonStoredInAzureBlobContainer = 940086,
 
         /// <summary>
-        /// 940087 - Generation of SAP xml payload for S100 data content published event started.
+        /// 940087 - Generation of SAP xml payload for S-100 data content published event started.
         /// </summary>
         S100EventSapXmlPayloadGenerationStarted = 940087,
 
         /// <summary>
-        /// 940088 - Generation of SAP xml payload for S100 data content published event completed.
+        /// 940088 - Generation of SAP xml payload for S-100 data content published event completed.
         /// </summary>
         S100EventSapXmlPayloadGenerationCompleted = 940088,
 
         /// <summary>
-        /// 940089 - Generation of SAP action for S100 data content published event started.
+        /// 940089 - Generation of SAP action for S-100 data content published event started.
         /// </summary>
         S100SapActionGenerationStarted = 940089,
 
         /// <summary>
-        /// 940090 - Generation of SAP action for S100 data content published event completed.
+        /// 940090 - Generation of SAP action for S-100 data content published event completed.
         /// </summary>
         S100SapActionGenerationCompleted = 940090,
 
         /// <summary>
-        /// 940093 - S100SapAction Information Generation Failed Exception.
+        /// 940091 - S100SapAction Information Generation Failed Exception.
         /// </summary>
         S100SapActionInformationGenerationFailedException = 940091,
 
         /// <summary>
-        /// 940087 - S100 event XML payload is stored in azure blob container.
+        /// 940092 - S-100 event XML payload is stored in azure blob container.
         /// </summary>
         S100EventXMLStoredInAzureBlobContainer = 940092
     }

@@ -12,22 +12,23 @@
             {
                 "productType": "S100",
                 "productIdentifier": "S-101",
-                "productName": "AU421115",
+                "productName": "101GB1111111A",
                 "editionNumber": 1,
                 "updateNumber": 0,
-                "mayAffectHoldings": false,
+                "mayAffectHoldings": true,
                 "contentChange": true,
                 "providerCode": "1",
                 "providerName": "ICE",
                 "size": "medium",
                 "producingAgency": "GB",
                 "status": {
-                    "statusName": "Update",
+                    "statusName": "newDataset",
                     "statusDate": "2024-07-16T19:20:30.45+01:00",
-                    "isNewCell": false
+                    "isNewCell": true
                 },
-                "replaces": [],
-                "dataReplacement": [],
+                "replaces": [
+                ],
+                "dataReplacement": [ "101GB1111111Z" ],
                 "boundingBox": {
                     "northLimit": 63.25,
                     "southLimit": 63,
@@ -36,16 +37,35 @@
                 },
                 "fileSize": 3456,
                 "inUnitsOfSale": [
-                    "AU421115"
+                    "101GB1111111A"
                 ]
             }
         ],
         "unitsOfSale": [
             {
-                "unitName": "AU421115",
+                "unitName": "101GB1111111A",
                 "title": "A test S-101 cell from GB authority in its own unit of sale",
                 "unitSize": "large",
                 "status": "ForSale",
+                "isNewUnitOfSale": true,
+                "boundingBox": {
+                    "northLimit": 63.25,
+                    "southLimit": 63,
+                    "eastLimit": 8,
+                    "westLimit": 7.75
+                },
+                "compositionChanges": {
+                    "addProducts": [
+                        "101GB1111111A"
+                    ],
+                    "removeProducts": []
+                }
+            },
+            {
+                "unitName": "101GB1111111Z",
+                "title": "A test S-101 cell from GB authority in its own unit of sale",
+                "unitSize": "large",
+                "status": "NotForSale",
                 "isNewUnitOfSale": false,
                 "boundingBox": {
                     "northLimit": 63.25,
@@ -56,7 +76,7 @@
                 "compositionChanges": {
                     "addProducts": [],
                     "removeProducts": [
-                        "AU421115"
+                        "101GB1111111Z"
                     ]
                 }
             }

@@ -44,8 +44,9 @@
             {
                 "unitName": "AU421115",
                 "title": "A test S-101 cell from GB authority in its own unit of sale",
+                "unitSize": "large",
                 "status": "ForSale",
-                "isNewUnitOfSale": true,
+                "isNewUnitOfSale": false,
                 "boundingBox": {
                     "northLimit": 63.25,
                     "southLimit": 63,

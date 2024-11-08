@@ -12,7 +12,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
         XmlDocument BuildXmlPayload<T>(T eventData, string xmlTemplatePath);
         bool ValidateActionRules(SapAction action, object obj);
         bool IsPropertyNullOrEmpty(string propertyName, string propertyValue);
-        void FinalizeSapXmlMessage(XmlDocument soapXml, string correlationId, XmlNode actionItemNode);
+        void FinalizeSapXmlMessage(XmlDocument soapXml, string correlationId, XmlNode actionItemNode, string xmlPathInfo);
     }
 
     public abstract class BaseXmlTransformer : IBaseXmlTransformer
@@ -51,7 +51,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             return isConditionSatisfied;
         }
 
-        public void FinalizeSapXmlMessage(XmlDocument soapXml, string correlationId, XmlNode actionItemNode)
+        public void FinalizeSapXmlMessage(XmlDocument soapXml, string correlationId, XmlNode actionItemNode,string xmlPathInfo)
         {
             // Extract all action item nodes
             var actionItems = actionItemNode.Cast<XmlNode>().ToList();
@@ -94,7 +94,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             recTimeNode.InnerText = DateTime.UtcNow.ToString(XmlFields.RecTimeFormat);
 
             //Set action items
-            var IM_MATINFONode = soapXml.SelectSingleNode(XmlTemplateInfo.XpathImMatInfo);
+            var IM_MATINFONode = soapXml.SelectSingleNode(xmlPathInfo);
             IM_MATINFONode.AppendChild(actionItemNode);
         }
 
