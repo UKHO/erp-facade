@@ -20,32 +20,32 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             randomCorrId = randomCorrId.Insert(5, "-");
             randomCorrId = randomCorrId.Insert(11, "-");
             randomCorrId = randomCorrId.Insert(16, "-");
-            var currentTimeStamp = DateTime.Now.ToString(Constants.RecDateFormat);
+            var currentTimeStamp = DateTime.Now.ToString(XmlFields.RecDateFormat);
             randomCorrId = "ft-" + currentTimeStamp + "-" + randomCorrId;
             return randomCorrId;
         }
 
         public static string UpdateTimeAndCorrIdField(string requestBody, string generatedCorrelationId)
         {
-            var currentTimeStamp = DateTime.Now.ToString(Constants.RecDateFormat);
+            var currentTimeStamp = DateTime.Now.ToString(XmlFields.RecDateFormat);
             JObject jsonObj = JObject.Parse(requestBody);
             jsonObj["time"] = currentTimeStamp;
-            jsonObj[Constants.DataNode]["correlationId"] = generatedCorrelationId;
+            jsonObj[JsonFields.DataNode]["correlationId"] = generatedCorrelationId;
             return jsonObj.ToString();
         }
 
         public static string UpdatePermitField(string requestBody, string permitState)
         {
             JObject jsonObj = JObject.Parse(requestBody);
-            var products = jsonObj[Constants.DataNode][Constants.Products];
+            var products = jsonObj[JsonFields.DataNode][JsonFields.Products];
 
-            string permit = permitState.Contains(Constants.PermitWithSameKey) ? Config.TestConfig.PermitWithSameKey.Permit
-                : permitState.Contains(Constants.PermitWithDifferentKey) ? Config.TestConfig.PermitWithDifferentKey.Permit
+            string permit = permitState.Contains(JsonFields.PermitWithSameKey) ? Config.TestConfig.PermitWithSameKey.Permit
+                : permitState.Contains(JsonFields.PermitWithDifferentKey) ? Config.TestConfig.PermitWithDifferentKey.Permit
                 : permitState;
 
             foreach (var product in products)
             {
-                product[Constants.Permit] = permit;
+                product[JsonFields.Permit] = permit;
             }
 
             return jsonObj.ToString();
@@ -70,8 +70,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             var expectedAttributes = expectedXml.Descendants("item").ToList();
 
 
-            string activeKey = permitState == Constants.PermitWithSameKey ? permitWithSameKeyActiveKey : permitWithDifferentKeyActiveKey;
-            string nextKey = permitState == Constants.PermitWithSameKey ? permitWithSameKeyNextKey : permitWithDifferentKeyNextKey;
+            string activeKey = permitState == JsonFields.PermitWithSameKey ? permitWithSameKeyActiveKey : permitWithDifferentKeyActiveKey;
+            string nextKey = permitState == JsonFields.PermitWithSameKey ? permitWithSameKeyNextKey : permitWithDifferentKeyNextKey;
 
             // Ensure both XMLs have the same number of items
             if (generatedAttributes.Count != expectedAttributes.Count)
@@ -91,7 +91,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 {
                     var expectedAttribute = expectedAction.Element(generatedAttribute.Name);
 
-                    if ((action == Constants.CreateEncCell || action == Constants.UpdateCell ) && (generatedAttribute.Name == Constants.ActiveKey || generatedAttribute.Name == Constants.NextKey))
+                    if ((action == ConfigFileFields.CreateEncCell || action == ConfigFileFields.UpdateCell ) && (generatedAttribute.Name == XmlFields.ActiveKey || generatedAttribute.Name == XmlFields.NextKey))
                     {
                         string expectedValue = generatedAttribute.Name == "ACTIVEKEY" ? activeKey : nextKey;
 

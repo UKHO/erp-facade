@@ -1,4 +1,6 @@
-﻿using Azure.Extensions.AspNetCore.Configuration.Secrets;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
+using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using Microsoft.ApplicationInsights.Channel;
@@ -7,12 +9,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
-using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
 using UKHO.ERPFacade.CleanUp.WebJob;
 using UKHO.ERPFacade.CleanUp.WebJob.Services;
 using UKHO.ERPFacade.Common.Configuration;
-using UKHO.ERPFacade.Common.IO.Azure;
+using UKHO.ERPFacade.Common.Operations.IO.Azure;
 using UKHO.Logging.EventHubLogProvider;
 
 namespace UKHO.ERPFacade.Monitoring.WebJob
@@ -142,14 +142,14 @@ namespace UKHO.ERPFacade.Monitoring.WebJob
 
             if (configuration != null)
             {
-                serviceCollection.Configure<ErpFacadeWebJobConfiguration>(configuration.GetSection("ErpFacadeWebJobConfiguration"));
+                serviceCollection.Configure<CleanupWebJobConfiguration>(configuration.GetSection("ErpFacadeWebJobConfiguration"));
                 serviceCollection.Configure<AzureStorageConfiguration>(configuration.GetSection("AzureStorageConfiguration"));
                 serviceCollection.AddSingleton(configuration);
             }
 
             serviceCollection.AddSingleton<CleanUpWebjob>();
             serviceCollection.AddSingleton<IAzureTableReaderWriter, AzureTableReaderWriter>();
-            serviceCollection.AddSingleton<IAzureBlobEventWriter, AzureBlobEventWriter>();
+            serviceCollection.AddSingleton<IAzureBlobReaderWriter, AzureBlobReaderWriter>();
             serviceCollection.AddSingleton<ICleanUpService, CleanUpService>();
         }
     }

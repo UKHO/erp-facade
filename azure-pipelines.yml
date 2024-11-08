@@ -385,6 +385,8 @@ stages:
         value: $(PermitWithDifferentKeyACTIVEKEY)
       - name: "PermitWithDifferentKey.NextKey"
         value: $(PermitWithDifferentKeyNEXTKEY)
+      - name: "SharedApiKeyConfiguration.SharedApiKey"
+        value: $(SharedApiKey)
     jobs:
       - deployment: DevDeployTerraform
         displayName: "Dev - Deploy Terraform"

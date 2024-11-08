@@ -4,7 +4,6 @@ using System.Reflection;
 using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
-using Elastic.Apm.AspNetCore;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -13,19 +12,23 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Newtonsoft.Json.Serialization;
 using Serilog;
+using UKHO.ERPFacade.API.Dispatcher;
 using UKHO.ERPFacade.API.Filters;
+using UKHO.ERPFacade.API.Handlers;
 using UKHO.ERPFacade.API.Health;
-using UKHO.ERPFacade.API.Helpers;
+using UKHO.ERPFacade.API.SapMessageBuilders;
+using UKHO.ERPFacade.API.XmlTransformers;
 using UKHO.ERPFacade.Common.Configuration;
+using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.HealthCheck;
 using UKHO.ERPFacade.Common.HttpClients;
-using UKHO.ERPFacade.Common.IO;
-using UKHO.ERPFacade.Common.IO.Azure;
 using UKHO.ERPFacade.Common.Models;
-using UKHO.ERPFacade.Common.Providers;
+using UKHO.ERPFacade.Common.Operations;
+using UKHO.ERPFacade.Common.Operations.IO;
+using UKHO.ERPFacade.Common.Operations.IO.Azure;
 using UKHO.ERPFacade.Common.PermitDecryption;
+using UKHO.ERPFacade.Common.Providers;
 using UKHO.Logging.EventHubLogProvider;
-using UKHO.ERPFacade.API.Services;
 
 namespace UKHO.ERPFacade
 {
@@ -37,6 +40,7 @@ namespace UKHO.ERPFacade
         {
             EventHubLoggingConfiguration eventHubLoggingConfiguration;
             SapActionConfiguration sapActionConfiguration;
+            S100SapActionConfiguration s100SapActionConfiguration;
 
             IHttpContextAccessor httpContextAccessor = new HttpContextAccessor();
             var builder = WebApplication.CreateBuilder(args);
@@ -46,7 +50,8 @@ namespace UKHO.ERPFacade
             builder.Configuration.SetBasePath(webHostEnvironment.ContentRootPath)
                 .AddJsonFile("appsettings.json", false, true)
                 .AddJsonFile($"appsettings.{webHostEnvironment.EnvironmentName}.json", true, true)
-                .AddJsonFile("ConfigurationFiles/SapActions.json", true, true)
+                .AddJsonFile("ConfigurationFiles/S57SapActions.json", true, true)
+                .AddJsonFile("ConfigurationFiles/S100SapActions.json", true, true)
 #if DEBUG
                 //Add development overrides configuration
                 .AddJsonFile("appsettings.local.overrides.json", true, true)
@@ -163,24 +168,33 @@ namespace UKHO.ERPFacade
             builder.Services.Configure<SapConfiguration>(configuration.GetSection("SapConfiguration"));
             builder.Services.Configure<SapActionConfiguration>(configuration.GetSection("SapActionConfiguration"));
             sapActionConfiguration = configuration.GetSection("SapActionConfiguration").Get<SapActionConfiguration>()!;
+            builder.Services.Configure<S100SapActionConfiguration>(configuration.GetSection("S100SapActionConfiguration"));
+            s100SapActionConfiguration = configuration.GetSection("S100SapActionConfiguration").Get<S100SapActionConfiguration>()!;
             builder.Services.Configure<EESHealthCheckEnvironmentConfiguration>(configuration.GetSection("EESHealthCheckEnvironmentConfiguration"));
             builder.Services.Configure<PermitConfiguration>(configuration.GetSection("PermitConfiguration"));
             builder.Services.Configure<AioConfiguration>(configuration.GetSection("AioConfiguration"));
+            builder.Services.Configure<SharedApiKeyConfiguration>(configuration.GetSection("SharedApiKeyConfiguration"));
 
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+            builder.Services.AddScoped<IAzureQueueReaderWriter, AzureQueueReaderWriter>();
             builder.Services.AddScoped<IAzureTableReaderWriter, AzureTableReaderWriter>();
-            builder.Services.AddScoped<IAzureBlobEventWriter, AzureBlobEventWriter>();
-            builder.Services.AddScoped<IAzureQueueHelper, AzureQueueHelper>();
-            builder.Services.AddScoped<IEncContentSapMessageBuilder, EncContentSapMessageBuilder>();
-            builder.Services.AddScoped<IXmlHelper, XmlHelper>();
-            builder.Services.AddScoped<IFileSystemHelper, FileSystemHelper>();
+            builder.Services.AddScoped<IAzureBlobReaderWriter, AzureBlobReaderWriter>();
+            builder.Services.AddScoped<IXmlOperations, XmlOperations>();
+            builder.Services.AddScoped<IFileOperations, FileOperations>();
             builder.Services.AddScoped<IFileSystem, FileSystem>();
             builder.Services.AddScoped<IEESClient, EESClient>();
             builder.Services.AddScoped<ILicenceUpdatedSapMessageBuilder, LicenceUpdatedSapMessageBuilder>();
             builder.Services.AddScoped<IWeekDetailsProvider, WeekDetailsProvider>();
             builder.Services.AddScoped<IPermitDecryption, PermitDecryption>();
-            builder.Services.AddScoped<IS57Service, S57Service>();
+
+            builder.Services.AddScoped<IEventHandler, S57EventHandler>();
+            builder.Services.AddScoped<IEventHandler, S100EventHandler>();
+
+            builder.Services.AddKeyedScoped<IBaseXmlTransformer, S57XmlTransformer>(XmlTransformers.S57XmlTransformer);
+            builder.Services.AddKeyedScoped<IBaseXmlTransformer, S100XmlTransformer>(XmlTransformers.S100XmlTransformer);
+            builder.Services.AddScoped<IEventDispatcher, EventDispatcher>();
+            builder.Services.AddScoped<SharedApiKeyAuthFilter>();
 
             ConfigureHealthChecks(builder);
 

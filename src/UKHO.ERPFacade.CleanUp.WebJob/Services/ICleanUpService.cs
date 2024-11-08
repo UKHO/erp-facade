@@ -2,6 +2,6 @@
 {
     public interface ICleanUpService
     {
-        void CleanUpAzureTableAndBlobs();
+        void Clean();
     }
 }

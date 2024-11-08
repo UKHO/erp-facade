@@ -15,9 +15,10 @@ using Serilog;
 using Serilog.Events;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.HttpClients;
-using UKHO.ERPFacade.Common.IO;
-using UKHO.ERPFacade.Common.IO.Azure;
-using UKHO.ERPFacade.EventAggregation.WebJob.Helpers;
+using UKHO.ERPFacade.Common.Operations;
+using UKHO.ERPFacade.Common.Operations.IO;
+using UKHO.ERPFacade.Common.Operations.IO.Azure;
+using UKHO.ERPFacade.EventAggregation.WebJob.SapMessageBuilders;
 using UKHO.ERPFacade.EventAggregation.WebJob.Services;
 using UKHO.Logging.EventHubLogProvider;
 
@@ -120,10 +121,10 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob
 
                  services.AddSingleton<IAggregationService, AggregationService>();
                  services.AddSingleton<IAzureTableReaderWriter, AzureTableReaderWriter>();
-                 services.AddSingleton<IAzureBlobEventWriter, AzureBlobEventWriter>();
+                 services.AddSingleton<IAzureBlobReaderWriter, AzureBlobReaderWriter>();
                  services.AddSingleton<IRecordOfSaleSapMessageBuilder, RecordOfSaleSapMessageBuilder>();
-                 services.AddSingleton<IXmlHelper, XmlHelper>();
-                 services.AddSingleton<IFileSystemHelper, FileSystemHelper>();
+                 services.AddSingleton<IXmlOperations, XmlOperations>();
+                 services.AddSingleton<IFileOperations, FileOperations>();
                  services.AddSingleton<IFileSystem, FileSystem>();
                  services.AddDistributedMemoryCache();
 
