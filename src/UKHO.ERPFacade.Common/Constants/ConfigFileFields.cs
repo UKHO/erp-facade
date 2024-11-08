@@ -13,5 +13,7 @@ namespace UKHO.ERPFacade.Common.Constants
         public const string UpdateCell = "UPDATE ENC CELL EDITION UPDATE NUMBER";
         public const string ReplaceEncCellAction = "REPLACED WITH ENC CELL";
         public const string ChangeEncCellAction = "CHANGE ENC CELL";
+
+        public const string HeaderApiKeyName = "X-API-Key";
     }
 }
