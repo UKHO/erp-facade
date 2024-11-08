@@ -8,7 +8,7 @@ using UKHO.ERPFacade.Common.Constants;
 namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 {
 
-    //[Ignore("It was originally built for ADDS Increment 3")]
+    [Ignore("It was originally built for ADDS Increment 3")]
     [TestFixture]
     public class LicenceUpdatedWebhookScenario
     {
