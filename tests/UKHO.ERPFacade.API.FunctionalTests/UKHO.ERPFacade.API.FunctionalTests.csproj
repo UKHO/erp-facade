@@ -122,6 +122,24 @@
     <None Update="ERPFacadeExpectedXmlFiles\Re-issue.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ERPFacadeExpectedXmlFiles\S100ExpectedXmlFiles\CancellationAndReplacement.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadeExpectedXmlFiles\S100ExpectedXmlFiles\NewCellAndEdition.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadeExpectedXmlFiles\S100ExpectedXmlFiles\SupplierDefinedUnitChange.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadeExpectedXmlFiles\S100ExpectedXmlFiles\SupplierDefinedReleasability.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadeExpectedXmlFiles\S100ExpectedXmlFiles\SupplierChange.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadeExpectedXmlFiles\S100ExpectedXmlFiles\SimpleUpdate.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ERPFacadeExpectedXmlFiles\S100ExpectedXmlFiles\NewCell.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -329,7 +347,25 @@
     <None Update="ERPFacadePayloadTestData\RoSPayloadTestData\RoS01_ValidRoSMainHolding.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPFacadePayloadTestData\S100PayloadTestData\NewCells.JSON">
+    <None Update="ERPFacadePayloadTestData\S100PayloadTestData\CancellationAndReplacement.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\S100PayloadTestData\SupplierDefinedUnitChange.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\S100PayloadTestData\SupplierDefinedReleasability.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\S100PayloadTestData\SupplierChange.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\S100PayloadTestData\SimpleUpdate.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\S100PayloadTestData\NewCellAndEdition.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\S100PayloadTestData\NewCell.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPFacadePayloadTestData\SapMockApiConfigure.xml">

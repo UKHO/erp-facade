@@ -435,24 +435,49 @@ namespace UKHO.ERPFacade.Common.Logging
         S100EventJsonStoredInAzureBlobContainer = 940086,
 
         /// <summary>
-        /// 940087 - S100 event XML payload is stored in azure blob container.
+        /// 940087 - Generation of SAP xml payload for S-100 data content published event started.
         /// </summary>
-        S100EventXMLStoredInAzureBlobContainer = 940087,
+        S100EventSapXmlPayloadGenerationStarted = 940087,
 
         /// <summary>
-        /// 940088 - Shared key is missing in request.
+        /// 940088 - Generation of SAP xml payload for S-100 data content published event completed.
         /// </summary>
-        SharedApiKeyMissingInRequest = 940088,
+        S100EventSapXmlPayloadGenerationCompleted = 940088,
 
         /// <summary>
-        /// 940089 - Invalid shared key.
+        /// 940089 - Generation of SAP action for S-100 data content published event started.
         /// </summary>
-        InvalidSharedApiKey = 940089,
+        S100SapActionGenerationStarted = 940089,
 
         /// <summary>
-        /// 940090 - Shared API Key Configuration is missing.
+        /// 940090 - Generation of SAP action for S-100 data content published event completed.
         /// </summary>
-        SharedApiKeyConfigurationMissing = 940090
+        S100SapActionGenerationCompleted = 940090,
+
+        /// <summary>
+        /// 940091 - S100SapAction Information Generation Failed Exception.
+        /// </summary>
+        S100SapActionInformationGenerationFailedException = 940091,
+
+        /// <summary>
+        /// 940092 - S100 event XML payload is stored in azure blob container.
+        /// </summary>
+        S100EventXMLStoredInAzureBlobContainer = 940092,
+
+        /// <summary>
+        /// 940093 - Shared key is missing in request.
+        /// </summary>
+        SharedApiKeyMissingInRequest = 940093,
+
+        /// <summary>
+        /// 940094 - Invalid shared key.
+        /// </summary>
+        InvalidSharedApiKey = 940094,
+
+        /// <summary>
+        /// 940095 - Shared API Key Configuration is missing.
+        /// </summary>
+        SharedApiKeyConfigurationMissing = 940095
     }
 
     /// <summary>

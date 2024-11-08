@@ -83,8 +83,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
                 }
 
                 //Expected XML 
-                string xmlFilePath = filePath.Replace(Config.TestConfig.PayloadFolder, EventPayloadFiles.ErpFacadeExpectedXmlFiles).Replace(".JSON", ".xml");
-
+                string xmlFilePath = filePath.Replace(Config.TestConfig.PayloadFolder, EventPayloadFiles.ErpFacadeExpectedXmlFiles).Replace(EventPayloadFiles.S100WebhookPayloadFolder, EventPayloadFiles.S100ExpectedXmlFiles).Replace(".JSON", ".xml");
                 Assert.That(SapXmlHelper.VerifyGeneratedXml(generatedXmlFilePath, xmlFilePath, permitState));
             }
             return response;
