@@ -33,6 +33,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [TestCase("SupplierChange.JSON", TestName = "WhenICallTheWebhookWithSupplierChangeScenario_ThenWebhookReturns200Response")]
         [TestCase("SupplierDefinedReleasability.JSON", TestName = "WhenICallTheWebhookWithSupplierDefinedReleasabilityScenario_ThenWebhookReturns200Response")]
         [TestCase("SupplierDefinedUnitChange.JSON", TestName = "WhenICallTheWebhookWithSupplierDefinedUnitChangeScenario_ThenWebhookReturns200Response")]
+        [TestCase("SupplierDefinedUnitChangeV2.JSON", TestName = "WhenICallTheWebhookWithSupplierDefinedUnitChangeV2Scenario_ThenWebhookReturns200Response")]
+        [TestCase("Suspend.JSON", TestName = "WhenICallTheWebhookWithSuspendScenario_ThenWebhookReturns200Response")]
+        [TestCase("Withdrawn.JSON", TestName = "WhenICallTheWebhookWithWithdrawnScenario_ThenWebhookReturns200Response")]
 
         public async Task WhenValidS100DataContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponse(string payload)
         {
