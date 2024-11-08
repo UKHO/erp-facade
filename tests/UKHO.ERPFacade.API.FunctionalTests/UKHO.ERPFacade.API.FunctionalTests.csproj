@@ -368,6 +368,15 @@
     <None Update="ERPFacadePayloadTestData\S100PayloadTestData\NewCell.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ERPFacadePayloadTestData\S100PayloadTestData\SupplierDefinedUnitChangeV2.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\S100PayloadTestData\Suspend.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\S100PayloadTestData\Withdrawn.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ERPFacadePayloadTestData\SapMockApiConfigure.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
