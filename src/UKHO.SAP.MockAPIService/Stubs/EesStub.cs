@@ -31,6 +31,16 @@ namespace UKHO.ERPFacade.StubService.Stubs
             server
                 .Given(Request.Create()
                     .WithPath(new WildcardMatcher(_eesConfiguration.Url))
+                    .WithBody(new RegexMatcher("badrequest", true))
+                    .UsingPost())
+                .RespondWith(Response.Create()
+                    .WithBody((request) => { return $"Bad Request"; })
+                    .WithStatusCode(400)
+                    .WithHeader("Content-Type", "application/json; charset=utf-8"));
+
+            server
+                .Given(Request.Create()
+                    .WithPath(new WildcardMatcher(_eesConfiguration.Url))
                     .WithBody(new RegexMatcher("internalservererror", true))
                     .UsingPost())
                 .RespondWith(Response.Create()

@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.StubService.Stubs;
 using WireMock.Server;
 using WireMock.Settings;
@@ -19,7 +18,8 @@ namespace UKHO.ERPFacade.StubService.StubSetup
 
         private void RegisterStubs()
         {
-            RegisterStub(_stubFactory.CreateSapServiceStub());
+            RegisterStub(_stubFactory.CreateSapStub());
+            RegisterStub(_stubFactory.CreateEesStub());
         }
 
         public Task StartAsync(CancellationToken cancellationToken)

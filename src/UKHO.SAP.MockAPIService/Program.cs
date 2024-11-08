@@ -1,8 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using UKHO.ERPFacade.StubService.Configuration;
+﻿using UKHO.ERPFacade.StubService.Configuration;
 using UKHO.ERPFacade.StubService.StubSetup;
+using UKHO.SAP.MockAPIService.Configuration;
 using WireMock.Settings;
 
 namespace UKHO.ERPFacade.StubService
@@ -25,6 +23,7 @@ namespace UKHO.ERPFacade.StubService
             services.Configure<S57EncEventConfiguration>(configuration.GetSection("S57EncEventConfiguration"));
             services.Configure<RecordOfSaleEventConfiguration>(configuration.GetSection("RecordOfSaleEventConfiguration"));
             services.Configure<S100DataEventConfiguration>(configuration.GetSection("S100DataEventConfiguration"));
+            services.Configure<EesConfiguration>(configuration.GetSection("EesConfiguration"));
 
             services.AddSingleton<StubFactory>();
             services.AddHostedService<StubManagerHostedService>();
