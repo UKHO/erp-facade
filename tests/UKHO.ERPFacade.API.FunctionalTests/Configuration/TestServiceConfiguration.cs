@@ -12,11 +12,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Configuration
         public static IConfigurationRoot LoadConfiguration()
         {
             var configBuilder = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json", optional: false)
-#if DEBUG
-                //Add development overrides configuration
-                .AddJsonFile("appsettings.local.overrides.json", true, true);
-#endif
+                .AddJsonFile("appsettings.json", optional: false);
             var configurationRoot = configBuilder.Build();
 
             return configurationRoot;
