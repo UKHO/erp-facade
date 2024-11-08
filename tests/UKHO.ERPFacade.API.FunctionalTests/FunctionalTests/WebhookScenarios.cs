@@ -10,7 +10,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
     [TestFixture]
     public class WebhookScenarios
     {
-        private WebhookEndpoint WebhookEndpoint { get; set; }
+        private WebhookEndpoint _webhookEndpoint { get; set; }
         private readonly ADAuthTokenProvider _authToken = new();
 
         private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
@@ -20,13 +20,13 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [SetUp]
         public void Setup()
         {
-            WebhookEndpoint = new WebhookEndpoint();
+            _webhookEndpoint = new WebhookEndpoint();
         }
 
         [Test(Description = "WhenValidEventInNewEncContentPublishedEventOptions_ThenWebhookReturns200OkResponse"), Order(0)]
         public async Task WhenValidEventInNewEncContentPublishedEventOptions_ThenWebhookReturns200OkResponse()
         {
-            var response = await WebhookEndpoint.OptionWebhookResponseAsync(await _authToken.GetAzureADToken(false));
+            var response = await _webhookEndpoint.OptionWebhookResponseAsync(await _authToken.GetAzureADToken(false));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
 
@@ -34,7 +34,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponse()
         {
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.WebhookPayloadFileName);
-            var response = await WebhookEndpoint.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(false));
+            var response = await _webhookEndpoint.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(false));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
 
@@ -42,7 +42,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithInvalidToken_ThenWebhookReturns401UnAuthorizedResponse()
         {
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.WebhookPayloadFileName);
-            var response = await WebhookEndpoint.PostWebhookResponseAsync(filePath, "invalidToken_abcd");
+            var response = await _webhookEndpoint.PostWebhookResponseAsync(filePath, "invalidToken_abcd");
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
         }
 
@@ -50,7 +50,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         public async Task WhenValidEventInNewEncContentPublishedEventReceivedWithTokenHavingNoRole_ThenWebhookReturns403ForbiddenResponse()
         {
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, Config.TestConfig.WebhookPayloadFileName);
-            var response = await WebhookEndpoint.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(true));
+            var response = await _webhookEndpoint.PostWebhookResponseAsync(filePath, await _authToken.GetAzureADToken(true));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.Forbidden);
         }
 
@@ -110,7 +110,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             Console.WriteLine("Scenario:" + payloadJsonFileName + "\n");
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, payloadJsonFileName);
             string generatedXmlFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXmlFolder);
-            RestResponse response = await WebhookEndpoint.PostWebhookResponseAsyncForXml(filePath, generatedXmlFolder, await _authToken.GetAzureADToken(false), permitState );
+            RestResponse response = await _webhookEndpoint.PostWebhookResponseAsyncForXml(filePath, generatedXmlFolder, await _authToken.GetAzureADToken(false), permitState);
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
 
@@ -134,10 +134,10 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         public async Task WhenMandatoryAttributeIsEmptyOrNullInPayload_ThenWebhookReturnsInternalServerErrorResponse(string attributeName, int index)
         {
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, "MandatoryAttributeValidation.JSON");
-            RestResponse response = await WebhookEndpoint.PostWebhookResponseForMandatoryAttributeValidation(filePath, await _authToken.GetAzureADToken(false), attributeName, index, "Remove");
+            RestResponse response = await _webhookEndpoint.PostWebhookResponseForMandatoryAttributeValidation(filePath, await _authToken.GetAzureADToken(false), attributeName, index, "Remove");
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.InternalServerError);
 
-            response = await WebhookEndpoint.PostWebhookResponseForMandatoryAttributeValidation(filePath, await _authToken.GetAzureADToken(false), attributeName, index, "EmptyOrNull");
+            response = await _webhookEndpoint.PostWebhookResponseForMandatoryAttributeValidation(filePath, await _authToken.GetAzureADToken(false), attributeName, index, "EmptyOrNull");
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.InternalServerError);
         }
 
@@ -146,7 +146,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         {
             string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, "NewCell.JSON");
             const string permitString = "wwslkC9oG3rNcT4ZrgqX39pg9DuC9oSkBsl4kqiwr5h3nW6t0HUmlSaYhpdLEpO1";  //Invalid permit string to test permit decryption failure.
-            RestResponse response = await WebhookEndpoint.PostWebhookResponseAsyncForXml(filePath, "", await _authToken.GetAzureADToken(false), permitString);
+            RestResponse response = await _webhookEndpoint.PostWebhookResponseAsyncForXml(filePath, "", await _authToken.GetAzureADToken(false), permitString);
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.InternalServerError);
         }
     }
