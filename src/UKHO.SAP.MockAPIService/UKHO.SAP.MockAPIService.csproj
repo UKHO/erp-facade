@@ -24,6 +24,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.35" />
     <PackageReference Include="SoapCore" Version="1.1.0.51" />
     <PackageReference Include="System.CodeDom" Version="8.0.0" />
+    <PackageReference Include="WireMock.Net" Version="1.6.7" />
   </ItemGroup>
 
   <ItemGroup>
