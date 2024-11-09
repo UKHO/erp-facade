@@ -373,17 +373,17 @@ stages:
         value: $(AzureADConfigurationAutoTestClientIdNoRole)
       - name: "AzureADConfiguration.ClientSecretNoRole"
         value: $(AzureADConfigurationClientSecretNoRole)
-      - name: "PermitWithSameKey.Permit"
+      - name: "ErpFacadeConfiguration.PermitWithSameKey.Permit"
         value: $(PermitWithSameKeyPermit)
-      - name: "PermitWithSameKey.ActiveKey"
+      - name: "ErpFacadeConfiguration.PermitWithSameKey.ActiveKey"
         value: $(PermitWithSameKeyACTIVEKEY)
-      - name: "PermitWithSameKey.NextKey"
+      - name: "ErpFacadeConfiguration.PermitWithSameKey.NextKey"
         value: $(PermitWithSameKeyNEXTKEY)
-      - name: "PermitWithDifferentKey.Permit"
+      - name: "ErpFacadeConfiguration.PermitWithDifferentKey.Permit"
         value: $(PermitWithDifferentKeyPermit)
-      - name: "PermitWithDifferentKey.ActiveKey"
+      - name: "ErpFacadeConfiguration.PermitWithDifferentKey.ActiveKey"
         value: $(PermitWithDifferentKeyACTIVEKEY)
-      - name: "PermitWithDifferentKey.NextKey"
+      - name: "ErpFacadeConfiguration.PermitWithDifferentKey.NextKey"
         value: $(PermitWithDifferentKeyNEXTKEY)
       - name: "SharedApiKeyConfiguration.SharedApiKey"
         value: $(SharedApiKey)
@@ -780,17 +780,17 @@ stages:
         value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
       - name: "SapMockConfiguration.BaseUrl"
         value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
-      - name: "PermitWithSameKey.Permit"
+      - name: "ErpFacadeConfiguration.PermitWithSameKey.Permit"
         value: $(PermitWithSameKeyPermit)
-      - name: "PermitWithSameKey.ActiveKey"
+      - name: "ErpFacadeConfiguration.PermitWithSameKey.ActiveKey"
         value: $(PermitWithSameKeyACTIVEKEY)
-      - name: "PermitWithSameKey.NextKey"
+      - name: "ErpFacadeConfiguration.PermitWithSameKey.NextKey"
         value: $(PermitWithSameKeyNEXTKEY)
-      - name: "PermitWithDifferentKey.Permit"
+      - name: "ErpFacadeConfiguration.PermitWithDifferentKey.Permit"
         value: $(PermitWithDifferentKeyPermit)
-      - name: "PermitWithDifferentKey.ActiveKey"
+      - name: "ErpFacadeConfiguration.PermitWithDifferentKey.ActiveKey"
         value: $(PermitWithDifferentKeyACTIVEKEY)
-      - name: "PermitWithDifferentKey.NextKey"
+      - name: "ErpFacadeConfiguration.PermitWithDifferentKey.NextKey"
         value: $(PermitWithDifferentKeyNEXTKEY)
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
 
