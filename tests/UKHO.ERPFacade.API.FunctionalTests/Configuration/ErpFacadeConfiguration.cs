@@ -11,18 +11,4 @@
         public string[] RosLicenceUpdateXmlList { get; set; }
         public string[] RoSLicenceUpdatedProdXmlList { get; set; }
     }
-
-    public class PermitWithSameKey
-    {
-        public string Permit { get; set; }
-        public string ActiveKey { get; set; }
-        public string NextKey { get; set; }
-    }
-
-    public class PermitWithDifferentKey
-    {
-        public string Permit { get; set; }
-        public string ActiveKey { get; set; }
-        public string NextKey { get; set; }
-    }
 }
