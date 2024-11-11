@@ -21,7 +21,7 @@ namespace UKHO.ERPFacade.StubService.Stubs
             server
                 .Given(Request.Create()
                     .WithPath(new WildcardMatcher(_eesConfiguration.Url))
-                    .WithBody(new RegexMatcher("unauthorize", true))
+                    .WithBody(new RegexMatcher("SAP200OkEES401Unauthorized", true))
                     .UsingPost())
                 .RespondWith(Response.Create()
                     .WithBody((request) => { return $"Unauthorized"; })
@@ -31,7 +31,17 @@ namespace UKHO.ERPFacade.StubService.Stubs
             server
                 .Given(Request.Create()
                     .WithPath(new WildcardMatcher(_eesConfiguration.Url))
-                    .WithBody(new RegexMatcher("badrequest", true))
+                    .WithBody(new RegexMatcher("SAP200OkEES403Forbidden", true))
+                    .UsingPost())
+                .RespondWith(Response.Create()
+                    .WithBody((request) => { return $"Forbidden"; })
+                    .WithStatusCode(403)
+                    .WithHeader("Content-Type", "application/json; charset=utf-8"));
+
+            server
+                .Given(Request.Create()
+                    .WithPath(new WildcardMatcher(_eesConfiguration.Url))
+                    .WithBody(new RegexMatcher("SAP200OkEES400BadRequest", true))
                     .UsingPost())
                 .RespondWith(Response.Create()
                     .WithBody((request) => { return $"Bad Request"; })
@@ -41,7 +51,7 @@ namespace UKHO.ERPFacade.StubService.Stubs
             server
                 .Given(Request.Create()
                     .WithPath(new WildcardMatcher(_eesConfiguration.Url))
-                    .WithBody(new RegexMatcher("internalservererror", true))
+                    .WithBody(new RegexMatcher("SAP200OkEES500InternalServerError", true))
                     .UsingPost())
                 .RespondWith(Response.Create()
                     .WithBody((request) => { return $"Internal Server Error"; })
