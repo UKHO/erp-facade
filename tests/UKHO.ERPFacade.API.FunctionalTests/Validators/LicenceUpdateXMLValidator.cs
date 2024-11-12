@@ -6,14 +6,24 @@ using System.Xml;
 using UKHO.ERPFacade.API.FunctionalTests.Model;
 using UKHO.ERPFacade.API.FunctionalTests.Configuration;
 using UKHO.ERPFacade.Common.Constants;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
-namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
+namespace UKHO.ERPFacade.API.FunctionalTests.Validators
 {
     [TestFixture]
-    public class LicenceUpdateXmlHelper
+    public class LicenceUpdateXMLValidator : TestFixtureBase
     {
         private static JsonInputLicenceUpdateHelper UpdatedJsonPayload { get; set; }
         private static readonly List<string> s_attrNotMatched = new();
+        private readonly ErpFacadeConfiguration _erpFacadeConfiguration;
+        private static List<string> ActionAttributesSeq = new List<string>();
+
+        public LicenceUpdateXMLValidator()
+        {
+            _erpFacadeConfiguration = GetServiceProvider().GetRequiredService<IOptions<ErpFacadeConfiguration>>().Value;
+            ActionAttributesSeq = _erpFacadeConfiguration.RosLicenceUpdateXmlList.ToList();
+        }
 
         public static async Task<bool> CheckXmlAttributes(JsonInputLicenceUpdateHelper jsonPayload, string xmlFilePath,
             string updatedRequestBody)
@@ -36,7 +46,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             JsonInputLicenceUpdateHelper.License licenceJsonFields = UpdatedJsonPayload.data.license;
             Z_ADDS_ROSIM_ORDER licResult = result.IM_ORDER;
 
-            Assert.That(VerifyPresenseOfMandatoryXMLAtrributes(licResult).Result,Is.True);
+            Assert.That(VerifyPresenseOfMandatoryXMLAtrributes(licResult).Result, Is.True);
             Assert.That(UpdatedJsonPayload.data.correlationId.Equals(licResult.GUID),
                 "GUID in xml is same a corrid as in EES JSON");
 
@@ -117,8 +127,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
 
         public static async Task<bool> VerifyPresenseOfMandatoryXMLAtrributes(Z_ADDS_ROSIM_ORDER order)
         {
-            List<string> ActionAttributesSeq = new List<string>();
-            ActionAttributesSeq = Config.TestConfig.RosLicenceUpdateXmlList.ToList<string>();
             List<string> CurrentActionAttributes = new List<string>();
             CurrentActionAttributes.Clear();
             Type arrayType = order.GetType();
