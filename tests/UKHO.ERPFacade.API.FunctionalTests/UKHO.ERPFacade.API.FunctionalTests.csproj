@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -27,8 +27,6 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
     <PackageReference Include="Microsoft.Identity.Client" Version="4.66.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
     <PackageReference Include="NUnit" Version="4.2.2" />
@@ -49,14 +47,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="appsettings.local.overrides.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="appsettings.local.overrides.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="ERPFacadeExpectedXmlFiles\S57ExpectedXmlFiles\2NewCells.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -172,9 +164,6 @@
     <None Update="ERPFacadeExpectedXmlFiles\S57ExpectedXmlFiles\WithdrawCell.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPFacadeGeneratedXmlFiles\we123s-sds3-df333-d3d.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="ERPFacadePayloadTestData\S57PayloadTestData\2NewCells.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -217,9 +206,6 @@
     <None Update="ERPFacadePayloadTestData\S57PayloadTestData\CellMetadataChange_AND_SuspendCell.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPFacadePayloadTestData\ID39_1AdditionalCoverageWithReplacedCell.JSON">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="ERPFacadePayloadTestData\LicenceUpdatedPayloadTestData\LU01_ValidInput.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -257,30 +243,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPFacadePayloadTestData\S57PayloadTestData\NewCell_AND_UpdateCell_AND_CellMetadataChange.JSON">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ERPFacadePayloadTestData\PC7_PAYSFDuration12Month.JSON">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ERPFacadePayloadTestData\PC3_MultipleProductDifferentDuration.JSON">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ERPFacadePayloadTestData\PC6_MultipleDurationSameEffectiveDifferentFutureDate.JSON">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ERPFacadePayloadTestData\PC1_MultipleProduct.JSON">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ERPFacadePayloadTestData\PC5_MultipleDurationDifferentEffectiveAndFutureDate.JSON">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ERPFacadePayloadTestData\PC4_MultipleDurationSameEffectiveAndFutureDate.JSON">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ERPFacadePayloadTestData\PC2_FutureDateBlank.JSON">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ERPFacadePayloadTestData\PriceChangeInput.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPFacadePayloadTestData\S57PayloadTestData\Re-issue.json">
@@ -394,43 +356,10 @@
     <None Update="ERPFacadePayloadTestData\S57PayloadTestData\SuspendCell_AND_WithdrawCell.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPFacadePayloadTestData\UoS1_Pricing.JSON">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="ERPFacadePayloadTestData\S57PayloadTestData\WebhookPayload.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPFacadePayloadTestData\UoS2_ProductISNullUOS.JSON">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ERPFacadePayloadTestData\UoS3_ProductMissingUOS.JSON">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="ERPFacadePayloadTestData\S57PayloadTestData\UoSMetadataChange.JSON">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ERPFacadePayloadTestData\UoS_10_DiffntEffectiveAndDiffFutureDate.JSON">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ERPFacadePayloadTestData\UoS_12_SAPPricing_PAYSF12Months.JSON">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ERPFacadePayloadTestData\UoS_4_FutureDateFieldBlank.JSON">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ERPFacadePayloadTestData\UoS_5_MultiProductSameDuration.JSON">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ERPFacadePayloadTestData\UoS_6_MultiProductMultiDuration.JSON">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ERPFacadePayloadTestData\UoS_7_SameEffectiveSameFutureDate.JSON">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ERPFacadePayloadTestData\UoS_8_DiffEffectiveSameFutureDate.JSON">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ERPFacadePayloadTestData\UoS_9_SameEffectiveDiffFutureDate.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPFacadePayloadTestData\S57PayloadTestData\UpdateCell.JSON">
@@ -451,10 +380,6 @@
 		<Content Include="ERPFacadeGeneratedXmlFiles\**">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <None Remove="ERPFacadeGeneratedXmlFiles\LicenceUpdate\FM-RoS-XMLPayloadUpdateLicense.xml" />
 	</ItemGroup>
 
 	<ItemGroup>
