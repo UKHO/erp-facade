@@ -63,7 +63,7 @@ namespace UKHO.SAP.MockAPIService.Stubs
                     .WithPath(new WildcardMatcher(_eesConfiguration.Url))
                     .UsingPost())
                 .RespondWith(Response.Create()
-                    .WithBody((request) => { return $"Event publsihed to EES sucecssfully"; })
+                    .WithBody((request) => { return $"Event publsihed to EES successfully"; })
                     .WithStatusCode(200)
                     .WithHeader("Content-Type", "application/json; charset=utf-8"));
         }

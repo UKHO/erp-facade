@@ -56,7 +56,7 @@ namespace UKHO.SAP.MockAPIService.Stubs
                     .WithPath(new WildcardMatcher(_encEventConfiguration.Url))
                     .UsingPost())
                 .RespondWith(Response.Create()
-                    .WithBody((request) => { return $"S57 record received sucecssfully"; })
+                    .WithBody((request) => { return $"S57 record received successfully"; })
                     .WithStatusCode(200)
                     .WithHeader("Content-Type", "text/xml; charset=utf-8"));
 
@@ -66,7 +66,7 @@ namespace UKHO.SAP.MockAPIService.Stubs
                     .WithBody(new RegexMatcher("delay", true))
                     .UsingPost())
                 .RespondWith(Response.Create()
-                    .WithBody((request) => { return $"S57 record received sucecssfully after 5 seconds"; })
+                    .WithBody((request) => { return $"S57 record received successfully after 5 seconds"; })
                     .WithStatusCode(200)
                     .WithHeader("Content-Type", "text/xml; charset=utf-8")
                     .WithDelay(TimeSpan.FromMilliseconds(5000)));
@@ -97,7 +97,7 @@ namespace UKHO.SAP.MockAPIService.Stubs
                     .WithPath(new WildcardMatcher(_recordOfSaleEventConfiguration.Url))
                     .UsingPost())
                 .RespondWith(Response.Create()
-                    .WithBody((request) => { return $"Record of sale record received sucecssfully"; })
+                    .WithBody((request) => { return $"Record of sale record received successfully"; })
                     .WithStatusCode(200)
                     .WithHeader("Content-Type", "text/xml; charset=utf-8"));
 
@@ -127,7 +127,7 @@ namespace UKHO.SAP.MockAPIService.Stubs
                     .WithPath(new WildcardMatcher(_s100DataEventConfiguration.Url))
                     .UsingPost())
                 .RespondWith(Response.Create()
-                    .WithBody((request) => { return $"S100 record received sucecssfully"; })
+                    .WithBody((request) => { return $"S100 record received successfully"; })
                     .WithHeader("Content-Type", "text/xml; charset=utf-8")
                     .WithCallback(request =>
                     {
