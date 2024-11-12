@@ -18,13 +18,15 @@ namespace UKHO.ERPFacade.StubService.Stubs
         private readonly RecordOfSaleEventConfiguration _recordOfSaleEventConfiguration;
         private readonly S100DataEventConfiguration _s100DataEventConfiguration;
         private readonly SapCallbackConfiguration _sapCallbackConfiguration;
+        private readonly ErpFacadeConfiguration _erpFacadeConfiguration;
 
-        public SapStub(S57EncEventConfiguration encEventConfiguration, RecordOfSaleEventConfiguration recordOfSaleEventConfiguration, S100DataEventConfiguration s100DataEventConfiguration, SapCallbackConfiguration sapCallbackConfiguration)
+        public SapStub(S57EncEventConfiguration encEventConfiguration, RecordOfSaleEventConfiguration recordOfSaleEventConfiguration, S100DataEventConfiguration s100DataEventConfiguration, SapCallbackConfiguration sapCallbackConfiguration, ErpFacadeConfiguration erpFacadeConfiguration)
         {
             _encEventConfiguration = encEventConfiguration ?? throw new ArgumentNullException(nameof(encEventConfiguration));
             _recordOfSaleEventConfiguration = recordOfSaleEventConfiguration ?? throw new ArgumentNullException(nameof(recordOfSaleEventConfiguration));
             _s100DataEventConfiguration = s100DataEventConfiguration ?? throw new ArgumentNullException(nameof(s100DataEventConfiguration));
             _sapCallbackConfiguration = sapCallbackConfiguration ?? throw new ArgumentNullException(nameof(s100DataEventConfiguration));
+            _erpFacadeConfiguration = erpFacadeConfiguration ?? throw new ArgumentNullException(nameof(erpFacadeConfiguration));
         }
 
         public void ConfigureStub(WireMockServer server)
@@ -145,18 +147,16 @@ namespace UKHO.ERPFacade.StubService.Stubs
 
                         var correlationId = correlationIdElement?.Value;
 
-                        if (correlationId.Contains("SAP200OkInvalidCorIdInCallback"))
-                            correlationId = Guid.NewGuid().ToString();
-                        if (correlationId.Contains("SAP200OkEmptyCorIdInCallback"))
-                            correlationId = null;
-
                         string payload = string.Format("{{\"correlationid\":\"{0}\"}}", correlationId);
 
                         Task.Run(async () =>
                         {
                             await Task.Delay(5000);
 
-                            using var httpClient = new HttpClient();
+                            using var httpClient = new HttpClient()
+                            {
+                                BaseAddress = new Uri(_erpFacadeConfiguration.ApiBaseUrl)
+                            };
                             var callbackRequest = new HttpRequestMessage(HttpMethod.Post, _sapCallbackConfiguration.Url)
                             {
                                 Content = new StringContent(payload, Encoding.UTF8, "application/json"),

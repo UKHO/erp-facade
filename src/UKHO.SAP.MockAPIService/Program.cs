@@ -25,6 +25,7 @@ namespace UKHO.ERPFacade.StubService
             services.Configure<S100DataEventConfiguration>(configuration.GetSection("S100DataEventConfiguration"));
             services.Configure<EesConfiguration>(configuration.GetSection("EesConfiguration"));
             services.Configure<SapCallbackConfiguration>(configuration.GetSection("SapCallbackConfiguration"));
+            services.Configure<ErpFacadeConfiguration>(configuration.GetSection("ErpFacadeConfiguration"));
 
             services.AddSingleton<StubFactory>();
             services.AddHostedService<StubManagerHostedService>();
