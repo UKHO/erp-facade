@@ -93,4 +93,6 @@ module "storage" {
 module "private_endpoint_link" {
   source                                = "./Modules/privateEndpoint"
   resource_group_name                   = azurerm_resource_group.rg.name
+  azurerm_erp                           = azurerm.erp
+  azurerm_hub                           = azurerm.hub
 }

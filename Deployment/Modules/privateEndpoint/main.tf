@@ -1,16 +1,16 @@
 data "azurerm_resource_group" "perg" {
-    provider = azurerm.erp
+    provider = var.azurerm.erp
     name = var.spoke_rg
 }
 
 data "azurerm_virtual_network" "pevn" {
-    provider = azurerm.erp
+    provider = var.azurerm.erp
     name = var.pe_vnet_name
     resource_group_name = var.spoke_rg
 }
 
 data "azurerm_subnet" "pesn" {
-    provider = azurerm.erp
+    provider = var.azurerm.erp
     name = var.pe_subnet_name
     virtual_network_name = var.pe_vnet_name
     resource_group_name = var.spoke_rg
@@ -19,8 +19,8 @@ data "azurerm_subnet" "pesn" {
 module "private_endpoint_link" {
   source              = "github.com/UKHO/tfmodule-azure-private-endpoint-private-link?ref=0.6.0"
   providers = {
-    azurerm.hub   = azurerm.hub
-    azurerm.spoke   = azurerm.erp
+    azurerm.hub   = var.azurerm.hub
+    azurerm.spoke   = var.azurerm.erp
   }
   vnet_link           = local.vnet_link
   private_connection  = local.env_name == "dev" ? [local.private_connection, local.mock_private_connection] : [local.private_connection]
