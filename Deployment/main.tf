@@ -89,3 +89,8 @@ module "storage" {
   webapp_principal_id                   = module.webapp_service.web_app_object_id
   slot_principal_id                     = module.webapp_service.slot_object_id
 }
+
+module "private_endpoint_link" {
+  source                                = "./Modules/privateEndpoint"
+  resource_group_name                   = azurerm_resource_group.rg.name
+}
