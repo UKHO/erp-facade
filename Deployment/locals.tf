@@ -12,7 +12,6 @@ locals {
   private_connection = "/subscriptions/${var.subscription_id}/resourceGroups/erpfacade-${local.env_name}-rg/providers/Microsoft.Web/sites/erpfacade-${local.env_name}-api"
   mock_private_connection = "/subscriptions/${var.subscription_id}/resourceGroups/erpfacade-${local.env_name}-rg/providers/Microsoft.Web/sites/erpfacade-${local.env_name}-sapmockservice"
   dns_resource_group = "${var.dns_zone_rg}"
-  rg_name  = "${var.pe_rg}"
   zone_group = "erp${local.env_name}2sapzone"
   dns_zones = "privatelink.azurewebsites.net"       
   tags = {
