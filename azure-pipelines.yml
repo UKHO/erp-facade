@@ -387,6 +387,9 @@ stages:
         value: $(PermitWithDifferentKeyNEXTKEY)
       - name: "SharedApiKeyConfiguration.SharedApiKey"
         value: $(SharedApiKey)
+      - name: "SapCallbackConfiguration.SharedApiKey"
+        value: $(SharedApiKey)
+
     jobs:
       - deployment: DevDeployTerraform
         displayName: "Dev - Deploy Terraform"
