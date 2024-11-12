@@ -1,10 +1,8 @@
 ﻿using Microsoft.Extensions.Options;
-using UKHO.ERPFacade.Common.Exceptions;
-using UKHO.ERPFacade.StubService.Configuration;
-using UKHO.ERPFacade.StubService.Stubs;
 using UKHO.SAP.MockAPIService.Configuration;
+using UKHO.SAP.MockAPIService.Stubs;
 
-namespace UKHO.ERPFacade.StubService.StubSetup
+namespace UKHO.SAP.MockAPIService.StubSetup
 {
     public class StubFactory
     {

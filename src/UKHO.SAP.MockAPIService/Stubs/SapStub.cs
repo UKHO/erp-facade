@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using System.Xml.Linq;
-using UKHO.ERPFacade.StubService.Configuration;
 using UKHO.SAP.MockAPIService.Configuration;
 using WireMock;
 using WireMock.Matchers;
@@ -10,7 +9,7 @@ using WireMock.Server;
 using WireMock.Types;
 using WireMock.Util;
 
-namespace UKHO.ERPFacade.StubService.Stubs
+namespace UKHO.SAP.MockAPIService.Stubs
 {
     public class SapStub : IStub
     {

@@ -4,7 +4,7 @@ using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
 using WireMock.Server;
 
-namespace UKHO.ERPFacade.StubService.Stubs
+namespace UKHO.SAP.MockAPIService.Stubs
 {
     public class EesStub : IStub
     {

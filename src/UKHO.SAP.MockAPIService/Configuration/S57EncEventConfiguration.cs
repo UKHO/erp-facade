@@ -1,4 +1,4 @@
-﻿namespace UKHO.ERPFacade.StubService.Configuration
+﻿namespace UKHO.SAP.MockAPIService.Configuration
 {
     public class S57EncEventConfiguration
     {

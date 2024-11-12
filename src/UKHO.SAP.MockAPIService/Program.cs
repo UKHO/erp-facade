@@ -1,9 +1,8 @@
-﻿using UKHO.ERPFacade.StubService.Configuration;
-using UKHO.ERPFacade.StubService.StubSetup;
-using UKHO.SAP.MockAPIService.Configuration;
+﻿using UKHO.SAP.MockAPIService.Configuration;
+using UKHO.SAP.MockAPIService.StubSetup;
 using WireMock.Settings;
 
-namespace UKHO.ERPFacade.StubService
+namespace UKHO.SAP.MockAPIService
 {
     internal static class Program
     {
