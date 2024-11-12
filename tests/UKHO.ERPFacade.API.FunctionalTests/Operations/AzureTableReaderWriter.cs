@@ -4,15 +4,25 @@ using Azure;
 using UKHO.ERPFacade.Common.Models.TableEntities;
 using UKHO.ERPFacade.API.FunctionalTests.Configuration;
 using UKHO.ERPFacade.Common.Constants;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
+namespace UKHO.ERPFacade.API.FunctionalTests.Operations
 {
-    public class AzureTableHelper
+    public class AzureTableReaderWriter : TestFixtureBase
     {
-        //Private Methods
-        private static TableClient GetTableClient(string tableName)
+        private readonly AzureStorageConfiguration _azureStorageConfiguration;
+
+        public AzureTableReaderWriter()
         {
-            TableServiceClient serviceClient = new(Config.TestConfig.AzureStorageConfiguration.ConnectionString);
+            var serviceProvider = GetServiceProvider();
+            _azureStorageConfiguration = serviceProvider!.GetRequiredService<IOptions<AzureStorageConfiguration>>().Value;
+        }
+
+        //Private Methods
+        private TableClient GetTableClient(string tableName)
+        {
+            TableServiceClient serviceClient = new(_azureStorageConfiguration.ConnectionString);
             Pageable<TableItem> queryTableResults = serviceClient.Query(filter: $"TableName eq '{tableName}'");
             TableItem tableExists = queryTableResults.FirstOrDefault(t => t.Name == tableName);
 
@@ -25,8 +35,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             return tableClient;
         }
 
-
-        public static string GetSapStatus(string correlationId)
+        public string GetSapStatus(string correlationId)
         {
             TableClient tableClient = GetTableClient(AzureStorage.EventTableName);
             Pageable<EventEntity> existingEntity = tableClient.Query<EventEntity>(filter: TableClient.CreateQueryFilter($"RowKey eq {correlationId}"));

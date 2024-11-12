@@ -6,16 +6,25 @@ using System.Xml;
 using UKHO.ERPFacade.API.FunctionalTests.Model;
 using UKHO.ERPFacade.API.FunctionalTests.Configuration;
 using UKHO.ERPFacade.Common.Constants;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
+namespace UKHO.ERPFacade.API.FunctionalTests.Validators
 {
     [TestFixture]
-    public class RoSXmlHelper
+    public class RoSXMLValidator : TestFixtureBase
     {
         private static JsonInputRoSWebhookEvent jsonPayload;
         private static readonly List<string> s_attrNotMatched = new();
+        private readonly ErpFacadeConfiguration _erpFacadeConfiguration;
 
-        public static async Task<bool> CheckXmlAttributes(string generatedXmlFilePath, string requestBody, List<JsonInputRoSWebhookEvent> listOfEventJson)
+
+        public RoSXMLValidator()
+        {
+            _erpFacadeConfiguration = GetServiceProvider().GetRequiredService<IOptions<ErpFacadeConfiguration>>().Value;
+        }
+
+        public static async Task<bool> CheckXmlAttributes(string generatedXmlFilePath, string requestBody, List<JsonInputRoSWebhookEvent> listOfEventJson, List<string> actionAttributesSeq, List<string> actionAttributesSeqProd)
         {
             jsonPayload = JsonConvert.DeserializeObject<JsonInputRoSWebhookEvent>(requestBody);
 
@@ -44,7 +53,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             Assert.Multiple(() =>
             {
                 Assert.That(jsonPayload.data.correlationId, Is.EqualTo(rosXmlPayload.GUID), "GUID in xml is same a corrid as in EES JSON");
-                Assert.That(VerifyPresenseOfMandatoryXMLAtrributes(rosXmlPayload).Result, Is.True);
+                Assert.That(VerifyPresenseOfMandatoryXMLAtrributes(rosXmlPayload, actionAttributesSeq, actionAttributesSeqProd).Result, Is.True);
             });
 
             JsonInputRoSWebhookEvent.Recordsofsale roSJsonFields = jsonPayload.data.recordsOfSale;
@@ -305,9 +314,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
             }
         }
 
-        public static async Task<bool> VerifyPresenseOfMandatoryXMLAtrributes(Z_ADDS_ROSIM_ORDER order)
+        public static async Task<bool> VerifyPresenseOfMandatoryXMLAtrributes(Z_ADDS_ROSIM_ORDER order, List<string> actionAttributesSeq, List<string> actionAttributesSeqProd)
         {
-            List<string> actionAttributesSeq = Config.TestConfig.RosLicenceUpdateXmlList.ToList<string>();
             List<string> currentActionAttributes = new();
             currentActionAttributes.Clear();
             Type arrayType = order.GetType();
@@ -323,7 +331,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Helpers
                 }
             }
 
-            List<string> actionAttributesSeqProd = Config.TestConfig.RoSLicenceUpdatedProdXmlList.ToList<string>();
             List<string> currentActionAttributesProd = new();
             currentActionAttributesProd.Clear();
             Z_ADDS_ROSIM_ORDERItem[] items = order.PROD;

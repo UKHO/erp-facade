@@ -1,28 +1,30 @@
 ﻿using NUnit.Framework;
 using FluentAssertions;
-using UKHO.ERPFacade.API.FunctionalTests.Configuration;
-using UKHO.ERPFacade.API.FunctionalTests.Helpers;
 using UKHO.ERPFacade.API.FunctionalTests.Service;
 using RestSharp;
 using UKHO.ERPFacade.Common.Constants;
+using UKHO.ERPFacade.API.FunctionalTests.Auth;
+using UKHO.ERPFacade.API.FunctionalTests.Operations;
+using UKHO.ERPFacade.API.FunctionalTests.Modifiers;
+using UKHO.ERPFacade.API.FunctionalTests.Validators;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 {
     [TestFixture]
     public class S100WebhookScenarios
     {
+        private AuthTokenProvider _authTokenProvider;
         private WebhookEndpoint _webhookEndpoint;
-        private readonly ADAuthTokenProvider _authToken = new();
+        private AzureBlobReaderWriter _azureBlobReaderWriter;
 
         private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
-        //for local
-        //private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\.."));
-
 
         [SetUp]
         public void Setup()
         {
+            _authTokenProvider = new AuthTokenProvider();
             _webhookEndpoint = new WebhookEndpoint();
+            _azureBlobReaderWriter = new AzureBlobReaderWriter();
         }
 
         [Test]
@@ -37,12 +39,26 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [TestCase("Suspend.JSON", TestName = "WhenICallTheWebhookWithSuspendScenario_ThenWebhookReturns200Response")]
         [TestCase("Withdrawn.JSON", TestName = "WhenICallTheWebhookWithWithdrawnScenario_ThenWebhookReturns200Response")]
 
-        public async Task WhenValidS100DataContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponse(string payload)
+        public async Task WhenValidS100DataContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponse(string jsonPayloadFileName)
         {
-            string filePath = Path.Combine(_projectDir, Config.TestConfig.PayloadFolder, EventPayloadFiles.S100WebhookPayloadFolder, payload);
-            string generatedXmlFolder = Path.Combine(_projectDir, Config.TestConfig.GeneratedXmlFolder);
-            RestResponse response = await _webhookEndpoint.PostWebhookResponseAsyncForXml(filePath, generatedXmlFolder, await _authToken.GetAzureADToken(false));
+            string correlationId = null;
+
+            string jsonPayloadFilePath = Path.Combine(_projectDir, EventPayloadFiles.PayloadFolder, EventPayloadFiles.S100PayloadFolder, jsonPayloadFileName);
+            string xmlPayloadFilePath = jsonPayloadFilePath.Replace(EventPayloadFiles.PayloadFolder, EventPayloadFiles.ErpFacadeExpectedXmlFolder)
+                                               .Replace(EventPayloadFiles.S100PayloadFolder, EventPayloadFiles.S100ExpectedXmlFiles)
+                                               .Replace(".JSON", ".xml");
+
+            string requestBody = await File.ReadAllTextAsync(jsonPayloadFilePath);
+            requestBody = JsonModifier.UpdateTime(requestBody);
+            (requestBody, correlationId) = JsonModifier.UpdateCorrelationId(requestBody);
+
+            RestResponse response = await _webhookEndpoint.PostWebhookResponseAsync(requestBody, await _authTokenProvider.GetAzureADToken(false));
+
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
+            string generatedXmlFilePath = _azureBlobReaderWriter.DownloadContainerFile(Path.Combine(_projectDir, EventPayloadFiles.GeneratedXmlFolder), correlationId, ".xml");
+
+            Assert.That(S100XmlValidator.VerifyXmlAttributes(generatedXmlFilePath, xmlPayloadFilePath, correlationId));
         }
     }
 }
