@@ -5,6 +5,7 @@ using System.Net;
 using System.Xml;
 using Azure.Data.Tables;
 using FakeItEasy;
+using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -18,6 +19,9 @@ using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models.CloudEvents;
 using UKHO.ERPFacade.Common.Models.CloudEvents.S100Event;
 using UKHO.ERPFacade.Common.Operations.IO.Azure;
+using UKHO.ERPFacade.API.UnitTests.Common;
+using UKHO.ERPFacade.Common.Constants;
+using UKHO.ERPFacade.Common.Exceptions;
 
 namespace UKHO.ERPFacade.API.UnitTests.Handlers
 {
@@ -85,6 +89,21 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Information
                                                 && call.GetArgument<EventId>(1) == EventIds.S100EventUpdateSentToSap.ToEventId()
                                                 && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "S100 data content has been sent to SAP successfully.").MustHaveHappenedOnceExactly();
+        }
+
+        [Test]
+        public void WhenS100EventHandler_NotProcessedTheEvent()
+        {
+            XmlDocument xmlDocument = new();
+            var newCellEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\S100TestData\\CancellationAndReplacement.JSON");
+            var eventData = JsonConvert.DeserializeObject<BaseCloudEvent>(newCellEventPayloadJson);
+            A.CallTo(() => _fakeBaseXmlTransformer.BuildXmlPayload(A<BaseCloudEvent>.Ignored, XmlTemplateInfo.S57SapXmlTemplatePath)).Returns(xmlDocument);
+            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(new HttpResponseMessage()
+            {
+                StatusCode = HttpStatusCode.Unauthorized,
+            });
+            Assert.ThrowsAsync<ERPFacadeException>(() => _fakes100EventHandler.ProcessEventAsync(eventData))
+                .Message.Should().Be("An error occurred while sending S100 data content to SAP. | Unauthorized");
         }
     }
 }
