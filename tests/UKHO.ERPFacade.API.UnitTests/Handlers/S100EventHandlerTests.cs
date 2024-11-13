@@ -1,14 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Net;
 using System.Xml;
 using Azure.Data.Tables;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using UKHO.ERPFacade.API.Handlers;
 using UKHO.ERPFacade.API.XmlTransformers;
+using UKHO.ERPFacade.Common.Configuration;
+using UKHO.ERPFacade.Common.HttpClients;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models.CloudEvents;
 using UKHO.ERPFacade.Common.Models.CloudEvents.S100Event;
@@ -24,6 +29,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
         private IAzureBlobReaderWriter _fakeAzureBlobReaderWriter;
         private S100EventHandler _fakes100EventHandler;
         private IBaseXmlTransformer _fakeBaseXmlTransformer;
+        private ISapClient _fakeSapClient;
+        private IOptions<SapConfiguration> _fakeSapConfig;
 
         [SetUp]
         public void Setup()
@@ -32,8 +39,10 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
             _fakeAzureTableReaderWriter = A.Fake<IAzureTableReaderWriter>();
             _fakeAzureBlobReaderWriter = A.Fake<IAzureBlobReaderWriter>();
             _fakeBaseXmlTransformer = A.Fake<IBaseXmlTransformer>();
+            _fakeSapClient = A.Fake<ISapClient>();
+            _fakeSapConfig = A.Fake<IOptions<SapConfiguration>>();
 
-            _fakes100EventHandler = new S100EventHandler(_fakeLogger, _fakeAzureTableReaderWriter, _fakeAzureBlobReaderWriter, _fakeBaseXmlTransformer);
+            _fakes100EventHandler = new S100EventHandler(_fakeLogger, _fakeAzureTableReaderWriter, _fakeAzureBlobReaderWriter, _fakeBaseXmlTransformer, _fakeSapClient, _fakeSapConfig);
         }
 
         [Test]
@@ -67,6 +76,15 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Information
                                                 && call.GetArgument<EventId>(1) == EventIds.S100EventXMLStoredInAzureBlobContainer.ToEventId()
                                                 && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "S-100 data content published event xml payload is stored in azure blob container.").MustHaveHappenedOnceExactly();
+            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(new HttpResponseMessage()
+            {
+                StatusCode = HttpStatusCode.OK
+            });
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+                                                && call.GetArgument<LogLevel>(0) == LogLevel.Information
+                                                && call.GetArgument<EventId>(1) == EventIds.S100EventUpdateSentToSap.ToEventId()
+                                                && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "S100 data content has been sent to SAP successfully.").MustHaveHappenedOnceExactly();
         }
     }
 }
