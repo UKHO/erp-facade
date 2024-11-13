@@ -1,1 +1,50 @@
-﻿
+﻿{
+"specversion": "1.0",
+"type": "uk.gov.ukho.shop.recordOfSale.v1",
+"source": "https://fleetmanager.ukho.gov.uk",
+"id": "e744fa37-0c9f-4795-adc9-7f42ad8f11c1",
+"time": "2023-07-20T10:40:00.000000Z",
+"subject": "Licence ID: 10044 | Order Number: XXL005456375",
+"datacontenttype": "application/json",
+"data": {
+"correlationId": "499ce4a4-1d62-4f56-b359-59e178d77100",
+"relatedEvents": ["e744fa37-0c9f-4795-adc9-7f42ad8f11c1"],
+"recordsOfSale": {
+"licenseId": "2",
+"productType": "AVCS",
+"transactionType": "MIGRATENEWLICENCE",
+"distributorCustomerNumber": "111",
+"shippingCoNumber": "1",
+"ordernumber": "XXL005456375",
+"orderDate": "2023-06-20",
+"po-ref": "75277T-Bengang",
+"holdingsExpiryDate": "2025-06-30",
+"sapId": "",
+"vesselName": "Cornelia Maersk",
+"imoNumber": "IMO9245756",
+"callSign": "A8YL9",
+"licenceType": "02",
+"shoreBased": "X",
+"fleetName": "",
+"numberLicenceUsers": 1,
+"ecdisManufacturerName": "MARIS",
+"licenceDuration": 12,
+"unitsOfSale": [
+{
+"unitName": "PT111101",
+"endDate": "2023-10-31",
+"duration": "12",
+"renew": "N",
+"repeat": ""
+},
+{
+"unitName": "GB302409",
+"endDate": "2023-12-01",
+"duration": "12",
+"renew": "N",
+"repeat": ""
+}
+]
+}
+}
+}
