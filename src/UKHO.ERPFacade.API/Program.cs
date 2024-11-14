@@ -22,12 +22,15 @@ using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.HealthCheck;
 using UKHO.ERPFacade.Common.HttpClients;
+using UKHO.ERPFacade.Common.Infrastructure.Authentication;
+using UKHO.ERPFacade.Common.Infrastructure.EventService;
 using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Operations;
 using UKHO.ERPFacade.Common.Operations.IO;
 using UKHO.ERPFacade.Common.Operations.IO.Azure;
 using UKHO.ERPFacade.Common.PermitDecryption;
 using UKHO.ERPFacade.Common.Providers;
+using UKHO.ERPFacade.Common.Services;
 using UKHO.Logging.EventHubLogProvider;
 
 namespace UKHO.ERPFacade
@@ -174,9 +177,21 @@ namespace UKHO.ERPFacade
             builder.Services.Configure<PermitConfiguration>(configuration.GetSection("PermitConfiguration"));
             builder.Services.Configure<AioConfiguration>(configuration.GetSection("AioConfiguration"));
             builder.Services.Configure<SharedApiKeyConfiguration>(configuration.GetSection("SharedApiKeyConfiguration"));
+            builder.Services.Configure<EnterpriseEventServiceConfiguration>(configuration.GetSection("EnterpriseEventServiceConfiguration"));
+            builder.Services.Configure<InteractiveLoginConfiguration>(configuration.GetSection("InteractiveLoginConfiguration"));
+            builder.Services.Configure<RetryPolicyConfiguration>(configuration.GetSection("RetryPolicyConfiguration"));
 
+            builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+            builder.Services.AddSingleton<IEventPublisher, EnterpriseEventServiceEventPublisher>();
+            builder.Services.AddSingleton<IAccessTokenCache, AccessTokenCache>().AddLazyCache();
+            builder.Services.AddSingleton<InteractiveTokenProvider>();
+            builder.Services.AddSingleton<ManagedIdentityTokenProvider>();
+            builder.Services.AddSingleton<ITokenProvider>((sp) =>
+            {
+                var useLocal = sp.GetRequiredService<IConfiguration>().GetValue<bool>("UseLocalResources");
+                return useLocal ? sp.GetRequiredService<InteractiveTokenProvider>() : sp.GetRequiredService<ManagedIdentityTokenProvider>();
+            });
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
             builder.Services.AddScoped<IAzureQueueReaderWriter, AzureQueueReaderWriter>();
             builder.Services.AddScoped<IAzureTableReaderWriter, AzureTableReaderWriter>();
             builder.Services.AddScoped<IAzureBlobReaderWriter, AzureBlobReaderWriter>();
@@ -187,6 +202,7 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<ILicenceUpdatedSapMessageBuilder, LicenceUpdatedSapMessageBuilder>();
             builder.Services.AddScoped<IWeekDetailsProvider, WeekDetailsProvider>();
             builder.Services.AddScoped<IPermitDecryption, PermitDecryption>();
+            builder.Services.AddScoped<IEventPublishingService, EventPublishingService>();
 
             builder.Services.AddScoped<IEventHandler, S57EventHandler>();
             builder.Services.AddScoped<IEventHandler, S100EventHandler>();

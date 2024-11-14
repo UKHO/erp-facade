@@ -477,7 +477,33 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940095 - Shared API Key Configuration is missing.
         /// </summary>
-        SharedApiKeyConfigurationMissing = 940095
+        SharedApiKeyConfigurationMissing = 940095,
+
+        /// <summary>
+        /// 940096 - Attempting to publish event to ESS.
+        /// </summary>
+        StartingEnterpriseEventServiceEventPublisher = 940096,
+
+        /// <summary>
+        /// 940097 - Retry attempt to publish EES event.
+        /// </summary>
+        RetryAttemptForEnterpriseEventServiceEvent = 940097,
+
+        /// <summary>
+        /// 940098 - Failed to publish event to EES.
+        /// </summary>
+        EnterpriseEventServiceEventPublisherFailure = 940098,
+
+        /// <summary>
+        /// 940099 - Event is published to EES successfully.
+        /// </summary>
+        EnterpriseEventServiceEventPublisherSuccess = 940099,
+
+        /// <summary>
+        /// 940100 - Failed to connect to EES.
+        /// </summary>
+        EnterpriseEventServiceEventConnectionFailure = 940100,
+
     }
 
     /// <summary>
