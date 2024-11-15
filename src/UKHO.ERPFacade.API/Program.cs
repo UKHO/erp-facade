@@ -20,10 +20,10 @@ using UKHO.ERPFacade.API.SapMessageBuilders;
 using UKHO.ERPFacade.API.XmlTransformers;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Constants;
+using UKHO.ERPFacade.Common.EventPublisher;
+using UKHO.ERPFacade.Common.EventPublisher.Authentication;
 using UKHO.ERPFacade.Common.HealthCheck;
 using UKHO.ERPFacade.Common.HttpClients;
-using UKHO.ERPFacade.Common.Infrastructure.Authentication;
-using UKHO.ERPFacade.Common.Infrastructure.EventService;
 using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Operations;
 using UKHO.ERPFacade.Common.Operations.IO;
@@ -177,12 +177,12 @@ namespace UKHO.ERPFacade
             builder.Services.Configure<PermitConfiguration>(configuration.GetSection("PermitConfiguration"));
             builder.Services.Configure<AioConfiguration>(configuration.GetSection("AioConfiguration"));
             builder.Services.Configure<SharedApiKeyConfiguration>(configuration.GetSection("SharedApiKeyConfiguration"));
-            builder.Services.Configure<EnterpriseEventServiceConfiguration>(configuration.GetSection("EnterpriseEventServiceConfiguration"));
+            builder.Services.Configure<EESConfiguration>(configuration.GetSection("EnterpriseEventServiceConfiguration"));
             builder.Services.Configure<InteractiveLoginConfiguration>(configuration.GetSection("InteractiveLoginConfiguration"));
             builder.Services.Configure<RetryPolicyConfiguration>(configuration.GetSection("RetryPolicyConfiguration"));
 
             builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
-            builder.Services.AddSingleton<IEventPublisher, EnterpriseEventServiceEventPublisher>();
+            builder.Services.AddSingleton<IEventPublisher, EESEventPublisher>();
             builder.Services.AddSingleton<IAccessTokenCache, AccessTokenCache>().AddLazyCache();
             builder.Services.AddSingleton<InteractiveTokenProvider>();
             builder.Services.AddSingleton<ManagedIdentityTokenProvider>();

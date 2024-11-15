@@ -2,7 +2,7 @@
 using Azure.Core;
 using Azure.Identity;
 
-namespace UKHO.ERPFacade.Common.Infrastructure.Authentication
+namespace UKHO.ERPFacade.Common.EventPublisher.Authentication
 {
     [ExcludeFromCodeCoverage]
     public class ManagedIdentityTokenProvider : ITokenProvider

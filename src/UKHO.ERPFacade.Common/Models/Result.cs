@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Newtonsoft.Json;
 
-namespace UKHO.ERPFacade.Common.Infrastructure
+namespace UKHO.ERPFacade.Common.Models
 {
     [ExcludeFromCodeCoverage]
     public class Result

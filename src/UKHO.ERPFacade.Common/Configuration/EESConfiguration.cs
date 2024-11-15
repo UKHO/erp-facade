@@ -3,7 +3,7 @@
 namespace UKHO.ERPFacade.Common.Configuration
 {
     [ExcludeFromCodeCoverage]
-    public class EnterpriseEventServiceConfiguration
+    public class EESConfiguration
     {
         public string ServiceUrl { get; set; }
         public string PublishEndpoint { get; set; }

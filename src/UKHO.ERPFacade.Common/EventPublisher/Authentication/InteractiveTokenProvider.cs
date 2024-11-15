@@ -4,15 +4,15 @@ using Microsoft.Extensions.Options;
 using Microsoft.Identity.Client;
 using UKHO.ERPFacade.Common.Configuration;
 
-namespace UKHO.ERPFacade.Common.Infrastructure.Authentication
+namespace UKHO.ERPFacade.Common.EventPublisher.Authentication
 {
     [ExcludeFromCodeCoverage]
     public class InteractiveTokenProvider : ITokenProvider
     {
-        private readonly EnterpriseEventServiceConfiguration _eesOptions;
+        private readonly EESConfiguration _eesOptions;
         private readonly InteractiveLoginConfiguration _loginOptions;
 
-        public InteractiveTokenProvider(IOptions<EnterpriseEventServiceConfiguration> eesOptions, IOptions<InteractiveLoginConfiguration> loginOptions)
+        public InteractiveTokenProvider(IOptions<EESConfiguration> eesOptions, IOptions<InteractiveLoginConfiguration> loginOptions)
         {
             _loginOptions = loginOptions.Value;
             _eesOptions = eesOptions.Value;
@@ -21,9 +21,8 @@ namespace UKHO.ERPFacade.Common.Infrastructure.Authentication
         public async Task<AccessToken> GetTokenAsync(string scope)
         {
             IConfidentialClientApplication app = ConfidentialClientApplicationBuilder.Create(_eesOptions.ClientId)
-                                                    .WithClientSecret(_eesOptions.ClientSecret)
-                                                    .WithAuthority(new Uri($"{_loginOptions.MicrosoftOnlineLoginUrl}{_loginOptions.TenantId}"))
-            .Build();
+                                               .WithClientSecret(_eesOptions.ClientSecret)
+                                               .WithAuthority(new Uri($"{_loginOptions.MicrosoftOnlineLoginUrl}{_loginOptions.TenantId}")).Build();
 
             AuthenticationResult tokenTask = await app.AcquireTokenForClient(new[]
             {

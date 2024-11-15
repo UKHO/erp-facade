@@ -6,6 +6,7 @@ namespace UKHO.ERPFacade.Common.Constants
     public static class JsonFields
     {
         public const string EventIdKey = "id";
+        public const string Type = "type";
         public const string DataNode = "data";
         public const string CorrelationIdKey = "data.correlationId";
         public const string UKHOWeekNumber = "data.ukhoWeekNumber";

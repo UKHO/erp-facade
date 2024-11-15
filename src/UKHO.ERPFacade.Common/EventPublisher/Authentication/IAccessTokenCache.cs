@@ -1,4 +1,4 @@
-﻿namespace UKHO.ERPFacade.Common.Infrastructure.Authentication
+﻿namespace UKHO.ERPFacade.Common.EventPublisher.Authentication
 {
     public interface IAccessTokenCache
     {
