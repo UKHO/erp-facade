@@ -55,7 +55,7 @@ namespace UKHO.ERPFacade.Common.EventPublisher
                 var _retryPolicy = HttpPolicyExtensions
                   .HandleTransientHttpError()
                   .WaitAndRetryAsync(_retryPolicyConfiguration.Value.Count, retryAttempt => TimeSpan.FromSeconds(_retryPolicyConfiguration.Value.Duration),
-                  onRetry: (outcome, timespan, retryAttempt, context) =>
+                  onRetry: (retryAttempt, context) =>
                   {
                       _logger.LogInformation(EventIds.RetryAttemptForEnterpriseEventServiceEvent.ToEventId(), "Retry attempt to publish {cloudEventType} to Enterprise Event Service failed at count : {retryAttemptCount}.", type, retryAttempt);
                   });
@@ -72,7 +72,7 @@ namespace UKHO.ERPFacade.Common.EventPublisher
                 }
 
                 _logger.LogInformation(EventIds.EnterpriseEventServiceEventPublisherSuccess.ToEventId(), "Event {cloudEventType} is published to Enterprise Event Service successfully | _X-Correlation-ID : {_X-Correlation-ID}", type, correlationId);
-                return Result.Success("Event published successfully");
+                return Result.Success();
             }
             catch (Exception ex)
             {
