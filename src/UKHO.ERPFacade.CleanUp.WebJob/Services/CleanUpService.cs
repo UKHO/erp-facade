@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Configuration;
-using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.Operations.IO.Azure;
 
 namespace UKHO.ERPFacade.CleanUp.WebJob.Services
@@ -22,25 +21,17 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.Services
 
         public void Clean()
         {
-            CleanS57Data(PartitionKeys.S57PartitionKey);
-        }
-
-        private void CleanS57Data(string partitionKey)
-        {
-            var entities = _azureTableReaderWriter.GetAllEntities(partitionKey);
+            var entities = _azureTableReaderWriter.GetAllEntities();
 
             foreach (var entity in entities)
             {
-                if (entity["RequestDateTime"] == null)
-                    continue;
-
                 var correlationId = entity.RowKey.ToString();
 
-                TimeSpan timediff = DateTime.Now - Convert.ToDateTime(entity["RequestDateTime"].ToString());
+                TimeSpan timediff = DateTime.Now - Convert.ToDateTime(entity["Timestamp"].ToString());
 
                 if (timediff.Days > int.Parse(_cleanupWebjobConfig.Value.CleanUpDurationInDays))
                 {
-                    Task.FromResult(_azureTableReaderWriter.DeleteEntityAsync(partitionKey, correlationId));
+                    Task.FromResult(_azureTableReaderWriter.DeleteEntityAsync(entity.PartitionKey.ToString(), correlationId));
 
                     _azureBlobReaderWriter.DeleteContainer(correlationId);
                 }

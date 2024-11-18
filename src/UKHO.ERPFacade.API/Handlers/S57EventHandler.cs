@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.Options;
-using MongoDB.Driver;
 using Newtonsoft.Json;
 using UKHO.ERPFacade.API.XmlTransformers;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Constants;
+using UKHO.ERPFacade.Common.Enums;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Extensions;
 using UKHO.ERPFacade.Common.HttpClients;
@@ -68,7 +68,8 @@ namespace UKHO.ERPFacade.API.Handlers
                 RowKey = s57EventData.CorrelationId,
                 PartitionKey = PartitionKeys.S57PartitionKey,
                 Timestamp = DateTime.UtcNow,
-                RequestDateTime = null
+                RequestDateTime = null,
+                Status = Status.Incomplete.ToString()
             };
 
             await _azureTableReaderWriter.UpsertEntityAsync(eventEntity);
@@ -94,7 +95,7 @@ namespace UKHO.ERPFacade.API.Handlers
 
             _logger.LogInformation(EventIds.S57EventUpdateSentToSap.ToEventId(), "S57 ENC update has been sent to SAP successfully.");
 
-            await _azureTableReaderWriter.UpdateEntityAsync(eventEntity.PartitionKey, eventEntity.RowKey, new[] { new KeyValuePair<string, DateTime>("RequestDateTime", DateTime.UtcNow) });
+            await _azureTableReaderWriter.UpdateEntityAsync(eventEntity.PartitionKey, eventEntity.RowKey, new KeyValuePair<string, object>[] { new("RequestDateTime", DateTime.UtcNow), new("Status", Status.Complete.ToString()) });
         }
 
         /// <summary>

@@ -5,6 +5,7 @@ using Azure.Data.Tables.Models;
 using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Constants;
+using UKHO.ERPFacade.Common.Enums;
 
 namespace UKHO.ERPFacade.Common.Operations.IO.Azure
 {
@@ -64,11 +65,12 @@ namespace UKHO.ERPFacade.Common.Operations.IO.Azure
             }
         }
 
-        public IList<TableEntity> GetAllEntities(string partitionKey)
+        public IList<TableEntity> GetAllEntities()
         {
+            var status = Status.Complete.ToString();
             var records = new List<TableEntity>();
             TableClient tableClient = GetTableClient(AzureStorage.EventTableName);
-            var entities = tableClient.Query<TableEntity>(filter: $"PartitionKey eq '{partitionKey}'");
+            var entities = tableClient.Query<TableEntity>(filter: $"Status eq '{status}'");
             foreach (var entity in entities)
             {
                 records.Add(entity);

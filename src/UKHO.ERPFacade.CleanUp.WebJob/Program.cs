@@ -142,7 +142,7 @@ namespace UKHO.ERPFacade.Monitoring.WebJob
 
             if (configuration != null)
             {
-                serviceCollection.Configure<CleanupWebJobConfiguration>(configuration.GetSection("ErpFacadeWebJobConfiguration"));
+                serviceCollection.Configure<CleanupWebJobConfiguration>(configuration.GetSection("CleanupWebJobConfiguration"));
                 serviceCollection.Configure<AzureStorageConfiguration>(configuration.GetSection("AzureStorageConfiguration"));
                 serviceCollection.AddSingleton(configuration);
             }
