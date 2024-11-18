@@ -930,5 +930,22 @@
     <packageUrl regex="true">^pkg:nuget/System\.Text\.Json@.*$</packageUrl>
     <vulnerabilityName>CVE-2024-43485</vulnerabilityName>
   </suppress>
+<suppress>
+   <notes><![CDATA[
+   file name: System.CodeDom:6.0.0
+   ]]></notes>
+   <packageUrl regex="true">^pkg:nuget/System\.CodeDom@.*$</packageUrl>
+   <cve>CVE-2006-4732</cve>
+   <cve>CVE-2007-0065</cve>
+   <cve>CVE-2007-2224</cve>
+   <cve>CVE-2007-2884</cve>
+   <cve>CVE-2007-4776</cve>
+   <cve>CVE-2008-0392</cve>
+   <cve>CVE-2008-3704</cve>
+   <cve>CVE-2012-0158</cve>
+   <cve>CVE-2012-1856</cve>
+   <cve>CVE-2001-0153</cve>
+</suppress>
+
  
 </suppressions>
