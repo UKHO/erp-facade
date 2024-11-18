@@ -17,6 +17,7 @@ using UKHO.ERPFacade.API.Filters;
 using UKHO.ERPFacade.API.Handlers;
 using UKHO.ERPFacade.API.Health;
 using UKHO.ERPFacade.API.SapMessageBuilders;
+using UKHO.ERPFacade.API.Services;
 using UKHO.ERPFacade.API.XmlTransformers;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Constants;
@@ -30,7 +31,6 @@ using UKHO.ERPFacade.Common.Operations.IO;
 using UKHO.ERPFacade.Common.Operations.IO.Azure;
 using UKHO.ERPFacade.Common.PermitDecryption;
 using UKHO.ERPFacade.Common.Providers;
-using UKHO.ERPFacade.Common.Services;
 using UKHO.Logging.EventHubLogProvider;
 
 namespace UKHO.ERPFacade
@@ -202,7 +202,6 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<ILicenceUpdatedSapMessageBuilder, LicenceUpdatedSapMessageBuilder>();
             builder.Services.AddScoped<IWeekDetailsProvider, WeekDetailsProvider>();
             builder.Services.AddScoped<IPermitDecryption, PermitDecryption>();
-            builder.Services.AddScoped<IEventPublishingService, EventPublishingService>();
 
             builder.Services.AddScoped<IEventHandler, S57EventHandler>();
             builder.Services.AddScoped<IEventHandler, S100EventHandler>();
@@ -211,6 +210,8 @@ namespace UKHO.ERPFacade
             builder.Services.AddKeyedScoped<IBaseXmlTransformer, S100XmlTransformer>(XmlTransformers.S100XmlTransformer);
             builder.Services.AddScoped<IEventDispatcher, EventDispatcher>();
             builder.Services.AddScoped<SharedApiKeyAuthFilter>();
+            builder.Services.AddScoped<IEventService, EventService>();
+            builder.Services.AddScoped<ISapCallBackService, SapCallBackService>();
 
             ConfigureHealthChecks(builder);
 

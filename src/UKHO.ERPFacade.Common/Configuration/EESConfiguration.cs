@@ -10,6 +10,6 @@ namespace UKHO.ERPFacade.Common.Configuration
         public string ClientId { get; set; }
         public string ClientSecret { get; set; }
         public string PublisherScope { get; set; }
-        public string ApplicationUri { get; set; }
+        public string SourceApplicationUri { get; set; }
     }
 }

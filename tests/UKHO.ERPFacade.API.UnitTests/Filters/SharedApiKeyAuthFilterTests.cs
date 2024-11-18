@@ -81,6 +81,22 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
         }
 
         [Test]
+        public void WhenNullSharedApiKeyInRequestedHeader_ThenSharedApiKeyAuthFilterUnAuthorizedTheSapCallBack()
+        {
+            string nullHeaderKey = null;
+            A.CallTo(() => _fakeHttpContext.Response.Headers).Returns(_fakeHeaderDictionary);
+            A.CallTo(() => _fakeHttpContextAccessor.HttpContext).Returns(_fakeHttpContext);
+            A.CallTo(() => _fakeHttpContext.Request.Headers[ConfigFileFields.HeaderApiKeyName]).Returns(new[] { nullHeaderKey });
+
+            _fakeSharedApiKeyAuthFilter.OnAuthorization(_fakeAuthorizationFilterContext);
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+                                                && call.GetArgument<LogLevel>(0) == LogLevel.Warning
+                                                && call.GetArgument<EventId>(1) == EventIds.SharedApiKeyMissingInRequest.ToEventId()
+                                                && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Shared key is missing in request").MustHaveHappenedOnceExactly();
+        }
+
+        [Test]
         public void WhenValidSharedApiKeyInRequestedHeader_ThenSharedApiKeyAuthFilterAuthorizedTheSapCallBack()
         {
             A.CallTo(() => _fakeHttpContext.Response.Headers).Returns(_fakeHeaderDictionary);

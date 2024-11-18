@@ -504,6 +504,41 @@ namespace UKHO.ERPFacade.Common.Logging
         /// </summary>
         EnterpriseEventServiceEventConnectionFailure = 940100,
 
+        /// <summary>
+        /// 940101 - S-100 sap callBack payload received from SAP.
+        /// </summary>
+        S100SapCallBackPayloadReceived = 940101,
+
+        /// <summary>
+        /// 940102 - CorrelationId is missing in S-100 sap call back.
+        /// </summary>
+        CorrelationIdMissingInS100SapCallBack = 940102,
+
+        /// <summary>
+        /// 940103 - Invalid S-100 SAP callback. Request from ERP Facade to SAP not found.
+        /// </summary>
+        InvalidS100SapCallback = 940103,
+
+        /// <summary>
+        /// 940104 - Valid S-100 SAP callback.
+        /// </summary>
+        ValidS100SapCallback = 940104,
+
+        /// <summary>
+        /// 940105 - Downloading the S-100 data publishing event payload from azure blob storage.
+        /// </summary>
+        DownloadS100DataPublishingEventPayloadStarted = 940105,
+
+        /// <summary>
+        /// 940106 - S-100 data publishing event payload started event payload is downloaded from azure blob storage successfully.
+        /// </summary>
+        DownloadS100DataPublishingEventPayloadCompleted = 940106,
+
+        /// <summary>
+        /// 940107 - S-100 data publishing container is not exists in azure blob storage.
+        /// </summary>
+        BlobContainerIsNotExists = 940107,
+
     }
 
     /// <summary>

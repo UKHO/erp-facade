@@ -5,6 +5,7 @@ using Azure.Data.Tables.Models;
 using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Constants;
+using UKHO.ERPFacade.Common.Models.TableEntities;
 
 namespace UKHO.ERPFacade.Common.Operations.IO.Azure
 {
@@ -100,6 +101,29 @@ namespace UKHO.ERPFacade.Common.Operations.IO.Azure
 
             TableClient tableClient = serviceClient.GetTableClient(tableName);
             return tableClient;
+        }
+
+        public async Task UpdateResponseTimeEntity(string correlationId)
+        {
+            TableClient tableClient = GetTableClient(AzureStorage.EventTableName);
+            EventEntity existingEntity = await GetEntity(correlationId);
+            if (existingEntity != null)
+            {
+                existingEntity.ResponseDateTime = DateTime.UtcNow;
+                await tableClient.UpdateEntityAsync(existingEntity, ETag.All, TableUpdateMode.Replace);
+            }
+        }
+
+        private async Task<EventEntity> GetEntity(string correlationId)
+        {
+            IList<EventEntity> records = new List<EventEntity>();
+            TableClient tableClient = GetTableClient(AzureStorage.EventTableName);
+            var entities = tableClient.QueryAsync<EventEntity>(filter: TableClient.CreateQueryFilter($"RowKey eq {correlationId}"), maxPerPage: 1);
+            await foreach (var entity in entities)
+            {
+                records.Add(entity);
+            }
+            return records.FirstOrDefault();
         }
     }
 }
