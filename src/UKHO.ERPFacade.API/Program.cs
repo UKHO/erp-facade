@@ -17,8 +17,6 @@ using UKHO.ERPFacade.API.Filters;
 using UKHO.ERPFacade.API.Handlers;
 using UKHO.ERPFacade.API.Health;
 using UKHO.ERPFacade.API.SapMessageBuilders;
-using UKHO.ERPFacade.API.Services.EventPublishingService;
-using UKHO.ERPFacade.API.Services;
 using UKHO.ERPFacade.API.XmlTransformers;
 using UKHO.ERPFacade.Common.Authentication;
 using UKHO.ERPFacade.Common.Configuration;
