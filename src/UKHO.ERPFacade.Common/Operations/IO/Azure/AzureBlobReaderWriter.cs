@@ -99,6 +99,14 @@ namespace UKHO.ERPFacade.Common.Operations.IO.Azure
             return blobList;
         }
 
+        public async Task<string> DownloadEventAsync(string blobName, string blobContainerName)
+        {
+            BlobContainerClient blobContainerClient = new(_azureStorageConfig.Value.ConnectionString, blobContainerName);
+            BlobClient blobClient = blobContainerClient.GetBlobClient(blobName);
+            BlobDownloadResult blobDownloadResult = await blobClient.DownloadContentAsync();
+            return blobDownloadResult.Content.ToString();
+        }
+
         //Private Methods
         private BlobClient GetBlobClient(string containerName, string blobName)
         {

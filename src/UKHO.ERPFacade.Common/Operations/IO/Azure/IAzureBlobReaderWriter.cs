@@ -11,5 +11,6 @@
         bool DeleteContainer(string blobContainerName);
         bool DeleteDirectory(string blobContainerName, string directoryName);
         List<string> GetBlobNamesInFolder(string blobContainerName, string corrId);
+        Task<string> DownloadEventAsync(string blobName, string blobContainerName);
     }
 }
