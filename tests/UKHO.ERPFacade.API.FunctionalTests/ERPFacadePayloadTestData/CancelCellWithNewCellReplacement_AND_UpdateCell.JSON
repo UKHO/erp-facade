@@ -1,0 +1,291 @@
+{
+  "specversion": "1.0",
+  "type": "uk.gov.ukho.encpublishing.enccontentpublished.v2.2",
+  "source": "https://encpublishing.ukho.gov.uk",
+  "id": "09531718-b83e-4de7-b0f4-b2f428298742",
+  "time": "2024-09-15T07:36:05.8545619+00:00",
+  "subject": "BR400304,PA5AM111,PA5CP007",
+  "datacontenttype": "application/json",
+  "data": {
+    "correlationId": "ft-8fa72b0a-4200-4363-9d00-08dcc128489e",
+    "ukhoWeekNumber": {
+      "year": 2024,
+      "week": 31,
+      "currentWeekAlphaCorrection": false
+    },
+    "products": [
+      {
+        "dataSetName": "BR400304.000",
+        "productName": "BR400304",
+        "title": "De Mosqueiro a Vila do Conde",
+        "scale": 45000,
+        "usageBand": 4,
+        "editionNumber": 14,
+        "updateNumber": 0,
+        "mayAffectHoldings": false,
+        "contentChange": true,
+        "permit": "ThisWillBeReplacedWithActualPermitFromKeyvault",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "size": "large",
+        "bundle": [
+          {
+            "bundleType": "DVD",
+            "location": "M2;B8"
+          }
+        ],
+        "status": {
+          "statusName": "New Edition",
+          "statusDate": "2024-07-09",
+          "isNewCell": false
+        },
+        "replaces": [],
+        "replacedBy": [],
+        "additionalCoverage": [],
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": -1,
+            "southLimit": -1.8333333,
+            "eastLimit": -48.4166667,
+            "westLimit": -49.0166667
+          },
+          "polygons": []
+        },
+        "inUnitsOfSale": [
+          "BR400304",
+          "PAYSF"
+        ],
+        "s63": {
+          "name": "BR400304.000",
+          "hash": "",
+          "fileSize": 0,
+          "compression": true,
+          "s57Crc": "2C842B6D"
+        },
+        "signature": {
+          "name": "BRL00304.000",
+          "hash": "",
+          "fileSize": 0
+        },
+        "ancillaryFiles": []
+      },
+      {
+        "dataSetName": "PA5AM111.001",
+        "productName": "PA5AM111",
+        "title": "Bahia Manzanillo Port Terminals",
+        "scale": 12000,
+        "usageBand": 5,
+        "editionNumber": 8,
+        "updateNumber": 1,
+        "mayAffectHoldings": true,
+        "contentChange": true,
+        "permit": "ThisWillBeReplacedWithActualPermitFromKeyvault",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "size": "medium",
+        "bundle": [
+          {
+            "bundleType": "DVD",
+            "location": "M2;B8"
+          }
+        ],
+        "status": {
+          "statusName": "Cancellation Update",
+          "statusDate": "2024-07-16",
+          "isNewCell": false
+        },
+        "replaces": [],
+        "replacedBy": [
+          "PA5CP007"
+        ],
+        "additionalCoverage": [],
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 9.4368333,
+            "southLimit": 9.3043269,
+            "eastLimit": -79.8700001,
+            "westLimit": -79.9022423
+          },
+          "polygons": []
+        },
+        "inUnitsOfSale": [],
+        "s63": {
+          "name": "PA5AM111.001",
+          "hash": "",
+          "fileSize": 0,
+          "compression": true,
+          "s57Crc": "78094592"
+        },
+        "signature": {
+          "name": "PAMAM111.001",
+          "hash": "",
+          "fileSize": 0
+        },
+        "ancillaryFiles": []
+      },
+      {
+        "dataSetName": "PA5CP007.000",
+        "productName": "PA5CP007",
+        "title": "Bah\u00EDa Manzanillo Port Terminal",
+        "scale": 10000,
+        "usageBand": 5,
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "contentChange": true,
+        "permit": "ThisWillBeReplacedWithActualPermitFromKeyvault",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "size": "large",
+        "bundle": [
+          {
+            "bundleType": "DVD",
+            "location": "M2;B8"
+          }
+        ],
+        "status": {
+          "statusName": "New Edition",
+          "statusDate": "2024-06-24",
+          "isNewCell": true
+        },
+        "replaces": [
+          "PA5AM111"
+        ],
+        "replacedBy": [],
+        "additionalCoverage": [],
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 9.4368333,
+            "southLimit": 9.3043269,
+            "eastLimit": -79.8700001,
+            "westLimit": -79.9022423
+          },
+          "polygons": []
+        },
+        "inUnitsOfSale": [
+          "PAYSF",
+          "PA5CP007"
+        ],
+        "s63": {
+          "name": "PA5CP007.000",
+          "hash": "",
+          "fileSize": 0,
+          "compression": true,
+          "s57Crc": "97348E72"
+        },
+        "signature": {
+          "name": "PAMCP007.000",
+          "hash": "",
+          "fileSize": 0
+        },
+        "ancillaryFiles": []
+      }
+    ],
+    "unitsOfSale": [
+      {
+        "unitName": "PA5AM111",
+        "title": "Bahia Manzanillo Port Terminals",
+        "unitOfSaleType": "unit",
+        "unitSize": "medium",
+        "unitType": "AVCS Units Harbour",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "status": "NotForSale",
+        "isNewUnitOfSale": false,
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 9.4368333,
+            "southLimit": 9.3043269,
+            "eastLimit": -79.8700001,
+            "westLimit": -79.9022423
+          },
+          "polygons": []
+        },
+        "compositionChanges": {
+          "addProducts": [],
+          "removeProducts": [
+            "PA5AM111"
+          ]
+        }
+      },
+      {
+        "unitName": "PA5CP007",
+        "title": "Bah\u00EDa Manzanillo Port Terminal",
+        "unitOfSaleType": "unit",
+        "unitSize": "large",
+        "unitType": "AVCS Units Harbour",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 9.4368333,
+            "southLimit": 9.3043269,
+            "eastLimit": -79.8700001,
+            "westLimit": -79.9022423
+          },
+          "polygons": []
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "PA5CP007"
+          ],
+          "removeProducts": []
+        }
+      },
+      {
+        "unitName": "BR400304",
+        "title": "De Mosqueiro a Abaetuba",
+        "unitOfSaleType": "unit",
+        "unitSize": "large",
+        "unitType": "AVCS Units Approach",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "status": "ForSale",
+        "isNewUnitOfSale": false,
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": -1,
+            "southLimit": -1.8333333,
+            "eastLimit": -48.4166667,
+            "westLimit": -49.0166667
+          },
+          "polygons": []
+        },
+        "compositionChanges": {
+          "addProducts": [],
+          "removeProducts": []
+        }
+      },
+      {
+        "unitName": "PAYSF",
+        "title": "World Folio",
+        "unitOfSaleType": "folio",
+        "unitSize": "large",
+        "unitType": "AVCS Folio Transit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "status": "ForSale",
+        "isNewUnitOfSale": false,
+        "geographicLimit": {
+          "boundingBox": {
+            "northLimit": 0,
+            "southLimit": 0,
+            "eastLimit": 0,
+            "westLimit": 0
+          },
+          "polygons": []
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "PA5CP007"
+          ],
+          "removeProducts": [
+            "PA5AM111"
+          ]
+        }
+      }
+    ]
+  }
+}
