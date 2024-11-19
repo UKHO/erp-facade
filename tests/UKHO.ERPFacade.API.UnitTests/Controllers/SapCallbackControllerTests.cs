@@ -9,6 +9,7 @@ using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using UKHO.ERPFacade.API.Controllers;
 using UKHO.ERPFacade.API.Services;
+using UKHO.ERPFacade.API.Services.EventPublishingService;
 using UKHO.ERPFacade.Common.Operations.IO.Azure;
 
 namespace UKHO.ERPFacade.API.UnitTests.Controllers
@@ -20,7 +21,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         private ILogger<SapCallbackController> _fakeLogger;
         private IAzureTableReaderWriter _fakeAzureTableReaderWriter;
         private ISapCallBackService _fakeSapCallBackService;
-        private IAzureBlobReaderWriter _fakeAzureBlobReaderWriter;
+        private IS100UnitOfSaleUpdatedEventPublishingService _fakeS100UnitOfSaleUpdatedEventPublishingService;
         private SapCallbackController _fakeSapCallbackController;
 
         [SetUp]
@@ -30,8 +31,9 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             _fakeLogger = A.Fake<ILogger<SapCallbackController>>();
             _fakeAzureTableReaderWriter = A.Fake<IAzureTableReaderWriter>();
             _fakeSapCallBackService = A.Fake<ISapCallBackService>();
-            _fakeAzureBlobReaderWriter = A.Fake<IAzureBlobReaderWriter>();
-            _fakeSapCallbackController = new SapCallbackController(_fakeHttpContextAccessor, _fakeLogger, _fakeAzureTableReaderWriter, _fakeSapCallBackService, _fakeAzureBlobReaderWriter);
+            _fakeS100UnitOfSaleUpdatedEventPublishingService = A.Fake<IS100UnitOfSaleUpdatedEventPublishingService>();
+
+            _fakeSapCallbackController = new SapCallbackController(_fakeHttpContextAccessor, _fakeLogger, _fakeSapCallBackService, _fakeS100UnitOfSaleUpdatedEventPublishingService, _fakeAzureTableReaderWriter);
         }
 
         [Test]
@@ -39,7 +41,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         {
             var fakeSapCallBackJson = JObject.Parse(@"{""correlationId"":""123""}");
 
-            A.CallTo(() => _fakeAzureBlobReaderWriter.CheckIfContainerExists(A<string>.Ignored))!.Returns(true);
+            A.CallTo(() => _fakeSapCallBackService.IsValidCallback(A<string>.Ignored)).Returns(true);
 
             var result = (OkResult)await _fakeSapCallbackController.S100SapCallBack(fakeSapCallBackJson);
 
@@ -87,7 +89,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         {
             var fakeSapCallBackJson = JObject.Parse(@"{""correlationId"":""123""}");
 
-            A.CallTo(() => _fakeAzureBlobReaderWriter.CheckIfContainerExists(A<string>.Ignored))!.Returns(false);
+            A.CallTo(() => _fakeSapCallBackService.IsValidCallback(A<string>.Ignored))!.Returns(false);
 
             var result = (NotFoundObjectResult)await _fakeSapCallbackController.S100SapCallBack(fakeSapCallBackJson);
 

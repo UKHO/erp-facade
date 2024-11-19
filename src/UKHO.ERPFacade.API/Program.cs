@@ -18,6 +18,7 @@ using UKHO.ERPFacade.API.Handlers;
 using UKHO.ERPFacade.API.Health;
 using UKHO.ERPFacade.API.SapMessageBuilders;
 using UKHO.ERPFacade.API.Services;
+using UKHO.ERPFacade.API.Services.EventPublishingService;
 using UKHO.ERPFacade.API.XmlTransformers;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Constants;
@@ -182,7 +183,7 @@ namespace UKHO.ERPFacade
             builder.Services.Configure<RetryPolicyConfiguration>(configuration.GetSection("RetryPolicyConfiguration"));
 
             builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
-            builder.Services.AddSingleton<IEventPublisher, EESEventPublisher>();
+            builder.Services.AddSingleton<IEventPublisher, EventPublisher>();
             builder.Services.AddSingleton<IAccessTokenCache, AccessTokenCache>().AddLazyCache();
             builder.Services.AddSingleton<InteractiveTokenProvider>();
             builder.Services.AddSingleton<ManagedIdentityTokenProvider>();
@@ -210,7 +211,7 @@ namespace UKHO.ERPFacade
             builder.Services.AddKeyedScoped<IBaseXmlTransformer, S100XmlTransformer>(XmlTransformers.S100XmlTransformer);
             builder.Services.AddScoped<IEventDispatcher, EventDispatcher>();
             builder.Services.AddScoped<SharedApiKeyAuthFilter>();
-            builder.Services.AddScoped<IEventService, EventService>();
+            builder.Services.AddScoped<IS100UnitOfSaleUpdatedEventPublishingService, S100UnitOfSaleUpdatedEventPublishingService>();
             builder.Services.AddScoped<ISapCallBackService, SapCallBackService>();
 
             ConfigureHealthChecks(builder);
@@ -218,6 +219,11 @@ namespace UKHO.ERPFacade
             builder.Services.AddHttpClient<ISapClient, SapClient>(c =>
             {
                 c.BaseAddress = new Uri(configuration.GetValue<string>("SapConfiguration:SapBaseAddress"));
+            });
+
+            builder.Services.AddHttpClient<IEESClient, EESClient>(c =>
+            {
+                c.BaseAddress = new Uri(configuration.GetValue<string>("EnterpriseEventServiceConfiguration:ServiceUrl"));
             });
 
             var app = builder.Build();

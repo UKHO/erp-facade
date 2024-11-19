@@ -26,15 +26,12 @@ namespace UKHO.ERPFacade.Common.Operations.IO.Azure
             await blobClient.UploadAsync(stream, overwrite: true);
         }
 
-        public string DownloadEvent(string blobName, string blobContainerName)
+        public async Task<string> DownloadEventAsync(string blobName, string blobContainerName)
         {
             BlobContainerClient blobContainerClient = new(_azureStorageConfig.Value.ConnectionString, blobContainerName);
             BlobClient blobClient = blobContainerClient.GetBlobClient(blobName);
-
-            BlobDownloadResult downloadResult = blobClient.DownloadContent();
-            string existingEesEvent = downloadResult.Content.ToString();
-
-            return existingEesEvent;
+            BlobDownloadResult blobDownloadResult = await blobClient.DownloadContentAsync();
+            return blobDownloadResult.Content.ToString();
         }
 
         public DateTime GetBlobCreateDate(string blobName, string blobContainerName)
