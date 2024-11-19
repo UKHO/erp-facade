@@ -17,7 +17,10 @@ using UKHO.ERPFacade.API.Filters;
 using UKHO.ERPFacade.API.Handlers;
 using UKHO.ERPFacade.API.Health;
 using UKHO.ERPFacade.API.SapMessageBuilders;
+using UKHO.ERPFacade.API.Services.EventPublishingService;
+using UKHO.ERPFacade.API.Services;
 using UKHO.ERPFacade.API.XmlTransformers;
+using UKHO.ERPFacade.Common.Authentication;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.HealthCheck;
@@ -174,8 +177,12 @@ namespace UKHO.ERPFacade
             builder.Services.Configure<PermitConfiguration>(configuration.GetSection("PermitConfiguration"));
             builder.Services.Configure<AioConfiguration>(configuration.GetSection("AioConfiguration"));
             builder.Services.Configure<SharedApiKeyConfiguration>(configuration.GetSection("SharedApiKeyConfiguration"));
+            builder.Services.Configure<AzureADConfiguration>(configuration.GetSection("AzureADConfiguration"));
+            builder.Services.Configure<EESConfiguration>(configuration.GetSection("EnterpriseEventServiceConfiguration"));
+            builder.Services.Configure<RetryPolicyConfiguration>(configuration.GetSection("RetryPolicyConfiguration"));
 
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            builder.Services.AddSingleton<ITokenProvider, ManagedIdentityTokenProvider>();
 
             builder.Services.AddScoped<IAzureQueueReaderWriter, AzureQueueReaderWriter>();
             builder.Services.AddScoped<IAzureTableReaderWriter, AzureTableReaderWriter>();
@@ -201,6 +208,11 @@ namespace UKHO.ERPFacade
             builder.Services.AddHttpClient<ISapClient, SapClient>(c =>
             {
                 c.BaseAddress = new Uri(configuration.GetValue<string>("SapConfiguration:SapBaseAddress"));
+            });
+
+            builder.Services.AddHttpClient<IEESClient, EESClient>(c =>
+            {
+                c.BaseAddress = new Uri(configuration.GetValue<string>("EnterpriseEventServiceConfiguration:ServiceUrl"));
             });
 
             var app = builder.Build();
