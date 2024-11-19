@@ -373,18 +373,6 @@
     </None>
     <None Update="ERPFacadePayloadTestData\S57PayloadTestData\WithdrawCell.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ERPFacadePayloadTestData\UpdateCell.JSON">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ERPFacadePayloadTestData\UpdateCellsWithDifferentStatusName.JSON">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ERPFacadePayloadTestData\UpdateCellWithNewEdition.JSON">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ERPFacadePayloadTestData\WithdrawCell.JSON">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>    
   </ItemGroup>
 
