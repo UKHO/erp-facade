@@ -39,6 +39,5 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
 
             return await _client.ExecuteAsync(request);
         }
-
     }
 }
