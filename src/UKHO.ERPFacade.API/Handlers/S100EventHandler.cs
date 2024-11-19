@@ -75,10 +75,10 @@ namespace UKHO.ERPFacade.API.Handlers
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new ERPFacadeException(EventIds.S100RequestToSapFailedException.ToEventId(), $"An error occurred while sending S100 data content to SAP. | {response.StatusCode}");
+                throw new ERPFacadeException(EventIds.S100RequestToSapFailedException.ToEventId(), $"An error occurred while sending S-100 data content to SAP. | {response.StatusCode}");
             }
 
-            _logger.LogInformation(EventIds.S100EventUpdateSentToSap.ToEventId(), "S100 data content has been sent to SAP successfully.");
+            _logger.LogInformation(EventIds.S100EventUpdateSentToSap.ToEventId(), "S-100 data content has been sent to SAP successfully.");
 
             await _azureTableReaderWriter.UpdateEntityAsync(eventEntity.PartitionKey, eventEntity.RowKey, new[] { new KeyValuePair<string, DateTime>("RequestDateTime", DateTime.UtcNow) });
 
