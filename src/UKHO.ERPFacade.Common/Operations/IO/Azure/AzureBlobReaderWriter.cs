@@ -26,12 +26,12 @@ namespace UKHO.ERPFacade.Common.Operations.IO.Azure
             await blobClient.UploadAsync(stream, overwrite: true);
         }
 
-        public string DownloadEvent(string blobName, string blobContainerName)
+        public async Task<string> DownloadEventAsync(string blobName, string blobContainerName)
         {
             BlobContainerClient blobContainerClient = new(_azureStorageConfig.Value.ConnectionString, blobContainerName);
             BlobClient blobClient = blobContainerClient.GetBlobClient(blobName);
 
-            BlobDownloadResult downloadResult = blobClient.DownloadContent();
+            BlobDownloadResult downloadResult = await blobClient.DownloadContentAsync();
             string existingEesEvent = downloadResult.Content.ToString();
 
             return existingEesEvent;
@@ -54,20 +54,20 @@ namespace UKHO.ERPFacade.Common.Operations.IO.Azure
             }
         }
 
-        public bool DeleteBlob(string blobName, string blobContainerName)
+        public async Task<bool> DeleteBlobAsync(string blobName, string blobContainerName)
         {
             BlobContainerClient blobContainerClient = new(_azureStorageConfig.Value.ConnectionString, blobContainerName);
             BlobClient blobClient = blobContainerClient.GetBlobClient(blobName);
-            return blobClient.DeleteIfExists();
+            return await blobClient.DeleteIfExistsAsync();
         }
 
-        public bool DeleteContainer(string blobContainerName)
+        public async Task<bool> DeleteContainerAsync(string blobContainerName)
         {
             BlobContainerClient blobContainerClient = new(_azureStorageConfig.Value.ConnectionString, blobContainerName);
-            return blobContainerClient.DeleteIfExists();
+            return await blobContainerClient.DeleteIfExistsAsync();
         }
 
-        public bool DeleteDirectory(string blobContainerName, string directoryName)
+        public async Task<bool> DeleteDirectoryAsync(string blobContainerName, string directoryName)
         {
             BlobContainerClient blobContainerClient = new(_azureStorageConfig.Value.ConnectionString, blobContainerName);
 
@@ -77,7 +77,7 @@ namespace UKHO.ERPFacade.Common.Operations.IO.Azure
                 // Get the BlobClient for each blob and delete it
                 BlobClient blobClient = blobContainerClient.GetBlobClient(blobItem.Name);
                 Console.WriteLine($"Deleting blob: {blobItem.Name}");
-                blobClient.DeleteIfExists();
+                await blobClient.DeleteIfExistsAsync();
             }
             return true;
         }

@@ -1,41 +1,58 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Configuration;
+using UKHO.ERPFacade.Common.Enums;
+using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Operations.IO.Azure;
 
 namespace UKHO.ERPFacade.CleanUp.WebJob.Services
 {
     public class CleanUpService : ICleanUpService
     {
+        private readonly ILogger<CleanUpService> _logger;
         private readonly IOptions<CleanupWebJobConfiguration> _cleanupWebjobConfig;
         private readonly IAzureTableReaderWriter _azureTableReaderWriter;
         private readonly IAzureBlobReaderWriter _azureBlobReaderWriter;
 
-        public CleanUpService(IOptions<CleanupWebJobConfiguration> cleanupWebjobConfig,
+        public CleanUpService(ILogger<CleanUpService> logger,
+                               IOptions<CleanupWebJobConfiguration> cleanupWebjobConfig,
                                IAzureTableReaderWriter azureTableReaderWriter,
                                IAzureBlobReaderWriter azureBlobReaderWriter)
         {
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _cleanupWebjobConfig = cleanupWebjobConfig ?? throw new ArgumentNullException(nameof(cleanupWebjobConfig));
             _azureTableReaderWriter = azureTableReaderWriter ?? throw new ArgumentNullException(nameof(azureTableReaderWriter));
             _azureBlobReaderWriter = azureBlobReaderWriter ?? throw new ArgumentNullException(nameof(azureBlobReaderWriter));
         }
 
-        public void Clean()
+        public async Task Clean()
         {
-            var entities = _azureTableReaderWriter.GetAllEntities();
-
-            foreach (var entity in entities)
+            try
             {
-                var correlationId = entity.RowKey.ToString();
+                var status = new KeyValuePair<string, string>("Status", Status.Complete.ToString());
+                var entities = await _azureTableReaderWriter.GetEntitiesByQueryParameterAsync(status);
 
-                TimeSpan timediff = DateTime.Now - Convert.ToDateTime(entity["Timestamp"].ToString());
-
-                if (timediff.Days > int.Parse(_cleanupWebjobConfig.Value.CleanUpDurationInDays))
+                foreach (var entity in entities)
                 {
-                    Task.FromResult(_azureTableReaderWriter.DeleteEntityAsync(entity.PartitionKey.ToString(), correlationId));
+                    var correlationId = entity.RowKey.ToString();
 
-                    _azureBlobReaderWriter.DeleteContainer(correlationId);
+                    TimeSpan timediff = DateTime.Now - Convert.ToDateTime(entity["Timestamp"].ToString());
+
+                    if (timediff.Days > int.Parse(_cleanupWebjobConfig.Value.CleanUpDurationInDays))
+                    {
+                        await _azureTableReaderWriter.DeleteEntityAsync(entity.PartitionKey.ToString(), correlationId);
+
+                        await _azureBlobReaderWriter.DeleteContainerAsync(correlationId);
+
+                        _logger.LogDebug(EventIds.DeletedContainerSuccessful.ToEventId(), $"Event data cleaned up for {correlationId} successfully.");
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                _logger.LogError(EventIds.ErrorOccurredInCleanupWebJob.ToEventId(), ex, $"Exception occur during clean up webjob process. ErrorMessage : {ex.Message}");
+            }
+
         }
     }
 }

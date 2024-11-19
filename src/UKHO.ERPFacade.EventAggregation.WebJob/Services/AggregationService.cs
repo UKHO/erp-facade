@@ -59,7 +59,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Services
                         {
                             _logger.LogInformation(EventIds.DownloadRecordOfSaleEventFromAzureBlob.ToEventId(), "Webjob has started downloading record of sale events from blob. | _X-Correlation-ID : {_X-Correlation-ID} | EventID : {EventID}", message.CorrelationId, message.EventId);
 
-                            string rosEvent = _azureBlobReaderWriter.DownloadEvent(message.CorrelationId + '/' + eventId + EventPayloadFiles.RecordOfSaleEventFileExtension, AzureStorage.RecordOfSaleEventContainerName);
+                            string rosEvent = await _azureBlobReaderWriter.DownloadEventAsync(message.CorrelationId + '/' + eventId + EventPayloadFiles.RecordOfSaleEventFileExtension, AzureStorage.RecordOfSaleEventContainerName);
                             rosEventList.Add(JsonConvert.DeserializeObject<RecordOfSaleEventPayLoad>(rosEvent)!);
                         }
 

@@ -5,7 +5,6 @@ using Azure.Data.Tables.Models;
 using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Constants;
-using UKHO.ERPFacade.Common.Enums;
 
 namespace UKHO.ERPFacade.Common.Operations.IO.Azure
 {
@@ -22,7 +21,7 @@ namespace UKHO.ERPFacade.Common.Operations.IO.Azure
 
         public async Task UpsertEntityAsync(ITableEntity entity)
         {
-            TableClient tableClient = GetTableClient(AzureStorage.EventTableName);
+            TableClient tableClient = await GetTableClientAsync(AzureStorage.EventTableName);
 
             TableEntity existingEntity = await GetEntityAsync(entity.PartitionKey, entity.RowKey);
 
@@ -40,7 +39,7 @@ namespace UKHO.ERPFacade.Common.Operations.IO.Azure
 
         public async Task<TableEntity> GetEntityAsync(string partitionKey, string rowKey)
         {
-            TableClient tableClient = GetTableClient(AzureStorage.EventTableName);
+            TableClient tableClient = await GetTableClientAsync(AzureStorage.EventTableName);
             try
             {
                 return await tableClient.GetEntityAsync<TableEntity>(partitionKey, rowKey);
@@ -53,7 +52,7 @@ namespace UKHO.ERPFacade.Common.Operations.IO.Azure
 
         public async Task UpdateEntityAsync<TKey, TValue>(string partitionKey, string rowKey, KeyValuePair<TKey, TValue>[] entitiesToUpdate)
         {
-            TableClient tableClient = GetTableClient(AzureStorage.EventTableName);
+            TableClient tableClient = await GetTableClientAsync(AzureStorage.EventTableName);
             TableEntity existingEntity = await GetEntityAsync(partitionKey, rowKey);
             if (existingEntity != null)
             {
@@ -65,12 +64,11 @@ namespace UKHO.ERPFacade.Common.Operations.IO.Azure
             }
         }
 
-        public IList<TableEntity> GetAllEntities()
+        public async Task<IList<TableEntity>> GetEntitiesByQueryParameterAsync<TKey, TValue>(KeyValuePair<TKey, TValue> parameter)
         {
-            var status = Status.Complete.ToString();
             var records = new List<TableEntity>();
-            TableClient tableClient = GetTableClient(AzureStorage.EventTableName);
-            var entities = tableClient.Query<TableEntity>(filter: $"Status eq '{status}'");
+            TableClient tableClient = await GetTableClientAsync(AzureStorage.EventTableName);
+            var entities = tableClient.Query<TableEntity>(filter: $"{parameter.Key} eq '{parameter.Value}'");
             foreach (var entity in entities)
             {
                 records.Add(entity);
@@ -80,7 +78,7 @@ namespace UKHO.ERPFacade.Common.Operations.IO.Azure
 
         public async Task DeleteEntityAsync(string partitionKey, string rowKey)
         {
-            TableClient tableClient = GetTableClient(AzureStorage.EventTableName);
+            TableClient tableClient = await GetTableClientAsync(AzureStorage.EventTableName);
             TableEntity existingEntity = await GetEntityAsync(partitionKey, rowKey);
             if (existingEntity != null)
             {
@@ -89,7 +87,7 @@ namespace UKHO.ERPFacade.Common.Operations.IO.Azure
         }
 
         //Private Methods
-        private TableClient GetTableClient(string tableName)
+        private async Task<TableClient> GetTableClientAsync(string tableName)
         {
             TableServiceClient serviceClient = new(_azureStorageConfig.Value.ConnectionString);
             Pageable<TableItem> queryTableResults = serviceClient.Query(filter: $"TableName eq '{tableName}'");
@@ -97,7 +95,7 @@ namespace UKHO.ERPFacade.Common.Operations.IO.Azure
 
             if (tableExists == null)
             {
-                serviceClient.GetTableClient(tableName).CreateIfNotExistsAsync();
+                await serviceClient.GetTableClient(tableName).CreateIfNotExistsAsync();
             }
 
             TableClient tableClient = serviceClient.GetTableClient(tableName);

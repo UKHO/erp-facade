@@ -477,7 +477,17 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940095 - Shared API Key Configuration is missing.
         /// </summary>
-        SharedApiKeyConfigurationMissing = 940095
+        SharedApiKeyConfigurationMissing = 940095,
+
+        /// <summary>
+        /// 940096 - Event data cleaned up for CorrelationId successfully.
+        /// </summary>
+        DeletedContainerSuccessful = 940096,
+
+        /// <summary>
+        /// 940097 - ErrorOccurred In CleanupWebJob.
+        /// </summary>
+        ErrorOccurredInCleanupWebJob = 940097
     }
 
     /// <summary>

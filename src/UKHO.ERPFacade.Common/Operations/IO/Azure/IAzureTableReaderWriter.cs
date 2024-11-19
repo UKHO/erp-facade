@@ -7,7 +7,7 @@ namespace UKHO.ERPFacade.Common.Operations.IO.Azure
         Task UpsertEntityAsync(ITableEntity entity);
         Task UpdateEntityAsync<TKey, TValue>(string partitionKey, string rowKey, KeyValuePair<TKey, TValue>[] entitiesToUpdate);
         Task<TableEntity> GetEntityAsync(string partitionKey, string rowKey);
-        IList<TableEntity> GetAllEntities();
+        Task<IList<TableEntity>> GetEntitiesByQueryParameterAsync<TKey, TValue>(KeyValuePair<TKey, TValue> parameter);
         Task DeleteEntityAsync(string partitionKey, string rowKey);
     }
 }
