@@ -82,7 +82,7 @@ namespace UKHO.ERPFacade.Common.Operations.IO.Azure
             TableEntity existingEntity = await GetEntityAsync(partitionKey, rowKey);
             if (existingEntity != null)
             {
-                tableClient.DeleteEntity(existingEntity.PartitionKey, existingEntity.RowKey);
+                await tableClient.DeleteEntityAsync(existingEntity.PartitionKey, existingEntity.RowKey);
             }
         }
 
