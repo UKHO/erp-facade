@@ -47,7 +47,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
             _fakeSapClient = A.Fake<ISapClient>();
             _fakeSapConfig = A.Fake<IOptions<SapConfiguration>>();
 
-            _fakes100EventHandler = new S100EventHandler(_fakeLogger, _fakeAzureTableReaderWriter, _fakeAzureBlobReaderWriter, _fakeBaseXmlTransformer, _fakeSapClient, _fakeSapConfig);
+            _fakes100EventHandler = new S100EventHandler(_fakeBaseXmlTransformer, _fakeLogger, _fakeAzureTableReaderWriter, _fakeAzureBlobReaderWriter, _fakeSapClient, _fakeSapConfig);
         }
 
         [Test]
@@ -95,7 +95,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
         }
 
         [Test]
-        public void WhenS100EventHandler_NotProcessedTheEvent()
+        public void WhenSapRespondsWith401Unauthorized_ThenS100EventHandlerRaiseAnException()
         {
             XmlDocument xmlDocument = new();
             var newCellEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\S100TestData\\CancellationAndReplacement.JSON");

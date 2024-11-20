@@ -26,17 +26,17 @@ namespace UKHO.ERPFacade.API.Handlers
         private readonly ISapClient _sapClient;
         private readonly IOptions<SapConfiguration> _sapConfig;
 
-        public S100EventHandler(ILogger<S100EventHandler> logger,
-            IAzureTableReaderWriter azureTableReaderWriter,
-            IAzureBlobReaderWriter azureBlobReaderWriter,
-            [FromKeyedServices("S100XmlTransformer")] IBaseXmlTransformer baseXmlTransformer,
-            ISapClient sapClient,
-            IOptions<SapConfiguration> sapConfig)
+        public S100EventHandler([FromKeyedServices("S100XmlTransformer")] IBaseXmlTransformer baseXmlTransformer,
+                                ILogger<S100EventHandler> logger,
+                                IAzureTableReaderWriter azureTableReaderWriter,
+                                IAzureBlobReaderWriter azureBlobReaderWriter,
+                                ISapClient sapClient,
+                                IOptions<SapConfiguration> sapConfig)
         {
             _logger = logger;
+            _baseXmlTransformer = baseXmlTransformer;
             _azureTableReaderWriter = azureTableReaderWriter;
             _azureBlobReaderWriter = azureBlobReaderWriter;
-            _baseXmlTransformer = baseXmlTransformer;
             _sapClient = sapClient;
             _sapConfig = sapConfig;
         }

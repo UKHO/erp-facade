@@ -417,20 +417,20 @@ namespace UKHO.ERPFacade.Common.Logging
         /// </summary>
         MessageDequeueCount = 940083,
 
-        //Below event ids for - S100
+        //Below event ids for - S-100
 
         /// <summary>
-        /// 940084 - S100 event processing started.
+        /// 940084 - S-100 event processing started.
         /// </summary>
         S100EventProcessingStarted = 940084,
 
         /// <summary>
-        /// 940085 - S100 event entry is added in azure table successfully.
+        /// 940085 - S-100 event entry is added in azure table successfully.
         /// </summary>
         S100EventEntryAddedInAzureTable = 940085,
 
         /// <summary>
-        /// 940086 - S100 event json payload is stored in azure blob container.
+        /// 940086 - S-100 event json payload is stored in azure blob container.
         /// </summary>
         S100EventJsonStoredInAzureBlobContainer = 940086,
 
@@ -480,12 +480,12 @@ namespace UKHO.ERPFacade.Common.Logging
         SharedApiKeyConfigurationMissing = 940095,
 
         /// <summary>
-        /// 940096 - S100 Request to SAP failed.
+        /// 940096 - S-100 Request to SAP failed.
         /// </summary>
         S100RequestToSapFailedException = 940096,
 
         /// <summary>
-        /// 940097 - S100 data content sent to SAP.
+        /// 940097 - S-100 data content sent to SAP.
         /// </summary>
         S100EventUpdateSentToSap = 940097
     }
