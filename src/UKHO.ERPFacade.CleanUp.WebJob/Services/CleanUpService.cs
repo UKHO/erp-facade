@@ -29,31 +29,31 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.Services
         {
             try
             {
-                var statusFilter = new Dictionary<string, string>
-                {
-                    {"Status", Status.Complete.ToString()}
-                };
+                var statusFilter = new Dictionary<string, string> { { "Status", Status.Complete.ToString() } };
+
                 var entities = await _azureTableReaderWriter.GetFilteredEntitiesAsync(statusFilter);
+
+                var cleanupDurationInDays = int.Parse(_cleanupWebjobConfig.Value.CleanUpDurationInDays);
 
                 foreach (var entity in entities)
                 {
                     var correlationId = entity.RowKey.ToString();
 
-                    TimeSpan timediff = DateTime.UtcNow - DateTime.SpecifyKind(Convert.ToDateTime(entity["Timestamp"].ToString()), DateTimeKind.Utc);
+                    var timestamp = DateTime.SpecifyKind(Convert.ToDateTime(entity["RequestDateTime"].ToString()), DateTimeKind.Utc);
+                    var timediff = DateTime.UtcNow - timestamp;
 
-                    if (timediff.Days > int.Parse(_cleanupWebjobConfig.Value.CleanUpDurationInDays))
+                    if (timediff.Days > cleanupDurationInDays)
                     {
                         await _azureTableReaderWriter.DeleteEntityAsync(entity.PartitionKey.ToString(), correlationId);
-
                         await _azureBlobReaderWriter.DeleteContainerAsync(correlationId);
 
-                        _logger.LogDebug(EventIds.EventCleanupSuccessful.ToEventId(), $"Event data cleaned up for {correlationId} successfully.");
+                        _logger.LogDebug(EventIds.EventCleanupSuccessful.ToEventId(), "Data clean up completed for {CorrelationId} successfully.", correlationId);
                     }
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.ErrorOccurredInCleanupWebJob.ToEventId(), ex, $"Exception occur during clean up webjob process. ErrorMessage : {ex.Message}");
+                _logger.LogError(EventIds.ErrorOccurredInCleanupWebJob.ToEventId(), "An error occured during clean up webjob process. ErrorMessage : {Exception}", ex.Message);
             }
 
         }

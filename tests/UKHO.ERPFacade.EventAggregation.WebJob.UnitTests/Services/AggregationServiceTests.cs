@@ -107,9 +107,9 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Services
 
             await _fakeAggregationService.MergeRecordOfSaleEvents(queueMessage);
 
-            A.CallTo(() => _fakeAzureBlobReaderWriter.GetBlobNamesInFolder(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeAzureBlobReaderWriter.GetBlobNamesInFolderAsync(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
             A.CallTo(() => _fakeAzureBlobReaderWriter.DownloadEventAsync(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
-            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntityAsync(A<string>.Ignored, A<string>.Ignored, A<KeyValuePair<string, string>[]>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntityAsync(A<string>.Ignored, A<string>.Ignored, A<Dictionary<string, object>>.Ignored)).MustNotHaveHappened();
             A.CallTo(() => _fakeAzureBlobReaderWriter.UploadEventAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
@@ -140,13 +140,13 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Services
              };
 
             A.CallTo(() => _fakeAzureTableReaderWriter.GetEntityAsync(A<string>.Ignored, A<string>.Ignored)).Returns(entity);
-            A.CallTo(() => _fakeAzureBlobReaderWriter.GetBlobNamesInFolder(A<string>.Ignored, A<string>.Ignored)).Returns(blob);
+            A.CallTo(() => _fakeAzureBlobReaderWriter.GetBlobNamesInFolderAsync(A<string>.Ignored, A<string>.Ignored)).Returns(blob);
 
             await _fakeAggregationService.MergeRecordOfSaleEvents(queueMessage);
 
-            A.CallTo(() => _fakeAzureBlobReaderWriter.GetBlobNamesInFolder(A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _fakeAzureBlobReaderWriter.GetBlobNamesInFolderAsync(A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceExactly();
             A.CallTo(() => _fakeAzureBlobReaderWriter.DownloadEventAsync(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
-            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntityAsync(A<string>.Ignored, A<string>.Ignored, A<KeyValuePair<string, string>[]>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntityAsync(A<string>.Ignored, A<string>.Ignored, A<Dictionary<string, object>>.Ignored)).MustNotHaveHappened();
             A.CallTo(() => _fakeAzureBlobReaderWriter.UploadEventAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
@@ -179,7 +179,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Services
              };
 
             A.CallTo(() => _fakeAzureTableReaderWriter.GetEntityAsync(A<string>.Ignored, A<string>.Ignored)).Returns(entity);
-            A.CallTo(() => _fakeAzureBlobReaderWriter.GetBlobNamesInFolder(A<string>.Ignored, A<string>.Ignored)).Returns(blob);
+            A.CallTo(() => _fakeAzureBlobReaderWriter.GetBlobNamesInFolderAsync(A<string>.Ignored, A<string>.Ignored)).Returns(blob);
 
             A.CallTo(() =>
                     _fakeRecordOfSaleSapMessageBuilder.BuildRecordOfSaleSapMessageXml(
@@ -194,9 +194,9 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Services
 
             Assert.ThrowsAsync<ERPFacadeException>(() => _fakeAggregationService.MergeRecordOfSaleEvents(queueMessage));
 
-            A.CallTo(() => _fakeAzureBlobReaderWriter.GetBlobNamesInFolder(A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _fakeAzureBlobReaderWriter.GetBlobNamesInFolderAsync(A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceExactly();
             A.CallTo(() => _fakeAzureBlobReaderWriter.DownloadEventAsync(A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceOrMore();
-            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntityAsync(A<string>.Ignored, A<string>.Ignored, A<KeyValuePair<string, string>[]>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntityAsync(A<string>.Ignored, A<string>.Ignored, A<Dictionary<string, object>>.Ignored)).MustNotHaveHappened();
             A.CallTo(() => _fakeAzureBlobReaderWriter.UploadEventAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
@@ -239,7 +239,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Services
              };
 
             A.CallTo(() => _fakeAzureTableReaderWriter.GetEntityAsync(A<string>.Ignored, A<string>.Ignored)).Returns(entity);
-            A.CallTo(() => _fakeAzureBlobReaderWriter.GetBlobNamesInFolder(A<string>.Ignored, A<string>.Ignored)).Returns(blob);
+            A.CallTo(() => _fakeAzureBlobReaderWriter.GetBlobNamesInFolderAsync(A<string>.Ignored, A<string>.Ignored)).Returns(blob);
 
             A.CallTo(() =>
                     _fakeRecordOfSaleSapMessageBuilder.BuildRecordOfSaleSapMessageXml(
@@ -254,9 +254,9 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Services
 
             await _fakeAggregationService.MergeRecordOfSaleEvents(queueMessage);
 
-            A.CallTo(() => _fakeAzureBlobReaderWriter.GetBlobNamesInFolder(A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _fakeAzureBlobReaderWriter.GetBlobNamesInFolderAsync(A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceExactly();
             A.CallTo(() => _fakeAzureBlobReaderWriter.DownloadEventAsync(A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceOrMore();
-            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntityAsync(A<string>.Ignored, A<string>.Ignored, A<KeyValuePair<string, string>[]>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntityAsync(A<string>.Ignored, A<string>.Ignored, A<Dictionary<string, object>>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureBlobReaderWriter.UploadEventAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
@@ -304,7 +304,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Services
              };
 
             A.CallTo(() => _fakeAzureTableReaderWriter.GetEntityAsync(A<string>.Ignored, A<string>.Ignored)).Returns(entity);
-            A.CallTo(() => _fakeAzureBlobReaderWriter.GetBlobNamesInFolder(A<string>.Ignored, A<string>.Ignored)).Returns(blob);
+            A.CallTo(() => _fakeAzureBlobReaderWriter.GetBlobNamesInFolderAsync(A<string>.Ignored, A<string>.Ignored)).Returns(blob);
 
             A.CallTo(() =>
                     _fakeRecordOfSaleSapMessageBuilder.BuildRecordOfSaleSapMessageXml(
@@ -320,7 +320,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Services
 
             Assert.That(ex.EventId, Is.EqualTo(EventIds.UnhandledWebJobException.ToEventId()));
 
-            A.CallTo(() => _fakeAzureBlobReaderWriter.GetBlobNamesInFolder(A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _fakeAzureBlobReaderWriter.GetBlobNamesInFolderAsync(A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Information

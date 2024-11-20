@@ -37,63 +37,21 @@ namespace UKHO.ERPFacade.Common.Operations.IO.Azure
             return existingEesEvent;
         }
 
-        public DateTime GetBlobCreateDate(string blobName, string blobContainerName)
-        {
-            BlobContainerClient blobContainerClient = new(_azureStorageConfig.Value.ConnectionString, blobContainerName);
-            BlobClient blobClient = blobContainerClient.GetBlobClient(blobName);
-            return blobClient.GetProperties().Value.CreatedOn.DateTime;
-        }
-
-        public IEnumerable<string> GetBlobsInContainer(string blobContainerName, string corrId)
-        {
-            BlobContainerClient blobContainerClient = new(_azureStorageConfig.Value.ConnectionString, blobContainerName);
-            var blobs = blobContainerClient.GetBlobs(BlobTraits.None, BlobStates.None, corrId);
-            foreach (BlobItem blob in blobs)
-            {
-                yield return blob.Name;
-            }
-        }
-
-        public async Task<bool> DeleteBlobAsync(string blobName, string blobContainerName)
-        {
-            BlobContainerClient blobContainerClient = new(_azureStorageConfig.Value.ConnectionString, blobContainerName);
-            BlobClient blobClient = blobContainerClient.GetBlobClient(blobName);
-            return await blobClient.DeleteIfExistsAsync();
-        }
-
         public async Task<bool> DeleteContainerAsync(string blobContainerName)
         {
             BlobContainerClient blobContainerClient = new(_azureStorageConfig.Value.ConnectionString, blobContainerName);
             return await blobContainerClient.DeleteIfExistsAsync();
         }
 
-        public async Task<bool> DeleteDirectoryAsync(string blobContainerName, string directoryName)
+        public async Task<List<string>> GetBlobNamesInFolderAsync(string blobContainerName, string corrId)
         {
-            BlobContainerClient blobContainerClient = new(_azureStorageConfig.Value.ConnectionString, blobContainerName);
+            List<string> blobList = new List<string>();
+            BlobContainerClient blobContainerClient = new BlobContainerClient(_azureStorageConfig.Value.ConnectionString, blobContainerName);
 
-            // List all blobs with the directory prefix
-            foreach (var blobItem in blobContainerClient.GetBlobs(prefix: directoryName))
+            await foreach (BlobItem blob in blobContainerClient.GetBlobsAsync(prefix: corrId))
             {
-                // Get the BlobClient for each blob and delete it
-                BlobClient blobClient = blobContainerClient.GetBlobClient(blobItem.Name);
-                Console.WriteLine($"Deleting blob: {blobItem.Name}");
-                await blobClient.DeleteIfExistsAsync();
-            }
-            return true;
-        }
-
-        public List<string> GetBlobNamesInFolder(string blobContainerName, string corrId)
-        {
-            List<string> blobList = new();
-            BlobContainerClient blobContainerClient = new(_azureStorageConfig.Value.ConnectionString, blobContainerName);
-
-            var blobs = blobContainerClient.GetBlobs(BlobTraits.None, BlobStates.None, corrId);
-
-            foreach (BlobItem blob in blobs)
-            {
-                var blobName = blob.Name.Split("/");
-                var fileName = blobName[1].Split(".");
-                blobList.Add(fileName[0]);
+                string fileName = Path.GetFileNameWithoutExtension(blob.Name);
+                blobList.Add(fileName);
             }
 
             return blobList;
@@ -107,16 +65,6 @@ namespace UKHO.ERPFacade.Common.Operations.IO.Azure
 
             BlobClient blobClient = blobContainerClient.GetBlobClient(blobName);
             return blobClient;
-        }
-
-        public bool CheckIfContainerExists(string containerName)
-        {
-            BlobServiceClient serviceClient = new(_azureStorageConfig.Value.ConnectionString);
-
-            var container = serviceClient.GetBlobContainerClient(containerName.ToLower());
-            var isExists = container.Exists();
-
-            return isExists;
         }
     }
 }

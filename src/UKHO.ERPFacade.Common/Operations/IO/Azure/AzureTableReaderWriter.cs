@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Azure;
 using Azure.Data.Tables;
-using Azure.Data.Tables.Models;
 using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Constants;
@@ -11,7 +10,6 @@ namespace UKHO.ERPFacade.Common.Operations.IO.Azure
     [ExcludeFromCodeCoverage]
     public class AzureTableReaderWriter : IAzureTableReaderWriter
     {
-
         private readonly IOptions<AzureStorageConfiguration> _azureStorageConfig;
 
         public AzureTableReaderWriter(IOptions<AzureStorageConfiguration> azureStorageConfig)
@@ -22,19 +20,7 @@ namespace UKHO.ERPFacade.Common.Operations.IO.Azure
         public async Task UpsertEntityAsync(ITableEntity entity)
         {
             TableClient tableClient = await GetTableClientAsync(AzureStorage.EventTableName);
-
-            TableEntity existingEntity = await GetEntityAsync(entity.PartitionKey, entity.RowKey);
-
-            if (existingEntity == null!)
-            {
-                await tableClient.AddEntityAsync(entity, CancellationToken.None);
-            }
-            else
-            {
-                existingEntity.Timestamp = DateTime.UtcNow;
-
-                await tableClient.UpdateEntityAsync(existingEntity, ETag.All, TableUpdateMode.Replace);
-            }
+            await tableClient.UpsertEntityAsync(entity, TableUpdateMode.Replace);
         }
 
         public async Task<TableEntity> GetEntityAsync(string partitionKey, string rowKey)
@@ -50,7 +36,7 @@ namespace UKHO.ERPFacade.Common.Operations.IO.Azure
             }
         }
 
-        public async Task UpdateEntityAsync<TKey, TValue>(string partitionKey, string rowKey, KeyValuePair<TKey, TValue>[] entitiesToUpdate)
+        public async Task UpdateEntityAsync(string partitionKey, string rowKey, Dictionary<string, object> entitiesToUpdate)
         {
             TableClient tableClient = await GetTableClientAsync(AzureStorage.EventTableName);
             TableEntity existingEntity = await GetEntityAsync(partitionKey, rowKey);
@@ -67,9 +53,8 @@ namespace UKHO.ERPFacade.Common.Operations.IO.Azure
         public async Task<IList<TableEntity>> GetFilteredEntitiesAsync(Dictionary<string, string> filters)
         {
             TableClient tableClient = await GetTableClientAsync(AzureStorage.EventTableName);
-            string filterQuery = string.Join(" and ", filters.Select(kv => $"{kv.Key} eq '{kv.Value}'"));
-            var entities = tableClient.Query<TableEntity>(filter: filterQuery).ToList();
-            return entities;
+            string filterQuery = string.Join(" and ", filters.Select(filter => $"{filter.Key} eq '{filter.Value}'"));
+            return [.. tableClient.Query<TableEntity>(filter: filterQuery)];
         }
 
         public async Task DeleteEntityAsync(string partitionKey, string rowKey)
@@ -86,15 +71,8 @@ namespace UKHO.ERPFacade.Common.Operations.IO.Azure
         private async Task<TableClient> GetTableClientAsync(string tableName)
         {
             TableServiceClient serviceClient = new(_azureStorageConfig.Value.ConnectionString);
-            Pageable<TableItem> queryTableResults = serviceClient.Query(filter: $"TableName eq '{tableName}'");
-            var tableExists = queryTableResults.FirstOrDefault(t => t.Name == tableName);
-
-            if (tableExists == null)
-            {
-                await serviceClient.GetTableClient(tableName).CreateIfNotExistsAsync();
-            }
-
             TableClient tableClient = serviceClient.GetTableClient(tableName);
+            await tableClient.CreateIfNotExistsAsync();
             return tableClient;
         }
     }

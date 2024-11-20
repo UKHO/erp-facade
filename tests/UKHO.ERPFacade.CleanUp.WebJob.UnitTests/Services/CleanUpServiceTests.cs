@@ -98,7 +98,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Debug
                                                 && call.GetArgument<EventId>(1) == EventIds.EventCleanupSuccessful.ToEventId()
-                                                && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == $"Event data cleaned up for {eventData[0].RowKey.ToString()} successfully.").MustHaveHappened();
+                                                && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Data clean up completed for {CorrelationId} successfully.").MustHaveHappened();
         }
 
         [Test]
@@ -174,7 +174,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Error
                                                 && call.GetArgument<EventId>(1) == EventIds.ErrorOccurredInCleanupWebJob.ToEventId()
-                                                && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Exception occur during clean up webjob process. ErrorMessage : Object reference not set to an instance of an object.").MustHaveHappenedOnceExactly();
+                                                && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "An error occured during clean up webjob process. ErrorMessage : {Exception}").MustHaveHappenedOnceExactly();
         }
     }
 }

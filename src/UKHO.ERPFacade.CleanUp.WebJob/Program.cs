@@ -48,7 +48,7 @@ namespace UKHO.ERPFacade.Monitoring.WebJob
                 {
                     //Ensure all buffered app insights logs are flushed into Azure
                     TelemetryChannel.Flush();
-                    Task.Delay(delayTime);
+                    await Task.Delay(delayTime);
                 }
             }
             catch (Exception ex)
