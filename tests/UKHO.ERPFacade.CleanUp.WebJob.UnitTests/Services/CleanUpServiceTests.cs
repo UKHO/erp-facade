@@ -79,10 +79,10 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
                new TableEntity()
                {
                     { "CorrelationId", "corrid" },
-                    { "RequestDateTime", DateTime.Now.AddDays(-31)},
+                    { "RequestDateTime", DateTime.UtcNow.AddDays(-31)},
                     { "PartitionKey", Guid.NewGuid().ToString() },
                     { "RowKey", Guid.NewGuid().ToString() },
-                    { "Timestamp", DateTime.Now.AddDays(-31)},
+                    { "Timestamp", DateTime.UtcNow.AddDays(-31)},
                     { "Status", Status.Complete.ToString()}
 
                }
@@ -108,10 +108,10 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
                new TableEntity()
                {
                     { "CorrelationId", "corrid" },
-                    { "RequestDateTime", DateTime.Now.AddDays(-21) },
+                    { "RequestDateTime", DateTime.UtcNow.AddDays(-21) },
                     { "PartitionKey", Guid.NewGuid().ToString() },
                     { "RowKey", Guid.NewGuid().ToString() },
-                    { "Timestamp", DateTime.Now.AddDays(-21) },
+                    { "Timestamp", DateTime.UtcNow.AddDays(-21) },
                     { "Status", Status.Complete.ToString()}
                }
             };
@@ -133,10 +133,10 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
                new TableEntity()
                {
                     { "CorrelationId", "corrid" },
-                    { "RequestDateTime", DateTime.Now.AddDays(-30) },
+                    { "RequestDateTime", DateTime.UtcNow.AddDays(-30) },
                     { "PartitionKey", Guid.NewGuid().ToString() },
                     { "RowKey", Guid.NewGuid().ToString() },
-                    { "Timestamp", DateTime.Now.AddDays(-30) },
+                    { "Timestamp", DateTime.UtcNow.AddDays(-30) },
                     { "Status", Status.Complete.ToString()}
                }
             };
@@ -150,7 +150,6 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
             A.CallTo(() => _fakeAzureBlobReaderWriter.DeleteContainerAsync(A<string>.Ignored)).MustNotHaveHappened();
         }
 
-
         [Test]
         public void WhenCleanupServiceOccurAnyError_ThenLogtheException()
         {
@@ -159,10 +158,10 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
                 new TableEntity()
                 {
                     { "CorrelationId", "corrid" },
-                    { "RequestDateTime", DateTime.Now.AddDays(-31) },
+                    { "RequestDateTime", DateTime.UtcNow.AddDays(-31) },
                     { "PartitionKey", Guid.NewGuid().ToString() },
                     { "RowKey", null },
-                    { "Timestamp", DateTime.Now.AddDays(-31) },
+                    { "Timestamp", DateTime.UtcNow.AddDays(-31) },
                     { "Status", Status.Complete.ToString()}
                 }
             };

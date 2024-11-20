@@ -15,9 +15,9 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.Services
         private readonly IAzureBlobReaderWriter _azureBlobReaderWriter;
 
         public CleanUpService(ILogger<CleanUpService> logger,
-                               IOptions<CleanupWebJobConfiguration> cleanupWebjobConfig,
-                               IAzureTableReaderWriter azureTableReaderWriter,
-                               IAzureBlobReaderWriter azureBlobReaderWriter)
+                              IOptions<CleanupWebJobConfiguration> cleanupWebjobConfig,
+                              IAzureTableReaderWriter azureTableReaderWriter,
+                              IAzureBlobReaderWriter azureBlobReaderWriter)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _cleanupWebjobConfig = cleanupWebjobConfig ?? throw new ArgumentNullException(nameof(cleanupWebjobConfig));
@@ -36,7 +36,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.Services
                 {
                     var correlationId = entity.RowKey.ToString();
 
-                    TimeSpan timediff = DateTime.Now - Convert.ToDateTime(entity["Timestamp"].ToString());
+                    TimeSpan timediff = DateTime.UtcNow - DateTime.SpecifyKind(Convert.ToDateTime(entity["Timestamp"].ToString()), DateTimeKind.Utc);
 
                     if (timediff.Days > int.Parse(_cleanupWebjobConfig.Value.CleanUpDurationInDays))
                     {
