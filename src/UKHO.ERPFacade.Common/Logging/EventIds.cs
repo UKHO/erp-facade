@@ -455,7 +455,7 @@ namespace UKHO.ERPFacade.Common.Logging
         S100SapActionGenerationCompleted = 940090,
 
         /// <summary>
-        /// 940091 - S100SapAction Information Generation Failed Exception.
+        /// 940091 - S-100 SAP action information generation failed.
         /// </summary>
         S100SapActionInformationGenerationFailedException = 940091,
 

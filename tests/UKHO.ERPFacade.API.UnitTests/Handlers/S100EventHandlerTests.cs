@@ -51,7 +51,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
         }
 
         [Test]
-        public void WhenValidS100EventHandlerEventReceived_ThenProcessingS100Event()
+        public void WhenValidEventReceived_ThenS100EventHandlerProcessEvent()
         {
             var fakeS100EventDataJson = JObject.Parse(@"{""data"":{""correlationId"":""123""}}");
             var fakeS100EventData = JsonConvert.DeserializeObject<BaseCloudEvent>(fakeS100EventDataJson.ToString());
