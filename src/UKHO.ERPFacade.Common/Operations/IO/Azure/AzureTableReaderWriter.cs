@@ -64,16 +64,12 @@ namespace UKHO.ERPFacade.Common.Operations.IO.Azure
             }
         }
 
-        public async Task<IList<TableEntity>> GetEntitiesByQueryParameterAsync<TKey, TValue>(KeyValuePair<TKey, TValue> parameter)
+        public async Task<IList<TableEntity>> GetFilteredEntitiesAsync(Dictionary<string, string> filters)
         {
-            var records = new List<TableEntity>();
             TableClient tableClient = await GetTableClientAsync(AzureStorage.EventTableName);
-            var entities = tableClient.Query<TableEntity>(filter: $"{parameter.Key} eq '{parameter.Value}'");
-            foreach (var entity in entities)
-            {
-                records.Add(entity);
-            }
-            return records;
+            string filterQuery = string.Join(" and ", filters.Select(kv => $"{kv.Key} eq '{kv.Value}'"));
+            var entities = tableClient.Query<TableEntity>(filter: filterQuery).ToList();
+            return entities;
         }
 
         public async Task DeleteEntityAsync(string partitionKey, string rowKey)

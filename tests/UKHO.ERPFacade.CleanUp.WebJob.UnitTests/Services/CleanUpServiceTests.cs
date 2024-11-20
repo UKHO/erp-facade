@@ -88,15 +88,16 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
                }
             };
 
-            A.CallTo(() => _fakeAzureTableReaderWriter.GetEntitiesByQueryParameterAsync(A<KeyValuePair<string, string>>.Ignored)).Returns(eventData);
+            A.CallTo(() => _fakeAzureTableReaderWriter.GetFilteredEntitiesAsync(A<Dictionary<string, string>>.Ignored)).Returns(eventData);
+
             _ = _fakeCleanUpService.Clean();
 
-            A.CallTo(() => _fakeAzureTableReaderWriter.GetEntitiesByQueryParameterAsync(A<KeyValuePair<string, string>>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeAzureTableReaderWriter.GetFilteredEntitiesAsync(A<Dictionary<string, string>>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureTableReaderWriter.DeleteEntityAsync(A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureBlobReaderWriter.DeleteContainerAsync(A<string>.Ignored)).MustHaveHappened();
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Debug
-                                                && call.GetArgument<EventId>(1) == EventIds.DeletedContainerSuccessful.ToEventId()
+                                                && call.GetArgument<EventId>(1) == EventIds.EventCleanupSuccessful.ToEventId()
                                                 && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == $"Event data cleaned up for {eventData[0].RowKey.ToString()} successfully.").MustHaveHappened();
         }
 
@@ -116,11 +117,11 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
                }
             };
 
-            A.CallTo(() => _fakeAzureTableReaderWriter.GetEntitiesByQueryParameterAsync(A<KeyValuePair<string, string>>.Ignored)).Returns(eventData);
+            A.CallTo(() => _fakeAzureTableReaderWriter.GetFilteredEntitiesAsync(A<Dictionary<string, string>>.Ignored)).Returns(eventData);
 
             _ = _fakeCleanUpService.Clean();
 
-            A.CallTo(() => _fakeAzureTableReaderWriter.GetEntitiesByQueryParameterAsync(A<KeyValuePair<string, string>>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeAzureTableReaderWriter.GetFilteredEntitiesAsync(A<Dictionary<string, string>>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureTableReaderWriter.DeleteEntityAsync(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
             A.CallTo(() => _fakeAzureBlobReaderWriter.DeleteContainerAsync(A<string>.Ignored)).MustNotHaveHappened();
         }
@@ -141,11 +142,11 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
                }
             };
 
-            A.CallTo(() => _fakeAzureTableReaderWriter.GetEntitiesByQueryParameterAsync(A<KeyValuePair<string, string>>.Ignored)).Returns(eventData);
+            A.CallTo(() => _fakeAzureTableReaderWriter.GetFilteredEntitiesAsync(A<Dictionary<string, string>>.Ignored)).Returns(eventData);
 
             _ = _fakeCleanUpService.Clean();
 
-            A.CallTo(() => _fakeAzureTableReaderWriter.GetEntitiesByQueryParameterAsync(A<KeyValuePair<string, string>>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeAzureTableReaderWriter.GetFilteredEntitiesAsync(A<Dictionary<string, string>>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureTableReaderWriter.DeleteEntityAsync(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
             A.CallTo(() => _fakeAzureBlobReaderWriter.DeleteContainerAsync(A<string>.Ignored)).MustNotHaveHappened();
         }
@@ -166,7 +167,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
                 }
             };
 
-            A.CallTo(() => _fakeAzureTableReaderWriter.GetEntitiesByQueryParameterAsync(A<KeyValuePair<string, string>>.Ignored)).Returns(eventData);
+            A.CallTo(() => _fakeAzureTableReaderWriter.GetFilteredEntitiesAsync(A<Dictionary<string, string>>.Ignored)).Returns(eventData);
 
             _ = _fakeCleanUpService.Clean();
 

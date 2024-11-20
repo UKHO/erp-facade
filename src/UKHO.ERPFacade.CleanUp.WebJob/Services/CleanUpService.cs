@@ -29,8 +29,11 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.Services
         {
             try
             {
-                var status = new KeyValuePair<string, string>("Status", Status.Complete.ToString());
-                var entities = await _azureTableReaderWriter.GetEntitiesByQueryParameterAsync(status);
+                var statusFilter = new Dictionary<string, string>
+                {
+                    {"Status", Status.Complete.ToString()}
+                };
+                var entities = await _azureTableReaderWriter.GetFilteredEntitiesAsync(statusFilter);
 
                 foreach (var entity in entities)
                 {
@@ -44,7 +47,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.Services
 
                         await _azureBlobReaderWriter.DeleteContainerAsync(correlationId);
 
-                        _logger.LogDebug(EventIds.DeletedContainerSuccessful.ToEventId(), $"Event data cleaned up for {correlationId} successfully.");
+                        _logger.LogDebug(EventIds.EventCleanupSuccessful.ToEventId(), $"Event data cleaned up for {correlationId} successfully.");
                     }
                 }
             }

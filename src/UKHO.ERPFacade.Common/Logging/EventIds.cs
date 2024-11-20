@@ -482,7 +482,7 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940096 - Event data cleaned up for CorrelationId successfully.
         /// </summary>
-        DeletedContainerSuccessful = 940096,
+        EventCleanupSuccessful = 940096,
 
         /// <summary>
         /// 940097 - ErrorOccurred In CleanupWebJob.
