@@ -3,7 +3,7 @@ using UKHO.ERPFacade.Common.Models.CloudEvents;
 
 namespace UKHO.ERPFacade.Common.HttpClients
 {
-    public interface IEESClient
+    public interface IEesClient
     {
         Task<HttpResponseMessage> Get(string url);
         Task<Result> PostAsync(BaseCloudEvent cloudEvent);

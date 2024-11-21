@@ -480,69 +480,69 @@ namespace UKHO.ERPFacade.Common.Logging
         SharedApiKeyConfigurationMissing = 940095,
 
         /// <summary>
-        /// 940096 - S-100 sap callBack payload received from SAP.
+        /// 940096 - Attempting to publish event to ESS.
         /// </summary>
-        S100SapCallbackPayloadReceived = 940096,
+        StartingEnterpriseEventServiceEventPublisher = 940096,
 
         /// <summary>
-        /// 940097 - CorrelationId is missing in S-100 sap call back.
+        /// 940097 - Retry attempt to publish EES event.
         /// </summary>
-        CorrelationIdMissingInS100SapCallBack = 940097,
+        RetryAttemptForEnterpriseEventServiceEvent = 940097,
 
         /// <summary>
-        /// 940098 - Invalid S-100 SAP callback. Request from ERP Facade to SAP not found.
+        /// 940098 - Exception occurred while publishing event to EES.
         /// </summary>
-        InvalidS100SapCallback = 940098,
+        EnterpriseEventServiceEventPublishException = 940098,
 
         /// <summary>
-        /// 940099 - Valid S-100 SAP callback.
+        /// 940099 - S-100 sap callBack payload received from SAP.
         /// </summary>
-        ValidS100SapCallback = 940099,
+        S100SapCallbackPayloadReceived = 940099,
 
         /// <summary>
-        /// 940100 - Download S100 Unit Of Sale Updated Event is started.
+        /// 940100 - CorrelationId is missing in S-100 sap call back.
         /// </summary>
-        DownloadS100UnitOfSaleUpdatedEventIsStarted = 940100,
+        CorrelationIdMissingInS100SapCallBack = 940100,
 
         /// <summary>
-        /// 940101 - Download S100 Unit Of Sale Updated Event is completed.
+        /// 940101 - Invalid S-100 SAP callback. Request from ERP Facade to SAP not found.
         /// </summary>
-        DownloadS100UnitOfSaleUpdatedEventIsCompleted = 940101,
+        InvalidS100SapCallback = 940101,
 
         /// <summary>
-        /// 940102 - Publishing Unit Of Sale Updated Event To Ees Started.
+        /// 940102 - Valid S-100 SAP callback.
         /// </summary>
-        PublishingUnitOfSaleUpdatedEventToEesStarted = 940102,
+        ValidS100SapCallback = 940102,
 
         /// <summary>
-        /// 940103 - Error occurred while publishing the publishing unit of sale updated event to EES.
+        /// 940103 - Download S100 Unit Of Sale Updated Event is started.
         /// </summary>
-        ErrorOccurredWhilePublishingUnitOfSaleUpdatedEventToEes = 940103,
+        DownloadS100UnitOfSaleUpdatedEventIsStarted = 940103,
 
         /// <summary>
-        /// 940104 - The publishing unit of sale updated event successfully to EES.
+        /// 940104 - Download S100 Unit Of Sale Updated Event is completed.
         /// </summary>
-        UnitOfSaleUpdatedEventPublished = 940104,
+        DownloadS100UnitOfSaleUpdatedEventIsCompleted = 940104,
 
         /// <summary>
-        /// 940105 - Updated The Enc Event StatusAnd Publish Date Time Entity in enc event table.
+        /// 940105 - Publishing Unit Of Sale Updated Event To Ees Started.
         /// </summary>
-        S100DataContentPublishedEventTableEntryUpdated = 940105,
+        PublishingUnitOfSaleUpdatedEventToEesStarted = 940105,
 
         /// <summary>
-        /// 940106 - Attempting to publish event to ESS.
+        /// 940106 - Error occurred while publishing the publishing unit of sale updated event to EES.
         /// </summary>
-        StartingEnterpriseEventServiceEventPublisher = 940106,
+        ErrorOccurredWhilePublishingUnitOfSaleUpdatedEventToEes = 940106,
 
         /// <summary>
-        /// 940107 - Retry attempt to publish EES event.
+        /// 940107 - The publishing unit of sale updated event successfully to EES.
         /// </summary>
-        RetryAttemptForEnterpriseEventServiceEvent = 940107,
+        UnitOfSaleUpdatedEventPublished = 940107,
 
         /// <summary>
-        /// 940108 - Exception occurred while publishing event to EES.
+        /// 940108 - Updated The Enc Event StatusAnd Publish Date Time Entity in enc event table.
         /// </summary>
-        EnterpriseEventServiceEventPublishException = 940108,
+        S100DataContentPublishedEventTableEntryUpdated = 940108,
     }
 
     /// <summary>
