@@ -10,10 +10,10 @@ namespace UKHO.ERPFacade.Common.HealthCheck
     public class EESServiceHealthCheck : IHealthCheck
     {
         private readonly ILogger<EESServiceHealthCheck> _logger;
-        private readonly IEesClient _eesClient;
+        private readonly IEESClient _eesClient;
         private readonly IOptions<EESHealthCheckEnvironmentConfiguration> _eesHealthCheckEnvironmentConfiguration;
 
-        public EESServiceHealthCheck(ILogger<EESServiceHealthCheck> logger, IEesClient eesClient, IOptions<EESHealthCheckEnvironmentConfiguration> eesHealthCheckEnvironmentConfiguration)
+        public EESServiceHealthCheck(ILogger<EESServiceHealthCheck> logger, IEESClient eesClient, IOptions<EESHealthCheckEnvironmentConfiguration> eesHealthCheckEnvironmentConfiguration)
         {
             _logger = logger;
             _eesClient = eesClient;

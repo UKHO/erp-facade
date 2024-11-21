@@ -191,7 +191,7 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<IXmlOperations, XmlOperations>();
             builder.Services.AddScoped<IFileOperations, FileOperations>();
             builder.Services.AddScoped<IFileSystem, FileSystem>();
-            builder.Services.AddScoped<IEesClient, EesClient>();
+            builder.Services.AddScoped<IEESClient, EESClient>();
             builder.Services.AddScoped<ILicenceUpdatedSapMessageBuilder, LicenceUpdatedSapMessageBuilder>();
             builder.Services.AddScoped<IWeekDetailsProvider, WeekDetailsProvider>();
             builder.Services.AddScoped<IPermitDecryption, PermitDecryption>();
@@ -211,10 +211,10 @@ namespace UKHO.ERPFacade
                 c.BaseAddress = new Uri(configuration.GetValue<string>("SapConfiguration:SapBaseAddress"));
             });
 
-            builder.Services.AddHttpClient<IEesClient, EesClient>(c =>
+            builder.Services.AddHttpClient<IEESClient, EESClient>(c =>
             {
                 c.BaseAddress = new Uri(configuration.GetValue<string>("EnterpriseEventServiceConfiguration:BaseAddress"));
-            }).AddPolicyHandler((services, request) => RetryPolicyProvider.GetRetryPolicy(services.GetRequiredService<ILogger<IEesClient>>(), "Enterprise Event Service", EventIds.RetryAttemptForEnterpriseEventServiceEvent, retryPolicyConfiguration.RetryCount, retryPolicyConfiguration.Duration));
+            }).AddPolicyHandler((services, request) => RetryPolicyProvider.GetRetryPolicy(services.GetRequiredService<ILogger<IEESClient>>(), "Enterprise Event Service", EventIds.RetryAttemptForEnterpriseEventServiceEvent, retryPolicyConfiguration.RetryCount, retryPolicyConfiguration.Duration));
 
             var app = builder.Build();
 
