@@ -16,7 +16,7 @@ namespace UKHO.ERPFacade.Common.Policies
             .WaitAndRetryAsync(retryCount, retryAttempt => TimeSpan.FromSeconds(sleepDuration),
             onRetry: (response, timespan, retryAttempt, context) =>
             {
-                _logger.LogInformation(eventId.ToEventId(), "Failed to connect {service}. Retry attempted: {retryAttempt}.", service, retryAttempt);
+                _logger.LogInformation(eventId.ToEventId(), "Failed to connect. Retry attempted");
             });
         }
     }
