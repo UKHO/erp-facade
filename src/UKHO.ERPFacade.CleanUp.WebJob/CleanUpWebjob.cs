@@ -18,10 +18,10 @@ namespace UKHO.ERPFacade.CleanUp.WebJob
             _cleanUpService = cleanUpService ?? throw new ArgumentNullException(nameof(cleanUpService));
         }
 
-        public void Start()
+        public async Task Start()
         {
             _logger.LogInformation(EventIds.CleanupWebjobStarted.ToEventId(), "Clean up webjob started.");
-            _cleanUpService.Clean();
+             await _cleanUpService.Clean();
             _logger.LogInformation(EventIds.CleanupWebjobCompleted.ToEventId(), "Clean up webjob completed.");
         }
     }

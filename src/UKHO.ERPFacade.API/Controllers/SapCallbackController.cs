@@ -52,7 +52,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
             _logger.LogInformation(EventIds.ValidS100SapCallback.ToEventId(), "Processing of valid S-100 SAP callback request started.");
 
-            await _sapCallbackService.LogCallbackResponseTimeAsync(correlationId);
+            await _sapCallbackService.UpdateResponseDateTimeAsync(correlationId);
 
             _logger.LogInformation(EventIds.DownloadS100UnitOfSaleUpdatedEventIsStarted.ToEventId(), "Download S-100 Unit Of Sale Updated Event from blob container is started.");
 

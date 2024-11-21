@@ -42,7 +42,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
 
             A.CallTo(() => _fakeSapCallbackService.IsValidCallbackAsync(A<string>.Ignored)).Returns(true);
 
-            A.CallTo(() => _fakeS100UnitOfSaleUpdatedEventPublishingService.PublishEvent(A<BaseCloudEvent>.Ignored)).Returns(result);
+            A.CallTo(() => _fakeS100UnitOfSaleUpdatedEventPublishingService.PublishEvent(A<BaseCloudEvent>.Ignored, A<string>.Ignored)).Returns(result);
 
             var response = (OkObjectResult)await _fakeSapCallbackController.S100SapCallback(fakeSapCallBackJson);
 

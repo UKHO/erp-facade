@@ -6,7 +6,7 @@ using UKHO.ERPFacade.Common.Configuration;
 
 namespace UKHO.ERPFacade.Common.Authentication
 {
-    [ExcludeFromCodeCoverage]
+    [ExcludeFromCodeCoverage] ////Excluded from code coverage as it has AD interaction
     public class ManagedIdentityTokenProvider : ITokenProvider
     {
         private readonly IOptions<AzureADConfiguration> _azureADConfiguration;

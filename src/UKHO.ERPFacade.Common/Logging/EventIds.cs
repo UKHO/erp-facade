@@ -417,20 +417,20 @@ namespace UKHO.ERPFacade.Common.Logging
         /// </summary>
         MessageDequeueCount = 940083,
 
-        //Below event ids for - S100
+        //Below event ids for - S-100
 
         /// <summary>
-        /// 940084 - S100 event processing started.
+        /// 940084 - S-100 event processing started.
         /// </summary>
         S100EventProcessingStarted = 940084,
 
         /// <summary>
-        /// 940085 - S100 event entry is added in azure table successfully.
+        /// 940085 - S-100 event entry is added in azure table successfully.
         /// </summary>
         S100EventEntryAddedInAzureTable = 940085,
 
         /// <summary>
-        /// 940086 - S100 event json payload is stored in azure blob container.
+        /// 940086 - S-100 event json payload is stored in azure blob container.
         /// </summary>
         S100EventJsonStoredInAzureBlobContainer = 940086,
 
@@ -455,7 +455,7 @@ namespace UKHO.ERPFacade.Common.Logging
         S100SapActionGenerationCompleted = 940090,
 
         /// <summary>
-        /// 940091 - S100SapAction Information Generation Failed Exception.
+        /// 940091 - S-100 SAP action information generation failed.
         /// </summary>
         S100SapActionInformationGenerationFailedException = 940091,
 
@@ -480,74 +480,94 @@ namespace UKHO.ERPFacade.Common.Logging
         SharedApiKeyConfigurationMissing = 940095,
 
         /// <summary>
-        /// 940096 - Attempting to publish event to ESS.
+        /// 940096 - S-100 Request to SAP failed.
         /// </summary>
-        StartingEnterpriseEventServiceEventPublisher = 940096,
+        S100RequestToSapFailedException = 940096,
 
         /// <summary>
-        /// 940097 - Retry attempt to publish EES event.
+        /// 940097 - S-100 data content sent to SAP.
         /// </summary>
-        RetryAttemptForEnterpriseEventServiceEvent = 940097,
+        S100EventUpdateSentToSap = 940097,
 
         /// <summary>
-        /// 940098 - Exception occurred while publishing event to EES.
+        /// 940098 - Event data cleaned up for CorrelationId successfully.
         /// </summary>
-        EnterpriseEventServiceEventPublishException = 940098,
+        EventCleanupSuccessful = 940098,
 
         /// <summary>
-        /// 940099 - S-100 sap callBack payload received from SAP.
+        /// 940099 - ErrorOccurred In CleanupWebJob.
         /// </summary>
-        S100SapCallbackPayloadReceived = 940099,
+        ErrorOccurredInCleanupWebJob = 940099,
 
         /// <summary>
-        /// 940100 - CorrelationId is missing in S-100 sap call back.
+        /// 940100 - Attempting to publish event to ESS.
         /// </summary>
-        CorrelationIdMissingInS100SapCallBack = 940100,
+        StartingEnterpriseEventServiceEventPublisher = 940100,
 
         /// <summary>
-        /// 940101 - Invalid S-100 SAP callback. Request from ERP Facade to SAP not found.
+        /// 940101 - Retry attempt to publish EES event.
         /// </summary>
-        InvalidS100SapCallback = 940101,
+        RetryAttemptForEnterpriseEventServiceEvent = 940101,
 
         /// <summary>
-        /// 940102 - Valid S-100 SAP callback.
+        /// 940102 - Exception occurred while publishing event to EES.
         /// </summary>
-        ValidS100SapCallback = 940102,
+        EnterpriseEventServiceEventPublishException = 940102,
 
         /// <summary>
-        /// 940103 - Download S100 Unit Of Sale Updated Event is started.
+        /// 940103 - S-100 sap callBack payload received from SAP.
         /// </summary>
-        DownloadS100UnitOfSaleUpdatedEventIsStarted = 940103,
+        S100SapCallbackPayloadReceived = 940103,
 
         /// <summary>
-        /// 940104 - Download S100 Unit Of Sale Updated Event is completed.
+        /// 940104 - CorrelationId is missing in S-100 sap call back.
         /// </summary>
-        DownloadS100UnitOfSaleUpdatedEventIsCompleted = 940104,
+        CorrelationIdMissingInS100SapCallBack = 940104,
 
         /// <summary>
-        /// 940105 - Publishing Unit Of Sale Updated Event To Ees Started.
+        /// 940105 - Invalid S-100 SAP callback. Request from ERP Facade to SAP not found.
         /// </summary>
-        PublishingUnitOfSaleUpdatedEventToEesStarted = 940105,
+        InvalidS100SapCallback = 940105,
 
         /// <summary>
-        /// 940106 - Error occurred while publishing the publishing unit of sale updated event to EES.
+        /// 940106 - Valid S-100 SAP callback.
         /// </summary>
-        ErrorOccurredWhilePublishingUnitOfSaleUpdatedEventToEes = 940106,
+        ValidS100SapCallback = 940106,
 
         /// <summary>
-        /// 940107 - The publishing unit of sale updated event successfully to EES.
+        /// 940107 - Download S100 Unit Of Sale Updated Event is started.
         /// </summary>
-        UnitOfSaleUpdatedEventPublished = 940107,
+        DownloadS100UnitOfSaleUpdatedEventIsStarted = 940107,
 
         /// <summary>
-        /// 940108 - Updated The Enc Event StatusAnd Publish Date Time Entity in enc event table.
+        /// 940108 - Download S100 Unit Of Sale Updated Event is completed.
         /// </summary>
-        S100DataContentPublishedEventTableEntryUpdated = 940108,
+        DownloadS100UnitOfSaleUpdatedEventIsCompleted = 940108,
 
         /// <summary>
-        /// 940109 - S-100 Unit Of Sale Updated Event Json Stored In Azure Blob Container
+        /// 940109 - Publishing Unit Of Sale Updated Event To Ees Started.
         /// </summary>
-        S100UnitOfSaleUpdatedEventJsonStoredInAzureBlobContainer = 940109,
+        PublishingUnitOfSaleUpdatedEventToEesStarted = 940109,
+
+        /// <summary>
+        /// 940110 - Error occurred while publishing the publishing unit of sale updated event to EES.
+        /// </summary>
+        ErrorOccurredWhilePublishingUnitOfSaleUpdatedEventToEes = 940110,
+
+        /// <summary>
+        /// 940111 - The publishing unit of sale updated event successfully to EES.
+        /// </summary>
+        UnitOfSaleUpdatedEventPublished = 940111,
+
+        /// <summary>
+        /// 940112 - Updated The Enc Event StatusAnd Publish Date Time Entity in enc event table.
+        /// </summary>
+        S100DataContentPublishedEventTableEntryUpdated = 940112,
+
+        /// <summary>
+        /// 940113 - S-100 Unit Of Sale Updated Event Json Stored In Azure Blob Container
+        /// </summary>
+        S100UnitOfSaleUpdatedEventJsonStoredInAzureBlobContainer = 940113
     }
 
     /// <summary>

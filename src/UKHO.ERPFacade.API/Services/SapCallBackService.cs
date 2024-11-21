@@ -30,14 +30,14 @@ namespace UKHO.ERPFacade.API.Services
 
             return JsonConvert.DeserializeObject<BaseCloudEvent>(s100DataPublishingEventPayloadJson);
         }
-        public async Task LogCallbackResponseTimeAsync(string correlationId)
+        public async Task UpdateResponseDateTimeAsync(string correlationId)
         {
-            await _azureTableReaderWriter.UpdateResponseTimeEntity(correlationId);
+            await _azureTableReaderWriter.UpdateEntityAsync(PartitionKeys.S100PartitionKey, correlationId, new Dictionary<string, object> { { "ResponseDateTime", DateTime.UtcNow } });
         }
 
         public async Task UpdateEventStatusAndEventPublishDateTimeEntity(string correlationId)
         {
-            await _azureTableReaderWriter.UpdateEntityAsync(PartitionKeys.S100PartitionKey, correlationId, new KeyValuePair<string, object>[] { new("Status", Status.Complete.ToString()), new("EventPublishDateTime", DateTime.UtcNow) });
+            await _azureTableReaderWriter.UpdateEntityAsync(PartitionKeys.S100PartitionKey, correlationId, new Dictionary<string, object> { { "Status", Status.Complete.ToString() } , {"EventPublishDateTime", DateTime.UtcNow } });
         }
     }
 }

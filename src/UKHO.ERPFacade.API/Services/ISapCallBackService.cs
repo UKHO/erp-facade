@@ -6,6 +6,6 @@ public interface ISapCallbackService
 {
     Task<bool> IsValidCallbackAsync(string correlationId);
     Task<BaseCloudEvent> GetEventPayload(string correlationId);
-    Task LogCallbackResponseTimeAsync(string correlationId);
+    Task UpdateResponseDateTimeAsync(string correlationId);
     Task UpdateEventStatusAndEventPublishDateTimeEntity(string correlationId);
 }
