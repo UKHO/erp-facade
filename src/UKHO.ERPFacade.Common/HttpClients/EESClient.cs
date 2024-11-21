@@ -16,16 +16,16 @@ using UKHO.ERPFacade.Common.Models.CloudEvents;
 namespace UKHO.ERPFacade.Common.HttpClients
 {
     [ExcludeFromCodeCoverage]
-    public class EESClient : IEESClient
+    public class EesClient : IEesClient
     {
         private readonly HttpClient _httpClient;
-        private readonly ILogger<EESClient> _logger;
+        private readonly ILogger<EesClient> _logger;
         private readonly ITokenProvider _tokenProvider;
         private readonly IOptions<EESConfiguration> _eesConfiguration;
         private readonly IOptions<RetryPolicyConfiguration> _retryPolicyConfiguration;
         private readonly IConfiguration _configuration;
 
-        public EESClient(HttpClient httpClient, ILogger<EESClient> logger, ITokenProvider tokenProvider, IOptions<EESConfiguration> eesConfiguration, IOptions<RetryPolicyConfiguration> retryPolicyConfiguration, IConfiguration configuration)
+        public EesClient(HttpClient httpClient, ILogger<EesClient> logger, ITokenProvider tokenProvider, IOptions<EESConfiguration> eesConfiguration, IOptions<RetryPolicyConfiguration> retryPolicyConfiguration, IConfiguration configuration)
         {
             _httpClient = httpClient;
             _logger = logger;

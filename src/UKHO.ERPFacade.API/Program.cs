@@ -188,7 +188,7 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<IXmlOperations, XmlOperations>();
             builder.Services.AddScoped<IFileOperations, FileOperations>();
             builder.Services.AddScoped<IFileSystem, FileSystem>();
-            builder.Services.AddScoped<IEESClient, EESClient>();
+            builder.Services.AddScoped<IEesClient, EesClient>();
             builder.Services.AddScoped<ILicenceUpdatedSapMessageBuilder, LicenceUpdatedSapMessageBuilder>();
             builder.Services.AddScoped<IWeekDetailsProvider, WeekDetailsProvider>();
             builder.Services.AddScoped<IPermitDecryption, PermitDecryption>();
@@ -208,9 +208,9 @@ namespace UKHO.ERPFacade
                 c.BaseAddress = new Uri(configuration.GetValue<string>("SapConfiguration:SapBaseAddress"));
             });
 
-            builder.Services.AddHttpClient<IEESClient, EESClient>(c =>
+            builder.Services.AddHttpClient<IEesClient, EesClient>(c =>
             {
-                c.BaseAddress = new Uri(configuration.GetValue<string>("EnterpriseEventServiceConfiguration:ServiceUrl"));
+                c.BaseAddress = new Uri(configuration.GetValue<string>("EnterpriseEventServiceConfiguration:BaseAddress"));
             });
 
             var app = builder.Build();
