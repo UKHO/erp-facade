@@ -13,14 +13,14 @@ using UKHO.ERPFacade.Common.Models.CloudEvents;
 namespace UKHO.ERPFacade.Common.HttpClients
 {
     [ExcludeFromCodeCoverage]
-    public class EESClient : IEESClient
+    public class EesClient : IEesClient
     {
         private readonly HttpClient _httpClient;
-        private readonly ILogger<EESClient> _logger;
+        private readonly ILogger<EesClient> _logger;
         private readonly ITokenProvider _tokenProvider;
         private readonly IOptions<EESConfiguration> _eesConfiguration;
 
-        public EESClient(HttpClient httpClient, ILogger<EESClient> logger, ITokenProvider tokenProvider, IOptions<EESConfiguration> eesConfiguration)
+        public EesClient(HttpClient httpClient, ILogger<EesClient> logger, ITokenProvider tokenProvider, IOptions<EESConfiguration> eesConfiguration)
         {
             _httpClient = httpClient;
             _logger = logger;
