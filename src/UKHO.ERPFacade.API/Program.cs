@@ -23,11 +23,13 @@ using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.HealthCheck;
 using UKHO.ERPFacade.Common.HttpClients;
+using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Operations;
 using UKHO.ERPFacade.Common.Operations.IO;
 using UKHO.ERPFacade.Common.Operations.IO.Azure;
 using UKHO.ERPFacade.Common.PermitDecryption;
+using UKHO.ERPFacade.Common.Policies;
 using UKHO.ERPFacade.Common.Providers;
 using UKHO.Logging.EventHubLogProvider;
 
@@ -42,6 +44,7 @@ namespace UKHO.ERPFacade
             EventHubLoggingConfiguration eventHubLoggingConfiguration;
             SapActionConfiguration sapActionConfiguration;
             S100SapActionConfiguration s100SapActionConfiguration;
+            RetryPolicyConfiguration retryPolicyConfiguration;
 
             IHttpContextAccessor httpContextAccessor = new HttpContextAccessor();
             var builder = WebApplication.CreateBuilder(args);
@@ -178,7 +181,7 @@ namespace UKHO.ERPFacade
             builder.Services.Configure<AzureADConfiguration>(configuration.GetSection("AzureADConfiguration"));
             builder.Services.Configure<EESConfiguration>(configuration.GetSection("EnterpriseEventServiceConfiguration"));
             builder.Services.Configure<RetryPolicyConfiguration>(configuration.GetSection("RetryPolicyConfiguration"));
-
+            retryPolicyConfiguration = configuration.GetSection("RetryPolicyConfiguration").Get<RetryPolicyConfiguration>()!;
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             builder.Services.AddSingleton<ITokenProvider, ManagedIdentityTokenProvider>();
 
@@ -211,7 +214,7 @@ namespace UKHO.ERPFacade
             builder.Services.AddHttpClient<IEESClient, EESClient>(c =>
             {
                 c.BaseAddress = new Uri(configuration.GetValue<string>("EnterpriseEventServiceConfiguration:ServiceUrl"));
-            });
+            }).AddPolicyHandler((services, request) => RetryPolicyProvider.GetRetryPolicy(services.GetRequiredService<ILogger<IEESClient>>(), "Enterprise Event Service", EventIds.RetryAttemptForEnterpriseEventServiceEvent, retryPolicyConfiguration.RetryCount, retryPolicyConfiguration.Duration));
 
             var app = builder.Build();
 
