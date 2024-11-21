@@ -13,50 +13,50 @@ namespace UKHO.ERPFacade.API.Controllers
     public class SapCallbackController : BaseController<SapCallbackController>
     {
         private readonly ILogger<SapCallbackController> _logger;
-        private readonly ISapCallBackService _sapCallBackService;
+        private readonly ISapCallbackService _sapCallbackService;
         private readonly IS100UnitOfSaleUpdatedEventPublishingService _s100UnitOfSaleUpdatedEventPublishingService;
 
         private const string CorrelationId = "correlationId";
 
         public SapCallbackController(IHttpContextAccessor contextAccessor,
                                      ILogger<SapCallbackController> logger,
-                                     ISapCallBackService sapCallBackService,
+                                     ISapCallbackService sapCallbackService,
                                      IS100UnitOfSaleUpdatedEventPublishingService s100UnitOfSaleUpdatedEventPublishingService)
         : base(contextAccessor)
         {
             _logger = logger;
             _s100UnitOfSaleUpdatedEventPublishingService = s100UnitOfSaleUpdatedEventPublishingService;
-            _sapCallBackService = sapCallBackService;
+            _sapCallbackService = sapCallbackService;
         }
 
         [HttpPost]
         [ServiceFilter(typeof(SharedApiKeyAuthFilter))]
         [Route("v2/callback/sap/s100actions/processed")]
-        public virtual async Task<IActionResult> S100SapCallBack([FromBody] JObject sapCallBackJson)
+        public virtual async Task<IActionResult> S100SapCallback([FromBody] JObject sapCallbackJson)
         {
-            _logger.LogInformation(EventIds.S100SapCallBackPayloadReceived.ToEventId(), "S-100 sap callBack payload received from SAP.");
+            string correlationId = sapCallbackJson.Value<string>(CorrelationId);
 
-            string correlationId = sapCallBackJson.SelectToken(CorrelationId)?.Value<string>();
+            _logger.LogInformation(EventIds.S100SapCallbackPayloadReceived.ToEventId(), "S-100 SAP callback received for {CorrelationId}.", correlationId);
 
             if (string.IsNullOrEmpty(correlationId))
             {
-                _logger.LogWarning(EventIds.CorrelationIdMissingInS100SapCallBack.ToEventId(), "CorrelationId is missing in S-100 sap call back.");
+                _logger.LogWarning(EventIds.CorrelationIdMissingInS100SapCallBack.ToEventId(), "CorrelationId is missing in S-100 SAP callback request.");
                 return new BadRequestObjectResult(StatusCodes.Status400BadRequest);
             }
 
-            if (!await _sapCallBackService.IsValidCallback(correlationId))
+            if (!await _sapCallbackService.IsValidCallbackAsync(correlationId))
             {
-                _logger.LogError(EventIds.InvalidS100SapCallback.ToEventId(), "Invalid SAP callback. Request from ERP Facade to SAP not found.");
+                _logger.LogError(EventIds.InvalidS100SapCallback.ToEventId(), "Invalid S-100 SAP callback request. Requested correlationId not found.");
                 return new NotFoundObjectResult(StatusCodes.Status404NotFound);
             }
 
-            _logger.LogInformation(EventIds.ValidS100SapCallback.ToEventId(), "Valid SAP callback.");
+            _logger.LogInformation(EventIds.ValidS100SapCallback.ToEventId(), "Processing of valid S-100 SAP callback request started.");
 
-            await _sapCallBackService.UpdateResponseTimeEntity(correlationId);
+            await _sapCallbackService.LogCallbackResponseTimeAsync(correlationId);
 
             _logger.LogInformation(EventIds.DownloadS100UnitOfSaleUpdatedEventIsStarted.ToEventId(), "Download S100 Unit Of Sale Updated Event from blob container is started.");
 
-            var baseCloudEvent = await _sapCallBackService.GetEventPayload(correlationId);
+            var baseCloudEvent = await _sapCallbackService.GetEventPayload(correlationId);
 
             _logger.LogInformation(EventIds.DownloadS100UnitOfSaleUpdatedEventIsCompleted.ToEventId(), "Download S100 Unit Of Sale Updated Event from blob container is completed.");
 
@@ -66,14 +66,14 @@ namespace UKHO.ERPFacade.API.Controllers
 
             if (!result.IsSuccess)
             {
-                throw new ERPFacadeException(EventIds.ErrorOccurredInSapForRecordOfSalePublishedEvent.ToEventId(), "Error occurred while publishing the publishing unit of sale updated event to EES.");
+                throw new ERPFacadeException(EventIds.ErrorOccurredWhilePublishingUnitOfSaleUpdatedEventToEes.ToEventId(), "Error occurred while publishing S-100 unit of sale updated event to EES.");
             }
 
-            _logger.LogInformation(EventIds.PublishingUnitOfSaleUpdatedEventSuccessfullyToEes.ToEventId(), "The publishing unit of sale updated event successfully to EES.");
+            _logger.LogInformation(EventIds.UnitOfSaleUpdatedEventPublished.ToEventId(), "The unit of sale updated event published to EES successfully.");
 
-            await _sapCallBackService.UpdateEventStatusAndEventPublishDateTimeEntity(correlationId);
+            await _sapCallbackService.UpdateEventStatusAndEventPublishDateTimeEntity(correlationId);
 
-            _logger.LogInformation(EventIds.UpdatedTheEncEventStatusAndPublishDateTimeEntity.ToEventId(), "Updated The Enc Event StatusAnd Publish Date Time Entity in enc event table.");
+            _logger.LogInformation(EventIds.S100DataContentPublishedEventTableEntryUpdated.ToEventId(), "Status and event published date time for S-100 data content published event is updated successfully.");
 
             return new OkObjectResult(StatusCodes.Status200OK);
         }

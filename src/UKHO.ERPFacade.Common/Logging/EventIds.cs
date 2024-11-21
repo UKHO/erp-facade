@@ -482,7 +482,7 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940096 - S-100 sap callBack payload received from SAP.
         /// </summary>
-        S100SapCallBackPayloadReceived = 940096,
+        S100SapCallbackPayloadReceived = 940096,
 
         /// <summary>
         /// 940097 - CorrelationId is missing in S-100 sap call back.
@@ -522,12 +522,12 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940104 - The publishing unit of sale updated event successfully to EES.
         /// </summary>
-        PublishingUnitOfSaleUpdatedEventSuccessfullyToEes = 940104,
+        UnitOfSaleUpdatedEventPublished = 940104,
 
         /// <summary>
         /// 940105 - Updated The Enc Event StatusAnd Publish Date Time Entity in enc event table.
         /// </summary>
-        UpdatedTheEncEventStatusAndPublishDateTimeEntity = 940105,
+        S100DataContentPublishedEventTableEntryUpdated = 940105,
 
         /// <summary>
         /// 940106 - Attempting to publish event to ESS.

@@ -204,7 +204,7 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<IEventDispatcher, EventDispatcher>();
             builder.Services.AddScoped<SharedApiKeyAuthFilter>();
             builder.Services.AddScoped<IS100UnitOfSaleUpdatedEventPublishingService, S100UnitOfSaleUpdatedEventPublishingService>();
-            builder.Services.AddScoped<ISapCallBackService, SapCallBackService>();
+            builder.Services.AddScoped<ISapCallbackService, SapCallbackService>();
 
             ConfigureHealthChecks(builder);
 

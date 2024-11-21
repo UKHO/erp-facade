@@ -7,19 +7,19 @@ using UKHO.ERPFacade.Services;
 
 namespace UKHO.ERPFacade.API.Services
 {
-    public class SapCallBackService : ISapCallBackService
+    public class SapCallbackService : ISapCallbackService
     {
         private readonly IAzureBlobReaderWriter _azureBlobReaderWriter;
         private readonly IAzureTableReaderWriter _azureTableReaderWriter;
 
-        public SapCallBackService(IAzureBlobReaderWriter azureBlobReaderWriter,
+        public SapCallbackService(IAzureBlobReaderWriter azureBlobReaderWriter,
             IAzureTableReaderWriter azureTableReaderWriter)
         {
             _azureTableReaderWriter = azureTableReaderWriter;
             _azureBlobReaderWriter = azureBlobReaderWriter;
         }
 
-        public async Task<bool> IsValidCallback(string correlationId)
+        public async Task<bool> IsValidCallbackAsync(string correlationId)
         {
             return await _azureTableReaderWriter.GetEntityAsync(PartitionKeys.S100PartitionKey, correlationId) is not null;
         }
@@ -30,7 +30,7 @@ namespace UKHO.ERPFacade.API.Services
 
             return JsonConvert.DeserializeObject<BaseCloudEvent>(s100DataPublishingEventPayloadJson);
         }
-        public async Task UpdateResponseTimeEntity(string correlationId)
+        public async Task LogCallbackResponseTimeAsync(string correlationId)
         {
             await _azureTableReaderWriter.UpdateResponseTimeEntity(correlationId);
         }

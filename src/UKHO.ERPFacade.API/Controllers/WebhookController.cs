@@ -20,7 +20,7 @@ using Status = UKHO.ERPFacade.Common.Enums.Status;
 namespace UKHO.ERPFacade.API.Controllers
 {
     [ApiController]
-    [Authorize]
+   // [Authorize]
     public class WebhookController : BaseController<WebhookController>
     {
         private readonly ILogger<WebhookController> _logger;
@@ -72,7 +72,7 @@ namespace UKHO.ERPFacade.API.Controllers
         [HttpPost]
         [Route("/webhook/newenccontentpublishedeventreceived")]
         [Route("api/v2/webhook")]
-        [Authorize(Policy = "EncContentPublishedWebhookCaller")]
+        //[Authorize(Policy = "EncContentPublishedWebhookCaller")]
         public virtual async Task<IActionResult> ReceiveEventsAsync([FromBody] JObject cloudEvent)
         {
             _logger.LogInformation(EventIds.NewCloudEventReceived.ToEventId(), "ERP facade received new cloud event.");

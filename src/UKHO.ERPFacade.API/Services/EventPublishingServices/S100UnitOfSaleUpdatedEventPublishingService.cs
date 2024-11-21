@@ -12,9 +12,9 @@ namespace UKHO.ERPFacade.API.Services.EventPublishingServices
         private readonly IEESClient _eesClient;
         private readonly IOptions<EESConfiguration> _eesConfig;
 
-        public S100UnitOfSaleUpdatedEventPublishingService(IEESClient iEesClient, IOptions<EESConfiguration> eesConfig)
+        public S100UnitOfSaleUpdatedEventPublishingService(IEESClient eesClient, IOptions<EESConfiguration> eesConfig)
         {
-            _eesClient = iEesClient;
+            _eesClient = eesClient;
             _eesConfig = eesConfig ?? throw new ArgumentNullException(nameof(eesConfig));
         }
 

@@ -2,10 +2,10 @@
 
 namespace UKHO.ERPFacade.Services;
 
-public interface ISapCallBackService
+public interface ISapCallbackService
 {
-    Task<bool> IsValidCallback(string correlationId);
+    Task<bool> IsValidCallbackAsync(string correlationId);
     Task<BaseCloudEvent> GetEventPayload(string correlationId);
-    Task UpdateResponseTimeEntity(string correlationId);
+    Task LogCallbackResponseTimeAsync(string correlationId);
     Task UpdateEventStatusAndEventPublishDateTimeEntity(string correlationId);
 }
