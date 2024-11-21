@@ -9,5 +9,6 @@ namespace UKHO.ERPFacade.Common.Operations.IO.Azure
         Task<TableEntity> GetEntityAsync(string partitionKey, string rowKey);
         IList<TableEntity> GetAllEntities(string partitionKey);
         Task DeleteEntityAsync(string partitionKey, string rowKey);
+        Task UpdateResponseTimeEntity(string correlationId);
     }
 }

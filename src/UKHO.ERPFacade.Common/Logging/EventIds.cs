@@ -487,7 +487,76 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940097 - S-100 data content sent to SAP.
         /// </summary>
-        S100EventUpdateSentToSap = 940097
+        S100EventUpdateSentToSap = 940097,
+        /// <summary>
+        /// 940098 - Shared API Key Configuration is missing.
+        /// </summary>
+        SharedApiKeyConfigurationMissing = 940098,
+
+        /// <summary>
+        /// 940099 - S-100 sap callBack payload received from SAP.
+        /// </summary>
+        S100SapCallbackPayloadReceived = 940099,
+
+        /// <summary>
+        /// 940100 - CorrelationId is missing in S-100 sap call back.
+        /// </summary>
+        CorrelationIdMissingInS100SapCallBack = 940100,
+
+        /// <summary>
+        /// 9400102 - Invalid S-100 SAP callback. Request from ERP Facade to SAP not found.
+        /// </summary>
+        InvalidS100SapCallback = 940102,
+
+        /// <summary>
+        /// 940103 - Valid S-100 SAP callback.
+        /// </summary>
+        ValidS100SapCallback = 940103,
+
+        /// <summary>
+        /// 940104 - Download S100 Unit Of Sale Updated Event is started.
+        /// </summary>
+        DownloadS100UnitOfSaleUpdatedEventIsStarted = 940104,
+
+        /// <summary>
+        /// 940105 - Download S100 Unit Of Sale Updated Event is completed.
+        /// </summary>
+        DownloadS100UnitOfSaleUpdatedEventIsCompleted = 940105,
+
+        /// <summary>
+        /// 940106 - Publishing Unit Of Sale Updated Event To Ees Started.
+        /// </summary>
+        PublishingUnitOfSaleUpdatedEventToEesStarted = 940106,
+
+        /// <summary>
+        /// 940107 - Error occurred while publishing the publishing unit of sale updated event to EES.
+        /// </summary>
+        ErrorOccurredWhilePublishingUnitOfSaleUpdatedEventToEes = 940107,
+
+        /// <summary>
+        /// 940108 - The publishing unit of sale updated event successfully to EES.
+        /// </summary>
+        UnitOfSaleUpdatedEventPublished = 940108,
+
+        /// <summary>
+        /// 940109 - Updated The Enc Event StatusAnd Publish Date Time Entity in enc event table.
+        /// </summary>
+        S100DataContentPublishedEventTableEntryUpdated = 940109,
+
+        /// <summary>
+        /// 940110 - Attempting to publish event to ESS.
+        /// </summary>
+        StartingEnterpriseEventServiceEventPublisher = 940110,
+
+        /// <summary>
+        /// 940111 - Retry attempt to publish EES event.
+        /// </summary>
+        RetryAttemptForEnterpriseEventServiceEvent = 940111,
+
+        /// <summary>
+        /// 940112 - Exception occurred while publishing event to EES.
+        /// </summary>
+        EnterpriseEventServiceEventPublishException = 940112,
     }
 
     /// <summary>
