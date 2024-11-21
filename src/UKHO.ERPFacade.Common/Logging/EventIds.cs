@@ -417,20 +417,20 @@ namespace UKHO.ERPFacade.Common.Logging
         /// </summary>
         MessageDequeueCount = 940083,
 
-        //Below event ids for - S100
+        //Below event ids for - S-100
 
         /// <summary>
-        /// 940084 - S100 event processing started.
+        /// 940084 - S-100 event processing started.
         /// </summary>
         S100EventProcessingStarted = 940084,
 
         /// <summary>
-        /// 940085 - S100 event entry is added in azure table successfully.
+        /// 940085 - S-100 event entry is added in azure table successfully.
         /// </summary>
         S100EventEntryAddedInAzureTable = 940085,
 
         /// <summary>
-        /// 940086 - S100 event json payload is stored in azure blob container.
+        /// 940086 - S-100 event json payload is stored in azure blob container.
         /// </summary>
         S100EventJsonStoredInAzureBlobContainer = 940086,
 
@@ -455,7 +455,7 @@ namespace UKHO.ERPFacade.Common.Logging
         S100SapActionGenerationCompleted = 940090,
 
         /// <summary>
-        /// 940091 - S100SapAction Information Generation Failed Exception.
+        /// 940091 - S-100 SAP action information generation failed.
         /// </summary>
         S100SapActionInformationGenerationFailedException = 940091,
 
@@ -480,19 +480,39 @@ namespace UKHO.ERPFacade.Common.Logging
         SharedApiKeyConfigurationMissing = 940095,
 
         /// <summary>
-        /// 940096 - Attempting to publish event to ESS.
+        /// 940096 - S-100 Request to SAP failed.
         /// </summary>
-        StartingEnterpriseEventServiceEventPublisher = 940096,
+        S100RequestToSapFailedException = 940096,
 
         /// <summary>
-        /// 940097 - Retry attempt to publish EES event.
+        /// 940097 - S-100 data content sent to SAP.
         /// </summary>
-        RetryAttemptForEnterpriseEventServiceEvent = 940097,
+        S100EventUpdateSentToSap = 940097,
 
         /// <summary>
-        /// 940098 - Exception occurred while publishing event to EES.
+        /// 940098 - Event data cleaned up for CorrelationId successfully.
         /// </summary>
-        EnterpriseEventServiceEventPublishException = 940098,
+        EventCleanupSuccessful = 940098,
+
+        /// <summary>
+        /// 940099 - ErrorOccurred In CleanupWebJob.
+        /// </summary>
+        ErrorOccurredInCleanupWebJob = 940099,
+
+        /// <summary>
+        /// 940100 - Attempting to publish event to ESS.
+        /// </summary>
+        StartingEnterpriseEventServiceEventPublisher = 940100,
+
+        /// <summary>
+        /// 940101 - Retry attempt to publish EES event.
+        /// </summary>
+        RetryAttemptForEnterpriseEventServiceEvent = 940101,
+
+        /// <summary>
+        /// 940102 - Exception occurred while publishing event to EES.
+        /// </summary>
+        EnterpriseEventServiceEventPublishException = 940102,
     }
 
     /// <summary>

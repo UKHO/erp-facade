@@ -1,8 +1,12 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using UKHO.ERPFacade.API.XmlTransformers;
+using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.Enums;
+using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Extensions;
+using UKHO.ERPFacade.Common.HttpClients;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models.CloudEvents;
 using UKHO.ERPFacade.Common.Models.CloudEvents.S100Event;
@@ -19,13 +23,22 @@ namespace UKHO.ERPFacade.API.Handlers
         private readonly IAzureTableReaderWriter _azureTableReaderWriter;
         private readonly IAzureBlobReaderWriter _azureBlobReaderWriter;
         private readonly IBaseXmlTransformer _baseXmlTransformer;
+        private readonly ISapClient _sapClient;
+        private readonly IOptions<SapConfiguration> _sapConfig;
 
-        public S100EventHandler(ILogger<S100EventHandler> logger, IAzureTableReaderWriter azureTableReaderWriter, IAzureBlobReaderWriter azureBlobReaderWriter, [FromKeyedServices("S100XmlTransformer")] IBaseXmlTransformer baseXmlTransformer)
+        public S100EventHandler([FromKeyedServices("S100XmlTransformer")] IBaseXmlTransformer baseXmlTransformer,
+                                ILogger<S100EventHandler> logger,
+                                IAzureTableReaderWriter azureTableReaderWriter,
+                                IAzureBlobReaderWriter azureBlobReaderWriter,
+                                ISapClient sapClient,
+                                IOptions<SapConfiguration> sapConfig)
         {
             _logger = logger;
+            _baseXmlTransformer = baseXmlTransformer;
             _azureTableReaderWriter = azureTableReaderWriter;
             _azureBlobReaderWriter = azureBlobReaderWriter;
-            _baseXmlTransformer = baseXmlTransformer;
+            _sapClient = sapClient;
+            _sapConfig = sapConfig;
         }
 
         public async Task ProcessEventAsync(BaseCloudEvent baseCloudEvent)
@@ -57,6 +70,18 @@ namespace UKHO.ERPFacade.API.Handlers
             await _azureBlobReaderWriter.UploadEventAsync(sapPayload.ToIndentedString(), s100EventData.CorrelationId, EventPayloadFiles.SapXmlPayloadFileName);
 
             _logger.LogInformation(EventIds.S100EventXMLStoredInAzureBlobContainer.ToEventId(), "S-100 data content published event xml payload is stored in azure blob container.");
+
+            var response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapEndpointForS100Event, _sapConfig.Value.SapServiceOperationForS100Event, _sapConfig.Value.SapUsernameForS100Event, _sapConfig.Value.SapPasswordForS100Event);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new ERPFacadeException(EventIds.S100RequestToSapFailedException.ToEventId(), $"An error occurred while sending S-100 data content to SAP. | {response.StatusCode}");
+            }
+
+            _logger.LogInformation(EventIds.S100EventUpdateSentToSap.ToEventId(), "S-100 data content has been sent to SAP successfully.");
+
+            await _azureTableReaderWriter.UpdateEntityAsync(eventEntity.PartitionKey, eventEntity.RowKey, new Dictionary<string, object> { { "RequestDateTime", DateTime.UtcNow } });
+
         }
     }
 }
