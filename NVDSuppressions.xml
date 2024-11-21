@@ -930,5 +930,57 @@
     <packageUrl regex="true">^pkg:nuget/System\.Text\.Json@.*$</packageUrl>
     <vulnerabilityName>CVE-2024-43485</vulnerabilityName>
   </suppress>
+<suppress>
+   <notes><![CDATA[
+   file name: System.CodeDom:6.0.0
+   ]]></notes>
+   <packageUrl regex="true">^pkg:nuget/System\.CodeDom@.*$</packageUrl>
+   <cve>CVE-2006-4732</cve>
+   <cve>CVE-2007-0065</cve>
+   <cve>CVE-2007-2224</cve>
+   <cve>CVE-2007-2884</cve>
+   <cve>CVE-2007-4776</cve>
+   <cve>CVE-2008-0392</cve>
+   <cve>CVE-2008-3704</cve>
+   <cve>CVE-2012-0158</cve>
+   <cve>CVE-2012-1856</cve>
+   <cve>CVE-2001-0153</cve>
+</suppress>
+<suppress>
+   <notes><![CDATA[
+   file name: Azure.Identity:1.10.3
+   ]]></notes>
+   <packageUrl regex="true">^pkg:nuget/Azure\.Identity@.*$</packageUrl>
+   <vulnerabilityName>CVE-2024-29992</vulnerabilityName>
+</suppress>
+
+<suppress>
+   <notes><![CDATA[
+   file name: Microsoft.Azure.WebJobs:3.0.37
+   ]]></notes>
+   <packageUrl regex="true">^pkg:nuget/Microsoft\.Azure\.WebJobs@.*$</packageUrl>
+   <cve>CVE-2022-29149</cve>
+</suppress>
+<suppress>
+   <notes><![CDATA[
+   file name: Microsoft.Extensions.Hosting.dll
+   ]]></notes>
+   <packageUrl regex="true">^pkg:generic/Microsoft\.Extensions\.Hosting@.*$</packageUrl>
+   <cve>CVE-2020-1147</cve>
+</suppress>
+<suppress>
+   <notes><![CDATA[
+   file name: Newtonsoft.Json.dll
+   ]]></notes>
+   <packageUrl regex="true">^pkg:generic/Newtonsoft\.Json@.*$</packageUrl>
+   <cve>CVE-2024-21907</cve>
+</suppress>
+<suppress>
+   <notes><![CDATA[
+   file name: Newtonsoft.Json.dll
+   ]]></notes>
+   <packageUrl regex="true">^pkg:generic/Newtonsoft\.Json@.*$</packageUrl>
+   <cve>CVE-2024-21907</cve>
+</suppress>
  
 </suppressions>

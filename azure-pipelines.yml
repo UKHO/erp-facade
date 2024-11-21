@@ -873,6 +873,7 @@ stages:
     variables:
       - group: "ERP-Facade-Live"
       - group: "Erp-Live"
+      - group: "ERP-FACADE-LIVE-KV"
       - name: "AzureADConfiguration.TenantId"
         value: $(AzureADConfigurationTenantId)
       - name: "AzureADConfiguration.ClientId"
