@@ -5,9 +5,9 @@ namespace UKHO.ERPFacade.Common.Operations.IO.Azure
     public interface IAzureTableReaderWriter
     {
         Task UpsertEntityAsync(ITableEntity entity);
-        Task UpdateEntityAsync<TKey, TValue>(string partitionKey, string rowKey, KeyValuePair<TKey, TValue>[] entitiesToUpdate);
+        Task UpdateEntityAsync(string partitionKey, string rowKey, Dictionary<string, object> entitiesToUpdate);
         Task<TableEntity> GetEntityAsync(string partitionKey, string rowKey);
-        IList<TableEntity> GetAllEntities(string partitionKey);
+        Task<IList<TableEntity>> GetFilteredEntitiesAsync(Dictionary<string, string> filters);
         Task DeleteEntityAsync(string partitionKey, string rowKey);
     }
 }

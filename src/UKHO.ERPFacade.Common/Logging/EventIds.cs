@@ -487,7 +487,17 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940097 - S-100 data content sent to SAP.
         /// </summary>
-        S100EventUpdateSentToSap = 940097
+        S100EventUpdateSentToSap = 940097,
+
+        /// <summary>
+        /// 940098 - Event data cleaned up for CorrelationId successfully.
+        /// </summary>
+        EventCleanupSuccessful = 940098,
+
+        /// <summary>
+        /// 940099 - ErrorOccurred In CleanupWebJob.
+        /// </summary>
+        ErrorOccurredInCleanupWebJob = 940099
     }
 
     /// <summary>

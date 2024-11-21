@@ -1,50 +1,61 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Configuration;
-using UKHO.ERPFacade.Common.Constants;
+using UKHO.ERPFacade.Common.Enums;
+using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Operations.IO.Azure;
 
 namespace UKHO.ERPFacade.CleanUp.WebJob.Services
 {
     public class CleanUpService : ICleanUpService
     {
+        private readonly ILogger<CleanUpService> _logger;
         private readonly IOptions<CleanupWebJobConfiguration> _cleanupWebjobConfig;
         private readonly IAzureTableReaderWriter _azureTableReaderWriter;
         private readonly IAzureBlobReaderWriter _azureBlobReaderWriter;
 
-        public CleanUpService(IOptions<CleanupWebJobConfiguration> cleanupWebjobConfig,
-                               IAzureTableReaderWriter azureTableReaderWriter,
-                               IAzureBlobReaderWriter azureBlobReaderWriter)
+        public CleanUpService(ILogger<CleanUpService> logger,
+                              IOptions<CleanupWebJobConfiguration> cleanupWebjobConfig,
+                              IAzureTableReaderWriter azureTableReaderWriter,
+                              IAzureBlobReaderWriter azureBlobReaderWriter)
         {
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _cleanupWebjobConfig = cleanupWebjobConfig ?? throw new ArgumentNullException(nameof(cleanupWebjobConfig));
             _azureTableReaderWriter = azureTableReaderWriter ?? throw new ArgumentNullException(nameof(azureTableReaderWriter));
             _azureBlobReaderWriter = azureBlobReaderWriter ?? throw new ArgumentNullException(nameof(azureBlobReaderWriter));
         }
 
-        public void Clean()
+        public async Task Clean()
         {
-            CleanS57Data(PartitionKeys.S57PartitionKey);
-        }
-
-        private void CleanS57Data(string partitionKey)
-        {
-            var entities = _azureTableReaderWriter.GetAllEntities(partitionKey);
-
-            foreach (var entity in entities)
+            try
             {
-                if (entity["RequestDateTime"] == null)
-                    continue;
+                var statusFilter = new Dictionary<string, string> { { "Status", Status.Complete.ToString() } };
 
-                var correlationId = entity.RowKey.ToString();
+                var entities = await _azureTableReaderWriter.GetFilteredEntitiesAsync(statusFilter);
 
-                TimeSpan timediff = DateTime.Now - Convert.ToDateTime(entity["RequestDateTime"].ToString());
+                var cleanupDurationInDays = int.Parse(_cleanupWebjobConfig.Value.CleanUpDurationInDays);
 
-                if (timediff.Days > int.Parse(_cleanupWebjobConfig.Value.CleanUpDurationInDays))
+                foreach (var entity in entities)
                 {
-                    Task.FromResult(_azureTableReaderWriter.DeleteEntityAsync(partitionKey, correlationId));
+                    var correlationId = entity.RowKey.ToString();
 
-                    _azureBlobReaderWriter.DeleteContainer(correlationId);
+                    var timestamp = DateTime.SpecifyKind(Convert.ToDateTime(entity["RequestDateTime"].ToString()), DateTimeKind.Utc);
+                    var timediff = DateTime.UtcNow - timestamp;
+
+                    if (timediff.Days > cleanupDurationInDays)
+                    {
+                        await _azureTableReaderWriter.DeleteEntityAsync(entity.PartitionKey.ToString(), correlationId);
+                        await _azureBlobReaderWriter.DeleteContainerAsync(correlationId);
+
+                        _logger.LogDebug(EventIds.EventCleanupSuccessful.ToEventId(), "Data clean up completed for {CorrelationId} successfully.", correlationId);
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                _logger.LogError(EventIds.ErrorOccurredInCleanupWebJob.ToEventId(), "An error occured during clean up webjob process. ErrorMessage : {Exception}", ex.Message);
+            }
+
         }
     }
 }

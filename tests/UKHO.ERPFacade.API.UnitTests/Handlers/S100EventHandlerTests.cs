@@ -91,7 +91,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
                                                 && call.GetArgument<EventId>(1) == EventIds.S100EventUpdateSentToSap.ToEventId()
                                                 && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "S-100 data content has been sent to SAP successfully.").MustHaveHappenedOnceExactly();
 
-            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntityAsync(A<string>.Ignored, A<string>.Ignored, A<KeyValuePair<string, DateTime>[]>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntityAsync(A<string>.Ignored, A<string>.Ignored, A<Dictionary<string, object>>.Ignored)).MustHaveHappened();
         }
 
         [Test]
@@ -108,7 +108,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
             Assert.ThrowsAsync<ERPFacadeException>(() => _fakes100EventHandler.ProcessEventAsync(eventData))
                 .Message.Should().Be("An error occurred while sending S-100 data content to SAP. | Unauthorized");
 
-            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntityAsync(A<string>.Ignored, A<string>.Ignored, A<KeyValuePair<string, DateTime>[]>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntityAsync(A<string>.Ignored, A<string>.Ignored, A<Dictionary<string, object>>.Ignored)).MustNotHaveHappened();
         }
     }
 }
