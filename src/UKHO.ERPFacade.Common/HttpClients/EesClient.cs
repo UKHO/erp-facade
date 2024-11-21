@@ -12,7 +12,6 @@ using UKHO.ERPFacade.Common.Models.CloudEvents;
 
 namespace UKHO.ERPFacade.Common.HttpClients
 {
-    [ExcludeFromCodeCoverage]
     public class EesClient : IEesClient
     {
         private readonly HttpClient _httpClient;
