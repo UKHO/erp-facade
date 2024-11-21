@@ -22,5 +22,14 @@ namespace UKHO.ERPFacade.Common.Configuration
         public string SapUsernameForRecordOfSale { get; set; }
 
         public string SapPasswordForRecordOfSale { get; set; }
+
+        public string SapEndpointForS100Event { get; set; }
+
+        public string SapServiceOperationForS100Event { get; set; }
+
+        public string SapUsernameForS100Event { get; set; }
+
+        public string SapPasswordForS100Event { get; set; }
+
     }
 }
