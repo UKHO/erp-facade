@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Net;
+using System.Net.Http;
 using System.Xml;
 using Azure.Data.Tables;
 using FakeItEasy;
@@ -13,16 +13,17 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using UKHO.ERPFacade.API.Handlers;
+using UKHO.ERPFacade.API.Services.EventPublishingServices;
+using UKHO.ERPFacade.API.UnitTests.Common;
 using UKHO.ERPFacade.API.XmlTransformers;
 using UKHO.ERPFacade.Common.Configuration;
+using UKHO.ERPFacade.Common.Constants;
+using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.HttpClients;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models.CloudEvents;
 using UKHO.ERPFacade.Common.Models.CloudEvents.S100Event;
 using UKHO.ERPFacade.Common.Operations.IO.Azure;
-using UKHO.ERPFacade.API.UnitTests.Common;
-using UKHO.ERPFacade.Common.Constants;
-using UKHO.ERPFacade.Common.Exceptions;
 
 namespace UKHO.ERPFacade.API.UnitTests.Handlers
 {
@@ -36,7 +37,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
         private IBaseXmlTransformer _fakeBaseXmlTransformer;
         private ISapClient _fakeSapClient;
         private IOptions<SapConfiguration> _fakeSapConfig;
-
+        private IS100UnitOfSaleUpdatedEventPublishingService _fakeS100UnitOfSaleUpdatedEventPublishingService;
         [SetUp]
         public void Setup()
         {
@@ -46,8 +47,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
             _fakeBaseXmlTransformer = A.Fake<IBaseXmlTransformer>();
             _fakeSapClient = A.Fake<ISapClient>();
             _fakeSapConfig = A.Fake<IOptions<SapConfiguration>>();
-
-            _fakes100EventHandler = new S100EventHandler(_fakeBaseXmlTransformer, _fakeLogger, _fakeAzureTableReaderWriter, _fakeAzureBlobReaderWriter, _fakeSapClient, _fakeSapConfig);
+            _fakeS100UnitOfSaleUpdatedEventPublishingService = A.Fake<IS100UnitOfSaleUpdatedEventPublishingService>();
+            _fakes100EventHandler = new S100EventHandler(_fakeBaseXmlTransformer, _fakeLogger, _fakeAzureTableReaderWriter, _fakeAzureBlobReaderWriter, _fakeSapClient, _fakeSapConfig, _fakeS100UnitOfSaleUpdatedEventPublishingService);
         }
 
         [Test]

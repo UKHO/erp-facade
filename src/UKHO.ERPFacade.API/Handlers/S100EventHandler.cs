@@ -75,7 +75,7 @@ namespace UKHO.ERPFacade.API.Handlers
 
             _logger.LogInformation(EventIds.S100EventXMLStoredInAzureBlobContainer.ToEventId(), "S-100 data content published event xml payload is stored in azure blob container.");
 
-            if (int.TryParse(sapPayload.SelectSingleNode(XmlTemplateInfo.XpathNoOfActions).InnerText, out int actionCount) && actionCount <= 0)
+            if (sapPayload.DocumentElement != null && int.TryParse(sapPayload.SelectSingleNode(XmlTemplateInfo.XpathNoOfActions).InnerText, out int actionCount) && actionCount <= 0)
             {
                 Result result = await _s100UnitOfSaleUpdatedEventPublishingService.PublishEvent(baseCloudEvent);
                 if (!result.IsSuccess)
