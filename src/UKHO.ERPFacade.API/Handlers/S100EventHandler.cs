@@ -80,7 +80,7 @@ namespace UKHO.ERPFacade.API.Handlers
 
             _logger.LogInformation(EventIds.S100EventUpdateSentToSap.ToEventId(), "S-100 data content has been sent to SAP successfully.");
 
-            await _azureTableReaderWriter.UpdateEntityAsync(eventEntity.PartitionKey, eventEntity.RowKey, new[] { new KeyValuePair<string, DateTime>("RequestDateTime", DateTime.UtcNow) });
+            await _azureTableReaderWriter.UpdateEntityAsync(eventEntity.PartitionKey, eventEntity.RowKey, new Dictionary<string, object> { { "RequestDateTime", DateTime.UtcNow } });
 
         }
     }
