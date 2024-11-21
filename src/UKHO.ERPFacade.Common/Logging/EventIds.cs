@@ -488,10 +488,6 @@ namespace UKHO.ERPFacade.Common.Logging
         /// 940097 - S-100 data content sent to SAP.
         /// </summary>
         S100EventUpdateSentToSap = 940097,
-        /// <summary>
-        /// 940098 - Shared API Key Configuration is missing.
-        /// </summary>
-        SharedApiKeyConfigurationMissing = 940098,
 
         /// <summary>
         /// 940099 - S-100 sap callBack payload received from SAP.
