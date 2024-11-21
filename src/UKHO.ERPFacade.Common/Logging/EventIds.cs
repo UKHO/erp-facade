@@ -543,6 +543,11 @@ namespace UKHO.ERPFacade.Common.Logging
         /// 940108 - Updated The Enc Event StatusAnd Publish Date Time Entity in enc event table.
         /// </summary>
         S100DataContentPublishedEventTableEntryUpdated = 940108,
+
+        /// <summary>
+        /// 940109 - S-100 Unit Of Sale Updated Event Json Stored In Azure Blob Container
+        /// </summary>
+        S100UnitOfSaleUpdatedEventJsonStoredInAzureBlobContainer = 940109,
     }
 
     /// <summary>
