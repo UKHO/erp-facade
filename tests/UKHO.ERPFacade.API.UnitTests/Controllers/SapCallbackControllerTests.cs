@@ -9,11 +9,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using UKHO.ERPFacade.API.Controllers;
-using UKHO.ERPFacade.API.Services.EventPublishingServices;
-using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Logging;
-using UKHO.ERPFacade.Common.Models;
-using UKHO.ERPFacade.Common.Models.CloudEvents;
 using UKHO.ERPFacade.Services;
 
 namespace UKHO.ERPFacade.API.UnitTests.Controllers
@@ -25,7 +21,6 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         private ILogger<SapCallbackController> _fakeLogger;
         private ISapCallbackService _fakeSapCallbackService;
         private SapCallbackController _fakeSapCallbackController;
-        private IS100UnitOfSaleUpdatedEventPublishingService _fakeS100UnitOfSaleUpdatedEventPublishingService;
 
         [SetUp]
         public void Setup()
@@ -33,8 +28,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             _fakeHttpContextAccessor = A.Fake<IHttpContextAccessor>();
             _fakeLogger = A.Fake<ILogger<SapCallbackController>>();
             _fakeSapCallbackService = A.Fake<ISapCallbackService>();
-            _fakeS100UnitOfSaleUpdatedEventPublishingService = A.Fake<IS100UnitOfSaleUpdatedEventPublishingService>();
-            _fakeSapCallbackController = new SapCallbackController(_fakeHttpContextAccessor, _fakeLogger, _fakeSapCallbackService, _fakeS100UnitOfSaleUpdatedEventPublishingService);
+            _fakeSapCallbackController = new SapCallbackController(_fakeHttpContextAccessor, _fakeLogger, _fakeSapCallbackService);
         }
 
         [Test]
@@ -42,23 +36,16 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         {
             var fakeSapCallBackJson = JObject.Parse(@"{""correlationId"":""123""}");
 
-            Result result = new (true,"");
-
             A.CallTo(() => _fakeSapCallbackService.IsValidCallbackAsync(A<string>.Ignored)).Returns(true);
-
-            A.CallTo(() => _fakeS100UnitOfSaleUpdatedEventPublishingService.PublishEvent(A<BaseCloudEvent>.Ignored, A<string>.Ignored)).Returns(result);
 
             var response = (OkObjectResult)await _fakeSapCallbackController.S100SapCallback(fakeSapCallBackJson);
 
-            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-                                                && call.GetArgument<LogLevel>(0) == LogLevel.Information
-                                                && call.GetArgument<EventId>(1) == EventIds.UnitOfSaleUpdatedEventPublished.ToEventId()
-                                                && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "The unit of sale updated event published to EES successfully.").MustHaveHappenedOnceExactly();
+            A.CallTo(() => _fakeSapCallbackService.ProcessSapCallback(A<string>.Ignored)).MustHaveHappenedOnceOrMore();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Information
-                                                && call.GetArgument<EventId>(1) == EventIds.S100DataContentPublishedEventTableEntryUpdated.ToEventId()
-                                                && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Status and event published date time for S-100 data content published event is updated successfully.").MustHaveHappenedOnceExactly();
+                                                && call.GetArgument<EventId>(1) == EventIds.S100SapCallbackPayloadReceived.ToEventId()
+                                                && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "S-100 SAP callback received for {CorrelationId}.").MustHaveHappenedOnceExactly();
 
             response.StatusCode.Should().Be(200);
         }
@@ -71,6 +58,11 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             A.CallTo(() => _fakeSapCallbackService.IsValidCallbackAsync(A<string>.Ignored)).Returns(true);
 
             var response = (BadRequestObjectResult)await _fakeSapCallbackController.S100SapCallback(fakeSapCallBackJson);
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+                                                && call.GetArgument<LogLevel>(0) == LogLevel.Information
+                                                && call.GetArgument<EventId>(1) == EventIds.S100SapCallbackPayloadReceived.ToEventId()
+                                                && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "S-100 SAP callback received for {CorrelationId}.").MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Warning
@@ -90,30 +82,16 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
             var response = (NotFoundObjectResult)await _fakeSapCallbackController.S100SapCallback(fakeSapCallBackJson);
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+                                                && call.GetArgument<LogLevel>(0) == LogLevel.Information
+                                                && call.GetArgument<EventId>(1) == EventIds.S100SapCallbackPayloadReceived.ToEventId()
+                                                && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "S-100 SAP callback received for {CorrelationId}.").MustHaveHappenedOnceExactly();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Error
                                                 && call.GetArgument<EventId>(1) == EventIds.InvalidS100SapCallback.ToEventId()
                                                 && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Invalid S-100 SAP callback request. Requested correlationId not found.").MustHaveHappenedOnceExactly();
 
             response.StatusCode.Should().Be(404);
-        }
-
-        [Test]
-        public async Task WhenValidCorrelationIdIsProvidedInPayloadButEventIsNotPublished_ThenSapCallbackReturns500InternalServerErrorResponse()
-        {
-            var fakeSapCallBackJson = JObject.Parse(@"{""correlationId"":""1234""}");
-
-            Result result = new(false, "Forbidden");
-
-            A.CallTo(() => _fakeSapCallbackService.IsValidCallbackAsync(A<string>.Ignored)).Returns(true);
-
-            A.CallTo(() => _fakeS100UnitOfSaleUpdatedEventPublishingService.PublishEvent(A<BaseCloudEvent>.Ignored, A<string>.Ignored)).Returns(result);
-
-            Assert.ThrowsAsync<ERPFacadeException>(() => _fakeSapCallbackController.S100SapCallback(fakeSapCallBackJson));
-
-            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-                                                && call.GetArgument<LogLevel>(0) == LogLevel.Error
-                                                && call.GetArgument<EventId>(1) == EventIds.ErrorOccurredWhilePublishingUnitOfSaleUpdatedEventToEes.ToEventId()
-                                                && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Error occurred while publishing S-100 unit of sale updated event to EES. | Status : {Status}").MustHaveHappenedOnceExactly();
         }
     }
 }

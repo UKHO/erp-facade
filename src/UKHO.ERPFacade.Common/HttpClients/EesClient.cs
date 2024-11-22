@@ -1,12 +1,10 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Net.Http.Headers;
+﻿using System.Net.Http.Headers;
 using System.Text;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using UKHO.ERPFacade.Common.Authentication;
 using UKHO.ERPFacade.Common.Configuration;
-using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Models.CloudEvents;
 
@@ -42,27 +40,16 @@ namespace UKHO.ERPFacade.Common.HttpClients
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
             }
 
-            try
+            var httpContent = new StringContent(cloudEventPayload, Encoding.UTF8);
+            httpContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+
+            HttpResponseMessage response = await _httpClient.PostAsync(_eesConfiguration.Value.PublishEndpoint, httpContent);
+
+            if (!response.IsSuccessStatusCode)
             {
-                _logger.LogInformation(EventIds.StartingEnterpriseEventServiceEventPublisher.ToEventId(), "Attempting to publish {cloudEventType} event to Enterprise Event Service.", cloudEvent.Type);
-
-                var httpContent = new StringContent(cloudEventPayload, Encoding.UTF8);
-                httpContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
-
-                HttpResponseMessage response = await _httpClient.PostAsync(_eesConfiguration.Value.PublishEndpoint, httpContent);
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    return Result.Failure(response.StatusCode.ToString());
-                }
-
-                return Result.Success();
+                return Result.Failure(response.StatusCode.ToString());
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(EventIds.EnterpriseEventServiceEventPublishException.ToEventId(), "An error ocurred while publishing {cloudEventType} to Enterprise Event Service. | Exception Message : {ExceptionMessage}", cloudEvent.Type, ex.Message);
-                return Result.Failure(ex.Message);
-            }
+            return Result.Success();
         }
     }
 }
