@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Net;
 using Microsoft.Extensions.Logging;
 using Polly;
 using Polly.Extensions.Http;
@@ -12,9 +11,8 @@ namespace UKHO.ERPFacade.Common.Policies
     {
         public static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy(ILogger _logger, string service, int retryCount, double sleepDuration)
         {
-            return Policy
-            .HandleResult<HttpResponseMessage>(r => r.StatusCode == HttpStatusCode.ServiceUnavailable)
-                .OrResult(r => r.StatusCode == HttpStatusCode.InternalServerError)
+            return HttpPolicyExtensions
+            .HandleTransientHttpError()
             .WaitAndRetryAsync(retryCount, retryAttempt => TimeSpan.FromSeconds(sleepDuration),
             onRetry: (response, timespan, retryAttempt, context) =>
             {
