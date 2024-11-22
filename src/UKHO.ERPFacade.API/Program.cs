@@ -218,7 +218,7 @@ namespace UKHO.ERPFacade
             builder.Services.AddHttpClient<IEesClient, EesClient>(c =>
             {
                 c.BaseAddress = new Uri(configuration.GetValue<string>("EnterpriseEventServiceConfiguration:BaseAddress"));
-            }).AddPolicyHandler((services, request) => RetryPolicyProvider.GetRetryPolicy(services.GetService<ILogger<IEesClient>>(), retryPolicyConfiguration.RetryCount, retryPolicyConfiguration.Duration));
+            }).AddPolicyHandler((services, request) => RetryPolicyProvider.GetRetryPolicy(retryPolicyConfiguration.RetryCount, retryPolicyConfiguration.Duration));
 
             var app = builder.Build();
 
