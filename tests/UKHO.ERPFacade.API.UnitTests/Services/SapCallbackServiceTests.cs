@@ -107,6 +107,6 @@ public class SapCallbackServiceTests
         A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                             && call.GetArgument<LogLevel>(0) == LogLevel.Error
                                             && call.GetArgument<EventId>(1) == EventIds.ErrorOccurredWhilePublishingUnitOfSaleUpdatedEventToEes.ToEventId()
-                                            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Error occurred while publishing S-100 unit of sale updated event to EES. | Status : {Status}").MustHaveHappenedOnceExactly();
+                                            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Error occurred while publishing S-100 unit of sale updated event to EES.").MustHaveHappenedOnceExactly();
     }
 }
