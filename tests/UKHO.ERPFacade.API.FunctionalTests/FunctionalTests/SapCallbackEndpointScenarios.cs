@@ -9,7 +9,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
     {
         private WebhookEndpoint _webhookEndpoint;
 
-
         [SetUp]
         public void Setup()
         {
@@ -25,13 +24,11 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         }
 
         [Test]
-
         public async Task WhenSAPEndpointHitWithInvalidKey_ThenSAPShouldReturns401UnauthorizedResponse()
         {
             string payload = $"{{\r\n\"correlationId\": \"165ce4a4-1d62-4f56-b359-59e178d771041\"\r\n}}";
             var response = await _webhookEndpoint.PostSapCallbackEndPointResponseAsync(payload, true);
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
         }
-
     }
 }

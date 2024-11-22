@@ -42,7 +42,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [TestCase("SupplierDefinedUnitChangeV2.JSON", TestName = "WhenICallTheWebhookWithSupplierDefinedUnitChangeV2Scenario_ThenWebhookReturns200Response")]
         [TestCase("Suspend.JSON", TestName = "WhenICallTheWebhookWithSuspendScenario_ThenWebhookReturns200Response")]
         [TestCase("Withdrawn.JSON", TestName = "WhenICallTheWebhookWithWithdrawnScenario_ThenWebhookReturns200Response")]
-
         public async Task WhenValidS100DataContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponse(string jsonPayloadFileName)
         {
             string correlationId = null;
@@ -66,7 +65,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         }
 
         [Test]
-
         public async Task WhenValidS100DataContentPublishedEventReceivedWithValidToken_ThenWebhookAndSAPEndPointReturns200OkResponse()
         {
             string correlationId = null;
@@ -84,13 +82,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
             await Task.Delay(15000); //This delay has been added to ensure SAP callback is completed.
 
-            expectedFilePath = _azureBlobReaderWriter.DownloadContainerFile(expectedFilePath, correlationId, ".json", EventPayloadFiles.S100UnitOfSaleUpdatedEvent);
+            expectedFilePath = _azureBlobReaderWriter.DownloadContainerFile(expectedFilePath, correlationId, ".json", EventPayloadFiles.S100UnitOfSaleUpdatedEventFileName);
             Assert.That(await _jsonValidator.VerifyUnitOfSaleEvent(expectedFilePath));
             Assert.That(_azureTableReaderWriter.GetSapStatus(correlationId).Equals("Complete"));
         }
 
         [Test]
-
         public async Task WhenValidS100DataContentPublishedEventReceived500InternalServerErrorFromSapCallbackEndpoint_ThenWebhookEndPointReturns500InternalServerErrorResponse()
         {
             string jsonPayloadFilePath = Path.Combine(_projectDir, EventPayloadFiles.PayloadFolder, EventPayloadFiles.S100PayloadFolder, "SAP500InternalServerError.JSON");
