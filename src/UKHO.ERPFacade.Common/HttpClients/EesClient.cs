@@ -5,7 +5,6 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using UKHO.ERPFacade.Common.Authentication;
 using UKHO.ERPFacade.Common.Configuration;
-using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Models.CloudEvents;
 
@@ -41,27 +40,16 @@ namespace UKHO.ERPFacade.Common.HttpClients
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
             }
 
-            try
+            var httpContent = new StringContent(cloudEventPayload, Encoding.UTF8);
+            httpContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+
+            HttpResponseMessage response = await _httpClient.PostAsync(_eesConfiguration.Value.PublishEndpoint, httpContent);
+
+            if (!response.IsSuccessStatusCode)
             {
-                _logger.LogInformation(EventIds.StartingEnterpriseEventServiceEventPublisher.ToEventId(), "Attempting to publish event to Enterprise Event Service.");
-
-                var httpContent = new StringContent(cloudEventPayload, Encoding.UTF8);
-                httpContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
-
-                HttpResponseMessage response = await _httpClient.PostAsync(_eesConfiguration.Value.PublishEndpoint, httpContent);
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    return Result.Failure(response.StatusCode.ToString());
-                }
-
-                return Result.Success();
+                return Result.Failure(response.StatusCode.ToString());
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(EventIds.EnterpriseEventServiceEventPublishException.ToEventId(), "An error ocurred while publishing to Enterprise Event Service.");
-                return Result.Failure(ex.Message);
-            }
+            return Result.Success();
         }
     }
 }

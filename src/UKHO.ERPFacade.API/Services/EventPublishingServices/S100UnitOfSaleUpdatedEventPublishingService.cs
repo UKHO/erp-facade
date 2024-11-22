@@ -35,7 +35,6 @@ namespace UKHO.ERPFacade.API.Services.EventPublishingServices
             await _azureBlobReaderWriter.UploadEventAsync(JsonConvert.SerializeObject(baseCloudEvent, Formatting.Indented), correlationId, EventPayloadFiles.S100UnitOfSaleUpdatedEventFileName);
 
             _logger.LogInformation(EventIds.S100UnitOfSaleUpdatedEventJsonStoredInAzureBlobContainer.ToEventId(), "S-100 unit of sale updated event json payload is stored in azure blob container.");
-
             return await _eesClient.PostAsync(baseCloudEvent);
         }
     }
