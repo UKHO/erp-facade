@@ -42,14 +42,14 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
             return await _client.ExecuteAsync(request);
         }
 
-        public async Task<RestResponse> PostSapCallbackEndPointResponseAsync(string requestBody, bool isWrongKey = false)
+        public async Task<RestResponse> PostSapCallbackEndPointResponseAsync(string requestBody, bool isInvalidKey = false)
         {
             var request = new RestRequest(_erpFacadeConfiguration.SapCallbackRequestEndPoint, Method.Post);
 
-            string key = isWrongKey ? "6CAxzdYcEtNDuRhMbDpkBF8e4d4Kib46dwL9ZE5egiL0iL5Y3dzREUBSUYVUwUkM" : _sharedApiKeyConfiguration.SharedApiKey;
+            var sharedApiKey = isInvalidKey ? _sharedApiKeyConfiguration.InvalidSharedApiKey : _sharedApiKeyConfiguration.SharedApiKey;
 
             request.AddHeader("Content-Type", "application/json");
-            request.AddHeader("X-API-Key", key);
+            request.AddHeader("X-API-Key", sharedApiKey);
             request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
 
             return await _client.ExecuteAsync(request);
