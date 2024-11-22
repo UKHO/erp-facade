@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Newtonsoft.Json.Serialization;
+using Polly;
+using Polly.Extensions.Http;
 using Serilog;
 using UKHO.ERPFacade.API.Dispatcher;
 using UKHO.ERPFacade.API.Filters;
@@ -219,7 +221,7 @@ namespace UKHO.ERPFacade
             builder.Services.AddHttpClient<IEesClient, EesClient>(c =>
             {
                 c.BaseAddress = new Uri(configuration.GetValue<string>("EnterpriseEventServiceConfiguration:BaseAddress"));
-            }).AddPolicyHandler((services, request) => RetryPolicyProvider.GetRetryPolicy(services.GetService<ILogger<IEesClient>>(), "Enterprise Event Service", EventIds.RetryAttemptForEnterpriseEventServiceEvent, retryPolicyConfiguration.RetryCount, retryPolicyConfiguration.Duration));
+            }).AddPolicyHandler((services, request) => GetRetryPolicy(services.GetService<ILogger<IEesClient>>(), "Enterprise Event Service", EventIds.RetryAttemptForEnterpriseEventServiceEvent.ToEventId(), retryPolicyConfiguration.RetryCount, retryPolicyConfiguration.Duration));
 
             var app = builder.Build();
 
@@ -249,6 +251,17 @@ namespace UKHO.ERPFacade
                 .AddCheck<SapServiceHealthCheck>("SAP Health Check", failureStatus: HealthStatus.Unhealthy)
                 .AddCheck<EESServiceHealthCheck>("EES Health Check", failureStatus: HealthStatus.Unhealthy)
                 .AddCheck<MemoryHealthCheck>("ERP Memory Check", failureStatus: HealthStatus.Unhealthy);
+        }
+
+        public static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy(Microsoft.Extensions.Logging.ILogger _logger, string service, EventId eventId, int retryCount, double sleepDuration)
+        {
+            return HttpPolicyExtensions
+            .HandleTransientHttpError()
+            .WaitAndRetryAsync(retryCount, retryAttempt => TimeSpan.FromSeconds(sleepDuration),
+            onRetry: (response, timespan, retryAttempt, context) =>
+            {
+                _logger.LogInformation(eventId, "Failed to connect {service} | StatusCode: {statusCode}. Retry attempted: {retryAttempt}.", service, response.Result.StatusCode.ToString(), retryAttempt);
+            });
         }
     }
 }
