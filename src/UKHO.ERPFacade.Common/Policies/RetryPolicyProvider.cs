@@ -15,7 +15,7 @@ namespace UKHO.ERPFacade.Common.Policies
             .WaitAndRetryAsync(retryCount, retryAttempt => TimeSpan.FromSeconds(sleepDuration),
             onRetry: (response, timespan, retryAttempt, context) =>
             {
-                logger.LogError($"Retry {retryAttempt}, due to {response.Result.StatusCode}");
+                logger.LogError("Retry {retryAttempt}, due to {response.Result.StatusCode}", retryAttempt, response.Result.StatusCode.ToString());
             });
         }
     }
