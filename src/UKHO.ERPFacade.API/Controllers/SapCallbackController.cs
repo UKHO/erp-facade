@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using UKHO.ERPFacade.API.Filters;
-using UKHO.ERPFacade.API.Services.EventPublishingServices;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Services;
 
