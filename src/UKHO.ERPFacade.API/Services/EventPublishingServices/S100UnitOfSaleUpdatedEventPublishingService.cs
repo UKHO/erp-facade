@@ -30,7 +30,7 @@ namespace UKHO.ERPFacade.API.Services.EventPublishingServices
             baseCloudEvent.Type = EventTypes.S100UnitOfSaleEventType;
             baseCloudEvent.Source = _eesConfig.Value.SourceApplicationUri;
             baseCloudEvent.Id = Guid.NewGuid().ToString();
-            baseCloudEvent.Time = DateTime.UtcNow.ToString();
+            baseCloudEvent.Time = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ");
 
             await _azureBlobReaderWriter.UploadEventAsync(JsonConvert.SerializeObject(baseCloudEvent, Formatting.Indented), correlationId, EventPayloadFiles.S100UnitOfSaleUpdatedEventFileName);
 
