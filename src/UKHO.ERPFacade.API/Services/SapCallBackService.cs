@@ -2,6 +2,7 @@
 using UKHO.ERPFacade.API.Services.EventPublishingServices;
 using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.Enums;
+using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models.CloudEvents;
 using UKHO.ERPFacade.Common.Operations.IO.Azure;
@@ -51,7 +52,7 @@ namespace UKHO.ERPFacade.API.Services
             if (!result.IsSuccess)
             {
                 _logger.LogError(EventIds.ErrorOccurredWhilePublishingUnitOfSaleUpdatedEventToEes.ToEventId(), "Error occurred while publishing S-100 unit of sale updated event to EES.");
-
+                throw new ERPFacadeException(EventIds.ErrorOccurredWhilePublishingUnitOfSaleUpdatedEventToEes.ToEventId(), "Error occurred while publishing S-100 unit of sale updated event to EES.");
             }
 
             _logger.LogInformation(EventIds.UnitOfSaleUpdatedEventPublished.ToEventId(), "The unit of sale updated event published to EES successfully.");

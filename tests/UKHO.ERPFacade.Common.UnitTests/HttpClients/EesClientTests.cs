@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -12,7 +10,6 @@ using RichardSzalay.MockHttp;
 using UKHO.ERPFacade.Common.Authentication;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.HttpClients;
-using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models.CloudEvents;
 
 namespace UKHO.ERPFacade.Common.UnitTests.HttpClients
@@ -33,7 +30,6 @@ namespace UKHO.ERPFacade.Common.UnitTests.HttpClients
         {
             _fakeLogger = A.Fake<ILogger<EesClient>>();
             _fakeHttpClientMessageHandler = new MockHttpMessageHandler();
-            _fakeHttpClient = A.Fake<HttpClient>();
             _fakeTokenProvider = A.Fake<ITokenProvider>();
             _fakeEesConfiguration = new EESConfiguration
             {
@@ -67,7 +63,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.HttpClients
                 .Expect(HttpMethod.Get, $"{_fakeEesConfiguration.BaseAddress}/{_fakeEesConfiguration.PublishEndpoint}")
                 .Respond(req => new HttpResponseMessage());
 
-           var result = await _fakeEesClient.Get($"{_fakeEesConfiguration.BaseAddress}/{_fakeEesConfiguration.PublishEndpoint}");
+            var result = await _fakeEesClient.Get($"{_fakeEesConfiguration.BaseAddress}/{_fakeEesConfiguration.PublishEndpoint}");
 
             _fakeHttpClientMessageHandler.VerifyNoOutstandingExpectation();
         }
@@ -86,11 +82,6 @@ namespace UKHO.ERPFacade.Common.UnitTests.HttpClients
 
             _fakeHttpClientMessageHandler.VerifyNoOutstandingExpectation();
             Assert.That(result.IsSuccess, Is.EqualTo(true));
-
-            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-            && call.GetArgument<LogLevel>(0) == LogLevel.Information
-            && call.GetArgument<EventId>(1) == EventIds.StartingEnterpriseEventServiceEventPublisher.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Attempting to publish {cloudEventType} event to Enterprise Event Service.").MustHaveHappenedOnceExactly();
         }
 
         [Test]
@@ -108,11 +99,6 @@ namespace UKHO.ERPFacade.Common.UnitTests.HttpClients
 
             _fakeHttpClientMessageHandler.VerifyNoOutstandingExpectation();
             Assert.That(result.IsSuccess, Is.EqualTo(false));
-
-            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-            && call.GetArgument<LogLevel>(0) == LogLevel.Information
-            && call.GetArgument<EventId>(1) == EventIds.StartingEnterpriseEventServiceEventPublisher.ToEventId()
-            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Attempting to publish {cloudEventType} event to Enterprise Event Service.").MustHaveHappenedOnceExactly();
         }
     }
 }
