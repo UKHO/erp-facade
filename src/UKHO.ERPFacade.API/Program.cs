@@ -25,7 +25,6 @@ using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.HealthCheck;
 using UKHO.ERPFacade.Common.HttpClients;
-using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Operations;
 using UKHO.ERPFacade.Common.Operations.IO;
@@ -219,7 +218,7 @@ namespace UKHO.ERPFacade
             builder.Services.AddHttpClient<IEesClient, EesClient>(c =>
             {
                 c.BaseAddress = new Uri(configuration.GetValue<string>("EnterpriseEventServiceConfiguration:BaseAddress"));
-            }).AddPolicyHandler((services, request) => RetryPolicyProvider.GetRetryPolicy(services.GetService<ILogger<IEesClient>>(), "Enterprise Event Service", EventIds.RetryAttemptForEnterpriseEventServiceEvent, retryPolicyConfiguration.RetryCount, retryPolicyConfiguration.Duration));
+            });
 
             var app = builder.Build();
 
