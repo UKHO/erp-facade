@@ -1,6 +1,4 @@
-﻿using UKHO.ERPFacade.Common.Models.CloudEvents;
-
-namespace UKHO.ERPFacade.Services;
+﻿namespace UKHO.ERPFacade.Services;
 
 public interface ISapCallbackService
 {
