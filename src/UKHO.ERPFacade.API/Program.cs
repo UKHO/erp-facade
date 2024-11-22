@@ -208,6 +208,7 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<SharedApiKeyAuthFilter>();
             builder.Services.AddScoped<IS100UnitOfSaleUpdatedEventPublishingService, S100UnitOfSaleUpdatedEventPublishingService>();
             builder.Services.AddScoped<IS100SapCallBackService, S100SapCallBackService>();
+            builder.Services.AddScoped<RetryPolicyProvider>();
 
             ConfigureHealthChecks(builder);
 
