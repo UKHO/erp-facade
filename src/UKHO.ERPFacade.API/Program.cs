@@ -221,8 +221,8 @@ namespace UKHO.ERPFacade
                 c.BaseAddress = new Uri(configuration.GetValue<string>("EnterpriseEventServiceConfiguration:BaseAddress"));
             }).AddPolicyHandler((services, request) =>
             {
-                var retryPolicyFactory = services.GetRequiredService<RetryPolicyFactory>();
-                return retryPolicyFactory.CreateRetryPolicy();
+                var retryPolicyFactory = services.GetRequiredService<RetryPolicyProvider>();
+                return retryPolicyFactory.CreateRetryPolicy("Enterprise Event Service", EventIds.RetryAttemptForEnterpriseEventServiceEvent, retryPolicyConfiguration.RetryCount, retryPolicyConfiguration.Duration);
             });
 
             var app = builder.Build();
