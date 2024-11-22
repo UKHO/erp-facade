@@ -195,7 +195,6 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<IXmlOperations, XmlOperations>();
             builder.Services.AddScoped<IFileOperations, FileOperations>();
             builder.Services.AddScoped<IFileSystem, FileSystem>();
-            builder.Services.AddScoped<IEesClient, EesClient>();
             builder.Services.AddScoped<ILicenceUpdatedSapMessageBuilder, LicenceUpdatedSapMessageBuilder>();
             builder.Services.AddScoped<IWeekDetailsProvider, WeekDetailsProvider>();
             builder.Services.AddScoped<IPermitDecryption, PermitDecryption>();
@@ -220,7 +219,7 @@ namespace UKHO.ERPFacade
             builder.Services.AddHttpClient<IEesClient, EesClient>(c =>
             {
                 c.BaseAddress = new Uri(configuration.GetValue<string>("EnterpriseEventServiceConfiguration:BaseAddress"));
-            }).AddPolicyHandler((services, request) => RetryPolicyProvider.GetRetryPolicy(services.GetRequiredService<ILogger<IEesClient>>(), retryPolicyConfiguration.RetryCount, retryPolicyConfiguration.Duration));
+            }).AddHeaderPropagation().AddPolicyHandler((services, request) => RetryPolicyProvider.GetRetryPolicy(services.GetRequiredService<ILogger<IEesClient>>(), retryPolicyConfiguration.RetryCount, retryPolicyConfiguration.Duration));
 
             var app = builder.Build();
 
