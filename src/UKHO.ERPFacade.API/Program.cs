@@ -4,7 +4,6 @@ using System.Reflection;
 using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
-using Elastic.Apm.Api;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -222,8 +221,8 @@ namespace UKHO.ERPFacade
                 c.BaseAddress = new Uri(configuration.GetValue<string>("EnterpriseEventServiceConfiguration:BaseAddress"));
             }).AddPolicyHandler((services, request) =>
             {
-                var retryPolicyFactory = services.GetRequiredService<RetryPolicyProvider>();
-                return retryPolicyFactory.CreateRetryPolicy("Enterprise Event Service", EventIds.RetryAttemptForEnterpriseEventServiceEvent, retryPolicyConfiguration.RetryCount, retryPolicyConfiguration.Duration);
+                var retryPolicyProvider = services.GetRequiredService<RetryPolicyProvider>();
+                return retryPolicyProvider.CreateRetryPolicy("Enterprise Event Service", EventIds.RetryAttemptForEnterpriseEventServiceEvent, retryPolicyConfiguration.RetryCount, retryPolicyConfiguration.Duration);
             });
 
             var app = builder.Build();

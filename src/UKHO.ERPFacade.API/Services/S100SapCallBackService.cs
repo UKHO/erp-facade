@@ -37,11 +37,13 @@ namespace UKHO.ERPFacade.API.Services
         {
             _logger.LogInformation(EventIds.ValidS100SapCallback.ToEventId(), "Processing of valid S-100 SAP callback request started.");
 
-            await UpdateResponseDateTimeAsync(correlationId);
+            await _azureTableReaderWriter.UpdateEntityAsync(PartitionKeys.S100PartitionKey, correlationId, new Dictionary<string, object> { { "ResponseDateTime", DateTime.UtcNow } });
 
             _logger.LogInformation(EventIds.DownloadS100UnitOfSaleUpdatedEventIsStarted.ToEventId(), "Download S-100 Unit Of Sale Updated Event from blob container is started.");
 
-            var baseCloudEvent = await GetEventPayload(correlationId);
+            var s100DataPublishingEventPayloadJson = await _azureBlobReaderWriter.DownloadEventAsync(EventPayloadFiles.S100DataEventFileName, correlationId.ToLower()).ConfigureAwait(false);
+
+            var baseCloudEvent = JsonConvert.DeserializeObject<BaseCloudEvent>(s100DataPublishingEventPayloadJson);
 
             _logger.LogInformation(EventIds.DownloadS100UnitOfSaleUpdatedEventIsCompleted.ToEventId(), "Download S-100 Unit Of Sale Updated Event from blob container is completed.");
 
@@ -57,27 +59,9 @@ namespace UKHO.ERPFacade.API.Services
 
             _logger.LogInformation(EventIds.UnitOfSaleUpdatedEventPublished.ToEventId(), "The unit of sale updated event published to EES successfully.");
 
-            await UpdateEventStatusAndEventPublishDateTimeEntity(correlationId);
+            await _azureTableReaderWriter.UpdateEntityAsync(PartitionKeys.S100PartitionKey, correlationId, new Dictionary<string, object> { { "Status", Status.Complete.ToString() }, { "EventPublishDateTime", DateTime.UtcNow } });
 
             _logger.LogInformation(EventIds.S100DataContentPublishedEventTableEntryUpdated.ToEventId(), "Status and event published date time for S-100 data content published event is updated successfully.");
         }
-
-        private async Task<BaseCloudEvent> GetEventPayload(string correlationId)
-        {
-            string s100DataPublishingEventPayloadJson = await _azureBlobReaderWriter.DownloadEventAsync(EventPayloadFiles.S100DataEventFileName, correlationId.ToLower()).ConfigureAwait(false);
-
-            return JsonConvert.DeserializeObject<BaseCloudEvent>(s100DataPublishingEventPayloadJson);
-        }
-        private async Task UpdateResponseDateTimeAsync(string correlationId)
-        {
-            await _azureTableReaderWriter.UpdateEntityAsync(PartitionKeys.S100PartitionKey, correlationId, new Dictionary<string, object> { { "ResponseDateTime", DateTime.UtcNow } });
-        }
-
-        private async Task UpdateEventStatusAndEventPublishDateTimeEntity(string correlationId)
-        {
-            await _azureTableReaderWriter.UpdateEntityAsync(PartitionKeys.S100PartitionKey, correlationId, new Dictionary<string, object> { { "Status", Status.Complete.ToString() }, { "EventPublishDateTime", DateTime.UtcNow } });
-        }
-
-
     }
 }

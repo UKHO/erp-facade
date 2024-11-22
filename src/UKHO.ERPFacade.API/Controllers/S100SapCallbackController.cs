@@ -11,7 +11,7 @@ namespace UKHO.ERPFacade.API.Controllers
     public class S100SapCallbackController : BaseController<S100SapCallbackController>
     {
         private readonly ILogger<S100SapCallbackController> _logger;
-        private readonly IS100SapCallBackService _sapCallbackService;
+        private readonly IS100SapCallBackService _s100SapCallbackService;
 
         private const string CorrelationId = "correlationId";
 
@@ -21,7 +21,7 @@ namespace UKHO.ERPFacade.API.Controllers
         : base(contextAccessor)
         {
             _logger = logger;
-            _sapCallbackService = sapCallbackService;
+            _s100SapCallbackService = sapCallbackService;
         }
 
         [HttpPost]
@@ -39,13 +39,13 @@ namespace UKHO.ERPFacade.API.Controllers
                 return new BadRequestObjectResult(StatusCodes.Status400BadRequest);
             }
 
-            if (!await _sapCallbackService.IsValidCallbackAsync(correlationId))
+            if (!await _s100SapCallbackService.IsValidCallbackAsync(correlationId))
             {
                 _logger.LogError(EventIds.InvalidS100SapCallback.ToEventId(), "Invalid S-100 SAP callback request. Requested correlationId not found.");
                 return new NotFoundObjectResult(StatusCodes.Status404NotFound);
             }
 
-            await _sapCallbackService.ProcessSapCallback(correlationId);
+            await _s100SapCallbackService.ProcessSapCallback(correlationId);
 
             return new OkObjectResult(StatusCodes.Status200OK);
         }
