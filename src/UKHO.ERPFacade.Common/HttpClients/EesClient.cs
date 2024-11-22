@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Net.Http.Headers;
+﻿using System.Net.Http.Headers;
 using System.Text;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -44,7 +43,7 @@ namespace UKHO.ERPFacade.Common.HttpClients
 
             try
             {
-                _logger.LogInformation(EventIds.StartingEnterpriseEventServiceEventPublisher.ToEventId(), "Attempting to publish {cloudEventType} event to Enterprise Event Service.", cloudEvent.Type);
+                _logger.LogInformation(EventIds.StartingEnterpriseEventServiceEventPublisher.ToEventId(), "Attempting to publish event to Enterprise Event Service.");
 
                 var httpContent = new StringContent(cloudEventPayload, Encoding.UTF8);
                 httpContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
@@ -60,7 +59,7 @@ namespace UKHO.ERPFacade.Common.HttpClients
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.EnterpriseEventServiceEventPublishException.ToEventId(), "An error ocurred while publishing {cloudEventType} to Enterprise Event Service. | Exception Message : {ExceptionMessage}", cloudEvent.Type, ex.Message);
+                _logger.LogError(EventIds.EnterpriseEventServiceEventPublishException.ToEventId(), "An error ocurred while publishing to Enterprise Event Service.");
                 return Result.Failure(ex.Message);
             }
         }
