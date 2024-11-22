@@ -29,7 +29,7 @@ namespace UKHO.ERPFacade.API.Controllers
         [Route("v2/callback/sap/s100actions/processed")]
         public virtual async Task<IActionResult> S100SapCallback([FromBody] JObject sapCallbackJson)
         {
-            string correlationId = sapCallbackJson.Value<string>(CorrelationId);
+            string correlationId = sapCallbackJson.GetValue(CorrelationId, StringComparison.OrdinalIgnoreCase)?.Value<string>();
 
             _logger.LogInformation(EventIds.S100SapCallbackPayloadReceived.ToEventId(), "S-100 SAP callback received.");
 
