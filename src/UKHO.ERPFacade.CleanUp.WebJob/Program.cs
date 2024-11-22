@@ -23,7 +23,7 @@ namespace UKHO.ERPFacade.Monitoring.WebJob
         private static readonly InMemoryChannel TelemetryChannel = new();
         private static readonly string WebJobAssemblyVersion = Assembly.GetExecutingAssembly().GetCustomAttributes<AssemblyFileVersionAttribute>().Single().Version;
 
-        public static void Main()
+        public static async Task Main()
         {
             try
             {
@@ -42,13 +42,13 @@ namespace UKHO.ERPFacade.Monitoring.WebJob
 
                 try
                 {
-                    serviceProvider.GetService<CleanUpWebjob>().Start();
+                   await serviceProvider.GetService<CleanUpWebjob>().Start();
                 }
                 finally
                 {
                     //Ensure all buffered app insights logs are flushed into Azure
                     TelemetryChannel.Flush();
-                    Task.Delay(delayTime);
+                    await Task.Delay(delayTime);
                 }
             }
             catch (Exception ex)
@@ -142,7 +142,7 @@ namespace UKHO.ERPFacade.Monitoring.WebJob
 
             if (configuration != null)
             {
-                serviceCollection.Configure<CleanupWebJobConfiguration>(configuration.GetSection("ErpFacadeWebJobConfiguration"));
+                serviceCollection.Configure<CleanupWebJobConfiguration>(configuration.GetSection("CleanupWebJobConfiguration"));
                 serviceCollection.Configure<AzureStorageConfiguration>(configuration.GetSection("AzureStorageConfiguration"));
                 serviceCollection.AddSingleton(configuration);
             }

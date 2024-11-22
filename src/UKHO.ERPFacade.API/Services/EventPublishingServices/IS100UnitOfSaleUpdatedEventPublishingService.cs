@@ -5,5 +5,5 @@ namespace UKHO.ERPFacade.API.Services.EventPublishingServices;
 
 public interface IS100UnitOfSaleUpdatedEventPublishingService
 {
-    public Task<Result> PublishEvent(BaseCloudEvent baseCloudEvent);
+    public Task<Result> PublishEvent(BaseCloudEvent baseCloudEvent, string correlationId);
 }

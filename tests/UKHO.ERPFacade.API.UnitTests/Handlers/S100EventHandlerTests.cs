@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -93,7 +92,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
                                                 && call.GetArgument<EventId>(1) == EventIds.S100EventUpdateSentToSap.ToEventId()
                                                 && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "S-100 data content has been sent to SAP successfully.").MustHaveHappenedOnceExactly();
 
-            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntityAsync(A<string>.Ignored, A<string>.Ignored, A<KeyValuePair<string, DateTime>[]>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntityAsync(A<string>.Ignored, A<string>.Ignored, A<Dictionary<string, object>>.Ignored)).MustHaveHappened();
         }
 
         [Test]
@@ -110,7 +109,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
             Assert.ThrowsAsync<ERPFacadeException>(() => _fakes100EventHandler.ProcessEventAsync(eventData))
                 .Message.Should().Be("An error occurred while sending S-100 data content to SAP. | Unauthorized");
 
-            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntityAsync(A<string>.Ignored, A<string>.Ignored, A<KeyValuePair<string, DateTime>[]>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntityAsync(A<string>.Ignored, A<string>.Ignored, A<Dictionary<string, object>>.Ignored)).MustNotHaveHappened();
         }
 
         [Test]
@@ -122,8 +121,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
             XmlDocument xmlDocument = new XmlDocument();
             xmlDocument.LoadXml("<NOOFACTIONS>0</NOOFACTIONS>");
             A.CallTo(() => _fakeBaseXmlTransformer.BuildXmlPayload(A<S100EventData>.Ignored, A<string>.Ignored)).Returns(xmlDocument);
-            A.CallTo(() => _fakeS100UnitOfSaleUpdatedEventPublishingService.PublishEvent(A<BaseCloudEvent>.Ignored)).Returns(Result.Success());
-            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntityAsync(A<string>.Ignored, A<string>.Ignored, A<KeyValuePair<string, object>[]>.Ignored));
+            A.CallTo(() => _fakeS100UnitOfSaleUpdatedEventPublishingService.PublishEvent(A<BaseCloudEvent>.Ignored, A<string>.Ignored)).Returns(Result.Success());
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntityAsync(A<string>.Ignored, A<string>.Ignored, A<Dictionary<string, object>>.Ignored));
 
             _ = _fakes100EventHandler.ProcessEventAsync(fakeS100EventData);
 
@@ -166,7 +165,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
             XmlDocument xmlDocument = new XmlDocument();
             xmlDocument.LoadXml("<NOOFACTIONS>0</NOOFACTIONS>");
             A.CallTo(() => _fakeBaseXmlTransformer.BuildXmlPayload(A<S100EventData>.Ignored, A<string>.Ignored)).Returns(xmlDocument);
-            A.CallTo(() => _fakeS100UnitOfSaleUpdatedEventPublishingService.PublishEvent(A<BaseCloudEvent>.Ignored)).Returns(Result.Failure("Internal Server Error"));
+            A.CallTo(() => _fakeS100UnitOfSaleUpdatedEventPublishingService.PublishEvent(A<BaseCloudEvent>.Ignored, A<string>.Ignored)).Returns(Result.Failure("Internal Server Error"));
 
             Assert.ThrowsAsync<ERPFacadeException>(() => _fakes100EventHandler.ProcessEventAsync(fakeS100EventData))
                 .Message.Should().Be("Error occurred while publishing S-100 unit of sale updated event to EES.");

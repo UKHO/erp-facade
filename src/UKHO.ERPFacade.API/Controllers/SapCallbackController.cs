@@ -52,20 +52,21 @@ namespace UKHO.ERPFacade.API.Controllers
 
             _logger.LogInformation(EventIds.ValidS100SapCallback.ToEventId(), "Processing of valid S-100 SAP callback request started.");
 
-            await _sapCallbackService.LogCallbackResponseTimeAsync(correlationId);
+            await _sapCallbackService.UpdateResponseDateTimeAsync(correlationId);
 
-            _logger.LogInformation(EventIds.DownloadS100UnitOfSaleUpdatedEventIsStarted.ToEventId(), "Download S100 Unit Of Sale Updated Event from blob container is started.");
+            _logger.LogInformation(EventIds.DownloadS100UnitOfSaleUpdatedEventIsStarted.ToEventId(), "Download S-100 Unit Of Sale Updated Event from blob container is started.");
 
             var baseCloudEvent = await _sapCallbackService.GetEventPayload(correlationId);
 
-            _logger.LogInformation(EventIds.DownloadS100UnitOfSaleUpdatedEventIsCompleted.ToEventId(), "Download S100 Unit Of Sale Updated Event from blob container is completed.");
+            _logger.LogInformation(EventIds.DownloadS100UnitOfSaleUpdatedEventIsCompleted.ToEventId(), "Download S-100 Unit Of Sale Updated Event from blob container is completed.");
 
             _logger.LogInformation(EventIds.PublishingUnitOfSaleUpdatedEventToEesStarted.ToEventId(), "The publishing unit of sale updated event to EES is started.");
 
-            var result = await _s100UnitOfSaleUpdatedEventPublishingService.PublishEvent(baseCloudEvent);
+            var result = await _s100UnitOfSaleUpdatedEventPublishingService.PublishEvent(baseCloudEvent, correlationId);
 
             if (!result.IsSuccess)
             {
+                _logger.LogError(EventIds.ErrorOccurredWhilePublishingUnitOfSaleUpdatedEventToEes.ToEventId(), "Error occurred while publishing S-100 unit of sale updated event to EES. | Status : {Status}", result.Error);
                 throw new ERPFacadeException(EventIds.ErrorOccurredWhilePublishingUnitOfSaleUpdatedEventToEes.ToEventId(), "Error occurred while publishing S-100 unit of sale updated event to EES.");
             }
 

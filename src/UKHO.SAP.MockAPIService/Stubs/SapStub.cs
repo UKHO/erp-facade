@@ -101,7 +101,7 @@ namespace UKHO.SAP.MockAPIService.Stubs
                     .WithStatusCode(200)
                     .WithHeader("Content-Type", "text/xml; charset=utf-8"));
 
-            //SAP responses for s100 data events
+            //SAP responses for S-100 data events
             server
                 .Given(Request.Create()
                     .WithPath(new WildcardMatcher(_s100DataEventConfiguration.Url))

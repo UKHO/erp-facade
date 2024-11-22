@@ -25,11 +25,13 @@ using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.HealthCheck;
 using UKHO.ERPFacade.Common.HttpClients;
+using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Operations;
 using UKHO.ERPFacade.Common.Operations.IO;
 using UKHO.ERPFacade.Common.Operations.IO.Azure;
 using UKHO.ERPFacade.Common.PermitDecryption;
+using UKHO.ERPFacade.Common.Policies;
 using UKHO.ERPFacade.Common.Providers;
 using UKHO.ERPFacade.Services;
 using UKHO.Logging.EventHubLogProvider;
@@ -45,6 +47,7 @@ namespace UKHO.ERPFacade
             EventHubLoggingConfiguration eventHubLoggingConfiguration;
             SapActionConfiguration sapActionConfiguration;
             S100SapActionConfiguration s100SapActionConfiguration;
+            RetryPolicyConfiguration retryPolicyConfiguration;
 
             IHttpContextAccessor httpContextAccessor = new HttpContextAccessor();
             var builder = WebApplication.CreateBuilder(args);
@@ -181,7 +184,7 @@ namespace UKHO.ERPFacade
             builder.Services.Configure<AzureADConfiguration>(configuration.GetSection("AzureADConfiguration"));
             builder.Services.Configure<EESConfiguration>(configuration.GetSection("EnterpriseEventServiceConfiguration"));
             builder.Services.Configure<RetryPolicyConfiguration>(configuration.GetSection("RetryPolicyConfiguration"));
-
+            retryPolicyConfiguration = configuration.GetSection("RetryPolicyConfiguration").Get<RetryPolicyConfiguration>()!;
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             builder.Services.AddSingleton<ITokenProvider, ManagedIdentityTokenProvider>();
 
@@ -191,7 +194,7 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<IXmlOperations, XmlOperations>();
             builder.Services.AddScoped<IFileOperations, FileOperations>();
             builder.Services.AddScoped<IFileSystem, FileSystem>();
-            builder.Services.AddScoped<IEESClient, EESClient>();
+            builder.Services.AddScoped<IEesClient, EesClient>();
             builder.Services.AddScoped<ILicenceUpdatedSapMessageBuilder, LicenceUpdatedSapMessageBuilder>();
             builder.Services.AddScoped<IWeekDetailsProvider, WeekDetailsProvider>();
             builder.Services.AddScoped<IPermitDecryption, PermitDecryption>();
@@ -213,10 +216,10 @@ namespace UKHO.ERPFacade
                 c.BaseAddress = new Uri(configuration.GetValue<string>("SapConfiguration:SapBaseAddress"));
             });
 
-            builder.Services.AddHttpClient<IEESClient, EESClient>(c =>
+            builder.Services.AddHttpClient<IEesClient, EesClient>(c =>
             {
-                c.BaseAddress = new Uri(configuration.GetValue<string>("EnterpriseEventServiceConfiguration:ServiceUrl"));
-            });
+                c.BaseAddress = new Uri(configuration.GetValue<string>("EnterpriseEventServiceConfiguration:BaseAddress"));
+            }).AddPolicyHandler((services, request) => RetryPolicyProvider.GetRetryPolicy(services.GetRequiredService<ILogger<IEesClient>>(), "Enterprise Event Service", retryPolicyConfiguration.RetryCount, retryPolicyConfiguration.Duration));
 
             var app = builder.Build();
 

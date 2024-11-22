@@ -10,6 +10,7 @@ namespace UKHO.ERPFacade.Common.Constants
         public const string SapXmlPayloadFileName = "SapXmlPayload.xml";
         public const string S100DataEventFileName = "S100DataPublishingEvent.json";
         public const string RecordOfSaleEventFileExtension = ".json";
+        public const string S100UnitOfSaleUpdatedEventFileName = "S100UnitOfSaleUpdatedEvent.json";
 
         /// <summary>
         /// Constants for functional test project files and folder names
