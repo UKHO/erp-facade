@@ -31,7 +31,7 @@ namespace UKHO.ERPFacade.API.Controllers
         {
             string correlationId = sapCallbackJson.Value<string>(CorrelationId);
 
-            _logger.LogInformation(EventIds.S100SapCallbackPayloadReceived.ToEventId(), "S-100 SAP callback received for {CorrelationId}.", correlationId);
+            _logger.LogInformation(EventIds.S100SapCallbackPayloadReceived.ToEventId(), "S-100 SAP callback received.");
 
             if (string.IsNullOrEmpty(correlationId))
             {
