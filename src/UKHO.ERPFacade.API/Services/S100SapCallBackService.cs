@@ -10,16 +10,16 @@ using UKHO.ERPFacade.Services;
 
 namespace UKHO.ERPFacade.API.Services
 {
-    public class SapCallbackService : ISapCallbackService
+    public class S100SapCallBackService : IS100SapCallBackService
     {
         private readonly IAzureBlobReaderWriter _azureBlobReaderWriter;
         private readonly IAzureTableReaderWriter _azureTableReaderWriter;
-        private readonly ILogger<SapCallbackService> _logger;
+        private readonly ILogger<S100SapCallBackService> _logger;
         private readonly IS100UnitOfSaleUpdatedEventPublishingService _s100UnitOfSaleUpdatedEventPublishingService;
 
-        public SapCallbackService(IAzureBlobReaderWriter azureBlobReaderWriter,
+        public S100SapCallBackService(IAzureBlobReaderWriter azureBlobReaderWriter,
             IAzureTableReaderWriter azureTableReaderWriter,
-            ILogger<SapCallbackService> logger,
+            ILogger<S100SapCallBackService> logger,
             IS100UnitOfSaleUpdatedEventPublishingService s100UnitOfSaleUpdatedEventPublishingService)
         {
             _azureTableReaderWriter = azureTableReaderWriter;

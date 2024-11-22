@@ -15,13 +15,13 @@ using UKHO.ERPFacade.Common.Operations.IO.Azure;
 namespace UKHO.ERPFacade.API.UnitTests.Services;
 
 [TestFixture]
-public class SapCallbackServiceTests
+public class S100SapCallbackServiceTests
 {
     private IAzureBlobReaderWriter _fakeAzureBlobReaderWriter;
     private IAzureTableReaderWriter _fakeAzureTableReaderWriter;
-    private ILogger<SapCallbackService> _fakeLogger;
+    private ILogger<S100SapCallBackService> _fakeLogger;
     private IS100UnitOfSaleUpdatedEventPublishingService _fakeS100UnitOfSaleUpdatedEventPublishingService;
-    private SapCallbackService _fakeSapCallbackService;
+    private S100SapCallBackService _fakeSapCallbackService;
     private string _fakeCorrelationId;
 
     [SetUp]
@@ -30,9 +30,9 @@ public class SapCallbackServiceTests
         _fakeCorrelationId = "123";
         _fakeAzureTableReaderWriter = A.Fake<IAzureTableReaderWriter>();
         _fakeAzureBlobReaderWriter = A.Fake<IAzureBlobReaderWriter>();
-        _fakeLogger = A.Fake<ILogger<SapCallbackService>>();
+        _fakeLogger = A.Fake<ILogger<S100SapCallBackService>>();
         _fakeS100UnitOfSaleUpdatedEventPublishingService = A.Fake<IS100UnitOfSaleUpdatedEventPublishingService>();
-        _fakeSapCallbackService = new SapCallbackService(_fakeAzureBlobReaderWriter, _fakeAzureTableReaderWriter, _fakeLogger, _fakeS100UnitOfSaleUpdatedEventPublishingService);
+        _fakeSapCallbackService = new S100SapCallBackService(_fakeAzureBlobReaderWriter, _fakeAzureTableReaderWriter, _fakeLogger, _fakeS100UnitOfSaleUpdatedEventPublishingService);
     }
 
     [Test]
