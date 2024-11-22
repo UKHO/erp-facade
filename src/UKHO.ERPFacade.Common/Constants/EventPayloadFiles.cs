@@ -25,6 +25,7 @@ namespace UKHO.ERPFacade.Common.Constants
         public const string WebhookPayloadFileName = "WebhookPayload.JSON";
 
         public const string GeneratedXmlFolder = "ERPFacadeGeneratedXmlFiles";
+        public const string GeneratedJsonFolder = "ERPFacadeGeneratedJsonFiles";
 
         public const string ErpFacadeExpectedXmlFolder = "ERPFacadeExpectedXmlFiles";
         public const string S100ExpectedXmlFiles = "S100ExpectedXmlFiles";

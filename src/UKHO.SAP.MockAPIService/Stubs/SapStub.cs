@@ -140,8 +140,8 @@ namespace UKHO.SAP.MockAPIService.Stubs
                         var correlationIdElement = xmlDocument
                             .Element(soapNs + "Envelope")?
                             .Element(soapNs + "Body")?
-                            .Element(rfcNs + "Z_ADDS_MAT_INFO")?
-                            .Element("IM_MATINFO")?
+                            .Element(rfcNs + "Z_SHOP_MAT_INFO")?
+                            .Element("ZSHOPMAT_INFO")?
                             .Element("CORRID");
 
                         var correlationId = correlationIdElement?.Value;
@@ -150,7 +150,7 @@ namespace UKHO.SAP.MockAPIService.Stubs
 
                         Task.Run(async () =>
                         {
-                            await Task.Delay(5000);
+                            await Task.Delay(1000);
 
                             using var httpClient = new HttpClient()
                             {
