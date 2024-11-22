@@ -16,6 +16,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         private AuthTokenProvider _authTokenProvider;
         private WebhookEndpoint _webhookEndpoint;
         private AzureBlobReaderWriter _azureBlobReaderWriter;
+        private AzureTableReaderWriter _azureTableReaderWriter;
+        private JsonValidator _jsonValidator;
 
         private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
 
@@ -25,6 +27,8 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             _authTokenProvider = new AuthTokenProvider();
             _webhookEndpoint = new WebhookEndpoint();
             _azureBlobReaderWriter = new AzureBlobReaderWriter();
+            _azureTableReaderWriter = new AzureTableReaderWriter();
+            _jsonValidator = new JsonValidator();
         }
 
         [Test]
@@ -59,6 +63,44 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             string generatedXmlFilePath = _azureBlobReaderWriter.DownloadContainerFile(Path.Combine(_projectDir, EventPayloadFiles.GeneratedXmlFolder), correlationId, ".xml");
 
             Assert.That(S100XmlValidator.VerifyXmlAttributes(generatedXmlFilePath, xmlPayloadFilePath, correlationId));
+        }
+
+        [Test]
+
+        public async Task WhenValidS100DataContentPublishedEventReceivedWithValidToken_ThenWebhookAndSAPEndPointReturns200OkResponse()
+        {
+            string correlationId = null;
+
+            string jsonPayloadFilePath = Path.Combine(_projectDir, EventPayloadFiles.PayloadFolder, EventPayloadFiles.S100PayloadFolder, "NewCell.JSON");
+            string expectedFilePath = Path.Combine(_projectDir, EventPayloadFiles.GeneratedJsonFolder);
+
+            string requestBody = await File.ReadAllTextAsync(jsonPayloadFilePath);
+            requestBody = JsonModifier.UpdateTime(requestBody);
+            (requestBody, correlationId) = JsonModifier.UpdateCorrelationId(requestBody);
+
+            RestResponse response = await _webhookEndpoint.PostWebhookResponseAsync(requestBody, await _authTokenProvider.GetAzureADToken(false));
+
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
+            await Task.Delay(15000); //This delay has been added to ensure SAP callback is completed.
+
+            expectedFilePath = _azureBlobReaderWriter.DownloadContainerFile(expectedFilePath, correlationId, ".json", EventPayloadFiles.S100UnitOfSaleUpdatedEvent);
+            Assert.That(await _jsonValidator.VerifyUnitOfSaleEvent(expectedFilePath));
+            Assert.That(_azureTableReaderWriter.GetSapStatus(correlationId).Equals("Complete"));
+        }
+
+        [Test]
+
+        public async Task WhenValidS100DataContentPublishedEventReceived500InternalServerErrorFromSapCallbackEndpoint_ThenWebhookEndPointReturns500InternalServerErrorResponse()
+        {
+            string jsonPayloadFilePath = Path.Combine(_projectDir, EventPayloadFiles.PayloadFolder, EventPayloadFiles.S100PayloadFolder, "SAP500InternalServerError.JSON");
+
+            string requestBody = await File.ReadAllTextAsync(jsonPayloadFilePath);
+            requestBody = JsonModifier.UpdateTime(requestBody);
+
+            RestResponse response = await _webhookEndpoint.PostWebhookResponseAsync(requestBody, await _authTokenProvider.GetAzureADToken(false));
+
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.InternalServerError);
         }
     }
 }
