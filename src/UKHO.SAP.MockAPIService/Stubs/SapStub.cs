@@ -146,7 +146,7 @@ namespace UKHO.SAP.MockAPIService.Stubs
 
                         var correlationId = correlationIdElement?.Value;
 
-                        string payload = string.Format("{{\"correlationid\":\"{0}\"}}", correlationId);
+                        string payload = string.Format("{{\"correlationId\":\"{0}\"}}", correlationId);
 
                         Task.Run(async () =>
                         {
