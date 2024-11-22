@@ -51,7 +51,7 @@ namespace UKHO.ERPFacade.API.Services
 
             if (!result.IsSuccess)
             {
-                _logger.LogError(EventIds.ErrorOccurredWhilePublishingUnitOfSaleUpdatedEventToEes.ToEventId(), "Error occurred while publishing S-100 unit of sale updated event to EES. | Status : {Status}", result.Error);
+                _logger.LogError(EventIds.ErrorOccurredWhilePublishingUnitOfSaleUpdatedEventToEes.ToEventId(), "Error occurred while publishing S-100 unit of sale updated event to EES.");
                 throw new ERPFacadeException(EventIds.ErrorOccurredWhilePublishingUnitOfSaleUpdatedEventToEes.ToEventId(), "Error occurred while publishing S-100 unit of sale updated event to EES.");
             }
 
@@ -75,7 +75,7 @@ namespace UKHO.ERPFacade.API.Services
 
         private async Task UpdateEventStatusAndEventPublishDateTimeEntity(string correlationId)
         {
-            await _azureTableReaderWriter.UpdateEntityAsync(PartitionKeys.S100PartitionKey, correlationId, new Dictionary<string, object> { { "Status", Status.Complete.ToString() } , {"EventPublishDateTime", DateTime.UtcNow } });
+            await _azureTableReaderWriter.UpdateEntityAsync(PartitionKeys.S100PartitionKey, correlationId, new Dictionary<string, object> { { "Status", Status.Complete.ToString() }, { "EventPublishDateTime", DateTime.UtcNow } });
         }
 
 
