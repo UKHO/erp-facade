@@ -35,7 +35,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Operations
             return tableClient;
         }
 
-        public string GetSapStatus(string correlationId)
+        public string GetStatus(string correlationId)
         {
             TableClient tableClient = GetTableClient(AzureStorage.EventTableName);
             Pageable<EventEntity> existingEntity = tableClient.Query<EventEntity>(filter: TableClient.CreateQueryFilter($"RowKey eq {correlationId}"));

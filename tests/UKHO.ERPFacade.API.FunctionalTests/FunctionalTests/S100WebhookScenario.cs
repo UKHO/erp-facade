@@ -17,7 +17,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         private WebhookEndpoint _webhookEndpoint;
         private AzureBlobReaderWriter _azureBlobReaderWriter;
         private AzureTableReaderWriter _azureTableReaderWriter;
-        private JsonValidator _jsonValidator;
+        private S100JsonValidator _s100JsonValidator;
 
         private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
 
@@ -28,7 +28,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             _webhookEndpoint = new WebhookEndpoint();
             _azureBlobReaderWriter = new AzureBlobReaderWriter();
             _azureTableReaderWriter = new AzureTableReaderWriter();
-            _jsonValidator = new JsonValidator();
+            _s100JsonValidator = new S100JsonValidator();
         }
 
         [Test]
@@ -65,7 +65,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         }
 
         [Test]
-        public async Task WhenValidS100DataContentPublishedEventReceivedWithValidToken_ThenWebhookAndSAPEndPointReturns200OkResponse()
+        public async Task WhenValidS100DataContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponseAndCallbackEndpointPublishesEvent()
         {
             string correlationId = null;
 
@@ -78,13 +78,17 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
             RestResponse response = await _webhookEndpoint.PostWebhookResponseAsync(requestBody, await _authTokenProvider.GetAzureADToken(false));
 
+            //Once the webhook endpoint returns 200 OK response, the SAP callback endpoint is called from wiremock.
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-            await Task.Delay(15000); //This delay has been added to ensure SAP callback is completed.
+            //Delay is added to ensure SAP callback is completed from wiremock.
+            await Task.Delay(15000); 
 
+            //Download the S100UnitOfSaleUpdatedEvent JSON file from the blob container.
             expectedFilePath = _azureBlobReaderWriter.DownloadContainerFile(expectedFilePath, correlationId, ".json", EventPayloadFiles.S100UnitOfSaleUpdatedEventFileName);
-            Assert.That(await _jsonValidator.VerifyUnitOfSaleEvent(expectedFilePath));
-            Assert.That(_azureTableReaderWriter.GetSapStatus(correlationId).Equals("Complete"));
+
+            Assert.That(await _s100JsonValidator.VerifyS100UnitOfSaleUpdatedEventJson(expectedFilePath));
+            Assert.That(_azureTableReaderWriter.GetStatus(correlationId).Equals("Complete"));
         }
 
         [Test]
