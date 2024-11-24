@@ -8,15 +8,15 @@ namespace UKHO.ERPFacade.API.Controllers
 {
     [Route("api")]
     [ApiController]
-    public class S100SapCallbackController : BaseController<S100SapCallbackController>
+    public class SapCallbackController : BaseController<SapCallbackController>
     {
-        private readonly ILogger<S100SapCallbackController> _logger;
+        private readonly ILogger<SapCallbackController> _logger;
         private readonly IS100SapCallBackService _s100SapCallbackService;
 
         private const string CorrelationId = "correlationId";
 
-        public S100SapCallbackController(IHttpContextAccessor contextAccessor,
-                                     ILogger<S100SapCallbackController> logger,
+        public SapCallbackController(IHttpContextAccessor contextAccessor,
+                                     ILogger<SapCallbackController> logger,
                                      IS100SapCallBackService sapCallbackService)
         : base(contextAccessor)
         {

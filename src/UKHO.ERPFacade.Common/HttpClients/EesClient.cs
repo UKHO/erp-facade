@@ -1,15 +1,16 @@
-﻿using System.Net.Http.Headers;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Net.Http.Headers;
 using System.Text;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using UKHO.ERPFacade.Common.Authentication;
 using UKHO.ERPFacade.Common.Configuration;
-using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Models.CloudEvents;
 
 namespace UKHO.ERPFacade.Common.HttpClients
 {
+    [ExcludeFromCodeCoverage]
     public class EesClient : IEesClient
     {
         private readonly HttpClient _httpClient;
@@ -30,7 +31,7 @@ namespace UKHO.ERPFacade.Common.HttpClients
             return await _httpClient.GetAsync(url);
         }
 
-        public async Task<Result> PostAsync(BaseCloudEvent cloudEvent)
+        public async Task<HttpResponseMessage> PostAsync(BaseCloudEvent cloudEvent)
         {
             var cloudEventPayload = JsonConvert.SerializeObject(cloudEvent);
 
@@ -43,13 +44,7 @@ namespace UKHO.ERPFacade.Common.HttpClients
             var httpContent = new StringContent(cloudEventPayload, Encoding.UTF8);
             httpContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
 
-            HttpResponseMessage response = await _httpClient.PostAsync(_eesConfiguration.Value.PublishEndpoint, httpContent);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                return Result.Failure(response.StatusCode.ToString());
-            }
-            return Result.Success();
+            return await _httpClient.PostAsync(_eesConfiguration.Value.PublishEndpoint, httpContent);
         }
     }
 }

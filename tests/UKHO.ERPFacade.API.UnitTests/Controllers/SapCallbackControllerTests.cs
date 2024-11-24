@@ -15,20 +15,20 @@ using UKHO.ERPFacade.Services;
 namespace UKHO.ERPFacade.API.UnitTests.Controllers
 {
     [TestFixture]
-    public class S100SapCallbackControllerTests
+    public class SapCallbackControllerTests
     {
         private IHttpContextAccessor _fakeHttpContextAccessor;
-        private ILogger<S100SapCallbackController> _fakeLogger;
+        private ILogger<SapCallbackController> _fakeLogger;
         private IS100SapCallBackService _fakeSapCallbackService;
-        private S100SapCallbackController _fakeSapCallbackController;
+        private SapCallbackController _fakeSapCallbackController;
 
         [SetUp]
         public void Setup()
         {
             _fakeHttpContextAccessor = A.Fake<IHttpContextAccessor>();
-            _fakeLogger = A.Fake<ILogger<S100SapCallbackController>>();
+            _fakeLogger = A.Fake<ILogger<SapCallbackController>>();
             _fakeSapCallbackService = A.Fake<IS100SapCallBackService>();
-            _fakeSapCallbackController = new S100SapCallbackController(_fakeHttpContextAccessor, _fakeLogger, _fakeSapCallbackService);
+            _fakeSapCallbackController = new SapCallbackController(_fakeHttpContextAccessor, _fakeLogger, _fakeSapCallbackService);
         }
 
         [Test]

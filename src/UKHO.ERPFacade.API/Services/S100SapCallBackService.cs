@@ -18,9 +18,9 @@ namespace UKHO.ERPFacade.API.Services
         private readonly IS100UnitOfSaleUpdatedEventPublishingService _s100UnitOfSaleUpdatedEventPublishingService;
 
         public S100SapCallBackService(IAzureBlobReaderWriter azureBlobReaderWriter,
-            IAzureTableReaderWriter azureTableReaderWriter,
-            ILogger<S100SapCallBackService> logger,
-            IS100UnitOfSaleUpdatedEventPublishingService s100UnitOfSaleUpdatedEventPublishingService)
+                                      IAzureTableReaderWriter azureTableReaderWriter,
+                                      ILogger<S100SapCallBackService> logger,
+                                      IS100UnitOfSaleUpdatedEventPublishingService s100UnitOfSaleUpdatedEventPublishingService)
         {
             _azureTableReaderWriter = azureTableReaderWriter;
             _azureBlobReaderWriter = azureBlobReaderWriter;
@@ -59,7 +59,7 @@ namespace UKHO.ERPFacade.API.Services
 
             _logger.LogInformation(EventIds.UnitOfSaleUpdatedEventPublished.ToEventId(), "The unit of sale updated event published to EES successfully.");
 
-            await _azureTableReaderWriter.UpdateEntityAsync(PartitionKeys.S100PartitionKey, correlationId, new Dictionary<string, object> { { "Status", Status.Complete.ToString() }, { "EventPublishDateTime", DateTime.UtcNow } });
+            await _azureTableReaderWriter.UpdateEntityAsync(PartitionKeys.S100PartitionKey, correlationId, new Dictionary<string, object> { { "Status", Status.Complete.ToString() }, { "EventPublishedDateTime", DateTime.UtcNow } });
 
             _logger.LogInformation(EventIds.S100DataContentPublishedEventTableEntryUpdated.ToEventId(), "Status and event published date time for S-100 data content published event is updated successfully.");
         }
