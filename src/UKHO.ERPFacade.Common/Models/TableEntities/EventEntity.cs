@@ -23,5 +23,7 @@ namespace UKHO.ERPFacade.Common.Models.TableEntities
 
         public string Status { get; set; } = default!;
 
+        public DateTime? EventPublishedDateTime { get; set; } = default!;
+
     }
 }

@@ -32,6 +32,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Configuration
             services.Configure<AzureADConfiguration>(configurationRoot.GetSection("AzureADConfiguration"));
             services.Configure<ErpFacadeConfiguration>(configurationRoot.GetSection("ErpFacadeConfiguration"));
             services.Configure<AzureStorageConfiguration>(configurationRoot.GetSection("AzureStorageConfiguration"));
+            services.Configure<SharedApiKeyConfiguration>(configurationRoot.GetSection("SharedApiKeyConfiguration"));
 
             return services.BuildServiceProvider();
         }

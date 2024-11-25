@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using UKHO.ERPFacade.API.Filters;
+using UKHO.ERPFacade.Common.Logging;
+using UKHO.ERPFacade.Services;
 
 namespace UKHO.ERPFacade.API.Controllers
 {
@@ -8,15 +10,43 @@ namespace UKHO.ERPFacade.API.Controllers
     [ApiController]
     public class SapCallbackController : BaseController<SapCallbackController>
     {
-        public SapCallbackController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
+        private readonly ILogger<SapCallbackController> _logger;
+        private readonly IS100SapCallBackService _s100SapCallbackService;
+
+        private const string CorrelationId = "correlationId";
+
+        public SapCallbackController(IHttpContextAccessor contextAccessor,
+                                     ILogger<SapCallbackController> logger,
+                                     IS100SapCallBackService sapCallbackService)
+        : base(contextAccessor)
         {
+            _logger = logger;
+            _s100SapCallbackService = sapCallbackService;
         }
 
         [HttpPost]
         [ServiceFilter(typeof(SharedApiKeyAuthFilter))]
         [Route("v2/callback/sap/s100actions/processed")]
-        public virtual async Task<IActionResult> S100SapCallBack([FromBody] JObject sapCallBackJson)
+        public virtual async Task<IActionResult> S100SapCallback([FromBody] JObject sapCallbackJson)
         {
+            string correlationId = sapCallbackJson.GetValue(CorrelationId, StringComparison.OrdinalIgnoreCase)?.Value<string>();
+
+            _logger.LogInformation(EventIds.S100SapCallbackPayloadReceived.ToEventId(), "S-100 SAP callback received.");
+
+            if (string.IsNullOrEmpty(correlationId))
+            {
+                _logger.LogWarning(EventIds.CorrelationIdMissingInS100SapCallBack.ToEventId(), "CorrelationId is missing in S-100 SAP callback request.");
+                return new BadRequestObjectResult(StatusCodes.Status400BadRequest);
+            }
+
+            if (!await _s100SapCallbackService.IsValidCallbackAsync(correlationId))
+            {
+                _logger.LogError(EventIds.InvalidS100SapCallback.ToEventId(), "Invalid S-100 SAP callback request. Requested correlationId not found.");
+                return new NotFoundObjectResult(StatusCodes.Status404NotFound);
+            }
+
+            await _s100SapCallbackService.ProcessSapCallback(correlationId);
+
             return new OkObjectResult(StatusCodes.Status200OK);
         }
     }
