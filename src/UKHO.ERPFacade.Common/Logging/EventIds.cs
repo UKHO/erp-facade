@@ -497,7 +497,77 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940099 - ErrorOccurred In CleanupWebJob.
         /// </summary>
-        ErrorOccurredInCleanupWebJob = 940099
+        ErrorOccurredInCleanupWebJob = 940099,
+
+        /// <summary>
+        /// 940100 - Attempting to publish event to ESS.
+        /// </summary>
+        StartingEnterpriseEventServiceEventPublisher = 940100,
+
+        /// <summary>
+        /// 940101 - Retry attempt to publish EES event.
+        /// </summary>
+        RetryAttemptForEnterpriseEventServiceEvent = 940101,
+
+        /// <summary>
+        /// 940102 - Exception occurred while publishing event to EES.
+        /// </summary>
+        EnterpriseEventServiceEventPublishException = 940102,
+
+        /// <summary>
+        /// 940103 - S-100 sap callBack payload received from SAP.
+        /// </summary>
+        S100SapCallbackPayloadReceived = 940103,
+
+        /// <summary>
+        /// 940104 - CorrelationId is missing in S-100 sap call back.
+        /// </summary>
+        CorrelationIdMissingInS100SapCallBack = 940104,
+
+        /// <summary>
+        /// 940105 - Invalid S-100 SAP callback. Request from ERP Facade to SAP not found.
+        /// </summary>
+        InvalidS100SapCallback = 940105,
+
+        /// <summary>
+        /// 940106 - Valid S-100 SAP callback.
+        /// </summary>
+        ValidS100SapCallback = 940106,
+
+        /// <summary>
+        /// 940107 - Download S100 Unit Of Sale Updated Event is started.
+        /// </summary>
+        DownloadS100UnitOfSaleUpdatedEventIsStarted = 940107,
+
+        /// <summary>
+        /// 940108 - Download S100 Unit Of Sale Updated Event is completed.
+        /// </summary>
+        DownloadS100UnitOfSaleUpdatedEventIsCompleted = 940108,
+
+        /// <summary>
+        /// 940109 - Publishing Unit Of Sale Updated Event To Ees Started.
+        /// </summary>
+        PublishingUnitOfSaleUpdatedEventToEesStarted = 940109,
+
+        /// <summary>
+        /// 940110 - Error occurred while publishing the publishing unit of sale updated event to EES.
+        /// </summary>
+        ErrorOccurredWhilePublishingUnitOfSaleUpdatedEventToEes = 940110,
+
+        /// <summary>
+        /// 940111 - The publishing unit of sale updated event successfully to EES.
+        /// </summary>
+        UnitOfSaleUpdatedEventPublished = 940111,
+
+        /// <summary>
+        /// 940112 - Updated The Enc Event StatusAnd Publish Date Time Entity in enc event table.
+        /// </summary>
+        S100DataContentPublishedEventTableEntryUpdated = 940112,
+
+        /// <summary>
+        /// 940113 - S-100 Unit Of Sale Updated Event Json Stored In Azure Blob Container
+        /// </summary>
+        S100UnitOfSaleUpdatedEventJsonStoredInAzureBlobContainer = 940113
     }
 
     /// <summary>

@@ -5,8 +5,7 @@ namespace UKHO.ERPFacade.API.Filters
     public class CorrelationIdMiddleware
     {
         public const string XCorrelationIdHeaderKey = "_X-Correlation-ID";
-        public const string CorrelationIdKey = "data.correlationId";
-        public const string CorrIdKey = "corrid";
+        public const string CorrelationIdKey = "correlationId";
 
         private readonly RequestDelegate _next;
 
@@ -18,42 +17,44 @@ namespace UKHO.ERPFacade.API.Filters
         public async Task InvokeAsync(HttpContext httpContext)
         {
             httpContext.Request.EnableBuffering();
-            var correlationId = Guid.NewGuid().ToString();
 
             using var streamReader = new StreamReader(httpContext.Request.Body);
-            var bodyAsText = await streamReader.ReadToEndAsync();
+            var bodyAsString = await streamReader.ReadToEndAsync();
 
-            if (!string.IsNullOrWhiteSpace(bodyAsText))
-            {
-                var bodyAsJson = JToken.Parse(bodyAsText);
-                if (bodyAsJson is JArray)
-                {
-                    var requestJArray = JArray.Parse(bodyAsText);
-                    if (!string.IsNullOrEmpty(requestJArray.First.SelectToken(CorrIdKey)?.Value<string>()))
-                        correlationId = requestJArray.First.SelectToken(CorrIdKey)?.Value<string>();
-                }
-                if (bodyAsJson is JObject)
-                {
-                    var requestJObject = JObject.Parse(bodyAsText);
-                    correlationId = requestJObject.SelectToken(CorrelationIdKey)?.Value<string>();
-                }
-            }
+            var correlationId = ExtractCorrelationId(bodyAsString) ?? Guid.NewGuid().ToString();
 
             httpContext.Request.Body.Position = 0;
 
-            httpContext.Request.Headers.Append(XCorrelationIdHeaderKey, correlationId);
-            httpContext.Response.Headers.Append(XCorrelationIdHeaderKey, correlationId);
+            httpContext.Request.Headers[XCorrelationIdHeaderKey] = correlationId;
+            httpContext.Response.Headers[XCorrelationIdHeaderKey] = correlationId;
 
             var state = new Dictionary<string, object>
             {
-                [XCorrelationIdHeaderKey] = correlationId!,
+                [XCorrelationIdHeaderKey] = correlationId,
             };
 
             var logger = httpContext.RequestServices.GetRequiredService<ILogger<CorrelationIdMiddleware>>();
+
             using (logger.BeginScope(state))
             {
                 await _next(httpContext);
             }
+        }
+
+        private string? ExtractCorrelationId(string bodyAsString)
+        {
+            if (string.IsNullOrWhiteSpace(bodyAsString))
+            {
+                return null;
+            }
+
+            if (JToken.Parse(bodyAsString) is JObject bodyAsJson)
+            {
+                var token = bodyAsJson.SelectToken($"..{CorrelationIdKey}");
+                return token?.ToString() ?? null;
+            }
+
+            return null;
         }
     }
 }

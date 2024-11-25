@@ -96,7 +96,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
         public async Task WhenCorrIdKeyExistsInRequestBody_ThenXCorrelationIdHeaderKeyAddedToRequestAndResponseHeaders()
         {
             var correlationId = Guid.NewGuid().ToString();
-            var bodyAsJson = new JArray { { new JObject { { "corrid", correlationId } } } };
+            var bodyAsJson = new JObject { { "correlationId", correlationId } };
             var bodyAsText = bodyAsJson.ToString();
             var responseHeaders =new HeaderDictionary() ;
             var requestHeaders = new HeaderDictionary();

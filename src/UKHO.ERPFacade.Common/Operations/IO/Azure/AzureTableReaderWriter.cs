@@ -4,6 +4,7 @@ using Azure.Data.Tables;
 using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Constants;
+using UKHO.ERPFacade.Common.Models.TableEntities;
 
 namespace UKHO.ERPFacade.Common.Operations.IO.Azure
 {

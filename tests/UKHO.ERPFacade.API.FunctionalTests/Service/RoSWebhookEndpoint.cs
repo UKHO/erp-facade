@@ -113,11 +113,11 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Service
                     List<string> actionAttributesSeq = _erpFacadeConfiguration.RosLicenceUpdateXmlList.ToList();
                     List<string> actionAttributesSeqProd = _erpFacadeConfiguration.RoSLicenceUpdatedProdXmlList.ToList();
                     Assert.That(RoSXMLValidator.CheckXmlAttributes(generatedXmlFilePath, requestBody, listOfEventJsons, actionAttributesSeq, actionAttributesSeqProd).Result, Is.True, "CheckXmlAttributes Failed");
-                    Assert.That(_azureTableReaderWriter.GetSapStatus(correlationId), Is.EqualTo("Complete"), $"SAP status is Incomplete for {correlationId}");
+                    Assert.That(_azureTableReaderWriter.GetStatus(correlationId), Is.EqualTo("Complete"), $"SAP status is Incomplete for {correlationId}");
                     break;
                 case false:
                     Assert.That(blobList, Does.Not.Contain(EventPayloadFiles.SapXmlPayloadFileName), $"XML is generated for {correlationId} before we receive all related events.");
-                    Assert.That(_azureTableReaderWriter.GetSapStatus(correlationId), Is.EqualTo("Incomplete"), $"SAP status is Complete for {correlationId}");
+                    Assert.That(_azureTableReaderWriter.GetStatus(correlationId), Is.EqualTo("Incomplete"), $"SAP status is Complete for {correlationId}");
                     break;
             }
             return response;
