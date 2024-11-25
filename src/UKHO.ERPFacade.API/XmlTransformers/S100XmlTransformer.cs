@@ -194,17 +194,14 @@ namespace UKHO.ERPFacade.API.XmlTransformers
 
                     if (attribute.IsRequired)
                     {
-                        if (attribute.XmlNodeName == XmlFields.ReplacedBy && !IsPropertyNullOrEmpty(attribute.JsonPropertyName, replacedBy))
+                        if (attribute.XmlNodeName == XmlFields.ReplacedBy)
                         {
                             attributeNode.InnerText = StringExtension.ToSubstring(replacedBy.ToString(), 0, XmlFields.MaxXmlNodeLength);
                         }
                         else
                         {
                             var jsonFieldValue = Extractor.ExtractJsonAttributeValue(attribute.JsonPropertyName, source, source.GetType()).ToString();
-                            if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, jsonFieldValue))
-                            {
-                                attributeNode.InnerText = StringExtension.ToSubstring(jsonFieldValue, 0, XmlFields.MaxXmlNodeLength);
-                            }
+                            attributeNode.InnerText = StringExtension.ToSubstring(jsonFieldValue, 0, XmlFields.MaxXmlNodeLength);
                         }
                     }
                     else

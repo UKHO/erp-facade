@@ -45,13 +45,7 @@
     <None Update="ERPTestData\NewCellWithNullcurrentWeekAlphaCorrectionInUkhoWeekNumberSection.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPTestData\NewCellWithoutYearInUkhoWeekNumberSection.JSON">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="ERPTestData\NewCellWithNullYearInUkhoWeekNumberSection.JSON">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ERPTestData\NewCellWithEmptyPermit.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPTestData\NewCellWithNoUnitOfSaleHavingTypeIsUnit.JSON">
@@ -60,7 +54,7 @@
     <None Update="ERPTestData\NewCellWithoutProviderCodeAttributes.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPTestData\NewCellWithoutUkhoWeekNumberSection.JSON">
+    <None Update="ERPTestData\NewCellWithoutYearInUkhoWeekNumberSection.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPTestData\NewCellWithWrongUkhoWeekDetails.JSON">

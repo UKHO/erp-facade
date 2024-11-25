@@ -229,21 +229,18 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                         switch (attribute.XmlNodeName)
                         {
                             case XmlFields.ReplacedBy:
-                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, replacedBy)) attributeNode.InnerText = StringExtension.ToSubstring(replacedBy.ToString(), 0, XmlFields.MaxXmlNodeLength);
+                                attributeNode.InnerText = StringExtension.ToSubstring(replacedBy.ToString(), 0, XmlFields.MaxXmlNodeLength);
                                 break;
                             case XmlFields.ActiveKey:
-                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, decryptedPermit.ActiveKey)) attributeNode.InnerText = StringExtension.ToSubstring(decryptedPermit.ActiveKey, 0, XmlFields.MaxXmlNodeLength);
+                                 attributeNode.InnerText = StringExtension.ToSubstring(decryptedPermit.ActiveKey, 0, XmlFields.MaxXmlNodeLength);
                                 break;
                             case XmlFields.NextKey:
-                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, decryptedPermit.NextKey)) attributeNode.InnerText = StringExtension.ToSubstring(decryptedPermit.NextKey, 0, XmlFields.MaxXmlNodeLength);
+                                attributeNode.InnerText = StringExtension.ToSubstring(decryptedPermit.NextKey, 0, XmlFields.MaxXmlNodeLength);
                                 break;
                             default:
                                 var jsonAttributeValue = Extractor.ExtractJsonAttributeValue(attribute.JsonPropertyName, source, source.GetType()).ToString();
-                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, jsonAttributeValue))
-                                {
-                                    // Set value as first 2 characters if the node is Agency, else limit other nodes to 250 characters
-                                    attributeNode.InnerText = attribute.XmlNodeName == XmlFields.Agency ? StringExtension.ToSubstring(jsonAttributeValue, 0, XmlFields.MaxAgencyXmlNodeLength) : StringExtension.ToSubstring(jsonAttributeValue, 0, XmlFields.MaxXmlNodeLength);
-                                }
+                                // Set value as first 2 characters if the node is Agency, else limit other nodes to 250 characters
+                                attributeNode.InnerText = attribute.XmlNodeName == XmlFields.Agency ? StringExtension.ToSubstring(jsonAttributeValue, 0, XmlFields.MaxAgencyXmlNodeLength) : StringExtension.ToSubstring(jsonAttributeValue, 0, XmlFields.MaxXmlNodeLength);
                                 break;
                         }
                     }
@@ -262,11 +259,6 @@ namespace UKHO.ERPFacade.API.XmlTransformers
 
         private void ProcessUkhoWeekNumberAttributes(string action, IEnumerable<ActionItemAttribute> attributes, XmlDocument soapXml, S57UkhoWeekNumber ukhoWeekNumber, List<(int, XmlElement)> actionAttributes)
         {
-            if (ukhoWeekNumber == null)
-            {
-                throw new ERPFacadeException(EventIds.RequiredWeekDetailsNotFoundException.ToEventId(), $"UkhoWeekNumber details not found in S57 enccontentpublished event to generate {action} action.");
-            }
-
             foreach (var attribute in attributes)
             {
                 try
