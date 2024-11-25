@@ -17,7 +17,10 @@ namespace UKHO.ERPFacade.API.Services.EventPublishingServices
         private readonly IAzureBlobReaderWriter _azureBlobReaderWriter;
         private readonly ILogger<S100UnitOfSaleUpdatedEventPublishingService> _logger;
 
-        public S100UnitOfSaleUpdatedEventPublishingService(IEesClient eesClient, IOptions<EESConfiguration> eesConfig, IAzureBlobReaderWriter azureBlobReaderWriter, ILogger<S100UnitOfSaleUpdatedEventPublishingService> logger)
+        public S100UnitOfSaleUpdatedEventPublishingService(IEesClient eesClient,
+                                                           IOptions<EESConfiguration> eesConfig,
+                                                           IAzureBlobReaderWriter azureBlobReaderWriter,
+                                                           ILogger<S100UnitOfSaleUpdatedEventPublishingService> logger)
         {
             _eesClient = eesClient;
             _eesConfig = eesConfig ?? throw new ArgumentNullException(nameof(eesConfig));
@@ -30,13 +33,18 @@ namespace UKHO.ERPFacade.API.Services.EventPublishingServices
             baseCloudEvent.Type = EventTypes.S100UnitOfSaleEventType;
             baseCloudEvent.Source = _eesConfig.Value.SourceApplicationUri;
             baseCloudEvent.Id = Guid.NewGuid().ToString();
-            baseCloudEvent.Time = DateTime.UtcNow.ToString();
+            baseCloudEvent.Time = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ");
 
             await _azureBlobReaderWriter.UploadEventAsync(JsonConvert.SerializeObject(baseCloudEvent, Formatting.Indented), correlationId, EventPayloadFiles.S100UnitOfSaleUpdatedEventFileName);
 
             _logger.LogInformation(EventIds.S100UnitOfSaleUpdatedEventJsonStoredInAzureBlobContainer.ToEventId(), "S-100 unit of sale updated event json payload is stored in azure blob container.");
+            HttpResponseMessage response = await _eesClient.PostAsync(baseCloudEvent);
 
-            return await _eesClient.PostAsync(baseCloudEvent);
+            if (!response.IsSuccessStatusCode)
+            {
+                return Result.Failure(response.StatusCode.ToString());
+            }
+            return Result.Success();
         }
     }
 }

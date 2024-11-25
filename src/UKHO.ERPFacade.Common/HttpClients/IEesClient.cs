@@ -6,6 +6,6 @@ namespace UKHO.ERPFacade.Common.HttpClients
     public interface IEesClient
     {
         Task<HttpResponseMessage> Get(string url);
-        Task<Result> PostAsync(BaseCloudEvent cloudEvent);
+        Task<HttpResponseMessage> PostAsync(BaseCloudEvent cloudEvent);
     }
 }

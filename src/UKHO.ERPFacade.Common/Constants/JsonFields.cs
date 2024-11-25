@@ -18,7 +18,6 @@ namespace UKHO.ERPFacade.Common.Constants
         public const string UnitOfSaleStatusForSale = "ForSale";
 
         public const string PermitWithSameKey = "PermitWithSameKey";
-        public const string PermitWithDifferentKey = "PermitWithDifferentKey";
-        public const string AioKey = "AIO";
+        public const string Source = "https://erp.ukho.gov.uk";
     }
 }
