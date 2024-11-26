@@ -97,38 +97,6 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
                                                 && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Generation of SAP xml payload for S-100 data content published event completed.").MustHaveHappenedOnceExactly();
         }
 
-
-        [Test]
-        public void WhenBuildXmlPayloadIsCalledWithNewProductWithNoUnitOfSaleHavingTypeIsUnit_ThenThrowERPFacadeException()
-        {
-            var newProductEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\S100TestData\\NewProductWithNoUnitOfSaleStatusAndAddProducts.JSON");
-            var baseCloudEvent = JsonConvert.DeserializeObject<BaseCloudEvent>(newProductEventPayloadJson);
-            S100EventData s100EventData = JsonConvert.DeserializeObject<S100EventData>(baseCloudEvent.Data.ToString()!);
-            XmlDocument soapXml = new();
-            soapXml.LoadXml(_sapXmlTemplate);
-
-            A.CallTo(() => _fakeXmlOperations.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
-
-            Assert.Throws<ERPFacadeException>(() => _fakeS100XmlTransformer.BuildXmlPayload(s100EventData, _sapXmlTemplate))
-                .Message.Should().Be("Required unit not found in S-100 data content published event for 101GB7645JTHG83 to generate CREATE PRODUCT action.");
-        }
-
-        [Test]
-        public void WhenBuildXmlPayloadIsCalledWithReplaceCellWithNoUnitOfSaleHavingTypeIsUnit_ThenThrowERPFacadeException()
-        {
-            var newProductEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\S100TestData\\ReplaceProductWithNoUnitOfSaleRemoveProducts.JSON");
-            var baseCloudEvent = JsonConvert.DeserializeObject<BaseCloudEvent>(newProductEventPayloadJson);
-            S100EventData s100EventData = JsonConvert.DeserializeObject<S100EventData>(baseCloudEvent.Data.ToString()!);
-
-            XmlDocument soapXml = new();
-            soapXml.LoadXml(_sapXmlTemplate);
-
-            A.CallTo(() => _fakeXmlOperations.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
-
-            Assert.Throws<ERPFacadeException>(() => _fakeS100XmlTransformer.BuildXmlPayload(s100EventData, _sapXmlTemplate))
-                .Message.Should().Be("Required unit not found in S-100 data content published event for 101GB1111111A to generate REPLACED WITH PRODUCT action.");
-        }
-
         [Test]
         public void WhenBuildXmlPayloadIfRequiredAttributesNotProvided_ThenThrowERPFacadeException()
         {

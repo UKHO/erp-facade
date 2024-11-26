@@ -67,22 +67,16 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                     {
                         case 1://CREATE PRODUCT
                         case 10://CANCEL PRODUCT
-                            if (unitOfSale is null)
-                            {
-                                throw new ERPFacadeException(EventIds.RequiredUnitNotFoundException.ToEventId(), $"Required unit not found in S-100 data content published event for {product.ProductName} to generate {action.Action} action.");
-                            }
-                            BuildAndAppendActionNode(soapXml, product, unitOfSale, action, actionItemNode, product.ProductName);
+                            if (unitOfSale is not null)
+                                BuildAndAppendActionNode(soapXml, product, unitOfSale, action, actionItemNode, product.ProductName);
                             break;
 
                         case 4://REPLACED WITH PRODUCT
-                            if (product.DataReplacement.Any() && unitOfSale is null)
-                            {
-                                throw new ERPFacadeException(EventIds.RequiredUnitNotFoundException.ToEventId(), $"Required unit not found in S-100 data content published event for {product.ProductName} to generate {action.Action} action.");
-                            }
-                            foreach (var replacedProduct in product.DataReplacement)
-                            {
-                                BuildAndAppendActionNode(soapXml, product, unitOfSale, action, actionItemNode, product.ProductName, replacedProduct);
-                            }
+                            if (product.DataReplacement.Any() && unitOfSale is not null)
+                                foreach (var replacedProduct in product.DataReplacement)
+                                {
+                                    BuildAndAppendActionNode(soapXml, product, unitOfSale, action, actionItemNode, product.ProductName, replacedProduct);
+                                }
                             break;
 
                         case 6://CHANGE PRODUCT

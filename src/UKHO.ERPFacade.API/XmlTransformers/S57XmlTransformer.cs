@@ -73,22 +73,16 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                     {
                         case 1://CREATE ENC CELL
                         case 10://CANCEL ENC CELL
-                            if (unitOfSale is null)
-                            {
-                                throw new ERPFacadeException(EventIds.RequiredUnitNotFoundException.ToEventId(), $"Required unit not found in S57 enccontentpublished event for {product.ProductName} to generate {action.Action} action.");
-                            }
-                            BuildAndAppendActionNode(soapXml, product, unitOfSale, action, eventData, actionItemNode, product.ProductName);
+                            if (unitOfSale is not null)
+                                BuildAndAppendActionNode(soapXml, product, unitOfSale, action, eventData, actionItemNode, product.ProductName);
                             break;
 
                         case 4://REPLACED WITH ENC CELL
-                            if (product.ReplacedBy.Any() && unitOfSale is null)
-                            {
-                                throw new ERPFacadeException(EventIds.RequiredUnitNotFoundException.ToEventId(), $"Required unit not found in S57 enccontentpublished event for {product.ProductName} to generate {action.Action} action.");
-                            }
-                            foreach (var replacedProduct in product.ReplacedBy)
-                            {
-                                BuildAndAppendActionNode(soapXml, product, unitOfSale, action, eventData, actionItemNode, product.ProductName, replacedProduct);
-                            }
+                            if (product.ReplacedBy.Any() && unitOfSale is not null)
+                                foreach (var replacedProduct in product.ReplacedBy)
+                                {
+                                    BuildAndAppendActionNode(soapXml, product, unitOfSale, action, eventData, actionItemNode, product.ProductName, replacedProduct);
+                                }
                             break;
 
                         case 5://ADDITIONAL COVERAGE ENC CELL
@@ -232,7 +226,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                                 attributeNode.InnerText = StringExtension.ToSubstring(replacedBy.ToString(), 0, XmlFields.MaxXmlNodeLength);
                                 break;
                             case XmlFields.ActiveKey:
-                                 attributeNode.InnerText = StringExtension.ToSubstring(decryptedPermit.ActiveKey, 0, XmlFields.MaxXmlNodeLength);
+                                attributeNode.InnerText = StringExtension.ToSubstring(decryptedPermit.ActiveKey, 0, XmlFields.MaxXmlNodeLength);
                                 break;
                             case XmlFields.NextKey:
                                 attributeNode.InnerText = StringExtension.ToSubstring(decryptedPermit.NextKey, 0, XmlFields.MaxXmlNodeLength);

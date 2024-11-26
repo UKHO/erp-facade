@@ -236,38 +236,6 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
         }
 
         [Test]
-        public void WhenBuildSapMessageXmlIsCalledWithNewCellWithNoUnitOfSaleHavingTypeIsUnit_ThenThrowERPFacadeException()
-        {
-            var newCellEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\NewCellWithNoUnitOfSaleHavingTypeIsUnit.JSON");
-            var baseCloudEvent = JsonConvert.DeserializeObject<BaseCloudEvent>(newCellEventPayloadJson);
-            S57EventData s57EventData = JsonConvert.DeserializeObject<S57EventData>(baseCloudEvent.Data.ToString()!);
-
-            XmlDocument soapXml = new();
-            soapXml.LoadXml(_sapXmlTemplate);
-
-            A.CallTo(() => _fakeXmlOperations.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
-
-            Assert.Throws<ERPFacadeException>(() => _fakeS57XmlTransformer.BuildXmlPayload(s57EventData, _sapXmlTemplate))
-                .Message.Should().Be("Required unit not found in S57 enccontentpublished event for US5AK9DI to generate CREATE ENC CELL action.");
-        }
-
-        [Test]
-        public void WhenBuildSapMessageXmlIsCalledWithReplaceCellWithNoUnitOfSaleHavingTypeIsUnit_ThenThrowERPFacadeException()
-        {
-            var newCellEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\ReplaceCellWithNoUnitOfSaleHavingTypeIsUnit.JSON");
-            var baseCloudEvent = JsonConvert.DeserializeObject<BaseCloudEvent>(newCellEventPayloadJson);
-            S57EventData s57EventData = JsonConvert.DeserializeObject<S57EventData>(baseCloudEvent.Data.ToString()!);
-
-            XmlDocument soapXml = new();
-            soapXml.LoadXml(_sapXmlTemplate);
-
-            A.CallTo(() => _fakeXmlOperations.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
-
-            Assert.Throws<ERPFacadeException>(() => _fakeS57XmlTransformer.BuildXmlPayload(s57EventData, _sapXmlTemplate))
-            .Message.Should().Be("Required unit not found in S57 enccontentpublished event for GB50382B to generate REPLACED WITH ENC CELL action.");
-        }
-
-        [Test]
         public void WhenBuildSapMessageXmlIfRequiredAttributesNotProvided_ThenThrowERPFacadeException()
         {
             var newCellEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\NewCellWithoutProviderCodeAttributes.JSON");
