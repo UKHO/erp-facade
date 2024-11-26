@@ -3,17 +3,17 @@ import { check } from 'k6';
 import { htmlReport } from "https://raw.githubusercontent.com/benc-uk/k6-reporter/main/dist/bundle.js";
 import { textSummary } from "https://jslib.k6.io/k6-summary/0.0.1/index.js";
 import { URL } from 'https://jslib.k6.io/url/1.0.0/index.js';
-import { PayloadSetup, S100PayloadSetup } from './PayloadDataSetup/PayloadSetupDifferentProfiles.js';
+import { PayloadSetup, S100PayloadSetup } from './../../PayloadDataSetup/PayloadSetupDifferentProfiles.js';
 
-var Config = JSON.parse(open('./config.json'));
+var Config = JSON.parse(open('./../../config.json'));
 
-var PayloadOneProduct = JSON.parse(open('./PayloadData/WebhookPayloads/1ProductNewCell.json'));
-var PayloadTwoProducts = JSON.parse(open('./PayloadData/WebhookPayloads/2ProductENCNewAndMoveCell.json'));
-var PayloadHundredProducts = JSON.parse(open('./PayloadData/WebhookPayloads/100ProductsNewCell.json'));
+var PayloadOneProduct = JSON.parse(open('./../../PayloadData/S57Payloads/1ProductNewCell.json'));
+var PayloadTwoProducts = JSON.parse(open('./../../PayloadData/S57Payloads/2ProductENCNewAndMoveCell.json'));
+var PayloadHundredProducts = JSON.parse(open('./../../PayloadData/S57Payloads/100ProductsNewCell.json'));
 
-var S100PayloadOneProduct = JSON.parse(open('./PayloadData/S100Payloads/1ProductNewCell_S100.json'));
-var S100PayloadTwoProducts = JSON.parse(open('./PayloadData/S100Payloads/2ProductsNewCellAndNewEdition_S100.json'));
-var S100PayloadHundredProducts = JSON.parse(open('./PayloadData/S100Payloads/100ProductsNewCell_S100.json'));
+var S100PayloadOneProduct = JSON.parse(open('./../../PayloadData/S100Payloads/1ProductNewCell_S100.json'));
+var S100PayloadTwoProducts = JSON.parse(open('./../../PayloadData/S100Payloads/2ProductsNewCellAndNewEdition_S100.json'));
+var S100PayloadHundredProducts = JSON.parse(open('./../../PayloadData/S100Payloads/100ProductsNewCell_S100.json'));
 
 if (!Config.BaseUrl.toString().toUpperCase().includes("DEV")) {
     throw new Error("Invalid Environment !! Please use DEV environment for performance testing.\n");

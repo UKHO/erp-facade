@@ -4,16 +4,16 @@ import { check } from 'k6';
 import { htmlReport } from "https://raw.githubusercontent.com/benc-uk/k6-reporter/main/dist/bundle.js";
 import { textSummary } from "https://jslib.k6.io/k6-summary/0.0.1/index.js";
 import { URL } from 'https://jslib.k6.io/url/1.0.0/index.js';
-import { PayloadSetup } from './PayloadDataSetup/PayloadSetup.js';
+import { PayloadSetup } from './../../PayloadDataSetup/PayloadSetup.js';
 
 
-var Config = JSON.parse(open('./config.json'));
-var ProductList = JSON.parse(open('./PayloadData/WebhookPayloads/SAPProductList.json'));
+var Config = JSON.parse(open('./../../config.json'));
+var ProductList = JSON.parse(open('./../../PayloadData/S57Payloads/SAPProductList.json'));
 
-var defaultPayload1 = JSON.parse(open('./PayloadData/WebhookPayloads/1ProductNewCell.json'));
-var defaultPayload2 = JSON.parse(open('./PayloadData/WebhookPayloads/5ProductsNewCell.json'));
-var defaultPayload3 = JSON.parse(open('./PayloadData/WebhookPayloads/10ProductsNewCell.json'));
-var defaultPayload4 = JSON.parse(open('./PayloadData/WebhookPayloads/100ProductsNewCell.json'));
+var defaultPayload1 = JSON.parse(open('./../../PayloadData/S57Payloads/1ProductNewCell.json'));
+var defaultPayload2 = JSON.parse(open('./../../PayloadData/S57Payloads/5ProductsNewCell.json'));
+var defaultPayload3 = JSON.parse(open('./../../PayloadData/S57Payloads/10ProductsNewCell.json'));
+var defaultPayload4 = JSON.parse(open('./../../PayloadData/S57Payloads/100ProductsNewCell.json'));
 
 if (!Config.BaseUrl.toString().toUpperCase().includes("DEV")) {
     throw new Error("Invalid Environment !! Please use DEV environment for performance testing.\n");
