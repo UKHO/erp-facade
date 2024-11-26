@@ -8,6 +8,5 @@ namespace UKHO.ERPFacade.Common.Constants
         public const string Source = "erpfacade";
         public const string CorrelationIdNotFoundMessage = "Correlation ID Not Found.";
         public const string UnknownEventTypeMessage = "Unknown event type received in payload.";
-
     }
 }
