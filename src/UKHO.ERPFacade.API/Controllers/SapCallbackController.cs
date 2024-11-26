@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using UKHO.ERPFacade.API.Filters;
 using UKHO.ERPFacade.Common.Logging;
+using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Services;
 
 namespace UKHO.ERPFacade.API.Controllers
@@ -14,6 +15,7 @@ namespace UKHO.ERPFacade.API.Controllers
         private readonly IS100SapCallBackService _s100SapCallbackService;
 
         private const string CorrelationId = "correlationId";
+        private const string EventPublishSource = "erpfacade";
 
         public SapCallbackController(IHttpContextAccessor contextAccessor,
                                      ILogger<SapCallbackController> logger,
@@ -36,7 +38,15 @@ namespace UKHO.ERPFacade.API.Controllers
             if (string.IsNullOrEmpty(correlationId))
             {
                 _logger.LogWarning(EventIds.CorrelationIdMissingInS100SapCallBack.ToEventId(), "CorrelationId is missing in S-100 SAP callback request.");
-                return new BadRequestObjectResult(StatusCodes.Status400BadRequest);
+                var error = new List<Error>
+                {
+                    new Error()
+                    {
+                        Source = EventPublishSource,
+                        Description = "Correlation ID Not Found."
+                    }
+                };
+                return BuildBadRequestErrorResponse(error);
             }
 
             if (!await _s100SapCallbackService.IsValidCallbackAsync(correlationId))
