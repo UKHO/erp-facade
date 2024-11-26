@@ -219,9 +219,9 @@ namespace UKHO.ERPFacade.API.XmlTransformers
 
         private void ProcessAttributes(string action, IEnumerable<ActionItemAttribute> attributes, XmlDocument soapXml, object source, List<(int, XmlElement)> actionAttributes, DecryptedPermit decryptedPermit = null, string replacedBy = null)
         {
-            try
+            foreach (var attribute in attributes)
             {
-                foreach (var attribute in attributes)
+                try
                 {
                     var attributeNode = soapXml.CreateElement(attribute.XmlNodeName);
 
@@ -253,12 +253,14 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                         attributeNode.InnerText = string.Empty;
                     }
                     actionAttributes.Add((attribute.SortingOrder, attributeNode));
+
+                }
+                catch (Exception ex)
+                {
+                    throw new ERPFacadeException(EventIds.S57SapActionInformationGenerationFailedException.ToEventId(), $"Error while generating SAP action information. | Action : {action} | XML Attribute : {attribute.XmlNodeName} | ErrorMessage : {ex.Message}");
                 }
             }
-            catch (Exception ex)
-            {
-                throw new ERPFacadeException(EventIds.S57SapActionInformationGenerationFailedException.ToEventId(), $"Error while generating SAP action information. | Action : {action} | XML Attribute : {attribute.XmlNodeName} | ErrorMessage : {ex.Message}");
-            }
+
         }
 
         private void ProcessUkhoWeekNumberAttributes(string action, IEnumerable<ActionItemAttribute> attributes, XmlDocument soapXml, S57UkhoWeekNumber ukhoWeekNumber, List<(int, XmlElement)> actionAttributes)
