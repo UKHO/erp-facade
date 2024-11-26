@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System;
+using System.Xml;
 using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.Exceptions;
@@ -12,15 +13,15 @@ using UKHO.ERPFacade.Common.Providers;
 
 namespace UKHO.ERPFacade.API.XmlTransformers
 {
-    public class S57XmlTransformer : BaseXmlTransformer
+    public class S57EncContentPublishedXmlTransformer : BaseXmlTransformer
     {
-        private readonly ILogger<S57XmlTransformer> _logger;
+        private readonly ILogger<S57EncContentPublishedXmlTransformer> _logger;
         private readonly IXmlOperations _xmlOperations;
         private readonly IWeekDetailsProvider _weekDetailsProvider;
         private readonly IPermitDecryption _permitDecryption;
         private readonly IOptions<SapActionConfiguration> _sapActionConfig;
 
-        public S57XmlTransformer(ILogger<S57XmlTransformer> logger,
+        public S57EncContentPublishedXmlTransformer(ILogger<S57EncContentPublishedXmlTransformer> logger,
                                  IXmlOperations xmlOperations,
                                  IWeekDetailsProvider weekDetailsProvider,
                                  IPermitDecryption permitDecryption,
@@ -218,9 +219,9 @@ namespace UKHO.ERPFacade.API.XmlTransformers
 
         private void ProcessAttributes(string action, IEnumerable<ActionItemAttribute> attributes, XmlDocument soapXml, object source, List<(int, XmlElement)> actionAttributes, DecryptedPermit decryptedPermit = null, string replacedBy = null)
         {
-            foreach (var attribute in attributes)
+            try
             {
-                try
+                foreach (var attribute in attributes)
                 {
                     var attributeNode = soapXml.CreateElement(attribute.XmlNodeName);
 
@@ -253,10 +254,10 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                     }
                     actionAttributes.Add((attribute.SortingOrder, attributeNode));
                 }
-                catch (Exception ex)
-                {
-                    throw new ERPFacadeException(EventIds.S57SapActionInformationGenerationFailedException.ToEventId(), $"Error while generating SAP action information. | Action : {action} | XML Attribute : {attribute.XmlNodeName} | ErrorMessage : {ex.Message}");
-                }
+            }
+            catch (Exception ex)
+            {
+                throw new ERPFacadeException(EventIds.S57SapActionInformationGenerationFailedException.ToEventId(), $"Error while generating SAP action information. | Action : {action} | XML Attribute : {attribute.XmlNodeName} | ErrorMessage : {ex.Message}");
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System;
+using System.Xml;
 using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.Exceptions;
@@ -10,12 +11,12 @@ using UKHO.ERPFacade.Common.Operations;
 
 namespace UKHO.ERPFacade.API.XmlTransformers
 {
-    public class S100XmlTransformer : BaseXmlTransformer
+    public class S100DataContentPublishedXmlTransformer : BaseXmlTransformer
     {
-        private readonly ILogger<S100XmlTransformer> _logger;
+        private readonly ILogger<S100DataContentPublishedXmlTransformer> _logger;
         private readonly IXmlOperations _xmlOperations;
         private readonly IOptions<S100SapActionConfiguration> _sapActionConfig;
-        public S100XmlTransformer(ILogger<S100XmlTransformer> logger,
+        public S100DataContentPublishedXmlTransformer(ILogger<S100DataContentPublishedXmlTransformer> logger,
                                   IXmlOperations xmlOperations,
                                   IOptions<S100SapActionConfiguration> sapActionConfig)
         {
@@ -129,7 +130,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             }
         }
 
-        private S100UnitOfSale? GetUnitOfSale(int actionNumber, List<S100UnitOfSale> listOfUnitOfSales, S100Product product)
+        private S100UnitOfSale GetUnitOfSale(int actionNumber, List<S100UnitOfSale> listOfUnitOfSales, S100Product product)
         {
             return actionNumber switch
             {
@@ -186,9 +187,9 @@ namespace UKHO.ERPFacade.API.XmlTransformers
 
         private void ProcessAttributes(string action, IEnumerable<ActionItemAttribute> attributes, XmlDocument soapXml, object source, List<(int, XmlElement)> actionAttributes, string replacedBy = null)
         {
-            foreach (var attribute in attributes)
+            try
             {
-                try
+                foreach (var attribute in attributes)
                 {
                     var attributeNode = soapXml.CreateElement(attribute.XmlNodeName);
 
@@ -213,10 +214,10 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                     }
                     actionAttributes.Add((attribute.SortingOrder, attributeNode));
                 }
-                catch (Exception ex)
-                {
-                    throw new ERPFacadeException(EventIds.S100SapActionInformationGenerationFailedException.ToEventId(), $"Error while generating SAP action information. | Action : {action} | XML Attribute : {attribute.XmlNodeName} | ErrorMessage : {ex.Message}");
-                }
+            }
+            catch (Exception ex)
+            {
+                throw new ERPFacadeException(EventIds.S100SapActionInformationGenerationFailedException.ToEventId(), $"Error while generating SAP action information. | Action : {action} | XML Attribute : {attribute.XmlNodeName} | ErrorMessage : {ex.Message}");
             }
         }
     }

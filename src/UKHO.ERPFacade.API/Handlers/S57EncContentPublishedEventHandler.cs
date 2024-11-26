@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.Options;
+using MongoDB.Driver;
 using Newtonsoft.Json;
 using UKHO.ERPFacade.API.XmlTransformers;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Constants;
-using UKHO.ERPFacade.Common.Enums;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Extensions;
 using UKHO.ERPFacade.Common.HttpClients;
@@ -15,12 +15,12 @@ using UKHO.ERPFacade.Common.Operations.IO.Azure;
 
 namespace UKHO.ERPFacade.API.Handlers
 {
-    public class S57EventHandler : IEventHandler
+    public class S57EncContentPublishedEventHandler : IEventHandler
     {
         public string EventType => EventTypes.S57EventType;
 
-        private readonly ILogger<S57EventHandler> _logger;
-        private readonly IBaseXmlTransformer _baseXmlTransformer;
+        private readonly ILogger<S57EncContentPublishedEventHandler> _logger;
+        private readonly IXmlTransformer _xmlTransformer;
         private readonly IAzureTableReaderWriter _azureTableReaderWriter;
         private readonly IAzureBlobReaderWriter _azureBlobReaderWriter;
         private readonly ISapClient _sapClient;
@@ -29,8 +29,8 @@ namespace UKHO.ERPFacade.API.Handlers
 
         private List<string> _aioCells = [];
 
-        public S57EventHandler([FromKeyedServices("S57XmlTransformer")] IBaseXmlTransformer baseXmlTransformer,
-                               ILogger<S57EventHandler> logger,
+        public S57EncContentPublishedEventHandler([FromKeyedServices("S57XmlTransformer")] IXmlTransformer xmlTransformer,
+                               ILogger<S57EncContentPublishedEventHandler> logger,
                                IAzureTableReaderWriter azureTableReaderWriter,
                                IAzureBlobReaderWriter azureBlobEventWriter,
                                ISapClient sapClient,
@@ -38,7 +38,7 @@ namespace UKHO.ERPFacade.API.Handlers
                                IOptions<AioConfiguration> aioConfig)
         {
             _logger = logger;
-            _baseXmlTransformer = baseXmlTransformer;
+            _xmlTransformer = xmlTransformer;
             _azureTableReaderWriter = azureTableReaderWriter;
             _azureBlobReaderWriter = azureBlobEventWriter;
             _sapClient = sapClient;
@@ -68,8 +68,7 @@ namespace UKHO.ERPFacade.API.Handlers
                 RowKey = s57EventData.CorrelationId,
                 PartitionKey = PartitionKeys.S57PartitionKey,
                 Timestamp = DateTime.UtcNow,
-                RequestDateTime = null,
-                Status = Status.Incomplete.ToString()
+                RequestDateTime = null
             };
 
             await _azureTableReaderWriter.UpsertEntityAsync(eventEntity);
@@ -80,7 +79,7 @@ namespace UKHO.ERPFacade.API.Handlers
 
             _logger.LogInformation(EventIds.S57EventJsonStoredInAzureBlobContainer.ToEventId(), "S57 enccontentpublished event json payload is stored in azure blob container.");
 
-            var sapPayload = _baseXmlTransformer.BuildXmlPayload(s57EventData, XmlTemplateInfo.S57SapXmlTemplatePath);
+            var sapPayload = _xmlTransformer.BuildXmlPayload(s57EventData, XmlTemplateInfo.S57SapXmlTemplatePath);
 
             await _azureBlobReaderWriter.UploadEventAsync(sapPayload.ToIndentedString(), s57EventData.CorrelationId, EventPayloadFiles.SapXmlPayloadFileName);
 
@@ -95,7 +94,7 @@ namespace UKHO.ERPFacade.API.Handlers
 
             _logger.LogInformation(EventIds.S57EventUpdateSentToSap.ToEventId(), "S57 ENC update has been sent to SAP successfully.");
 
-            await _azureTableReaderWriter.UpdateEntityAsync(eventEntity.PartitionKey, eventEntity.RowKey, new Dictionary<string, object> { { "RequestDateTime", DateTime.UtcNow }, { "Status", Status.Complete.ToString() } });
+            await _azureTableReaderWriter.UpdateEntityAsync(eventEntity.PartitionKey, eventEntity.RowKey, new[] { new KeyValuePair<string, DateTime>("RequestDateTime", DateTime.UtcNow) });
         }
 
         /// <summary>

@@ -7,7 +7,7 @@ using UKHO.ERPFacade.Common.Operations;
 
 namespace UKHO.ERPFacade.API.XmlTransformers
 {
-    public interface IBaseXmlTransformer
+    public interface IXmlTransformer
     {
         XmlDocument BuildXmlPayload<T>(T eventData, string xmlTemplatePath);
         bool ValidateActionRules(SapAction action, object obj);
@@ -15,7 +15,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
         void FinalizeSapXmlMessage(XmlDocument soapXml, string correlationId, XmlNode actionItemNode, string xmlPathInfo);
     }
 
-    public abstract class BaseXmlTransformer : IBaseXmlTransformer
+    public abstract class BaseXmlTransformer : IXmlTransformer
     {
         public BaseXmlTransformer()
         {
@@ -94,8 +94,8 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             recTimeNode.InnerText = DateTime.UtcNow.ToString(XmlFields.RecTimeFormat);
 
             //Set action items
-            var IM_MATINFONode = soapXml.SelectSingleNode(xmlPathInfo);
-            IM_MATINFONode.AppendChild(actionItemNode);
+            var parentInfoNode = soapXml.SelectSingleNode(xmlPathInfo);
+            parentInfoNode.AppendChild(actionItemNode);
         }
 
         public bool IsPropertyNullOrEmpty(string propertyName, string propertyValue)

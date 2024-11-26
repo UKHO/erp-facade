@@ -198,11 +198,11 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<IWeekDetailsProvider, WeekDetailsProvider>();
             builder.Services.AddScoped<IPermitDecryption, PermitDecryption>();
 
-            builder.Services.AddScoped<IEventHandler, S57EventHandler>();
-            builder.Services.AddScoped<IEventHandler, S100EventHandler>();
+            builder.Services.AddScoped<IEventHandler, S57EncContentPublishedEventHandler>();
+            builder.Services.AddScoped<IEventHandler, S100DataContentPublishedEventHandler>();
 
-            builder.Services.AddKeyedScoped<IBaseXmlTransformer, S57XmlTransformer>(XmlTransformers.S57XmlTransformer);
-            builder.Services.AddKeyedScoped<IBaseXmlTransformer, S100XmlTransformer>(XmlTransformers.S100XmlTransformer);
+            builder.Services.AddKeyedScoped<IXmlTransformer, S57EncContentPublishedXmlTransformer>(XmlTransformers.S57XmlTransformer);
+            builder.Services.AddKeyedScoped<IXmlTransformer, S100DataContentPublishedXmlTransformer>(XmlTransformers.S100XmlTransformer);
             builder.Services.AddScoped<IEventDispatcher, EventDispatcher>();
             builder.Services.AddScoped<SharedApiKeyAuthFilter>();
             builder.Services.AddScoped<IS100UnitOfSaleUpdatedEventPublishingService, S100UnitOfSaleUpdatedEventPublishingService>();

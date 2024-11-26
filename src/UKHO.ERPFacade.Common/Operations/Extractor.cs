@@ -6,7 +6,7 @@ namespace UKHO.ERPFacade.Common.Operations
     [ExcludeFromCodeCoverage]
     public static class Extractor
     {
-        public static object ExtractJsonAttributeValue(string name, object obj, Type type)
+        public static string ExtractJsonAttributeValue(string name, object obj, Type type)
         {
             var parts = name.Split('.').ToList();
             var currentPart = parts[0];

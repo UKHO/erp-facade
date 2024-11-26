@@ -26,26 +26,26 @@ using UKHO.ERPFacade.Common.Providers;
 namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
 {
     [TestFixture]
-    public class S57XmlTransformerTests
+    public class S57EncContentPublishedXmlTransformerTests
     {
-        private ILogger<S57XmlTransformer> _fakeLogger;
+        private ILogger<S57EncContentPublishedXmlTransformer> _fakeLogger;
         private IXmlOperations _fakeXmlOperations;
         private IOptions<SapActionConfiguration> _fakeSapActionConfig;
         private IWeekDetailsProvider _fakeWeekDetailsProvider;
         private IPermitDecryption _fakePermitDecryption;
-        private S57XmlTransformer _fakeS57XmlTransformer;
+        private S57EncContentPublishedXmlTransformer _fakeS57EncContentPublishedXmlTransformer;
         private string _sapXmlTemplate;
 
 
         [SetUp]
         public void Setup()
         {
-            _fakeLogger = A.Fake<ILogger<S57XmlTransformer>>();
+            _fakeLogger = A.Fake<ILogger<S57EncContentPublishedXmlTransformer>>();
             _fakeXmlOperations = A.Fake<IXmlOperations>();
             _fakeWeekDetailsProvider = A.Fake<IWeekDetailsProvider>();
             _fakePermitDecryption = A.Fake<IPermitDecryption>();
             _fakeSapActionConfig = Options.Create(InitConfiguration().GetSection("SapActionConfiguration").Get<SapActionConfiguration>())!;
-            _fakeS57XmlTransformer = new S57XmlTransformer(_fakeLogger, _fakeXmlOperations, _fakeWeekDetailsProvider, _fakePermitDecryption, _fakeSapActionConfig);
+            _fakeS57EncContentPublishedXmlTransformer = new S57EncContentPublishedXmlTransformer(_fakeLogger, _fakeXmlOperations, _fakeWeekDetailsProvider, _fakePermitDecryption, _fakeSapActionConfig);
             _sapXmlTemplate = TestHelper.ReadFileData(XmlTemplateInfo.S57SapXmlTemplatePath);
         }
 
@@ -68,7 +68,7 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
 
             A.CallTo(() => _fakeXmlOperations.CreateXmlDocument(A<string>.Ignored)).Throws(new ERPFacadeException(EventIds.SapXmlTemplateNotFound.ToEventId(), "The SAP XML payload template does not exist."));
 
-            Assert.Throws<ERPFacadeException>(() => _fakeS57XmlTransformer.BuildXmlPayload(eventData!, _sapXmlTemplate))
+            Assert.Throws<ERPFacadeException>(() => _fakeS57EncContentPublishedXmlTransformer.BuildXmlPayload(eventData!, _sapXmlTemplate))
                 .Message.Should().Be("The SAP XML payload template does not exist.");
         }
 
@@ -85,7 +85,7 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
             A.CallTo(() => _fakeXmlOperations.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
             A.CallTo(() => _fakeWeekDetailsProvider.GetDateOfWeek(A<int>.Ignored, A<int>.Ignored, A<bool>.Ignored)).Returns("20240808");
 
-            var result = _fakeS57XmlTransformer.BuildXmlPayload(s57EventData, _sapXmlTemplate);
+            var result = _fakeS57EncContentPublishedXmlTransformer.BuildXmlPayload(s57EventData, _sapXmlTemplate);
 
             result.Should().BeOfType<XmlDocument>();
 
@@ -127,7 +127,7 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
             A.CallTo(() => _fakePermitDecryption.Decrypt(A<string>.Ignored)).Returns(permitKeys);
             A.CallTo(() => _fakeWeekDetailsProvider.GetDateOfWeek(A<int>.Ignored, A<int>.Ignored, A<bool>.Ignored)).Returns("20240801");
 
-            var result = _fakeS57XmlTransformer.BuildXmlPayload(s57EventData, _sapXmlTemplate);
+            var result = _fakeS57EncContentPublishedXmlTransformer.BuildXmlPayload(s57EventData, _sapXmlTemplate);
 
             result.Should().BeOfType<XmlDocument>();
 
@@ -169,7 +169,7 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
             A.CallTo(() => _fakePermitDecryption.Decrypt(A<string>.Ignored)).Returns(permitKeys);
             A.CallTo(() => _fakeWeekDetailsProvider.GetDateOfWeek(A<int>.Ignored, A<int>.Ignored, A<bool>.Ignored)).Returns("20240801");
 
-            var result = _fakeS57XmlTransformer.BuildXmlPayload(s57EventData, _sapXmlTemplate);
+            var result = _fakeS57EncContentPublishedXmlTransformer.BuildXmlPayload(s57EventData, _sapXmlTemplate);
 
             result.Should().BeOfType<XmlDocument>();
 
@@ -211,7 +211,7 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
             A.CallTo(() => _fakePermitDecryption.Decrypt(A<string>.Ignored)).Returns(permitKeys);
             A.CallTo(() => _fakeWeekDetailsProvider.GetDateOfWeek(A<int>.Ignored, A<int>.Ignored, A<bool>.Ignored)).Returns("20240801");
 
-            var result = _fakeS57XmlTransformer.BuildXmlPayload(s57EventData, _sapXmlTemplate);
+            var result = _fakeS57EncContentPublishedXmlTransformer.BuildXmlPayload(s57EventData, _sapXmlTemplate);
 
             result.Should().BeOfType<XmlDocument>();
 
@@ -248,7 +248,7 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
 
             A.CallTo(() => _fakeXmlOperations.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
 
-            Assert.Throws<ERPFacadeException>(() => _fakeS57XmlTransformer.BuildXmlPayload(s57EventData, _sapXmlTemplate))
+            Assert.Throws<ERPFacadeException>(() => _fakeS57EncContentPublishedXmlTransformer.BuildXmlPayload(s57EventData, _sapXmlTemplate))
                 .Message.Should().Be("Required unit not found in S57 enccontentpublished event for US5AK9DI to generate CREATE ENC CELL action.");
         }
 
@@ -264,7 +264,7 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
 
             A.CallTo(() => _fakeXmlOperations.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
 
-            Assert.Throws<ERPFacadeException>(() => _fakeS57XmlTransformer.BuildXmlPayload(s57EventData, _sapXmlTemplate))
+            Assert.Throws<ERPFacadeException>(() => _fakeS57EncContentPublishedXmlTransformer.BuildXmlPayload(s57EventData, _sapXmlTemplate))
             .Message.Should().Be("Required unit not found in S57 enccontentpublished event for GB50382B to generate REPLACED WITH ENC CELL action.");
         }
 
@@ -280,7 +280,7 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
 
             A.CallTo(() => _fakeXmlOperations.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
 
-            Assert.Throws<ERPFacadeException>(() => _fakeS57XmlTransformer.BuildXmlPayload(s57EventData, _sapXmlTemplate))
+            Assert.Throws<ERPFacadeException>(() => _fakeS57EncContentPublishedXmlTransformer.BuildXmlPayload(s57EventData, _sapXmlTemplate))
                 .Message.Should().Be("Error while generating SAP action information. | Action : CREATE ENC CELL | XML Attribute : PROVIDER | ErrorMessage : Object reference not set to an instance of an object.");
         }
 
@@ -299,7 +299,7 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
             A.CallTo(() => _fakeXmlOperations.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
             A.CallTo(() => _fakePermitDecryption.Decrypt(A<string>.Ignored)).Returns(permitKeys);
 
-            Assert.Throws<ERPFacadeException>(() => _fakeS57XmlTransformer.BuildXmlPayload(s57EventData, _sapXmlTemplate))
+            Assert.Throws<ERPFacadeException>(() => _fakeS57EncContentPublishedXmlTransformer.BuildXmlPayload(s57EventData, _sapXmlTemplate))
             .Message.Should().Be("UkhoWeekNumber details not found in S57 enccontentpublished event to generate CREATE ENC CELL action.");
         }
 
@@ -319,7 +319,7 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
             A.CallTo(() => _fakePermitDecryption.Decrypt(A<string>.Ignored)).Returns(permitKeys);
             A.CallTo(() => _fakeWeekDetailsProvider.GetDateOfWeek(A<int>.Ignored, A<int>.Ignored, A<bool>.Ignored)).Throws<System.Exception>();
 
-            Assert.Throws<ERPFacadeException>(() => _fakeS57XmlTransformer.BuildXmlPayload(s57EventData, _sapXmlTemplate))
+            Assert.Throws<ERPFacadeException>(() => _fakeS57EncContentPublishedXmlTransformer.BuildXmlPayload(s57EventData, _sapXmlTemplate))
                 .Message.Should().Be("Error while generating SAP action information. | Action : CREATE ENC CELL | XML Attribute : VALIDFROM | ErrorMessage : Exception of type 'System.Exception' was thrown.");
         }
 
@@ -331,8 +331,8 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
             S57EventData s57EventData = JsonConvert.DeserializeObject<S57EventData>(baseCloudEvent.Data.ToString()!);
             var action = _fakeSapActionConfig.Value.SapActions.FirstOrDefault(x => x.Product == XmlFields.EncCell && x.Action == ConfigFileFields.ReplaceEncCellAction);
 
-            MethodInfo buildAction = typeof(S57XmlTransformer).GetMethod("GetUnitOfSale", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
-            var result = (XmlElement)buildAction.Invoke(_fakeS57XmlTransformer, new object[] { action.ActionNumber, s57EventData.UnitsOfSales!, s57EventData.Products.FirstOrDefault()! })!;
+            MethodInfo buildAction = typeof(S57EncContentPublishedXmlTransformer).GetMethod("GetUnitOfSale", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
+            var result = (XmlElement)buildAction.Invoke(_fakeS57EncContentPublishedXmlTransformer, new object[] { action.ActionNumber, s57EventData.UnitsOfSales!, s57EventData.Products.FirstOrDefault()! })!;
 
             result.Should().BeNull();
         }
@@ -346,8 +346,8 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
 
             var action = _fakeSapActionConfig.Value.SapActions.FirstOrDefault(x => x.Product == XmlFields.EncCell && x.Action == ConfigFileFields.ChangeEncCellAction);
 
-            MethodInfo buildAction = typeof(S57XmlTransformer).GetMethod("GetUnitOfSale", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
-            var result = (XmlElement)buildAction.Invoke(_fakeS57XmlTransformer, new object[] { action.ActionNumber, s57EventData.UnitsOfSales!, s57EventData.Products.LastOrDefault()! })!;
+            MethodInfo buildAction = typeof(S57EncContentPublishedXmlTransformer).GetMethod("GetUnitOfSale", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
+            var result = (XmlElement)buildAction.Invoke(_fakeS57EncContentPublishedXmlTransformer, new object[] { action.ActionNumber, s57EventData.UnitsOfSales!, s57EventData.Products.LastOrDefault()! })!;
 
             result.Should().BeNull();
         }
@@ -371,7 +371,7 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
             A.CallTo(() => _fakePermitDecryption.Decrypt(A<string>.Ignored)).Returns(permitKeys);
             A.CallTo(() => _fakeWeekDetailsProvider.GetDateOfWeek(A<int>.Ignored, A<int>.Ignored, A<bool>.Ignored)).Throws<System.Exception>();
 
-            Assert.Throws<ERPFacadeException>(() => _fakeS57XmlTransformer.BuildXmlPayload(s57EventData, _sapXmlTemplate))
+            Assert.Throws<ERPFacadeException>(() => _fakeS57EncContentPublishedXmlTransformer.BuildXmlPayload(s57EventData, _sapXmlTemplate))
                 .Message.Should().Be("Error while generating SAP action information. | Action : CREATE ENC CELL | XML Attribute : WEEKNO | ErrorMessage : Required property value is empty in enccontentpublished event payload. | Property Name : ");
         }
 
@@ -390,7 +390,7 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
             A.CallTo(() => _fakeWeekDetailsProvider.GetDateOfWeek(A<int>.Ignored, A<int>.Ignored, A<bool>.Ignored)).Throws<System.Exception>();
             A.CallTo(_fakePermitDecryption).Where(call => call.Method.Name == "Decrypt").MustNotHaveHappened();
 
-            Assert.Throws<ERPFacadeException>(() => _fakeS57XmlTransformer.BuildXmlPayload(s57EventData, _sapXmlTemplate))
+            Assert.Throws<ERPFacadeException>(() => _fakeS57EncContentPublishedXmlTransformer.BuildXmlPayload(s57EventData, _sapXmlTemplate))
             .Message.Should().Be("Error while generating SAP action information. | Action : CREATE ENC CELL | XML Attribute : ACTIVEKEY | ErrorMessage : Required details are missing in enccontentpublished event payload. | Property Name : ");
         }
     }
