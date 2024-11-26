@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using UKHO.ERPFacade.API.Filters;
+using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Services;
@@ -15,7 +16,6 @@ namespace UKHO.ERPFacade.API.Controllers
         private readonly IS100SapCallBackService _s100SapCallbackService;
 
         private const string CorrelationId = "correlationId";
-        private const string EventPublishSource = "erpfacade";
 
         public SapCallbackController(IHttpContextAccessor contextAccessor,
                                      ILogger<SapCallbackController> logger,
@@ -42,8 +42,8 @@ namespace UKHO.ERPFacade.API.Controllers
                 {
                     new Error()
                     {
-                        Source = EventPublishSource,
-                        Description = "Correlation ID Not Found."
+                        Source = ErrorDetails.Source,
+                        Description = ErrorDetails.CorrelationIdNotFoundMessage
                     }
                 };
                 return BuildBadRequestErrorResponse(error);

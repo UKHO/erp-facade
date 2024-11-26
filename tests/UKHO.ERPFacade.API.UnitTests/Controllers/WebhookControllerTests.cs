@@ -121,6 +121,9 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
 
             Assert.That(StatusCodes.Status400BadRequest, Is.EqualTo(result.StatusCode));
 
+            var errors = (ErrorDescription)result.Value;
+            errors.Errors.Single().Description.Should().Be("Unknown event type received in payload.");
+
             A.CallTo(() => _fakeEventDispatcher.DispatchEventAsync(A<BaseCloudEvent>.Ignored)).MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"

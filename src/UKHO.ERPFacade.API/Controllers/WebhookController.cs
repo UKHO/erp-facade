@@ -83,7 +83,15 @@ namespace UKHO.ERPFacade.API.Controllers
 
             if (!isEventDispatched)
             {
-                return new BadRequestObjectResult(StatusCodes.Status400BadRequest);
+                var error = new List<Error>
+                {
+                    new Error()
+                    {
+                        Source = ErrorDetails.Source,
+                        Description = ErrorDetails.UnknownEventTypeMessage
+                    }
+                };
+                return BuildBadRequestErrorResponse(error);
             }
             return new OkObjectResult(StatusCodes.Status200OK);
         }
