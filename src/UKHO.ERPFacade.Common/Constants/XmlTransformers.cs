@@ -5,7 +5,7 @@ namespace UKHO.ERPFacade.Common.Constants
     [ExcludeFromCodeCoverage]
     public static class XmlTransformers
     {
-        public const string S57XmlTransformer = "S57XmlTransformer";
-        public const string S100XmlTransformer = "S100XmlTransformer";
+        public const string S57EncContentPublishedXmlTransformer = "S57EncContentPublishedXmlTransformer";
+        public const string S100DataContentPublishedXmlTransformer = "S100DataContentPublishedXmlTransformer";
     }
 }
