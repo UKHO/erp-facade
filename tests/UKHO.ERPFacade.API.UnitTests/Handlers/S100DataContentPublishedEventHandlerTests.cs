@@ -48,7 +48,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
             _fakeSapClient = A.Fake<ISapClient>();
             _fakeSapConfig = A.Fake<IOptions<SapConfiguration>>();
             _fakeS100UnitOfSaleUpdatedEventPublishingService = A.Fake<IS100UnitOfSaleUpdatedEventPublishingService>();
-            _fakes100DataContentPublishedEventHandler = new S100DataContentPublishedEventHandler(_fakeBaseXmlTransformer, _fakeLogger, _fakeAzureTableReaderWriter, _fakeAzureBlobReaderWriter, _fakeSapClient, _fakeSapConfig, _fakeS100UnitOfSaleUpdatedEventPublishingService);
+            _fakes100DataContentPublishedEventHandler = new S100DataContentPublishedEventHandler(_fakeXmlTransformer, _fakeLogger, _fakeAzureTableReaderWriter, _fakeAzureBlobReaderWriter, _fakeSapClient, _fakeSapConfig, _fakeS100UnitOfSaleUpdatedEventPublishingService);
         }
 
         [Test]
