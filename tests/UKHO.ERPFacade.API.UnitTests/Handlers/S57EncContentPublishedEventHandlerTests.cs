@@ -59,7 +59,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
         {
             var newCellEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\NewCell.JSON");
             var eventData = JsonConvert.DeserializeObject<BaseCloudEvent>(newCellEventPayloadJson);
-            _ = _fakeS57EventHandler.ProcessEventAsync(eventData);
+            _ = _fakeS57EncContentPublishedEventHandler.ProcessEventAsync(eventData);
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Information
                                                 && call.GetArgument<EventId>(1) == EventIds.S57EventUpdateSentToSap.ToEventId()
@@ -77,7 +77,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
             {
                 StatusCode = HttpStatusCode.Unauthorized,
             });
-            Assert.ThrowsAsync<ERPFacadeException>(() => _fakeS57EventHandler.ProcessEventAsync(eventData))
+            Assert.ThrowsAsync<ERPFacadeException>(() => _fakeS57EncContentPublishedEventHandler.ProcessEventAsync(eventData))
                 .Message.Should().Be("An error occurred while sending S57 ENC update to SAP. | Unauthorized");
         }
 
@@ -87,7 +87,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
             var newCellEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\NewAIOCell.JSON");
             var eventData = JsonConvert.DeserializeObject<BaseCloudEvent>(newCellEventPayloadJson);
 
-            _ = _fakeS57EventHandler.ProcessEventAsync(eventData);
+            _ = _fakeS57EncContentPublishedEventHandler.ProcessEventAsync(eventData);
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Information
