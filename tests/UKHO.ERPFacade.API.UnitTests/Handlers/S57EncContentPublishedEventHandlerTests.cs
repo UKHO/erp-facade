@@ -45,7 +45,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
             _fakeAioConfig = A.Fake<IOptions<AioConfiguration>>();
             _fakeSapConfig = A.Fake<IOptions<SapConfiguration>>();
             _fakeAioConfig.Value.AioCells = "GB800001,GB800002";
-            _fakeS57EventHandler = new S57EncContentPublishedEventHandler(_fakeXmlTransformer,
+            _fakeS57EncContentPublishedEventHandler = new S57EncContentPublishedEventHandler(_fakeXmlTransformer,
                                                        _fakeLogger,
                                                        _fakeAzureTableReaderWriter,
                                                        _fakeAzureBlobReaderWriter,
