@@ -905,7 +905,11 @@ stages:
       - name: "AzureADConfiguration.AutoTestClientIdNoRole"
         value: $(AzureADConfigurationAutoTestClientIdNoRole)
       - name: "AzureADConfiguration.ClientSecretNoRole"
-        value: $(AzureADConfigurationClientSecretNoRole)        
+        value: $(AzureADConfigurationClientSecretNoRole)
+      - name: "SharedApiKeyConfiguration.SharedApiKey"
+        value: $(SharedApiKey)
+      - name: "SapCallbackConfiguration.SharedApiKey"
+        value: $(SharedApiKey)
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
     jobs:
       - deployment: LiveDeployTerraform
