@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Xml;
+using Azure.Data.Tables;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
@@ -14,10 +16,12 @@ using UKHO.ERPFacade.API.UnitTests.Common;
 using UKHO.ERPFacade.API.XmlTransformers;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Constants;
+using UKHO.ERPFacade.Common.Enums;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.HttpClients;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models.CloudEvents;
+using UKHO.ERPFacade.Common.Models.CloudEvents.S57Event;
 using UKHO.ERPFacade.Common.Operations.IO.Azure;
 
 namespace UKHO.ERPFacade.API.UnitTests.Handlers
@@ -61,9 +65,45 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
             var eventData = JsonConvert.DeserializeObject<BaseCloudEvent>(newCellEventPayloadJson);
             _ = _fakeS57EventHandler.ProcessEventAsync(eventData);
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+                                              && call.GetArgument<LogLevel>(0) == LogLevel.Information
+                                              && call.GetArgument<EventId>(1) == EventIds.S57EventProcessingStarted.ToEventId()
+                                              && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "S57 enccontentpublished event processing started.").MustHaveHappenedOnceExactly();
+
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpsertEntityAsync(A<ITableEntity>.Ignored)).MustHaveHappened();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+                                                && call.GetArgument<LogLevel>(0) == LogLevel.Information
+                                                && call.GetArgument<EventId>(1) == EventIds.S57EventEntryAddedInAzureTable.ToEventId()
+                                                && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "S57 enccontentpublished event entry added in azure table.").MustHaveHappenedOnceExactly();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+                                                && call.GetArgument<LogLevel>(0) == LogLevel.Information
+                                                && call.GetArgument<EventId>(1) == EventIds.S57EventJsonStoredInAzureBlobContainer.ToEventId()
+                                                && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "S57 enccontentpublished event json payload is stored in azure blob container.").MustHaveHappenedOnceExactly();
+
+            A.CallTo(() => _fakeBaseXmlTransformer.BuildXmlPayload(A<S57EventData>.Ignored, A<string>.Ignored)).Returns(new XmlDocument());
+
+            A.CallTo(() => _fakeAzureBlobReaderWriter.UploadEventAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened(2, Times.Exactly);
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+                                                && call.GetArgument<LogLevel>(0) == LogLevel.Information
+                                                && call.GetArgument<EventId>(1) == EventIds.S57EventJsonStoredInAzureBlobContainer.ToEventId()
+                                                && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "S57 enccontentpublished event xml payload is stored in azure blob container.").MustHaveHappenedOnceExactly();
+            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(new HttpResponseMessage()
+            {
+                StatusCode = HttpStatusCode.OK
+            });
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Information
                                                 && call.GetArgument<EventId>(1) == EventIds.S57EventUpdateSentToSap.ToEventId()
                                                 && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "S57 ENC update has been sent to SAP successfully.").MustHaveHappenedOnceExactly();
+
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntityAsync(A<string>.Ignored, A<string>.Ignored, A<Dictionary<string, object>>.That.Matches(d => d.ContainsKey("RequestDateTime") && (DateTime)d["RequestDateTime"] <= DateTime.UtcNow)))
+           .MustHaveHappenedOnceExactly();
+
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntityAsync(A<string>.Ignored, A<string>.Ignored, A<Dictionary<string, object>>.That.Matches(d => d.ContainsKey("Status") && (string)d["Status"] == Status.Complete.ToString())))
+            .MustHaveHappenedOnceExactly();
         }
 
         [Test]
