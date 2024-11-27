@@ -299,29 +299,5 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
 
             result.Should().BeNull();
         }
-
-        [Test]
-        [TestCase("ERPTestData\\NewCellWithNullYearInUkhoWeekNumberSection.JSON")]
-        [TestCase("ERPTestData\\NewCellWithoutYearInUkhoWeekNumberSection.JSON")]
-        [TestCase("ERPTestData\\NewCellWithNullcurrentWeekAlphaCorrectionInUkhoWeekNumberSection.JSON")]
-        public void WhenProcessingUkhoWeekNumberAttributes(string jsonPayloadFile)
-        {
-            var cancelCellWithNewCellReplacementPayloadJson = TestHelper.ReadFileData(jsonPayloadFile);
-            var baseCloudEvent = JsonConvert.DeserializeObject<BaseCloudEvent>(cancelCellWithNewCellReplacementPayloadJson);
-            S57EventData s57EventData = JsonConvert.DeserializeObject<S57EventData>(baseCloudEvent.Data.ToString()!);
-
-            var permitKeys = new DecryptedPermit { ActiveKey = "firstkey", NextKey = "nextkey" };
-
-            XmlDocument soapXml = new();
-            soapXml.LoadXml(_sapXmlTemplate);
-
-            A.CallTo(() => _fakeXmlOperations.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
-            A.CallTo(() => _fakePermitDecryption.Decrypt(A<string>.Ignored)).Returns(permitKeys);
-            A.CallTo(() => _fakeWeekDetailsProvider.GetDateOfWeek(A<int>.Ignored, A<int>.Ignored, A<bool>.Ignored)).Throws<System.Exception>();
-
-            Assert.Throws<ERPFacadeException>(() => _fakeS57XmlTransformer.BuildXmlPayload(s57EventData, _sapXmlTemplate))
-                .Message.Should().Be("Error while generating SAP action information. | Action : CREATE ENC CELL | XML Attribute : WEEKNO | ErrorMessage : Required property value is empty in enccontentpublished event payload. | Property Name : ");
-        }
-
     }
 }
