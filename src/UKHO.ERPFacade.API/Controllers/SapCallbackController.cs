@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using UKHO.ERPFacade.API.Filters;
+using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.Logging;
+using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Services;
 
 namespace UKHO.ERPFacade.API.Controllers
@@ -36,7 +38,15 @@ namespace UKHO.ERPFacade.API.Controllers
             if (string.IsNullOrEmpty(correlationId))
             {
                 _logger.LogWarning(EventIds.CorrelationIdMissingInS100SapCallBack.ToEventId(), "CorrelationId is missing in S-100 SAP callback request.");
-                return new BadRequestObjectResult(StatusCodes.Status400BadRequest);
+                var error = new List<Error>
+                {
+                    new Error()
+                    {
+                        Source = ErrorDetails.Source,
+                        Description = ErrorDetails.CorrelationIdNotFoundMessage
+                    }
+                };
+                return BuildBadRequestErrorResponse(error);
             }
 
             if (!await _s100SapCallbackService.IsValidCallbackAsync(correlationId))

@@ -67,26 +67,19 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                     {
                         case 1://CREATE PRODUCT
                         case 10://CANCEL PRODUCT
-                            if (unitOfSale is null)
-                            {
-                                throw new ERPFacadeException(EventIds.RequiredUnitNotFoundException.ToEventId(), $"Required unit not found in S-100 data content published event for {product.ProductName} to generate {action.Action} action.");
-                            }
                             BuildAndAppendActionNode(soapXml, product, unitOfSale, action, actionItemNode, product.ProductName);
                             break;
 
                         case 4://REPLACED WITH PRODUCT
-                            if (product.DataReplacement.Any() && unitOfSale is null)
-                            {
-                                throw new ERPFacadeException(EventIds.RequiredUnitNotFoundException.ToEventId(), $"Required unit not found in S-100 data content published event for {product.ProductName} to generate {action.Action} action.");
-                            }
-                            foreach (var replacedProduct in product.DataReplacement)
-                            {
-                                BuildAndAppendActionNode(soapXml, product, unitOfSale, action, actionItemNode, product.ProductName, replacedProduct);
-                            }
+                            if (product.DataReplacement.Any())
+                                foreach (var replacedProduct in product.DataReplacement)
+                                {
+                                    BuildAndAppendActionNode(soapXml, product, unitOfSale, action, actionItemNode, product.ProductName, replacedProduct);
+                                }
                             break;
 
                         case 6://CHANGE PRODUCT
-                            if (unitOfSale is not null)
+                            if (product.InUnitsOfSale.Any())
                                 BuildAndAppendActionNode(soapXml, product, unitOfSale, action, actionItemNode, product.ProductName);
                             break;
                     }
@@ -134,14 +127,16 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             return actionNumber switch
             {
                 //Case 1 : CREATE PRODUCT
-                1 => listOfUnitOfSales.FirstOrDefault(x => x.Status == JsonFields.UnitOfSaleStatusForSale && x.CompositionChanges.AddProducts.Contains(product.ProductName)),
+                1 => listOfUnitOfSales.FirstOrDefault(x => x.Status == JsonFields.UnitOfSaleStatusForSale &&
+                                                           x.CompositionChanges.AddProducts.Contains(product.ProductName)),
 
                 //Case 4 : REPLACED WITH PRODUCT
                 //Case 10 : CANCEL PRODUCT
                 4 or 10 => listOfUnitOfSales.FirstOrDefault(x => x.CompositionChanges.RemoveProducts.Contains(product.ProductName)),
 
                 //Case 6 : CHANGE PRODUCT
-                6 => listOfUnitOfSales.FirstOrDefault(x => x.Status == JsonFields.UnitOfSaleStatusForSale && product.InUnitsOfSale.Contains(x.UnitName)),
+                6 => listOfUnitOfSales.FirstOrDefault(x => x.Status == JsonFields.UnitOfSaleStatusForSale &&
+                                                           product.InUnitsOfSale.Contains(x.UnitName)),
                 _ => null,
             };
         }
@@ -194,17 +189,14 @@ namespace UKHO.ERPFacade.API.XmlTransformers
 
                     if (attribute.IsRequired)
                     {
-                        if (attribute.XmlNodeName == XmlFields.ReplacedBy && !IsPropertyNullOrEmpty(attribute.JsonPropertyName, replacedBy))
+                        if (attribute.XmlNodeName == XmlFields.ReplacedBy)
                         {
                             attributeNode.InnerText = StringExtension.ToSubstring(replacedBy.ToString(), 0, XmlFields.MaxXmlNodeLength);
                         }
                         else
                         {
                             var jsonFieldValue = Extractor.ExtractJsonAttributeValue(attribute.JsonPropertyName, source, source.GetType()).ToString();
-                            if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, jsonFieldValue))
-                            {
-                                attributeNode.InnerText = StringExtension.ToSubstring(jsonFieldValue, 0, XmlFields.MaxXmlNodeLength);
-                            }
+                            attributeNode.InnerText = StringExtension.ToSubstring(jsonFieldValue, 0, XmlFields.MaxXmlNodeLength);
                         }
                     }
                     else

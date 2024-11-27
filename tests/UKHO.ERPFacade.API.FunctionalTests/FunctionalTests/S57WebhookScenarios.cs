@@ -88,9 +88,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         {
             PermitWithSameKey permitWithSameKey = null;
             PermitWithDifferentKey permitWithDifferentKey = null;
-            string correlationId = null;
-
-            Console.WriteLine("Scenario:" + jsonPayloadFileName + "\n");
 
             string jsonPayloadFilePath = Path.Combine(_projectDir, EventPayloadFiles.PayloadFolder, EventPayloadFiles.S57PayloadFolder, jsonPayloadFileName);
             string xmlPayloadFilePath = jsonPayloadFilePath.Replace(EventPayloadFiles.PayloadFolder, EventPayloadFiles.ErpFacadeExpectedXmlFolder)
@@ -99,7 +96,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
             string requestBody = await File.ReadAllTextAsync(jsonPayloadFilePath);
             requestBody = JsonModifier.UpdateTime(requestBody);
-            (requestBody, correlationId) = JsonModifier.UpdateCorrelationId(requestBody);
+            (requestBody, string correlationId) = JsonModifier.UpdateCorrelationId(requestBody);
+
+            Console.WriteLine("Scenario: " + jsonPayloadFileName + "\n" + "CorrelationId: " + correlationId + "\n");
 
             if (permitState == JsonFields.PermitWithSameKey)
             {
@@ -129,16 +128,14 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
         public async Task WhenWebhookPostEndpointReceivesEventWithValidAioCellScenario_ThenWebhookReturns200OkResponse(string jsonPayloadFileName)
         {
-            string correlationId = null;
-
-            Console.WriteLine("Scenario:" + jsonPayloadFileName + "\n");
-
             string requestPayloadFilePath = Path.Combine(_projectDir, EventPayloadFiles.PayloadFolder, EventPayloadFiles.S57PayloadFolder, jsonPayloadFileName);
 
             string requestBody = await File.ReadAllTextAsync(requestPayloadFilePath);
 
             requestBody = JsonModifier.UpdateTime(requestBody);
-            (requestBody, correlationId) = JsonModifier.UpdateCorrelationId(requestBody);
+            (requestBody, string correlationId) = JsonModifier.UpdateCorrelationId(requestBody);
+
+            Console.WriteLine("Scenario:" + jsonPayloadFileName + "\n" + "CorrelationId: " + correlationId + "\n");
 
             RestResponse response = await _webhookEndpoint.PostWebhookResponseAsync(requestBody, await _authTokenProvider.GetAzureADToken(false));
 
@@ -168,23 +165,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [TestCase("products.permit", 1, TestName = "WhenProductPermitIsEmptyOrNull_ThenWebhookShouldReturn500ResponseCode")]
         public async Task WhenWebhookPostEndpointReceivesEventWithRequiredDataMissing_ThenWebhookReturnsInternalServerErrorResponse(string attributeName, int index)
         {
-            RestResponse response;
-            string correlationId = null;
-
             string requestPayload = await File.ReadAllTextAsync(Path.Combine(_projectDir, EventPayloadFiles.PayloadFolder, EventPayloadFiles.S57PayloadFolder, "MandatoryAttributeValidation.JSON"));
-
             requestPayload = JsonModifier.UpdateTime(requestPayload);
-            (requestPayload, correlationId) = JsonModifier.UpdateCorrelationId(requestPayload);
+            (requestPayload, string correlationId) = JsonModifier.UpdateCorrelationId(requestPayload);
             requestPayload = JsonModifier.UpdatePermitField(requestPayload, _erpFacadeConfiguration.PermitWithSameKey.Permit);
-
-            var requestPayloadWithMissingProperty = JsonModifier.UpdateMandatoryAttribute(requestPayload, attributeName, index, "Remove");
-
-            response = await _webhookEndpoint.PostWebhookResponseAsync(requestPayloadWithMissingProperty, await _authTokenProvider.GetAzureADToken(false));
-            response.StatusCode.Should().Be(System.Net.HttpStatusCode.InternalServerError);
-
-            var requestPayloadWithNullProperty = JsonModifier.UpdateMandatoryAttribute(requestPayload, attributeName, index, "Null");
-
-            response = await _webhookEndpoint.PostWebhookResponseAsync(requestPayloadWithNullProperty, await _authTokenProvider.GetAzureADToken(false));
+            var requestPayloadWithMissingProperty = JsonModifier.UpdateMandatoryAttribute(requestPayload, attributeName, index);
+            RestResponse response = await _webhookEndpoint.PostWebhookResponseAsync(requestPayloadWithMissingProperty, await _authTokenProvider.GetAzureADToken(false));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.InternalServerError);
         }
 

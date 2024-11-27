@@ -73,22 +73,15 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                     {
                         case 1://CREATE ENC CELL
                         case 10://CANCEL ENC CELL
-                            if (unitOfSale is null)
-                            {
-                                throw new ERPFacadeException(EventIds.RequiredUnitNotFoundException.ToEventId(), $"Required unit not found in S57 enccontentpublished event for {product.ProductName} to generate {action.Action} action.");
-                            }
                             BuildAndAppendActionNode(soapXml, product, unitOfSale, action, eventData, actionItemNode, product.ProductName);
                             break;
 
                         case 4://REPLACED WITH ENC CELL
-                            if (product.ReplacedBy.Any() && unitOfSale is null)
-                            {
-                                throw new ERPFacadeException(EventIds.RequiredUnitNotFoundException.ToEventId(), $"Required unit not found in S57 enccontentpublished event for {product.ProductName} to generate {action.Action} action.");
-                            }
-                            foreach (var replacedProduct in product.ReplacedBy)
-                            {
-                                BuildAndAppendActionNode(soapXml, product, unitOfSale, action, eventData, actionItemNode, product.ProductName, replacedProduct);
-                            }
+                            if (product.ReplacedBy.Any())
+                                foreach (var replacedProduct in product.ReplacedBy)
+                                {
+                                    BuildAndAppendActionNode(soapXml, product, unitOfSale, action, eventData, actionItemNode, product.ProductName, replacedProduct);
+                                }
                             break;
 
                         case 5://ADDITIONAL COVERAGE ENC CELL
@@ -100,7 +93,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
 
                         case 6://CHANGE ENC CELL
                         case 8://UPDATE ENC CELL EDITION UPDATE NUMBER
-                            if (unitOfSale is not null)
+                            if (product.InUnitsOfSale.Any())
                                 BuildAndAppendActionNode(soapXml, product, unitOfSale, action, eventData, actionItemNode, product.ProductName);
                             break;
                     }
@@ -229,21 +222,18 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                         switch (attribute.XmlNodeName)
                         {
                             case XmlFields.ReplacedBy:
-                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, replacedBy)) attributeNode.InnerText = StringExtension.ToSubstring(replacedBy.ToString(), 0, XmlFields.MaxXmlNodeLength);
+                                attributeNode.InnerText = StringExtension.ToSubstring(replacedBy.ToString(), 0, XmlFields.MaxXmlNodeLength);
                                 break;
                             case XmlFields.ActiveKey:
-                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, decryptedPermit.ActiveKey)) attributeNode.InnerText = StringExtension.ToSubstring(decryptedPermit.ActiveKey, 0, XmlFields.MaxXmlNodeLength);
+                                attributeNode.InnerText = StringExtension.ToSubstring(decryptedPermit.ActiveKey, 0, XmlFields.MaxXmlNodeLength);
                                 break;
                             case XmlFields.NextKey:
-                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, decryptedPermit.NextKey)) attributeNode.InnerText = StringExtension.ToSubstring(decryptedPermit.NextKey, 0, XmlFields.MaxXmlNodeLength);
+                                attributeNode.InnerText = StringExtension.ToSubstring(decryptedPermit.NextKey, 0, XmlFields.MaxXmlNodeLength);
                                 break;
                             default:
                                 var jsonAttributeValue = Extractor.ExtractJsonAttributeValue(attribute.JsonPropertyName, source, source.GetType()).ToString();
-                                if (!IsPropertyNullOrEmpty(attribute.JsonPropertyName, jsonAttributeValue))
-                                {
-                                    // Set value as first 2 characters if the node is Agency, else limit other nodes to 250 characters
-                                    attributeNode.InnerText = attribute.XmlNodeName == XmlFields.Agency ? StringExtension.ToSubstring(jsonAttributeValue, 0, XmlFields.MaxAgencyXmlNodeLength) : StringExtension.ToSubstring(jsonAttributeValue, 0, XmlFields.MaxXmlNodeLength);
-                                }
+                                // Set value as first 2 characters if the node is Agency, else limit other nodes to 250 characters
+                                attributeNode.InnerText = attribute.XmlNodeName == XmlFields.Agency ? StringExtension.ToSubstring(jsonAttributeValue, 0, XmlFields.MaxAgencyXmlNodeLength) : StringExtension.ToSubstring(jsonAttributeValue, 0, XmlFields.MaxXmlNodeLength);
                                 break;
                         }
                     }
@@ -262,11 +252,6 @@ namespace UKHO.ERPFacade.API.XmlTransformers
 
         private void ProcessUkhoWeekNumberAttributes(string action, IEnumerable<ActionItemAttribute> attributes, XmlDocument soapXml, S57UkhoWeekNumber ukhoWeekNumber, List<(int, XmlElement)> actionAttributes)
         {
-            if (ukhoWeekNumber == null)
-            {
-                throw new ERPFacadeException(EventIds.RequiredWeekDetailsNotFoundException.ToEventId(), $"UkhoWeekNumber details not found in S57 enccontentpublished event to generate {action} action.");
-            }
-
             foreach (var attribute in attributes)
             {
                 try
@@ -275,26 +260,19 @@ namespace UKHO.ERPFacade.API.XmlTransformers
 
                     if (attribute.IsRequired)
                     {
-                        if (ukhoWeekNumber.Year.HasValue && ukhoWeekNumber.Week.HasValue && ukhoWeekNumber.CurrentWeekAlphaCorrection.HasValue)
+                        switch (attribute.XmlNodeName)
                         {
-                            switch (attribute.XmlNodeName)
-                            {
-                                case XmlFields.ValidFrom:
-                                    var validFrom = _weekDetailsProvider.GetDateOfWeek(ukhoWeekNumber.Year.Value, ukhoWeekNumber.Week.Value, ukhoWeekNumber.CurrentWeekAlphaCorrection.Value);
-                                    attributeNode.InnerText = StringExtension.ToSubstring(validFrom, 0, XmlFields.MaxXmlNodeLength);
-                                    break;
-                                case XmlFields.WeekNo:
-                                    var weekNo = string.Join("", ukhoWeekNumber.Year, ukhoWeekNumber.Week.Value.ToString("D2"));
-                                    attributeNode.InnerText = StringExtension.ToSubstring(weekNo, 0, XmlFields.MaxXmlNodeLength);
-                                    break;
-                                case XmlFields.Correction:
-                                    attributeNode.InnerText = ukhoWeekNumber.CurrentWeekAlphaCorrection.Value ? XmlFields.IsCorrectionTrue : XmlFields.IsCorrectionFalse;
-                                    break;
-                            }
-                        }
-                        else
-                        {
-                            throw new ERPFacadeException(EventIds.EmptyEventJsonPropertyException.ToEventId(), $"Required property value is empty in enccontentpublished event payload. | Property Name : {attribute.JsonPropertyName}");
+                            case XmlFields.ValidFrom:
+                                var validFrom = _weekDetailsProvider.GetDateOfWeek(ukhoWeekNumber.Year.Value, ukhoWeekNumber.Week.Value, ukhoWeekNumber.CurrentWeekAlphaCorrection.Value);
+                                attributeNode.InnerText = StringExtension.ToSubstring(validFrom, 0, XmlFields.MaxXmlNodeLength);
+                                break;
+                            case XmlFields.WeekNo:
+                                var weekNo = string.Join("", ukhoWeekNumber.Year, ukhoWeekNumber.Week.Value.ToString("D2"));
+                                attributeNode.InnerText = StringExtension.ToSubstring(weekNo, 0, XmlFields.MaxXmlNodeLength);
+                                break;
+                            case XmlFields.Correction:
+                                attributeNode.InnerText = ukhoWeekNumber.CurrentWeekAlphaCorrection.Value ? XmlFields.IsCorrectionTrue : XmlFields.IsCorrectionFalse;
+                                break;
                         }
                     }
                     actionAttributes.Add((attribute.SortingOrder, attributeNode));
