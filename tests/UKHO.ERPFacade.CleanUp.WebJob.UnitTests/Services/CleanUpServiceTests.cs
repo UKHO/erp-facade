@@ -7,8 +7,8 @@ using NUnit.Framework;
 using UKHO.ERPFacade.CleanUp.WebJob.Services;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Enums;
-using UKHO.ERPFacade.Common.Operations.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
+using UKHO.ERPFacade.Common.Operations.IO.Azure;
 
 namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
 {
@@ -87,8 +87,8 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
 
                }
             };
-
-            A.CallTo(() => _fakeAzureTableReaderWriter.GetFilteredEntitiesAsync(A<Dictionary<string, string>>.Ignored)).Returns(eventData);
+            var statusFilter = new Dictionary<string, string> { { "Status", Status.Complete.ToString() } };
+            A.CallTo(() => _fakeAzureTableReaderWriter.GetFilteredEntitiesAsync(statusFilter)).Returns(eventData);
 
             _ = _fakeCleanUpService.Clean();
 
