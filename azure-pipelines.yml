@@ -373,6 +373,8 @@ stages:
         value: $(AzureADConfigurationAutoTestClientIdNoRole)
       - name: "AzureADConfiguration.ClientSecretNoRole"
         value: $(AzureADConfigurationClientSecretNoRole)
+      - name: "EnterpriseEventServiceConfiguration.ClientId"
+        value: $(EnterpriseEventServiceConfigurationClientId)
       - name: "ErpFacadeConfiguration.PermitWithSameKey.Permit"
         value: $(PermitWithSameKeyPermit)
       - name: "ErpFacadeConfiguration.PermitWithSameKey.ActiveKey"
@@ -484,7 +486,11 @@ stages:
       - name: "AzureADConfiguration.ClientSecretNoRole"
         value: $(AzureADConfigurationClientSecretNoRole)
       - name: "EnterpriseEventServiceConfiguration.ClientId"
-        value: $(EnterpriseEventServiceConfigurationClientId)     
+        value: $(EnterpriseEventServiceConfigurationClientId)
+      - name: "SharedApiKeyConfiguration.SharedApiKey"
+        value: $(SharedApiKey)
+      - name: "SapCallbackConfiguration.SharedApiKey"
+        value: $(SharedApiKey)
       - name: mockWebAppName
         value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup
@@ -556,7 +562,11 @@ stages:
       - name: "AzureADConfiguration.ClientSecretNoRole"
         value: $(AzureADConfigurationClientSecretNoRole)
       - name: "EnterpriseEventServiceConfiguration.ClientId"
-        value: $(EnterpriseEventServiceConfigurationClientId)         
+        value: $(EnterpriseEventServiceConfigurationClientId)
+      - name: "SharedApiKeyConfiguration.SharedApiKey"
+        value: $(SharedApiKey)
+      - name: "SapCallbackConfiguration.SharedApiKey"
+        value: $(SharedApiKey)
       - name: mockWebAppName
         value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup
@@ -631,7 +641,11 @@ stages:
       - name: "AzureADConfiguration.ClientSecretNoRole"
         value: $(AzureADConfigurationClientSecretNoRole)
       - name: "EnterpriseEventServiceConfiguration.ClientId"
-        value: $(EnterpriseEventServiceConfigurationClientId)   
+        value: $(EnterpriseEventServiceConfigurationClientId)
+      - name: "SharedApiKeyConfiguration.SharedApiKey"
+        value: $(SharedApiKey)
+      - name: "SapCallbackConfiguration.SharedApiKey"
+        value: $(SharedApiKey)
       - name: mockWebAppName
         value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup
@@ -777,6 +791,12 @@ stages:
         value: $(AzureADConfigurationAutoTestClientIdNoRole)
       - name: "AzureADConfiguration.ClientSecretNoRole"
         value: $(AzureADConfigurationClientSecretNoRole)
+      - name: "EnterpriseEventServiceConfiguration.ClientId"
+        value: $(EnterpriseEventServiceConfigurationClientId)
+      - name: "SharedApiKeyConfiguration.SharedApiKey"
+        value: $(SharedApiKey)
+      - name: "SapCallbackConfiguration.SharedApiKey"
+        value: $(SharedApiKey)
       - name: mockWebAppName
         value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup
