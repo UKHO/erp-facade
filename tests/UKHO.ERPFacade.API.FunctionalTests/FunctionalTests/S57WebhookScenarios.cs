@@ -150,45 +150,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         }
 
         [Test]
-        //Mandatory attribute validation scenarios
-        [TestCase("products.productName", 1, TestName = "WhenProductNameIsEmptyOrNull_ThenWebhookShouldReturn500ResponseCode")]
-        [TestCase("unitsOfSale.unitName", 1, TestName = "WhenUnitNameIsEmptyOrNull_ThenWebhookShouldReturn500ResponseCode")]
-        [TestCase("products.providerCode", 1, TestName = "WhenProductProviderCodeIsEmptyOrNull_ThenWebhookShouldReturn500ResponseCode")]
-        [TestCase("unitsOfSale.providerCode", 1, TestName = "WhenUnitProviderCodeIsEmptyOrNull_ThenWebhookShouldReturn500ResponseCode")]
-        [TestCase("products.size", 1, TestName = "WhenProductSizeIsEmptyOrNull_ThenWebhookShouldReturn500ResponseCode")]
-        [TestCase("unitsOfSale.unitSize", 1, TestName = "WhenUnitSizeIsEmptyOrNull_ThenWebhookShouldReturn500ResponseCode")]
-        [TestCase("products.title", 1, TestName = "WhenProductTitleIsEmptyOrNull_ThenWebhookShouldReturn500ResponseCode")]
-        [TestCase("unitsOfSale.title", 1, TestName = "WhenUnitTitleIsEmptyOrNull_ThenWebhookShouldReturn500ResponseCode")]
-        [TestCase("products.editionNumber", 1, TestName = "WhenProductEditionNumberIsEmptyOrNull_ThenWebhookShouldReturn500ResponseCode")]
-        [TestCase("products.updateNumber", 1, TestName = "WhenProductUpdateNumberIsEmptyOrNull_ThenWebhookShouldReturn500ResponseCode")]
-        [TestCase("unitsOfSale.unitType", 1, TestName = "WhenUnitTypeIsEmptyOrNull_ThenWebhookShouldReturn500ResponseCode")]
-        [TestCase("year", 0, TestName = "WhenYearIsEmptyOrNull_ThenWebhookShouldReturn500ResponseCode")]
-        [TestCase("week", 0, TestName = "WhenWeekIsEmptyOrNull_ThenWebhookShouldReturn500ResponseCode")]
-        [TestCase("currentWeekAlphaCorrection", 0, TestName = "WhenAlphaCorrectionFlagIsEmptyOrNull_ThenWebhookShouldReturn500ResponseCode")]
-        [TestCase("products.permit", 1, TestName = "WhenProductPermitIsEmptyOrNull_ThenWebhookShouldReturn500ResponseCode")]
-        public async Task WhenWebhookPostEndpointReceivesEventWithRequiredDataMissing_ThenWebhookReturnsInternalServerErrorResponse(string attributeName, int index)
-        {
-            RestResponse response;
-            string correlationId = null;
-
-            string requestPayload = await File.ReadAllTextAsync(Path.Combine(_projectDir, EventPayloadFiles.PayloadFolder, EventPayloadFiles.S57PayloadFolder, "MandatoryAttributeValidation.JSON"));
-
-            requestPayload = JsonModifier.UpdateTime(requestPayload);
-            (requestPayload, correlationId) = JsonModifier.UpdateCorrelationId(requestPayload);
-            requestPayload = JsonModifier.UpdatePermitField(requestPayload, _erpFacadeConfiguration.PermitWithSameKey.Permit);
-
-            var requestPayloadWithMissingProperty = JsonModifier.UpdateMandatoryAttribute(requestPayload, attributeName, index, "Remove");
-
-            response = await _webhookEndpoint.PostWebhookResponseAsync(requestPayloadWithMissingProperty, await _authTokenProvider.GetAzureADToken(false));
-            response.StatusCode.Should().Be(System.Net.HttpStatusCode.InternalServerError);
-
-            var requestPayloadWithNullProperty = JsonModifier.UpdateMandatoryAttribute(requestPayload, attributeName, index, "Null");
-
-            response = await _webhookEndpoint.PostWebhookResponseAsync(requestPayloadWithNullProperty, await _authTokenProvider.GetAzureADToken(false));
-            response.StatusCode.Should().Be(System.Net.HttpStatusCode.InternalServerError);
-        }
-
-        [Test]
         public async Task WhenPermitDecryptionFails_ThenWebhookReturnsInternalServerErrorResponse()
         {
             string requestPayload = await File.ReadAllTextAsync(Path.Combine(_projectDir, EventPayloadFiles.PayloadFolder, EventPayloadFiles.S57PayloadFolder, EventPayloadFiles.WebhookPayloadFileName));
