@@ -73,12 +73,11 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                     {
                         case 1://CREATE ENC CELL
                         case 10://CANCEL ENC CELL
-                            if (unitOfSale is not null)
-                                BuildAndAppendActionNode(soapXml, product, unitOfSale, action, eventData, actionItemNode, product.ProductName);
+                            BuildAndAppendActionNode(soapXml, product, unitOfSale, action, eventData, actionItemNode, product.ProductName);
                             break;
 
                         case 4://REPLACED WITH ENC CELL
-                            if (product.ReplacedBy.Any() && unitOfSale is not null)
+                            if (product.ReplacedBy.Any())
                                 foreach (var replacedProduct in product.ReplacedBy)
                                 {
                                     BuildAndAppendActionNode(soapXml, product, unitOfSale, action, eventData, actionItemNode, product.ProductName, replacedProduct);
@@ -94,7 +93,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
 
                         case 6://CHANGE ENC CELL
                         case 8://UPDATE ENC CELL EDITION UPDATE NUMBER
-                            if (unitOfSale is not null)
+                            if (product.InUnitsOfSale.Any())
                                 BuildAndAppendActionNode(soapXml, product, unitOfSale, action, eventData, actionItemNode, product.ProductName);
                             break;
                     }

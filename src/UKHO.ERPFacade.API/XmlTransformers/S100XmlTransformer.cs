@@ -67,12 +67,11 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                     {
                         case 1://CREATE PRODUCT
                         case 10://CANCEL PRODUCT
-                            if (unitOfSale is not null)
-                                BuildAndAppendActionNode(soapXml, product, unitOfSale, action, actionItemNode, product.ProductName);
+                            BuildAndAppendActionNode(soapXml, product, unitOfSale, action, actionItemNode, product.ProductName);
                             break;
 
                         case 4://REPLACED WITH PRODUCT
-                            if (product.DataReplacement.Any() && unitOfSale is not null)
+                            if (product.DataReplacement.Any())
                                 foreach (var replacedProduct in product.DataReplacement)
                                 {
                                     BuildAndAppendActionNode(soapXml, product, unitOfSale, action, actionItemNode, product.ProductName, replacedProduct);
@@ -80,7 +79,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                             break;
 
                         case 6://CHANGE PRODUCT
-                            if (unitOfSale is not null)
+                            if (product.InUnitsOfSale.Any())
                                 BuildAndAppendActionNode(soapXml, product, unitOfSale, action, actionItemNode, product.ProductName);
                             break;
                     }
@@ -128,14 +127,16 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             return actionNumber switch
             {
                 //Case 1 : CREATE PRODUCT
-                1 => listOfUnitOfSales.FirstOrDefault(x => x.Status == JsonFields.UnitOfSaleStatusForSale && x.CompositionChanges.AddProducts.Contains(product.ProductName)),
+                1 => listOfUnitOfSales.FirstOrDefault(x => x.Status == JsonFields.UnitOfSaleStatusForSale &&
+                                                           x.CompositionChanges.AddProducts.Contains(product.ProductName)),
 
                 //Case 4 : REPLACED WITH PRODUCT
                 //Case 10 : CANCEL PRODUCT
                 4 or 10 => listOfUnitOfSales.FirstOrDefault(x => x.CompositionChanges.RemoveProducts.Contains(product.ProductName)),
 
                 //Case 6 : CHANGE PRODUCT
-                6 => listOfUnitOfSales.FirstOrDefault(x => x.Status == JsonFields.UnitOfSaleStatusForSale && product.InUnitsOfSale.Contains(x.UnitName)),
+                6 => listOfUnitOfSales.FirstOrDefault(x => x.Status == JsonFields.UnitOfSaleStatusForSale &&
+                                                           product.InUnitsOfSale.Contains(x.UnitName)),
                 _ => null,
             };
         }
