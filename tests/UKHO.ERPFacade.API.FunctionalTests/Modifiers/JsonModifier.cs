@@ -40,5 +40,23 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Modifiers
             }
             return jsonObj.ToString();
         }
+
+        public static string UpdateMandatoryAttribute(string payload, string attributeName, int index)
+        {
+            JObject jsonObject = JObject.Parse(payload);
+            string[] types = attributeName.Split(".");
+            var tokens = types[0] == JsonFields.Products
+                ? jsonObject.SelectTokens($"$.{JsonFields.ProductsNode}[{index}].{types[1]}").ToList()
+                : types[0] == JsonFields.UnitsOfSale
+                    ? jsonObject.SelectTokens($"$.{JsonFields.UnitsOfSaleNode}[{index}].{types[1]}").ToList()
+                    : jsonObject.SelectTokens($"$.{JsonFields.UKHOWeekNumber}.{types[0]}").ToList();
+            tokens.ToList().ForEach(token =>
+            {
+                JProperty parentProperty = (JProperty)token.Parent;
+                parentProperty?.Remove();
+            });
+            payload = jsonObject.ToString();
+            return payload;
+        }
     }
 }
