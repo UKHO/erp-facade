@@ -14,26 +14,26 @@ using UKHO.ERPFacade.Common.Providers;
 
 namespace UKHO.ERPFacade.API.XmlTransformers
 {
-    public class S57EncContentPublishedXmlTransformer : BaseXmlTransformer
+    public class S57EncContentPublishedEventXmlTransformer : BaseXmlTransformer
     {
-        private readonly ILogger<S57EncContentPublishedXmlTransformer> _logger;
+        private readonly ILogger<S57EncContentPublishedEventXmlTransformer> _logger;
         private readonly IXmlOperations _xmlOperations;
         private readonly IWeekDetailsProvider _weekDetailsProvider;
         private readonly IPermitDecryption _permitDecryption;
-        private readonly IOptions<S57EncContentPublishedEventSapActionConfiguration> _sapActionConfig;
+        private readonly IOptions<S57EncContentPublishedEventSapActionConfiguration> _s57EncContentPublishedEventSapActionConfig;
 
-        public S57EncContentPublishedXmlTransformer(ILogger<S57EncContentPublishedXmlTransformer> logger,
-                                 IXmlOperations xmlOperations,
-                                 IWeekDetailsProvider weekDetailsProvider,
-                                 IPermitDecryption permitDecryption,
-                                 IOptions<S57EncContentPublishedEventSapActionConfiguration> sapActionConfig)
+        public S57EncContentPublishedEventXmlTransformer(ILogger<S57EncContentPublishedEventXmlTransformer> logger,
+                                                         IXmlOperations xmlOperations,
+                                                         IWeekDetailsProvider weekDetailsProvider,
+                                                         IPermitDecryption permitDecryption,
+                                                         IOptions<S57EncContentPublishedEventSapActionConfiguration> s57EncContentPublishedEventSapActionConfig)
         : base()
         {
             _logger = logger;
             _xmlOperations = xmlOperations;
             _weekDetailsProvider = weekDetailsProvider;
             _permitDecryption = permitDecryption;
-            _sapActionConfig = sapActionConfig;
+            _s57EncContentPublishedEventSapActionConfig = s57EncContentPublishedEventSapActionConfig;
         }
 
         public override XmlDocument BuildXmlPayload<T>(T eventData, string xmlTemplatePath)
@@ -64,7 +64,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
         {
             foreach (var product in eventData.Products)
             {
-                foreach (var action in _sapActionConfig.Value.Actions.Where(x => x.Product == XmlFields.EncCell))
+                foreach (var action in _s57EncContentPublishedEventSapActionConfig.Value.Actions.Where(x => x.Product == XmlFields.EncCell))
                 {
                     var unitOfSale = GetUnitOfSale(action.ActionNumber, eventData.UnitsOfSales, product);
 
@@ -107,7 +107,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
         {
             foreach (var unitOfSale in eventData.UnitsOfSales)
             {
-                foreach (var action in _sapActionConfig.Value.Actions.Where(x => x.Product == XmlFields.AvcsUnit))
+                foreach (var action in _s57EncContentPublishedEventSapActionConfig.Value.Actions.Where(x => x.Product == XmlFields.AvcsUnit))
                 {
                     if (!ValidateActionRules(action, unitOfSale))
                         continue;

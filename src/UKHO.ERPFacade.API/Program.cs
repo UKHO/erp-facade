@@ -202,8 +202,8 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<IS100SapCallBackService, S100SapCallBackService>();
             builder.Services.AddScoped<RetryPolicyProvider>();
 
-            builder.Services.AddKeyedScoped<IXmlTransformer, S57EncContentPublishedXmlTransformer>(XmlTransformers.S57EncContentPublishedXmlTransformer);
-            builder.Services.AddKeyedScoped<IXmlTransformer, S100DataContentPublishedXmlTransformer>(XmlTransformers.S100DataContentPublishedXmlTransformer);
+            builder.Services.AddKeyedScoped<IXmlTransformer, S57EncContentPublishedEventXmlTransformer>(XmlTransformers.S57EncContentPublishedEventXmlTransformer);
+            builder.Services.AddKeyedScoped<IXmlTransformer, S100DataContentPublishedEventXmlTransformer>(XmlTransformers.S100DataContentPublishedEventXmlTransformer);
 
             retryPolicyConfiguration = configuration.GetSection("RetryPolicyConfiguration").Get<RetryPolicyConfiguration>()!;
 

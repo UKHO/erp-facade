@@ -10,15 +10,15 @@ using UKHO.ERPFacade.Common.Operations;
 
 namespace UKHO.ERPFacade.API.XmlTransformers
 {
-    public class S100DataContentPublishedXmlTransformer : BaseXmlTransformer
+    public class S100DataContentPublishedEventXmlTransformer : BaseXmlTransformer
     {
-        private readonly ILogger<S100DataContentPublishedXmlTransformer> _logger;
+        private readonly ILogger<S100DataContentPublishedEventXmlTransformer> _logger;
         private readonly IXmlOperations _xmlOperations;
         private readonly IOptions<S100DataContentPublishedEventSapActionConfiguration> _s100DataContentPublishedEventSapActionConfig;
 
-        public S100DataContentPublishedXmlTransformer(ILogger<S100DataContentPublishedXmlTransformer> logger,
-                                                      IXmlOperations xmlOperations,
-                                                      IOptions<S100DataContentPublishedEventSapActionConfiguration> s100DataContentPublishedEventSapActionConfig)
+        public S100DataContentPublishedEventXmlTransformer(ILogger<S100DataContentPublishedEventXmlTransformer> logger,
+                                                           IXmlOperations xmlOperations,
+                                                           IOptions<S100DataContentPublishedEventSapActionConfiguration> s100DataContentPublishedEventSapActionConfig)
         {
             _logger = logger;
             _xmlOperations = xmlOperations;
