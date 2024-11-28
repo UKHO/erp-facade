@@ -90,7 +90,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
 
             A.CallTo(() => _fakeAzureTableReaderWriter.GetFilteredEntitiesAsync(A<Dictionary<string, string>>.Ignored)).Returns(eventData);
 
-            _ = _fakeCleanUpService.Clean();
+            _ = _fakeCleanUpService.CleanAsync();
 
             A.CallTo(() => _fakeAzureTableReaderWriter.GetFilteredEntitiesAsync(A<Dictionary<string, string>>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureTableReaderWriter.DeleteEntityAsync(A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();
@@ -119,7 +119,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
 
             A.CallTo(() => _fakeAzureTableReaderWriter.GetFilteredEntitiesAsync(A<Dictionary<string, string>>.Ignored)).Returns(eventData);
 
-            _ = _fakeCleanUpService.Clean();
+            _ = _fakeCleanUpService.CleanAsync();
 
             A.CallTo(() => _fakeAzureTableReaderWriter.GetFilteredEntitiesAsync(A<Dictionary<string, string>>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureTableReaderWriter.DeleteEntityAsync(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
@@ -144,7 +144,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
 
             A.CallTo(() => _fakeAzureTableReaderWriter.GetFilteredEntitiesAsync(A<Dictionary<string, string>>.Ignored)).Returns(eventData);
 
-            _ = _fakeCleanUpService.Clean();
+            _ = _fakeCleanUpService.CleanAsync();
 
             A.CallTo(() => _fakeAzureTableReaderWriter.GetFilteredEntitiesAsync(A<Dictionary<string, string>>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureTableReaderWriter.DeleteEntityAsync(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
@@ -169,7 +169,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
 
             A.CallTo(() => _fakeAzureTableReaderWriter.GetFilteredEntitiesAsync(A<Dictionary<string, string>>.Ignored)).Returns(eventData);
 
-            _ = _fakeCleanUpService.Clean();
+            _ = _fakeCleanUpService.CleanAsync();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Error

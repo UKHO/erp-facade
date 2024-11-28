@@ -8,7 +8,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Modifiers
         public static string UpdateTime(string requestBody)
         {
             //Create timestamp using the current date and time
-            var currentTimeStamp = DateTime.Now.ToString(XmlFields.EventJsonDateTimeFormat);
+            var currentTimeStamp = DateTime.Now.ToString(DateTimeFormats.EventJsonDateTimeFormat);
             JObject jsonObj = JObject.Parse(requestBody);
             jsonObj["time"] = currentTimeStamp;
             return jsonObj.ToString();

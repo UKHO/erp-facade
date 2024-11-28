@@ -1,6 +1,6 @@
 ﻿using System.Xml;
 using UKHO.ERPFacade.Common.Constants;
-using UKHO.ERPFacade.Common.Models;
+using UKHO.ERPFacade.Common.Models.SapActionConfigurationModels;
 using UKHO.ERPFacade.Common.Operations;
 
 namespace UKHO.ERPFacade.API.XmlTransformers
@@ -8,7 +8,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
     public interface IXmlTransformer
     {
         XmlDocument BuildXmlPayload<T>(T eventData, string xmlTemplatePath);
-        bool ValidateActionRules(SapAction action, object obj);
+        bool ValidateActionRules(Actions action, object obj);
         void FinalizeSapXmlMessage(XmlDocument soapXml, string correlationId, XmlNode actionItemNode, string xmlPathInfo);
     }
 
@@ -16,7 +16,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
     {
         public abstract XmlDocument BuildXmlPayload<T>(T eventData, string xmlTemplatePath);
 
-        public bool ValidateActionRules(SapAction action, object obj)
+        public bool ValidateActionRules(Actions action, object obj)
         {
             bool isConditionSatisfied = false;
 
@@ -81,10 +81,10 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             noOfActionsNode.InnerText = actionItemNode.ChildNodes.Count.ToString();
 
             var recDateNode = soapXml.SelectSingleNode(XmlTemplateInfo.XpathRecDate);
-            recDateNode.InnerText = DateTime.UtcNow.ToString(XmlFields.RecDateFormat);
+            recDateNode.InnerText = DateTime.UtcNow.ToString(DateTimeFormats.RecDateFormat);
 
             var recTimeNode = soapXml.SelectSingleNode(XmlTemplateInfo.XpathRecTime);
-            recTimeNode.InnerText = DateTime.UtcNow.ToString(XmlFields.RecTimeFormat);
+            recTimeNode.InnerText = DateTime.UtcNow.ToString(DateTimeFormats.RecTimeFormat);
 
             //Set action items
             var parentInfoNode = soapXml.SelectSingleNode(xmlPathInfo);

@@ -55,7 +55,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
         {
             A.CallTo(() => _fakeHttpContext.Response.Headers).Returns(_fakeHeaderDictionary);
             A.CallTo(() => _fakeHttpContextAccessor.HttpContext).Returns(_fakeHttpContext);
-            A.CallTo(() => _fakeHttpContext.Request.Headers[ConfigFileFields.HeaderApiKeyName]).Returns(new[] { "xyz-123" });
+            A.CallTo(() => _fakeHttpContext.Request.Headers[ApiHeaderKeys.ApiKeyHeaderKey]).Returns(new[] { "xyz-123" });
 
             _fakeSharedApiKeyAuthFilter.OnAuthorization(_fakeAuthorizationFilterContext);
 
@@ -70,7 +70,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
         {
             A.CallTo(() => _fakeHttpContext.Response.Headers).Returns(_fakeHeaderDictionary);
             A.CallTo(() => _fakeHttpContextAccessor.HttpContext).Returns(_fakeHttpContext);
-            A.CallTo(() => _fakeHttpContext.Request.Headers[ConfigFileFields.HeaderApiKeyName]).Returns(new[] { "" });
+            A.CallTo(() => _fakeHttpContext.Request.Headers[ApiHeaderKeys.ApiKeyHeaderKey]).Returns(new[] { "" });
 
             _fakeSharedApiKeyAuthFilter.OnAuthorization(_fakeAuthorizationFilterContext);
 
@@ -85,7 +85,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
         {
             A.CallTo(() => _fakeHttpContext.Response.Headers).Returns(_fakeHeaderDictionary);
             A.CallTo(() => _fakeHttpContextAccessor.HttpContext).Returns(_fakeHttpContext);
-            A.CallTo(() => _fakeHttpContext.Request.Headers[ConfigFileFields.HeaderApiKeyName]).Returns(new[] { "abc-123" });
+            A.CallTo(() => _fakeHttpContext.Request.Headers[ApiHeaderKeys.ApiKeyHeaderKey]).Returns(new[] { "abc-123" });
 
             _fakeSharedApiKeyAuthFilter.OnAuthorization(_fakeAuthorizationFilterContext);
 

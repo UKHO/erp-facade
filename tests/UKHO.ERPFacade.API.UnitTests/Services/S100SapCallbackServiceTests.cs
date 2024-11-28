@@ -40,9 +40,9 @@ public class S100SapCallbackServiceTests
     {
         Result result = new Result(true, "");
 
-        A.CallTo(() => _fakeS100UnitOfSaleUpdatedEventPublishingService.PublishEvent(A<BaseCloudEvent>.Ignored, A<string>.Ignored)).Returns(result);
+        A.CallTo(() => _fakeS100UnitOfSaleUpdatedEventPublishingService.BuildAndPublishEventAsync(A<BaseCloudEvent>.Ignored, A<string>.Ignored)).Returns(result);
 
-        await _fakeSapCallbackService.ProcessSapCallback(_fakeCorrelationId);
+        await _fakeSapCallbackService.ProcessSapCallbackAsync(_fakeCorrelationId);
 
         A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                             && call.GetArgument<LogLevel>(0) == LogLevel.Information
@@ -80,9 +80,9 @@ public class S100SapCallbackServiceTests
     {
         Result result = new Result(false, "Forbidden");
 
-        A.CallTo(() => _fakeS100UnitOfSaleUpdatedEventPublishingService.PublishEvent(A<BaseCloudEvent>.Ignored, A<string>.Ignored)).Returns(result);
+        A.CallTo(() => _fakeS100UnitOfSaleUpdatedEventPublishingService.BuildAndPublishEventAsync(A<BaseCloudEvent>.Ignored, A<string>.Ignored)).Returns(result);
 
-        Assert.ThrowsAsync<ERPFacadeException>(() => _fakeSapCallbackService.ProcessSapCallback(_fakeCorrelationId));
+        Assert.ThrowsAsync<ERPFacadeException>(() => _fakeSapCallbackService.ProcessSapCallbackAsync(_fakeCorrelationId));
 
         A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                             && call.GetArgument<LogLevel>(0) == LogLevel.Information

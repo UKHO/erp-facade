@@ -13,7 +13,8 @@ namespace UKHO.ERPFacade.API.Filters
         private readonly ILogger<SharedApiKeyAuthFilter> _logger;
         private readonly SharedApiKeyConfiguration _sharedApiKeyConfiguration;
 
-        public SharedApiKeyAuthFilter(ILogger<SharedApiKeyAuthFilter> logger, IOptions<SharedApiKeyConfiguration> sharedApiKeyConfiguration)
+        public SharedApiKeyAuthFilter(ILogger<SharedApiKeyAuthFilter> logger,
+                                      IOptions<SharedApiKeyConfiguration> sharedApiKeyConfiguration)
         {
             _logger = logger;
             _sharedApiKeyConfiguration = sharedApiKeyConfiguration.Value ?? throw new ArgumentNullException(nameof(sharedApiKeyConfiguration));
@@ -26,7 +27,8 @@ namespace UKHO.ERPFacade.API.Filters
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            string sharedApiKey = context.HttpContext.Request.Headers[ConfigFileFields.HeaderApiKeyName];
+            string sharedApiKey = context.HttpContext.Request.Headers[ApiHeaderKeys.ApiKeyHeaderKey];
+
             if (string.IsNullOrWhiteSpace(sharedApiKey))
             {
                 _logger.LogWarning(EventIds.SharedApiKeyMissingInRequest.ToEventId(), "Shared key is missing in request");

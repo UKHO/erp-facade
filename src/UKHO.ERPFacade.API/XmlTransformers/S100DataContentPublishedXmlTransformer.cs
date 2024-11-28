@@ -1,12 +1,11 @@
-﻿using System;
-using System.Xml;
+﻿using System.Xml;
 using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Extensions;
 using UKHO.ERPFacade.Common.Logging;
-using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Models.CloudEvents.S100Event;
+using UKHO.ERPFacade.Common.Models.SapActionConfigurationModels;
 using UKHO.ERPFacade.Common.Operations;
 
 namespace UKHO.ERPFacade.API.XmlTransformers
@@ -15,14 +14,15 @@ namespace UKHO.ERPFacade.API.XmlTransformers
     {
         private readonly ILogger<S100DataContentPublishedXmlTransformer> _logger;
         private readonly IXmlOperations _xmlOperations;
-        private readonly IOptions<S100SapActionConfiguration> _sapActionConfig;
+        private readonly IOptions<S100DataContentPublishedEventSapActionConfiguration> _s100DataContentPublishedEventSapActionConfig;
+
         public S100DataContentPublishedXmlTransformer(ILogger<S100DataContentPublishedXmlTransformer> logger,
-                                  IXmlOperations xmlOperations,
-                                  IOptions<S100SapActionConfiguration> sapActionConfig)
+                                                      IXmlOperations xmlOperations,
+                                                      IOptions<S100DataContentPublishedEventSapActionConfiguration> s100DataContentPublishedEventSapActionConfig)
         {
             _logger = logger;
             _xmlOperations = xmlOperations;
-            _sapActionConfig = sapActionConfig;
+            _s100DataContentPublishedEventSapActionConfig = s100DataContentPublishedEventSapActionConfig;
         }
 
         /// <summary>
@@ -42,6 +42,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
 
                 // Build SAP actions for Product
                 BuildProductActions(s100EventData, s100EventXmlPayload, actionItemNode);
+
                 // Build SAP actions for Unit Of Sale
                 BuildUnitActions(s100EventData, s100EventXmlPayload, actionItemNode);
 
@@ -57,7 +58,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
         {
             foreach (var product in eventData.Products)
             {
-                foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == XmlFields.ShopCell))
+                foreach (var action in _s100DataContentPublishedEventSapActionConfig.Value.Actions.Where(x => x.Product == XmlFields.ShopCell))
                 {
                     var unitOfSale = GetUnitOfSale(action.ActionNumber, eventData.UnitsOfSales, product);
 
@@ -92,7 +93,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
         {
             foreach (var unitOfSale in eventData.UnitsOfSales)
             {
-                foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == XmlFields.ShopUnit))
+                foreach (var action in _s100DataContentPublishedEventSapActionConfig.Value.Actions.Where(x => x.Product == XmlFields.ShopUnit))
                 {
                     if (!ValidateActionRules(action, unitOfSale))
                         continue;
@@ -142,22 +143,22 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             };
         }
 
-        private void BuildAndAppendActionNode(XmlDocument soapXml, S100Product product, S100UnitOfSale unitOfSale, SapAction action, XmlNode actionItemNode, string childCell = null, string replacedBy = null)
+        private void BuildAndAppendActionNode(XmlDocument soapXml, S100Product product, S100UnitOfSale unitOfSale, Actions action, XmlNode actionItemNode, string childCell = null, string replacedBy = null)
         {
-            _logger.LogInformation(EventIds.S100SapActionGenerationStarted.ToEventId(), "Generation of {ActionName} action started.", action.Action);
+            _logger.LogInformation(EventIds.S100SapActionGenerationStarted.ToEventId(), "Generation of {ActionName} action started.", action.ActionName);
             var actionNode = BuildAction(soapXml, product, unitOfSale, action, childCell, replacedBy);
             actionItemNode.AppendChild(actionNode);
-            _logger.LogInformation(EventIds.S100SapActionGenerationCompleted.ToEventId(), "Generation of {ActionName} action completed.", action.Action);
+            _logger.LogInformation(EventIds.S100SapActionGenerationCompleted.ToEventId(), "Generation of {ActionName} action completed.", action.ActionName);
         }
 
-        private XmlElement BuildAction(XmlDocument soapXml, S100Product product, S100UnitOfSale unitOfSale, SapAction action, string childCell, string replacedBy = null)
+        private XmlElement BuildAction(XmlDocument soapXml, S100Product product, S100UnitOfSale unitOfSale, Actions action, string childCell, string replacedBy = null)
         {
             // Create main item node
             var itemNode = soapXml.CreateElement(XmlTemplateInfo.Item);
 
             // Add basic action-related nodes
             _xmlOperations.AppendChildNode(itemNode, soapXml, XmlFields.ActionNumber, action.ActionNumber.ToString());
-            _xmlOperations.AppendChildNode(itemNode, soapXml, XmlFields.Action, action.Action.ToString());
+            _xmlOperations.AppendChildNode(itemNode, soapXml, XmlFields.Action, action.ActionName.ToString());
             _xmlOperations.AppendChildNode(itemNode, soapXml, XmlFields.Product, action.Product.ToString());
 
             // Add child cell node
@@ -166,10 +167,10 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             List<(int sortingOrder, XmlElement node)> actionAttributes = new();
 
             // Process ProductSection attributes
-            ProcessAttributes(action.Action, action.Attributes.Where(x => x.Section == ConfigFileFields.ProductSection), soapXml, product, actionAttributes, replacedBy);
+            ProcessAttributes(action.ActionName, action.Attributes.Where(x => x.Section == ConfigFileFields.ProductSection), soapXml, product, actionAttributes, replacedBy);
 
             // Process UnitOfSaleSection attributes
-            ProcessAttributes(action.Action, action.Attributes.Where(x => x.Section == ConfigFileFields.UnitOfSaleSection), soapXml, unitOfSale, actionAttributes, null);
+            ProcessAttributes(action.ActionName, action.Attributes.Where(x => x.Section == ConfigFileFields.UnitOfSaleSection), soapXml, unitOfSale, actionAttributes, null);
 
             // Sort and append attributes to SAP action
             foreach (var (sortingOrder, node) in actionAttributes.OrderBy(x => x.sortingOrder))
@@ -180,7 +181,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             return itemNode;
         }
 
-        private void ProcessAttributes(string action, IEnumerable<ActionItemAttribute> attributes, XmlDocument soapXml, object source, List<(int, XmlElement)> actionAttributes, string replacedBy = null)
+        private void ProcessAttributes(string action, IEnumerable<Attributes> attributes, XmlDocument soapXml, object source, List<(int, XmlElement)> actionAttributes, string replacedBy = null)
         {
             foreach (var attribute in attributes)
             {

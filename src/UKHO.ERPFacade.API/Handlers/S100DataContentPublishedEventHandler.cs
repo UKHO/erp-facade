@@ -29,12 +29,12 @@ namespace UKHO.ERPFacade.API.Handlers
         private readonly IS100UnitOfSaleUpdatedEventPublishingService _s100UnitOfSaleUpdatedEventPublishingService;
 
         public S100DataContentPublishedEventHandler([FromKeyedServices("S100DataContentPublishedXmlTransformer")] IXmlTransformer xmlTransformer,
-                                ILogger<S100DataContentPublishedEventHandler> logger,
-                                IAzureTableReaderWriter azureTableReaderWriter,
-                                IAzureBlobReaderWriter azureBlobReaderWriter,
-                                ISapClient sapClient,
-                                IOptions<SapConfiguration> sapConfig,
-                                IS100UnitOfSaleUpdatedEventPublishingService s100UnitOfSaleUpdatedEventPublishingService)
+                                                    ILogger<S100DataContentPublishedEventHandler> logger,
+                                                    IAzureTableReaderWriter azureTableReaderWriter,
+                                                    IAzureBlobReaderWriter azureBlobReaderWriter,
+                                                    ISapClient sapClient,
+                                                    IOptions<SapConfiguration> sapConfig,
+                                                    IS100UnitOfSaleUpdatedEventPublishingService s100UnitOfSaleUpdatedEventPublishingService)
         {
             _logger = logger;
             _xmlTransformer = xmlTransformer;
@@ -49,15 +49,16 @@ namespace UKHO.ERPFacade.API.Handlers
         {
             _logger.LogInformation(EventIds.S100EventProcessingStarted.ToEventId(), "S-100 data content published event processing started.");
 
-            S100EventData s100EventData = JsonConvert.DeserializeObject<S100EventData>(baseCloudEvent.Data.ToString());
+            var s100EventData = JsonConvert.DeserializeObject<S100EventData>(baseCloudEvent.Data.ToString());
 
-            EventEntity eventEntity = new()
+            var eventEntity = new EventEntity()
             {
                 RowKey = s100EventData.CorrelationId,
                 PartitionKey = PartitionKeys.S100PartitionKey,
                 Timestamp = DateTime.UtcNow,
                 RequestDateTime = null,
                 ResponseDateTime = null,
+                EventPublishedDateTime = null,
                 Status = Status.Incomplete.ToString()
             };
 
@@ -77,12 +78,11 @@ namespace UKHO.ERPFacade.API.Handlers
 
             if (sapPayload.DocumentElement != null && int.TryParse(sapPayload.SelectSingleNode(XmlTemplateInfo.XpathNoOfActions).InnerText, out int actionCount) && actionCount <= 0)
             {
-                var result = await _s100UnitOfSaleUpdatedEventPublishingService.PublishEvent(baseCloudEvent, s100EventData.CorrelationId);
+                var result = await _s100UnitOfSaleUpdatedEventPublishingService.BuildAndPublishEventAsync(baseCloudEvent, s100EventData.CorrelationId);
 
                 if (!result.IsSuccess)
                 {
-                    _logger.LogError(EventIds.ErrorOccurredWhilePublishingUnitOfSaleUpdatedEventToEes.ToEventId(), "Error occurred while publishing S-100 unit of sale updated event to EES. | Status:{status}", result.Error);
-                    throw new ERPFacadeException(EventIds.ErrorOccurredWhilePublishingUnitOfSaleUpdatedEventToEes.ToEventId(), "Error occurred while publishing S-100 unit of sale updated event to EES.");
+                    throw new ERPFacadeException(EventIds.ErrorOccurredWhilePublishingUnitOfSaleUpdatedEventToEes.ToEventId(), $"Error occurred while publishing S-100 unit of sale updated event to EES. | {result.Error}");
                 }
 
                 _logger.LogInformation(EventIds.UnitOfSaleUpdatedEventPublished.ToEventId(), "The unit of sale updated event published to EES successfully.");
@@ -91,14 +91,14 @@ namespace UKHO.ERPFacade.API.Handlers
             }
             else
             {
-                var response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapEndpointForS100Event, _sapConfig.Value.SapServiceOperationForS100Event, _sapConfig.Value.SapUsernameForS100Event, _sapConfig.Value.SapPasswordForS100Event);
+                var response = await _sapClient.SendUpdateAsync(sapPayload, _sapConfig.Value.SapEndpointForS100Event, _sapConfig.Value.SapServiceOperationForS100Event, _sapConfig.Value.SapUsernameForS100Event, _sapConfig.Value.SapPasswordForS100Event);
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    throw new ERPFacadeException(EventIds.S100RequestToSapFailedException.ToEventId(), $"An error occurred while sending S-100 data content to SAP. | {response.StatusCode}");
+                    throw new ERPFacadeException(EventIds.S100RequestToSapFailedException.ToEventId(), $"An error occurred while sending S-100 product update to SAP. | {response.StatusCode}");
                 }
 
-                _logger.LogInformation(EventIds.S100EventUpdateSentToSap.ToEventId(), "S-100 data content has been sent to SAP successfully.");
+                _logger.LogInformation(EventIds.S100EventUpdateSentToSap.ToEventId(), "S-100 product update has been sent to SAP successfully.");
 
                 await _azureTableReaderWriter.UpdateEntityAsync(eventEntity.PartitionKey, eventEntity.RowKey, new Dictionary<string, object> { { "RequestDateTime", DateTime.UtcNow } });
             }

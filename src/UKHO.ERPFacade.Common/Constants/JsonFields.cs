@@ -7,7 +7,7 @@ namespace UKHO.ERPFacade.Common.Constants
     {
         public const string EventIdKey = "id";
         public const string DataNode = "data";
-        public const string CorrelationIdKey = "data.correlationId";
+        public const string CorrelationIdKey = "correlationId";
         public const string UKHOWeekNumber = "data.ukhoWeekNumber";
         public const string ProductsNode = "data.products";
         public const string UnitsOfSaleNode = "data.unitsOfSale";

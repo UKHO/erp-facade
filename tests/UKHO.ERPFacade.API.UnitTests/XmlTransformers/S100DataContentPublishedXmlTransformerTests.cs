@@ -14,9 +14,9 @@ using UKHO.ERPFacade.API.XmlTransformers;
 using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Logging;
-using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Models.CloudEvents;
 using UKHO.ERPFacade.Common.Models.CloudEvents.S100Event;
+using UKHO.ERPFacade.Common.Models.SapActionConfigurationModels;
 using UKHO.ERPFacade.Common.Operations;
 
 namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
@@ -26,7 +26,7 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
     {
         private ILogger<S100DataContentPublishedXmlTransformer> _fakeLogger;
         private IXmlOperations _fakeXmlOperations;
-        private IOptions<S100SapActionConfiguration> _fakeSapActionConfig;
+        private IOptions<S100DataContentPublishedEventSapActionConfiguration> _fakeSapActionConfig;
         private S100DataContentPublishedXmlTransformer _fakeS100DataContentPublishedXmlTransformer;
         private string _sapXmlTemplate;
         [SetUp]
@@ -34,7 +34,7 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
         {
             _fakeLogger = A.Fake<ILogger<S100DataContentPublishedXmlTransformer>>();
             _fakeXmlOperations = A.Fake<IXmlOperations>();
-            _fakeSapActionConfig = Options.Create(InitConfiguration().GetSection("S100SapActionConfiguration").Get<S100SapActionConfiguration>())!;
+            _fakeSapActionConfig = Options.Create(InitConfiguration().GetSection("S100DataContentPublishedEventSapActionConfiguration").Get<S100DataContentPublishedEventSapActionConfiguration>())!;
             _fakeS100DataContentPublishedXmlTransformer = new S100DataContentPublishedXmlTransformer(_fakeLogger, _fakeXmlOperations, _fakeSapActionConfig);
             _sapXmlTemplate = TestHelper.ReadFileData(XmlTemplateInfo.S100SapXmlTemplatePath);
         }
@@ -42,7 +42,7 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
         {
             var config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory() + @"/ConfigurationFiles")
-                .AddJsonFile("S100SapActions.json")
+                .AddJsonFile("S100DataContentPublishedEventSapActionConfiguration.json")
                 .AddEnvironmentVariables()
                 .Build();
 

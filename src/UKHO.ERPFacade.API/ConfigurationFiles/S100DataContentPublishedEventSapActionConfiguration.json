@@ -1,9 +1,31 @@
+/*
+JSON configuration file that defines a set of SAP actions sent to SAP when ERP Facade recieve S100 data product update from Penrose as part of "uk.gov.ukho.encpublishing.s100datacontentpublished.v1" event.
+It allows for easy customization and configuration of the system's behavior based on the defined actions and their associated rules and attributes.
+
+Each action has the following properties:
+
+•	"ActionNumber": An representing the sequence number of the action.
+•	"ActionName": Action Name.
+•	"Product": A string specifying the product associated with the action.
+•	"Rules": An array of objects representing the conditions that must be met for a rule to satisfied to create a SAP action. Mininum one rule needs to be satisfied to generate a SAP action. These rules are applied against event data received from Penrose. Each rule object has following properties
+      * "Conditions": An array of objects representing the conditions that must be met for the rule to be satisfied. Each condition object has following properties.
+            * "AttributeDataType" (a string specifying the data type of the attribute),
+            * "AttributeName" (a string specifying the name of the attribute in received event JSON),
+            * "AttributeValue" (a string specifying the value of the attribute).
+•	"Attributes": An array of objects representing the attributes associated with the action. Each attribute object has following properties
+      * "IsRequired" (a boolean indicating whether the attribute is required),
+      * "Section" (the section to which the attribute belongs),
+      * "JsonPropertyName" (the name of the attribute in event JSON payload),
+      * "XmlNodeName" (the name of the attribute in SAP XML payload),
+      * "SortingOrder" (an integer specifying the sorting order of the attribute).
+*/
+
 {
-    "S100SapActionConfiguration": {
-        "SapActions": [
+    "S100DataContentPublishedEventSapActionConfiguration": {
+        "Actions": [
             {
                 "ActionNumber": 1,
-                "Action": "CREATE PRODUCT",
+                "ActionName": "CREATE PRODUCT",
                 "Product": "SHOP CELL",
                 "Rules": [
                     {
@@ -76,7 +98,7 @@
             },
             {
                 "ActionNumber": 2,
-                "Action": "CREATE UNIT OF SALE",
+                "ActionName": "CREATE UNIT OF SALE",
                 "Product": "SHOP UNIT",
                 "Rules": [
                     {
@@ -143,7 +165,7 @@
             },
             {
                 "ActionNumber": 3,
-                "Action": "ASSIGN PRODUCT TO UNIT OF SALE",
+                "ActionName": "ASSIGN PRODUCT TO UNIT OF SALE",
                 "Product": "SHOP UNIT",
                 "Rules": [],
                 "Attributes": [
@@ -200,7 +222,7 @@
             },
             {
                 "ActionNumber": 4,
-                "Action": "REPLACED WITH PRODUCT",
+                "ActionName": "REPLACED WITH PRODUCT",
                 "Product": "SHOP CELL",
                 "Rules": [
                     {
@@ -267,7 +289,7 @@
             },
             {
                 "ActionNumber": 6,
-                "Action": "CHANGE PRODUCT",
+                "ActionName": "CHANGE PRODUCT",
                 "Product": "SHOP CELL",
                 "Rules": [
                     {
@@ -343,7 +365,7 @@
             },
             {
                 "ActionNumber": 7,
-                "Action": "CHANGE UNIT OF SALE",
+                "ActionName": "CHANGE UNIT OF SALE",
                 "Product": "SHOP UNIT",
                 "Rules": [
                     {
@@ -415,7 +437,7 @@
             },
             {
                 "ActionNumber": 9,
-                "Action": "REMOVE PRODUCT FROM UNIT OF SALE",
+                "ActionName": "REMOVE PRODUCT FROM UNIT OF SALE",
                 "Product": "SHOP UNIT",
                 "Rules": [],
                 "Attributes": [
@@ -472,7 +494,7 @@
             },
             {
                 "ActionNumber": 10,
-                "Action": "CANCEL PRODUCT",
+                "ActionName": "CANCEL PRODUCT",
                 "Product": "SHOP CELL",
                 "Rules": [
                     {
@@ -544,7 +566,7 @@
             },
             {
                 "ActionNumber": 11,
-                "Action": "CANCEL UNIT OF SALE",
+                "ActionName": "CANCEL UNIT OF SALE",
                 "Product": "SHOP UNIT",
                 "Rules": [
                     {

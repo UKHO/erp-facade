@@ -5,12 +5,7 @@ namespace UKHO.ERPFacade.Common.Constants
     [ExcludeFromCodeCoverage]
     public static class XmlFields
     {
-        public const string EventJsonDateTimeFormat = "yyyy-MM-ddTHH:mm:ss.fffffffK";
-        public const string RecDateFormat = "yyyyMMdd";
-        public const string RecTimeFormat = "hhmmss";
-
         public const string ImOrderNameSpace = "RecordOfSale";
-
         public const string SoldToAcc = "SOLDTOACC";
         public const string LicenceAcc = "LICENSEEACC";
         public const string StartDate = "STARTDATE";

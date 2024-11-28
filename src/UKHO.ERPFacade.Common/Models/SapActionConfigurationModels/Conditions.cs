@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace UKHO.ERPFacade.Common.Models
+namespace UKHO.ERPFacade.Common.Models.SapActionConfigurationModels
 {
     [ExcludeFromCodeCoverage]
     public class Conditions

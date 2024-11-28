@@ -25,7 +25,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.Services
             _azureBlobReaderWriter = azureBlobReaderWriter ?? throw new ArgumentNullException(nameof(azureBlobReaderWriter));
         }
 
-        public async Task Clean()
+        public async Task CleanAsync()
         {
             try
             {

@@ -18,6 +18,7 @@ using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Models.CloudEvents;
 using UKHO.ERPFacade.Common.Models.CloudEvents.S57Event;
+using UKHO.ERPFacade.Common.Models.SapActionConfigurationModels;
 using UKHO.ERPFacade.Common.Operations;
 using UKHO.ERPFacade.Common.PermitDecryption;
 using UKHO.ERPFacade.Common.Providers;
@@ -29,7 +30,7 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
     {
         private ILogger<S57EncContentPublishedXmlTransformer> _fakeLogger;
         private IXmlOperations _fakeXmlOperations;
-        private IOptions<SapActionConfiguration> _fakeSapActionConfig;
+        private IOptions<S57EncContentPublishedEventSapActionConfiguration> _fakeSapActionConfig;
         private IWeekDetailsProvider _fakeWeekDetailsProvider;
         private IPermitDecryption _fakePermitDecryption;
         private S57EncContentPublishedXmlTransformer _fakeS57EncContentPublishedXmlTransformer;
@@ -43,7 +44,7 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
             _fakeXmlOperations = A.Fake<IXmlOperations>();
             _fakeWeekDetailsProvider = A.Fake<IWeekDetailsProvider>();
             _fakePermitDecryption = A.Fake<IPermitDecryption>();
-            _fakeSapActionConfig = Options.Create(InitConfiguration().GetSection("SapActionConfiguration").Get<SapActionConfiguration>())!;
+            _fakeSapActionConfig = Options.Create(InitConfiguration().GetSection("S57EncContentPublishedEventSapActionConfiguration").Get<S57EncContentPublishedEventSapActionConfiguration>())!;
             _fakeS57EncContentPublishedXmlTransformer = new S57EncContentPublishedXmlTransformer(_fakeLogger, _fakeXmlOperations, _fakeWeekDetailsProvider, _fakePermitDecryption, _fakeSapActionConfig);
             _sapXmlTemplate = TestHelper.ReadFileData(XmlTemplateInfo.S57SapXmlTemplatePath);
         }
@@ -52,7 +53,7 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
         {
             var config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory() + @"/ConfigurationFiles")
-                .AddJsonFile("S57SapActions.json")
+                .AddJsonFile("S57EncContentPublishedEventSapActionConfiguration.json")
                 .AddEnvironmentVariables()
                 .Build();
 
@@ -277,7 +278,7 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
             var cancelCellWithNewCellReplacementPayloadJson = TestHelper.ReadFileData("ERPTestData\\CancelCellWithNewCellReplacement.JSON");
             var baseCloudEvent = JsonConvert.DeserializeObject<BaseCloudEvent>(cancelCellWithNewCellReplacementPayloadJson);
             S57EventData s57EventData = JsonConvert.DeserializeObject<S57EventData>(baseCloudEvent.Data.ToString()!);
-            var action = _fakeSapActionConfig.Value.SapActions.FirstOrDefault(x => x.Product == XmlFields.EncCell && x.Action == ConfigFileFields.ReplaceEncCellAction);
+            var action = _fakeSapActionConfig.Value.Actions.FirstOrDefault(x => x.Product == XmlFields.EncCell && x.ActionName == ConfigFileFields.ReplaceEncCellAction);
 
             MethodInfo buildAction = typeof(S57EncContentPublishedXmlTransformer).GetMethod("GetUnitOfSale", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
             var result = (XmlElement)buildAction.Invoke(_fakeS57EncContentPublishedXmlTransformer, new object[] { action.ActionNumber, s57EventData.UnitsOfSales!, s57EventData.Products.FirstOrDefault()! })!;
@@ -292,7 +293,7 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
             var baseCloudEvent = JsonConvert.DeserializeObject<BaseCloudEvent>(cancelCellWithNewCellReplacementPayloadJson);
             S57EventData s57EventData = JsonConvert.DeserializeObject<S57EventData>(baseCloudEvent.Data.ToString()!);
 
-            var action = _fakeSapActionConfig.Value.SapActions.FirstOrDefault(x => x.Product == XmlFields.EncCell && x.Action == ConfigFileFields.ChangeEncCellAction);
+            var action = _fakeSapActionConfig.Value.Actions.FirstOrDefault(x => x.Product == XmlFields.EncCell && x.ActionName == ConfigFileFields.ChangeEncCellAction);
 
             MethodInfo buildAction = typeof(S57EncContentPublishedXmlTransformer).GetMethod("GetUnitOfSale", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)!;
             var result = (XmlElement)buildAction.Invoke(_fakeS57EncContentPublishedXmlTransformer, new object[] { action.ActionNumber, s57EventData.UnitsOfSales!, s57EventData.Products.LastOrDefault()! })!;

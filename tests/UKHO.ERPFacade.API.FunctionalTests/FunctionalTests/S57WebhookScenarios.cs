@@ -113,7 +113,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
             requestBody = JsonModifier.UpdatePermitField(requestBody, permitState == JsonFields.PermitWithSameKey ? permitWithSameKey.Permit : permitWithDifferentKey.Permit);
 
-            RestResponse response = await _webhookEndpoint.PostWebhookResponseAsync(requestBody, await _authTokenProvider.GetAzureADToken(false));
+            RestResponse response = await _webhookEndpoint.PostWebhookResponseAsync(requestBody, await _authTokenProvider.GetAzureADTokenAsync(false));
 
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
@@ -137,7 +137,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
             Console.WriteLine("Scenario:" + jsonPayloadFileName + "\n" + "CorrelationId: " + correlationId + "\n");
 
-            RestResponse response = await _webhookEndpoint.PostWebhookResponseAsync(requestBody, await _authTokenProvider.GetAzureADToken(false));
+            RestResponse response = await _webhookEndpoint.PostWebhookResponseAsync(requestBody, await _authTokenProvider.GetAzureADTokenAsync(false));
 
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
@@ -170,7 +170,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             (requestPayload, string correlationId) = JsonModifier.UpdateCorrelationId(requestPayload);
             requestPayload = JsonModifier.UpdatePermitField(requestPayload, _erpFacadeConfiguration.PermitWithSameKey.Permit);
             var requestPayloadWithMissingProperty = JsonModifier.UpdateMandatoryAttribute(requestPayload, attributeName, index);
-            RestResponse response = await _webhookEndpoint.PostWebhookResponseAsync(requestPayloadWithMissingProperty, await _authTokenProvider.GetAzureADToken(false));
+            RestResponse response = await _webhookEndpoint.PostWebhookResponseAsync(requestPayloadWithMissingProperty, await _authTokenProvider.GetAzureADTokenAsync(false));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.InternalServerError);
         }
 
@@ -179,7 +179,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         {
             string requestPayload = await File.ReadAllTextAsync(Path.Combine(_projectDir, EventPayloadFiles.PayloadFolder, EventPayloadFiles.S57PayloadFolder, EventPayloadFiles.WebhookPayloadFileName));
 
-            RestResponse response = await _webhookEndpoint.PostWebhookResponseAsync(requestPayload, await _authTokenProvider.GetAzureADToken(false));
+            RestResponse response = await _webhookEndpoint.PostWebhookResponseAsync(requestPayload, await _authTokenProvider.GetAzureADTokenAsync(false));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.InternalServerError);
         }
     }

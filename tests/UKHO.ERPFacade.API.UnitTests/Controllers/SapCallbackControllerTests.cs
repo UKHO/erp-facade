@@ -41,7 +41,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
 
             var response = (OkObjectResult)await _fakeSapCallbackController.S100SapCallback(fakeSapCallBackJson);
 
-            A.CallTo(() => _fakeSapCallbackService.ProcessSapCallback(A<string>.Ignored)).MustHaveHappenedOnceOrMore();
+            A.CallTo(() => _fakeSapCallbackService.ProcessSapCallbackAsync(A<string>.Ignored)).MustHaveHappenedOnceOrMore();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Information
@@ -66,7 +66,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
                                                 && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "S-100 SAP callback received.").MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-                                                && call.GetArgument<LogLevel>(0) == LogLevel.Warning
+                                                && call.GetArgument<LogLevel>(0) == LogLevel.Error
                                                 && call.GetArgument<EventId>(1) == EventIds.CorrelationIdMissingInS100SapCallBack.ToEventId()
                                                 && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "CorrelationId is missing in S-100 SAP callback request.").MustHaveHappenedOnceExactly();
 

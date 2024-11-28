@@ -27,15 +27,15 @@ namespace UKHO.ERPFacade.API.Handlers
         private readonly IOptions<SapConfiguration> _sapConfig;
         private readonly AioConfiguration _aioConfig;
 
-        private List<string> _aioCells = [];
+        private readonly List<string> _aioCells = [];
 
         public S57EncContentPublishedEventHandler([FromKeyedServices("S57EncContentPublishedXmlTransformer")] IXmlTransformer xmlTransformer,
-                               ILogger<S57EncContentPublishedEventHandler> logger,
-                               IAzureTableReaderWriter azureTableReaderWriter,
-                               IAzureBlobReaderWriter azureBlobEventWriter,
-                               ISapClient sapClient,
-                               IOptions<SapConfiguration> sapConfig,
-                               IOptions<AioConfiguration> aioConfig)
+                                                  ILogger<S57EncContentPublishedEventHandler> logger,
+                                                  IAzureTableReaderWriter azureTableReaderWriter,
+                                                  IAzureBlobReaderWriter azureBlobEventWriter,
+                                                  ISapClient sapClient,
+                                                  IOptions<SapConfiguration> sapConfig,
+                                                  IOptions<AioConfiguration> aioConfig)
         {
             _logger = logger;
             _xmlTransformer = xmlTransformer;
@@ -49,21 +49,23 @@ namespace UKHO.ERPFacade.API.Handlers
             {
                 throw new ERPFacadeException(EventIds.AioConfigurationMissingException.ToEventId(), "AIO cell configuration missing.");
             }
+
+            _aioCells = new List<string>(_aioConfig.AioCells.Split(',').Select(s => s.Trim()));
         }
 
         public async Task ProcessEventAsync(BaseCloudEvent baseCloudEvent)
         {
             _logger.LogInformation(EventIds.S57EventProcessingStarted.ToEventId(), "S57 enccontentpublished event processing started.");
 
-            S57EventData s57EventData = JsonConvert.DeserializeObject<S57EventData>(baseCloudEvent.Data.ToString());
+            var s57EventData = JsonConvert.DeserializeObject<S57EventData>(baseCloudEvent.Data.ToString());
 
-            if (IsAioCell(s57EventData.Products.Select(x => x.ProductName).ToList()))
+            if (s57EventData.Products.Any(x => _aioCells.Contains(x.ProductName)))
             {
                 _logger.LogInformation(EventIds.S57EventNotProcessedForAioCells.ToEventId(), "S57 enccontentpublished event is specific to AIO cells and, as a result, it is not processed.");
                 return;
             }
 
-            EventEntity eventEntity = new()
+            var eventEntity = new EventEntity()
             {
                 RowKey = s57EventData.CorrelationId,
                 PartitionKey = PartitionKeys.S57PartitionKey,
@@ -84,9 +86,9 @@ namespace UKHO.ERPFacade.API.Handlers
 
             await _azureBlobReaderWriter.UploadEventAsync(sapPayload.ToIndentedString(), s57EventData.CorrelationId, EventPayloadFiles.SapXmlPayloadFileName);
 
-            _logger.LogInformation(EventIds.S57EventJsonStoredInAzureBlobContainer.ToEventId(), "S57 enccontentpublished event xml payload is stored in azure blob container.");
+            _logger.LogInformation(EventIds.S57EventXmlStoredInAzureBlobContainer.ToEventId(), "S57 enccontentpublished event xml payload is stored in azure blob container.");
 
-            var response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapEndpointForEncEvent, _sapConfig.Value.SapServiceOperationForEncEvent, _sapConfig.Value.SapUsernameForEncEvent, _sapConfig.Value.SapPasswordForEncEvent);
+            var response = await _sapClient.SendUpdateAsync(sapPayload, _sapConfig.Value.SapEndpointForEncEvent, _sapConfig.Value.SapServiceOperationForEncEvent, _sapConfig.Value.SapUsernameForEncEvent, _sapConfig.Value.SapPasswordForEncEvent);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -96,17 +98,6 @@ namespace UKHO.ERPFacade.API.Handlers
             _logger.LogInformation(EventIds.S57EventUpdateSentToSap.ToEventId(), "S57 ENC update has been sent to SAP successfully.");
 
             await _azureTableReaderWriter.UpdateEntityAsync(eventEntity.PartitionKey, eventEntity.RowKey, new Dictionary<string, object> { { "RequestDateTime", DateTime.UtcNow }, { "Status", Status.Complete.ToString() } });
-        }
-
-        /// <summary>
-        /// Private method to check if the received enccontentpublished event is for AIO cell
-        /// </summary>
-        /// <param name="products"></param>
-        /// <returns></returns>
-        private bool IsAioCell(IEnumerable<string> products)
-        {
-            var aioCells = !string.IsNullOrEmpty(_aioConfig.AioCells) ? new(_aioConfig.AioCells.Split(',').Select(s => s.Trim())) : new List<string>();
-            return products.Any(aioCells.Contains);
         }
     }
 }

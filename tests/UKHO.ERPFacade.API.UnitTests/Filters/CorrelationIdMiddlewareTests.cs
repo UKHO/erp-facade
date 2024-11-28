@@ -9,7 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
-using UKHO.ERPFacade.API.Filters;
+using UKHO.ERPFacade.API.Middlewares;
+using UKHO.ERPFacade.Common.Constants;
 
 namespace UKHO.ERPFacade.API.UnitTests.Filters
 {
@@ -52,10 +53,10 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
             A.CallTo(() => _fakeLogger.BeginScope(A<Dictionary<string, object>>._)).MustHaveHappenedOnceExactly();
 
             Assert.That(_fakeHttpContext.Request.Headers.Count, Is.EqualTo(1));
-            Assert.That(_fakeHttpContext.Request.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey], Is.EqualTo(correlationId));
+            Assert.That(_fakeHttpContext.Request.Headers[ApiHeaderKeys.XCorrelationIdHeaderKey], Is.EqualTo(correlationId));
 
             Assert.That(_fakeHttpContext.Response.Headers.Count, Is.EqualTo(1));
-            Assert.That(_fakeHttpContext.Response.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey], Is.EqualTo(correlationId));
+            Assert.That(_fakeHttpContext.Response.Headers[ApiHeaderKeys.XCorrelationIdHeaderKey], Is.EqualTo(correlationId));
 
         }
 
@@ -72,8 +73,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
 
             await _middleware.InvokeAsync(_fakeHttpContext);
 
-            A.CallTo(() => _fakeHttpContext.Request.Headers.ContainsKey(CorrelationIdMiddleware.XCorrelationIdHeaderKey)).Returns(true);
-            A.CallTo(() => _fakeHttpContext.Response.Headers.ContainsKey(CorrelationIdMiddleware.XCorrelationIdHeaderKey)).Returns(true);
+            A.CallTo(() => _fakeHttpContext.Request.Headers.ContainsKey(ApiHeaderKeys.XCorrelationIdHeaderKey)).Returns(true);
+            A.CallTo(() => _fakeHttpContext.Response.Headers.ContainsKey(ApiHeaderKeys.XCorrelationIdHeaderKey)).Returns(true);
             A.CallTo(() => _fakeLogger.BeginScope(A<Dictionary<string, object>>.Ignored)).MustHaveHappenedOnceExactly();
         }
 
@@ -110,10 +111,10 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
             await _middleware.InvokeAsync(_fakeHttpContext);
 
             Assert.That(_fakeHttpContext.Request.Headers.Count, Is.EqualTo(1));
-            Assert.That(_fakeHttpContext.Request.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey], Is.EqualTo(correlationId));
+            Assert.That(_fakeHttpContext.Request.Headers[ApiHeaderKeys.XCorrelationIdHeaderKey], Is.EqualTo(correlationId));
 
             Assert.That(_fakeHttpContext.Response.Headers.Count, Is.EqualTo(1));
-            Assert.That(_fakeHttpContext.Response.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey], Is.EqualTo(correlationId));
+            Assert.That(_fakeHttpContext.Response.Headers[ApiHeaderKeys.XCorrelationIdHeaderKey], Is.EqualTo(correlationId));
         }
     }
 }
