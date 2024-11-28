@@ -29,7 +29,7 @@ namespace UKHO.ERPFacade.API.Handlers
 
         private readonly List<string> _aioCells = [];
 
-        public S57EncContentPublishedEventHandler([FromKeyedServices("S57EncContentPublishedXmlTransformer")] IXmlTransformer xmlTransformer,
+        public S57EncContentPublishedEventHandler([FromKeyedServices("S57EncContentPublishedEventXmlTransformer")] IXmlTransformer xmlTransformer,
                                                   ILogger<S57EncContentPublishedEventHandler> logger,
                                                   IAzureTableReaderWriter azureTableReaderWriter,
                                                   IAzureBlobReaderWriter azureBlobEventWriter,

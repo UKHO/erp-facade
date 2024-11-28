@@ -28,7 +28,7 @@ namespace UKHO.ERPFacade.API.Handlers
         private readonly IOptions<SapConfiguration> _sapConfig;
         private readonly IS100UnitOfSaleUpdatedEventPublishingService _s100UnitOfSaleUpdatedEventPublishingService;
 
-        public S100DataContentPublishedEventHandler([FromKeyedServices("S100DataContentPublishedXmlTransformer")] IXmlTransformer xmlTransformer,
+        public S100DataContentPublishedEventHandler([FromKeyedServices("S100DataContentPublishedEventXmlTransformer")] IXmlTransformer xmlTransformer,
                                                     ILogger<S100DataContentPublishedEventHandler> logger,
                                                     IAzureTableReaderWriter azureTableReaderWriter,
                                                     IAzureBlobReaderWriter azureBlobReaderWriter,
