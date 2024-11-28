@@ -10,6 +10,7 @@ using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using UKHO.ERPFacade.API.Controllers;
 using UKHO.ERPFacade.Common.Logging;
+using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Services;
 
 namespace UKHO.ERPFacade.API.UnitTests.Controllers
@@ -70,6 +71,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
                                                 && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "CorrelationId is missing in S-100 SAP callback request.").MustHaveHappenedOnceExactly();
 
             response.StatusCode.Should().Be(400);
+            var errors = (ErrorDescription)response.Value;
+            errors.Errors.Single().Description.Should().Be("Correlation ID Not Found.");
         }
 
         [Test]

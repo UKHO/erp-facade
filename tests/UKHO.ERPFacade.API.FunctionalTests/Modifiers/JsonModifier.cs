@@ -41,33 +41,20 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Modifiers
             return jsonObj.ToString();
         }
 
-        public static string UpdateMandatoryAttribute(string payload, string attributeName, int index, string action)
+        public static string UpdateMandatoryAttribute(string payload, string attributeName, int index)
         {
             JObject jsonObject = JObject.Parse(payload);
-
             string[] types = attributeName.Split(".");
-
             var tokens = types[0] == JsonFields.Products
                 ? jsonObject.SelectTokens($"$.{JsonFields.ProductsNode}[{index}].{types[1]}").ToList()
                 : types[0] == JsonFields.UnitsOfSale
                     ? jsonObject.SelectTokens($"$.{JsonFields.UnitsOfSaleNode}[{index}].{types[1]}").ToList()
                     : jsonObject.SelectTokens($"$.{JsonFields.UKHOWeekNumber}.{types[0]}").ToList();
-
-            if (action == "Remove")
+            tokens.ToList().ForEach(token =>
             {
-                foreach (var token in tokens)
-                {
-                    JProperty parentProperty = (JProperty)token.Parent;
-                    parentProperty?.Remove();
-                }
-            }
-            else
-            {
-                foreach (var token in tokens)
-                {
-                    token.Replace(JValue.CreateNull());
-                }
-            }
+                JProperty parentProperty = (JProperty)token.Parent;
+                parentProperty?.Remove();
+            });
             payload = jsonObject.ToString();
             return payload;
         }

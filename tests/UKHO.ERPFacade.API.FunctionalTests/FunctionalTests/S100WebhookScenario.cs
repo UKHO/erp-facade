@@ -44,8 +44,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [TestCase("Withdrawn.JSON", TestName = "WhenICallTheWebhookWithWithdrawnScenario_ThenWebhookReturns200Response")]
         public async Task WhenValidS100DataContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponse(string jsonPayloadFileName)
         {
-            string correlationId = null;
-
             string jsonPayloadFilePath = Path.Combine(_projectDir, EventPayloadFiles.PayloadFolder, EventPayloadFiles.S100PayloadFolder, jsonPayloadFileName);
             string xmlPayloadFilePath = jsonPayloadFilePath.Replace(EventPayloadFiles.PayloadFolder, EventPayloadFiles.ErpFacadeExpectedXmlFolder)
                                                .Replace(EventPayloadFiles.S100PayloadFolder, EventPayloadFiles.S100ExpectedXmlFiles)
@@ -53,7 +51,9 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
             string requestBody = await File.ReadAllTextAsync(jsonPayloadFilePath);
             requestBody = JsonModifier.UpdateTime(requestBody);
-            (requestBody, correlationId) = JsonModifier.UpdateCorrelationId(requestBody);
+            (requestBody, string correlationId) = JsonModifier.UpdateCorrelationId(requestBody);
+
+            Console.WriteLine("Scenario: " + jsonPayloadFileName + "\n" + "CorrelationId: " + correlationId + "\n");
 
             RestResponse response = await _webhookEndpoint.PostWebhookResponseAsync(requestBody, await _authTokenProvider.GetAzureADToken(false));
 
@@ -67,14 +67,14 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [Test]
         public async Task WhenValidS100DataContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponseAndCallbackEndpointPublishesEvent()
         {
-            string correlationId = null;
-
             string jsonPayloadFilePath = Path.Combine(_projectDir, EventPayloadFiles.PayloadFolder, EventPayloadFiles.S100PayloadFolder, "NewCell.JSON");
             string expectedFilePath = Path.Combine(_projectDir, EventPayloadFiles.GeneratedJsonFolder);
 
             string requestBody = await File.ReadAllTextAsync(jsonPayloadFilePath);
             requestBody = JsonModifier.UpdateTime(requestBody);
-            (requestBody, correlationId) = JsonModifier.UpdateCorrelationId(requestBody);
+            (requestBody, string correlationId) = JsonModifier.UpdateCorrelationId(requestBody);
+
+            Console.WriteLine("Scenario: ERP Facade to SAP to EES event publish.\nCorrelationId: " + correlationId + "\n");
 
             RestResponse response = await _webhookEndpoint.PostWebhookResponseAsync(requestBody, await _authTokenProvider.GetAzureADToken(false));
 
