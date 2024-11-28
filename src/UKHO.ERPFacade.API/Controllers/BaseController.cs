@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics.CodeAnalysis;
 using UKHO.ERPFacade.API.Filters;
+using UKHO.ERPFacade.Common.Models;
 
 namespace UKHO.ERPFacade.API.Controllers
 {
@@ -18,6 +19,15 @@ namespace UKHO.ERPFacade.API.Controllers
         protected string GetCurrentCorrelationId()
         {
             return _httpContextAccessor.HttpContext!.Request.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey].FirstOrDefault()!;
+        }
+
+        protected IActionResult BuildBadRequestErrorResponse(List<Error> errors)
+        {
+            return new BadRequestObjectResult(new ErrorDescription
+            {
+                CorrelationId = GetCurrentCorrelationId(),
+                Errors = errors,
+            });
         }
     }
 }

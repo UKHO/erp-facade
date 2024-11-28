@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Xml;
 using FakeItEasy;
 using FluentAssertions;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -237,38 +236,6 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
         }
 
         [Test]
-        public void WhenBuildSapMessageXmlIsCalledWithNewCellWithNoUnitOfSaleHavingTypeIsUnit_ThenThrowERPFacadeException()
-        {
-            var newCellEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\NewCellWithNoUnitOfSaleHavingTypeIsUnit.JSON");
-            var baseCloudEvent = JsonConvert.DeserializeObject<BaseCloudEvent>(newCellEventPayloadJson);
-            S57EventData s57EventData = JsonConvert.DeserializeObject<S57EventData>(baseCloudEvent.Data.ToString()!);
-
-            XmlDocument soapXml = new();
-            soapXml.LoadXml(_sapXmlTemplate);
-
-            A.CallTo(() => _fakeXmlOperations.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
-
-            Assert.Throws<ERPFacadeException>(() => _fakeS57EncContentPublishedXmlTransformer.BuildXmlPayload(s57EventData, _sapXmlTemplate))
-                .Message.Should().Be("Required unit not found in S57 enccontentpublished event for US5AK9DI to generate CREATE ENC CELL action.");
-        }
-
-        [Test]
-        public void WhenBuildSapMessageXmlIsCalledWithReplaceCellWithNoUnitOfSaleHavingTypeIsUnit_ThenThrowERPFacadeException()
-        {
-            var newCellEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\ReplaceCellWithNoUnitOfSaleHavingTypeIsUnit.JSON");
-            var baseCloudEvent = JsonConvert.DeserializeObject<BaseCloudEvent>(newCellEventPayloadJson);
-            S57EventData s57EventData = JsonConvert.DeserializeObject<S57EventData>(baseCloudEvent.Data.ToString()!);
-
-            XmlDocument soapXml = new();
-            soapXml.LoadXml(_sapXmlTemplate);
-
-            A.CallTo(() => _fakeXmlOperations.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
-
-            Assert.Throws<ERPFacadeException>(() => _fakeS57EncContentPublishedXmlTransformer.BuildXmlPayload(s57EventData, _sapXmlTemplate))
-            .Message.Should().Be("Required unit not found in S57 enccontentpublished event for GB50382B to generate REPLACED WITH ENC CELL action.");
-        }
-
-        [Test]
         public void WhenBuildSapMessageXmlIfRequiredAttributesNotProvided_ThenThrowERPFacadeException()
         {
             var newCellEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\NewCellWithoutProviderCodeAttributes.JSON");
@@ -282,25 +249,6 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
 
             Assert.Throws<ERPFacadeException>(() => _fakeS57EncContentPublishedXmlTransformer.BuildXmlPayload(s57EventData, _sapXmlTemplate))
                 .Message.Should().Be("Error while generating SAP action information. | Action : CREATE ENC CELL | XML Attribute : PROVIDER | ErrorMessage : Object reference not set to an instance of an object.");
-        }
-
-        [Test]
-        public void WhenBuildSapMessageXmlIfUkhoWeekNumberSectionNotProvided_ThenThrowERPFacadeException()
-        {
-            var newCellEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\NewCellWithoutUkhoWeekNumberSection.JSON");
-            var baseCloudEvent = JsonConvert.DeserializeObject<BaseCloudEvent>(newCellEventPayloadJson);
-            S57EventData s57EventData = JsonConvert.DeserializeObject<S57EventData>(baseCloudEvent.Data.ToString()!);
-
-            var permitKeys = new DecryptedPermit { ActiveKey = "firstkey", NextKey = "nextkey" };
-
-            XmlDocument soapXml = new();
-            soapXml.LoadXml(_sapXmlTemplate);
-
-            A.CallTo(() => _fakeXmlOperations.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
-            A.CallTo(() => _fakePermitDecryption.Decrypt(A<string>.Ignored)).Returns(permitKeys);
-
-            Assert.Throws<ERPFacadeException>(() => _fakeS57EncContentPublishedXmlTransformer.BuildXmlPayload(s57EventData, _sapXmlTemplate))
-            .Message.Should().Be("UkhoWeekNumber details not found in S57 enccontentpublished event to generate CREATE ENC CELL action.");
         }
 
         [Test]
@@ -350,48 +298,6 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
             var result = (XmlElement)buildAction.Invoke(_fakeS57EncContentPublishedXmlTransformer, new object[] { action.ActionNumber, s57EventData.UnitsOfSales!, s57EventData.Products.LastOrDefault()! })!;
 
             result.Should().BeNull();
-        }
-
-        [Test]
-        [TestCase("ERPTestData\\NewCellWithNullYearInUkhoWeekNumberSection.JSON")]
-        [TestCase("ERPTestData\\NewCellWithoutYearInUkhoWeekNumberSection.JSON")]
-        [TestCase("ERPTestData\\NewCellWithNullcurrentWeekAlphaCorrectionInUkhoWeekNumberSection.JSON")]
-        public void WhenProcessingUkhoWeekNumberAttributes(string jsonPayloadFile)
-        {
-            var cancelCellWithNewCellReplacementPayloadJson = TestHelper.ReadFileData(jsonPayloadFile);
-            var baseCloudEvent = JsonConvert.DeserializeObject<BaseCloudEvent>(cancelCellWithNewCellReplacementPayloadJson);
-            S57EventData s57EventData = JsonConvert.DeserializeObject<S57EventData>(baseCloudEvent.Data.ToString()!);
-
-            var permitKeys = new DecryptedPermit { ActiveKey = "firstkey", NextKey = "nextkey" };
-
-            XmlDocument soapXml = new();
-            soapXml.LoadXml(_sapXmlTemplate);
-
-            A.CallTo(() => _fakeXmlOperations.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
-            A.CallTo(() => _fakePermitDecryption.Decrypt(A<string>.Ignored)).Returns(permitKeys);
-            A.CallTo(() => _fakeWeekDetailsProvider.GetDateOfWeek(A<int>.Ignored, A<int>.Ignored, A<bool>.Ignored)).Throws<System.Exception>();
-
-            Assert.Throws<ERPFacadeException>(() => _fakeS57EncContentPublishedXmlTransformer.BuildXmlPayload(s57EventData, _sapXmlTemplate))
-                .Message.Should().Be("Error while generating SAP action information. | Action : CREATE ENC CELL | XML Attribute : WEEKNO | ErrorMessage : Required property value is empty in enccontentpublished event payload. | Property Name : ");
-        }
-
-        [Test]
-        public void WhenBuildSapMessageXmlWithEmptyPermit_ThenThrowERPFacadeException()
-        {
-            var newCellEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\NewCellWithEmptyPermit.JSON");
-            var baseCloudEvent = JsonConvert.DeserializeObject<BaseCloudEvent>(newCellEventPayloadJson);
-            S57EventData s57EventData = JsonConvert.DeserializeObject<S57EventData>(baseCloudEvent.Data.ToString()!);
-
-            XmlDocument soapXml = new();
-            soapXml.LoadXml(_sapXmlTemplate);
-
-            A.CallTo(() => _fakeXmlOperations.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
-
-            A.CallTo(() => _fakeWeekDetailsProvider.GetDateOfWeek(A<int>.Ignored, A<int>.Ignored, A<bool>.Ignored)).Throws<System.Exception>();
-            A.CallTo(_fakePermitDecryption).Where(call => call.Method.Name == "Decrypt").MustNotHaveHappened();
-
-            Assert.Throws<ERPFacadeException>(() => _fakeS57EncContentPublishedXmlTransformer.BuildXmlPayload(s57EventData, _sapXmlTemplate))
-            .Message.Should().Be("Error while generating SAP action information. | Action : CREATE ENC CELL | XML Attribute : ACTIVEKEY | ErrorMessage : Required details are missing in enccontentpublished event payload. | Property Name : ");
         }
     }
 }

@@ -1,7 +1,5 @@
 ﻿using System.Xml;
 using UKHO.ERPFacade.Common.Constants;
-using UKHO.ERPFacade.Common.Exceptions;
-using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Operations;
 
@@ -11,16 +9,11 @@ namespace UKHO.ERPFacade.API.XmlTransformers
     {
         XmlDocument BuildXmlPayload<T>(T eventData, string xmlTemplatePath);
         bool ValidateActionRules(SapAction action, object obj);
-        bool IsPropertyNullOrEmpty(string propertyName, string propertyValue);
         void FinalizeSapXmlMessage(XmlDocument soapXml, string correlationId, XmlNode actionItemNode, string xmlPathInfo);
     }
 
     public abstract class BaseXmlTransformer : IXmlTransformer
     {
-        public BaseXmlTransformer()
-        {
-        }
-
         public abstract XmlDocument BuildXmlPayload<T>(T eventData, string xmlTemplatePath);
 
         public bool ValidateActionRules(SapAction action, object obj)
@@ -51,7 +44,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             return isConditionSatisfied;
         }
 
-        public void FinalizeSapXmlMessage(XmlDocument soapXml, string correlationId, XmlNode actionItemNode,string xmlPathInfo)
+        public void FinalizeSapXmlMessage(XmlDocument soapXml, string correlationId, XmlNode actionItemNode, string xmlPathInfo)
         {
             // Extract all action item nodes
             var actionItems = actionItemNode.Cast<XmlNode>().ToList();
@@ -96,15 +89,6 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             //Set action items
             var parentInfoNode = soapXml.SelectSingleNode(xmlPathInfo);
             parentInfoNode.AppendChild(actionItemNode);
-        }
-
-        public bool IsPropertyNullOrEmpty(string propertyName, string propertyValue)
-        {
-            if (string.IsNullOrEmpty(propertyValue))
-            {
-                throw new ERPFacadeException(EventIds.EmptyEventJsonPropertyException.ToEventId(), $"Required details are missing in enccontentpublished event payload. | Property Name : {propertyName}");
-            }
-            else return false;
         }
     }
 }
