@@ -271,7 +271,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                                 attributeNode.InnerText = StringExtension.ToSubstring(validFrom, 0, XmlFields.MaxXmlNodeLength);
                                 break;
                             case XmlFields.WeekNo:
-                                var weekNo = string.Join("", ukhoWeekNumber.Year, ukhoWeekNumber.Week.Value.ToString("D2"));
+                                var weekNo = string.Join(XmlFields.UkhoWeekNoFormatSeparator, ukhoWeekNumber.Year, ukhoWeekNumber.Week.Value.ToString(XmlFields.UkhoWeekNoFormat));
                                 attributeNode.InnerText = StringExtension.ToSubstring(weekNo, 0, XmlFields.MaxXmlNodeLength);
                                 break;
                             case XmlFields.Correction:
