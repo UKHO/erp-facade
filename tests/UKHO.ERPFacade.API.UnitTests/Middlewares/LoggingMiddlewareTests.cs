@@ -15,7 +15,7 @@ using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Logging;
 
-namespace UKHO.ERPFacade.API.UnitTests.Filters
+namespace UKHO.ERPFacade.API.UnitTests.Middlewares
 {
     [TestFixture]
     public class LoggingMiddlewareTests
@@ -43,7 +43,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
             _fakeHttpContext.Response.Body = memoryStream;
             A.CallTo(() => _fakeNextMiddleware(_fakeHttpContext)).Throws(new Exception("fake exception"));
 
-            await _middleware.InvokeAsync(_fakeHttpContext);                  
+            await _middleware.InvokeAsync(_fakeHttpContext);
 
             _fakeHttpContext.Response.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
             _fakeHttpContext.Response.ContentType.Should().Be("application/json");
@@ -62,8 +62,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
             _fakeHttpContext.Response.Body = memoryStream;
             A.CallTo(() => _fakeNextMiddleware(_fakeHttpContext)).Throws(new ERPFacadeException(EventIds.SapXmlTemplateNotFound.ToEventId(), "fakemessage"));
 
-            await _middleware.InvokeAsync(_fakeHttpContext);                 
-                        
+            await _middleware.InvokeAsync(_fakeHttpContext);
+
             _fakeHttpContext.Response.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
             _fakeHttpContext.Response.ContentType.Should().Be("application/json");
 

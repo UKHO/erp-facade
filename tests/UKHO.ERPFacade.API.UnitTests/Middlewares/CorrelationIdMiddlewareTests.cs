@@ -12,7 +12,7 @@ using NUnit.Framework;
 using UKHO.ERPFacade.API.Middlewares;
 using UKHO.ERPFacade.Common.Constants;
 
-namespace UKHO.ERPFacade.API.UnitTests.Filters
+namespace UKHO.ERPFacade.API.UnitTests.Middlewares
 {
     [TestFixture]
     public class CorrelationIdMiddlewareTests
@@ -27,9 +27,9 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
         {
             _fakeNextMiddleware = A.Fake<RequestDelegate>();
             _middleware = new CorrelationIdMiddleware(_fakeNextMiddleware);
-            _fakeLogger = A.Fake<ILogger<CorrelationIdMiddleware>>();           
-            _fakeHttpContext = A.Fake<HttpContext>();            
-            _fakeHttpContext.RequestServices = new ServiceCollection().AddSingleton(_fakeLogger).BuildServiceProvider();          
+            _fakeLogger = A.Fake<ILogger<CorrelationIdMiddleware>>();
+            _fakeHttpContext = A.Fake<HttpContext>();
+            _fakeHttpContext.RequestServices = new ServiceCollection().AddSingleton(_fakeLogger).BuildServiceProvider();
         }
 
         [Test]
@@ -49,7 +49,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
             A.CallTo(() => _fakeHttpContext.Request.Headers).Returns(requestHeaders);
 
             await _middleware.InvokeAsync(_fakeHttpContext);
-           
+
             A.CallTo(() => _fakeLogger.BeginScope(A<Dictionary<string, object>>._)).MustHaveHappenedOnceExactly();
 
             Assert.That(_fakeHttpContext.Request.Headers.Count, Is.EqualTo(1));
@@ -65,11 +65,11 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
         {
             var correlationId = Guid.NewGuid().ToString();
             var bodyAsJson = new JObject { { "data", new JObject { { "corId", correlationId } } } };
-            var bodyAsText = bodyAsJson.ToString();            
+            var bodyAsText = bodyAsJson.ToString();
 
             _fakeHttpContext.Request.Body = new MemoryStream(Encoding.UTF8.GetBytes(bodyAsText));
             _fakeHttpContext.Request.ContentLength = bodyAsText.Length;
-            _fakeHttpContext.Response.Body = new MemoryStream();            
+            _fakeHttpContext.Response.Body = new MemoryStream();
 
             await _middleware.InvokeAsync(_fakeHttpContext);
 
@@ -99,7 +99,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
             var correlationId = Guid.NewGuid().ToString();
             var bodyAsJson = new JObject { { "correlationId", correlationId } };
             var bodyAsText = bodyAsJson.ToString();
-            var responseHeaders =new HeaderDictionary() ;
+            var responseHeaders = new HeaderDictionary();
             var requestHeaders = new HeaderDictionary();
 
             _fakeHttpContext.Request.Body = new MemoryStream(Encoding.UTF8.GetBytes(bodyAsText));
