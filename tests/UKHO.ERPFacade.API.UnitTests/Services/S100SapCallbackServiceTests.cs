@@ -1,12 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Azure.Data.Tables;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using NUnit.Framework;
 using UKHO.ERPFacade.API.Services;
 using UKHO.ERPFacade.API.Services.EventPublishingServices;
+using UKHO.ERPFacade.Common.Constants;
+using UKHO.ERPFacade.Common.Enums;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
@@ -77,7 +82,7 @@ public class S100SapCallbackServiceTests
     }
 
     [Test]
-    public async Task WhenInValidCorrelationIdIsProvidedInPayload_ThenPublishEventIsFailed()
+    public void WhenInValidCorrelationIdIsProvidedInPayload_ThenPublishEventIsFailed()
     {
         Result result = new Result(false, "Forbidden");
 
@@ -105,5 +110,45 @@ public class S100SapCallbackServiceTests
                                             && call.GetArgument<LogLevel>(0) == LogLevel.Information
                                             && call.GetArgument<EventId>(1) == EventIds.PublishingUnitOfSaleUpdatedEventToEesStarted.ToEventId()
                                             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "The publishing unit of sale updated event to EES is started.").MustHaveHappenedOnceExactly();
+    }
+
+    [Test]
+    public async Task WhenGetEntityAsyncReturnsNull_ThenReturnFalse()
+    {
+        A.CallTo(() => _fakeAzureTableReaderWriter.GetEntityAsync(PartitionKeys.S100PartitionKey, _fakeCorrelationId))
+         .Returns<TableEntity>(null);
+
+        var result = await _fakeSapCallbackService.IsValidCallbackAsync(_fakeCorrelationId);
+        result.Should().BeFalse();
+    }
+
+    [Test]
+    public async Task WhenProcessedSapCallback_ThenUpdateEntityWithResponseDateTimeAndEventPublishDateTime()
+    {
+        A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntityAsync(PartitionKeys.S100PartitionKey, _fakeCorrelationId, A<Dictionary<string, object>>.Ignored))
+            .Returns(Task.FromResult(new object()));
+
+        A.CallTo(() => _fakeAzureBlobReaderWriter.DownloadEventAsync(EventPayloadFiles.S100DataEventFileName, _fakeCorrelationId.ToLower()))
+            .Returns(Task.FromResult(JsonConvert.SerializeObject(new BaseCloudEvent())));
+
+        A.CallTo(() => _fakeS100UnitOfSaleUpdatedEventPublishingService.BuildAndPublishEventAsync(A<BaseCloudEvent>.Ignored, _fakeCorrelationId))
+            .Returns(Task.FromResult(Result.Success()));
+
+        await _fakeSapCallbackService.ProcessSapCallbackAsync(_fakeCorrelationId);
+
+        A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntityAsync(
+            PartitionKeys.S100PartitionKey,
+            _fakeCorrelationId,
+            A<Dictionary<string, object>>.That.Matches(d => d.ContainsKey("ResponseDateTime") && (DateTime)d["ResponseDateTime"] <= DateTime.UtcNow))).MustHaveHappenedOnceExactly();
+
+        A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntityAsync(
+          PartitionKeys.S100PartitionKey,
+          _fakeCorrelationId,
+          A<Dictionary<string, object>>.That.Matches(d => d.ContainsKey("EventPublishedDateTime") && (DateTime)d["EventPublishedDateTime"] <= DateTime.UtcNow))).MustHaveHappenedOnceExactly();
+
+        A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntityAsync(
+            PartitionKeys.S100PartitionKey,
+            _fakeCorrelationId,
+            A<Dictionary<string, object>>.That.Matches(d => d.ContainsKey("Status") && (string)d["Status"] == Status.Complete.ToString()))).MustHaveHappenedOnceExactly();
     }
 }

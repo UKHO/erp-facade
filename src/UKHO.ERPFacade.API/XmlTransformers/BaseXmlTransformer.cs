@@ -5,13 +5,6 @@ using UKHO.ERPFacade.Common.Operations;
 
 namespace UKHO.ERPFacade.API.XmlTransformers
 {
-    public interface IXmlTransformer
-    {
-        XmlDocument BuildXmlPayload<T>(T eventData, string xmlTemplatePath);
-        bool ValidateActionRules(Actions action, object obj);
-        void FinalizeSapXmlMessage(XmlDocument soapXml, string correlationId, XmlNode actionItemNode, string xmlPathInfo);
-    }
-
     public abstract class BaseXmlTransformer : IXmlTransformer
     {
         public abstract XmlDocument BuildXmlPayload<T>(T eventData, string xmlTemplatePath);
