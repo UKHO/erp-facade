@@ -15,22 +15,22 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Auth
             _azureADConfiguration = serviceProvider!.GetRequiredService<IOptions<AzureADConfiguration>>().Value;
         }
 
-        public async Task<string> GetAzureADToken(bool noRole)
+        public async Task<string> GetAzureADTokenAsync(bool noRole)
         {
             string azureADToken;
 
             if (noRole)
             {
-                azureADToken = await GenerateAzureADToken(_azureADConfiguration.AutoTestClientIdNoRole, _azureADConfiguration.ClientSecretNoRole);
+                azureADToken = await GenerateAzureADTokenAsync(_azureADConfiguration.AutoTestClientIdNoRole, _azureADConfiguration.ClientSecretNoRole);
             }
             else
             {
-                azureADToken = await GenerateAzureADToken(_azureADConfiguration.AutoTestClientId, _azureADConfiguration.ClientSecret);
+                azureADToken = await GenerateAzureADTokenAsync(_azureADConfiguration.AutoTestClientId, _azureADConfiguration.ClientSecret);
             }
             return azureADToken;
         }
 
-        private async Task<string> GenerateAzureADToken(string clientId, string clientSecret)
+        private async Task<string> GenerateAzureADTokenAsync(string clientId, string clientSecret)
         {
             try
             {

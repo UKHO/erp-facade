@@ -16,6 +16,7 @@ using UKHO.ERPFacade.API.Dispatcher;
 using UKHO.ERPFacade.API.Filters;
 using UKHO.ERPFacade.API.Handlers;
 using UKHO.ERPFacade.API.Health;
+using UKHO.ERPFacade.API.Middlewares;
 using UKHO.ERPFacade.API.SapMessageBuilders;
 using UKHO.ERPFacade.API.Services;
 using UKHO.ERPFacade.API.Services.EventPublishingServices;
@@ -26,7 +27,7 @@ using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.HealthCheck;
 using UKHO.ERPFacade.Common.HttpClients;
 using UKHO.ERPFacade.Common.Logging;
-using UKHO.ERPFacade.Common.Models;
+using UKHO.ERPFacade.Common.Models.SapActionConfigurationModels;
 using UKHO.ERPFacade.Common.Operations;
 using UKHO.ERPFacade.Common.Operations.IO;
 using UKHO.ERPFacade.Common.Operations.IO.Azure;
@@ -55,8 +56,8 @@ namespace UKHO.ERPFacade
             builder.Configuration.SetBasePath(webHostEnvironment.ContentRootPath)
                 .AddJsonFile("appsettings.json", false, true)
                 .AddJsonFile($"appsettings.{webHostEnvironment.EnvironmentName}.json", true, true)
-                .AddJsonFile("ConfigurationFiles/S57SapActions.json", true, true)
-                .AddJsonFile("ConfigurationFiles/S100SapActions.json", true, true)
+                .AddJsonFile("ConfigurationFiles/S57EncContentPublishedEventSapActionConfiguration.json", true, true)
+                .AddJsonFile("ConfigurationFiles/S100DataContentPublishedEventSapActionConfiguration.json", true, true)
 #if DEBUG
                 //Add development overrides configuration
                 .AddJsonFile("appsettings.local.overrides.json", true, true)
@@ -97,7 +98,7 @@ namespace UKHO.ERPFacade
                                 additionalValues["_RemoteIPAddress"] = httpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString();
                                 additionalValues["_User-Agent"] = httpContextAccessor.HttpContext.Request.Headers.UserAgent.FirstOrDefault() ?? string.Empty;
                                 additionalValues["_AssemblyVersion"] = Assembly.GetExecutingAssembly().GetCustomAttributes<AssemblyFileVersionAttribute>().Single().Version;
-                                additionalValues["_X-Correlation-ID"] = httpContextAccessor.HttpContext.Request.Headers?[CorrelationIdMiddleware.XCorrelationIdHeaderKey].FirstOrDefault() ?? string.Empty;
+                                additionalValues["_X-Correlation-ID"] = httpContextAccessor.HttpContext.Request.Headers?[ApiHeaderKeys.XCorrelationIdHeaderKeyName].FirstOrDefault() ?? string.Empty;
                             }
                         }
                         config.Environment = eventHubLoggingConfiguration.Environment;
@@ -127,7 +128,7 @@ namespace UKHO.ERPFacade
 
             builder.Services.AddHeaderPropagation(options =>
             {
-                options.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey);
+                options.Headers.Add(ApiHeaderKeys.XCorrelationIdHeaderKeyName);
             });
 
             var azureAdConfiguration = new AzureADConfiguration();
@@ -171,8 +172,8 @@ namespace UKHO.ERPFacade
 
             builder.Services.Configure<AzureStorageConfiguration>(configuration.GetSection("AzureStorageConfiguration"));
             builder.Services.Configure<SapConfiguration>(configuration.GetSection("SapConfiguration"));
-            builder.Services.Configure<SapActionConfiguration>(configuration.GetSection("SapActionConfiguration"));
-            builder.Services.Configure<S100SapActionConfiguration>(configuration.GetSection("S100SapActionConfiguration"));
+            builder.Services.Configure<S57EncContentPublishedEventSapActionConfiguration>(configuration.GetSection("S57EncContentPublishedEventSapActionConfiguration"));
+            builder.Services.Configure<S100DataContentPublishedEventSapActionConfiguration>(configuration.GetSection("S100DataContentPublishedEventSapActionConfiguration"));
             builder.Services.Configure<EESHealthCheckEnvironmentConfiguration>(configuration.GetSection("EESHealthCheckEnvironmentConfiguration"));
             builder.Services.Configure<PermitConfiguration>(configuration.GetSection("PermitConfiguration"));
             builder.Services.Configure<AioConfiguration>(configuration.GetSection("AioConfiguration"));
@@ -180,7 +181,7 @@ namespace UKHO.ERPFacade
             builder.Services.Configure<AzureADConfiguration>(configuration.GetSection("AzureADConfiguration"));
             builder.Services.Configure<EESConfiguration>(configuration.GetSection("EnterpriseEventServiceConfiguration"));
             builder.Services.Configure<RetryPolicyConfiguration>(configuration.GetSection("RetryPolicyConfiguration"));
-            retryPolicyConfiguration = configuration.GetSection("RetryPolicyConfiguration").Get<RetryPolicyConfiguration>()!;
+
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             builder.Services.AddSingleton<ITokenProvider, ManagedIdentityTokenProvider>();
 
@@ -193,19 +194,18 @@ namespace UKHO.ERPFacade
             builder.Services.AddScoped<ILicenceUpdatedSapMessageBuilder, LicenceUpdatedSapMessageBuilder>();
             builder.Services.AddScoped<IWeekDetailsProvider, WeekDetailsProvider>();
             builder.Services.AddScoped<IPermitDecryption, PermitDecryption>();
-
-            builder.Services.AddScoped<IEventHandler, S57EventHandler>();
-            builder.Services.AddScoped<IEventHandler, S100EventHandler>();
-
-            builder.Services.AddKeyedScoped<IBaseXmlTransformer, S57XmlTransformer>(XmlTransformers.S57XmlTransformer);
-            builder.Services.AddKeyedScoped<IBaseXmlTransformer, S100XmlTransformer>(XmlTransformers.S100XmlTransformer);
+            builder.Services.AddScoped<IEventHandler, S57EncContentPublishedEventHandler>();
+            builder.Services.AddScoped<IEventHandler, S100DataContentPublishedEventHandler>();
             builder.Services.AddScoped<IEventDispatcher, EventDispatcher>();
             builder.Services.AddScoped<SharedApiKeyAuthFilter>();
             builder.Services.AddScoped<IS100UnitOfSaleUpdatedEventPublishingService, S100UnitOfSaleUpdatedEventPublishingService>();
             builder.Services.AddScoped<IS100SapCallBackService, S100SapCallBackService>();
             builder.Services.AddScoped<RetryPolicyProvider>();
 
-            ConfigureHealthChecks(builder);
+            builder.Services.AddKeyedScoped<IXmlTransformer, S57EncContentPublishedEventXmlTransformer>(XmlTransformers.S57EncContentPublishedEventXmlTransformer);
+            builder.Services.AddKeyedScoped<IXmlTransformer, S100DataContentPublishedEventXmlTransformer>(XmlTransformers.S100DataContentPublishedEventXmlTransformer);
+
+            retryPolicyConfiguration = configuration.GetSection("RetryPolicyConfiguration").Get<RetryPolicyConfiguration>()!;
 
             builder.Services.AddHttpClient<ISapClient, SapClient>(c =>
             {
@@ -218,8 +218,10 @@ namespace UKHO.ERPFacade
             }).AddPolicyHandler((services, request) =>
             {
                 var retryPolicyProvider = services.GetRequiredService<RetryPolicyProvider>();
-                return retryPolicyProvider.CreateRetryPolicy("Enterprise Event Service", EventIds.RetryAttemptForEnterpriseEventServiceEvent, retryPolicyConfiguration.RetryCount, retryPolicyConfiguration.Duration);
+                return retryPolicyProvider.GetRetryPolicy("Enterprise Event Service", EventIds.RetryAttemptForEnterpriseEventServiceEvent, retryPolicyConfiguration.RetryCount, retryPolicyConfiguration.Duration);
             });
+
+            ConfigureHealthChecks(builder);
 
             var app = builder.Build();
 

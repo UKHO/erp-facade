@@ -4,19 +4,18 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
-using UKHO.ERPFacade.API.Filters;
+using UKHO.ERPFacade.API.Middlewares;
+using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Logging;
 
-namespace UKHO.ERPFacade.API.UnitTests.Filters
+namespace UKHO.ERPFacade.API.UnitTests.Middlewares
 {
     [TestFixture]
     public class LoggingMiddlewareTests
@@ -40,11 +39,11 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
         public async Task WhenExceptionIsOfTypeException_ThenLogsErrorWithUnhandledExceptionEventId()
         {
             var memoryStream = new MemoryStream();
-            _fakeHttpContext.Request.Headers.Append(CorrelationIdMiddleware.XCorrelationIdHeaderKey, "fakeCorrelationId");
+            _fakeHttpContext.Request.Headers.Append(ApiHeaderKeys.XCorrelationIdHeaderKeyName, "fakeCorrelationId");
             _fakeHttpContext.Response.Body = memoryStream;
             A.CallTo(() => _fakeNextMiddleware(_fakeHttpContext)).Throws(new Exception("fake exception"));
 
-            await _middleware.InvokeAsync(_fakeHttpContext);                  
+            await _middleware.InvokeAsync(_fakeHttpContext);
 
             _fakeHttpContext.Response.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
             _fakeHttpContext.Response.ContentType.Should().Be("application/json");
@@ -56,21 +55,21 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
         }
 
         [Test]
-        public async Task WhenExceptionIsOfTypePermitServiceException_ThenLogsErrorWithPermitServiceExceptionEventId()
+        public async Task WhenExceptionIsOfTypeErpFacadeException_ThenLogsErrorWithErpFacadeExceptionEventId()
         {
             var memoryStream = new MemoryStream();
-            _fakeHttpContext.Request.Headers.Append(CorrelationIdMiddleware.XCorrelationIdHeaderKey, "fakeCorrelationId");
+            _fakeHttpContext.Request.Headers.Append(ApiHeaderKeys.XCorrelationIdHeaderKeyName, "fakeCorrelationId");
             _fakeHttpContext.Response.Body = memoryStream;
-            A.CallTo(() => _fakeNextMiddleware(_fakeHttpContext)).Throws(new ERPFacadeException(EventIds.SapXmlTemplateNotFound.ToEventId(), "fakemessage"));
+            A.CallTo(() => _fakeNextMiddleware(_fakeHttpContext)).Throws(new ERPFacadeException(EventIds.SapXmlTemplateNotFoundException.ToEventId(), "fakemessage"));
 
-            await _middleware.InvokeAsync(_fakeHttpContext);                 
-                        
+            await _middleware.InvokeAsync(_fakeHttpContext);
+
             _fakeHttpContext.Response.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
             _fakeHttpContext.Response.ContentType.Should().Be("application/json");
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Error
-            && call.GetArgument<EventId>(1) == EventIds.SapXmlTemplateNotFound.ToEventId()
+            && call.GetArgument<EventId>(1) == EventIds.SapXmlTemplateNotFoundException.ToEventId()
             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "fakemessage").MustHaveHappenedOnceExactly();
         }
     }

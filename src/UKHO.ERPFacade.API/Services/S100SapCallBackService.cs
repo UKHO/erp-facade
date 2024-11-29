@@ -33,7 +33,7 @@ namespace UKHO.ERPFacade.API.Services
             return await _azureTableReaderWriter.GetEntityAsync(PartitionKeys.S100PartitionKey, correlationId) is not null;
         }
 
-        public async Task ProcessSapCallback(string correlationId)
+        public async Task ProcessSapCallbackAsync(string correlationId)
         {
             _logger.LogInformation(EventIds.ValidS100SapCallback.ToEventId(), "Processing of valid S-100 SAP callback request started.");
 
@@ -49,12 +49,11 @@ namespace UKHO.ERPFacade.API.Services
 
             _logger.LogInformation(EventIds.PublishingUnitOfSaleUpdatedEventToEesStarted.ToEventId(), "The publishing unit of sale updated event to EES is started.");
 
-            var result = await _s100UnitOfSaleUpdatedEventPublishingService.PublishEvent(baseCloudEvent, correlationId);
+            var result = await _s100UnitOfSaleUpdatedEventPublishingService.BuildAndPublishEventAsync(baseCloudEvent, correlationId);
 
             if (!result.IsSuccess)
             {
-                _logger.LogError(EventIds.ErrorOccurredWhilePublishingUnitOfSaleUpdatedEventToEes.ToEventId(), "Error occurred while publishing S-100 unit of sale updated event to EES.");
-                throw new ERPFacadeException(EventIds.ErrorOccurredWhilePublishingUnitOfSaleUpdatedEventToEes.ToEventId(), "Error occurred while publishing S-100 unit of sale updated event to EES.");
+                throw new ERPFacadeException(EventIds.PublishingUnitOfSaleUpdatedEventToEesFailedException.ToEventId(), $"Error occurred while publishing S-100 unit of sale updated event to EES. | {result.Error}");
             }
 
             _logger.LogInformation(EventIds.UnitOfSaleUpdatedEventPublished.ToEventId(), "The unit of sale updated event published to EES successfully.");

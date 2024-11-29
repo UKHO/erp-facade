@@ -2,14 +2,15 @@
 using UKHO.ERPFacade.Common.Exceptions;
 using UKHO.ERPFacade.Common.Logging;
 
-namespace UKHO.ERPFacade.API.Filters
+namespace UKHO.ERPFacade.API.Middlewares
 {
     public class LoggingMiddleware
     {
         private readonly RequestDelegate _next;
         private readonly ILogger<LoggingMiddleware> _logger;
 
-        public LoggingMiddleware(RequestDelegate next, ILogger<LoggingMiddleware> logger)
+        public LoggingMiddleware(RequestDelegate next,
+                                 ILogger<LoggingMiddleware> logger)
         {
             _next = next;
             _logger = logger;

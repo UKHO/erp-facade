@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace UKHO.ERPFacade.API.Filters
+namespace UKHO.ERPFacade.API.Middlewares
 {
     [ExcludeFromCodeCoverage]
     public static class CorrelationIdMiddlewareExtensions

@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System;
+using System.Xml;
 using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.Exceptions;
@@ -6,32 +7,33 @@ using UKHO.ERPFacade.Common.Extensions;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Models.CloudEvents.S57Event;
+using UKHO.ERPFacade.Common.Models.SapActionConfigurationModels;
 using UKHO.ERPFacade.Common.Operations;
 using UKHO.ERPFacade.Common.PermitDecryption;
 using UKHO.ERPFacade.Common.Providers;
 
 namespace UKHO.ERPFacade.API.XmlTransformers
 {
-    public class S57XmlTransformer : BaseXmlTransformer
+    public class S57EncContentPublishedEventXmlTransformer : BaseXmlTransformer
     {
-        private readonly ILogger<S57XmlTransformer> _logger;
+        private readonly ILogger<S57EncContentPublishedEventXmlTransformer> _logger;
         private readonly IXmlOperations _xmlOperations;
         private readonly IWeekDetailsProvider _weekDetailsProvider;
         private readonly IPermitDecryption _permitDecryption;
-        private readonly IOptions<SapActionConfiguration> _sapActionConfig;
+        private readonly IOptions<S57EncContentPublishedEventSapActionConfiguration> _s57EncContentPublishedEventSapActionConfig;
 
-        public S57XmlTransformer(ILogger<S57XmlTransformer> logger,
-                                 IXmlOperations xmlOperations,
-                                 IWeekDetailsProvider weekDetailsProvider,
-                                 IPermitDecryption permitDecryption,
-                                 IOptions<SapActionConfiguration> sapActionConfig)
+        public S57EncContentPublishedEventXmlTransformer(ILogger<S57EncContentPublishedEventXmlTransformer> logger,
+                                                         IXmlOperations xmlOperations,
+                                                         IWeekDetailsProvider weekDetailsProvider,
+                                                         IPermitDecryption permitDecryption,
+                                                         IOptions<S57EncContentPublishedEventSapActionConfiguration> s57EncContentPublishedEventSapActionConfig)
         : base()
         {
             _logger = logger;
             _xmlOperations = xmlOperations;
             _weekDetailsProvider = weekDetailsProvider;
             _permitDecryption = permitDecryption;
-            _sapActionConfig = sapActionConfig;
+            _s57EncContentPublishedEventSapActionConfig = s57EncContentPublishedEventSapActionConfig;
         }
 
         public override XmlDocument BuildXmlPayload<T>(T eventData, string xmlTemplatePath)
@@ -62,7 +64,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
         {
             foreach (var product in eventData.Products)
             {
-                foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == XmlFields.EncCell))
+                foreach (var action in _s57EncContentPublishedEventSapActionConfig.Value.Actions.Where(x => x.Product == XmlFields.EncCell))
                 {
                     var unitOfSale = GetUnitOfSale(action.ActionNumber, eventData.UnitsOfSales, product);
 
@@ -105,7 +107,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
         {
             foreach (var unitOfSale in eventData.UnitsOfSales)
             {
-                foreach (var action in _sapActionConfig.Value.SapActions.Where(x => x.Product == XmlFields.AvcsUnit))
+                foreach (var action in _s57EncContentPublishedEventSapActionConfig.Value.Actions.Where(x => x.Product == XmlFields.AvcsUnit))
                 {
                     if (!ValidateActionRules(action, unitOfSale))
                         continue;
@@ -155,19 +157,19 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                 6 or 8 => listOfUnitOfSales.FirstOrDefault(x => x.UnitOfSaleType == JsonFields.UnitSaleType &&
                                                                 x.Status == JsonFields.UnitOfSaleStatusForSale &&
                                                                 product.InUnitsOfSale.Contains(x.UnitName)),
-                _ => null,
+                _ => null
             };
         }
 
-        private void BuildAndAppendActionNode(XmlDocument soapXml, S57Product product, S57UnitOfSale unitOfSale, SapAction action, S57EventData eventData, XmlNode actionItemNode, string childCell = null, string replacedBy = null)
+        private void BuildAndAppendActionNode(XmlDocument soapXml, S57Product product, S57UnitOfSale unitOfSale, Actions action, S57EventData eventData, XmlNode actionItemNode, string childCell = null, string replacedBy = null)
         {
-            _logger.LogInformation(EventIds.S57SapActionGenerationStarted.ToEventId(), "Generation of {ActionName} action started.", action.Action);
+            _logger.LogInformation(EventIds.S57SapActionGenerationStarted.ToEventId(), "Generation of {ActionName} action started.", action.ActionName);
             var actionNode = BuildAction(soapXml, product, unitOfSale, action, eventData.UkhoWeekNumber, childCell, replacedBy);
             actionItemNode.AppendChild(actionNode);
-            _logger.LogInformation(EventIds.S57SapActionGenerationCompleted.ToEventId(), "Generation of {ActionName} action completed", action.Action);
+            _logger.LogInformation(EventIds.S57SapActionGenerationCompleted.ToEventId(), "Generation of {ActionName} action completed", action.ActionName);
         }
 
-        private XmlElement BuildAction(XmlDocument soapXml, S57Product product, S57UnitOfSale unitOfSale, SapAction action, S57UkhoWeekNumber ukhoWeekNumber, string childCell, string replacedBy = null)
+        private XmlElement BuildAction(XmlDocument soapXml, S57Product product, S57UnitOfSale unitOfSale, Actions action, S57UkhoWeekNumber ukhoWeekNumber, string childCell, string replacedBy = null)
         {
             DecryptedPermit decryptedPermit = null;
 
@@ -176,7 +178,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
 
             // Add basic action-related nodes
             _xmlOperations.AppendChildNode(itemNode, soapXml, XmlFields.ActionNumber, action.ActionNumber.ToString());
-            _xmlOperations.AppendChildNode(itemNode, soapXml, XmlFields.Action, action.Action.ToString());
+            _xmlOperations.AppendChildNode(itemNode, soapXml, XmlFields.Action, action.ActionName.ToString());
             _xmlOperations.AppendChildNode(itemNode, soapXml, XmlFields.Product, action.Product.ToString());
             _xmlOperations.AppendChildNode(itemNode, soapXml, XmlFields.ProdType, XmlFields.ProdTypeValue);
 
@@ -186,19 +188,19 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             List<(int sortingOrder, XmlElement node)> actionAttributes = new();
 
             // Get permit keys for New cell and Updated cell
-            if (action.Action == ConfigFileFields.CreateEncCell || action.Action == ConfigFileFields.UpdateCell)
+            if (action.ActionName == ConfigFileFields.CreateEncCell || action.ActionName == ConfigFileFields.UpdateCell)
             {
                 decryptedPermit = _permitDecryption.Decrypt(product.Permit);
             }
 
             // Process ProductSection attributes
-            ProcessAttributes(action.Action, action.Attributes.Where(x => x.Section == ConfigFileFields.ProductSection), soapXml, product, actionAttributes, decryptedPermit, replacedBy);
+            ProcessAttributes(action.ActionName, action.Attributes.Where(x => x.Section == ConfigFileFields.ProductSection), soapXml, product, actionAttributes, decryptedPermit, replacedBy);
 
             // Process UnitOfSaleSection attributes
-            ProcessAttributes(action.Action, action.Attributes.Where(x => x.Section == ConfigFileFields.UnitOfSaleSection), soapXml, unitOfSale, actionAttributes, null);
+            ProcessAttributes(action.ActionName, action.Attributes.Where(x => x.Section == ConfigFileFields.UnitOfSaleSection), soapXml, unitOfSale, actionAttributes, null);
 
             // Process UkhoWeekNumberSection attributes
-            ProcessUkhoWeekNumberAttributes(action.Action, action.Attributes.Where(x => x.Section == ConfigFileFields.UkhoWeekNumberSection), soapXml, ukhoWeekNumber, actionAttributes);
+            ProcessUkhoWeekNumberAttributes(action.ActionName, action.Attributes.Where(x => x.Section == ConfigFileFields.UkhoWeekNumberSection), soapXml, ukhoWeekNumber, actionAttributes);
 
             // Sort and append attributes to SAP action
             foreach (var (sortingOrder, node) in actionAttributes.OrderBy(x => x.sortingOrder))
@@ -209,7 +211,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             return itemNode;
         }
 
-        private void ProcessAttributes(string action, IEnumerable<ActionItemAttribute> attributes, XmlDocument soapXml, object source, List<(int, XmlElement)> actionAttributes, DecryptedPermit decryptedPermit = null, string replacedBy = null)
+        private void ProcessAttributes(string action, IEnumerable<Attributes> attributes, XmlDocument soapXml, object source, List<(int, XmlElement)> actionAttributes, DecryptedPermit decryptedPermit = null, string replacedBy = null)
         {
             foreach (var attribute in attributes)
             {
@@ -242,15 +244,17 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                         attributeNode.InnerText = string.Empty;
                     }
                     actionAttributes.Add((attribute.SortingOrder, attributeNode));
+
                 }
                 catch (Exception ex)
                 {
                     throw new ERPFacadeException(EventIds.S57SapActionInformationGenerationFailedException.ToEventId(), $"Error while generating SAP action information. | Action : {action} | XML Attribute : {attribute.XmlNodeName} | ErrorMessage : {ex.Message}");
                 }
             }
+
         }
 
-        private void ProcessUkhoWeekNumberAttributes(string action, IEnumerable<ActionItemAttribute> attributes, XmlDocument soapXml, S57UkhoWeekNumber ukhoWeekNumber, List<(int, XmlElement)> actionAttributes)
+        private void ProcessUkhoWeekNumberAttributes(string action, IEnumerable<Attributes> attributes, XmlDocument soapXml, S57UkhoWeekNumber ukhoWeekNumber, List<(int, XmlElement)> actionAttributes)
         {
             foreach (var attribute in attributes)
             {
@@ -267,7 +271,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                                 attributeNode.InnerText = StringExtension.ToSubstring(validFrom, 0, XmlFields.MaxXmlNodeLength);
                                 break;
                             case XmlFields.WeekNo:
-                                var weekNo = string.Join("", ukhoWeekNumber.Year, ukhoWeekNumber.Week.Value.ToString("D2"));
+                                var weekNo = string.Join(XmlFields.UkhoWeekNoFormatSeparator, ukhoWeekNumber.Year, ukhoWeekNumber.Week.Value.ToString(XmlFields.UkhoWeekNoFormat));
                                 attributeNode.InnerText = StringExtension.ToSubstring(weekNo, 0, XmlFields.MaxXmlNodeLength);
                                 break;
                             case XmlFields.Correction:

@@ -14,7 +14,7 @@ namespace UKHO.ERPFacade.Common.Policies
             _logger = logger;
         }
 
-        public IAsyncPolicy<HttpResponseMessage> CreateRetryPolicy(string service, EventIds eventId, int retryCount, double sleepDuration)
+        public IAsyncPolicy<HttpResponseMessage> GetRetryPolicy(string service, EventIds eventId, int retryCount, double sleepDuration)
         {
             return HttpPolicyExtensions
                 .HandleTransientHttpError()

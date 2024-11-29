@@ -55,7 +55,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
             Console.WriteLine("Scenario: " + jsonPayloadFileName + "\n" + "CorrelationId: " + correlationId + "\n");
 
-            RestResponse response = await _webhookEndpoint.PostWebhookResponseAsync(requestBody, await _authTokenProvider.GetAzureADToken(false));
+            RestResponse response = await _webhookEndpoint.PostWebhookResponseAsync(requestBody, await _authTokenProvider.GetAzureADTokenAsync(false));
 
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
@@ -76,7 +76,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
             Console.WriteLine("Scenario: ERP Facade to SAP to EES event publish.\nCorrelationId: " + correlationId + "\n");
 
-            RestResponse response = await _webhookEndpoint.PostWebhookResponseAsync(requestBody, await _authTokenProvider.GetAzureADToken(false));
+            RestResponse response = await _webhookEndpoint.PostWebhookResponseAsync(requestBody, await _authTokenProvider.GetAzureADTokenAsync(false));
 
             //Once the webhook endpoint returns 200 OK response, the SAP callback endpoint is called from wiremock.
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
@@ -99,7 +99,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             string requestBody = await File.ReadAllTextAsync(jsonPayloadFilePath);
             requestBody = JsonModifier.UpdateTime(requestBody);
 
-            RestResponse response = await _webhookEndpoint.PostWebhookResponseAsync(requestBody, await _authTokenProvider.GetAzureADToken(false));
+            RestResponse response = await _webhookEndpoint.PostWebhookResponseAsync(requestBody, await _authTokenProvider.GetAzureADTokenAsync(false));
 
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.InternalServerError);
         }

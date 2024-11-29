@@ -28,17 +28,18 @@ namespace UKHO.ERPFacade.API.Services.EventPublishingServices
             _logger = logger;
         }
 
-        public async Task<Result> PublishEvent(BaseCloudEvent baseCloudEvent, string correlationId)
+        public async Task<Result> BuildAndPublishEventAsync(BaseCloudEvent baseCloudEvent, string correlationId)
         {
-            baseCloudEvent.Type = EventTypes.S100UnitOfSaleEventType;
+            baseCloudEvent.Type = EventTypes.S100UnitOfSaleUpdatedEventType;
             baseCloudEvent.Source = _eesConfig.Value.SourceApplicationUri;
             baseCloudEvent.Id = Guid.NewGuid().ToString();
-            baseCloudEvent.Time = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ");
+            baseCloudEvent.Time = DateTime.UtcNow.ToString(DateTimeFormats.EventJsonDateTimeFormat);
 
             await _azureBlobReaderWriter.UploadEventAsync(JsonConvert.SerializeObject(baseCloudEvent, Formatting.Indented), correlationId, EventPayloadFiles.S100UnitOfSaleUpdatedEventFileName);
 
             _logger.LogInformation(EventIds.S100UnitOfSaleUpdatedEventJsonStoredInAzureBlobContainer.ToEventId(), "S-100 unit of sale updated event json payload is stored in azure blob container.");
-            HttpResponseMessage response = await _eesClient.PostAsync(baseCloudEvent);
+
+            HttpResponseMessage response = await _eesClient.PublishEventAsync(baseCloudEvent);
 
             if (!response.IsSuccessStatusCode)
             {

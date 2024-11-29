@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using FakeItEasy;
+using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using UKHO.ERPFacade.API.Services;
@@ -40,9 +41,9 @@ public class S100SapCallbackServiceTests
     {
         Result result = new Result(true, "");
 
-        A.CallTo(() => _fakeS100UnitOfSaleUpdatedEventPublishingService.PublishEvent(A<BaseCloudEvent>.Ignored, A<string>.Ignored)).Returns(result);
+        A.CallTo(() => _fakeS100UnitOfSaleUpdatedEventPublishingService.BuildAndPublishEventAsync(A<BaseCloudEvent>.Ignored, A<string>.Ignored)).Returns(result);
 
-        await _fakeSapCallbackService.ProcessSapCallback(_fakeCorrelationId);
+        await _fakeSapCallbackService.ProcessSapCallbackAsync(_fakeCorrelationId);
 
         A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                             && call.GetArgument<LogLevel>(0) == LogLevel.Information
@@ -80,9 +81,10 @@ public class S100SapCallbackServiceTests
     {
         Result result = new Result(false, "Forbidden");
 
-        A.CallTo(() => _fakeS100UnitOfSaleUpdatedEventPublishingService.PublishEvent(A<BaseCloudEvent>.Ignored, A<string>.Ignored)).Returns(result);
+        A.CallTo(() => _fakeS100UnitOfSaleUpdatedEventPublishingService.BuildAndPublishEventAsync(A<BaseCloudEvent>.Ignored, A<string>.Ignored)).Returns(result);
 
-        Assert.ThrowsAsync<ERPFacadeException>(() => _fakeSapCallbackService.ProcessSapCallback(_fakeCorrelationId));
+        Assert.ThrowsAsync<ERPFacadeException>(() => _fakeSapCallbackService.ProcessSapCallbackAsync(_fakeCorrelationId))
+            .Message.Should().Be("Error occurred while publishing S-100 unit of sale updated event to EES. | Forbidden");
 
         A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                             && call.GetArgument<LogLevel>(0) == LogLevel.Information
@@ -103,10 +105,5 @@ public class S100SapCallbackServiceTests
                                             && call.GetArgument<LogLevel>(0) == LogLevel.Information
                                             && call.GetArgument<EventId>(1) == EventIds.PublishingUnitOfSaleUpdatedEventToEesStarted.ToEventId()
                                             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "The publishing unit of sale updated event to EES is started.").MustHaveHappenedOnceExactly();
-
-        A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-                                            && call.GetArgument<LogLevel>(0) == LogLevel.Error
-                                            && call.GetArgument<EventId>(1) == EventIds.ErrorOccurredWhilePublishingUnitOfSaleUpdatedEventToEes.ToEventId()
-                                            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Error occurred while publishing S-100 unit of sale updated event to EES.").MustHaveHappenedOnceExactly();
     }
 }

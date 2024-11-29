@@ -41,16 +41,16 @@ namespace UKHO.ERPFacade.API.UnitTests.Services.EventPublishingServicesTests
             string correlationId = Guid.NewGuid().ToString();
             BaseCloudEvent fakeBaseCloudEvent =new()
             {
-                Type = EventTypes.S100UnitOfSaleEventType,
+                Type = EventTypes.S100UnitOfSaleUpdatedEventType,
                 Source = _fakeEesConfig.Value.SourceApplicationUri,
                 Id = correlationId,
                 Time = DateTime.UtcNow.ToString()
             };
 
-            await _fakeS100UnitOfSaleUpdatedEventPublishingService.PublishEvent(fakeBaseCloudEvent, correlationId);
+            await _fakeS100UnitOfSaleUpdatedEventPublishingService.BuildAndPublishEventAsync(fakeBaseCloudEvent, correlationId);
 
             A.CallTo(() => _fakeAzureBlobReaderWriter.UploadEventAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceOrMore();
-            A.CallTo(() => _fakeEesClient.PostAsync(A<BaseCloudEvent>.Ignored)).MustHaveHappenedOnceOrMore();
+            A.CallTo(() => _fakeEesClient.PublishEventAsync(A<BaseCloudEvent>.Ignored)).MustHaveHappenedOnceOrMore();
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Information
                                                 && call.GetArgument<EventId>(1) == EventIds.S100UnitOfSaleUpdatedEventJsonStoredInAzureBlobContainer.ToEventId()

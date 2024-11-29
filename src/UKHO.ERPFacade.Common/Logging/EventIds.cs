@@ -16,7 +16,7 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940002 - Sap Xml Template Not Found
         /// </summary>
-        SapXmlTemplateNotFound = 940002,
+        SapXmlTemplateNotFoundException = 940002,
 
         /// <summary>
         /// 940003 - ERP facade OPTIONS endpoint requested.
@@ -295,12 +295,12 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940057 - An error occurred while sending record of sale published event data to SAP.
         /// </summary>
-        ErrorOccurredInSapForRecordOfSalePublishedEvent = 940057,
+        RecordOfSaleRequestToSapFailedException = 940057,
 
         /// <summary>
         /// 940058 - An error occurred while sending licence updated event data to SAP.
         /// </summary>
-        ErrorOccurredInSapForLicenceUpdatedPublishedEvent = 940058,
+        LicenceUpdatedRequestToSapFailedException = 940058,
 
         /// <summary>
         /// 940059 - Uploading Sap Xml payload for licence updated event in Azure blob.
@@ -457,7 +457,7 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940089 - Shared API Key Configuration is missing.
         /// </summary>
-        SharedApiKeyConfigurationMissing = 940089,
+        SharedApiKeyConfigurationMissingException = 940089,
 
         /// <summary>
         /// 940090 - S-100 Request to SAP failed.
@@ -532,7 +532,7 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940104 - Error occurred while publishing the publishing unit of sale updated event to EES.
         /// </summary>
-        ErrorOccurredWhilePublishingUnitOfSaleUpdatedEventToEes = 940104,
+        PublishingUnitOfSaleUpdatedEventToEesFailedException = 940104,
 
         /// <summary>
         /// 940105 - The publishing unit of sale updated event successfully to EES.

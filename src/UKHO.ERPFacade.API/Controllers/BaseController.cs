@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics.CodeAnalysis;
-using UKHO.ERPFacade.API.Filters;
+using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.Models;
 
 namespace UKHO.ERPFacade.API.Controllers
 {
-    [ExcludeFromCodeCoverage]    
+    [ExcludeFromCodeCoverage]
     public abstract class BaseController<T> : ControllerBase
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -18,7 +18,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
         protected string GetCurrentCorrelationId()
         {
-            return _httpContextAccessor.HttpContext!.Request.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey].FirstOrDefault()!;
+            return _httpContextAccessor.HttpContext!.Request.Headers[ApiHeaderKeys.XCorrelationIdHeaderKeyName].FirstOrDefault()!;
         }
 
         protected IActionResult BuildBadRequestErrorResponse(List<Error> errors)

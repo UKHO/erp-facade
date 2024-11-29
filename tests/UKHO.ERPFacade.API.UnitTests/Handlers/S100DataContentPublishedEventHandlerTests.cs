@@ -28,27 +28,27 @@ using UKHO.ERPFacade.Common.Operations.IO.Azure;
 namespace UKHO.ERPFacade.API.UnitTests.Handlers
 {
     [TestFixture]
-    public class S100EventHandlerTests
+    public class S100DataContentPublishedEventHandlerTests
     {
-        private ILogger<S100EventHandler> _fakeLogger;
+        private ILogger<S100DataContentPublishedEventHandler> _fakeLogger;
         private IAzureTableReaderWriter _fakeAzureTableReaderWriter;
         private IAzureBlobReaderWriter _fakeAzureBlobReaderWriter;
-        private S100EventHandler _fakes100EventHandler;
-        private IBaseXmlTransformer _fakeBaseXmlTransformer;
+        private S100DataContentPublishedEventHandler _fakes100DataContentPublishedEventHandler;
+        private IXmlTransformer _fakeXmlTransformer;
         private ISapClient _fakeSapClient;
         private IOptions<SapConfiguration> _fakeSapConfig;
         private IS100UnitOfSaleUpdatedEventPublishingService _fakeS100UnitOfSaleUpdatedEventPublishingService;
         [SetUp]
         public void Setup()
         {
-            _fakeLogger = A.Fake<ILogger<S100EventHandler>>();
+            _fakeLogger = A.Fake<ILogger<S100DataContentPublishedEventHandler>>();
             _fakeAzureTableReaderWriter = A.Fake<IAzureTableReaderWriter>();
             _fakeAzureBlobReaderWriter = A.Fake<IAzureBlobReaderWriter>();
-            _fakeBaseXmlTransformer = A.Fake<IBaseXmlTransformer>();
+            _fakeXmlTransformer = A.Fake<IXmlTransformer>();
             _fakeSapClient = A.Fake<ISapClient>();
             _fakeSapConfig = A.Fake<IOptions<SapConfiguration>>();
             _fakeS100UnitOfSaleUpdatedEventPublishingService = A.Fake<IS100UnitOfSaleUpdatedEventPublishingService>();
-            _fakes100EventHandler = new S100EventHandler(_fakeBaseXmlTransformer, _fakeLogger, _fakeAzureTableReaderWriter, _fakeAzureBlobReaderWriter, _fakeSapClient, _fakeSapConfig, _fakeS100UnitOfSaleUpdatedEventPublishingService);
+            _fakes100DataContentPublishedEventHandler = new S100DataContentPublishedEventHandler(_fakeXmlTransformer, _fakeLogger, _fakeAzureTableReaderWriter, _fakeAzureBlobReaderWriter, _fakeSapClient, _fakeSapConfig, _fakeS100UnitOfSaleUpdatedEventPublishingService);
         }
 
         [Test]
@@ -56,7 +56,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
         {
             var fakeS100EventDataJson = JObject.Parse(@"{""data"":{""correlationId"":""123""}}");
             var fakeS100EventData = JsonConvert.DeserializeObject<BaseCloudEvent>(fakeS100EventDataJson.ToString());
-            _ = _fakes100EventHandler.ProcessEventAsync(fakeS100EventData);
+            _ = _fakes100DataContentPublishedEventHandler.ProcessEventAsync(fakeS100EventData);
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Information
                                                 && call.GetArgument<EventId>(1) == EventIds.S100EventProcessingStarted.ToEventId()
@@ -74,7 +74,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
                                                 && call.GetArgument<EventId>(1) == EventIds.S100EventJsonStoredInAzureBlobContainer.ToEventId()
                                                 && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "S-100 data content published event json payload is stored in azure blob container.").MustHaveHappenedOnceExactly();
 
-            A.CallTo(() => _fakeBaseXmlTransformer.BuildXmlPayload(A<S100EventData>.Ignored, A<string>.Ignored)).Returns(new XmlDocument());
+            A.CallTo(() => _fakeXmlTransformer.BuildXmlPayload(A<S100EventData>.Ignored, A<string>.Ignored)).Returns(new XmlDocument());
 
             A.CallTo(() => _fakeAzureBlobReaderWriter.UploadEventAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened(2, Times.Exactly);
 
@@ -82,7 +82,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Information
                                                 && call.GetArgument<EventId>(1) == EventIds.S100EventXMLStoredInAzureBlobContainer.ToEventId()
                                                 && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "S-100 data content published event xml payload is stored in azure blob container.").MustHaveHappenedOnceExactly();
-            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(new HttpResponseMessage()
+            A.CallTo(() => _fakeSapClient.SendUpdateAsync(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(new HttpResponseMessage()
             {
                 StatusCode = HttpStatusCode.OK
             });
@@ -90,7 +90,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Information
                                                 && call.GetArgument<EventId>(1) == EventIds.S100EventUpdateSentToSap.ToEventId()
-                                                && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "S-100 data content has been sent to SAP successfully.").MustHaveHappenedOnceExactly();
+                                                && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "S-100 product update has been sent to SAP successfully.").MustHaveHappenedOnceExactly();
 
             A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntityAsync(A<string>.Ignored, A<string>.Ignored, A<Dictionary<string, object>>.Ignored)).MustHaveHappened();
         }
@@ -101,13 +101,13 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
             XmlDocument xmlDocument = new();
             var newCellEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\S100TestData\\CancellationAndReplacement.JSON");
             var eventData = JsonConvert.DeserializeObject<BaseCloudEvent>(newCellEventPayloadJson);
-            A.CallTo(() => _fakeBaseXmlTransformer.BuildXmlPayload(A<BaseCloudEvent>.Ignored, XmlTemplateInfo.S57SapXmlTemplatePath)).Returns(xmlDocument);
-            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(new HttpResponseMessage()
+            A.CallTo(() => _fakeXmlTransformer.BuildXmlPayload(A<BaseCloudEvent>.Ignored, XmlTemplateInfo.S57SapXmlTemplatePath)).Returns(xmlDocument);
+            A.CallTo(() => _fakeSapClient.SendUpdateAsync(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(new HttpResponseMessage()
             {
                 StatusCode = HttpStatusCode.Unauthorized,
             });
-            Assert.ThrowsAsync<ERPFacadeException>(() => _fakes100EventHandler.ProcessEventAsync(eventData))
-                .Message.Should().Be("An error occurred while sending S-100 data content to SAP. | Unauthorized");
+            Assert.ThrowsAsync<ERPFacadeException>(() => _fakes100DataContentPublishedEventHandler.ProcessEventAsync(eventData))
+                .Message.Should().Be("An error occurred while sending S-100 product update to SAP. | Unauthorized");
 
             A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntityAsync(A<string>.Ignored, A<string>.Ignored, A<Dictionary<string, object>>.Ignored)).MustNotHaveHappened();
         }
@@ -122,11 +122,11 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
             XmlDocument xmlDocument = new XmlDocument();
             xmlDocument.LoadXml(sapXml);
 
-            A.CallTo(() => _fakeBaseXmlTransformer.BuildXmlPayload(A<S100EventData>.Ignored, A<string>.Ignored)).Returns(xmlDocument);
-            A.CallTo(() => _fakeS100UnitOfSaleUpdatedEventPublishingService.PublishEvent(A<BaseCloudEvent>.Ignored, A<string>.Ignored)).Returns(Result.Success());
+            A.CallTo(() => _fakeXmlTransformer.BuildXmlPayload(A<S100EventData>.Ignored, A<string>.Ignored)).Returns(xmlDocument);
+            A.CallTo(() => _fakeS100UnitOfSaleUpdatedEventPublishingService.BuildAndPublishEventAsync(A<BaseCloudEvent>.Ignored, A<string>.Ignored)).Returns(Result.Success());
 
 
-            _ = _fakes100EventHandler.ProcessEventAsync(fakeS100EventData);
+            _ = _fakes100DataContentPublishedEventHandler.ProcessEventAsync(fakeS100EventData);
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Information
@@ -159,7 +159,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
                                                 && call.GetArgument<EventId>(1) == EventIds.UnitOfSaleUpdatedEventPublished.ToEventId()
                                                 && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "The unit of sale updated event published to EES successfully.").MustHaveHappenedOnceExactly();
 
-            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeSapClient.SendUpdateAsync(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
         }
 
         [Test]
@@ -171,11 +171,11 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
             XmlDocument xmlDocument = new XmlDocument();
             xmlDocument.LoadXml(sapXml);
 
-            A.CallTo(() => _fakeBaseXmlTransformer.BuildXmlPayload(A<S100EventData>.Ignored, A<string>.Ignored)).Returns(xmlDocument);
-            A.CallTo(() => _fakeS100UnitOfSaleUpdatedEventPublishingService.PublishEvent(A<BaseCloudEvent>.Ignored, A<string>.Ignored)).Returns(Result.Failure("Internal Server Error"));
+            A.CallTo(() => _fakeXmlTransformer.BuildXmlPayload(A<S100EventData>.Ignored, A<string>.Ignored)).Returns(xmlDocument);
+            A.CallTo(() => _fakeS100UnitOfSaleUpdatedEventPublishingService.BuildAndPublishEventAsync(A<BaseCloudEvent>.Ignored, A<string>.Ignored)).Returns(Result.Failure("Internal Server Error"));
 
-            Assert.ThrowsAsync<ERPFacadeException>(() => _fakes100EventHandler.ProcessEventAsync(fakeS100EventData))
-                .Message.Should().Be("Error occurred while publishing S-100 unit of sale updated event to EES.");
+            Assert.ThrowsAsync<ERPFacadeException>(() => _fakes100DataContentPublishedEventHandler.ProcessEventAsync(fakeS100EventData))
+                .Message.Should().Be("Error occurred while publishing S-100 unit of sale updated event to EES. | Internal Server Error");
         }
     }
 }

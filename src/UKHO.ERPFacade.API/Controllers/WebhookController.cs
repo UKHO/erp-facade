@@ -14,6 +14,7 @@ using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Models;
 using UKHO.ERPFacade.Common.Models.CloudEvents;
 using UKHO.ERPFacade.Common.Models.TableEntities;
+using UKHO.ERPFacade.Common.Operations;
 using UKHO.ERPFacade.Common.Operations.IO.Azure;
 using Status = UKHO.ERPFacade.Common.Enums.Status;
 
@@ -122,8 +123,8 @@ namespace UKHO.ERPFacade.API.Controllers
         {
             _logger.LogInformation(EventIds.RecordOfSalePublishedEventReceived.ToEventId(), "ERP Facade webhook has received record of sale event from EES.");
 
-            var correlationId = recordOfSaleEventJson.SelectToken(JsonFields.CorrelationIdKey)?.Value<string>();
-            var eventId = recordOfSaleEventJson.SelectToken(JsonFields.EventIdKey)?.Value<string>();
+            var correlationId = Extractor.ExtractTokenValue(recordOfSaleEventJson, JsonFields.CorrelationIdKey);
+            var eventId = Extractor.ExtractTokenValue(recordOfSaleEventJson, JsonFields.EventIdKey);
 
             if (string.IsNullOrEmpty(correlationId))
             {
@@ -179,7 +180,7 @@ namespace UKHO.ERPFacade.API.Controllers
         {
             _logger.LogInformation(EventIds.LicenceUpdatedEventPublishedEventReceived.ToEventId(), "ERP Facade webhook has received new licence updated publish event from EES.");
 
-            var correlationId = licenceUpdatedEventJson.SelectToken(JsonFields.CorrelationIdKey)?.Value<string>();
+            var correlationId = Extractor.ExtractTokenValue(licenceUpdatedEventJson, JsonFields.CorrelationIdKey);
 
             if (string.IsNullOrEmpty(correlationId))
             {
@@ -208,11 +209,11 @@ namespace UKHO.ERPFacade.API.Controllers
             await _azureBlobReaderWriter.UploadEventAsync(sapPayload.ToIndentedString(), AzureStorage.LicenceUpdatedEventContainerName, correlationId + '/' + EventPayloadFiles.SapXmlPayloadFileName);
             _logger.LogInformation(EventIds.UploadedLicenceUpdatedSapXmlPayloadInAzureBlob.ToEventId(), "SAP xml payload for licence updated event is uploaded in blob storage successfully.");
 
-            var response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapEndpointForRecordOfSale, _sapConfig.Value.SapServiceOperationForRecordOfSale, _sapConfig.Value.SapUsernameForRecordOfSale, _sapConfig.Value.SapPasswordForRecordOfSale);
+            var response = await _sapClient.SendUpdateAsync(sapPayload, _sapConfig.Value.SapEndpointForRecordOfSale, _sapConfig.Value.SapServiceOperationForRecordOfSale, _sapConfig.Value.SapUsernameForRecordOfSale, _sapConfig.Value.SapPasswordForRecordOfSale);
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new ERPFacadeException(EventIds.ErrorOccurredInSapForLicenceUpdatedPublishedEvent.ToEventId(), $"An error occurred while sending licence updated event data to SAP. | {response.StatusCode}");
+                throw new ERPFacadeException(EventIds.LicenceUpdatedRequestToSapFailedException.ToEventId(), $"An error occurred while sending licence updated event data to SAP. | {response.StatusCode}");
             }
 
             _logger.LogInformation(EventIds.LicenceUpdatedPublishedEventUpdatePushedToSap.ToEventId(), "The licence updated event data has been sent to SAP successfully. | {StatusCode}", response.StatusCode);
