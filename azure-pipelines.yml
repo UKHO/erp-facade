@@ -815,7 +815,7 @@ stages:
         value: $(PermitWithDifferentKeyACTIVEKEY)
       - name: "ErpFacadeConfiguration.PermitWithDifferentKey.NextKey"
         value: $(PermitWithDifferentKeyNEXTKEY)
-    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
+    #condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
 
     jobs:
       - deployment: QADeployTerraform

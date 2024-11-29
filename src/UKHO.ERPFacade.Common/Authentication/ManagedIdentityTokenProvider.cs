@@ -18,7 +18,7 @@ namespace UKHO.ERPFacade.Common.Authentication
 
         public async Task<string> GetTokenAsync(string scope)
         {
-            DefaultAzureCredential credential = new(new DefaultAzureCredentialOptions { ManagedIdentityClientId = _azureADConfiguration.Value.ClientId });
+            DefaultAzureCredential credential = new();
             var accessToken = await credential.GetTokenAsync(new TokenRequestContext([scope]));
             return accessToken.Token;
         }
