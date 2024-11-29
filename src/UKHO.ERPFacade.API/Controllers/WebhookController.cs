@@ -213,7 +213,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new ERPFacadeException(EventIds.ErrorOccurredInSapForLicenceUpdatedPublishedEvent.ToEventId(), $"An error occurred while sending licence updated event data to SAP. | {response.StatusCode}");
+                throw new ERPFacadeException(EventIds.LicenceUpdatedRequestToSapFailedException.ToEventId(), $"An error occurred while sending licence updated event data to SAP. | {response.StatusCode}");
             }
 
             _logger.LogInformation(EventIds.LicenceUpdatedPublishedEventUpdatePushedToSap.ToEventId(), "The licence updated event data has been sent to SAP successfully. | {StatusCode}", response.StatusCode);

@@ -21,7 +21,7 @@ namespace UKHO.ERPFacade.API.Filters
 
             if (string.IsNullOrEmpty(_sharedApiKeyConfiguration.SharedApiKey))
             {
-                throw new ERPFacadeException(EventIds.SharedApiKeyConfigurationMissing.ToEventId(), "Shared API key configuration missing.");
+                throw new ERPFacadeException(EventIds.SharedApiKeyConfigurationMissingException.ToEventId(), "Shared API key configuration missing.");
             }
         }
 

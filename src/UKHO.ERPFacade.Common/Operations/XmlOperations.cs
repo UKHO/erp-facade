@@ -22,7 +22,7 @@ namespace UKHO.ERPFacade.Common.Operations
             // Check if SAP XML payload template exists
             if (!_fileOperations.IsFileExists(xmlPath))
             {
-                throw new ERPFacadeException(EventIds.SapXmlTemplateNotFound.ToEventId(), "The SAP XML payload template does not exist.");
+                throw new ERPFacadeException(EventIds.SapXmlTemplateNotFoundException.ToEventId(), "The SAP XML payload template does not exist.");
             }
             XmlDocument xmlDocument = new();
             xmlDocument.Load(xmlPath);

@@ -82,7 +82,7 @@ namespace UKHO.ERPFacade.API.Handlers
 
                 if (!result.IsSuccess)
                 {
-                    throw new ERPFacadeException(EventIds.ErrorOccurredWhilePublishingUnitOfSaleUpdatedEventToEes.ToEventId(), $"Error occurred while publishing S-100 unit of sale updated event to EES. | {result.Error}");
+                    throw new ERPFacadeException(EventIds.PublishingUnitOfSaleUpdatedEventToEesFailedException.ToEventId(), $"Error occurred while publishing S-100 unit of sale updated event to EES. | {result.Error}");
                 }
 
                 _logger.LogInformation(EventIds.UnitOfSaleUpdatedEventPublished.ToEventId(), "The unit of sale updated event published to EES successfully.");

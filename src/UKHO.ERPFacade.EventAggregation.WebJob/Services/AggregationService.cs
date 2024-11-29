@@ -76,7 +76,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Services
 
                         if (!response.IsSuccessStatusCode)
                         {
-                            throw new ERPFacadeException(EventIds.ErrorOccurredInSapForRecordOfSalePublishedEvent.ToEventId(), $"An error occurred while sending record of sale event data to SAP. | _X-Correlation-ID : {message.CorrelationId} | EventID : {message.EventId} | StatusCode: {response.StatusCode}");
+                            throw new ERPFacadeException(EventIds.RecordOfSaleRequestToSapFailedException.ToEventId(), $"An error occurred while sending record of sale event data to SAP. | _X-Correlation-ID : {message.CorrelationId} | EventID : {message.EventId} | StatusCode: {response.StatusCode}");
                         }
 
                         _logger.LogInformation(EventIds.RecordOfSalePublishedEventDataPushedToSap.ToEventId(), "The record of sale event data has been sent to SAP successfully. | _X-Correlation-ID : {_X-Correlation-ID} | EventID : {EventID} | StatusCode: {StatusCode}", message.CorrelationId, message.EventId, response.StatusCode);

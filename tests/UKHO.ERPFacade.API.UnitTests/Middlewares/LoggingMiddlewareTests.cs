@@ -55,12 +55,12 @@ namespace UKHO.ERPFacade.API.UnitTests.Middlewares
         }
 
         [Test]
-        public async Task WhenExceptionIsOfTypePermitServiceException_ThenLogsErrorWithPermitServiceExceptionEventId()
+        public async Task WhenExceptionIsOfTypeErpFacadeException_ThenLogsErrorWithErpFacadeExceptionEventId()
         {
             var memoryStream = new MemoryStream();
             _fakeHttpContext.Request.Headers.Append(ApiHeaderKeys.XCorrelationIdHeaderKeyName, "fakeCorrelationId");
             _fakeHttpContext.Response.Body = memoryStream;
-            A.CallTo(() => _fakeNextMiddleware(_fakeHttpContext)).Throws(new ERPFacadeException(EventIds.SapXmlTemplateNotFound.ToEventId(), "fakemessage"));
+            A.CallTo(() => _fakeNextMiddleware(_fakeHttpContext)).Throws(new ERPFacadeException(EventIds.SapXmlTemplateNotFoundException.ToEventId(), "fakemessage"));
 
             await _middleware.InvokeAsync(_fakeHttpContext);
 
@@ -69,7 +69,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Middlewares
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
             && call.GetArgument<LogLevel>(0) == LogLevel.Error
-            && call.GetArgument<EventId>(1) == EventIds.SapXmlTemplateNotFound.ToEventId()
+            && call.GetArgument<EventId>(1) == EventIds.SapXmlTemplateNotFoundException.ToEventId()
             && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "fakemessage").MustHaveHappenedOnceExactly();
         }
     }
