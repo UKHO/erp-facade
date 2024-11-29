@@ -39,7 +39,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
         public async Task WhenExceptionIsOfTypeException_ThenLogsErrorWithUnhandledExceptionEventId()
         {
             var memoryStream = new MemoryStream();
-            _fakeHttpContext.Request.Headers.Append(ApiHeaderKeys.XCorrelationIdHeaderKey, "fakeCorrelationId");
+            _fakeHttpContext.Request.Headers.Append(ApiHeaderKeys.XCorrelationIdHeaderKeyName, "fakeCorrelationId");
             _fakeHttpContext.Response.Body = memoryStream;
             A.CallTo(() => _fakeNextMiddleware(_fakeHttpContext)).Throws(new Exception("fake exception"));
 
@@ -58,7 +58,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
         public async Task WhenExceptionIsOfTypePermitServiceException_ThenLogsErrorWithPermitServiceExceptionEventId()
         {
             var memoryStream = new MemoryStream();
-            _fakeHttpContext.Request.Headers.Append(ApiHeaderKeys.XCorrelationIdHeaderKey, "fakeCorrelationId");
+            _fakeHttpContext.Request.Headers.Append(ApiHeaderKeys.XCorrelationIdHeaderKeyName, "fakeCorrelationId");
             _fakeHttpContext.Response.Body = memoryStream;
             A.CallTo(() => _fakeNextMiddleware(_fakeHttpContext)).Throws(new ERPFacadeException(EventIds.SapXmlTemplateNotFound.ToEventId(), "fakemessage"));
 

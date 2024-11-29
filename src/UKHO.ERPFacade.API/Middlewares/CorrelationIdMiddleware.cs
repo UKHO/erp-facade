@@ -30,12 +30,12 @@ namespace UKHO.ERPFacade.API.Middlewares
 
             httpContext.Request.Body.Position = 0;
 
-            httpContext.Request.Headers[ApiHeaderKeys.XCorrelationIdHeaderKey] = correlationId;
-            httpContext.Response.Headers[ApiHeaderKeys.XCorrelationIdHeaderKey] = correlationId;
+            httpContext.Request.Headers[ApiHeaderKeys.XCorrelationIdHeaderKeyName] = correlationId;
+            httpContext.Response.Headers[ApiHeaderKeys.XCorrelationIdHeaderKeyName] = correlationId;
 
             var state = new Dictionary<string, object>
             {
-                [ApiHeaderKeys.XCorrelationIdHeaderKey] = correlationId,
+                [ApiHeaderKeys.XCorrelationIdHeaderKeyName] = correlationId,
             };
 
             var logger = httpContext.RequestServices.GetRequiredService<ILogger<CorrelationIdMiddleware>>();

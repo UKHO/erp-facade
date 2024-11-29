@@ -27,7 +27,7 @@ namespace UKHO.ERPFacade.API.Filters
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            string sharedApiKey = context.HttpContext.Request.Headers[ApiHeaderKeys.ApiKeyHeaderKey];
+            string sharedApiKey = context.HttpContext.Request.Headers[ApiHeaderKeys.ApiKeyHeaderKeyName];
 
             if (string.IsNullOrWhiteSpace(sharedApiKey))
             {
