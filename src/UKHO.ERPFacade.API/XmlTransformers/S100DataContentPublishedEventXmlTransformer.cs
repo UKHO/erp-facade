@@ -161,16 +161,13 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             _xmlOperations.AppendChildNode(itemNode, soapXml, XmlFields.Action, action.ActionName.ToString());
             _xmlOperations.AppendChildNode(itemNode, soapXml, XmlFields.Product, action.Product.ToString());
 
-            // Add child cell node
-            _xmlOperations.AppendChildNode(itemNode, soapXml, XmlFields.ChildCell, childCell);
-
             List<(int sortingOrder, XmlElement node)> actionAttributes = new();
 
             // Process ProductSection attributes
-            ProcessAttributes(action.ActionName, action.Attributes.Where(x => x.Section == ConfigFileFields.ProductSection), soapXml, product, actionAttributes, replacedBy);
+            ProcessAttributes(action.ActionName, action.Attributes.Where(x => x.Section == ConfigFileFields.ProductSection), soapXml, product, actionAttributes, childCell, replacedBy);
 
             // Process UnitOfSaleSection attributes
-            ProcessAttributes(action.ActionName, action.Attributes.Where(x => x.Section == ConfigFileFields.UnitOfSaleSection), soapXml, unitOfSale, actionAttributes, null);
+            ProcessAttributes(action.ActionName, action.Attributes.Where(x => x.Section == ConfigFileFields.UnitOfSaleSection), soapXml, unitOfSale, actionAttributes, childCell, null);
 
             // Sort and append attributes to SAP action
             foreach (var (sortingOrder, node) in actionAttributes.OrderBy(x => x.sortingOrder))
@@ -181,7 +178,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             return itemNode;
         }
 
-        private void ProcessAttributes(string action, IEnumerable<Attributes> attributes, XmlDocument soapXml, object source, List<(int, XmlElement)> actionAttributes, string replacedBy = null)
+        private void ProcessAttributes(string action, IEnumerable<Attributes> attributes, XmlDocument soapXml, object source, List<(int, XmlElement)> actionAttributes, string childCell, string replacedBy = null)
         {
             foreach (var attribute in attributes)
             {
@@ -194,6 +191,10 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                         if (attribute.XmlNodeName == XmlFields.ReplacedBy)
                         {
                             attributeNode.InnerText = StringExtension.ToSubstring(replacedBy.ToString(), 0, XmlFields.MaxXmlNodeLength);
+                        }
+                        else if (attribute.XmlNodeName == XmlFields.ChildCell)
+                        {
+                            attributeNode.InnerText = childCell ?? string.Empty;
                         }
                         else
                         {

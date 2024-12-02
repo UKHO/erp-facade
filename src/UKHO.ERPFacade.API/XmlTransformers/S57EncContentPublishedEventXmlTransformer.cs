@@ -1,5 +1,4 @@
-﻿using System;
-using System.Xml;
+﻿using System.Xml;
 using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.Exceptions;
@@ -27,7 +26,6 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                                                          IWeekDetailsProvider weekDetailsProvider,
                                                          IPermitDecryption permitDecryption,
                                                          IOptions<S57EncContentPublishedEventSapActionConfiguration> s57EncContentPublishedEventSapActionConfig)
-        : base()
         {
             _logger = logger;
             _xmlOperations = xmlOperations;

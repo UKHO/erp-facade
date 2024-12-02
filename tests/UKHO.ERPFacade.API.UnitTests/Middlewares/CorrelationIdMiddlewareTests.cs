@@ -63,8 +63,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Middlewares
         [Test]
         public async Task WhenCorrelationIdKeyDoesNotExistInRequestBody_ThenGenerateNewCorrelationId()
         {
-            var correlationId = Guid.NewGuid().ToString();
-            var bodyAsJson = new JObject { { "data", new JObject { { "corId", correlationId } } } };
+            var bodyAsJson = new JObject { { "data", new JObject { { "corId", Guid.NewGuid().ToString() } } } };
             var bodyAsText = bodyAsJson.ToString();
 
             _fakeHttpContext.Request.Body = new MemoryStream(Encoding.UTF8.GetBytes(bodyAsText));
@@ -115,6 +114,20 @@ namespace UKHO.ERPFacade.API.UnitTests.Middlewares
 
             Assert.That(_fakeHttpContext.Response.Headers.Count, Is.EqualTo(1));
             Assert.That(_fakeHttpContext.Response.Headers[ApiHeaderKeys.XCorrelationIdHeaderKeyName], Is.EqualTo(correlationId));
+        }
+
+        [Test]
+        public async Task WhenRequestBodyIsEmpty_ThenNextMiddlewareShouldBeInvoked()
+        {
+            var bodyAsText = string.Empty;
+
+            _fakeHttpContext.Request.Body = new MemoryStream(Encoding.UTF8.GetBytes(bodyAsText));
+            _fakeHttpContext.Request.ContentLength = bodyAsText.Length;
+            _fakeHttpContext.Response.Body = new MemoryStream();
+
+            await _middleware.InvokeAsync(_fakeHttpContext);
+
+            A.CallTo(() => _fakeNextMiddleware(_fakeHttpContext)).MustHaveHappenedOnceExactly();
         }
     }
 }

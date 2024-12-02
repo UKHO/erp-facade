@@ -6,9 +6,10 @@ using Microsoft.Extensions.Options;
 using NUnit.Framework;
 using UKHO.ERPFacade.CleanUp.WebJob.Services;
 using UKHO.ERPFacade.Common.Configuration;
+using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.Enums;
-using UKHO.ERPFacade.Common.Operations.IO.Azure;
 using UKHO.ERPFacade.Common.Logging;
+using UKHO.ERPFacade.Common.Operations.IO.Azure;
 
 namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
 {
@@ -36,7 +37,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
         }
 
         [Test]
-        public void Does_Constructor_Throws_ArgumentNullException_When_Logger_Parameter_Is_Null()
+        public void WhenLoggerParameterIsNull_ThenConstructorThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>(
                     () => new CleanUpService(null, _fakeCleanupWebjobConfig, _fakeAzureTableReaderWriter, _fakeAzureBlobReaderWriter))
@@ -45,7 +46,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
         }
 
         [Test]
-        public void Does_Constructor_Throws_ArgumentNullException_When_AzureTableReaderWriter_Parameter_Is_Null()
+        public void WhenAzureTableReaderWriterParameterIsNull_ThenConstructorThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>(
              () => new CleanUpService(_fakeLogger, _fakeCleanupWebjobConfig, null, _fakeAzureBlobReaderWriter))
@@ -54,7 +55,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
         }
 
         [Test]
-        public void Does_Constructor_Throws_ArgumentNullException_When_CleanupWebjobConfig_Parameter_Is_Null()
+        public void WhenCleanupWebjobConfigParameterIsNull_ThenConstructorThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>(
              () => new CleanUpService(_fakeLogger, null, _fakeAzureTableReaderWriter, _fakeAzureBlobReaderWriter))
@@ -63,7 +64,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
         }
 
         [Test]
-        public void Does_Constructor_Throws_ArgumentNullException_When_AzureBlobReaderWriter_Parameter_Is_Null()
+        public void WhenAzureBlobReaderWriterParameterIsNull_ThenConstructorThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>(
              () => new CleanUpService(_fakeLogger, _fakeCleanupWebjobConfig, _fakeAzureTableReaderWriter, null))
@@ -88,7 +89,9 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
                }
             };
 
-            A.CallTo(() => _fakeAzureTableReaderWriter.GetFilteredEntitiesAsync(A<Dictionary<string, string>>.Ignored)).Returns(eventData);
+            var statusFilter = new Dictionary<string, string> { { AzureStorage.EventStatus, Status.Complete.ToString() } };
+
+            A.CallTo(() => _fakeAzureTableReaderWriter.GetFilteredEntitiesAsync(statusFilter)).Returns(eventData);
 
             _ = _fakeCleanUpService.CleanAsync();
 

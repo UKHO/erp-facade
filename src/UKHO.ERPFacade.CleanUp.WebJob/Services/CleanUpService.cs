@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Configuration;
+using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.Enums;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Operations.IO.Azure;
@@ -29,7 +30,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.Services
         {
             try
             {
-                var statusFilter = new Dictionary<string, string> { { "Status", Status.Complete.ToString() } };
+                var statusFilter = new Dictionary<string, string> { { AzureStorage.EventStatus, Status.Complete.ToString() } };
 
                 var entities = await _azureTableReaderWriter.GetFilteredEntitiesAsync(statusFilter);
 
@@ -39,7 +40,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.Services
                 {
                     var correlationId = entity.RowKey.ToString();
 
-                    var timestamp = DateTime.SpecifyKind(Convert.ToDateTime(entity["RequestDateTime"].ToString()), DateTimeKind.Utc);
+                    var timestamp = DateTime.SpecifyKind(Convert.ToDateTime(entity[AzureStorage.EventRequestDateTime].ToString()), DateTimeKind.Utc);
                     var timediff = DateTime.UtcNow - timestamp;
 
                     if (timediff.Days > cleanupDurationInDays)

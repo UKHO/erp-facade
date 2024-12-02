@@ -56,8 +56,6 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         {
             var fakeSapCallBackJson = JObject.Parse(@"{""correlationId"":""""}");
 
-            A.CallTo(() => _fakeSapCallbackService.IsValidCallbackAsync(A<string>.Ignored)).Returns(true);
-
             var response = (BadRequestObjectResult)await _fakeSapCallbackController.S100SapCallback(fakeSapCallBackJson);
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"

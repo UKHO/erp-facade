@@ -1,5 +1,8 @@
-﻿namespace UKHO.ERPFacade.API.Health
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace UKHO.ERPFacade.API.Health
 {
+    [ExcludeFromCodeCoverage]
     public class ErpHealthReportEntry
     {
         public IReadOnlyDictionary<string, object> Data { get; set; } = null!;

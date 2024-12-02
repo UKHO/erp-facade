@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Xml;
+using System.Xml.Linq;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
@@ -77,6 +78,15 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
             var result = _fakeS100DataContentPublishedEventXmlTransformer.BuildXmlPayload(s100EventData, _sapXmlTemplate);
 
             result.Should().BeOfType<XmlDocument>();
+
+            XElement xElement = XElement.Parse(result.OuterXml);
+            var itemList = xElement.Descendants("item").ToList();
+
+            Assert.That(itemList.Count > 0, Is.True);
+            Assert.That(itemList[0].Descendants("AGENCY").FirstOrDefault().Value.Length == 2, Is.True);
+            Assert.That(itemList[0].Descendants().ToList().All(item => item.Value.Length <= 250), Is.True);
+
+            A.CallTo(() => _fakeXmlOperations.AppendChildNode(A<XmlElement>.Ignored, A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened(9, Times.Exactly);
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Information

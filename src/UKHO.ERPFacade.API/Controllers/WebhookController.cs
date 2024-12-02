@@ -218,7 +218,7 @@ namespace UKHO.ERPFacade.API.Controllers
 
             _logger.LogInformation(EventIds.LicenceUpdatedPublishedEventUpdatePushedToSap.ToEventId(), "The licence updated event data has been sent to SAP successfully. | {StatusCode}", response.StatusCode);
 
-            await _azureTableReaderWriter.UpdateEntityAsync(PartitionKeys.LUPPartitionKey, correlationId, new Dictionary<string, object> { { "Status", Status.Complete.ToString() } });
+            await _azureTableReaderWriter.UpdateEntityAsync(PartitionKeys.LUPPartitionKey, correlationId, new Dictionary<string, object> { { AzureStorage.EventStatus, Status.Complete.ToString() } });
 
             return new OkObjectResult(StatusCodes.Status200OK);
         }
