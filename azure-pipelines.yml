@@ -468,7 +468,7 @@ stages:
   - stage: vNextIATDeploy
     dependsOn:  Devdeploy
     displayName: "VNext IATdeploy (inc terraform, webapp deploy)"
-    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/develop'), startsWith(variables['Build.SourceBranch'], 'refs/heads/dev/')))
+    #condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/develop'), startsWith(variables['Build.SourceBranch'], 'refs/heads/dev/')))
     variables:
       - group: "ERP-Facade-vNextIAT"
       - group: "Erp-vNextIAT"
