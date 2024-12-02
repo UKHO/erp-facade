@@ -59,7 +59,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
         }
 
         [Test]
-        public void WhenS57EventHandler_ProcessedTheEvent_ThenCheckAllRequiredMessagesLoggedAsExpected()
+        public void WhenS57EventHandlerHasProcessedTheEvent_ThenCheckAllRequiredMessagesLoggedAsExpected()
         {
             var newCellEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\NewCell.JSON");
             var eventData = JsonConvert.DeserializeObject<BaseCloudEvent>(newCellEventPayloadJson);
@@ -106,7 +106,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
         }
 
         [Test]
-        public void WhenS57EventHandler_NotProcessedTheEvent()
+        public void WhenS57EventHandler_ThenEventShouldNotBeProcessedDueToUnauthorizedAccess()
         {
             XmlDocument xmlDocument = new();
             var newCellEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\NewCell.JSON");
@@ -121,7 +121,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
         }
 
         [Test]
-        public void WhenS57EventHandler_NotProcessedForAioCells()
+        public void WhenS57EventHandler_ThenEventShouldNotBeProcessedForAioCells()
         {
             var newCellEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\NewAIOCell.JSON");
             var eventData = JsonConvert.DeserializeObject<BaseCloudEvent>(newCellEventPayloadJson);
@@ -135,7 +135,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
         }
 
         [Test]
-        public void WhenS57EventHandler_AioCellConfigurationIsMissing_ThenThrowERPFacadeException()
+        public void WhenAioCellConfigurationIsMissing_ThenThrowERPFacadeException()
         {
             _fakeAioConfig.Value.AioCells = string.Empty;
 
