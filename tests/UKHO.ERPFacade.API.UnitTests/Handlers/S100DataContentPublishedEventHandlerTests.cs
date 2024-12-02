@@ -98,7 +98,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
                                                 && call.GetArgument<EventId>(1) == EventIds.S100EventUpdateSentToSap.ToEventId()
                                                 && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "S-100 product update has been sent to SAP successfully.").MustHaveHappenedOnceExactly();
 
-            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntityAsync(A<string>.Ignored, A<string>.Ignored, A<Dictionary<string, object>>.That.Matches(d => d.ContainsKey("RequestDateTime") && (DateTime)d["RequestDateTime"] <= DateTime.UtcNow))).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntityAsync(A<string>.Ignored, A<string>.Ignored, A<Dictionary<string, object>>.That.Matches(d => d.ContainsKey(AzureStorage.EventRequestDateTime) && (DateTime)d[AzureStorage.EventRequestDateTime] <= DateTime.UtcNow))).MustHaveHappenedOnceExactly();
         }
 
         [Test]
@@ -158,11 +158,11 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
                                                 && call.GetArgument<EventId>(1) == EventIds.S100EventXMLStoredInAzureBlobContainer.ToEventId()
                                                 && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "S-100 data content published event xml payload is stored in azure blob container.").MustHaveHappenedOnceExactly();
 
-            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntityAsync(A<string>.Ignored, A<string>.Ignored, A<Dictionary<string, object>>.That.Matches(d => d.ContainsKey("RequestDateTime") && (DateTime)d["RequestDateTime"] <= DateTime.UtcNow))).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntityAsync(A<string>.Ignored, A<string>.Ignored, A<Dictionary<string, object>>.That.Matches(d => d.ContainsKey(AzureStorage.EventRequestDateTime) && (DateTime)d[AzureStorage.EventRequestDateTime] <= DateTime.UtcNow))).MustHaveHappenedOnceExactly();
 
-            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntityAsync(A<string>.Ignored, A<string>.Ignored, A<Dictionary<string, object>>.That.Matches(d => d.ContainsKey("EventPublishedDateTime") && (DateTime)d["EventPublishedDateTime"] <= DateTime.UtcNow))).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntityAsync(A<string>.Ignored, A<string>.Ignored, A<Dictionary<string, object>>.That.Matches(d => d.ContainsKey(AzureStorage.EventPublishedDateTime) && (DateTime)d[AzureStorage.EventPublishedDateTime] <= DateTime.UtcNow))).MustHaveHappenedOnceExactly();
 
-            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntityAsync(A<string>.Ignored, A<string>.Ignored, A<Dictionary<string, object>>.That.Matches(d => d.ContainsKey("Status") && (string)d["Status"] == Status.Complete.ToString()))).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntityAsync(A<string>.Ignored, A<string>.Ignored, A<Dictionary<string, object>>.That.Matches(d => d.ContainsKey(AzureStorage.EventStatus) && (string)d[AzureStorage.EventStatus] == Status.Complete.ToString()))).MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Information
@@ -173,7 +173,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
         }
 
         [Test]
-        public async Task WhenValidEventReceivedWithNoSAPAction_ThenS100EventHandlerPublishTheUnitOfsaleUpdatedEventToEesFailed()
+        public void WhenValidEventReceivedWithNoSAPAction_ThenS100EventHandlerPublishTheUnitOfsaleUpdatedEventToEesFailed()
         {
             var fakeS100EventDataJson = JObject.Parse(@"{""data"":{""correlationId"":""123""}}");
             var fakeS100EventData = JsonConvert.DeserializeObject<BaseCloudEvent>(fakeS100EventDataJson.ToString());
@@ -183,8 +183,6 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
 
             A.CallTo(() => _fakeXmlTransformer.BuildXmlPayload(A<S100EventData>.Ignored, A<string>.Ignored)).Returns(xmlDocument);
             A.CallTo(() => _fakeS100UnitOfSaleUpdatedEventPublishingService.BuildAndPublishEventAsync(A<BaseCloudEvent>.Ignored, A<string>.Ignored)).Returns(Result.Failure("Internal Server Error"));
-
-            await _fakes100DataContentPublishedEventHandler.ProcessEventAsync(fakeS100EventData);
 
             Assert.ThrowsAsync<ERPFacadeException>(() => _fakes100DataContentPublishedEventHandler.ProcessEventAsync(fakeS100EventData))
                 .Message.Should().Be("Error occurred while publishing S-100 unit of sale updated event to EES. | Internal Server Error");

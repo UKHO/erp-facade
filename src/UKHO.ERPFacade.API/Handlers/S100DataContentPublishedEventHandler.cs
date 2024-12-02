@@ -87,7 +87,7 @@ namespace UKHO.ERPFacade.API.Handlers
 
                 _logger.LogInformation(EventIds.UnitOfSaleUpdatedEventPublished.ToEventId(), "The unit of sale updated event published to EES successfully.");
 
-                await _azureTableReaderWriter.UpdateEntityAsync(PartitionKeys.S100PartitionKey, s100EventData.CorrelationId, new Dictionary<string, object> { { "RequestDateTime", DateTime.UtcNow }, { "Status", Status.Complete.ToString() }, { "EventPublishedDateTime", DateTime.UtcNow } });
+                await _azureTableReaderWriter.UpdateEntityAsync(PartitionKeys.S100PartitionKey, s100EventData.CorrelationId, new Dictionary<string, object> { { AzureStorage.EventRequestDateTime, DateTime.UtcNow }, { AzureStorage.EventStatus, Status.Complete.ToString() }, { AzureStorage.EventPublishedDateTime, DateTime.UtcNow } });
             }
             else
             {
@@ -100,7 +100,7 @@ namespace UKHO.ERPFacade.API.Handlers
 
                 _logger.LogInformation(EventIds.S100EventUpdateSentToSap.ToEventId(), "S-100 product update has been sent to SAP successfully.");
 
-                await _azureTableReaderWriter.UpdateEntityAsync(eventEntity.PartitionKey, eventEntity.RowKey, new Dictionary<string, object> { { "RequestDateTime", DateTime.UtcNow } });
+                await _azureTableReaderWriter.UpdateEntityAsync(eventEntity.PartitionKey, eventEntity.RowKey, new Dictionary<string, object> { { AzureStorage.EventRequestDateTime, DateTime.UtcNow } });
             }
         }
     }

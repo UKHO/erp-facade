@@ -139,16 +139,16 @@ public class S100SapCallbackServiceTests
         A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntityAsync(
             PartitionKeys.S100PartitionKey,
             _fakeCorrelationId,
-            A<Dictionary<string, object>>.That.Matches(d => d.ContainsKey("ResponseDateTime") && (DateTime)d["ResponseDateTime"] <= DateTime.UtcNow))).MustHaveHappenedOnceExactly();
+            A<Dictionary<string, object>>.That.Matches(d => d.ContainsKey(AzureStorage.EventResponseDateTime) && (DateTime)d[AzureStorage.EventResponseDateTime] <= DateTime.UtcNow))).MustHaveHappenedOnceExactly();
 
         A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntityAsync(
           PartitionKeys.S100PartitionKey,
           _fakeCorrelationId,
-          A<Dictionary<string, object>>.That.Matches(d => d.ContainsKey("EventPublishedDateTime") && (DateTime)d["EventPublishedDateTime"] <= DateTime.UtcNow))).MustHaveHappenedOnceExactly();
+          A<Dictionary<string, object>>.That.Matches(d => d.ContainsKey(AzureStorage.EventPublishedDateTime) && (DateTime)d[AzureStorage.EventPublishedDateTime] <= DateTime.UtcNow))).MustHaveHappenedOnceExactly();
 
         A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntityAsync(
             PartitionKeys.S100PartitionKey,
             _fakeCorrelationId,
-            A<Dictionary<string, object>>.That.Matches(d => d.ContainsKey("Status") && (string)d["Status"] == Status.Complete.ToString()))).MustHaveHappenedOnceExactly();
+            A<Dictionary<string, object>>.That.Matches(d => d.ContainsKey(AzureStorage.EventStatus) && (string)d[AzureStorage.EventStatus] == Status.Complete.ToString()))).MustHaveHappenedOnceExactly();
     }
 }

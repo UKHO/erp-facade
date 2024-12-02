@@ -37,7 +37,7 @@ namespace UKHO.ERPFacade.API.Services
         {
             _logger.LogInformation(EventIds.ValidS100SapCallback.ToEventId(), "Processing of valid S-100 SAP callback request started.");
 
-            await _azureTableReaderWriter.UpdateEntityAsync(PartitionKeys.S100PartitionKey, correlationId, new Dictionary<string, object> { { "ResponseDateTime", DateTime.UtcNow } });
+            await _azureTableReaderWriter.UpdateEntityAsync(PartitionKeys.S100PartitionKey, correlationId, new Dictionary<string, object> { { AzureStorage.EventResponseDateTime, DateTime.UtcNow } });
 
             _logger.LogInformation(EventIds.DownloadS100UnitOfSaleUpdatedEventIsStarted.ToEventId(), "Download S-100 Unit Of Sale Updated Event from blob container is started.");
 
@@ -58,7 +58,7 @@ namespace UKHO.ERPFacade.API.Services
 
             _logger.LogInformation(EventIds.UnitOfSaleUpdatedEventPublished.ToEventId(), "The unit of sale updated event published to EES successfully.");
 
-            await _azureTableReaderWriter.UpdateEntityAsync(PartitionKeys.S100PartitionKey, correlationId, new Dictionary<string, object> { { "Status", Status.Complete.ToString() }, { "EventPublishedDateTime", DateTime.UtcNow } });
+            await _azureTableReaderWriter.UpdateEntityAsync(PartitionKeys.S100PartitionKey, correlationId, new Dictionary<string, object> { { AzureStorage.EventStatus, Status.Complete.ToString() }, { AzureStorage.EventPublishedDateTime, DateTime.UtcNow } });
 
             _logger.LogInformation(EventIds.S100DataContentPublishedEventTableEntryUpdated.ToEventId(), "Status and event published date time for S-100 data content published event is updated successfully.");
         }

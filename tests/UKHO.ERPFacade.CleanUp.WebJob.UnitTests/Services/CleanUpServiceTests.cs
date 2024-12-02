@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using NUnit.Framework;
 using UKHO.ERPFacade.CleanUp.WebJob.Services;
 using UKHO.ERPFacade.Common.Configuration;
+using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.Enums;
 using UKHO.ERPFacade.Common.Logging;
 using UKHO.ERPFacade.Common.Operations.IO.Azure;
@@ -88,7 +89,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
                }
             };
 
-            var statusFilter = new Dictionary<string, string> { { "Status", Status.Complete.ToString() } };
+            var statusFilter = new Dictionary<string, string> { { AzureStorage.EventStatus, Status.Complete.ToString() } };
 
             A.CallTo(() => _fakeAzureTableReaderWriter.GetFilteredEntitiesAsync(statusFilter)).Returns(eventData);
 

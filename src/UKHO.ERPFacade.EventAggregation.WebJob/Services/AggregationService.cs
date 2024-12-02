@@ -52,7 +52,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Services
 
                 var entity = await _azureTableReaderWriter.GetEntityAsync(PartitionKeys.ROSPartitionKey, message.CorrelationId);
 
-                if (entity["Status"].ToString() == Status.Incomplete.ToString())
+                if (entity[AzureStorage.EventStatus].ToString() == Status.Incomplete.ToString())
                 {
                     List<string> blob = await _azureBlobReaderWriter.GetBlobNamesInFolderAsync(AzureStorage.RecordOfSaleEventContainerName, message.CorrelationId);
 
@@ -81,7 +81,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Services
 
                         _logger.LogInformation(EventIds.RecordOfSalePublishedEventDataPushedToSap.ToEventId(), "The record of sale event data has been sent to SAP successfully. | _X-Correlation-ID : {_X-Correlation-ID} | EventID : {EventID} | StatusCode: {StatusCode}", message.CorrelationId, message.EventId, response.StatusCode);
 
-                        await _azureTableReaderWriter.UpdateEntityAsync(PartitionKeys.ROSPartitionKey, message.CorrelationId, new Dictionary<string, object> { { "Status", Status.Complete.ToString() } });
+                        await _azureTableReaderWriter.UpdateEntityAsync(PartitionKeys.ROSPartitionKey, message.CorrelationId, new Dictionary<string, object> { { AzureStorage.EventStatus, Status.Complete.ToString() } });
                     }
                     else
                     {
