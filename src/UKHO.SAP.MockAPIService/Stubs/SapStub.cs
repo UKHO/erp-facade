@@ -141,7 +141,7 @@ namespace UKHO.SAP.MockAPIService.Stubs
                             .Element(soapNs + "Envelope")?
                             .Element(soapNs + "Body")?
                             .Element(rfcNs + "Z_SHOP_MAT_INFO")?
-                            .Element("ZSHOPMAT_INFO")?
+                            .Element("IM_MATINFO")?
                             .Element("CORRID");
 
                         var correlationId = correlationIdElement?.Value;
