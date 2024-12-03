@@ -85,7 +85,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Validators
 
         private static List<string> GetRootElementValues(XElement xml)
         {
-            var imMatInfo = xml.Descendants().FirstOrDefault(e => e.Name.LocalName == "ZSHOPMAT_INFO");
+            var imMatInfo = xml.Descendants().FirstOrDefault(e => e.Name.LocalName == "IM_MATINFO");
 
             return imMatInfo == null ? new List<string>() : new List<string>
             {
