@@ -82,7 +82,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
             //Delay is added to ensure SAP callback is completed from wiremock.
-            await Task.Delay(15000); 
+            await Task.Delay(30000); 
 
             //Download the S100UnitOfSaleUpdatedEvent JSON file from the blob container.
             expectedFilePath = _azureBlobReaderWriter.DownloadContainerFile(expectedFilePath, correlationId, ".json", EventPayloadFiles.S100UnitOfSaleUpdatedEventFileName);
