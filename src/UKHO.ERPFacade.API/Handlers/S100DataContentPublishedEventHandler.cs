@@ -95,7 +95,7 @@ namespace UKHO.ERPFacade.API.Handlers
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    throw new ERPFacadeException(EventIds.S100RequestToSapFailedException.ToEventId(), $"An error occurred while sending S-100 product update to SAP. | {response.StatusCode}");
+                    throw new ERPFacadeException(EventIds.S100RequestToSapFailedException.ToEventId(), $"An error occurred while sending S-100 product update to SAP. | {response.StatusCode} | {response.ReasonPhrase}");
                 }
 
                 _logger.LogInformation(EventIds.S100EventUpdateSentToSap.ToEventId(), "S-100 product update has been sent to SAP successfully.");
