@@ -32,7 +32,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [Test(Description = "WhenWebhookOptionsEndpointRequestedWithValidToken_ThenWebhookReturns200OkResponse"), Order(0)]
         public async Task WhenWebhookOptionsEndpointRequestedWithValidToken_ThenWebhookReturns200OkResponse()
         {
-            var token = await _authTokenProvider.GetAzureADToken(false);
+            var token = await _authTokenProvider.GetAzureADTokenAsync(false);
             var response = await _webhookEndpoint.OptionWebhookResponseAsync(token);
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
@@ -47,7 +47,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [Test(Description = "WhenWebhookOptionsEndpointRequestedWithValidTokenWithNoRole_ThenWebhookReturns403ForbiddenResponse"), Order(0)]
         public async Task WhenWebhookOptionsEndpointRequestedWithValidTokenWithNoRole_ThenWebhookReturns403ForbiddenResponse()
         {
-            var response = await _webhookEndpoint.OptionWebhookResponseAsync(await _authTokenProvider.GetAzureADToken(true));
+            var response = await _webhookEndpoint.OptionWebhookResponseAsync(await _authTokenProvider.GetAzureADTokenAsync(true));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.Forbidden);
         }
 
@@ -56,7 +56,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         {
             string requestPayload = await File.ReadAllTextAsync(Path.Combine(_projectDir, EventPayloadFiles.PayloadFolder, EventPayloadFiles.S57PayloadFolder, EventPayloadFiles.WebhookPayloadFileName));
             requestPayload = JsonModifier.UpdatePermitField(requestPayload, _erpFacadeConfiguration.PermitWithSameKey.Permit);
-            var response = await _webhookEndpoint.PostWebhookResponseAsync(requestPayload, await _authTokenProvider.GetAzureADToken(false));
+            var response = await _webhookEndpoint.PostWebhookResponseAsync(requestPayload, await _authTokenProvider.GetAzureADTokenAsync(false));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
 
@@ -72,7 +72,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         public async Task WhenWebhookPostEndpointReceivesEventWithValidTokenWithNoRole_ThenWebhookReturns403ForbiddenResponse()
         {
             string requestPayload = await File.ReadAllTextAsync(Path.Combine(_projectDir, EventPayloadFiles.PayloadFolder, EventPayloadFiles.S57PayloadFolder, EventPayloadFiles.WebhookPayloadFileName));
-            var response = await _webhookEndpoint.PostWebhookResponseAsync(requestPayload, await _authTokenProvider.GetAzureADToken(true));
+            var response = await _webhookEndpoint.PostWebhookResponseAsync(requestPayload, await _authTokenProvider.GetAzureADTokenAsync(true));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.Forbidden);
         }
 

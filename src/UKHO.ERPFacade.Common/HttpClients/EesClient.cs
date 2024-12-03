@@ -26,12 +26,12 @@ namespace UKHO.ERPFacade.Common.HttpClients
             _eesConfiguration = eesConfiguration;
         }
 
-        public async Task<HttpResponseMessage> Get(string url)
+        public async Task<HttpResponseMessage> GetAsync(string url)
         {
             return await _httpClient.GetAsync(url);
         }
 
-        public async Task<HttpResponseMessage> PostAsync(BaseCloudEvent cloudEvent)
+        public async Task<HttpResponseMessage> PublishEventAsync(BaseCloudEvent cloudEvent)
         {
             var cloudEventPayload = JsonConvert.SerializeObject(cloudEvent);
 

@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using UKHO.ERPFacade.API.Filters;
+using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.Logging;
+using UKHO.ERPFacade.Common.Models;
+using UKHO.ERPFacade.Common.Operations;
 using UKHO.ERPFacade.Services;
 
 namespace UKHO.ERPFacade.API.Controllers
@@ -12,8 +15,6 @@ namespace UKHO.ERPFacade.API.Controllers
     {
         private readonly ILogger<SapCallbackController> _logger;
         private readonly IS100SapCallBackService _s100SapCallbackService;
-
-        private const string CorrelationId = "correlationId";
 
         public SapCallbackController(IHttpContextAccessor contextAccessor,
                                      ILogger<SapCallbackController> logger,
@@ -29,14 +30,24 @@ namespace UKHO.ERPFacade.API.Controllers
         [Route("v2/callback/sap/s100actions/processed")]
         public virtual async Task<IActionResult> S100SapCallback([FromBody] JObject sapCallbackJson)
         {
-            string correlationId = sapCallbackJson.GetValue(CorrelationId, StringComparison.OrdinalIgnoreCase)?.Value<string>();
+            var correlationId = Extractor.ExtractTokenValue(sapCallbackJson, JsonFields.CorrelationIdKey);
 
             _logger.LogInformation(EventIds.S100SapCallbackPayloadReceived.ToEventId(), "S-100 SAP callback received.");
 
             if (string.IsNullOrEmpty(correlationId))
             {
-                _logger.LogWarning(EventIds.CorrelationIdMissingInS100SapCallBack.ToEventId(), "CorrelationId is missing in S-100 SAP callback request.");
-                return new BadRequestObjectResult(StatusCodes.Status400BadRequest);
+                _logger.LogError(EventIds.CorrelationIdMissingInS100SapCallBack.ToEventId(), "CorrelationId is missing in S-100 SAP callback request.");
+
+                var error = new List<Error>
+                {
+                    new()
+                    {
+                        Source = ErrorDetails.Source,
+                        Description = ErrorDetails.CorrelationIdNotFoundMessage
+                    }
+                };
+
+                return BuildBadRequestErrorResponse(error);
             }
 
             if (!await _s100SapCallbackService.IsValidCallbackAsync(correlationId))
@@ -45,7 +56,7 @@ namespace UKHO.ERPFacade.API.Controllers
                 return new NotFoundObjectResult(StatusCodes.Status404NotFound);
             }
 
-            await _s100SapCallbackService.ProcessSapCallback(correlationId);
+            await _s100SapCallbackService.ProcessSapCallbackAsync(correlationId);
 
             return new OkObjectResult(StatusCodes.Status200OK);
         }

@@ -121,6 +121,9 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
 
             Assert.That(StatusCodes.Status400BadRequest, Is.EqualTo(result.StatusCode));
 
+            var errors = (ErrorDescription)result.Value;
+            errors.Errors.Single().Description.Should().Be("Unknown event type received in payload.");
+
             A.CallTo(() => _fakeEventDispatcher.DispatchEventAsync(A<BaseCloudEvent>.Ignored)).MustHaveHappenedOnceExactly();
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
@@ -278,7 +281,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         {
             var fakeLicenceUpdatedEventJson = JObject.Parse(@"{""data"":{""correlationId"":""123""}}");
 
-            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+            A.CallTo(() => _fakeSapClient.SendUpdateAsync(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                 .Returns(new HttpResponseMessage()
                 {
                     StatusCode = HttpStatusCode.OK
@@ -362,7 +365,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
                         A<LicenceUpdatedEventPayLoad>.Ignored, A<string>.Ignored))
                 .Returns(xmlDocument);
 
-            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+            A.CallTo(() => _fakeSapClient.SendUpdateAsync(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                 .Returns(new HttpResponseMessage()
                 {
                     StatusCode = HttpStatusCode.Unauthorized

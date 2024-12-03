@@ -28,7 +28,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [Test(Description = "WhenValidRoSEventInRecordOfSalePublishedEventReceivedOptions_ThenWebhookReturns200OkResponse"), Order(0)]
         public async Task WhenValidRoSEventInRecordOfSalePublishedEventReceivedOptions_ThenWebhookReturns200OkResponse()
         {
-            var response = await _rosWebhookEndpoint.OptionRosWebhookResponseAsync(await _authTokenProvider.GetAzureADToken(false));
+            var response = await _rosWebhookEndpoint.OptionRosWebhookResponseAsync(await _authTokenProvider.GetAzureADTokenAsync(false));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
 
@@ -42,7 +42,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [Test(Description = "WhenValidRoSEventInRecordOfSalePublishedEventOptionsReceivedWithNoRole_ThenWebhookReturns403ForbiddenResponse"), Order(3)]
         public async Task WhenValidRoSEventInRecordOfSalePublishedEventOptionsReceivedWithNoRole_ThenWebhookReturns403ForbiddenResponse()
         {
-            var response = await _rosWebhookEndpoint.OptionRosWebhookResponseAsync(await _authTokenProvider.GetAzureADToken(true));
+            var response = await _rosWebhookEndpoint.OptionRosWebhookResponseAsync(await _authTokenProvider.GetAzureADTokenAsync(true));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.Forbidden);
         }
 
@@ -51,7 +51,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         public async Task WhenValidRoSEventInRecordOfSalePublishedEventPostReceivedWithValidToken_ThenWebhookReturns200OkResponse(string payloadFileName)
         {
             string filePath = Path.Combine(_projectDir, EventPayloadFiles.PayloadFolder, EventPayloadFiles.RosPayloadTestDataFolder, payloadFileName);
-            var response = await _rosWebhookEndpoint.PostWebhookResponseAsync(filePath, await _authTokenProvider.GetAzureADToken(false));
+            var response = await _rosWebhookEndpoint.PostWebhookResponseAsync(filePath, await _authTokenProvider.GetAzureADTokenAsync(false));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
 
@@ -69,7 +69,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         public async Task WhenValidRoSEventInRecordOfSalePublishedEventPostReceivedWithInvalidToken_ThenWebhookReturns403ForbiddenResponse(string payloadFileName)
         {
             string filePath = Path.Combine(_projectDir, EventPayloadFiles.PayloadFolder, EventPayloadFiles.RosPayloadTestDataFolder, payloadFileName);
-            var response = await _rosWebhookEndpoint.PostWebhookResponseAsync(filePath, await _authTokenProvider.GetAzureADToken(true));
+            var response = await _rosWebhookEndpoint.PostWebhookResponseAsync(filePath, await _authTokenProvider.GetAzureADTokenAsync(true));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.Forbidden);
         }
 
@@ -81,7 +81,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         public async Task WhenInValidRoSEventInRecordOfSalePublishedEventPostReceived_ThenWebhookReturns400BadRequestResponse(string payloadFileName)
         {
             string filePath = Path.Combine(_projectDir, EventPayloadFiles.PayloadFolder, EventPayloadFiles.RosPayloadTestDataFolder, payloadFileName);
-            var response = await _rosWebhookEndpoint.PostWebhookResponseAsync("Bad Request", filePath, await _authTokenProvider.GetAzureADToken(false));
+            var response = await _rosWebhookEndpoint.PostWebhookResponseAsync("Bad Request", filePath, await _authTokenProvider.GetAzureADTokenAsync(false));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
         }
 
@@ -90,7 +90,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         public async Task WhenInvalidRoSEventInRecordOfSalePublishedEventPostReceivedWithInvalidPayloadType_ThenWebhookReturns415UnsupportedMediaResponse(string payloadFileName)
         {
             string filePath = Path.Combine(_projectDir, EventPayloadFiles.PayloadFolder, EventPayloadFiles.RosPayloadTestDataFolder, payloadFileName);
-            var response = await _rosWebhookEndpoint.PostWebhookResponseAsync("Unsupported Media Type", filePath, await _authTokenProvider.GetAzureADToken(false));
+            var response = await _rosWebhookEndpoint.PostWebhookResponseAsync("Unsupported Media Type", filePath, await _authTokenProvider.GetAzureADTokenAsync(false));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.UnsupportedMediaType);
         }
 
@@ -106,7 +106,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         {
             Console.WriteLine("Scenario:" + payloadJsonFileName + "\n");
             string filePath = Path.Combine(_projectDir, EventPayloadFiles.PayloadFolder, EventPayloadFiles.RosPayloadTestDataFolder, payloadJsonFileName);
-            RestResponse response = await _rosWebhookEndpoint.PostWebhookResponseAsync(filePath, await _authTokenProvider.GetAzureADToken(false));
+            RestResponse response = await _rosWebhookEndpoint.PostWebhookResponseAsync(filePath, await _authTokenProvider.GetAzureADTokenAsync(false));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
 
@@ -119,7 +119,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         {
             Console.WriteLine("Scenario:" + payloadJsonFileName + "\n");
             string filePath = Path.Combine(_projectDir, EventPayloadFiles.PayloadFolder, EventPayloadFiles.RosPayloadTestDataFolder, payloadJsonFileName);
-            RestResponse response = await _rosWebhookEndpoint.PostWebhookResponseAsync(filePath, await _authTokenProvider.GetAzureADToken(false));
+            RestResponse response = await _rosWebhookEndpoint.PostWebhookResponseAsync(filePath, await _authTokenProvider.GetAzureADTokenAsync(false));
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.InternalServerError);
         }
 
@@ -147,14 +147,14 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 
             //Send first event
             string firstEventPayloadJsonFilePath = Path.Combine(_projectDir, EventPayloadFiles.PayloadFolder, EventPayloadFiles.RosPayloadTestDataFolder, firstEventPayloadJsonFileName);
-            RestResponse firstEventResponse = await _rosWebhookEndpoint.PostWebhookResponseAsyncForXml(firstEventPayloadJsonFilePath, correlationId, true, false, generatedXmlFolder, null, await _authTokenProvider.GetAzureADToken(false));
+            RestResponse firstEventResponse = await _rosWebhookEndpoint.PostWebhookResponseAsyncForXml(firstEventPayloadJsonFilePath, correlationId, true, false, generatedXmlFolder, null, await _authTokenProvider.GetAzureADTokenAsync(false));
 
             //Assert if ROS webhook returns OK
             firstEventResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
             //Send last event  - Additionally we need to send list of all json files to compare total unitofsales items with final XML payload
             string lastEventPayloadJsonFilePath = Path.Combine(_projectDir, EventPayloadFiles.PayloadFolder, EventPayloadFiles.RosPayloadTestDataFolder, lastEventPayloadJsonFileName);
-            RestResponse lastEventResponse = await _rosWebhookEndpoint.PostWebhookResponseAsyncForXml(lastEventPayloadJsonFilePath, correlationId, false, true, generatedXmlFolder, listOfEventJsons, await _authTokenProvider.GetAzureADToken(false));
+            RestResponse lastEventResponse = await _rosWebhookEndpoint.PostWebhookResponseAsyncForXml(lastEventPayloadJsonFilePath, correlationId, false, true, generatedXmlFolder, listOfEventJsons, await _authTokenProvider.GetAzureADTokenAsync(false));
 
             //Assert if ROS webhook returns OK
             lastEventResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
@@ -185,7 +185,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             }
 
             string firstEventPayloadJsonFilePath = Path.Combine(_projectDir, EventPayloadFiles.PayloadFolder, EventPayloadFiles.RosPayloadTestDataFolder, firstEventPayloadJsonFileName);
-            RestResponse firstEventResponse = await _rosWebhookEndpoint.PostWebhookResponseAsyncForXml(firstEventPayloadJsonFilePath, correlationId, true, true, generatedXmlFolder, listOfEventJsons, await _authTokenProvider.GetAzureADToken(false));
+            RestResponse firstEventResponse = await _rosWebhookEndpoint.PostWebhookResponseAsyncForXml(firstEventPayloadJsonFilePath, correlationId, true, true, generatedXmlFolder, listOfEventJsons, await _authTokenProvider.GetAzureADTokenAsync(false));
             firstEventResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
     }

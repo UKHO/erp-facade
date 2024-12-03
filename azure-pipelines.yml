@@ -373,6 +373,8 @@ stages:
         value: $(AzureADConfigurationAutoTestClientIdNoRole)
       - name: "AzureADConfiguration.ClientSecretNoRole"
         value: $(AzureADConfigurationClientSecretNoRole)
+      - name: "EnterpriseEventServiceConfiguration.ClientId"
+        value: $(EnterpriseEventServiceConfigurationClientId)
       - name: "ErpFacadeConfiguration.PermitWithSameKey.Permit"
         value: $(PermitWithSameKeyPermit)
       - name: "ErpFacadeConfiguration.PermitWithSameKey.ActiveKey"
@@ -484,7 +486,11 @@ stages:
       - name: "AzureADConfiguration.ClientSecretNoRole"
         value: $(AzureADConfigurationClientSecretNoRole)
       - name: "EnterpriseEventServiceConfiguration.ClientId"
-        value: $(EnterpriseEventServiceConfigurationClientId)     
+        value: $(EnterpriseEventServiceConfigurationClientId)
+      - name: "SharedApiKeyConfiguration.SharedApiKey"
+        value: $(SharedApiKey)
+      - name: "SapCallbackConfiguration.SharedApiKey"
+        value: $(SharedApiKey)
       - name: mockWebAppName
         value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup
@@ -556,7 +562,11 @@ stages:
       - name: "AzureADConfiguration.ClientSecretNoRole"
         value: $(AzureADConfigurationClientSecretNoRole)
       - name: "EnterpriseEventServiceConfiguration.ClientId"
-        value: $(EnterpriseEventServiceConfigurationClientId)         
+        value: $(EnterpriseEventServiceConfigurationClientId)
+      - name: "SharedApiKeyConfiguration.SharedApiKey"
+        value: $(SharedApiKey)
+      - name: "SapCallbackConfiguration.SharedApiKey"
+        value: $(SharedApiKey)
       - name: mockWebAppName
         value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup
@@ -631,7 +641,11 @@ stages:
       - name: "AzureADConfiguration.ClientSecretNoRole"
         value: $(AzureADConfigurationClientSecretNoRole)
       - name: "EnterpriseEventServiceConfiguration.ClientId"
-        value: $(EnterpriseEventServiceConfigurationClientId)   
+        value: $(EnterpriseEventServiceConfigurationClientId)
+      - name: "SharedApiKeyConfiguration.SharedApiKey"
+        value: $(SharedApiKey)
+      - name: "SapCallbackConfiguration.SharedApiKey"
+        value: $(SharedApiKey)
       - name: mockWebAppName
         value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup
@@ -777,6 +791,12 @@ stages:
         value: $(AzureADConfigurationAutoTestClientIdNoRole)
       - name: "AzureADConfiguration.ClientSecretNoRole"
         value: $(AzureADConfigurationClientSecretNoRole)
+      - name: "EnterpriseEventServiceConfiguration.ClientId"
+        value: $(EnterpriseEventServiceConfigurationClientId)
+      - name: "SharedApiKeyConfiguration.SharedApiKey"
+        value: $(SharedApiKey)
+      - name: "SapCallbackConfiguration.SharedApiKey"
+        value: $(SharedApiKey)
       - name: mockWebAppName
         value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup
@@ -842,21 +862,23 @@ stages:
                   parameters:
                     AzureSubscription: "ERP-Facade-QA-A.011.05.12"
 
-      - job: FunctionalTests
-        dependsOn:
-        - QADeployTerraform
-        - QADeployApp
-        pool: $(WindowsPool)
-        variables:
-          - name : AzureStorageConfiguration.ConnectionString
-            value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
-        displayName: "Qa Functional Automated Tests"
-        workspace:
-         clean: all
-        steps:
-          - template: Deployment/templates/continuous-testing.yml
-            parameters:
-              AzureSubscription: "ERP-Facade-Dev-A.011.05.12"              
+ # disabling this job temporarily , re enable it once integration testing for QA environment is finished.
+
+      # - job: FunctionalTests
+      #   dependsOn:
+      #   - QADeployTerraform
+      #   - QADeployApp
+      #   pool: $(WindowsPool)
+      #   variables:
+      #     - name : AzureStorageConfiguration.ConnectionString
+      #       value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
+      #   displayName: "Qa Functional Automated Tests"
+      #   workspace:
+      #    clean: all
+      #   steps:
+      #     - template: Deployment/templates/continuous-testing.yml
+      #       parameters:
+      #         AzureSubscription: "ERP-Facade-Dev-A.011.05.12"              
 
   - stage: Livedeploy
     dependsOn: PreProdDeploy 
@@ -885,7 +907,11 @@ stages:
       - name: "AzureADConfiguration.AutoTestClientIdNoRole"
         value: $(AzureADConfigurationAutoTestClientIdNoRole)
       - name: "AzureADConfiguration.ClientSecretNoRole"
-        value: $(AzureADConfigurationClientSecretNoRole)        
+        value: $(AzureADConfigurationClientSecretNoRole)
+      - name: "SharedApiKeyConfiguration.SharedApiKey"
+        value: $(SharedApiKey)
+      - name: "SapCallbackConfiguration.SharedApiKey"
+        value: $(SharedApiKey)
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
     jobs:
       - deployment: LiveDeployTerraform

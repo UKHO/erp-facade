@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.Exceptions;
@@ -12,14 +11,12 @@ namespace UKHO.ERPFacade.Common.PermitDecryption
     [ExcludeFromCodeCoverage]
     public class PermitDecryption : IPermitDecryption
     {
-        private readonly ILogger<PermitDecryption> _logger;
         private readonly IOptions<PermitConfiguration> _permitConfiguration;
 
-        public PermitDecryption(ILogger<PermitDecryption> logger, IOptions<PermitConfiguration> permitConfiguration)
+        public PermitDecryption(IOptions<PermitConfiguration> permitConfiguration)
         {
             _permitConfiguration = permitConfiguration ?? throw new ArgumentNullException(nameof(permitConfiguration));
-            _logger = logger;
-
+            
             if (string.IsNullOrEmpty(_permitConfiguration.Value.PermitDecryptionHardwareId))
             {
                 throw new ERPFacadeException(EventIds.HardwareIdsConfigurationMissingException.ToEventId(), "Hardware ids configuration missing.");
@@ -28,11 +25,6 @@ namespace UKHO.ERPFacade.Common.PermitDecryption
 
         public DecryptedPermit Decrypt(string encryptedPermit)
         {
-            if (string.IsNullOrEmpty(encryptedPermit))
-            {
-                throw new ERPFacadeException(EventIds.EmptyPermitStringException.ToEventId(), "Permit string is empty in S57 enccontentpublished event.");
-            }
-
             try
             {
                 byte[] hardwareIds = GetHardwareIds();

@@ -1,29 +1,15 @@
 ﻿using System.Xml;
 using UKHO.ERPFacade.Common.Constants;
-using UKHO.ERPFacade.Common.Exceptions;
-using UKHO.ERPFacade.Common.Logging;
-using UKHO.ERPFacade.Common.Models;
+using UKHO.ERPFacade.Common.Models.SapActionConfigurationModels;
 using UKHO.ERPFacade.Common.Operations;
 
 namespace UKHO.ERPFacade.API.XmlTransformers
 {
-    public interface IBaseXmlTransformer
+    public abstract class BaseXmlTransformer : IXmlTransformer
     {
-        XmlDocument BuildXmlPayload<T>(T eventData, string xmlTemplatePath);
-        bool ValidateActionRules(SapAction action, object obj);
-        bool IsPropertyNullOrEmpty(string propertyName, string propertyValue);
-        void FinalizeSapXmlMessage(XmlDocument soapXml, string correlationId, XmlNode actionItemNode, string xmlPathInfo);
-    }
-
-    public abstract class BaseXmlTransformer : IBaseXmlTransformer
-    {
-        public BaseXmlTransformer()
-        {
-        }
-
         public abstract XmlDocument BuildXmlPayload<T>(T eventData, string xmlTemplatePath);
 
-        public bool ValidateActionRules(SapAction action, object obj)
+        public bool ValidateActionRules(Actions action, object obj)
         {
             bool isConditionSatisfied = false;
 
@@ -51,7 +37,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             return isConditionSatisfied;
         }
 
-        public void FinalizeSapXmlMessage(XmlDocument soapXml, string correlationId, XmlNode actionItemNode,string xmlPathInfo)
+        public void FinalizeSapXmlMessage(XmlDocument soapXml, string correlationId, XmlNode actionItemNode, string xmlPathInfo)
         {
             // Extract all action item nodes
             var actionItems = actionItemNode.Cast<XmlNode>().ToList();
@@ -88,23 +74,14 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             noOfActionsNode.InnerText = actionItemNode.ChildNodes.Count.ToString();
 
             var recDateNode = soapXml.SelectSingleNode(XmlTemplateInfo.XpathRecDate);
-            recDateNode.InnerText = DateTime.UtcNow.ToString(XmlFields.RecDateFormat);
+            recDateNode.InnerText = DateTime.UtcNow.ToString(DateTimeFormats.RecDateFormat);
 
             var recTimeNode = soapXml.SelectSingleNode(XmlTemplateInfo.XpathRecTime);
-            recTimeNode.InnerText = DateTime.UtcNow.ToString(XmlFields.RecTimeFormat);
+            recTimeNode.InnerText = DateTime.UtcNow.ToString(DateTimeFormats.RecTimeFormat);
 
             //Set action items
-            var IM_MATINFONode = soapXml.SelectSingleNode(xmlPathInfo);
-            IM_MATINFONode.AppendChild(actionItemNode);
-        }
-
-        public bool IsPropertyNullOrEmpty(string propertyName, string propertyValue)
-        {
-            if (string.IsNullOrEmpty(propertyValue))
-            {
-                throw new ERPFacadeException(EventIds.EmptyEventJsonPropertyException.ToEventId(), $"Required details are missing in enccontentpublished event payload. | Property Name : {propertyName}");
-            }
-            else return false;
+            var parentInfoNode = soapXml.SelectSingleNode(xmlPathInfo);
+            parentInfoNode.AppendChild(actionItemNode);
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using FakeItEasy;
+using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using UKHO.ERPFacade.API.Dispatcher;
@@ -43,8 +44,9 @@ namespace UKHO.ERPFacade.API.Tests.Dispatcher
             var eventType = "test_eventype_A";
             var baseCloudEvent = new BaseCloudEvent { Type = eventType };
 
-            await _fakeEventDispatcher.DispatchEventAsync(baseCloudEvent);
+            var result = await _fakeEventDispatcher.DispatchEventAsync(baseCloudEvent);
 
+            result.Should().BeTrue();
             A.CallTo(() => _fakeEventTypeAHandler.ProcessEventAsync(baseCloudEvent)).MustHaveHappenedOnceExactly();
             A.CallTo(() => _fakeEventTypeBHandler.ProcessEventAsync(baseCloudEvent)).MustNotHaveHappened();
         }
@@ -55,8 +57,9 @@ namespace UKHO.ERPFacade.API.Tests.Dispatcher
             var eventType = "test";
             var baseCloudEvent = new BaseCloudEvent { Type = eventType };
 
-            await _fakeEventDispatcher.DispatchEventAsync(baseCloudEvent);
+            var result = await _fakeEventDispatcher.DispatchEventAsync(baseCloudEvent);
 
+            result.Should().BeFalse();
             A.CallTo(() => _fakeEventTypeAHandler.ProcessEventAsync(baseCloudEvent)).MustNotHaveHappened();
             A.CallTo(() => _fakeEventTypeBHandler.ProcessEventAsync(baseCloudEvent)).MustNotHaveHappened();
 

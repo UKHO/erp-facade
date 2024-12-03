@@ -105,7 +105,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Services
 
             A.CallTo(() => _fakeAzureTableReaderWriter.GetEntityAsync(A<string>.Ignored, A<string>.Ignored)).Returns(entity);
 
-            await _fakeAggregationService.MergeRecordOfSaleEvents(queueMessage);
+            await _fakeAggregationService.MergeRecordOfSaleEventsAsync(queueMessage);
 
             A.CallTo(() => _fakeAzureBlobReaderWriter.GetBlobNamesInFolderAsync(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
             A.CallTo(() => _fakeAzureBlobReaderWriter.DownloadEventAsync(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
@@ -142,7 +142,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Services
             A.CallTo(() => _fakeAzureTableReaderWriter.GetEntityAsync(A<string>.Ignored, A<string>.Ignored)).Returns(entity);
             A.CallTo(() => _fakeAzureBlobReaderWriter.GetBlobNamesInFolderAsync(A<string>.Ignored, A<string>.Ignored)).Returns(blob);
 
-            await _fakeAggregationService.MergeRecordOfSaleEvents(queueMessage);
+            await _fakeAggregationService.MergeRecordOfSaleEventsAsync(queueMessage);
 
             A.CallTo(() => _fakeAzureBlobReaderWriter.GetBlobNamesInFolderAsync(A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceExactly();
             A.CallTo(() => _fakeAzureBlobReaderWriter.DownloadEventAsync(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
@@ -186,13 +186,13 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Services
                         A<List<RecordOfSaleEventPayLoad>>.Ignored, A<string>.Ignored))
                 .Returns(xmlDocument);
 
-            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+            A.CallTo(() => _fakeSapClient.SendUpdateAsync(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                 .Returns(new HttpResponseMessage()
                 {
                     StatusCode = HttpStatusCode.Unauthorized
                 });
 
-            Assert.ThrowsAsync<ERPFacadeException>(() => _fakeAggregationService.MergeRecordOfSaleEvents(queueMessage));
+            Assert.ThrowsAsync<ERPFacadeException>(() => _fakeAggregationService.MergeRecordOfSaleEventsAsync(queueMessage));
 
             A.CallTo(() => _fakeAzureBlobReaderWriter.GetBlobNamesInFolderAsync(A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceExactly();
             A.CallTo(() => _fakeAzureBlobReaderWriter.DownloadEventAsync(A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceOrMore();
@@ -246,13 +246,13 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Services
                         A<List<RecordOfSaleEventPayLoad>>.Ignored, A<string>.Ignored))
                 .Returns(xmlDocument);
 
-            A.CallTo(() => _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+            A.CallTo(() => _fakeSapClient.SendUpdateAsync(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                 .Returns(new HttpResponseMessage()
                 {
                     StatusCode = HttpStatusCode.OK
                 });
 
-            await _fakeAggregationService.MergeRecordOfSaleEvents(queueMessage);
+            await _fakeAggregationService.MergeRecordOfSaleEventsAsync(queueMessage);
 
             A.CallTo(() => _fakeAzureBlobReaderWriter.GetBlobNamesInFolderAsync(A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceExactly();
             A.CallTo(() => _fakeAzureBlobReaderWriter.DownloadEventAsync(A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceOrMore();
@@ -312,11 +312,11 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Services
                 .Returns(xmlDocument);
 
             A.CallTo(() =>
-                    _fakeSapClient.PostEventData(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored,
+                    _fakeSapClient.SendUpdateAsync(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored,
                         A<string>.Ignored))
                 .Throws(new ERPFacadeException(EventIds.UnhandledWebJobException.ToEventId(), "message", []));
 
-            var ex = Assert.ThrowsAsync<ERPFacadeException>(() => _fakeAggregationService.MergeRecordOfSaleEvents(queueMessage));
+            var ex = Assert.ThrowsAsync<ERPFacadeException>(() => _fakeAggregationService.MergeRecordOfSaleEventsAsync(queueMessage));
 
             Assert.That(ex.EventId, Is.EqualTo(EventIds.UnhandledWebJobException.ToEventId()));
 

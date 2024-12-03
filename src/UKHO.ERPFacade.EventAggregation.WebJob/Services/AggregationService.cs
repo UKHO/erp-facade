@@ -26,9 +26,12 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Services
         private readonly IOptions<SapConfiguration> _sapConfig;
         private readonly IRecordOfSaleSapMessageBuilder _recordOfSaleSapMessageBuilder;
 
-        public AggregationService(ILogger<AggregationService> logger, IAzureTableReaderWriter azureTableReaderWriter, IAzureBlobReaderWriter azureBlobReaderWriter,
-             ISapClient sapClient, IOptions<SapConfiguration> sapConfig,
-            IRecordOfSaleSapMessageBuilder recordOfSaleSapMessageBuilder)
+        public AggregationService(ILogger<AggregationService> logger,
+                                  IAzureTableReaderWriter azureTableReaderWriter,
+                                  IAzureBlobReaderWriter azureBlobReaderWriter,
+                                  ISapClient sapClient,
+                                  IOptions<SapConfiguration> sapConfig,
+                                  IRecordOfSaleSapMessageBuilder recordOfSaleSapMessageBuilder)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _azureBlobReaderWriter = azureBlobReaderWriter ?? throw new ArgumentNullException(nameof(azureBlobReaderWriter));
@@ -38,7 +41,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Services
             _recordOfSaleSapMessageBuilder = recordOfSaleSapMessageBuilder;
         }
 
-        public async Task MergeRecordOfSaleEvents(QueueMessage queueMessage)
+        public async Task MergeRecordOfSaleEventsAsync(QueueMessage queueMessage)
         {
             List<RecordOfSaleEventPayLoad> rosEventList = new();
             RecordOfSaleQueueMessageEntity message = JsonConvert.DeserializeObject<RecordOfSaleQueueMessageEntity>(queueMessage.Body.ToString())!;
@@ -49,7 +52,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Services
 
                 var entity = await _azureTableReaderWriter.GetEntityAsync(PartitionKeys.ROSPartitionKey, message.CorrelationId);
 
-                if (entity["Status"].ToString() == Status.Incomplete.ToString())
+                if (entity[AzureStorage.EventStatus].ToString() == Status.Incomplete.ToString())
                 {
                     List<string> blob = await _azureBlobReaderWriter.GetBlobNamesInFolderAsync(AzureStorage.RecordOfSaleEventContainerName, message.CorrelationId);
 
@@ -69,16 +72,16 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Services
                         await _azureBlobReaderWriter.UploadEventAsync(sapPayload.ToIndentedString(), AzureStorage.RecordOfSaleEventContainerName, message.CorrelationId + '/' + EventPayloadFiles.SapXmlPayloadFileName);
                         _logger.LogInformation(EventIds.UploadedRecordOfSaleSapXmlPayloadInAzureBlob.ToEventId(), "SAP xml payload for record of sale event is uploaded in blob storage successfully. | _X-Correlation-ID : {_X-Correlation-ID} | EventID : {EventID}", message.CorrelationId, message.EventId);
 
-                        HttpResponseMessage response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapEndpointForRecordOfSale, _sapConfig.Value.SapServiceOperationForRecordOfSale, _sapConfig.Value.SapUsernameForRecordOfSale, _sapConfig.Value.SapPasswordForRecordOfSale);
+                        HttpResponseMessage response = await _sapClient.SendUpdateAsync(sapPayload, _sapConfig.Value.SapEndpointForRecordOfSale, _sapConfig.Value.SapServiceOperationForRecordOfSale, _sapConfig.Value.SapUsernameForRecordOfSale, _sapConfig.Value.SapPasswordForRecordOfSale);
 
                         if (!response.IsSuccessStatusCode)
                         {
-                            throw new ERPFacadeException(EventIds.ErrorOccurredInSapForRecordOfSalePublishedEvent.ToEventId(), $"An error occurred while sending record of sale event data to SAP. | _X-Correlation-ID : {message.CorrelationId} | EventID : {message.EventId} | StatusCode: {response.StatusCode}");
+                            throw new ERPFacadeException(EventIds.RecordOfSaleRequestToSapFailedException.ToEventId(), $"An error occurred while sending record of sale event data to SAP. | _X-Correlation-ID : {message.CorrelationId} | EventID : {message.EventId} | StatusCode: {response.StatusCode}");
                         }
 
                         _logger.LogInformation(EventIds.RecordOfSalePublishedEventDataPushedToSap.ToEventId(), "The record of sale event data has been sent to SAP successfully. | _X-Correlation-ID : {_X-Correlation-ID} | EventID : {EventID} | StatusCode: {StatusCode}", message.CorrelationId, message.EventId, response.StatusCode);
 
-                        await _azureTableReaderWriter.UpdateEntityAsync(PartitionKeys.ROSPartitionKey, message.CorrelationId, new Dictionary<string, object> { { "Status", Status.Complete.ToString() } });
+                        await _azureTableReaderWriter.UpdateEntityAsync(PartitionKeys.ROSPartitionKey, message.CorrelationId, new Dictionary<string, object> { { AzureStorage.EventStatus, Status.Complete.ToString() } });
                     }
                     else
                     {

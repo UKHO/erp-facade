@@ -29,7 +29,7 @@ namespace UKHO.ERPFacade.Common.HealthCheck
             {
                 healthCheckData.Add("EES health endpoint", _eesHealthCheckEnvironmentConfiguration.Value.EESHealthCheckUrl);
 
-                HttpResponseMessage response = await _eesClient.Get(_eesHealthCheckEnvironmentConfiguration.Value.EESHealthCheckUrl);
+                HttpResponseMessage response = await _eesClient.GetAsync(_eesHealthCheckEnvironmentConfiguration.Value.EESHealthCheckUrl);
 
                 _logger.LogInformation(EventIds.EESHealthCheckRequestSentToEES.ToEventId(), "EES health check request has been sent to EES successfully. | {StatusCode}", response.StatusCode);
 
