@@ -3,7 +3,7 @@ import { check } from 'k6';
 import { htmlReport } from "https://raw.githubusercontent.com/benc-uk/k6-reporter/main/dist/bundle.js";
 import { textSummary } from "https://jslib.k6.io/k6-summary/0.0.1/index.js";
 import { URL } from 'https://jslib.k6.io/url/1.0.0/index.js';
-import { PayloadSetup, S100PayloadSetup } from './../../PayloadDataSetup/PayloadSetupDifferentProfiles.js';
+import { PayloadSetup, S100PayloadSetup } from '../../PayloadDataSetup/PayloadSetupDifferentProfiles.js';
 
 var Config = JSON.parse(open('./../../config.json'));
 
@@ -56,7 +56,7 @@ export const options = {
         ScenarioWithOneProduct: {
             executor: 'constant-arrival-rate',
             exec: 'ScenarioWithOneProduct',
-            rate: 4,
+            rate: 3,
             timeUnit: '1s',
             startTime: '1s',
             duration: '27m',
@@ -66,7 +66,7 @@ export const options = {
         ScenarioWithOneProductS100: {
             executor: 'constant-arrival-rate',
             exec: 'ScenarioWithOneProductS100',
-            rate: 4,
+            rate: 3,
             timeUnit: '1s',
             startTime: '1s',
             duration: '27m',
@@ -76,7 +76,7 @@ export const options = {
         ScenarioWithTwoProducts: { 
             executor: 'constant-arrival-rate',
             exec: 'ScenarioWithTwoProducts',
-            rate: 4,
+            rate: 3,
             timeUnit: '1s',
             startTime: '27m',
             duration: '179s',
@@ -86,7 +86,7 @@ export const options = {
         ScenarioWithTwoProductsS100: { 
             executor: 'constant-arrival-rate',
             exec: 'ScenarioWithTwoProductsS100',
-            rate: 4,
+            rate: 3,
             timeUnit: '1s',
             startTime: '27m',
             duration: '179s',
@@ -96,7 +96,7 @@ export const options = {
         ScenarioWithHundredProducts: { 
             executor: 'constant-arrival-rate',
             exec: 'ScenarioWithHundredProducts',
-            rate: 4,
+            rate: 3,
             timeUnit: '1s',
             startTime: '1799s',
             duration: '1s',
@@ -105,7 +105,7 @@ export const options = {
         ScenarioWithHundredProductsS100: { 
             executor: 'constant-arrival-rate',
             exec: 'ScenarioWithHundredProductsS100',
-            rate: 4,
+            rate: 3,
             timeUnit: '1s',
             startTime: '1799s',
             duration: '1s',
@@ -200,9 +200,9 @@ export function teardown() {
 //reporting
 export function handleSummary(data) {
     return {
-        ["Summary/TestResult_" + new Date().toISOString().substr(0, 19).replace(/(:|-)/g, "").replace("T", "_") + ".html"]: htmlReport(data),
+        ["./../../Summary/TestResult_" + new Date().toISOString().substr(0, 19).replace(/(:|-)/g, "").replace("T", "_") + ".html"]: htmlReport(data),
         stdout: textSummary(data, { indent: " ", enableColors: true }),
-        ["Summary/TestResult_" + new Date().toISOString().substr(0, 19).replace(/(:|-)/g, "").replace("T", "_") + ".json"]: JSON.stringify(data),
+        ["./../../Summary/TestResult_" + new Date().toISOString().substr(0, 19).replace(/(:|-)/g, "").replace("T", "_") + ".json"]: JSON.stringify(data),
     }
 }
 
