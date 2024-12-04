@@ -862,23 +862,22 @@ stages:
                   parameters:
                     AzureSubscription: "ERP-Facade-QA-A.011.05.12"
 
- # disabling this job temporarily , re enable it once integration testing for QA environment is finished.
 
-      # - job: FunctionalTests
-      #   dependsOn:
-      #   - QADeployTerraform
-      #   - QADeployApp
-      #   pool: $(WindowsPool)
-      #   variables:
-      #     - name : AzureStorageConfiguration.ConnectionString
-      #       value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
-      #   displayName: "Qa Functional Automated Tests"
-      #   workspace:
-      #    clean: all
-      #   steps:
-      #     - template: Deployment/templates/continuous-testing.yml
-      #       parameters:
-      #         AzureSubscription: "ERP-Facade-Dev-A.011.05.12"              
+      - job: FunctionalTests
+        dependsOn:
+        - QADeployTerraform
+        - QADeployApp
+        pool: $(WindowsPool)
+        variables:
+          - name : AzureStorageConfiguration.ConnectionString
+            value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
+        displayName: "Qa Functional Automated Tests"
+        workspace:
+         clean: all
+        steps:
+          - template: Deployment/templates/continuous-testing.yml
+            parameters:
+              AzureSubscription: "ERP-Facade-Dev-A.011.05.12"              
 
   - stage: Livedeploy
     dependsOn: PreProdDeploy 

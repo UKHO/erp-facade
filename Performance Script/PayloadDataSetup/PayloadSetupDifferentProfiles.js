@@ -1,9 +1,8 @@
 const Config = JSON.parse(open('../config.json'));
 
-export function PayloadSetup(payload, productList) {
+export function PayloadSetup(payload) {
 
     var productArraySize = payload.data.products.length;
-    var unitOfSalesArraySize = payload.data.unitsOfSale.length;
     var jsonObj = payload;
 
     payload.data.correlationId = generateUniqueCorrId();
@@ -11,6 +10,13 @@ export function PayloadSetup(payload, productList) {
     for (var i = 0; i < productArraySize; i++) {
         jsonObj.data.products[i].permit = Config.Permit;
     }
+    return jsonObj;
+}
+
+export function S100PayloadSetup(payload) {
+
+    var jsonObj = payload;
+    payload.data.correlationId = generateUniqueCorrId();
     return jsonObj;
 }
 

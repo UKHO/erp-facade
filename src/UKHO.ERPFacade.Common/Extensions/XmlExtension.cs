@@ -9,19 +9,24 @@ namespace UKHO.ERPFacade.Common.Extensions
     {
         public static string ToIndentedString(this XmlDocument doc)
         {
-            StringBuilder sb = new StringBuilder();
-            XmlWriterSettings settings = new XmlWriterSettings
+            using (var memoryStream = new MemoryStream())
             {
-                Indent = true,
-                IndentChars = "  ",
-                NewLineChars = "\r\n",
-                NewLineHandling = NewLineHandling.Replace
-            };
-            using (XmlWriter writer = XmlWriter.Create(sb, settings))
-            {
-                doc.Save(writer);
+                XmlWriterSettings settings = new XmlWriterSettings
+                {
+                    Indent = true,
+                    IndentChars = "  ",
+                    NewLineChars = "\r\n",
+                    NewLineHandling = NewLineHandling.Replace,
+                    Encoding = Encoding.UTF8
+                };
+
+                using (XmlWriter writer = XmlWriter.Create(memoryStream, settings))
+                {
+                    doc.Save(writer);
+                }
+
+                return Encoding.UTF8.GetString(memoryStream.ToArray());
             }
-            return sb.ToString();
         }
     }
 }

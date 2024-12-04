@@ -4,15 +4,15 @@ import { check } from 'k6';
 import { htmlReport } from "https://raw.githubusercontent.com/benc-uk/k6-reporter/main/dist/bundle.js";
 import { textSummary } from "https://jslib.k6.io/k6-summary/0.0.1/index.js";
 import { URL } from 'https://jslib.k6.io/url/1.0.0/index.js';
-import { PayloadSetup } from './PayloadDataSetup/PayloadSetupDifferentProfiles.js';
+import { PayloadSetup } from '../../PayloadDataSetup/PayloadSetupDifferentProfiles.js';
 
 
-var Config = JSON.parse(open('./config.json'));
-var ProductList = JSON.parse(open('./PayloadData/WebhookPayloads/SAPProductList.json'));
+var Config = JSON.parse(open('./../../config.json'));
+var ProductList = JSON.parse(open('./../../PayloadData/S57Payloads/SAPProductList.json'));
 
-var PayloadOneProduct = JSON.parse(open('./PayloadData/WebhookPayloads/1ProductNewCell.json'));
-var PayloadTwoProducts = JSON.parse(open('./PayloadData/WebhookPayloads/2ProductENCNewAndMoveCell.json'));
-var PayloadHundredProducts = JSON.parse(open('./PayloadData/WebhookPayloads/100ProductsNewCell.json'));
+var PayloadOneProduct = JSON.parse(open('./../../PayloadData/S57Payloads/1ProductNewCell.json'));
+var PayloadTwoProducts = JSON.parse(open('./../../PayloadData/S57Payloads/2ProductENCNewAndMoveCell.json'));
+var PayloadHundredProducts = JSON.parse(open('./../../PayloadData/S57Payloads/100ProductsNewCell.json'));
 
 if (!Config.BaseUrl.toString().toUpperCase().includes("DEV")) {
     throw new Error("Invalid Environment !! Please use DEV environment for performance testing.\n");
@@ -122,9 +122,9 @@ export function teardown() {
 //reporting
 export function handleSummary(data) {
     return {
-        ["Summary/TestResult_" + new Date().toISOString().substr(0, 19).replace(/(:|-)/g, "").replace("T", "_") + ".html"]: htmlReport(data),
+        ["./../../Summary/TestResult_" + new Date().toISOString().substr(0, 19).replace(/(:|-)/g, "").replace("T", "_") + ".html"]: htmlReport(data),
         stdout: textSummary(data, { indent: " ", enableColors: true }),
-        ["Summary/TestResult_" + new Date().toISOString().substr(0, 19).replace(/(:|-)/g, "").replace("T", "_") + ".json"]: JSON.stringify(data),
+        ["./../../Summary/TestResult_" + new Date().toISOString().substr(0, 19).replace(/(:|-)/g, "").replace("T", "_") + ".json"]: JSON.stringify(data),
     }
 }
 

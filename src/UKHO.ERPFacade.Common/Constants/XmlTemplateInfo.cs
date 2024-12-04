@@ -16,14 +16,10 @@ namespace UKHO.ERPFacade.Common.Constants
 
         public const string XpathImMatInfo = $"//*[local-name()='IM_MATINFO']";
         public const string XpathActionItems = $"//*[local-name()='ACTIONITEMS']";
-        public const string XpathActionNumber = $"//*[local-name()='ACTIONNUMBER']";
-        public const string XpathAction = $"//*[local-name()='ACTION']";
         public const string XpathNoOfActions = $"//*[local-name()='NOOFACTIONS']";
         public const string XpathCorrId = $"//*[local-name()='CORRID']";
         public const string XpathRecDate = $"//*[local-name()='RECDATE']";
         public const string XpathRecTime = $"//*[local-name()='RECTIME']";
         public const string Item = "item";
-
-        public const string S100XpathZShopMatInfo = $"//*[local-name()='ZSHOPMAT_INFO']";
     }
 }

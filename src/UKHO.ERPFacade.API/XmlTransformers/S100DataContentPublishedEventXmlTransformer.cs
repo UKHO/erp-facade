@@ -47,7 +47,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                 BuildUnitActions(s100EventData, s100EventXmlPayload, actionItemNode);
 
                 // Finalize SAP XML message
-                FinalizeSapXmlMessage(s100EventXmlPayload, s100EventData.CorrelationId, actionItemNode, XmlTemplateInfo.S100XpathZShopMatInfo);
+                FinalizeSapXmlMessage(s100EventXmlPayload, s100EventData.CorrelationId, actionItemNode, XmlTemplateInfo.XpathImMatInfo);
 
                 _logger.LogInformation(EventIds.S100EventSapXmlPayloadGenerationCompleted.ToEventId(), "Generation of SAP xml payload for S-100 data content published event completed.");
             }
