@@ -906,14 +906,18 @@ stages:
         environment: "ERP-Live"
         pool: $(DeploymentPoolPE)
         variables:
-          - name : WEB_APP_NAME
-            value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.WEB_APP'] ]
-          - name : ResourceGroup
-            value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.ResourceGroup'] ]
-          - name : WEB_APP_SLOT_NAME
-            value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME'] ]
-          - name : WEB_APP_SLOT_HOST_NAME
-            value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME'] ]
+        - name : WEB_APP_NAME
+          value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.WEB_APP'] ]
+        - name : "KeyVaultSettings.ServiceUri"
+          value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.keyvaulturi'] ]
+        - name : "AzureWebJobsStorage.ConnectionString"
+          value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
+        - name : ResourceGroup
+          value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.ResourceGroup'] ]
+        - name : WEB_APP_SLOT_NAME
+          value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME'] ]
+        - name : WEB_APP_SLOT_HOST_NAME
+          value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME'] ] 
         workspace:
           clean: all
         strategy:
