@@ -824,9 +824,9 @@ stages:
       - name: "AzureADConfiguration.TenantId"
         value: $(AzureADConfigurationTenantId)
       - name: "AzureADConfiguration.ClientId"
+        value: $(AzureADConfigurationClientId)
       - name: "PermitConfiguration.PermitDecryptionHardwareId"
         value: $(PermitDecryptionHardwareId)
-        value: $(AzureADConfigurationClientId)
       - name: "EnterpriseEventServiceConfiguration.ClientId"
         value: $(EnterpriseEventServiceConfigurationClientId)
       - name: "SharedApiKeyConfiguration.SharedApiKey"
