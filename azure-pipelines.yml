@@ -477,6 +477,8 @@ stages:
         value: $(AzureADConfigurationTenantId)
       - name: "AzureADConfiguration.ClientId"
         value: $(AzureADConfigurationClientId)
+      - name: "PermitConfiguration.PermitDecryptionHardwareId"
+        value: $(PermitDecryptionHardwareId)
       - name: "EnterpriseEventServiceConfiguration.ClientId"
         value: $(EnterpriseEventServiceConfigurationClientId)
       - name: "SharedApiKeyConfiguration.SharedApiKey"
@@ -542,7 +544,9 @@ stages:
       - name: "AzureADConfiguration.TenantId"
         value: $(AzureADConfigurationTenantId)
       - name: "AzureADConfiguration.ClientId"
-        value: $(AzureADConfigurationClientId)      
+        value: $(AzureADConfigurationClientId)
+      - name: "PermitConfiguration.PermitDecryptionHardwareId"
+        value: $(PermitDecryptionHardwareId)
       - name: "EnterpriseEventServiceConfiguration.ClientId"
         value: $(EnterpriseEventServiceConfigurationClientId)
       - name: "SharedApiKeyConfiguration.SharedApiKey"
@@ -612,6 +616,8 @@ stages:
         value: $(AzureADConfigurationTenantId)
       - name: "AzureADConfiguration.ClientId"
         value: $(AzureADConfigurationClientId)
+      - name: "PermitConfiguration.PermitDecryptionHardwareId"
+        value: $(PermitDecryptionHardwareId)
       - name: "EnterpriseEventServiceConfiguration.ClientId"
         value: $(EnterpriseEventServiceConfigurationClientId)
       - name: "SharedApiKeyConfiguration.SharedApiKey"
@@ -680,6 +686,8 @@ stages:
         value: $(AzureADConfigurationTenantId)
       - name: "AzureADConfiguration.ClientId"
         value: $(AzureADConfigurationClientId)
+      - name: "PermitConfiguration.PermitDecryptionHardwareId"
+        value: $(PermitDecryptionHardwareId)
       - name: "EnterpriseEventServiceConfiguration.ClientId"
         value: $(EnterpriseEventServiceConfigurationClientId)
       - name: "SharedApiKeyConfiguration.SharedApiKey"
@@ -747,6 +755,8 @@ stages:
         value: $(AzureADConfigurationTenantId)
       - name: "AzureADConfiguration.ClientId"
         value: $(AzureADConfigurationClientId)
+      - name: "PermitConfiguration.PermitDecryptionHardwareId"
+        value: $(PermitDecryptionHardwareId)
       - name: "EnterpriseEventServiceConfiguration.ClientId"
         value: $(EnterpriseEventServiceConfigurationClientId)
       - name: "SharedApiKeyConfiguration.SharedApiKey"
@@ -815,6 +825,8 @@ stages:
         value: $(AzureADConfigurationTenantId)
       - name: "AzureADConfiguration.ClientId"
         value: $(AzureADConfigurationClientId)
+      - name: "PermitConfiguration.PermitDecryptionHardwareId"
+        value: $(PermitDecryptionHardwareId)
       - name: "EnterpriseEventServiceConfiguration.ClientId"
         value: $(EnterpriseEventServiceConfigurationClientId)
       - name: "SharedApiKeyConfiguration.SharedApiKey"
