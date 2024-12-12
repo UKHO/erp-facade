@@ -387,10 +387,6 @@ stages:
         value: $(PermitWithDifferentKeyACTIVEKEY)
       - name: "PermitWithDifferentKey.NextKey"
         value: $(PermitWithDifferentKeyNEXTKEY)
-      - name: "SharedApiKeyConfiguration.SharedApiKey"
-        value: $(SharedApiKeyConfigurationSharedApiKey)
-      - name: "SapCallbackConfiguration.SharedApiKey"
-        value: $(SharedApiKeyConfigurationSharedApiKey)
 
     jobs:
       - deployment: DevDeployTerraform
@@ -479,10 +475,6 @@ stages:
         value: $(AzureADConfigurationClientId)
       - name: "PermitConfiguration.PermitDecryptionHardwareId"
         value: $(PermitDecryptionHardwareId)
-      - name: "EnterpriseEventServiceConfiguration.ClientId"
-        value: $(EnterpriseEventServiceConfigurationClientId)
-      - name: "SharedApiKeyConfiguration.SharedApiKey"
-        value: $(SharedApiKeyConfigurationSharedApiKey)
       - name: mockWebAppName
         value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup
@@ -547,10 +539,6 @@ stages:
         value: $(AzureADConfigurationClientId)
       - name: "PermitConfiguration.PermitDecryptionHardwareId"
         value: $(PermitDecryptionHardwareId)
-      - name: "EnterpriseEventServiceConfiguration.ClientId"
-        value: $(EnterpriseEventServiceConfigurationClientId)
-      - name: "SharedApiKeyConfiguration.SharedApiKey"
-        value: $(SharedApiKeyConfigurationSharedApiKey)
       - name: mockWebAppName
         value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup
@@ -618,10 +606,6 @@ stages:
         value: $(AzureADConfigurationClientId)
       - name: "PermitConfiguration.PermitDecryptionHardwareId"
         value: $(PermitDecryptionHardwareId)
-      - name: "EnterpriseEventServiceConfiguration.ClientId"
-        value: $(EnterpriseEventServiceConfigurationClientId)
-      - name: "SharedApiKeyConfiguration.SharedApiKey"
-        value: $(SharedApiKeyConfigurationSharedApiKey)
       - name: mockWebAppName
         value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup
@@ -688,10 +672,6 @@ stages:
         value: $(AzureADConfigurationClientId)
       - name: "PermitConfiguration.PermitDecryptionHardwareId"
         value: $(PermitDecryptionHardwareId)
-      - name: "EnterpriseEventServiceConfiguration.ClientId"
-        value: $(EnterpriseEventServiceConfigurationClientId)
-      - name: "SharedApiKeyConfiguration.SharedApiKey"
-        value: $(SharedApiKeyConfigurationSharedApiKey)
       - name: mockWebAppName
         value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup
@@ -757,10 +737,6 @@ stages:
         value: $(AzureADConfigurationClientId)
       - name: "PermitConfiguration.PermitDecryptionHardwareId"
         value: $(PermitDecryptionHardwareId)
-      - name: "EnterpriseEventServiceConfiguration.ClientId"
-        value: $(EnterpriseEventServiceConfigurationClientId)
-      - name: "SharedApiKeyConfiguration.SharedApiKey"
-        value: $(SharedApiKeyConfigurationSharedApiKey)
       - name: mockWebAppName
         value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup
@@ -827,10 +803,6 @@ stages:
         value: $(AzureADConfigurationClientId)
       - name: "PermitConfiguration.PermitDecryptionHardwareId"
         value: $(PermitDecryptionHardwareId)
-      - name: "EnterpriseEventServiceConfiguration.ClientId"
-        value: $(EnterpriseEventServiceConfigurationClientId)
-      - name: "SharedApiKeyConfiguration.SharedApiKey"
-        value: $(SharedApiKeyConfigurationSharedApiKey)
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
     jobs:
       - deployment: LiveDeployTerraform
