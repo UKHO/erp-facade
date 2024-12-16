@@ -52,11 +52,11 @@ namespace UKHO.ERPFacade.API.UnitTests.Middlewares
 
             A.CallTo(() => _fakeLogger.BeginScope(A<Dictionary<string, object>>._)).MustHaveHappenedOnceExactly();
 
-            Assert.That(_fakeHttpContext.Request.Headers.Count, Is.EqualTo(1));
-            Assert.That(_fakeHttpContext.Request.Headers[ApiHeaderKeys.XCorrelationIdHeaderKeyName], Is.EqualTo(correlationId));
+            Assert.That(_fakeHttpContext.Request.Headers.Count, Is.EqualTo((object?)1));
+            Assert.That(_fakeHttpContext.Request.Headers[ApiHeaderKeys.XCorrelationIdHeaderKeyName], Is.EqualTo((object?)correlationId));
 
-            Assert.That(_fakeHttpContext.Response.Headers.Count, Is.EqualTo(1));
-            Assert.That(_fakeHttpContext.Response.Headers[ApiHeaderKeys.XCorrelationIdHeaderKeyName], Is.EqualTo(correlationId));
+            Assert.That(_fakeHttpContext.Response.Headers.Count, Is.EqualTo((object?)1));
+            Assert.That(_fakeHttpContext.Response.Headers[ApiHeaderKeys.XCorrelationIdHeaderKeyName], Is.EqualTo((object?)correlationId));
 
         }
 
@@ -109,11 +109,11 @@ namespace UKHO.ERPFacade.API.UnitTests.Middlewares
 
             await _middleware.InvokeAsync(_fakeHttpContext);
 
-            Assert.That(_fakeHttpContext.Request.Headers.Count, Is.EqualTo(1));
-            Assert.That(_fakeHttpContext.Request.Headers[ApiHeaderKeys.XCorrelationIdHeaderKeyName], Is.EqualTo(correlationId));
+            Assert.That(_fakeHttpContext.Request.Headers.Count, Is.EqualTo((object?)1));
+            Assert.That(_fakeHttpContext.Request.Headers[ApiHeaderKeys.XCorrelationIdHeaderKeyName], Is.EqualTo((object?)correlationId));
 
-            Assert.That(_fakeHttpContext.Response.Headers.Count, Is.EqualTo(1));
-            Assert.That(_fakeHttpContext.Response.Headers[ApiHeaderKeys.XCorrelationIdHeaderKeyName], Is.EqualTo(correlationId));
+            Assert.That(_fakeHttpContext.Response.Headers.Count, Is.EqualTo((object?)1));
+            Assert.That(_fakeHttpContext.Response.Headers[ApiHeaderKeys.XCorrelationIdHeaderKeyName], Is.EqualTo((object?)correlationId));
         }
 
         [Test]

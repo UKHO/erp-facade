@@ -89,9 +89,9 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
               && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "ERP facade webhook options endpoint requested.").MustHaveHappenedOnceExactly();
 
             Assert.That(responseHeaders.ContainsKey("WebHook-Allowed-Rate"), Is.True);
-            Assert.That(responseHeaders["WebHook-Allowed-Rate"], Is.EqualTo("*"));
+            Assert.That(responseHeaders["WebHook-Allowed-Rate"], Is.EqualTo((object?)"*"));
             Assert.That(responseHeaders.ContainsKey("WebHook-Allowed-Origin"), Is.True);
-            Assert.That(responseHeaders["WebHook-Allowed-Origin"], Is.EqualTo("test.com"));
+            Assert.That(responseHeaders["WebHook-Allowed-Origin"], Is.EqualTo((object?)"test.com"));
         }
 
         [Test]
@@ -173,9 +173,9 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
               && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Completed processing the Options request for the Record of Sale Published event for webhook. | WebHook-Request-Origin : {webhookRequestOrigin}").MustHaveHappenedOnceExactly();
 
             Assert.That(responseHeaders.ContainsKey("WebHook-Allowed-Rate"), Is.True);
-            Assert.That(responseHeaders["WebHook-Allowed-Rate"], Is.EqualTo("*"));
+            Assert.That(responseHeaders["WebHook-Allowed-Rate"], Is.EqualTo((object?)"*"));
             Assert.That(responseHeaders.ContainsKey("WebHook-Allowed-Origin"), Is.True);
-            Assert.That(responseHeaders["WebHook-Allowed-Origin"], Is.EqualTo("test.com"));
+            Assert.That(responseHeaders["WebHook-Allowed-Origin"], Is.EqualTo((object?)"test.com"));
         }
 
         [Test]
@@ -271,9 +271,9 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
               && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Completed processing the Options request for the Licence updated event for webhook. | WebHook-Request-Origin : {webhookRequestOrigin}").MustHaveHappenedOnceExactly();
 
             Assert.That(responseHeaders.ContainsKey("WebHook-Allowed-Rate"), Is.True);
-            Assert.That(responseHeaders["WebHook-Allowed-Rate"], Is.EqualTo("*"));
+            Assert.That(responseHeaders["WebHook-Allowed-Rate"], Is.EqualTo((object?)"*"));
             Assert.That(responseHeaders.ContainsKey("WebHook-Allowed-Origin"), Is.True);
-            Assert.That(responseHeaders["WebHook-Allowed-Origin"], Is.EqualTo("test.com"));
+            Assert.That(responseHeaders["WebHook-Allowed-Origin"], Is.EqualTo((object?)"test.com"));
         }
 
         [Test]
