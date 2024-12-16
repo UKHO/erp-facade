@@ -375,6 +375,10 @@ stages:
         value: $(AzureADConfigurationClientSecretNoRole)
       - name: "EnterpriseEventServiceConfiguration.ClientId"
         value: $(EnterpriseEventServiceConfigurationClientId)
+      - name: "SharedApiKeyConfiguration.SharedApiKey"
+        value: $(SharedApiKeyConfigurationSharedApiKey)
+      - name: "SapCallbackConfiguration.SharedApiKey"
+        value: $(SharedApiKeyConfigurationSharedApiKey)
       - name: "ErpFacadeConfiguration.PermitWithSameKey.Permit"
         value: $(PermitWithSameKeyPermit)
       - name: "ErpFacadeConfiguration.PermitWithSameKey.ActiveKey"
@@ -387,10 +391,6 @@ stages:
         value: $(PermitWithDifferentKeyACTIVEKEY)
       - name: "ErpFacadeConfiguration.PermitWithDifferentKey.NextKey"
         value: $(PermitWithDifferentKeyNEXTKEY)
-      - name: "SharedApiKeyConfiguration.SharedApiKey"
-        value: $(SharedApiKey)
-      - name: "SapCallbackConfiguration.SharedApiKey"
-        value: $(SharedApiKey)
 
     jobs:
       - deployment: DevDeployTerraform
@@ -477,20 +477,10 @@ stages:
         value: $(AzureADConfigurationTenantId)
       - name: "AzureADConfiguration.ClientId"
         value: $(AzureADConfigurationClientId)
-      - name: "AzureADConfiguration.AutoTestClientId"
-        value: $(AzureADConfigurationAutoTestClientId)
-      - name: "AzureADConfiguration.ClientSecret"
-        value: $(AzureADConfigurationClientSecret)
-      - name: "AzureADConfiguration.AutoTestClientIdNoRole"
-        value: $(AzureADConfigurationAutoTestClientIdNoRole)
-      - name: "AzureADConfiguration.ClientSecretNoRole"
-        value: $(AzureADConfigurationClientSecretNoRole)
       - name: "EnterpriseEventServiceConfiguration.ClientId"
         value: $(EnterpriseEventServiceConfigurationClientId)
       - name: "SharedApiKeyConfiguration.SharedApiKey"
-        value: $(SharedApiKey)
-      - name: "SapCallbackConfiguration.SharedApiKey"
-        value: $(SharedApiKey)
+        value: $(SharedApiKeyConfigurationSharedApiKey)
       - name: mockWebAppName
         value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup
@@ -552,21 +542,11 @@ stages:
       - name: "AzureADConfiguration.TenantId"
         value: $(AzureADConfigurationTenantId)
       - name: "AzureADConfiguration.ClientId"
-        value: $(AzureADConfigurationClientId)      
-      - name: "AzureADConfiguration.AutoTestClientId"
-        value: $(AzureADConfigurationAutoTestClientId)
-      - name: "AzureADConfiguration.ClientSecret"
-        value: $(AzureADConfigurationClientSecret)
-      - name: "AzureADConfiguration.AutoTestClientIdNoRole"
-        value: $(AzureADConfigurationAutoTestClientIdNoRole)
-      - name: "AzureADConfiguration.ClientSecretNoRole"
-        value: $(AzureADConfigurationClientSecretNoRole)
+        value: $(AzureADConfigurationClientId)
       - name: "EnterpriseEventServiceConfiguration.ClientId"
         value: $(EnterpriseEventServiceConfigurationClientId)
       - name: "SharedApiKeyConfiguration.SharedApiKey"
-        value: $(SharedApiKey)
-      - name: "SapCallbackConfiguration.SharedApiKey"
-        value: $(SharedApiKey)
+        value: $(SharedApiKeyConfigurationSharedApiKey)
       - name: mockWebAppName
         value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup
@@ -632,20 +612,10 @@ stages:
         value: $(AzureADConfigurationTenantId)
       - name: "AzureADConfiguration.ClientId"
         value: $(AzureADConfigurationClientId)
-      - name: "AzureADConfiguration.AutoTestClientId"
-        value: $(AzureADConfigurationAutoTestClientId)
-      - name: "AzureADConfiguration.ClientSecret"
-        value: $(AzureADConfigurationClientSecret)
-      - name: "AzureADConfiguration.AutoTestClientIdNoRole"
-        value: $(AzureADConfigurationAutoTestClientIdNoRole)
-      - name: "AzureADConfiguration.ClientSecretNoRole"
-        value: $(AzureADConfigurationClientSecretNoRole)
       - name: "EnterpriseEventServiceConfiguration.ClientId"
         value: $(EnterpriseEventServiceConfigurationClientId)
       - name: "SharedApiKeyConfiguration.SharedApiKey"
-        value: $(SharedApiKey)
-      - name: "SapCallbackConfiguration.SharedApiKey"
-        value: $(SharedApiKey)
+        value: $(SharedApiKeyConfigurationSharedApiKey)
       - name: mockWebAppName
         value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup
@@ -710,16 +680,10 @@ stages:
         value: $(AzureADConfigurationTenantId)
       - name: "AzureADConfiguration.ClientId"
         value: $(AzureADConfigurationClientId)
-      - name: "AzureADConfiguration.AutoTestClientId"
-        value: $(AzureADConfigurationAutoTestClientId)
-      - name: "AzureADConfiguration.ClientSecret"
-        value: $(AzureADConfigurationClientSecret)
-      - name: "AzureADConfiguration.AutoTestClientIdNoRole"
-        value: $(AzureADConfigurationAutoTestClientIdNoRole)
-      - name: "AzureADConfiguration.ClientSecretNoRole"
-        value: $(AzureADConfigurationClientSecretNoRole)
       - name: "EnterpriseEventServiceConfiguration.ClientId"
-        value: $(EnterpriseEventServiceConfigurationClientId)  
+        value: $(EnterpriseEventServiceConfigurationClientId)
+      - name: "SharedApiKeyConfiguration.SharedApiKey"
+        value: $(SharedApiKeyConfigurationSharedApiKey)
       - name: mockWebAppName
         value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup
@@ -783,38 +747,16 @@ stages:
         value: $(AzureADConfigurationTenantId)
       - name: "AzureADConfiguration.ClientId"
         value: $(AzureADConfigurationClientId)
-      - name: "AzureADConfiguration.AutoTestClientId"
-        value: $(AzureADConfigurationAutoTestClientId)
-      - name: "AzureADConfiguration.ClientSecret"
-        value: $(AzureADConfigurationClientSecret)
-      - name: "AzureADConfiguration.AutoTestClientIdNoRole"
-        value: $(AzureADConfigurationAutoTestClientIdNoRole)
-      - name: "AzureADConfiguration.ClientSecretNoRole"
-        value: $(AzureADConfigurationClientSecretNoRole)
       - name: "EnterpriseEventServiceConfiguration.ClientId"
         value: $(EnterpriseEventServiceConfigurationClientId)
       - name: "SharedApiKeyConfiguration.SharedApiKey"
-        value: $(SharedApiKey)
-      - name: "SapCallbackConfiguration.SharedApiKey"
-        value: $(SharedApiKey)
+        value: $(SharedApiKeyConfigurationSharedApiKey)
       - name: mockWebAppName
         value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup
         value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
       - name: "SapMockConfiguration.BaseUrl"
         value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
-      - name: "ErpFacadeConfiguration.PermitWithSameKey.Permit"
-        value: $(PermitWithSameKeyPermit)
-      - name: "ErpFacadeConfiguration.PermitWithSameKey.ActiveKey"
-        value: $(PermitWithSameKeyACTIVEKEY)
-      - name: "ErpFacadeConfiguration.PermitWithSameKey.NextKey"
-        value: $(PermitWithSameKeyNEXTKEY)
-      - name: "ErpFacadeConfiguration.PermitWithDifferentKey.Permit"
-        value: $(PermitWithDifferentKeyPermit)
-      - name: "ErpFacadeConfiguration.PermitWithDifferentKey.ActiveKey"
-        value: $(PermitWithDifferentKeyACTIVEKEY)
-      - name: "ErpFacadeConfiguration.PermitWithDifferentKey.NextKey"
-        value: $(PermitWithDifferentKeyNEXTKEY)
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
 
     jobs:
@@ -873,28 +815,10 @@ stages:
         value: $(AzureADConfigurationTenantId)
       - name: "AzureADConfiguration.ClientId"
         value: $(AzureADConfigurationClientId)
-      - name: "AzureADConfiguration.AutoTestClientId"
-        value: $(AzureADConfigurationAutoTestClientId)
-      - name: "AzureADConfiguration.ClientSecret"
-        value: $(AzureADConfigurationClientSecret)
-      - name: "AzureADConfiguration.AutoTestClientIdNoRole"
-        value: $(AzureADConfigurationAutoTestClientIdNoRole)
-      - name: "AzureADConfiguration.ClientSecretNoRole"
-        value: $(AzureADConfigurationClientSecretNoRole)
       - name: "EnterpriseEventServiceConfiguration.ClientId"
         value: $(EnterpriseEventServiceConfigurationClientId)
-      - name: "AzureADConfiguration.AutoTestClientId"
-        value: $(AzureADConfigurationAutoTestClientId)
-      - name: "AzureADConfiguration.ClientSecret"
-        value: $(AzureADConfigurationClientSecret)
-      - name: "AzureADConfiguration.AutoTestClientIdNoRole"
-        value: $(AzureADConfigurationAutoTestClientIdNoRole)
-      - name: "AzureADConfiguration.ClientSecretNoRole"
-        value: $(AzureADConfigurationClientSecretNoRole)
       - name: "SharedApiKeyConfiguration.SharedApiKey"
-        value: $(SharedApiKey)
-      - name: "SapCallbackConfiguration.SharedApiKey"
-        value: $(SharedApiKey)
+        value: $(SharedApiKeyConfigurationSharedApiKey)
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
     jobs:
       - deployment: LiveDeployTerraform
@@ -919,14 +843,18 @@ stages:
         environment: "ERP-Live"
         pool: $(DeploymentPoolPE)
         variables:
-          - name : WEB_APP_NAME
-            value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.WEB_APP'] ]
-          - name : ResourceGroup
-            value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.ResourceGroup'] ]
-          - name : WEB_APP_SLOT_NAME
-            value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME'] ]
-          - name : WEB_APP_SLOT_HOST_NAME
-            value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME'] ]
+        - name : WEB_APP_NAME
+          value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.WEB_APP'] ]
+        - name : "KeyVaultSettings.ServiceUri"
+          value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.keyvaulturi'] ]
+        - name : "AzureWebJobsStorage.ConnectionString"
+          value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
+        - name : ResourceGroup
+          value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.ResourceGroup'] ]
+        - name : WEB_APP_SLOT_NAME
+          value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME'] ]
+        - name : WEB_APP_SLOT_HOST_NAME
+          value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME'] ] 
         workspace:
           clean: all
         strategy:

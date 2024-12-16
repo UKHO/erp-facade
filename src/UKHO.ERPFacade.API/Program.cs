@@ -36,6 +36,7 @@ using UKHO.ERPFacade.Common.Policies;
 using UKHO.ERPFacade.Common.Providers;
 using UKHO.ERPFacade.Services;
 using UKHO.Logging.EventHubLogProvider;
+using UKHO.ERPFacade.API.Services;
 
 namespace UKHO.ERPFacade
 {
