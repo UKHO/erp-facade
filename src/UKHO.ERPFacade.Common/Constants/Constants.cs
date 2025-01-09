@@ -56,7 +56,7 @@ namespace UKHO.ERPFacade.Common.Constants
         public const string ReplacedBy = "REPLACEDBY";
         public const string ChildCell = "CHILDCELL";
         public const string RecDateFormat = "yyyyMMdd";
-        public const string RecTimeFormat = "hhmmss";
+        public const string RecTimeFormat = "HHmmss";
 
         public const string EncCell = "ENC CELL";
         public const string AvcsUnit = "AVCS UNIT";

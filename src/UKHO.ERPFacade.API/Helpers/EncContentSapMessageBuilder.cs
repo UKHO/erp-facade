@@ -61,13 +61,15 @@ namespace UKHO.ERPFacade.API.Helpers
 
             // Build SAP actions for Units
             BuildUnitActions(eventData, soapXml, actionItemNode);
-                        
+
             var xmlNode = SortXmlPayload(actionItemNode);
+
+            var currentDateTime = DateTime.UtcNow;
 
             soapXml.SelectSingleNode(Constants.XpathCorrId).InnerText = eventData.Data.CorrelationId;
             soapXml.SelectSingleNode(Constants.XpathNoOfActions).InnerText = xmlNode.ChildNodes.Count.ToString();
-            soapXml.SelectSingleNode(Constants.XpathRecDate).InnerText = DateTime.UtcNow.ToString(Constants.RecDateFormat);
-            soapXml.SelectSingleNode(Constants.XpathRecTime).InnerText = DateTime.UtcNow.ToString(Constants.RecTimeFormat);
+            soapXml.SelectSingleNode(Constants.XpathRecDate).InnerText = currentDateTime.ToString(Constants.RecDateFormat);
+            soapXml.SelectSingleNode(Constants.XpathRecTime).InnerText = currentDateTime.ToString(Constants.RecTimeFormat);
 
             var IM_MATINFONode = soapXml.SelectSingleNode(Constants.XpathImMatInfo);
             IM_MATINFONode.AppendChild(xmlNode);
@@ -163,7 +165,7 @@ namespace UKHO.ERPFacade.API.Helpers
                 }
             }
         }
-        
+
         /// <summary>
         /// Returns primary unit of sale for given product to get ProductName for ENC cell SAP actions.
         /// </summary>
@@ -372,7 +374,7 @@ namespace UKHO.ERPFacade.API.Helpers
                     throw new ERPFacadeException(EventIds.BuildingSapActionInformationException.ToEventId(), $"Error while generating SAP action information. | Action : {action} | XML Attribute : {attribute.XmlNodeName} | ErrorMessage : {ex.Message}");
                 }
             }
-        }    
+        }
 
         private string GetXmlNodeValue(string fieldValue, string xmlNodeName = null)
         {
