@@ -7,6 +7,6 @@ namespace UKHO.ERPFacade.Common.Constants
     {
         public const string EventJsonDateTimeFormat = "yyyy-MM-ddTHH:mm:ss.fffffffZ";
         public const string RecDateFormat = "yyyyMMdd";
-        public const string RecTimeFormat = "hhmmss";
+        public const string RecTimeFormat = "HHmmss";
     }
 }

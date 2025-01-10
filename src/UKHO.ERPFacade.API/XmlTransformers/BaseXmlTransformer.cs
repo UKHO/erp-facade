@@ -73,11 +73,13 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             var noOfActionsNode = soapXml.SelectSingleNode(XmlTemplateInfo.XpathNoOfActions);
             noOfActionsNode.InnerText = actionItemNode.ChildNodes.Count.ToString();
 
+            DateTime currentDateTime = DateTime.UtcNow;
+
             var recDateNode = soapXml.SelectSingleNode(XmlTemplateInfo.XpathRecDate);
-            recDateNode.InnerText = DateTime.UtcNow.ToString(DateTimeFormats.RecDateFormat);
+            recDateNode.InnerText = currentDateTime.ToString(DateTimeFormats.RecDateFormat);
 
             var recTimeNode = soapXml.SelectSingleNode(XmlTemplateInfo.XpathRecTime);
-            recTimeNode.InnerText = DateTime.UtcNow.ToString(DateTimeFormats.RecTimeFormat);
+            recTimeNode.InnerText = currentDateTime.ToString(DateTimeFormats.RecTimeFormat);
 
             //Set action items
             var parentInfoNode = soapXml.SelectSingleNode(xmlPathInfo);
