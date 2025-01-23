@@ -793,7 +793,7 @@ stages:
                     AzureSubscription: "ERP-Facade-QA-A.011.05.12"
      
   - stage: Livedeploy
-    dependsOn: PreProdDeploy 
+    dependsOn: Devdeploy 
     displayName: "Livedeploy (inc terraform, webapp deploy)"
     variables:
       - group: "ERP-Facade-Live"
