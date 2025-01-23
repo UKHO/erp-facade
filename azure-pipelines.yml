@@ -39,6 +39,8 @@ variables:
     value: "Tiberius"
   - name: DeploymentPoolPE
     value: "Private Link Deployments (ENG)"
+  - name: DeploymentPoolPD
+    value: "Private Link Deployments (BUS)"
   - name: DotNetSdkVersion
     value: "8.x"
 
@@ -825,7 +827,7 @@ stages:
         dependsOn: LiveDeployTerraform
         displayName: "Live - Deploy Dotnet App"
         environment: "ERP-Live"
-        pool: "$(DeploymentPool)"
+        pool: "$(DeploymentPoolPD)"
         variables:
         - name : WEB_APP_NAME
           value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.WEB_APP'] ]
