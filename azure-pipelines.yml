@@ -825,7 +825,7 @@ stages:
         dependsOn: LiveDeployTerraform
         displayName: "Live - Deploy Dotnet App"
         environment: "ERP-Live"
-        pool: $(DeploymentPoolPE)
+        pool: "$(DeploymentPool)"
         variables:
         - name : WEB_APP_NAME
           value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.WEB_APP'] ]
