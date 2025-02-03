@@ -257,17 +257,6 @@
   <suppress>
     <notes>
       <![CDATA[
-   file name: System.Threading.Tasks.Dataflow.dll
-   False positive - applies to Tasks.org Android app
-   ]]>
-    </notes>
-    <packageUrl regex="true">^pkg:generic/System\.Threading\.Tasks\.Dataflow@.*$</packageUrl>
-    <cve>CVE-2020-22475</cve>
-    <cve>CVE-2022-39349</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
    file name: System.Threading.Tasks.Dataflow:Various
    False positive - applies to Tasks.org Android app
    ]]>
@@ -534,33 +523,13 @@
     <packageUrl regex="true">^pkg:generic/Elasticsearch\.Net@.*$</packageUrl>
     <cve>CVE-2023-46674</cve>
   </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
-   file name: System.Security.Cryptography.X509Certificates:4.1.0
-   .NET Core 1.0, 1.1, and 2.0 allow an unauthenticated attacker to remotely cause a denial of service attack against a .NET Core web application by improperly parsing certificate data.
-   POS is pinned to .Net core SDK 6.0.419 which is not vulnerable.
-   ]]>
-    </notes>
-    <cve>CVE-2017-11770</cve>
-  </suppress>
-
 <suppress>
    <notes><![CDATA[
    file name: System.Security.Cryptography.Xml:4.7.0
    ]]></notes>
    <packageUrl regex="true">^pkg:nuget/System\.Security\.Cryptography\.Xml@.*$</packageUrl>
    <vulnerabilityName>CVE-2022-34716</vulnerabilityName>
-</suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
-   file name: Azure.Core.dll
-   ]]>
-    </notes>
-    <packageUrl regex="true">^pkg:generic/Azure\.Core@.*$</packageUrl>   
-    <cve>CVE-2024-43591</cve>    
-  </suppress> 
+</suppress> 
   <suppress>
     <notes>
       <![CDATA[
@@ -661,5 +630,14 @@
    <packageUrl regex="true">^pkg:generic/Newtonsoft\.Json@.*$</packageUrl>
    <cve>CVE-2024-21907</cve>
 </suppress>
- 
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Elasticsearch.Net.dll
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:generic/Elasticsearch\.Net@.*$</packageUrl>
+    <cve>CVE-2024-43709</cve>
+  </suppress>
+
 </suppressions>
