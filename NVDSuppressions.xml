@@ -639,5 +639,14 @@
     <packageUrl regex="true">^pkg:generic/Elasticsearch\.Net@.*$</packageUrl>
     <cve>CVE-2024-43709</cve>
   </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Elasticsearch.Net.dll
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:generic/Elasticsearch\.Net@.*$</packageUrl>
+    <cve>CVE-2024-43709</cve>
+  </suppress>
 
 </suppressions>
