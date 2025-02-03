@@ -639,7 +639,7 @@
     <packageUrl regex="true">^pkg:generic/Elasticsearch\.Net@.*$</packageUrl>
     <cve>CVE-2024-43709</cve>
   </suppress>
-  <suppress>
+  <!--<suppress>
     <notes>
       <![CDATA[
    file name: Elasticsearch.Net.dll
@@ -647,7 +647,7 @@
     </notes>
     <packageUrl regex="true">^pkg:generic/Elasticsearch\.Net@.*$</packageUrl>
     <cve>CVE-2024-43709</cve>
-  </suppress>
+  </suppress>-->
   <suppress>
    <notes><![CDATA[
    file name: Azure.Core.dll
@@ -664,7 +664,7 @@
     <packageUrl regex="true">^pkg:generic/Azure\.Core@.*$</packageUrl>
     <cve>CVE-2024-43591</cve>
   </suppress>
-  <suppress>
+  <!--<suppress>
     <notes>
       <![CDATA[
    file name: Azure.Core.dll
@@ -690,8 +690,8 @@
     </notes>
     <packageUrl regex="true">^pkg:generic/Azure\.Core@.*$</packageUrl>
     <cve>CVE-2024-43591</cve>
-  </suppress>
-  <suppress>
+  </suppress>-->
+  <!--<suppress>
     <notes>
       <![CDATA[
    file name: System.Threading.Tasks.Dataflow.dll
@@ -700,7 +700,7 @@
     <packageUrl regex="true">^pkg:generic/System\.Threading\.Tasks\.Dataflow@.*$</packageUrl>
     <cve>CVE-2020-22475</cve>
     <cve>CVE-2022-39349</cve>
-  </suppress>
+  </suppress>-->
   
 
 </suppressions>
