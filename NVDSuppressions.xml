@@ -665,6 +665,14 @@
     <cve>CVE-2020-22475</cve>
     <cve>CVE-2022-39349</cve>
   </suppress>
-  
-
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Elasticsearch.Net.dll
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:generic/Elasticsearch\.Net@.*$</packageUrl>
+    <cve>CVE-2024-23444</cve>
+    <cve>CVE-2024-23450</cve>
+  </suppress>
 </suppressions>
