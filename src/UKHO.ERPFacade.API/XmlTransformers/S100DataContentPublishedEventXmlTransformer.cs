@@ -58,6 +58,11 @@ namespace UKHO.ERPFacade.API.XmlTransformers
         {
             foreach (var product in eventData.Products)
             {
+                if (product.Status.StatusName.ToLower() == "cancellation")
+                {
+                    product.Status.StatusName = product.Status.StatusName.ToLower();
+                }
+
                 foreach (var action in _s100DataContentPublishedEventSapActionConfig.Value.Actions.Where(x => x.Product == XmlFields.ShopCell))
                 {
                     var unitOfSale = GetUnitOfSale(action.ActionNumber, eventData.UnitsOfSales, product);
