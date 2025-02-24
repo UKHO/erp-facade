@@ -15,6 +15,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
         private readonly ILogger<S100DataContentPublishedEventXmlTransformer> _logger;
         private readonly IXmlOperations _xmlOperations;
         private readonly IOptions<S100DataContentPublishedEventSapActionConfiguration> _s100DataContentPublishedEventSapActionConfig;
+        private const string CANCELLATION_STATUS = "cancellation";
 
         public S100DataContentPublishedEventXmlTransformer(ILogger<S100DataContentPublishedEventXmlTransformer> logger,
                                                            IXmlOperations xmlOperations,
@@ -58,9 +59,9 @@ namespace UKHO.ERPFacade.API.XmlTransformers
         {
             foreach (var product in eventData.Products)
             {
-                if (product.Status.StatusName.ToLower() == "cancellation")
+                if (string.Equals(product.Status.StatusName, CANCELLATION_STATUS, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    product.Status.StatusName = product.Status.StatusName.ToLower();
+                    product.Status.StatusName = CANCELLATION_STATUS;
                 }
 
                 foreach (var action in _s100DataContentPublishedEventSapActionConfig.Value.Actions.Where(x => x.Product == XmlFields.ShopCell))
