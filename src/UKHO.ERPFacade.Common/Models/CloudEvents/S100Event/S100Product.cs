@@ -40,5 +40,7 @@ namespace UKHO.ERPFacade.Common.Models.CloudEvents.S100Event
         public int FileSize { get; set; }
         [JsonProperty("inUnitsOfSale")]
         public List<string> InUnitsOfSale { get; set; }
+        [JsonProperty("producerUnitName")]
+        public string ProducerUnitName { get; set; }
     }
 }
