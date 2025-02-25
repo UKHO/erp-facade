@@ -11,7 +11,7 @@
         "products": [
             {
                 "productType": "S100",
-                "productIdentifier": "S-101",
+                "productIdentifier": "s101",
                 "productName": "101GB1111111A",
                 "editionNumber": 1,
                 "updateNumber": 0,
@@ -21,6 +21,7 @@
                 "providerName": "ICE",
                 "size": "medium",
                 "producingAgency": "GB",
+                "producerUnitName": "101GB1111111A",
                 "status": {
                     "statusName": "newDataset",
                     "statusDate": "2024-07-16T19:20:30.45+01:00",
@@ -44,7 +45,12 @@
         "unitsOfSale": [
             {
                 "unitName": "101GB1111111A",
-                "title": "A test S-101 cell from GB authority in its own unit of sale",
+                "title": "A test s101 cell from GB authority in its own unit of sale",
+                "productIdentifier": "s101",
+                "unitOfSaleType": "unit",
+                "providerCode": "1",
+                "providerName": "ICE",
+                "producingAgency": "GB",
                 "unitSize": "large",
                 "status": "ForSale",
                 "isNewUnitOfSale": true,
@@ -63,7 +69,12 @@
             },
             {
                 "unitName": "101GB1111111Z",
-                "title": "A test S-101 cell from GB authority in its own unit of sale",
+                "title": "A test s101 cell from GB authority in its own unit of sale",
+                "productIdentifier": "s101",
+                "unitOfSaleType": "unit",
+                "providerCode": "1",
+                "providerName": "ICE",
+                "producingAgency": "GB",
                 "unitSize": "large",
                 "status": "NotForSale",
                 "isNewUnitOfSale": false,

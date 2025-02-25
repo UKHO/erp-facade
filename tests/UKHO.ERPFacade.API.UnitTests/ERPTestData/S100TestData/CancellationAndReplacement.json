@@ -11,7 +11,7 @@
         "products": [
             {
                 "productType": "S100",
-                "productIdentifier": "S-101",
+                "productIdentifier": "s101",
                 "productName": "US5NY28M",
                 "editionNumber": 1,
                 "updateNumber": 0,
@@ -21,6 +21,7 @@
                 "providerName": "ICE",
                 "size": "medium",
                 "producingAgency": "GB",
+                "producerUnitName": "US5NY28M",
                 "status": {
                     "statusName": "Cancellation Update",
                     "statusDate": "2024-07-16T19:20:30.45+01:00",
@@ -42,7 +43,7 @@
             },
             {
                 "productType": "S100",
-                "productIdentifier": "S-101",
+                "productIdentifier": "s101",
                 "productName": "US5NY6HU",
                 "editionNumber": 1,
                 "updateNumber": 0,
@@ -52,8 +53,9 @@
                 "providerName": "ICE",
                 "size": "medium",
                 "producingAgency": "GB",
+                "producerUnitName": "US5NY6HU",
                 "status": {
-                    "statusName": "New Edition",
+                    "statusName": "NewEdition",
                     "statusDate": "2024-07-16T19:20:30.45+01:00",
                     "isNewCell": true
                 },
@@ -74,7 +76,7 @@
             },
             {
                 "productType": "S100",
-                "productIdentifier": "S-101",
+                "productIdentifier": "s101",
                 "productName": "US5NY6HV",
                 "editionNumber": 1,
                 "updateNumber": 0,
@@ -84,8 +86,9 @@
                 "providerName": "ICE",
                 "size": "medium",
                 "producingAgency": "GB",
+                "producerUnitName": "US5NY6HV",
                 "status": {
-                    "statusName": "New Edition",
+                    "statusName": "NewEdition",
                     "statusDate": "2024-07-16T19:20:30.45+01:00",
                     "isNewCell": true
                 },
@@ -108,7 +111,12 @@
         "unitsOfSale": [
             {
                 "unitName": "US5NY28M",
-                "title": "A test S-101 cell from GB authority in its own unit of sale",
+                "title": "A test s101 cell from GB authority in its own unit of sale",
+                "productIdentifier": "s101",
+                "unitOfSaleType": "unit",
+                "providerCode": "1",
+                "providerName": "ICE",
+                "producingAgency": "GB",
                 "unitSize": "large",
                 "status": "NotForSale",
                 "isNewUnitOfSale": false,
@@ -127,7 +135,12 @@
             },
             {
                 "unitName": "US5NY6HU",
-                "title": "A test S-101 cell from GB authority in its own unit of sale",
+                "title": "A test s101 cell from GB authority in its own unit of sale",
+                "productIdentifier": "s101",
+                "unitOfSaleType": "unit",
+                "providerCode": "1",
+                "providerName": "ICE",
+                "producingAgency": "GB",
                 "unitSize": "large",
                 "status": "ForSale",
                 "isNewUnitOfSale": true,
@@ -146,7 +159,12 @@
             },
             {
                 "unitName": "US5NY6HV",
-                "title": "A test S-101 cell from GB authority in its own unit of sale",
+                "title": "A test s101 cell from GB authority in its own unit of sale",
+                "productIdentifier": "s101",
+                "unitOfSaleType": "unit",
+                "providerCode": "1",
+                "providerName": "ICE",
+                "producingAgency": "GB",
                 "unitSize": "large",
                 "status": "ForSale",
                 "isNewUnitOfSale": true,
