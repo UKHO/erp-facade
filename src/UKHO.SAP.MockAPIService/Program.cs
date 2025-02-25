@@ -13,7 +13,16 @@ namespace UKHO.SAP.MockAPIService
 
         private static IHostBuilder CreateHostBuilder(string[] args)
         => Host.CreateDefaultBuilder(args)
-            .ConfigureServices((host, services) => ConfigureServices(services, host.Configuration));
+                        .ConfigureAppConfiguration((context, config) =>
+                        {
+                            IHostEnvironment env = context.HostingEnvironment;
+                            config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+#if DEBUG
+                                  .AddJsonFile("appsettings.local.overrides.json", optional: true, reloadOnChange: true)
+#endif
+                                  .AddEnvironmentVariables();
+                        })
+              .ConfigureServices((host, services) => ConfigureServices(services, host.Configuration));
 
         private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
