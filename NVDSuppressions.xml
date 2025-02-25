@@ -1006,5 +1006,13 @@
     <packageUrl regex="true">^pkg:generic/Newtonsoft\.Json@.*$</packageUrl>
     <cve>CVE-2024-21907</cve>
   </suppress>
-
+  <suppress>
+   <notes><![CDATA[
+   file name: Elasticsearch.Net.dll
+   ]]></notes>
+   <packageUrl regex="true">^pkg:generic/Elasticsearch\.Net@.*$</packageUrl>
+   <cve>CVE-2024-23444</cve>
+   <cve>CVE-2024-23450</cve>
+   <cve>CVE-2024-43709</cve>
+</suppress>
 </suppressions>
