@@ -22,7 +22,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                 {
                     object jsonAttributeValue = Extractor.ExtractJsonAttributeValue(conditions.AttributeName, obj, obj.GetType());
 
-                    if (jsonAttributeValue != null! && jsonAttributeValue.ToString() == conditions.AttributeValue)
+                    if (jsonAttributeValue != null! && string.Equals(jsonAttributeValue.ToString(), conditions.AttributeValue, StringComparison.InvariantCultureIgnoreCase))
                     {
                         isConditionSatisfied = true;
                     }

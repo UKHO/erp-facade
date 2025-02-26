@@ -551,7 +551,7 @@ Each action has the following properties:
                             {
                                 "AttributeDataType": "string",
                                 "AttributeName": "Status.StatusName",
-                                "AttributeValue": "Cancellation Update"
+                                "AttributeValue": "cancellation"
                             },
                             {
                                 "AttributeDataType": "bool",
