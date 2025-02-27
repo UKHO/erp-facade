@@ -22,7 +22,7 @@
                 "size": "medium",
                 "producingAgency": "GB",
                 "status": {
-                    "statusName": "Cancellation Update",
+                    "statusName": "cancellation",
                     "statusDate": "2024-07-16T19:20:30.45+01:00",
                     "isNewCell": false
                 },
@@ -103,6 +103,34 @@
                 "inUnitsOfSale": [
                     "101CA123456UNIC"
                 ]
+            },
+            {
+                "productType": "S100",
+                "productIdentifier": "S-101",
+                "productName": "101CA123456UNID",
+                "editionNumber": 1,
+                "updateNumber": 0,
+                "mayAffectHoldings": true,
+                "contentChange": true,
+                "providerCode": "1",
+                "providerName": "ICE",
+                "size": "medium",
+                "producingAgency": "GB",
+                "status": {
+                    "statusName": "CancellAtion",
+                    "statusDate": "2024-07-16T19:20:30.45+01:00",
+                    "isNewCell": false
+                },
+                "replaces": [],
+                "dataReplacement": [],
+                "boundingBox": {
+                    "northLimit": 63.25,
+                    "southLimit": 63,
+                    "eastLimit": 8,
+                    "westLimit": 7.75
+                },
+                "fileSize": 3456,
+                "inUnitsOfSale": []
             }
         ],
         "unitsOfSale": [
@@ -157,8 +185,28 @@
                     "westLimit": 7.75
                 },
                 "compositionChanges": {
-                    "addProducts": [ "101CA123456UNIC" ],
+                    "addProducts": [
+                        "101CA123456UNIC"
+                    ],
+                    "removeProducts": []
+                }
+            },
+            {
+                "unitName": "101CA123456UNID",
+                "title": "A test S-101 cell from GB authority in its own unit of sale",
+                "unitSize": "large",
+                "status": "NotForSale",
+                "isNewUnitOfSale": false,
+                "boundingBox": {
+                    "northLimit": 63.25,
+                    "southLimit": 63,
+                    "eastLimit": 8,
+                    "westLimit": 7.75
+                },
+                "compositionChanges": {
+                    "addProducts": [],
                     "removeProducts": [
+                        "101CA123456UNID"
                     ]
                 }
             }
