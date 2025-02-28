@@ -30,6 +30,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UKHO.ERPFacade.EventAggrega
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UKHO.ERPFacade.EventAggregation.WebJob.UnitTests", "tests\UKHO.ERPFacade.EventAggregation.WebJob.UnitTests\UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.csproj", "{860140C0-E6FA-41E6-86D3-BB49D5D25EDA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "mock", "mock", "{4F617D82-D41E-4518-9D44-20FD98EA6734}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ADDSMock", "mock\repo\src\ADDSMock\ADDSMock.csproj", "{728E827F-9D17-456F-9FF2-62EE246073C5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -76,6 +80,10 @@ Global
 		{860140C0-E6FA-41E6-86D3-BB49D5D25EDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{860140C0-E6FA-41E6-86D3-BB49D5D25EDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{860140C0-E6FA-41E6-86D3-BB49D5D25EDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{728E827F-9D17-456F-9FF2-62EE246073C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{728E827F-9D17-456F-9FF2-62EE246073C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{728E827F-9D17-456F-9FF2-62EE246073C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{728E827F-9D17-456F-9FF2-62EE246073C5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -91,6 +99,7 @@ Global
 		{E0EE87DB-1582-4DBD-8387-FAF180CBB845} = {50E64422-A1CF-4B77-9652-B141C13C6086}
 		{F82F8E74-51BA-41A9-95C1-48AE58938959} = {E2E557E3-1BF9-47BD-9B86-949B7F1CE3FA}
 		{860140C0-E6FA-41E6-86D3-BB49D5D25EDA} = {50E64422-A1CF-4B77-9652-B141C13C6086}
+		{728E827F-9D17-456F-9FF2-62EE246073C5} = {4F617D82-D41E-4518-9D44-20FD98EA6734}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BF0B4581-F0AA-473C-A20A-39248D227DF6}
