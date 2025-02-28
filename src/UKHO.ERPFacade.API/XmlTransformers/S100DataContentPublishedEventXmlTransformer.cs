@@ -20,9 +20,9 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                                                            IXmlOperations xmlOperations,
                                                            IOptions<S100DataContentPublishedEventSapActionConfiguration> s100DataContentPublishedEventSapActionConfig)
         {
-            _logger = logger;
-            _xmlOperations = xmlOperations;
-            _s100DataContentPublishedEventSapActionConfig = s100DataContentPublishedEventSapActionConfig;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _xmlOperations = xmlOperations ?? throw new ArgumentNullException(nameof(xmlOperations));
+            _s100DataContentPublishedEventSapActionConfig = s100DataContentPublishedEventSapActionConfig ?? throw new ArgumentNullException(nameof(s100DataContentPublishedEventSapActionConfig));
         }
 
         /// <summary>
