@@ -60,8 +60,6 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             {
                 foreach (var action in _s100DataContentPublishedEventSapActionConfig.Value.Actions.Where(x => x.Product == XmlFields.ShopCell))
                 {
-                    var unitOfSale = GetUnitOfSale(action.ActionNumber, eventData.UnitsOfSales, product);
-
                     if (!ValidateActionRules(action, product))
                         continue;
 
@@ -69,20 +67,20 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                     {
                         case 1://CREATE PRODUCT
                         case 10://CANCEL PRODUCT
-                            BuildAndAppendActionNode(soapXml, product, unitOfSale, action, actionItemNode, product.ProductName);
+                            BuildAndAppendActionNode(soapXml, product, null, action, actionItemNode, product.ProductName);
                             break;
 
                         case 4://REPLACED WITH PRODUCT
                             if (product.DataReplacement.Any())
                                 foreach (var replacedProduct in product.DataReplacement)
                                 {
-                                    BuildAndAppendActionNode(soapXml, product, unitOfSale, action, actionItemNode, product.ProductName, replacedProduct);
+                                    BuildAndAppendActionNode(soapXml, product, null, action, actionItemNode, product.ProductName, replacedProduct);
                                 }
                             break;
 
                         case 6://CHANGE PRODUCT
                             if (product.InUnitsOfSale.Any())
-                                BuildAndAppendActionNode(soapXml, product, unitOfSale, action, actionItemNode, product.ProductName);
+                                BuildAndAppendActionNode(soapXml, product, null, action, actionItemNode, product.ProductName);
                             break;
                     }
                 }
@@ -122,25 +120,6 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                     }
                 }
             }
-        }
-
-        private S100UnitOfSale GetUnitOfSale(int actionNumber, List<S100UnitOfSale> listOfUnitOfSales, S100Product product)
-        {
-            return actionNumber switch
-            {
-                //Case 1 : CREATE PRODUCT
-                1 => listOfUnitOfSales.FirstOrDefault(x => x.Status == JsonFields.UnitOfSaleStatusForSale &&
-                                                           x.CompositionChanges.AddProducts.Contains(product.ProductName)),
-
-                //Case 4 : REPLACED WITH PRODUCT
-                //Case 10 : CANCEL PRODUCT
-                4 or 10 => listOfUnitOfSales.FirstOrDefault(x => x.CompositionChanges.RemoveProducts.Contains(product.ProductName)),
-
-                //Case 6 : CHANGE PRODUCT
-                6 => listOfUnitOfSales.FirstOrDefault(x => x.Status == JsonFields.UnitOfSaleStatusForSale &&
-                                                           product.InUnitsOfSale.Contains(x.UnitName)),
-                _ => null,
-            };
         }
 
         private void BuildAndAppendActionNode(XmlDocument soapXml, S100Product product, S100UnitOfSale unitOfSale, Actions action, XmlNode actionItemNode, string childCell = null, string replacedBy = null)
