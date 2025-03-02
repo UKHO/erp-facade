@@ -345,11 +345,11 @@ stages:
             inputs:
               command: "restore"
               projects: |
-                **/*ADDSMock.csproj
+                **/ADDSMock.csproj
               feedsToUse: config
               noCache: true
               nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
-              workingDirectory: '$(Build.SourcesDirectory)\mock\repo\'
+              workingDirectory: '$(Build.SourcesDirectory)\mock\repo\src'
               packagesDirectory: '$(Build.SourcesDirectory)\mock\repo\src\ADDSMockpackages'
 
           - task: DotNetCoreCLI@2
