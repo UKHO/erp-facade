@@ -349,8 +349,8 @@ stages:
               feedsToUse: config
               noCache: true
               nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
-              workingDirectory: '$(Build.SourcesDirectory)'
-              packagesDirectory: '$(Build.SourcesDirectory)\mock\packages'
+              workingDirectory: '$(Build.SourcesDirectory)\mock\repo\'
+              packagesDirectory: '$(Build.SourcesDirectory)\mock\repo\src\ADDSMockpackages'
 
           - task: DotNetCoreCLI@2
             displayName: "Build ADDS Mock Service Project"
