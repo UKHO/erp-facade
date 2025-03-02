@@ -329,12 +329,40 @@ stages:
               ArtifactName: UKHOMockSAPService
           
           - task: DotNetCoreCLI@2
+            displayName: ".Net Core - NuGet restore for Adds mock project"
+            inputs:
+              command: "restore"
+              projects: |
+                (Build.SourcesDirectory)/ADDSMock.csproj
+              feedsToUse: config
+              noCache: true
+              nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
+              workingDirectory: '$(Build.SourcesDirectory)\mock'
+              packagesDirectory: '$(Build.SourcesDirectory)\UKHO.SAP.MockSAPService\packages'
+
+          - task: DotNetCoreCLI@2
             displayName: "Build Adds Mock Service Project"
             inputs:
               command: "build"
               projects: |
-                $(Build.SourcesDirectory)\mock\ADDSMock.csproj
+                (Build.SourcesDirectory)/ADDSMock.csproj
               arguments: '--configuration $(BuildConfiguration)'
+
+          - task: DotNetCoreCLI@2
+            displayName: "Publish Adds Mock Service"
+            inputs:
+              command: "publish"
+              publishWebProjects: false
+              projects: '(Build.SourcesDirectory)/ADDSMock.csproj'
+              arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\AddMockService'
+              zipAfterPublish: true
+              modifyOutputPath: true
+
+          - task: PublishBuildArtifacts@1
+            displayName: "Publish Mock Service Artifact"
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)\AddsMockService'
+              ArtifactName: AddsMockService
 
       - job: Stryker
         condition: eq('${{ parameters.RunStryker }}', true)      
