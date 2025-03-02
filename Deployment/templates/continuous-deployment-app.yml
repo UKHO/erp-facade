@@ -47,6 +47,23 @@ steps:
       deployToSlotOrASE: true
       slotName: $(WEB_APP_SLOT_NAME)
 
+  - task: FileTransform@1
+    displayName: "File Transform: Adds Mock Service Application Settings"
+    condition: and(succeeded(), eq(variables['Environment.Name'], 'ERP-Dev'))
+    inputs:
+      folderPath: '$(Pipeline.Workspace)/ADDSMock/*.zip'
+      fileType: 'json'
+      targetFiles: '**/appsettings.json'
+
+  - task: AzureWebApp@1
+    displayName: "Azure App Deploy: AddsMockService"
+    condition: and(succeeded(), eq(variables['Environment.Name'], 'ERP-Dev'))
+    inputs:
+      azureSubscription: "${{ parameters.AzureSubscription }}"
+      appType: webApp
+      appName: "$(MOCK_WEB_APP_NAME)"
+      package: "$(Pipeline.Workspace)/ADDSMock/ADDSMock.zip"
+
   # - task: PowerShell@2
   #   displayName: "Check the status of staging slot"
   #   inputs:

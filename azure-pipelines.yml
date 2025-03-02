@@ -327,7 +327,15 @@ stages:
             inputs:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)\MockSAPService'
               ArtifactName: UKHOMockSAPService
-              
+          
+          - task: DotNetCoreCLI@2
+            displayName: "Build Adds Mock Service Project"
+            inputs:
+              command: "build"
+              projects: |
+                **/ADDSMock.csproj
+              arguments: '--configuration $(BuildConfiguration)'
+
       - job: Stryker
         condition: eq('${{ parameters.RunStryker }}', true)      
         workspace:
@@ -428,7 +436,7 @@ stages:
           - name : WEB_APP_SLOT_NAME
             value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME'] ]
           - name : WEB_APP_SLOT_HOST_NAME
-            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME'] ]
+            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME'] ]        
         workspace:
           clean: all
         strategy:
@@ -614,6 +622,12 @@ stages:
         value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
       - name: "SapMockConfiguration.BaseUrl"
         value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
+      - name: addsmockWebAppName
+        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.addsmockWebApp']  ]
+      - name: addsmockWebAppResourceGroup
+        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.addsmockWebAppResourceGroupName']  ]
+      - name: "addsSapMockConfiguration.BaseUrl"
+        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.addsmockwebappurl']  ]
    
     jobs:
       - deployment: IATDeployTerraform
