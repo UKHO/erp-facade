@@ -333,7 +333,7 @@ stages:
             inputs:
               command: "build"
               projects: |
-                ./mock/ADDSMock.csproj
+                $(Build.SourcesDirectory)\mock\ADDSMock.csproj
               arguments: '--configuration $(BuildConfiguration)'
 
       - job: Stryker
