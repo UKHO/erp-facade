@@ -408,7 +408,7 @@ stages:
           - task: PublishBuildArtifacts@1
             displayName: "Publish Web Artifact"
             inputs:
-              PathtoPublish: '$(Build.ArtifactStagingDirectory)\mock\repo\ADDSMock\ADDSMock.zip'
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)\Mock\ADDSMock.zip'
               ArtifactName: ADDSMock
  
   - stage: Devdeploy
