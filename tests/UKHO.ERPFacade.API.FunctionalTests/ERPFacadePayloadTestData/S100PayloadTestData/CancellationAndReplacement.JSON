@@ -4,14 +4,14 @@
     "source": "https://encpublishing.ukho.gov.uk",
     "id": "5f03a25f-28b3-46ea-b009-5943250a9a41",
     "time": "2024-08-13T12:08:03.4880776Z",
-    "subject": "",
+    "subject": "101CA123456UNIA",
     "datacontenttype": "application/json",
     "data": {
-        "correlationId": "165ce4a4-1d62-4f56-b359-59e178d77104",
+        "correlationId": "165ce4a4-162-f56-39-59e17877104",
         "products": [
             {
-                "productType": "S100",
-                "productIdentifier": "S-101",
+                "productType": "s100",
+                "productIdentifier": "s101",
                 "productName": "101CA123456UNIA",
                 "editionNumber": 1,
                 "updateNumber": 0,
@@ -32,17 +32,18 @@
                     "101CA123456UNIC"
                 ],
                 "boundingBox": {
-                    "northLimit": 63.25,
+                    "northLimit": 63,
                     "southLimit": 63,
                     "eastLimit": 8,
-                    "westLimit": 7.75
+                    "westLimit": 7
                 },
                 "fileSize": 3456,
-                "inUnitsOfSale": []
+                "inUnitsOfSale": [],
+                "producerUnitName": "101CA123456UNIA"
             },
             {
-                "productType": "S100",
-                "productIdentifier": "S-101",
+                "productType": "s100",
+                "productIdentifier": "s101",
                 "productName": "101CA123456UNIB",
                 "editionNumber": 1,
                 "updateNumber": 0,
@@ -62,19 +63,20 @@
                 ],
                 "dataReplacement": [],
                 "boundingBox": {
-                    "northLimit": 63.25,
+                    "northLimit": 63,
                     "southLimit": 63,
                     "eastLimit": 8,
-                    "westLimit": 7.75
+                    "westLimit": 7
                 },
                 "fileSize": 3456,
                 "inUnitsOfSale": [
                     "101CA123456UNIB"
-                ]
+                ],
+                "producerUnitName": "101CA123456UNIB"
             },
             {
-                "productType": "S100",
-                "productIdentifier": "S-101",
+                "productType": "s100",
+                "productIdentifier": "s101",
                 "productName": "101CA123456UNIC",
                 "editionNumber": 1,
                 "updateNumber": 0,
@@ -94,19 +96,20 @@
                 ],
                 "dataReplacement": [],
                 "boundingBox": {
-                    "northLimit": 63.25,
+                    "northLimit": 63,
                     "southLimit": 63,
                     "eastLimit": 8,
-                    "westLimit": 7.75
+                    "westLimit": 7
                 },
                 "fileSize": 3456,
                 "inUnitsOfSale": [
                     "101CA123456UNIC"
-                ]
+                ],
+                "producerUnitName": "101CA123456UNIC"
             },
             {
-                "productType": "S100",
-                "productIdentifier": "S-101",
+                "productType": "s100",
+                "productIdentifier": "s101",
                 "productName": "101CA123456UNID",
                 "editionNumber": 1,
                 "updateNumber": 0,
@@ -117,34 +120,40 @@
                 "size": "medium",
                 "producingAgency": "GB",
                 "status": {
-                    "statusName": "CancellAtion",
+                    "statusName": "Cancellation",
                     "statusDate": "2024-07-16T19:20:30.45+01:00",
                     "isNewCell": false
                 },
                 "replaces": [],
                 "dataReplacement": [],
                 "boundingBox": {
-                    "northLimit": 63.25,
+                    "northLimit": 63,
                     "southLimit": 63,
                     "eastLimit": 8,
-                    "westLimit": 7.75
+                    "westLimit": 7
                 },
                 "fileSize": 3456,
-                "inUnitsOfSale": []
+                "inUnitsOfSale": [],
+                "producerUnitName": "101CA123456UNID"
             }
         ],
         "unitsOfSale": [
             {
                 "unitName": "101CA123456UNIA",
+                "productIdentifier": "s101",
                 "title": "A test S-101 cell from GB authority in its own unit of sale",
+                "unitOfSaleType": "unit",
+                "providerCode": "1",
+                "providerName": "ICE",
+                "producingAgency": "GB00",
                 "unitSize": "large",
                 "status": "NotForSale",
                 "isNewUnitOfSale": false,
                 "boundingBox": {
-                    "northLimit": 63.25,
+                    "northLimit": 63,
                     "southLimit": 63,
                     "eastLimit": 8,
-                    "westLimit": 7.75
+                    "westLimit": 7
                 },
                 "compositionChanges": {
                     "addProducts": [],
@@ -155,15 +164,20 @@
             },
             {
                 "unitName": "101CA123456UNIB",
+                "productIdentifier": "s101",
                 "title": "A test S-101 cell from GB authority in its own unit of sale",
+                "unitOfSaleType": "unit",
+                "providerCode": "1",
+                "providerName": "ICE",
+                "producingAgency": "GB00",
                 "unitSize": "large",
                 "status": "ForSale",
                 "isNewUnitOfSale": true,
                 "boundingBox": {
-                    "northLimit": 63.25,
+                    "northLimit": 63,
                     "southLimit": 63,
                     "eastLimit": 8,
-                    "westLimit": 7.75
+                    "westLimit": 7
                 },
                 "compositionChanges": {
                     "addProducts": [
@@ -174,15 +188,20 @@
             },
             {
                 "unitName": "101CA123456UNIC",
+                "productIdentifier": "s101",
                 "title": "A test S-101 cell from GB authority in its own unit of sale",
+                "unitOfSaleType": "unit",
+                "providerCode": "1",
+                "providerName": "ICE",
+                "producingAgency": "GB00",
                 "unitSize": "large",
                 "status": "ForSale",
                 "isNewUnitOfSale": true,
                 "boundingBox": {
-                    "northLimit": 63.25,
+                    "northLimit": 63,
                     "southLimit": 63,
                     "eastLimit": 8,
-                    "westLimit": 7.75
+                    "westLimit": 7
                 },
                 "compositionChanges": {
                     "addProducts": [
@@ -193,20 +212,52 @@
             },
             {
                 "unitName": "101CA123456UNID",
+                "productIdentifier": "s101",
                 "title": "A test S-101 cell from GB authority in its own unit of sale",
+                "unitOfSaleType": "unit",
+                "providerCode": "1",
+                "providerName": "ICE",
+                "producingAgency": "GB00",
                 "unitSize": "large",
                 "status": "NotForSale",
                 "isNewUnitOfSale": false,
                 "boundingBox": {
-                    "northLimit": 63.25,
+                    "northLimit": 63,
                     "southLimit": 63,
                     "eastLimit": 8,
-                    "westLimit": 7.75
+                    "westLimit": 7
                 },
                 "compositionChanges": {
                     "addProducts": [],
                     "removeProducts": [
                         "101CA123456UNID"
+                    ]
+                }
+            },
+            {
+                "unitName": "s100WorldFolio",
+                "productIdentifier": "s101",
+                "title": "Whole World Wide Folio",
+                "unitOfSaleType": "folio",
+                "providerCode": "0",
+                "providerName": "UKHO",
+                "producingAgency": "UKHO",
+                "unitSize": "large",
+                "status": "ForSale",
+                "isNewUnitOfSale": false,
+                "boundingBox": {
+                    "northLimit": 90,
+                    "southLimit": -90,
+                    "eastLimit": 180,
+                    "westLimit": -180
+                },
+                "compositionChanges": {
+                    "addProducts": [
+                        "101GB00123456UNIB",
+                        "101GB00123456UNIC"
+                    ],
+                    "removeProducts": [
+                        "101GB00123456UNIA"
                     ]
                 }
             }
