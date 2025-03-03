@@ -328,53 +328,6 @@ stages:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)\MockSAPService'
               ArtifactName: UKHOMockSAPService
           
-      - job: BuildAndPublishADDSMockService
-        workspace:
-          clean: all
-        displayName: "Dotnet Build And Publish ADDS Mock Service"
-        steps:
-
-          - task: UseDotNet@2
-            displayName: Use .NET SDK $(DotNetSdkVersion)
-            inputs:
-              packageType: sdk
-              version: $(DotNetSdkVersion)
-              
-          - task: DotNetCoreCLI@2
-            displayName: ".Net Core - NuGet restore for adds mock project"
-            inputs:
-              command: "restore"
-              projects: |
-                **/ADDSMock.csproj
-              feedsToUse: config
-              noCache: true
-              nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
-              workingDirectory: '$(Build.SourcesDirectory)\mock\repo\src'
-              packagesDirectory: '$(Build.SourcesDirectory)\mock\repo\src\ADDSMockpackages'
-
-          - task: DotNetCoreCLI@2
-            displayName: "Build ADDS Mock Service Project"
-            inputs:
-              command: "build"
-              projects: |
-                **/ADDSMock.csproj
-              arguments: '--configuration $(BuildConfiguration)'
-
-          - task: DotNetCoreCLI@2
-            displayName: "Publish ADDS Mock Service"
-            inputs:
-              command: "publish"
-              publishWebProjects: false
-              projects: '**ADDSMock.csproj'
-              arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\ADDSMock'
-              zipAfterPublish: true
-              modifyOutputPath: true
-
-          - task: PublishBuildArtifacts@1
-            displayName: "Publish ADDS Mock Service Artifact"
-            inputs:
-              PathtoPublish: '$(Build.ArtifactStagingDirectory)\ADDSMock'
-              ArtifactName: ADDSMock
       - job: Stryker
         condition: eq('${{ parameters.RunStryker }}', true)      
         workspace:
@@ -403,7 +356,56 @@ stages:
             displayName: 'Publish Strkyer Mutator Report'
             inputs:
               reportPattern: '**/mutation-report.html'
+      
+      - job: BuildAndPublishADDSMockService
+        workspace:
+          clean: all
+        displayName: "Dotnet Build publish ADDS Mock Service"
+        steps:
 
+          - task: UseDotNet@2
+            displayName: Use .NET SDK $(DotNetSdkVersion)
+            inputs:
+              packageType: sdk
+              version: $(DotNetSdkVersion)
+              
+          - task: DotNetCoreCLI@2
+            displayName: ".Net Core - NuGet restore for non test projects only"
+            inputs:
+              command: "restore"
+              projects: |
+                **/*.csproj              
+              feedsToUse: config
+              noCache: true
+              nugetConfigPath: '$(Build.SourcesDirectory)\mock\repo\BuildNuget.config'
+              workingDirectory: '$(Build.SourcesDirectory)\mock\repo\src'
+              packagesDirectory: '$(Build.SourcesDirectory)\mock\repo\src\packages'
+
+          - task: DotNetCoreCLI@2
+            displayName: "dotnet build task"
+            inputs:
+              command: "build"
+              projects: |
+                **/*.csproj
+              
+              arguments: '--configuration $(BuildConfiguration)\mock\repo'
+
+          - task: DotNetCoreCLI@2
+            displayName: "Publish ADDS Mock Service "
+            inputs:
+              command: "publish"
+              publishWebProjects: false
+              projects: '**/*ADDSMock.csproj'
+              arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\ADDSMock'
+              zipAfterPublish: false
+              modifyOutputPath: false
+
+          - task: PublishBuildArtifacts@1
+            displayName: "Publish Web Artifact"
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)\ADDSMock\ADDSMock.zip'
+              ArtifactName: ADDSMock
+ 
   - stage: Devdeploy
     displayName: "Devdeploy (inc terraform, webapp deploy)"
     variables:
