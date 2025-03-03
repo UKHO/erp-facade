@@ -61,8 +61,8 @@ Each action has the following properties:
                     },
                     {
                         "IsRequired": true,
-                        "Section": "UnitOfSale",
-                        "JsonPropertyName": "UnitName",
+                        "Section": "Product",
+                        "JsonPropertyName": "ProducerUnitName",
                         "XmlNodeName": "PRODUCTNAME",
                         "SortingOrder": 3
                     },
@@ -120,8 +120,8 @@ Each action has the following properties:
                 ],
                 "Attributes": [
                     {
-                        "IsRequired": false,
-                        "Section": "Product",
+                        "IsRequired": true,
+                        "Section": "UnitOfSale",
                         "JsonPropertyName": "ProductIdentifier",
                         "XmlNodeName": "PRODTYPE",
                         "SortingOrder": 1
@@ -148,14 +148,14 @@ Each action has the following properties:
                         "SortingOrder": 4
                     },
                     {
-                        "IsRequired": false,
+                        "IsRequired": true,
                         "Section": "UnitOfSale",
                         "JsonPropertyName": "ProducingAgency",
                         "XmlNodeName": "AGENCY",
                         "SortingOrder": 5
                     },
                     {
-                        "IsRequired": false,
+                        "IsRequired": true,
                         "Section": "UnitOfSale",
                         "JsonPropertyName": "ProviderCode",
                         "XmlNodeName": "PROVIDER",
@@ -184,8 +184,8 @@ Each action has the following properties:
                 "Rules": [],
                 "Attributes": [
                     {
-                        "IsRequired": false,
-                        "Section": "Product",
+                        "IsRequired": true,
+                        "Section": "UnitOfSale",
                         "JsonPropertyName": "ProductIdentifier",
                         "XmlNodeName": "PRODTYPE",
                         "SortingOrder": 1
@@ -273,8 +273,8 @@ Each action has the following properties:
                     },
                     {
                         "IsRequired": true,
-                        "Section": "UnitOfSale",
-                        "JsonPropertyName": "UnitName",
+                        "Section": "Product",
+                        "JsonPropertyName": "ProducerUnitName",
                         "XmlNodeName": "PRODUCTNAME",
                         "SortingOrder": 3
                     },
@@ -356,8 +356,8 @@ Each action has the following properties:
                     },
                     {
                         "IsRequired": true,
-                        "Section": "UnitOfSale",
-                        "JsonPropertyName": "UnitName",
+                        "Section": "Product",
+                        "JsonPropertyName": "ProducerUnitName",
                         "XmlNodeName": "PRODUCTNAME",
                         "SortingOrder": 3
                     },
@@ -420,8 +420,8 @@ Each action has the following properties:
                 ],
                 "Attributes": [
                     {
-                        "IsRequired": false,
-                        "Section": "Product",
+                        "IsRequired": true,
+                        "Section": "UnitOfSale",
                         "JsonPropertyName": "ProductIdentifier",
                         "XmlNodeName": "PRODTYPE",
                         "SortingOrder": 1
@@ -448,14 +448,14 @@ Each action has the following properties:
                         "SortingOrder": 4
                     },
                     {
-                        "IsRequired": false,
+                        "IsRequired": true,
                         "Section": "UnitOfSale",
                         "JsonPropertyName": "ProducingAgency",
                         "XmlNodeName": "AGENCY",
                         "SortingOrder": 5
                     },
                     {
-                        "IsRequired": false,
+                        "IsRequired": true,
                         "Section": "UnitOfSale",
                         "JsonPropertyName": "ProviderCode",
                         "XmlNodeName": "PROVIDER",
@@ -484,8 +484,8 @@ Each action has the following properties:
                 "Rules": [],
                 "Attributes": [
                     {
-                        "IsRequired": false,
-                        "Section": "Product",
+                        "IsRequired": true,
+                        "Section": "UnitOfSale",
                         "JsonPropertyName": "ProductIdentifier",
                         "XmlNodeName": "PRODTYPE",
                         "SortingOrder": 1
@@ -578,8 +578,8 @@ Each action has the following properties:
                     },
                     {
                         "IsRequired": true,
-                        "Section": "UnitOfSale",
-                        "JsonPropertyName": "UnitName",
+                        "Section": "Product",
+                        "JsonPropertyName": "ProducerUnitName",
                         "XmlNodeName": "PRODUCTNAME",
                         "SortingOrder": 3
                     },
@@ -637,8 +637,8 @@ Each action has the following properties:
                 ],
                 "Attributes": [
                     {
-                        "IsRequired": false,
-                        "Section": "Product",
+                        "IsRequired": true,
+                        "Section": "UnitOfSale",
                         "JsonPropertyName": "ProductIdentifier",
                         "XmlNodeName": "PRODTYPE",
                         "SortingOrder": 1

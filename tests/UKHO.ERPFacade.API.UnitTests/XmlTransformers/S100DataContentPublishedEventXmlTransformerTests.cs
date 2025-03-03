@@ -53,6 +53,17 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
         }
 
         [Test]
+        public void WhenConstructorIsCalledWithAnyDependencyAsNull_ThenShouldThrowArgumentNullException()
+        {
+            Assert.Multiple(() =>
+            {
+                Assert.That(() => new S100DataContentPublishedEventXmlTransformer(null, _fakeXmlOperations, _fakeSapActionConfig), Throws.ArgumentNullException.With.Message.EqualTo("Value cannot be null. (Parameter 'logger')"));
+                Assert.That(() => new S100DataContentPublishedEventXmlTransformer(_fakeLogger, null, _fakeSapActionConfig), Throws.ArgumentNullException.With.Message.EqualTo("Value cannot be null. (Parameter 'xmlOperations')"));
+                Assert.That(() => new S100DataContentPublishedEventXmlTransformer(_fakeLogger, _fakeXmlOperations, null), Throws.ArgumentNullException.With.Message.EqualTo("Value cannot be null. (Parameter 's100DataContentPublishedEventSapActionConfig')"));
+            });
+        }
+
+        [Test]
         public void WhenSapXmlTemplateFileNotExist_ThenThrowERPFacadeException()
         {
             var newProductEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\S100TestData\\NewProduct.JSON");
