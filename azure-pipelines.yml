@@ -360,8 +360,13 @@ stages:
       - job: BuildAndPublishADDSMockService
         workspace:
           clean: all
-        displayName: "Dotnet Build publish ADDS Mock Service"
+        displayName: "Dotnet Build publish ADDS Mock Service"        
         steps:
+          - checkout: self        
+          
+          - script: git submodule update --init --recursive
+            displayName: 'update submodule for ADDS Mock Service'
+            workingDirectory: '$(Build.SourcesDirectory)'
 
           - task: UseDotNet@2
             displayName: Use .NET SDK $(DotNetSdkVersion)
