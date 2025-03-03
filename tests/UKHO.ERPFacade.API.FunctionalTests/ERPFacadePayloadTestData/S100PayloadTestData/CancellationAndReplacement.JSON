@@ -22,7 +22,7 @@
                 "size": "medium",
                 "producingAgency": "GB",
                 "status": {
-                    "statusName": "cancellation",
+                    "statusName": "CancellAtion",
                     "statusDate": "2024-07-16T19:20:30.45+01:00",
                     "isNewCell": false
                 },
