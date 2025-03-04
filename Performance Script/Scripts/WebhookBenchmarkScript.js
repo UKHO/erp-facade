@@ -4,7 +4,7 @@ import { htmlReport } from "https://raw.githubusercontent.com/benc-uk/k6-reporte
 import { textSummary } from "https://jslib.k6.io/k6-summary/0.0.1/index.js";
 import { URL } from 'https://jslib.k6.io/url/1.0.0/index.js';
 import { PayloadSetup, S100PayloadSetup } from '../PayloadDataSetup/PayloadSetupDifferentProfiles.js';
-import { Trend } from 'k6/metrics';
+import { Trend,Counter } from 'k6/metrics';
 
 var Config = JSON.parse(open('./../config.json'));
 const S57ResponseTimewithOneProduct = new Trend('S57ResponseTimewithOneProduct');
@@ -13,6 +13,14 @@ const S57ResponseTimewithTwoProduct = new Trend('S57ResponseTimewithTwoProduct')
 const S100ResponseTimewithTwoProduct = new Trend('S100ResponseTimewithTwoProduct');
 const S57ResponseTimewithHundredProduct = new Trend('S57ResponseTimewithHundredProduct');
 const S100ResponseTimewithHundredProduct = new Trend('S100ResponseTimewithHundredProduct');
+
+const S57RequestCountWithOneProduct = new Counter('S57RequestCountWithOneProduct');
+const S100RequestCountWithOneProduct = new Counter('S100RequestCountWithOneProduct');
+const S57RequestCountWithTwoProduct = new Counter('S57RequestCountWithTwoProduct');
+const S100RequestCountWithTwoProduct = new Counter('S100RequestCountWithTwoProduct');
+const S57RequestCountWithHundredProduct = new Counter('S57RequestCountWithHundredProduct');
+const S100RequestCountWithHundredProduct = new Counter('S100RequestCountWithHundredProduct');
+
 
 var PayloadOneProduct = JSON.parse(open('./../PayloadData/S57Payloads/1ProductNewCell.json'));
 var PayloadTwoProducts = JSON.parse(open('./../PayloadData/S57Payloads/2ProductENCNewAndMoveCell.json'));
@@ -48,15 +56,15 @@ export const options = {
         'http_req_duration': ['p(100)<=5000'], // 100% of requests must complete within 5s 
 
         // Total request count threshold S-57 & S-100
-        'http_reqs': ['count<=2000'], // Total request count should be exactly 2000
+        'http_reqs': ['count>=2000'], // Total request count should be more then 2000
     },
     scenarios: {
 
         SingleProductLoadS57: {
             executor: 'constant-arrival-rate',
             exec: 'ScenarioWithOneProduct',
-            rate: 8, //800/3600 - Rate for 1 hour
-            preAllocatedVUs: 4,
+            rate: 8, //80% load with one S-57 product
+            preAllocatedVUs: 1,
             maxVUs: 8,
             timeUnit: '36s',
             duration: '1h',
@@ -65,8 +73,8 @@ export const options = {
         SingleProductLoadS100: {
             executor: 'constant-arrival-rate',
             exec: 'ScenarioWithOneProductS100',
-            rate: 8, //800/3600 - Rate for 1 hour
-            preAllocatedVUs: 4,
+            rate: 8, //80% load with one S-100 product
+            preAllocatedVUs: 1,
             maxVUs: 8,
             timeUnit: '36s',
             duration: '1h',
@@ -75,7 +83,7 @@ export const options = {
         TwoProductLoadS57: {
             executor: 'constant-arrival-rate',
             exec: 'ScenarioWithTwoProducts',
-            rate: 15, //150/3600 - Rate for 1 hour
+            rate: 15, //15% load with two S-57 products
             preAllocatedVUs: 1,
             maxVUs: 15,
             timeUnit: '6m',
@@ -85,7 +93,7 @@ export const options = {
         TwoProductLoadS100: {
             executor: 'constant-arrival-rate',
             exec: 'ScenarioWithTwoProductsS100',
-            rate: 15, //150/3600 - Rate for 1 hour
+            rate: 15, //15% load with two S-100 products
             preAllocatedVUs: 1,
             maxVUs: 15,
             timeUnit: '6m',
@@ -95,7 +103,7 @@ export const options = {
         HundredProductLoadS57: {
             executor: 'constant-arrival-rate',
             exec: 'ScenarioWithHundredProducts',
-            rate: 25,//50/3600 - Rate for 1 hour
+            rate: 25,//5% load with hundred S-57 products
             preAllocatedVUs: 25,
             maxVUs: 30,
             timeUnit: '30m',
@@ -105,7 +113,7 @@ export const options = {
         HundredProductLoadS100: {
             executor: 'constant-arrival-rate',
             exec: 'ScenarioWithHundredProductsS100',
-            rate: 25,//50/3600 - Rate for 1 hour
+            rate: 25,//5% load with hundred S-100 products
             preAllocatedVUs: 25,
             maxVUs: 30,
             timeUnit: '30m',
@@ -114,11 +122,11 @@ export const options = {
     }
 };
 
-
 export function ScenarioWithOneProduct() {
     const updatedPayloadOneProduct = PayloadSetup(PayloadOneProduct);
     const res = http.post(url.toString(), JSON.stringify(updatedPayloadOneProduct), { headers }, { tags: { my_custom_tag: 'ScenarioWithOneProduct' } });
     S57ResponseTimewithOneProduct.add(res.timings.duration);
+    S57RequestCountWithOneProduct.add(1); // Increment the counter by 1
     check(res, {
         'Status is 200': (r) => r.status === 200,
     });
@@ -129,6 +137,7 @@ export function ScenarioWithOneProductS100() {
     const updatedS100PayloadOneProduct = S100PayloadSetup(S100PayloadOneProduct);
     const res = http.post(url.toString(), JSON.stringify(updatedS100PayloadOneProduct), { headers }, { tags: { my_custom_tag: 'ScenarioWithOneProductS100' } });
     S100ResponseTimewithOneProduct.add(res.timings.duration);
+    S100RequestCountWithOneProduct.add(1);
     check(res, {
         'Status is 200': (r) => r.status === 200,
     });
@@ -139,6 +148,7 @@ export function ScenarioWithTwoProducts() {
     const updatedPayloadTwoProducts = PayloadSetup(PayloadTwoProducts);
     const res = http.post(url.toString(), JSON.stringify(updatedPayloadTwoProducts), { headers }, { tags: { my_custom_tag: 'ScenarioWithTwoProducts' } });
     S57ResponseTimewithTwoProduct.add(res.timings.duration);
+    S57RequestCountWithTwoProduct.add(1); 
     check(res, {
         'Status is 200': (r) => r.status === 200,
     });
@@ -149,6 +159,7 @@ export function ScenarioWithTwoProductsS100() {
     const updatedS100PayloadTwoProducts = S100PayloadSetup(S100PayloadTwoProducts);
     const res = http.post(url.toString(), JSON.stringify(updatedS100PayloadTwoProducts), { headers }, { tags: { my_custom_tag: 'ScenarioWithTwoProductsS100' } });
     S100ResponseTimewithTwoProduct.add(res.timings.duration);
+    S100RequestCountWithTwoProduct.add(1); 
     check(res, {
         'Status is 200': (r) => r.status === 200,
     });
@@ -159,6 +170,7 @@ export function ScenarioWithHundredProducts() {
     const updatedPayloadHundredProducts = PayloadSetup(PayloadHundredProducts);
     const res = http.post(url.toString(), JSON.stringify(updatedPayloadHundredProducts), { headers }, { tags: { my_custom_tag: 'ScenarioWithHundredProducts' } });
     S57ResponseTimewithHundredProduct.add(res.timings.duration);
+    S57RequestCountWithHundredProduct.add(1); 
     check(res, {
         'Status is 200': (r) => r.status === 200,
     });
@@ -169,6 +181,7 @@ export function ScenarioWithHundredProductsS100() {
     const updatedS100PayloadHundredProducts = S100PayloadSetup(S100PayloadHundredProducts);
     const res = http.post(url.toString(), JSON.stringify(updatedS100PayloadHundredProducts), { headers }, { tags: { my_custom_tag: 'ScenarioWithHundredProductsS100' } });
     S100ResponseTimewithHundredProduct.add(res.timings.duration);
+    S100RequestCountWithHundredProduct.add(1); 
     check(res, {
         'Status is 200': (r) => r.status === 200,
     });
@@ -183,9 +196,9 @@ export function teardown() {
 //reporting
 export function handleSummary(data) {
     return {
-        ["./Summary/TestResult_" + new Date().toISOString().substr(0, 19).replace(/(:|-)/g, "").replace("T", "_") + ".html"]: htmlReport(data),
+        ["./Summary/BaselineResult_" + new Date().toISOString().substr(0, 19).replace(/(:|-)/g, "").replace("T", "_") + ".html"]: htmlReport(data),
         stdout: textSummary(data, { indent: " ", enableColors: true }),
-        ["./Summary/TestResult_" + new Date().toISOString().substr(0, 19).replace(/(:|-)/g, "").replace("T", "_") + ".json"]: JSON.stringify(data),
+        ["./Summary/BaselineResult_" + new Date().toISOString().substr(0, 19).replace(/(:|-)/g, "").replace("T", "_") + ".json"]: JSON.stringify(data),
     }
 }
 
