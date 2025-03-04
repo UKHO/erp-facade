@@ -122,70 +122,37 @@ export const options = {
     }
 };
 
+function executeScenario(payload, responseTimeTrend, requestCount, scenarioName) {
+    const updatedPayload = PayloadSetup(payload);
+    const res = http.post(url.toString(), JSON.stringify(updatedPayload), { headers }, { tags: { my_custom_tag: scenarioName } });
+    responseTimeTrend.add(res.timings.duration);
+    requestCount.add(1);
+    check(res, { 'Status is 200': (r) => r.status === 200 });
+    console.log(`||${scenarioName}||Status code: ${res.status}`);
+}
+
 export function ScenarioWithOneProduct() {
-    const updatedPayloadOneProduct = PayloadSetup(PayloadOneProduct);
-    const res = http.post(url.toString(), JSON.stringify(updatedPayloadOneProduct), { headers }, { tags: { my_custom_tag: 'ScenarioWithOneProduct' } });
-    S57ResponseTimewithOneProduct.add(res.timings.duration);
-    S57RequestCountWithOneProduct.add(1); // Increment the counter by 1
-    check(res, {
-        'Status is 200': (r) => r.status === 200,
-    });
-    console.log("||ScenarioWithOneProductS57||Status code:" + res.status);
+    executeScenario(PayloadOneProduct, S57ResponseTimewithOneProduct, S57RequestCountWithOneProduct, 'ScenarioWithOneProductS57');
 }
 
 export function ScenarioWithOneProductS100() {
-    const updatedS100PayloadOneProduct = S100PayloadSetup(S100PayloadOneProduct);
-    const res = http.post(url.toString(), JSON.stringify(updatedS100PayloadOneProduct), { headers }, { tags: { my_custom_tag: 'ScenarioWithOneProductS100' } });
-    S100ResponseTimewithOneProduct.add(res.timings.duration);
-    S100RequestCountWithOneProduct.add(1);
-    check(res, {
-        'Status is 200': (r) => r.status === 200,
-    });
-    console.log("||ScenarioWithOneProductS100||Status code:" + res.status);
+    executeScenario(S100PayloadOneProduct, S100ResponseTimewithOneProduct, S100RequestCountWithOneProduct, 'ScenarioWithOneProductS100');
 }
 
 export function ScenarioWithTwoProducts() {
-    const updatedPayloadTwoProducts = PayloadSetup(PayloadTwoProducts);
-    const res = http.post(url.toString(), JSON.stringify(updatedPayloadTwoProducts), { headers }, { tags: { my_custom_tag: 'ScenarioWithTwoProducts' } });
-    S57ResponseTimewithTwoProduct.add(res.timings.duration);
-    S57RequestCountWithTwoProduct.add(1); 
-    check(res, {
-        'Status is 200': (r) => r.status === 200,
-    });
-    console.log("||ScenarioWithTwoProductsS57||Status code:" + res.status);
+    executeScenario(PayloadTwoProducts, S57ResponseTimewithTwoProduct, S57RequestCountWithTwoProduct, 'ScenarioWithTwoProductsS57');
 }
 
 export function ScenarioWithTwoProductsS100() {
-    const updatedS100PayloadTwoProducts = S100PayloadSetup(S100PayloadTwoProducts);
-    const res = http.post(url.toString(), JSON.stringify(updatedS100PayloadTwoProducts), { headers }, { tags: { my_custom_tag: 'ScenarioWithTwoProductsS100' } });
-    S100ResponseTimewithTwoProduct.add(res.timings.duration);
-    S100RequestCountWithTwoProduct.add(1); 
-    check(res, {
-        'Status is 200': (r) => r.status === 200,
-    });
-    console.log("||ScenarioWithTwoProductsS100||Status code:" + res.status);
+    executeScenario(S100PayloadTwoProducts, S100ResponseTimewithTwoProduct, S100RequestCountWithTwoProduct, 'ScenarioWithTwoProductsS100');
 }
 
 export function ScenarioWithHundredProducts() {
-    const updatedPayloadHundredProducts = PayloadSetup(PayloadHundredProducts);
-    const res = http.post(url.toString(), JSON.stringify(updatedPayloadHundredProducts), { headers }, { tags: { my_custom_tag: 'ScenarioWithHundredProducts' } });
-    S57ResponseTimewithHundredProduct.add(res.timings.duration);
-    S57RequestCountWithHundredProduct.add(1); 
-    check(res, {
-        'Status is 200': (r) => r.status === 200,
-    });
-    console.log("||ScenarioWithHundredProductsS57||Status code:" + res.status);
+    executeScenario(PayloadHundredProducts, S57ResponseTimewithHundredProduct, S57RequestCountWithHundredProduct, 'ScenarioWithHundredProductsS57');
 }
 
 export function ScenarioWithHundredProductsS100() {
-    const updatedS100PayloadHundredProducts = S100PayloadSetup(S100PayloadHundredProducts);
-    const res = http.post(url.toString(), JSON.stringify(updatedS100PayloadHundredProducts), { headers }, { tags: { my_custom_tag: 'ScenarioWithHundredProductsS100' } });
-    S100ResponseTimewithHundredProduct.add(res.timings.duration);
-    S100RequestCountWithHundredProduct.add(1); 
-    check(res, {
-        'Status is 200': (r) => r.status === 200,
-    });
-    console.log("||ScenarioWithHundredProductsS100||Status code:" + res.status);
+    executeScenario(S100PayloadHundredProducts, S100ResponseTimewithHundredProduct, S100RequestCountWithHundredProduct, 'ScenarioWithHundredProductsS100');
 }
 
 export function teardown() {
