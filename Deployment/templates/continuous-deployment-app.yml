@@ -61,7 +61,7 @@ steps:
     inputs:
       azureSubscription: "${{ parameters.AzureSubscription }}"
       appType: webApp
-      appName: "$(MOCK_WEB_APP_NAME)"
+      appName: "$(ADDSMOCK_WEB_APP_NAME)"
       package: "$(Pipeline.Workspace)/ADDSMock/ADDSMock.zip"      
   
   # - task: PowerShell@2
