@@ -402,8 +402,8 @@ stages:
               publishWebProjects: false
               projects: '**/*ADDSMock.csproj'
               arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\ADDSMock'
-              zipAfterPublish: false
-              modifyOutputPath: false
+              zipAfterPublish: true
+              modifyOutputPath: true
 
           - task: PublishBuildArtifacts@1
             displayName: "Publish Web Artifact"
