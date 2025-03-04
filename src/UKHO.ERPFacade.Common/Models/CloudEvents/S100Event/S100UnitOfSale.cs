@@ -20,5 +20,13 @@ namespace UKHO.ERPFacade.Common.Models.CloudEvents.S100Event
         public S100BoundingBox BoundingBox { get; set; }
         [JsonProperty("compositionChanges")]
         public S100CompositionChanges CompositionChanges { get; set; }
+        [JsonProperty("providerCode")]
+        public string ProviderCode { get; set; }
+        [JsonProperty("producingAgency")]
+        public string ProducingAgency { get; set; }
+        [JsonProperty("productIdentifier")]
+        public string ProductIdentifier { get; set; }
+        [JsonProperty("unitOfSaleType")]
+        public string UnitOfSaleType { get; set; }
     }
 }

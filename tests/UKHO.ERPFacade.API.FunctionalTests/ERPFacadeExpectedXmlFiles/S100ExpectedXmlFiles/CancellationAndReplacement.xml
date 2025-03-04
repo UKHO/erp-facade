@@ -3,17 +3,17 @@
   <soap:Body>
     <Z_SHOP_MAT_INFO xmlns="urn:sap-com:document:sap:rfc:functions">
       <IM_MATINFO xmlns="">
-        <CORRID>165ce4a4-1d62-4f56-b359-59e178d77194</CORRID>
-        <NOOFACTIONS>14</NOOFACTIONS>
-        <RECDATE>20250225</RECDATE>
-        <RECTIME>065834</RECTIME>
+        <CORRID>165ce4a4-162-f56-39-59e17877104</CORRID>
+        <NOOFACTIONS>18</NOOFACTIONS>
+        <RECDATE>20250228</RECDATE>
+        <RECTIME>101810</RECTIME>
         <ORG>UKHO</ORG>
         <ACTIONITEMS>
           <item>
             <ACTIONNUMBER>1</ACTIONNUMBER>
             <ACTION>CREATE PRODUCT</ACTION>
             <PRODUCT>SHOP CELL</PRODUCT>
-            <PRODTYPE>S-101</PRODTYPE>
+            <PRODTYPE>s101</PRODTYPE>
             <CHILDCELL>101CA123456UNIB</CHILDCELL>
             <PRODUCTNAME>101CA123456UNIB</PRODUCTNAME>
             <REPLACEDBY></REPLACEDBY>
@@ -26,7 +26,7 @@
             <ACTIONNUMBER>2</ACTIONNUMBER>
             <ACTION>CREATE PRODUCT</ACTION>
             <PRODUCT>SHOP CELL</PRODUCT>
-            <PRODTYPE>S-101</PRODTYPE>
+            <PRODTYPE>s101</PRODTYPE>
             <CHILDCELL>101CA123456UNIC</CHILDCELL>
             <PRODUCTNAME>101CA123456UNIC</PRODUCTNAME>
             <REPLACEDBY></REPLACEDBY>
@@ -39,12 +39,12 @@
             <ACTIONNUMBER>3</ACTIONNUMBER>
             <ACTION>CREATE UNIT OF SALE</ACTION>
             <PRODUCT>SHOP UNIT</PRODUCT>
-            <PRODTYPE></PRODTYPE>
+            <PRODTYPE>s101</PRODTYPE>
             <CHILDCELL></CHILDCELL>
             <PRODUCTNAME>101CA123456UNIB</PRODUCTNAME>
             <REPLACEDBY></REPLACEDBY>
-            <AGENCY></AGENCY>
-            <PROVIDER></PROVIDER>
+            <AGENCY>GB00</AGENCY>
+            <PROVIDER>1</PROVIDER>
             <ENCSIZE>large</ENCSIZE>
             <TITLE>A test S-101 cell from GB authority in its own unit of sale</TITLE>
           </item>
@@ -52,12 +52,12 @@
             <ACTIONNUMBER>4</ACTIONNUMBER>
             <ACTION>CREATE UNIT OF SALE</ACTION>
             <PRODUCT>SHOP UNIT</PRODUCT>
-            <PRODTYPE></PRODTYPE>
+            <PRODTYPE>s101</PRODTYPE>
             <CHILDCELL></CHILDCELL>
             <PRODUCTNAME>101CA123456UNIC</PRODUCTNAME>
             <REPLACEDBY></REPLACEDBY>
-            <AGENCY></AGENCY>
-            <PROVIDER></PROVIDER>
+            <AGENCY>GB00</AGENCY>
+            <PROVIDER>1</PROVIDER>
             <ENCSIZE>large</ENCSIZE>
             <TITLE>A test S-101 cell from GB authority in its own unit of sale</TITLE>
           </item>
@@ -65,7 +65,7 @@
             <ACTIONNUMBER>5</ACTIONNUMBER>
             <ACTION>ASSIGN PRODUCT TO UNIT OF SALE</ACTION>
             <PRODUCT>SHOP UNIT</PRODUCT>
-            <PRODTYPE></PRODTYPE>
+            <PRODTYPE>s101</PRODTYPE>
             <CHILDCELL>101CA123456UNIB</CHILDCELL>
             <PRODUCTNAME>101CA123456UNIB</PRODUCTNAME>
             <REPLACEDBY></REPLACEDBY>
@@ -78,7 +78,7 @@
             <ACTIONNUMBER>6</ACTIONNUMBER>
             <ACTION>ASSIGN PRODUCT TO UNIT OF SALE</ACTION>
             <PRODUCT>SHOP UNIT</PRODUCT>
-            <PRODTYPE></PRODTYPE>
+            <PRODTYPE>s101</PRODTYPE>
             <CHILDCELL>101CA123456UNIC</CHILDCELL>
             <PRODUCTNAME>101CA123456UNIC</PRODUCTNAME>
             <REPLACEDBY></REPLACEDBY>
@@ -89,9 +89,35 @@
           </item>
           <item>
             <ACTIONNUMBER>7</ACTIONNUMBER>
+            <ACTION>ASSIGN PRODUCT TO UNIT OF SALE</ACTION>
+            <PRODUCT>SHOP UNIT</PRODUCT>
+            <PRODTYPE>s101</PRODTYPE>
+            <CHILDCELL>101GB00123456UNIB</CHILDCELL>
+            <PRODUCTNAME>s100WorldFolio</PRODUCTNAME>
+            <REPLACEDBY></REPLACEDBY>
+            <AGENCY></AGENCY>
+            <PROVIDER></PROVIDER>
+            <ENCSIZE></ENCSIZE>
+            <TITLE></TITLE>
+          </item>
+          <item>
+            <ACTIONNUMBER>8</ACTIONNUMBER>
+            <ACTION>ASSIGN PRODUCT TO UNIT OF SALE</ACTION>
+            <PRODUCT>SHOP UNIT</PRODUCT>
+            <PRODTYPE>s101</PRODTYPE>
+            <CHILDCELL>101GB00123456UNIC</CHILDCELL>
+            <PRODUCTNAME>s100WorldFolio</PRODUCTNAME>
+            <REPLACEDBY></REPLACEDBY>
+            <AGENCY></AGENCY>
+            <PROVIDER></PROVIDER>
+            <ENCSIZE></ENCSIZE>
+            <TITLE></TITLE>
+          </item>
+          <item>
+            <ACTIONNUMBER>9</ACTIONNUMBER>
             <ACTION>REPLACED WITH PRODUCT</ACTION>
             <PRODUCT>SHOP CELL</PRODUCT>
-            <PRODTYPE>S-101</PRODTYPE>
+            <PRODTYPE>s101</PRODTYPE>
             <CHILDCELL>101CA123456UNIA</CHILDCELL>
             <PRODUCTNAME>101CA123456UNIA</PRODUCTNAME>
             <REPLACEDBY>101CA123456UNIB</REPLACEDBY>
@@ -101,10 +127,10 @@
             <TITLE></TITLE>
           </item>
           <item>
-            <ACTIONNUMBER>8</ACTIONNUMBER>
+            <ACTIONNUMBER>10</ACTIONNUMBER>
             <ACTION>REPLACED WITH PRODUCT</ACTION>
             <PRODUCT>SHOP CELL</PRODUCT>
-            <PRODTYPE>S-101</PRODTYPE>
+            <PRODTYPE>s101</PRODTYPE>
             <CHILDCELL>101CA123456UNIA</CHILDCELL>
             <PRODUCTNAME>101CA123456UNIA</PRODUCTNAME>
             <REPLACEDBY>101CA123456UNIC</REPLACEDBY>
@@ -114,51 +140,25 @@
             <TITLE></TITLE>
           </item>
           <item>
-            <ACTIONNUMBER>9</ACTIONNUMBER>
-            <ACTION>REMOVE PRODUCT FROM UNIT OF SALE</ACTION>
-            <PRODUCT>SHOP UNIT</PRODUCT>
-            <PRODTYPE></PRODTYPE>
-            <CHILDCELL>101CA123456UNIA</CHILDCELL>
-            <PRODUCTNAME>101CA123456UNIA</PRODUCTNAME>
-            <REPLACEDBY></REPLACEDBY>
-            <AGENCY></AGENCY>
-            <PROVIDER></PROVIDER>
-            <ENCSIZE></ENCSIZE>
-            <TITLE></TITLE>
-          </item>
-          <item>
-            <ACTIONNUMBER>10</ACTIONNUMBER>
-            <ACTION>REMOVE PRODUCT FROM UNIT OF SALE</ACTION>
-            <PRODUCT>SHOP UNIT</PRODUCT>
-            <PRODTYPE></PRODTYPE>
-            <CHILDCELL>101CA123456UNID</CHILDCELL>
-            <PRODUCTNAME>101CA123456UNID</PRODUCTNAME>
-            <REPLACEDBY></REPLACEDBY>
-            <AGENCY></AGENCY>
-            <PROVIDER></PROVIDER>
-            <ENCSIZE></ENCSIZE>
-            <TITLE></TITLE>
-          </item>
-          <item>
             <ACTIONNUMBER>11</ACTIONNUMBER>
-            <ACTION>CANCEL PRODUCT</ACTION>
-            <PRODUCT>SHOP CELL</PRODUCT>
-            <PRODTYPE>S-101</PRODTYPE>
-            <CHILDCELL>101CA123456UNIA</CHILDCELL>
-            <PRODUCTNAME>101CA123456UNIA</PRODUCTNAME>
+            <ACTION>CHANGE UNIT OF SALE</ACTION>
+            <PRODUCT>SHOP UNIT</PRODUCT>
+            <PRODTYPE>s101</PRODTYPE>
+            <CHILDCELL></CHILDCELL>
+            <PRODUCTNAME>s100WorldFolio</PRODUCTNAME>
             <REPLACEDBY></REPLACEDBY>
-            <AGENCY></AGENCY>
-            <PROVIDER></PROVIDER>
-            <ENCSIZE></ENCSIZE>
+            <AGENCY>UKHO</AGENCY>
+            <PROVIDER>0</PROVIDER>
+            <ENCSIZE>large</ENCSIZE>
             <TITLE></TITLE>
           </item>
           <item>
             <ACTIONNUMBER>12</ACTIONNUMBER>
-            <ACTION>CANCEL PRODUCT</ACTION>
-            <PRODUCT>SHOP CELL</PRODUCT>
-            <PRODTYPE>S-101</PRODTYPE>
-            <CHILDCELL>101CA123456UNID</CHILDCELL>
-            <PRODUCTNAME>101CA123456UNID</PRODUCTNAME>
+            <ACTION>REMOVE PRODUCT FROM UNIT OF SALE</ACTION>
+            <PRODUCT>SHOP UNIT</PRODUCT>
+            <PRODTYPE>s101</PRODTYPE>
+            <CHILDCELL>101CA123456UNIA</CHILDCELL>
+            <PRODUCTNAME>101CA123456UNIA</PRODUCTNAME>
             <REPLACEDBY></REPLACEDBY>
             <AGENCY></AGENCY>
             <PROVIDER></PROVIDER>
@@ -167,9 +167,61 @@
           </item>
           <item>
             <ACTIONNUMBER>13</ACTIONNUMBER>
+            <ACTION>REMOVE PRODUCT FROM UNIT OF SALE</ACTION>
+            <PRODUCT>SHOP UNIT</PRODUCT>
+            <PRODTYPE>s101</PRODTYPE>
+            <CHILDCELL>101CA123456UNID</CHILDCELL>
+            <PRODUCTNAME>101CA123456UNID</PRODUCTNAME>
+            <REPLACEDBY></REPLACEDBY>
+            <AGENCY></AGENCY>
+            <PROVIDER></PROVIDER>
+            <ENCSIZE></ENCSIZE>
+            <TITLE></TITLE>
+          </item>
+          <item>
+            <ACTIONNUMBER>14</ACTIONNUMBER>
+            <ACTION>REMOVE PRODUCT FROM UNIT OF SALE</ACTION>
+            <PRODUCT>SHOP UNIT</PRODUCT>
+            <PRODTYPE>s101</PRODTYPE>
+            <CHILDCELL>101GB00123456UNIA</CHILDCELL>
+            <PRODUCTNAME>s100WorldFolio</PRODUCTNAME>
+            <REPLACEDBY></REPLACEDBY>
+            <AGENCY></AGENCY>
+            <PROVIDER></PROVIDER>
+            <ENCSIZE></ENCSIZE>
+            <TITLE></TITLE>
+          </item>
+          <item>
+            <ACTIONNUMBER>15</ACTIONNUMBER>
+            <ACTION>CANCEL PRODUCT</ACTION>
+            <PRODUCT>SHOP CELL</PRODUCT>
+            <PRODTYPE>s101</PRODTYPE>
+            <CHILDCELL>101CA123456UNIA</CHILDCELL>
+            <PRODUCTNAME>101CA123456UNIA</PRODUCTNAME>
+            <REPLACEDBY></REPLACEDBY>
+            <AGENCY></AGENCY>
+            <PROVIDER></PROVIDER>
+            <ENCSIZE></ENCSIZE>
+            <TITLE></TITLE>
+          </item>
+          <item>
+            <ACTIONNUMBER>16</ACTIONNUMBER>
+            <ACTION>CANCEL PRODUCT</ACTION>
+            <PRODUCT>SHOP CELL</PRODUCT>
+            <PRODTYPE>s101</PRODTYPE>
+            <CHILDCELL>101CA123456UNID</CHILDCELL>
+            <PRODUCTNAME>101CA123456UNID</PRODUCTNAME>
+            <REPLACEDBY></REPLACEDBY>
+            <AGENCY></AGENCY>
+            <PROVIDER></PROVIDER>
+            <ENCSIZE></ENCSIZE>
+            <TITLE></TITLE>
+          </item>
+          <item>
+            <ACTIONNUMBER>17</ACTIONNUMBER>
             <ACTION>CANCEL UNIT OF SALE</ACTION>
             <PRODUCT>SHOP UNIT</PRODUCT>
-            <PRODTYPE></PRODTYPE>
+            <PRODTYPE>s101</PRODTYPE>
             <CHILDCELL></CHILDCELL>
             <PRODUCTNAME>101CA123456UNIA</PRODUCTNAME>
             <REPLACEDBY></REPLACEDBY>
@@ -179,10 +231,10 @@
             <TITLE></TITLE>
           </item>
           <item>
-            <ACTIONNUMBER>14</ACTIONNUMBER>
+            <ACTIONNUMBER>18</ACTIONNUMBER>
             <ACTION>CANCEL UNIT OF SALE</ACTION>
             <PRODUCT>SHOP UNIT</PRODUCT>
-            <PRODTYPE></PRODTYPE>
+            <PRODTYPE>s101</PRODTYPE>
             <CHILDCELL></CHILDCELL>
             <PRODUCTNAME>101CA123456UNID</PRODUCTNAME>
             <REPLACEDBY></REPLACEDBY>
