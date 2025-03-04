@@ -10,8 +10,8 @@
         "correlationId": "165ce4a4-1d62-4f56-b359-59e178d77106",
         "products": [
             {
-                "productType": "S100",
-                "productIdentifier": "S-101",
+                "productType": "s100",
+                "productIdentifier": "s101",
                 "productName": "101CA7777777",
                 "editionNumber": 3,
                 "updateNumber": 0,
@@ -29,19 +29,20 @@
                 "replaces": [],
                 "dataReplacement": [],
                 "boundingBox": {
-                    "northLimit": 63.25,
+                    "northLimit": 63,
                     "southLimit": 63,
                     "eastLimit": 8,
-                    "westLimit": 7.75
+                    "westLimit": 7
                 },
                 "fileSize": 3456,
                 "inUnitsOfSale": [
                     "101CA7777777"
-                ]
+                ],
+                "producerUnitName": "101CA7777777"
             },
             {
-                "productType": "S100",
-                "productIdentifier": "S-101",
+                "productType": "s100",
+                "productIdentifier": "s101",
                 "productName": "101CA8888888",
                 "editionNumber": 1,
                 "updateNumber": 0,
@@ -67,21 +68,27 @@
                 "fileSize": 3456,
                 "inUnitsOfSale": [
                     "101CA8888888"
-                ]
+                ],
+                "producerUnitName": "101CA8888888"
             }
         ],
         "unitsOfSale": [
             {
                 "unitName": "101CA8888888",
+                "productIdentifier": "s101",
                 "title": "A test S-101 cell from GB authority in its own unit of sale",
+                "unitOfSaleType": "unit",
+                "providerCode": "1A",
+                "providerName": "ICE",
+                "producingAgency": "GB03",
                 "unitSize": "large",
                 "status": "ForSale",
                 "isNewUnitOfSale": true,
                 "boundingBox": {
-                    "northLimit": 63.25,
+                    "northLimit": 63,
                     "southLimit": 63,
                     "eastLimit": 8,
-                    "westLimit": 7.75
+                    "westLimit": 7
                 },
                 "compositionChanges": {
                     "addProducts": [
@@ -92,15 +99,20 @@
             },
             {
                 "unitName": "101CA7777777",
+                "productIdentifier": "s101",
                 "title": "A test S-101 cell from GB authority in its own unit of sale",
-                "unitSize": "large",
+                "unitOfSaleType": "unit",
+                "providerCode": "1",
+                "providerName": "ICE",
+                "producingAgency": "GB00",
+                "unitSize": "small",
                 "status": "ForSale",
                 "isNewUnitOfSale": false,
                 "boundingBox": {
-                    "northLimit": 63.25,
+                    "northLimit": 63,
                     "southLimit": 63,
                     "eastLimit": 8,
-                    "westLimit": 7.75
+                    "westLimit": 7
                 },
                 "compositionChanges": {
                     "addProducts": [],
