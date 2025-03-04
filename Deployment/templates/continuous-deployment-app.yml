@@ -47,13 +47,13 @@ steps:
       deployToSlotOrASE: true
       slotName: $(WEB_APP_SLOT_NAME)
 
-  - task: FileTransform@1
-    displayName: "File Transform: Adds Mock Service Application Settings"
-    condition: and(succeeded(), eq(variables['Environment.Name'], 'ERP-Dev'))
-    inputs:
-      folderPath: '$(Pipeline.Workspace)/ADDSMock/*.zip'
-      fileType: 'json'
-      targetFiles: '**/appsettings.json'
+  # - task: FileTransform@1
+  #   displayName: "File Transform: Adds Mock Service Application Settings"
+  #   condition: and(succeeded(), eq(variables['Environment.Name'], 'ERP-Dev'))
+  #   inputs:
+  #     folderPath: '$(Pipeline.Workspace)/ADDSMock/*.zip'
+  #     fileType: 'json'
+  #     targetFiles: '**/appsettings.json'
 
   - task: AzureWebApp@1
     displayName: "Azure App Deploy: AddsMockService"
