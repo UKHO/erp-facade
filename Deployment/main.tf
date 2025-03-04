@@ -25,12 +25,13 @@ module "webapp_service" {
   source                    = "./Modules/Webapp"
   name                      = local.web_app_name
   mock_webapp_name          = local.mock_web_app_name
+  addsmock_webapp_name      = local.addsmock_web_app_name
   service_name              = local.service_name                 
   resource_group_name       = azurerm_resource_group.rg.name
   env_name                  = local.env_name
   location                  = azurerm_resource_group.rg.location
   sku_name                  = var.sku_name[local.env_name]
-  subnet_id                 = data.azurerm_subnet.main_subnet.id
+  subnet_id                 = data.azurerm_subnet.main_subnet.id  
   app_settings = {
     "KeyVaultSettings:ServiceUri"                              = "https://${local.key_vault_name}.vault.azure.net/"
     "EventHubLoggingConfiguration:Environment"                 = local.env_name

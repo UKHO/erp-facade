@@ -6,8 +6,8 @@ output "mock_webapp_name" {
   value = local.env_name == "dev" ? local.mock_web_app_name : null
 }
 
-output "adds_mock_webapp_name" {
-  value = local.adds_mock_web_app_name
+output "addsmock_webapp_name" {
+  value = local.addsmock_web_app_name
 }
 
 output "storage_connection_string" {
