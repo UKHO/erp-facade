@@ -107,7 +107,7 @@ resource "azurerm_app_service_virtual_network_swift_connection" "mock_webapp_vne
 
 resource "azurerm_app_service_virtual_network_swift_connection" "addsmock_webapp_vnet_integration" {
   count               = var.env_name == "iat" ? 1 : 0
-  app_service_id = azurerm_windows_web_app.addsmock_webapp_service
+  app_service_id = azurerm_windows_web_app.mock_webapp_service[0].id
   subnet_id      = var.subnet_id
 }
 
