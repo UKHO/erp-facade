@@ -62,18 +62,8 @@ steps:
       azureSubscription: "${{ parameters.AzureSubscription }}"
       appType: webApp
       appName: "$(MOCK_WEB_APP_NAME)"
-      package: "$(Pipeline.Workspace)/ADDSMock/ADDSMock.zip" 
-     
-  - task: AzureAppServiceManage@0
-    displayName: "Swap with production slot"
-    inputs:
-      azureSubscription: "${{ parameters.AzureSubscription }}"
-      resourceGroupName: $(ResourceGroup)
-      webAppName: $(WEB_APP_NAME)
-      action: "Swap Slots"
-      swapWithProduction: true
-      sourceSlot: $(WEB_APP_SLOT_NAME)
-
+      package: "$(Pipeline.Workspace)/ADDSMock/ADDSMock.zip"      
+  
   # - task: PowerShell@2
   #   displayName: "Check the status of production slot"
   #   inputs:
