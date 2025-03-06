@@ -47,6 +47,16 @@ steps:
       package: "$(Pipeline.Workspace)/UKHOERPFacadeAPI/UKHOERPFacadeAPI.zip"
       deployToSlotOrASE: true
       slotName: $(WEB_APP_SLOT_NAME)
+  
+  - task: AzureWebApp@1
+    displayName: "Azure App Deploy: Staging slot"
+    inputs:
+      azureSubscription: "${{ parameters.AzureSubscription }}"
+      appType: webApp
+      appName: "$(WEB_APP_NAME)"
+      package: "$(Pipeline.Workspace)/ADDSMock/ADDSMock.zip"
+      deployToSlotOrASE: true
+      slotName: $(WEB_APP_SLOT_NAME)
 
   # - task: FileTransform@1
   #   displayName: "File Transform: Adds Mock Service Application Settings"
@@ -56,14 +66,14 @@ steps:
   #     fileType: 'json'
   #     targetFiles: '**/appsettings.json'
 
-  - task: AzureWebApp@1
-    displayName: "Azure App Deploy: AddsMockService"
-    condition: and(succeeded(), eq(variables['Environment.Name'], 'ERP-IAT'))
-    inputs:
-      azureSubscription: "${{ parameters.AzureSubscription }}"
-      appType: webApp
-      appName: "erpfacade-iat-addsmockservice"
-      package: "$(Pipeline.Workspace)/ADDSMock/ADDSMock.zip"      
+  # - task: AzureWebApp@1
+  #   displayName: "Azure App Deploy: AddsMockService"
+  #   condition: and(succeeded(), eq(variables['Environment.Name'], 'ERP-IAT'))
+  #   inputs:
+  #     azureSubscription: "${{ parameters.AzureSubscription }}"
+  #     appType: webApp
+  #     appName: "erpfacade-iat-addsmockservice"
+  #     package: "$(Pipeline.Workspace)/ADDSMock/ADDSMock.zip"      
   
   # - task: PowerShell@2
   #   displayName: "Check the status of production slot"
