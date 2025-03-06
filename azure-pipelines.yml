@@ -668,12 +668,12 @@ stages:
         value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
       - name: "SapMockConfiguration.BaseUrl"
         value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
-      - name: addsmockWebAppName
-        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.addsmockWebApp']  ]
+      - name: addsmockWebApp
+        value: $[ stageDependencies.DevDeploy.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.addsmock_webapp_name']  ]
       - name: addsmockWebAppResourceGroup
-        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.addsmockWebAppResourceGroupName']  ]
+        value: $[ stageDependencies.DevDeploy.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.addsmockWebAppResourceGroupName']  ]
       - name: "addsSapMockConfiguration.BaseUrl"
-        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.addsmockwebappurl']  ]
+        value: $[ stageDependencies.DevDeploy.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.addsmockwebappurl']  ]
       - name : ADDSMOCK_WEB_APP_NAME
         value : $[ dependencies.DevDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.addsmock_webapp_name'] ]
    
@@ -712,8 +712,11 @@ stages:
             value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME'] ]
           - name : WEB_APP_SLOT_HOST_NAME
             value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME'] ]
-          - name : addsmockWebApp
-            value: "erpfacade-iat-addsmockservice"
+          - name : ADDSMOCK_WEB_APP_NAME
+            value : $[ dependencies.DevDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.addsmock_webapp_name'] ]
+   
+          # - name : addsmockWebApp
+            # value: "erpfacade-iat-addsmockservice"
             # value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.addsmock_webapp_name'] ]
         workspace:
           clean: all
@@ -723,8 +726,7 @@ stages:
               steps:
                 - template: Deployment/templates/continuous-deployment-app.yml
                   parameters:
-                    AzureSubscription: "ERP-Facade-IAT-A.011.08"
-                    addsmockWebApp: $(addsmockWebApp)
+                    AzureSubscription: "ERP-Facade-IAT-A.011.08"                    
   
   - stage: PreProdDeploy
     dependsOn: IATDeploy   
