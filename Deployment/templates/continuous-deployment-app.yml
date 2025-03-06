@@ -1,6 +1,8 @@
 parameters:
   - name: AzureSubscription
     type: string
+  - name: addsmockWebApp
+    type: string
 
 steps:
   - task: PowerShell@2
