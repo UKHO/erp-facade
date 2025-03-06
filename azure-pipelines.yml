@@ -723,7 +723,7 @@ stages:
                 - template: Deployment/templates/continuous-deployment-app.yml
                   parameters:
                     AzureSubscription: "ERP-Facade-IAT-A.011.08"
-                    addsmockWebApp: $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.addsmock_webapp_name'] ]
+                    addsmockWebApp: $(addsmockWebApp)
   
   - stage: PreProdDeploy
     dependsOn: IATDeploy   
