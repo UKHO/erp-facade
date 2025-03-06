@@ -34,6 +34,11 @@ Each action has the following properties:
                                 "AttributeDataType": "bool",
                                 "AttributeName": "Status.IsNewCell",
                                 "AttributeValue": "True"
+                            },
+                            {
+                                "AttributeDataType": "bool",
+                                "AttributeName": "ContentChange",
+                                "AttributeValue": "True"
                             }
                         ]
                     }
