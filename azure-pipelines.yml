@@ -674,6 +674,8 @@ stages:
         value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.addsmockWebAppResourceGroupName']  ]
       - name: "addsSapMockConfiguration.BaseUrl"
         value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.addsmockwebappurl']  ]
+      - name : ADDSMOCK_WEB_APP_NAME
+        value : $[ dependencies.DevDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.addsmock_webapp_name'] ]
    
     jobs:
       - deployment: IATDeployTerraform
