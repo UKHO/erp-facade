@@ -140,6 +140,10 @@ resource "azurerm_windows_web_app" "addsmock_webapp_service" {
   identity {
     type = "SystemAssigned"
   }
+  
+  lifecycle {
+    ignore_changes = [ virtual_network_subnet_id ]
+  }
 
   https_only = true
 }
