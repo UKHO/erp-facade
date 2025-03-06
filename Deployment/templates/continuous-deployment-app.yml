@@ -3,6 +3,7 @@ parameters:
     type: string
   - name: addsmockWebApp
     type: string
+    default: ""
 
 steps:
   - task: PowerShell@2
