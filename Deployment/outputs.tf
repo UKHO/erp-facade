@@ -7,7 +7,7 @@ output "mock_webapp_name" {
 }
 
 output "addsmock_webapp_name" {
-  value = local.addsmock_web_app_name
+  value = local.addsmock_webapp_name
 }
 
 output "storage_connection_string" {

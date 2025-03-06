@@ -25,7 +25,7 @@ module "webapp_service" {
   source                    = "./Modules/Webapp"
   name                      = local.web_app_name
   mock_webapp_name          = local.mock_web_app_name
-  addsmock_webapp_name      = local.addsmock_web_app_name
+  addsmock_webapp_name      = local.addsmock_webapp_name
   service_name              = local.service_name                 
   resource_group_name       = azurerm_resource_group.rg.name
   env_name                  = local.env_name

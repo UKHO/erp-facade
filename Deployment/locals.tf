@@ -3,7 +3,7 @@ locals {
   service_name       = "erpfacade"  
   web_app_name       = "${local.service_name}-${local.env_name}-api"
   mock_web_app_name  = "${local.service_name}-${local.env_name}-sapmockservice"
-  addsmock_web_app_name  = "${local.service_name}-${local.env_name}-addsmockservice"
+  addsmock_webapp_name  = "${local.service_name}-${local.env_name}-addsmockservice"
   key_vault_name     = local.env_name == "live" ? "${local.service_name}-ukho-prd-kv":  "${local.service_name}-ukho-${local.env_name}-kv"
   storage_name       = "${local.service_name}${local.env_name}storage"
   container_name     = "erp-container"
