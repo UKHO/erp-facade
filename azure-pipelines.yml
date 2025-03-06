@@ -711,7 +711,7 @@ stages:
           - name : WEB_APP_SLOT_HOST_NAME
             value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME'] ]
           - name : ADDSMOCK_WEB_APP_NAME
-            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.addsmockWebApp'] ]
+            value : $[ dependencies.DevDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.addsmockWebApp'] ]
         workspace:
           clean: all
         strategy:
