@@ -3,11 +3,11 @@ output "webapp_name" {
 }
 
 output "mock_webapp_name" {
-  value = local.env_name == "dev" || local.env_name == "IAT" ? local.mock_web_app_name : null
+  value = local.env_name == "dev" || local.env_name == "iat" ? local.mock_web_app_name : null
 }
 
 output "addsmock_webapp_name" {
-  value = local.env_name == "IAT"? local.addsmock_webapp_name : null
+  value = local.env_name == "iat"? local.addsmock_webapp_name : null
 }
 
 output "storage_connection_string" {
