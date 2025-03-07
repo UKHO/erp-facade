@@ -58,7 +58,7 @@ steps:
 
   - task: AzureWebApp@1
     displayName: "Azure App Deploy: AddsMockService"
-    condition: and(succeeded(), or(eq(variables['Environment.Name'], 'ERP-IAT'), eq(variables['Environment.Name'], 'ERP-Dev')))
+    condition: and(succeeded(), or(eq(variables['Environment.Name'], 'ERP-IAT'))
     inputs:
       azureSubscription: "${{ parameters.AzureSubscription }}"
       appType: webApp
