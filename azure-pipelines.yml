@@ -715,11 +715,8 @@ stages:
           - name : WEB_APP_SLOT_HOST_NAME
             value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME'] ]
           - name : ADDSMOCK_WEB_APP_NAME
-            value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.addsmock_webapp_name'] ]
-   
-          # - name : addsmockWebApp
-            # value: "erpfacade-iat-addsmockservice"
-            # value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.addsmock_webapp_name'] ]
+            value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.addsmock_webapp_name'] ]  
+     
         workspace:
           clean: all
         strategy:
