@@ -22,7 +22,7 @@ steps:
       fileType: 'json'
       targetFiles: '**/appsettings.json'
 
-  - task: AzureWebApp@1
+  - task: AzureWebApp@1f
     displayName: "Azure App Deploy: ERPFacade-SAP-MockService"
     condition: and(succeeded(), eq(variables['Environment.Name'], 'ERP-Dev'))
     inputs:
