@@ -68,7 +68,7 @@ resource "azurerm_windows_web_app_slot" "staging" {
 }
 
 resource "azurerm_windows_web_app" "mock_webapp_service" {
-  count               = var.env_name == "dev" ? 1 : 0
+  count               = var.env_name == "dev" || var.env_name == "iat" ? 1 : 0
   name                = var.mock_webapp_name
   location            = var.location
   resource_group_name = var.resource_group_name
@@ -94,36 +94,36 @@ resource "azurerm_windows_web_app" "mock_webapp_service" {
   https_only = true
 }
 
-resource "azurerm_windows_web_app" "addsmock_webapp_service" {
-  count               = var.env_name == "iat" ? 1 : 0
-  name                = var.addsmock_webapp_name
-  location            = var.location
-  resource_group_name = var.resource_group_name
-  service_plan_id     = azurerm_service_plan.app_service_plan.id
-  tags                = var.tags
-  public_network_access_enabled      = false
+# resource "azurerm_windows_web_app" "addsmock_webapp_service" {
+#   count               = var.env_name == "iat" ? 1 : 0
+#   name                = var.addsmock_webapp_name
+#   location            = var.location
+#   resource_group_name = var.resource_group_name
+#   service_plan_id     = azurerm_service_plan.app_service_plan.id
+#   tags                = var.tags
+#   public_network_access_enabled      = false
 
-  site_config {
-    application_stack {    
-      current_stack  = "dotnet"
-      dotnet_version = "v8.0"
-    }
-    always_on  = true
-    ftps_state = "Disabled"
-  }
+#   site_config {
+#     application_stack {    
+#       current_stack  = "dotnet"
+#       dotnet_version = "v8.0"
+#     }
+#     always_on  = true
+#     ftps_state = "Disabled"
+#   }
      
-  app_settings = var.mock_app_settings
+#   app_settings = var.mock_app_settings
 
-  identity {
-    type = "SystemAssigned"
-  }
+#   identity {
+#     type = "SystemAssigned"
+#   }
 
-  lifecycle {
-    ignore_changes = [ virtual_network_subnet_id ]
-  }
+#   lifecycle {
+#     ignore_changes = [ virtual_network_subnet_id ]
+#   }
 
-  https_only = true
-}
+#   https_only = true
+# }
 
 resource "azurerm_app_service_virtual_network_swift_connection" "webapp_vnet_integration" {
   app_service_id = azurerm_windows_web_app.webapp_service.id
@@ -131,16 +131,16 @@ resource "azurerm_app_service_virtual_network_swift_connection" "webapp_vnet_int
 }
 
 resource "azurerm_app_service_virtual_network_swift_connection" "mock_webapp_vnet_integration" {
-  count               = var.env_name == "dev" ? 1 : 0
+  count               = var.env_name == "dev" || var.env_name == "iat" ? 1 : 0
   app_service_id = azurerm_windows_web_app.mock_webapp_service[0].id
   subnet_id      = var.subnet_id
 }
 
-resource "azurerm_app_service_virtual_network_swift_connection" "addsmock_webapp_vnet_integration" {
-  count               = var.env_name == "iat" ? 1 : 0
-  app_service_id = azurerm_windows_web_app.addsmock_webapp_service[0].id
-  subnet_id      = var.subnet_id
-}
+# resource "azurerm_app_service_virtual_network_swift_connection" "addsmock_webapp_vnet_integration" {
+#   count               = var.env_name == "iat" ? 1 : 0
+#   app_service_id = azurerm_windows_web_app.addsmock_webapp_service[0].id
+#   subnet_id      = var.subnet_id
+# }
 
 resource "azurerm_app_service_slot_virtual_network_swift_connection" "slot_vnet_integration" {
   app_service_id = azurerm_windows_web_app.webapp_service.id
