@@ -675,7 +675,9 @@ stages:
       - name: "addsSapMockConfiguration.BaseUrl"
         value: $[ stageDependencies.DevDeploy.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.addsmockwebappurl']  ]
       - name : ADDSMOCK_WEB_APP_NAME
-        value : $[ dependencies.DevDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.addsmock_webapp_name'] ]
+        value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.addsmock_webapp_name'] ]
+      - name : MOCK_WEB_APP_NAME
+        value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.mockWebApp'] ]
    
     jobs:
       - deployment: IATDeployTerraform
