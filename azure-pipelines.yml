@@ -387,11 +387,11 @@ stages:
               packagesDirectory: '$(Build.SourcesDirectory)\mock\repo\src\packages'
           
           - task: CopyFiles@2
-            displayName: 'Copy files to: $(BuildConfiguration)\mock\repo\service-configuration'
+            displayName: 'Copy files to: $(Build.SourcesDirectory)\mock\repo\service-configuration'
             inputs:
               SourceFolder: '$(Build.SourcesDirectory)\mock\repo\service-configuration'
               Contents: '**'
-              TargetFolder: '$(Build.SourcesDirectory)\mock\repo\src\service-configuration'
+              TargetFolder: '$(Build.SourcesDirectory)\mock\repo\src\ADDSMock\service-configuration'
 
           - task: DotNetCoreCLI@2
             displayName: "dotnet build task"
