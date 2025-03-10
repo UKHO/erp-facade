@@ -385,6 +385,13 @@ stages:
               nugetConfigPath: '$(Build.SourcesDirectory)\mock\repo\BuildNuget.config'
               workingDirectory: '$(Build.SourcesDirectory)\mock\repo\src'
               packagesDirectory: '$(Build.SourcesDirectory)\mock\repo\src\packages'
+          
+          - task: CopyFiles@2
+            displayName: 'Copy files to: $(BuildConfiguration)\mock\repo\service-configuration'
+            inputs:
+              SourceFolder: '$(Build.SourcesDirectory)\mock\repo\service-configuration'
+              Contents: '**'
+              TargetFolder: '$(Build.SourcesDirectory)\ADDSMock\service-configuration'
 
           - task: DotNetCoreCLI@2
             displayName: "dotnet build task"
