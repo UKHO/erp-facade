@@ -391,7 +391,7 @@ stages:
             inputs:
               SourceFolder: '$(Build.SourcesDirectory)\mock\repo\service-configuration'
               Contents: '**'
-              TargetFolder: '$(Build.SourcesDirectory)\ADDSMock\service-configuration'
+              TargetFolder: '$(Build.SourcesDirectory)\mock\repo\src\service-configuration'
 
           - task: DotNetCoreCLI@2
             displayName: "dotnet build task"
