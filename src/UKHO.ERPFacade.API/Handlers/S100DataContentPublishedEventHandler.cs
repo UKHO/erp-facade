@@ -72,10 +72,7 @@ namespace UKHO.ERPFacade.API.Handlers
 
             var sapPayload = _xmlTransformer.BuildXmlPayload(s100EventData, XmlTemplateInfo.S100SapXmlTemplatePath);
 
-            await _azureBlobReaderWriter.UploadEventAsync(sapPayload.ToIndentedString(), s100EventData.CorrelationId, EventPayloadFiles.SapXmlPayloadFileName);
-
-            _logger.LogInformation(EventIds.S100EventXMLStoredInAzureBlobContainer.ToEventId(), "S-100 data content published event xml payload is stored in azure blob container.");
-
+    
             if (sapPayload.DocumentElement != null && int.TryParse(sapPayload.SelectSingleNode(XmlTemplateInfo.XpathNoOfActions).InnerText, out int actionCount) && actionCount <= 0)
             {
                 var result = await _s100UnitOfSaleUpdatedEventPublishingService.BuildAndPublishEventAsync(baseCloudEvent, s100EventData.CorrelationId);
@@ -91,6 +88,10 @@ namespace UKHO.ERPFacade.API.Handlers
             }
             else
             {
+                await _azureBlobReaderWriter.UploadEventAsync(sapPayload.ToIndentedString(), s100EventData.CorrelationId, EventPayloadFiles.SapXmlPayloadFileName);
+
+                _logger.LogInformation(EventIds.S100EventXMLStoredInAzureBlobContainer.ToEventId(), "S-100 data content published event xml payload is stored in azure blob container.");
+
                 var response = await _sapClient.SendUpdateAsync(sapPayload, _sapConfig.Value.SapEndpointForS100Event, _sapConfig.Value.SapServiceOperationForS100Event, _sapConfig.Value.SapUsernameForS100Event, _sapConfig.Value.SapPasswordForS100Event);
 
                 if (!response.IsSuccessStatusCode)
