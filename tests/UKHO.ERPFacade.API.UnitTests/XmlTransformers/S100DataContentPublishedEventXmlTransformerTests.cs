@@ -138,9 +138,9 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
             var itemList = xElement.Descendants("item").ToList();
             var s100WorldFolio = itemList.FirstOrDefault(item => item.Descendants("PRODUCTNAME").FirstOrDefault()?.Value == "s100WorldFolio");
             Assert.That(itemList.Count > 0, Is.True);
-            Assert.That(s100WorldFolio==null, Is.True);
-            
-            
+            Assert.That(s100WorldFolio == null, Is.True);
+
+
             A.CallTo(() => _fakeXmlOperations.AppendChildNode(A<XmlElement>.Ignored, A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened(9, Times.Exactly);
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
