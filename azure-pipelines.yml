@@ -386,13 +386,6 @@ stages:
               workingDirectory: '$(Build.SourcesDirectory)\mock\repo\src'
               packagesDirectory: '$(Build.SourcesDirectory)\mock\repo\src\packages'
           
-          - task: CopyFiles@2
-            displayName: 'Copy files to: $(Build.SourcesDirectory)\mock\repo\service-configuration'
-            inputs:
-              SourceFolder: '$(Build.SourcesDirectory)\mock\repo\service-configuration'
-              Contents: '**'
-              TargetFolder: '$(Build.SourcesDirectory)\mock\repo\src\ADDSMock\service-configuration'
-
           - task: DotNetCoreCLI@2
             displayName: "dotnet build task"
             inputs:
@@ -411,6 +404,13 @@ stages:
               arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\ADDSMock'
               zipAfterPublish: true
               modifyOutputPath: true
+
+          - task: CopyFiles@2
+            displayName: 'Copy files to: $(Build.SourcesDirectory)\mock\repo\service-configuration'
+            inputs:
+              SourceFolder: '$(Build.SourcesDirectory)\mock\repo\service-configuration'
+              Contents: '**'
+              TargetFolder: '$(Build.SourcesDirectory)\mock\repo\src\ADDSMock\service-configuration'
 
           - task: PublishBuildArtifacts@1
             displayName: "Publish Web Artifact"
