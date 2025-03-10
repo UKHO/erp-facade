@@ -57,9 +57,6 @@
     <None Update="ERPTestData\S100TestData\SapXmlWithNoActions.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPTestData\S100TestData\ChangeProduct.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="ERPTestData\S100TestData\NewProductWithNoUnitOfSaleStatusAndAddProducts.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

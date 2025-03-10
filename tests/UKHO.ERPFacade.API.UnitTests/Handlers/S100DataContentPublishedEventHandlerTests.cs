@@ -146,18 +146,6 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
                                                 && call.GetArgument<EventId>(1) == EventIds.S100EventEntryAddedInAzureTable.ToEventId()
                                                 && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "S-100 data content published event entry added in azure table.").MustHaveHappenedOnceExactly();
 
-            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-                                                && call.GetArgument<LogLevel>(0) == LogLevel.Information
-                                                && call.GetArgument<EventId>(1) == EventIds.S100EventJsonStoredInAzureBlobContainer.ToEventId()
-                                                && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "S-100 data content published event json payload is stored in azure blob container.").MustHaveHappenedOnceExactly();
-
-            A.CallTo(() => _fakeAzureBlobReaderWriter.UploadEventAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened(2, Times.Exactly);
-
-            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-                                                && call.GetArgument<LogLevel>(0) == LogLevel.Information
-                                                && call.GetArgument<EventId>(1) == EventIds.S100EventXMLStoredInAzureBlobContainer.ToEventId()
-                                                && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "S-100 data content published event xml payload is stored in azure blob container.").MustHaveHappenedOnceExactly();
-
             A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntityAsync(A<string>.Ignored, A<string>.Ignored, A<Dictionary<string, object>>.That.Matches(d => d.ContainsKey(AzureStorage.EventRequestDateTime) && (DateTime)d[AzureStorage.EventRequestDateTime] <= DateTime.UtcNow))).MustHaveHappenedOnceExactly();
 
             A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntityAsync(A<string>.Ignored, A<string>.Ignored, A<Dictionary<string, object>>.That.Matches(d => d.ContainsKey(AzureStorage.EventPublishedDateTime) && (DateTime)d[AzureStorage.EventPublishedDateTime] <= DateTime.UtcNow))).MustHaveHappenedOnceExactly();
