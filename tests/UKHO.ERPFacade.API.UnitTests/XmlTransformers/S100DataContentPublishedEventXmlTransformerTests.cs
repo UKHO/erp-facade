@@ -121,9 +121,9 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
         }
 
         [Test]
-        public void WhenBuildXmlPayloadIsCalledForNewProductWithFolioDataScenario_ThenReturnXMLDocumentWithoutFolio()
+        public void WhenBuildXmlPayloadIsCalledForNewProductWithUnitOfSaleTypeAsFolio_ThenReturnXMLDocumentWithoutFolio()
         {
-            var newProductEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\S100TestData\\NewProductWithFolioData.JSON");
+            var newProductEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\S100TestData\\NewProductWithUnitOfSaleTypeAsFolio.JSON");
             var baseCloudEvent = JsonConvert.DeserializeObject<BaseCloudEvent>(newProductEventPayloadJson);
             var s100EventData = JsonConvert.DeserializeObject<S100EventData>(baseCloudEvent.Data.ToString()!);
 

@@ -93,7 +93,7 @@
     <None Update="ERPTestData\S100TestData\NewProduct.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPTestData\S100TestData\NewProductWithFolioData.json">
+    <None Update="ERPTestData\S100TestData\NewProductWithUnitOfSaleTypeAsFolio.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
