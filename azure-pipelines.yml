@@ -410,7 +410,7 @@ stages:
             inputs:
               SourceFolder: '$(Build.SourcesDirectory)\mock\repo\service-configuration'
               Contents: '**'
-              TargetFolder: '$(Build.SourcesDirectory)\mock\repo\src\ADDSMock\service-configuration'
+              TargetFolder: '$(Build.ArtifactStagingDirectory)\service-configuration'
 
           - task: PublishBuildArtifacts@1
             displayName: "Publish Web Artifact"
