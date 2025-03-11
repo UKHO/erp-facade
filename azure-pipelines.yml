@@ -415,8 +415,8 @@ stages:
           - task: PublishBuildArtifacts@1
             displayName: "copy service-configuration"
             inputs:
-              PathtoPublish: '$(Build.ArtifactStagingDirectory)\ADDSMock'
-              ArtifactName: ADDSMock
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+              ArtifactName: service-configuration"
 
           - task: PublishBuildArtifacts@1
             displayName: "Publish Web Artifact"
