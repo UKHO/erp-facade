@@ -164,6 +164,9 @@
     <None Update="ERPFacadeExpectedXmlFiles\S57ExpectedXmlFiles\WithdrawCell.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ERPFacadePayloadTestData\S100PayloadTestData\NewCellV1.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ERPFacadePayloadTestData\S100PayloadTestData\SAP500InternalServerError.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -376,7 +379,7 @@
     </None>
     <None Update="ERPFacadePayloadTestData\S57PayloadTestData\WithdrawCell.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>    
+    </None>
   </ItemGroup>
 
 	<ItemGroup>
