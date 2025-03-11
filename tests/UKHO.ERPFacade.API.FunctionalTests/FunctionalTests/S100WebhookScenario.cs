@@ -106,13 +106,13 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [Test]
         public async Task Verify400BadRequestReceivedForInvalidS100DataContentPublishedEvent()
         {
-            var jsonPayloadFilePath = Path.Combine(_projectDir,EventPayloadFiles.PayloadFolder,EventPayloadFiles.S100PayloadFolder,"NewCellV1.JSON");
-
+            var jsonPayloadFilePath = Path.Combine(_projectDir, EventPayloadFiles.PayloadFolder, EventPayloadFiles.S100PayloadFolder, "NewCellV1.JSON");
+            
             var requestBody = await File.ReadAllTextAsync(jsonPayloadFilePath);
             requestBody = JsonModifier.UpdateTime(requestBody);
             (requestBody, _) = JsonModifier.UpdateCorrelationId(requestBody);
 
-            var response = await _webhookEndpoint.PostWebhookResponseAsync(requestBody,await _authTokenProvider.GetAzureADTokenAsync(false));
+            var response = await _webhookEndpoint.PostWebhookResponseAsync(requestBody, await _authTokenProvider.GetAzureADTokenAsync(false));
 
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
 
