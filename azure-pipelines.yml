@@ -364,7 +364,7 @@ stages:
         steps:
           - checkout: self        
           
-          - script: git submodule update --init --recursive
+          - script: git submodule update --init --force --remote
             displayName: 'update submodule for ADDS Mock Service'
             workingDirectory: '$(Build.SourcesDirectory)'
 
