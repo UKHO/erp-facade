@@ -416,7 +416,7 @@ stages:
             displayName: "copy service-configuration"
             inputs:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-              ArtifactName: drop
+              ArtifactName: service-configuration
 
           - task: PublishBuildArtifacts@1
             displayName: "Publish Web Artifact"
