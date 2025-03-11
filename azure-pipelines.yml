@@ -411,6 +411,12 @@ stages:
               SourceFolder: '$(Build.SourcesDirectory)\mock\repo\service-configuration'
               Contents: '**'
               TargetFolder: '$(Build.ArtifactStagingDirectory)\service-configuration'
+          
+          - task: PublishBuildArtifacts@1
+            displayName: "copy service-configuration"
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+              ArtifactName: drop
 
           - task: PublishBuildArtifacts@1
             displayName: "Publish Web Artifact"
