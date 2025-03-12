@@ -1,22 +1,21 @@
 {
   "specversion": "1.0",
-  "type": "uk.gov.ukho.encpublishing.s100datacontentpublished.v1",
+  "type": "uk.gov.ukho.encpublishing.s100datacontentpublished.v1.1",
   "source": "https://encpublishing.ukho.gov.uk",
   "id": "5f03a25f-28b3-46ea-b009-5943250a9a41",
   "time": "2024-08-13T12:08:03.4880776Z",
   "subject": "LT",
   "datacontenttype": "application/json",
   "data": {
-    "correlationId": "47d4d418-15c7-4697-910a-cb075741c53c",
+    "correlationId": "lt-20250310-m83j68tm-t8imgq3l-a4ieg6",
     "products": [
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG001",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -29,24 +28,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG001"
-        ]
+              "101GB7645JTHG001"
+            ],
+        "producerUnitName": "101GB7645JTHG001"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG002",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -59,24 +58,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG002"
-        ]
+              "101GB7645JTHG002"
+            ],
+        "producerUnitName": "101GB7645JTHG002"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG003",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -89,24 +88,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG003"
-        ]
+              "101GB7645JTHG003"
+            ],
+        "producerUnitName": "101GB7645JTHG003"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG004",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -119,24 +118,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG004"
-        ]
+              "101GB7645JTHG004"
+            ],
+        "producerUnitName": "101GB7645JTHG004"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG005",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -149,24 +148,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG005"
-        ]
+              "101GB7645JTHG005"
+            ],
+        "producerUnitName": "101GB7645JTHG005"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG006",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -179,24 +178,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG006"
-        ]
+              "101GB7645JTHG006"
+            ],
+        "producerUnitName": "101GB7645JTHG006"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG007",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -209,24 +208,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG007"
-        ]
+              "101GB7645JTHG007"
+            ],
+        "producerUnitName": "101GB7645JTHG007"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG008",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -239,24 +238,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG008"
-        ]
+              "101GB7645JTHG008"
+            ],
+        "producerUnitName": "101GB7645JTHG008"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG009",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -269,24 +268,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG009"
-        ]
+              "101GB7645JTHG009"
+            ],
+        "producerUnitName": "101GB7645JTHG009"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG010",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -299,24 +298,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG010"
-        ]
+              "101GB7645JTHG010"
+            ],
+        "producerUnitName": "101GB7645JTHG010"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG011",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -329,24 +328,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG011"
-        ]
+              "101GB7645JTHG011"
+            ],
+        "producerUnitName": "101GB7645JTHG011"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG012",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -359,24 +358,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG012"
-        ]
+              "101GB7645JTHG012"
+            ],
+        "producerUnitName": "101GB7645JTHG012"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG013",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -389,24 +388,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG013"
-        ]
+              "101GB7645JTHG013"
+            ],
+        "producerUnitName": "101GB7645JTHG013"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG014",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -419,24 +418,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG014"
-        ]
+              "101GB7645JTHG014"
+            ],
+        "producerUnitName": "101GB7645JTHG014"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG015",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -449,24 +448,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG015"
-        ]
+              "101GB7645JTHG015"
+            ],
+        "producerUnitName": "101GB7645JTHG015"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG016",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -479,24 +478,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG016"
-        ]
+              "101GB7645JTHG016"
+            ],
+        "producerUnitName": "101GB7645JTHG016"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG017",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -509,24 +508,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG017"
-        ]
+              "101GB7645JTHG017"
+            ],
+        "producerUnitName": "101GB7645JTHG017"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG018",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -539,24 +538,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG018"
-        ]
+              "101GB7645JTHG018"
+            ],
+        "producerUnitName": "101GB7645JTHG018"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG019",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -569,24 +568,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG019"
-        ]
+              "101GB7645JTHG019"
+            ],
+        "producerUnitName": "101GB7645JTHG019"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG020",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -599,24 +598,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG020"
-        ]
+              "101GB7645JTHG020"
+            ],
+        "producerUnitName": "101GB7645JTHG020"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG021",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -629,24 +628,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG021"
-        ]
+              "101GB7645JTHG021"
+            ],
+        "producerUnitName": "101GB7645JTHG021"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG022",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -659,24 +658,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG022"
-        ]
+              "101GB7645JTHG022"
+            ],
+        "producerUnitName": "101GB7645JTHG022"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG023",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -689,24 +688,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG023"
-        ]
+              "101GB7645JTHG023"
+            ],
+        "producerUnitName": "101GB7645JTHG023"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG024",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -719,24 +718,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG024"
-        ]
+              "101GB7645JTHG024"
+            ],
+        "producerUnitName": "101GB7645JTHG024"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG025",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -749,24 +748,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG025"
-        ]
+              "101GB7645JTHG025"
+            ],
+        "producerUnitName": "101GB7645JTHG025"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG026",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -779,24 +778,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG026"
-        ]
+              "101GB7645JTHG026"
+            ],
+        "producerUnitName": "101GB7645JTHG026"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG027",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -809,24 +808,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG027"
-        ]
+              "101GB7645JTHG027"
+            ],
+        "producerUnitName": "101GB7645JTHG027"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG028",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -839,24 +838,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG028"
-        ]
+              "101GB7645JTHG028"
+            ],
+        "producerUnitName": "101GB7645JTHG028"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG029",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -869,24 +868,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG029"
-        ]
+              "101GB7645JTHG029"
+            ],
+        "producerUnitName": "101GB7645JTHG029"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG030",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -899,24 +898,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG030"
-        ]
+              "101GB7645JTHG030"
+            ],
+        "producerUnitName": "101GB7645JTHG030"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG031",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -929,24 +928,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG031"
-        ]
+              "101GB7645JTHG031"
+            ],
+        "producerUnitName": "101GB7645JTHG031"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG032",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -959,24 +958,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG032"
-        ]
+              "101GB7645JTHG032"
+            ],
+        "producerUnitName": "101GB7645JTHG032"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG033",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -989,24 +988,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG033"
-        ]
+              "101GB7645JTHG033"
+            ],
+        "producerUnitName": "101GB7645JTHG033"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG034",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -1019,24 +1018,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG034"
-        ]
+              "101GB7645JTHG034"
+            ],
+        "producerUnitName": "101GB7645JTHG034"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG035",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -1049,24 +1048,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG035"
-        ]
+              "101GB7645JTHG035"
+            ],
+        "producerUnitName": "101GB7645JTHG035"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG036",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -1079,24 +1078,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG036"
-        ]
+              "101GB7645JTHG036"
+            ],
+        "producerUnitName": "101GB7645JTHG036"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG037",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -1109,24 +1108,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG037"
-        ]
+              "101GB7645JTHG037"
+            ],
+        "producerUnitName": "101GB7645JTHG037"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG038",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -1139,24 +1138,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG038"
-        ]
+              "101GB7645JTHG038"
+            ],
+        "producerUnitName": "101GB7645JTHG038"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG039",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -1169,24 +1168,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG039"
-        ]
+              "101GB7645JTHG039"
+            ],
+        "producerUnitName": "101GB7645JTHG039"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG040",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -1199,24 +1198,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG040"
-        ]
+              "101GB7645JTHG040"
+            ],
+        "producerUnitName": "101GB7645JTHG040"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG041",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -1229,24 +1228,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG041"
-        ]
+              "101GB7645JTHG041"
+            ],
+        "producerUnitName": "101GB7645JTHG041"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG042",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -1259,24 +1258,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG042"
-        ]
+              "101GB7645JTHG042"
+            ],
+        "producerUnitName": "101GB7645JTHG042"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG043",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -1289,24 +1288,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG043"
-        ]
+              "101GB7645JTHG043"
+            ],
+        "producerUnitName": "101GB7645JTHG043"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG044",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -1319,24 +1318,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG044"
-        ]
+              "101GB7645JTHG044"
+            ],
+        "producerUnitName": "101GB7645JTHG044"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG045",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -1349,24 +1348,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG045"
-        ]
+              "101GB7645JTHG045"
+            ],
+        "producerUnitName": "101GB7645JTHG045"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG046",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -1379,24 +1378,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG046"
-        ]
+              "101GB7645JTHG046"
+            ],
+        "producerUnitName": "101GB7645JTHG046"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG047",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -1409,24 +1408,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG047"
-        ]
+              "101GB7645JTHG047"
+            ],
+        "producerUnitName": "101GB7645JTHG047"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG048",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -1439,24 +1438,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG048"
-        ]
+              "101GB7645JTHG048"
+            ],
+        "producerUnitName": "101GB7645JTHG048"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG049",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -1469,24 +1468,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG049"
-        ]
+              "101GB7645JTHG049"
+            ],
+        "producerUnitName": "101GB7645JTHG049"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG050",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -1499,24 +1498,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG050"
-        ]
+              "101GB7645JTHG050"
+            ],
+        "producerUnitName": "101GB7645JTHG050"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG051",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -1529,24 +1528,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG051"
-        ]
+              "101GB7645JTHG051"
+            ],
+        "producerUnitName": "101GB7645JTHG051"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG052",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -1559,24 +1558,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG052"
-        ]
+              "101GB7645JTHG052"
+            ],
+        "producerUnitName": "101GB7645JTHG052"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG053",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -1589,24 +1588,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG053"
-        ]
+              "101GB7645JTHG053"
+            ],
+        "producerUnitName": "101GB7645JTHG053"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG054",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -1619,24 +1618,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG054"
-        ]
+              "101GB7645JTHG054"
+            ],
+        "producerUnitName": "101GB7645JTHG054"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG055",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -1649,24 +1648,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG055"
-        ]
+              "101GB7645JTHG055"
+            ],
+        "producerUnitName": "101GB7645JTHG055"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG056",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -1679,24 +1678,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG056"
-        ]
+              "101GB7645JTHG056"
+            ],
+        "producerUnitName": "101GB7645JTHG056"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG057",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -1709,24 +1708,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG057"
-        ]
+              "101GB7645JTHG057"
+            ],
+        "producerUnitName": "101GB7645JTHG057"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG058",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -1739,24 +1738,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG058"
-        ]
+              "101GB7645JTHG058"
+            ],
+        "producerUnitName": "101GB7645JTHG058"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG059",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -1769,24 +1768,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG059"
-        ]
+              "101GB7645JTHG059"
+            ],
+        "producerUnitName": "101GB7645JTHG059"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG060",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -1799,24 +1798,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG060"
-        ]
+              "101GB7645JTHG060"
+            ],
+        "producerUnitName": "101GB7645JTHG060"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG061",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -1829,24 +1828,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG061"
-        ]
+              "101GB7645JTHG061"
+            ],
+        "producerUnitName": "101GB7645JTHG061"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG062",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -1859,24 +1858,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG062"
-        ]
+              "101GB7645JTHG062"
+            ],
+        "producerUnitName": "101GB7645JTHG062"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG063",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -1889,24 +1888,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG063"
-        ]
+              "101GB7645JTHG063"
+            ],
+        "producerUnitName": "101GB7645JTHG063"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG064",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -1919,24 +1918,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG064"
-        ]
+              "101GB7645JTHG064"
+            ],
+        "producerUnitName": "101GB7645JTHG064"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG065",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -1949,24 +1948,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG065"
-        ]
+              "101GB7645JTHG065"
+            ],
+        "producerUnitName": "101GB7645JTHG065"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG066",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -1979,24 +1978,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG066"
-        ]
+              "101GB7645JTHG066"
+            ],
+        "producerUnitName": "101GB7645JTHG066"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG067",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -2009,24 +2008,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG067"
-        ]
+              "101GB7645JTHG067"
+            ],
+        "producerUnitName": "101GB7645JTHG067"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG068",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -2039,24 +2038,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG068"
-        ]
+              "101GB7645JTHG068"
+            ],
+        "producerUnitName": "101GB7645JTHG068"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG069",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -2069,24 +2068,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG069"
-        ]
+              "101GB7645JTHG069"
+            ],
+        "producerUnitName": "101GB7645JTHG069"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG070",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -2099,24 +2098,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG070"
-        ]
+              "101GB7645JTHG070"
+            ],
+        "producerUnitName": "101GB7645JTHG070"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG071",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -2129,24 +2128,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG071"
-        ]
+              "101GB7645JTHG071"
+            ],
+        "producerUnitName": "101GB7645JTHG071"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG072",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -2159,24 +2158,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG072"
-        ]
+              "101GB7645JTHG072"
+            ],
+        "producerUnitName": "101GB7645JTHG072"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG073",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -2189,24 +2188,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG073"
-        ]
+              "101GB7645JTHG073"
+            ],
+        "producerUnitName": "101GB7645JTHG073"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG074",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -2219,24 +2218,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG074"
-        ]
+              "101GB7645JTHG074"
+            ],
+        "producerUnitName": "101GB7645JTHG074"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG075",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -2249,24 +2248,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG075"
-        ]
+              "101GB7645JTHG075"
+            ],
+        "producerUnitName": "101GB7645JTHG075"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG076",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -2279,24 +2278,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG076"
-        ]
+              "101GB7645JTHG076"
+            ],
+        "producerUnitName": "101GB7645JTHG076"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG077",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -2309,24 +2308,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG077"
-        ]
+              "101GB7645JTHG077"
+            ],
+        "producerUnitName": "101GB7645JTHG077"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG078",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -2339,24 +2338,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG078"
-        ]
+              "101GB7645JTHG078"
+            ],
+        "producerUnitName": "101GB7645JTHG078"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG079",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -2369,24 +2368,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG079"
-        ]
+              "101GB7645JTHG079"
+            ],
+        "producerUnitName": "101GB7645JTHG079"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG080",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -2399,24 +2398,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG080"
-        ]
+              "101GB7645JTHG080"
+            ],
+        "producerUnitName": "101GB7645JTHG080"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG081",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -2429,24 +2428,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG081"
-        ]
+              "101GB7645JTHG081"
+            ],
+        "producerUnitName": "101GB7645JTHG081"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG082",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -2459,24 +2458,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG082"
-        ]
+              "101GB7645JTHG082"
+            ],
+        "producerUnitName": "101GB7645JTHG082"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG083",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -2489,24 +2488,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG083"
-        ]
+              "101GB7645JTHG083"
+            ],
+        "producerUnitName": "101GB7645JTHG083"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG084",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -2519,24 +2518,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG084"
-        ]
+              "101GB7645JTHG084"
+            ],
+        "producerUnitName": "101GB7645JTHG084"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG085",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -2549,24 +2548,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG085"
-        ]
+              "101GB7645JTHG085"
+            ],
+        "producerUnitName": "101GB7645JTHG085"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG086",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -2579,24 +2578,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG086"
-        ]
+              "101GB7645JTHG086"
+            ],
+        "producerUnitName": "101GB7645JTHG086"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG087",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -2609,24 +2608,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG087"
-        ]
+              "101GB7645JTHG087"
+            ],
+        "producerUnitName": "101GB7645JTHG087"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG088",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -2639,24 +2638,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG088"
-        ]
+              "101GB7645JTHG088"
+            ],
+        "producerUnitName": "101GB7645JTHG088"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG089",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -2669,24 +2668,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG089"
-        ]
+              "101GB7645JTHG089"
+            ],
+        "producerUnitName": "101GB7645JTHG089"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG090",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -2699,24 +2698,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG090"
-        ]
+              "101GB7645JTHG090"
+            ],
+        "producerUnitName": "101GB7645JTHG090"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG091",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -2729,24 +2728,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG091"
-        ]
+              "101GB7645JTHG091"
+            ],
+        "producerUnitName": "101GB7645JTHG091"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG092",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -2759,24 +2758,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG092"
-        ]
+              "101GB7645JTHG092"
+            ],
+        "producerUnitName": "101GB7645JTHG092"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG093",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -2789,24 +2788,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG093"
-        ]
+              "101GB7645JTHG093"
+            ],
+        "producerUnitName": "101GB7645JTHG093"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG094",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -2819,24 +2818,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG094"
-        ]
+              "101GB7645JTHG094"
+            ],
+        "producerUnitName": "101GB7645JTHG094"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG095",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -2849,24 +2848,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG095"
-        ]
+              "101GB7645JTHG095"
+            ],
+        "producerUnitName": "101GB7645JTHG095"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG096",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -2879,24 +2878,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG096"
-        ]
+              "101GB7645JTHG096"
+            ],
+        "producerUnitName": "101GB7645JTHG096"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG097",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -2909,24 +2908,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG097"
-        ]
+              "101GB7645JTHG097"
+            ],
+        "producerUnitName": "101GB7645JTHG097"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG098",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -2939,24 +2938,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG098"
-        ]
+              "101GB7645JTHG098"
+            ],
+        "producerUnitName": "101GB7645JTHG098"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG099",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -2969,24 +2968,24 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG099"
-        ]
+              "101GB7645JTHG099"
+            ],
+        "producerUnitName": "101GB7645JTHG099"
       },
       {
         "productType": "S100",
-        "productIdentifier": "S-101",
+        "productIdentifier": "s101",
         "productName": "101GB7645JTHG100",
         "editionNumber": 1,
         "updateNumber": 0,
         "mayAffectHoldings": true,
-        "contentChange": true,
         "providerCode": "1",
         "providerName": "ICE",
         "size": "medium",
@@ -2999,15 +2998,16 @@
         "replaces": [],
         "dataReplacement": [],
         "boundingBox": {
-          "northLimit": 63.25,
-          "southLimit": 63,
-          "eastLimit": 8,
-          "westLimit": 7.75
-        },
+              "northLimit": 63.25,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7.75
+            },
         "fileSize": 3456,
         "inUnitsOfSale": [
-          "101GB7645JTHG100"
-        ]
+              "101GB7645JTHG100"
+            ],
+        "producerUnitName": "101GB7645JTHG100"
       }
     ],
     "unitsOfSale": [
@@ -3028,7 +3028,12 @@
             "101GB7645JTHG001"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG002",
@@ -3047,7 +3052,12 @@
             "101GB7645JTHG002"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG003",
@@ -3066,7 +3076,12 @@
             "101GB7645JTHG003"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG004",
@@ -3085,7 +3100,12 @@
             "101GB7645JTHG004"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG005",
@@ -3104,7 +3124,12 @@
             "101GB7645JTHG005"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG006",
@@ -3123,7 +3148,12 @@
             "101GB7645JTHG006"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG007",
@@ -3142,7 +3172,12 @@
             "101GB7645JTHG007"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG008",
@@ -3161,7 +3196,12 @@
             "101GB7645JTHG008"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG009",
@@ -3180,7 +3220,12 @@
             "101GB7645JTHG009"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG010",
@@ -3199,7 +3244,12 @@
             "101GB7645JTHG010"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG011",
@@ -3218,7 +3268,12 @@
             "101GB7645JTHG011"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG012",
@@ -3237,7 +3292,12 @@
             "101GB7645JTHG012"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG013",
@@ -3256,7 +3316,12 @@
             "101GB7645JTHG013"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG014",
@@ -3275,7 +3340,12 @@
             "101GB7645JTHG014"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG015",
@@ -3294,7 +3364,12 @@
             "101GB7645JTHG015"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG016",
@@ -3313,7 +3388,12 @@
             "101GB7645JTHG016"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG017",
@@ -3332,7 +3412,12 @@
             "101GB7645JTHG017"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG018",
@@ -3351,7 +3436,12 @@
             "101GB7645JTHG018"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG019",
@@ -3370,7 +3460,12 @@
             "101GB7645JTHG019"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG020",
@@ -3389,7 +3484,12 @@
             "101GB7645JTHG020"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG021",
@@ -3408,7 +3508,12 @@
             "101GB7645JTHG021"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG022",
@@ -3427,7 +3532,12 @@
             "101GB7645JTHG022"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG023",
@@ -3446,7 +3556,12 @@
             "101GB7645JTHG023"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG024",
@@ -3465,7 +3580,12 @@
             "101GB7645JTHG024"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG025",
@@ -3484,7 +3604,12 @@
             "101GB7645JTHG025"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG026",
@@ -3503,7 +3628,12 @@
             "101GB7645JTHG026"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG027",
@@ -3522,7 +3652,12 @@
             "101GB7645JTHG027"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG028",
@@ -3541,7 +3676,12 @@
             "101GB7645JTHG028"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG029",
@@ -3560,7 +3700,12 @@
             "101GB7645JTHG029"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG030",
@@ -3579,7 +3724,12 @@
             "101GB7645JTHG030"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG031",
@@ -3598,7 +3748,12 @@
             "101GB7645JTHG031"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG032",
@@ -3617,7 +3772,12 @@
             "101GB7645JTHG032"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG033",
@@ -3636,7 +3796,12 @@
             "101GB7645JTHG033"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG034",
@@ -3655,7 +3820,12 @@
             "101GB7645JTHG034"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG035",
@@ -3674,7 +3844,12 @@
             "101GB7645JTHG035"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG036",
@@ -3693,7 +3868,12 @@
             "101GB7645JTHG036"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG037",
@@ -3712,7 +3892,12 @@
             "101GB7645JTHG037"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG038",
@@ -3731,7 +3916,12 @@
             "101GB7645JTHG038"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG039",
@@ -3750,7 +3940,12 @@
             "101GB7645JTHG039"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG040",
@@ -3769,7 +3964,12 @@
             "101GB7645JTHG040"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG041",
@@ -3788,7 +3988,12 @@
             "101GB7645JTHG041"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG042",
@@ -3807,7 +4012,12 @@
             "101GB7645JTHG042"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG043",
@@ -3826,7 +4036,12 @@
             "101GB7645JTHG043"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG044",
@@ -3845,7 +4060,12 @@
             "101GB7645JTHG044"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG045",
@@ -3864,7 +4084,12 @@
             "101GB7645JTHG045"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG046",
@@ -3883,7 +4108,12 @@
             "101GB7645JTHG046"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG047",
@@ -3902,7 +4132,12 @@
             "101GB7645JTHG047"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG048",
@@ -3921,7 +4156,12 @@
             "101GB7645JTHG048"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG049",
@@ -3940,7 +4180,12 @@
             "101GB7645JTHG049"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG050",
@@ -3959,7 +4204,12 @@
             "101GB7645JTHG050"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG051",
@@ -3978,7 +4228,12 @@
             "101GB7645JTHG051"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG052",
@@ -3997,7 +4252,12 @@
             "101GB7645JTHG052"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG053",
@@ -4016,7 +4276,12 @@
             "101GB7645JTHG053"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG054",
@@ -4035,7 +4300,12 @@
             "101GB7645JTHG054"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG055",
@@ -4054,7 +4324,12 @@
             "101GB7645JTHG055"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG056",
@@ -4073,7 +4348,12 @@
             "101GB7645JTHG056"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG057",
@@ -4092,7 +4372,12 @@
             "101GB7645JTHG057"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG058",
@@ -4111,7 +4396,12 @@
             "101GB7645JTHG058"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG059",
@@ -4130,7 +4420,12 @@
             "101GB7645JTHG059"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG060",
@@ -4149,7 +4444,12 @@
             "101GB7645JTHG060"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG061",
@@ -4168,7 +4468,12 @@
             "101GB7645JTHG061"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG062",
@@ -4187,7 +4492,12 @@
             "101GB7645JTHG062"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG063",
@@ -4206,7 +4516,12 @@
             "101GB7645JTHG063"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG064",
@@ -4225,7 +4540,12 @@
             "101GB7645JTHG064"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG065",
@@ -4244,7 +4564,12 @@
             "101GB7645JTHG065"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG066",
@@ -4263,7 +4588,12 @@
             "101GB7645JTHG066"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG067",
@@ -4282,7 +4612,12 @@
             "101GB7645JTHG067"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG068",
@@ -4301,7 +4636,12 @@
             "101GB7645JTHG068"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG069",
@@ -4320,7 +4660,12 @@
             "101GB7645JTHG069"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG070",
@@ -4339,7 +4684,12 @@
             "101GB7645JTHG070"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG071",
@@ -4358,7 +4708,12 @@
             "101GB7645JTHG071"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG072",
@@ -4377,7 +4732,12 @@
             "101GB7645JTHG072"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG073",
@@ -4396,7 +4756,12 @@
             "101GB7645JTHG073"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG074",
@@ -4415,7 +4780,12 @@
             "101GB7645JTHG074"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG075",
@@ -4434,7 +4804,12 @@
             "101GB7645JTHG075"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG076",
@@ -4453,7 +4828,12 @@
             "101GB7645JTHG076"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG077",
@@ -4472,7 +4852,12 @@
             "101GB7645JTHG077"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG078",
@@ -4491,7 +4876,12 @@
             "101GB7645JTHG078"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG079",
@@ -4510,7 +4900,12 @@
             "101GB7645JTHG079"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG080",
@@ -4529,7 +4924,12 @@
             "101GB7645JTHG080"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG081",
@@ -4548,7 +4948,12 @@
             "101GB7645JTHG081"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG082",
@@ -4567,7 +4972,12 @@
             "101GB7645JTHG082"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG083",
@@ -4586,7 +4996,12 @@
             "101GB7645JTHG083"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG084",
@@ -4605,7 +5020,12 @@
             "101GB7645JTHG084"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG085",
@@ -4624,7 +5044,12 @@
             "101GB7645JTHG085"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG086",
@@ -4643,7 +5068,12 @@
             "101GB7645JTHG086"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG087",
@@ -4662,7 +5092,12 @@
             "101GB7645JTHG087"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG088",
@@ -4681,7 +5116,12 @@
             "101GB7645JTHG088"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG089",
@@ -4700,7 +5140,12 @@
             "101GB7645JTHG089"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG090",
@@ -4719,7 +5164,12 @@
             "101GB7645JTHG090"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG091",
@@ -4738,7 +5188,12 @@
             "101GB7645JTHG091"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG092",
@@ -4757,7 +5212,12 @@
             "101GB7645JTHG092"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG093",
@@ -4776,7 +5236,12 @@
             "101GB7645JTHG093"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG094",
@@ -4795,7 +5260,12 @@
             "101GB7645JTHG094"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG095",
@@ -4814,7 +5284,12 @@
             "101GB7645JTHG095"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG096",
@@ -4833,7 +5308,12 @@
             "101GB7645JTHG096"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG097",
@@ -4852,7 +5332,12 @@
             "101GB7645JTHG097"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG098",
@@ -4871,7 +5356,12 @@
             "101GB7645JTHG098"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG099",
@@ -4890,7 +5380,12 @@
             "101GB7645JTHG099"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       },
       {
         "unitName": "101GB7645JTHG100",
@@ -4909,7 +5404,12 @@
             "101GB7645JTHG100"
           ],
           "removeProducts": []
-        }
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1",
+        "providerName": "ICE",
+        "producingAgency": "GB"
       }
     ]
   }

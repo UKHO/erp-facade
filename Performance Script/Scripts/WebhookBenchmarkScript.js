@@ -4,7 +4,7 @@ import { htmlReport } from "https://raw.githubusercontent.com/benc-uk/k6-reporte
 import { textSummary } from "https://jslib.k6.io/k6-summary/0.0.1/index.js";
 import { URL } from 'https://jslib.k6.io/url/1.0.0/index.js';
 import { PayloadSetup, S100PayloadSetup } from '../PayloadDataSetup/PayloadSetupDifferentProfiles.js';
-import { Trend,Counter } from 'k6/metrics';
+import { Trend, Counter } from 'k6/metrics';
 
 var Config = JSON.parse(open('./../config.json'));
 const S57ResponseTimewithOneProduct = new Trend('S57ResponseTimewithOneProduct');
@@ -59,7 +59,6 @@ export const options = {
         'http_reqs': ['count>=2000'], // Total request count should be more then 2000
     },
     scenarios: {
-
         SingleProductLoadS57: {
             executor: 'constant-arrival-rate',
             exec: 'ScenarioWithOneProduct',
@@ -122,9 +121,8 @@ export const options = {
     }
 };
 
-function executeScenario(payload, responseTimeTrend, requestCount, scenarioName) {
-    const updatedPayload = PayloadSetup(payload);
-    const res = http.post(url.toString(), JSON.stringify(updatedPayload), { headers }, { tags: { my_custom_tag: scenarioName } });
+function ExecuteScenario(payload, responseTimeTrend, requestCount, scenarioName) {
+    const res = http.post(url.toString(), JSON.stringify(payload), { headers }, { tags: { my_custom_tag: scenarioName } });
     responseTimeTrend.add(res.timings.duration);
     requestCount.add(1);
     check(res, { 'Status is 200': (r) => r.status === 200 });
@@ -132,27 +130,33 @@ function executeScenario(payload, responseTimeTrend, requestCount, scenarioName)
 }
 
 export function ScenarioWithOneProduct() {
-    executeScenario(PayloadOneProduct, S57ResponseTimewithOneProduct, S57RequestCountWithOneProduct, 'ScenarioWithOneProductS57');
+    const updatedPayloadOneProduct = PayloadSetup(PayloadOneProduct);
+    ExecuteScenario(updatedPayloadOneProduct, S57ResponseTimewithOneProduct, S57RequestCountWithOneProduct, 'ScenarioWithOneProductS57');
 }
 
 export function ScenarioWithOneProductS100() {
-    executeScenario(S100PayloadOneProduct, S100ResponseTimewithOneProduct, S100RequestCountWithOneProduct, 'ScenarioWithOneProductS100');
+    const updatedPayloadOneProductS100 = S100PayloadSetup(S100PayloadOneProduct);
+    ExecuteScenario(updatedPayloadOneProductS100, S100ResponseTimewithOneProduct, S100RequestCountWithOneProduct, 'ScenarioWithOneProductS100');
 }
 
 export function ScenarioWithTwoProducts() {
-    executeScenario(PayloadTwoProducts, S57ResponseTimewithTwoProduct, S57RequestCountWithTwoProduct, 'ScenarioWithTwoProductsS57');
+    const updatedPayloadTwoProducts = PayloadSetup(PayloadTwoProducts);
+    ExecuteScenario(updatedPayloadTwoProducts, S57ResponseTimewithTwoProduct, S57RequestCountWithTwoProduct, 'ScenarioWithTwoProductsS57');
 }
 
 export function ScenarioWithTwoProductsS100() {
-    executeScenario(S100PayloadTwoProducts, S100ResponseTimewithTwoProduct, S100RequestCountWithTwoProduct, 'ScenarioWithTwoProductsS100');
+    const updatedPayloadTwoProductsS100 = S100PayloadSetup(S100PayloadTwoProducts);
+    ExecuteScenario(updatedPayloadTwoProductsS100, S100ResponseTimewithTwoProduct, S100RequestCountWithTwoProduct, 'ScenarioWithTwoProductsS100');
 }
 
 export function ScenarioWithHundredProducts() {
-    executeScenario(PayloadHundredProducts, S57ResponseTimewithHundredProduct, S57RequestCountWithHundredProduct, 'ScenarioWithHundredProductsS57');
+    const updatedPayloadHundredProducts = PayloadSetup(PayloadHundredProducts);
+    ExecuteScenario(updatedPayloadHundredProducts, S57ResponseTimewithHundredProduct, S57RequestCountWithHundredProduct, 'ScenarioWithHundredProductsS57');
 }
 
 export function ScenarioWithHundredProductsS100() {
-    executeScenario(S100PayloadHundredProducts, S100ResponseTimewithHundredProduct, S100RequestCountWithHundredProduct, 'ScenarioWithHundredProductsS100');
+    const updatedPayloadHundredProductsS100 = S100PayloadSetup(S100PayloadHundredProducts);
+    ExecuteScenario(updatedPayloadHundredProductsS100, S100ResponseTimewithHundredProduct, S100RequestCountWithHundredProduct, 'ScenarioWithHundredProductsS100');
 }
 
 export function teardown() {
