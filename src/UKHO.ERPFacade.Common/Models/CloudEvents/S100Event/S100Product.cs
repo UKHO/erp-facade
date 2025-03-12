@@ -18,8 +18,6 @@ namespace UKHO.ERPFacade.Common.Models.CloudEvents.S100Event
         public int UpdateNumber { get; set; }
         [JsonProperty("mayAffectHoldings")]
         public bool MayAffectHoldings { get; set; }
-        [JsonProperty("contentChange")]
-        public bool ContentChange { get; set; }
         [JsonProperty("providerCode")]
         public string ProviderCode { get; set; }
         [JsonProperty("providerName")]

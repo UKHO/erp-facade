@@ -34,11 +34,6 @@ Each action has the following properties:
                                 "AttributeDataType": "bool",
                                 "AttributeName": "Status.IsNewCell",
                                 "AttributeValue": "True"
-                            },
-                            {
-                                "AttributeDataType": "bool",
-                                "AttributeName": "ContentChange",
-                                "AttributeValue": "True"
                             }
                         ]
                     }
@@ -249,17 +244,7 @@ Each action has the following properties:
                 "ActionNumber": 4,
                 "ActionName": "REPLACED WITH PRODUCT",
                 "Product": "SHOP CELL",
-                "Rules": [
-                    {
-                        "Conditions": [
-                            {
-                                "AttributeDataType": "bool",
-                                "AttributeName": "ContentChange",
-                                "AttributeValue": "True"
-                            }
-                        ]
-                    }
-                ],
+                "Rules": [],
                 "Attributes": [
                     {
                         "IsRequired": true,
@@ -324,15 +309,6 @@ Each action has the following properties:
                 "ActionName": "CHANGE PRODUCT",
                 "Product": "SHOP CELL",
                 "Rules": [
-                    {
-                        "Conditions": [
-                            {
-                                "AttributeDataType": "bool",
-                                "AttributeName": "ContentChange",
-                                "AttributeValue": "False"
-                            }
-                        ]
-                    },
                     {
                         "Conditions": [
                             {
@@ -556,11 +532,6 @@ Each action has the following properties:
                                 "AttributeDataType": "string",
                                 "AttributeName": "Status.StatusName",
                                 "AttributeValue": "cancellation"
-                            },
-                            {
-                                "AttributeDataType": "bool",
-                                "AttributeName": "ContentChange",
-                                "AttributeValue": "True"
                             }
                         ]
                     }
