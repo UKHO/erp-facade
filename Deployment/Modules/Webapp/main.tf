@@ -85,7 +85,7 @@ resource "azurerm_windows_web_app" "mock_webapp_service" {
     ftps_state = "Disabled"
   }
      
-  app_settings = var.env_name == "dev" || var.env_name == "iat" ? var.mock_app_settings : {}
+  app_settings = var.env_name == "dev" ? var.mock_app_settings : {}
 
   identity {
     type = "SystemAssigned"
