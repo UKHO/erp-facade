@@ -49,6 +49,12 @@ module "webapp_service" {
     "WEBSITE_RUN_FROM_PACKAGE"                                 = "1"
     "WEBSITE_ENABLE_SYNC_UPDATE_SITE"                          = "true"
   }
+  addsmock_app_settings = {   
+    "ASPNETCORE_ENVIRONMENT"                                   = local.env_name
+    "WEBSITE_RUN_FROM_PACKAGE"                                 = "1"
+    "WEBSITE_ENABLE_SYNC_UPDATE_SITE"                          = "true"
+    "APPINSIGHTS_INSTRUMENTATIONKEY"                           = module.app_insights.instrumentation_key
+  }
   tags                                                         = local.tags
 }
   

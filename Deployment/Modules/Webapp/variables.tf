@@ -43,6 +43,10 @@ variable "mock_app_settings" {
   type = map(string)
 }
 
+variable "addsmock_app_settings" {
+  type = map(string)
+}
+
 variable "subnet_id" {
   type = string  
 }
