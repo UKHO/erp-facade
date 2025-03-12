@@ -1,12 +1,11 @@
-﻿using NUnit.Framework;
-using FluentAssertions;
-using UKHO.ERPFacade.API.FunctionalTests.Service;
-using RestSharp;
-using UKHO.ERPFacade.Common.Constants;
+﻿using FluentAssertions;
+using NUnit.Framework;
 using UKHO.ERPFacade.API.FunctionalTests.Auth;
-using UKHO.ERPFacade.API.FunctionalTests.Operations;
 using UKHO.ERPFacade.API.FunctionalTests.Modifiers;
+using UKHO.ERPFacade.API.FunctionalTests.Operations;
+using UKHO.ERPFacade.API.FunctionalTests.Service;
 using UKHO.ERPFacade.API.FunctionalTests.Validators;
+using UKHO.ERPFacade.Common.Constants;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
 {
@@ -42,24 +41,25 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [TestCase("SupplierDefinedUnitChangeV2.JSON", TestName = "WhenICallTheWebhookWithSupplierDefinedUnitChangeV2Scenario_ThenWebhookReturns200Response")]
         [TestCase("Suspend.JSON", TestName = "WhenICallTheWebhookWithSuspendScenario_ThenWebhookReturns200Response")]
         [TestCase("Withdrawn.JSON", TestName = "WhenICallTheWebhookWithWithdrawnScenario_ThenWebhookReturns200Response")]
+        [TestCase("NewCellWithUnitOfSaleTypeIsFolio.JSON", TestName = "VerifyCreateUnitOfSaleActionNotGeneratedWhenUnitOfSaleTypeIsFolio")]
         public async Task WhenValidS100DataContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponse(string jsonPayloadFileName)
         {
-            string jsonPayloadFilePath = Path.Combine(_projectDir, EventPayloadFiles.PayloadFolder, EventPayloadFiles.S100PayloadFolder, jsonPayloadFileName);
-            string xmlPayloadFilePath = jsonPayloadFilePath.Replace(EventPayloadFiles.PayloadFolder, EventPayloadFiles.ErpFacadeExpectedXmlFolder)
+            var jsonPayloadFilePath = Path.Combine(_projectDir, EventPayloadFiles.PayloadFolder, EventPayloadFiles.S100PayloadFolder, jsonPayloadFileName);
+            var xmlPayloadFilePath = jsonPayloadFilePath.Replace(EventPayloadFiles.PayloadFolder, EventPayloadFiles.ErpFacadeExpectedXmlFolder)
                                                .Replace(EventPayloadFiles.S100PayloadFolder, EventPayloadFiles.S100ExpectedXmlFiles)
                                                .Replace(".JSON", ".xml");
 
-            string requestBody = await File.ReadAllTextAsync(jsonPayloadFilePath);
+            var requestBody = await File.ReadAllTextAsync(jsonPayloadFilePath);
             requestBody = JsonModifier.UpdateTime(requestBody);
-            (requestBody, string correlationId) = JsonModifier.UpdateCorrelationId(requestBody);
+            (requestBody, var correlationId) = JsonModifier.UpdateCorrelationId(requestBody);
 
             Console.WriteLine("Scenario: " + jsonPayloadFileName + "\n" + "CorrelationId: " + correlationId + "\n");
 
-            RestResponse response = await _webhookEndpoint.PostWebhookResponseAsync(requestBody, await _authTokenProvider.GetAzureADTokenAsync(false));
+            var response = await _webhookEndpoint.PostWebhookResponseAsync(requestBody, await _authTokenProvider.GetAzureADTokenAsync(false));
 
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
-            string generatedXmlFilePath = _azureBlobReaderWriter.DownloadContainerFile(Path.Combine(_projectDir, EventPayloadFiles.GeneratedXmlFolder), correlationId, ".xml");
+            var generatedXmlFilePath = _azureBlobReaderWriter.DownloadContainerFile(Path.Combine(_projectDir, EventPayloadFiles.GeneratedXmlFolder), correlationId, ".xml");
 
             Assert.That(S100XmlValidator.VerifyXmlAttributes(generatedXmlFilePath, xmlPayloadFilePath, correlationId));
         }
@@ -67,16 +67,16 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [Test]
         public async Task WhenValidS100DataContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponseAndCallbackEndpointPublishesEvent()
         {
-            string jsonPayloadFilePath = Path.Combine(_projectDir, EventPayloadFiles.PayloadFolder, EventPayloadFiles.S100PayloadFolder, "NewCell.JSON");
-            string expectedFilePath = Path.Combine(_projectDir, EventPayloadFiles.GeneratedJsonFolder);
+            var jsonPayloadFilePath = Path.Combine(_projectDir, EventPayloadFiles.PayloadFolder, EventPayloadFiles.S100PayloadFolder, "NewCell.JSON");
+            var expectedFilePath = Path.Combine(_projectDir, EventPayloadFiles.GeneratedJsonFolder);
 
-            string requestBody = await File.ReadAllTextAsync(jsonPayloadFilePath);
+            var requestBody = await File.ReadAllTextAsync(jsonPayloadFilePath);
             requestBody = JsonModifier.UpdateTime(requestBody);
-            (requestBody, string correlationId) = JsonModifier.UpdateCorrelationId(requestBody);
+            (requestBody, var correlationId) = JsonModifier.UpdateCorrelationId(requestBody);
 
             Console.WriteLine("Scenario: ERP Facade to SAP to EES event publish.\nCorrelationId: " + correlationId + "\n");
 
-            RestResponse response = await _webhookEndpoint.PostWebhookResponseAsync(requestBody, await _authTokenProvider.GetAzureADTokenAsync(false));
+            var response = await _webhookEndpoint.PostWebhookResponseAsync(requestBody, await _authTokenProvider.GetAzureADTokenAsync(false));
 
             //Once the webhook endpoint returns 200 OK response, the SAP callback endpoint is called from wiremock.
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
@@ -94,14 +94,31 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [Test]
         public async Task WhenValidS100DataContentPublishedEventReceived500InternalServerErrorFromSapCallbackEndpoint_ThenWebhookEndPointReturns500InternalServerErrorResponse()
         {
-            string jsonPayloadFilePath = Path.Combine(_projectDir, EventPayloadFiles.PayloadFolder, EventPayloadFiles.S100PayloadFolder, "SAP500InternalServerError.JSON");
+            var jsonPayloadFilePath = Path.Combine(_projectDir, EventPayloadFiles.PayloadFolder, EventPayloadFiles.S100PayloadFolder, "SAP500InternalServerError.JSON");
 
-            string requestBody = await File.ReadAllTextAsync(jsonPayloadFilePath);
+            var requestBody = await File.ReadAllTextAsync(jsonPayloadFilePath);
             requestBody = JsonModifier.UpdateTime(requestBody);
 
-            RestResponse response = await _webhookEndpoint.PostWebhookResponseAsync(requestBody, await _authTokenProvider.GetAzureADTokenAsync(false));
+            var response = await _webhookEndpoint.PostWebhookResponseAsync(requestBody, await _authTokenProvider.GetAzureADTokenAsync(false));
 
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.InternalServerError);
         }
+
+        [Test]
+        public async Task Verify400BadRequestReceivedForInvalidS100DataContentPublishedEvent()
+        {
+            var jsonPayloadFilePath = Path.Combine(_projectDir, EventPayloadFiles.PayloadFolder, EventPayloadFiles.S100PayloadFolder, "NewCellV1.JSON");
+            
+            var requestBody = await File.ReadAllTextAsync(jsonPayloadFilePath);
+            requestBody = JsonModifier.UpdateTime(requestBody);
+            (requestBody, _) = JsonModifier.UpdateCorrelationId(requestBody);
+
+            var response = await _webhookEndpoint.PostWebhookResponseAsync(requestBody, await _authTokenProvider.GetAzureADTokenAsync(false));
+
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
+
+            Assert.That(response.Content!.Contains("Unknown event type received in payload."));
+        }
+
     }
 }

@@ -40,7 +40,6 @@ Each action has the following properties:
                                 "AttributeName": "ContentChange",
                                 "AttributeValue": "True"
                             }
-
                         ]
                     }
                 ],
@@ -114,6 +113,11 @@ Each action has the following properties:
                                 "AttributeDataType": "bool",
                                 "AttributeName": "IsNewUnitOfSale",
                                 "AttributeValue": "True"
+                            },
+                            {
+                                "AttributeDataType": "string",
+                                "AttributeName": "UnitOfSaleType",
+                                "AttributeValue": "unit"
                             }
                         ]
                     }

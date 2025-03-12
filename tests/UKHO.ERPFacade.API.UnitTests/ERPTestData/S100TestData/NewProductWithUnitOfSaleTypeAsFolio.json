@@ -4,23 +4,22 @@
     "source": "https://encpublishing.ukho.gov.uk",
     "id": "5f03a25f-28b3-46ea-b009-5943250a9a41",
     "time": "2024-08-13T12:08:03.4880776Z",
-    "subject": "DE416080",
+    "subject": "101GB7645JTHG83",
     "datacontenttype": "application/json",
     "data": {
-        "correlationId": "165ce4a4-1d62-4f56-b359-59e178d77104",
+        "correlationId": "165ce4a4-1d62-4f56-b359-59e178d77106",
         "products": [
             {
-                "productType": "S100",
                 "productIdentifier": "s101",
-                "productName": "101GB7645JTHG83",
+                "productName": "101GB007645JTHG95",
                 "editionNumber": 1,
                 "updateNumber": 0,
                 "mayAffectHoldings": true,
-                "contentChange": true,
-                "providerCode": "1",
+                "providerCode": "1B",
                 "providerName": "ICE",
-                "size": "medium",
-                "producerUnitName": "101GB7645JTHG83",
+                "contentChange": true,
+                "size": "small",
+                "producingAgency": "GB03",
                 "status": {
                     "statusName": "newDataset",
                     "statusDate": "2024-07-16T19:20:30.45+01:00",
@@ -30,38 +29,62 @@
                 "dataReplacement": [],
                 "boundingBox": {
                     "northLimit": 63.25,
-                    "southLimit": 63,
-                    "eastLimit": 8,
+                    "southLimit": 63.75,
+                    "eastLimit": 8.03,
                     "westLimit": 7.75
                 },
                 "fileSize": 3456,
                 "inUnitsOfSale": [
-                    "101GB7645JTHG83"
-                ]
+                    "101GB007645JTHG95",
+                    "s100WorldFolio"
+                ],
+                "producerUnitName": "101GB007645JTHG95"
             }
         ],
         "unitsOfSale": [
             {
-                "unitName": "101GB7645JTHG83",
-                "title": "A test s101 cell from GB authority in its own unit of sale",
+                "unitName": "101GB007645JTHG95",
                 "productIdentifier": "s101",
+                "title": "A test S-101 cell from GB authority in its own unit of sale",
                 "unitOfSaleType": "unit",
                 "providerCode": "1",
                 "providerName": "ICE",
-                "producingAgency": "GB",
+                "producingAgency": "GB00",
                 "unitSize": "large",
                 "status": "ForSale",
                 "isNewUnitOfSale": true,
                 "boundingBox": {
                     "northLimit": 63.25,
-                    "southLimit": 63,
-                    "eastLimit": 8,
+                    "southLimit": 63.21,
+                    "eastLimit": 8.70,
                     "westLimit": 7.75
                 },
                 "compositionChanges": {
                     "addProducts": [
-                        "101GB7645JTHG83"
+                        "101GB007645JTHG95"
                     ],
+                    "removeProducts": []
+                }
+            },
+            {
+                "unitName": "s100WorldFolio",
+                "productIdentifier": "s101",
+                "title": "Whole World Wide Folio",
+                "unitOfSaleType": "folio",
+                "providerCode": "0",
+                "providerName": "UKHO",
+                "producingAgency": "UKHO",
+                "unitSize": "large",
+                "status": "ForSale",
+                "isNewUnitOfSale": true,
+                "boundingBox": {
+                    "northLimit": 90.12,
+                    "southLimit": -90.41,
+                    "eastLimit": 180.06,
+                    "westLimit": -180.60
+                },
+                "compositionChanges": {
+                    "addProducts": [],
                     "removeProducts": []
                 }
             }
