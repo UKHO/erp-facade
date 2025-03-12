@@ -1,0 +1,95 @@
+{
+    "specversion": "1.0",
+    "type": "uk.gov.ukho.encpublishing.s100datacontentpublished.v1.1",
+    "source": "https://encpublishing.ukho.gov.uk",
+    "id": "5f03a25-283-46e-b09-594325a9a41",
+    "time": "2024-08-13T12:08:03.4880776Z",
+    "subject": "101GB7645JTHG83",
+    "datacontenttype": "application/json",
+    "data": {
+        "correlationId": "165cea4-1d6-4f6-b35-59e178d7108",
+        "products": [
+            {
+                "productType": "s100",
+                "productIdentifier": "s101",
+                "productName": "101GB7645JTHG83",
+                "editionNumber": 1,
+                "updateNumber": 0,
+                "mayAffectHoldings": true,
+                "contentChange": true,
+                "providerCode": "1",
+                "providerName": "ICE",
+                "size": "medium",
+                "producingAgency": "GB",
+                "status": {
+                    "statusName": "newDataset",
+                    "statusDate": "2024-07-16T19:20:30.45+01:00",
+                    "isNewCell": true
+                },
+                "replaces": [],
+                "dataReplacement": [],
+                "boundingBox": {
+                    "northLimit": 63,
+                    "southLimit": 63,
+                    "eastLimit": 8,
+                    "westLimit": 7
+                },
+                "fileSize": 3456,
+                "inUnitsOfSale": [
+                    "101GB7645JTHG83"
+                ],
+                "producerUnitName": "101GB7645JTHG83"
+            }
+        ],
+        "unitsOfSale": [
+          {
+            "unitName": "101GB7645JTHG83",
+            "productIdentifier": "s101",
+            "title": "A test S-101 cell from GB authority in its own unit of sale",
+            "unitOfSaleType": "folio",
+            "providerCode": "1",
+            "providerName": "ICE",
+            "producingAgency": "GB00",
+            "unitSize": "large",
+            "status": "ForSale",
+            "isNewUnitOfSale": true,
+            "boundingBox": {
+              "northLimit": 63,
+              "southLimit": 63,
+              "eastLimit": 8,
+              "westLimit": 7
+            },
+            "compositionChanges": {
+              "addProducts": [
+                "101GB7645JTHG83"
+              ],
+              "removeProducts": []
+            }
+          },
+            {
+                "unitName": "s100WorldFolio",
+                "productIdentifier": "s101",
+                "title": "Whole World Wide Folio",
+                "unitOfSaleType": "folio",
+                "providerCode": "0",
+                "providerName": "UKHO",
+                "producingAgency": "UKHO",
+                "unitSize": "large",
+                "status": "ForSale",
+                "isNewUnitOfSale": false,
+                "boundingBox": {
+                    "northLimit": 90,
+                    "southLimit": -90,
+                    "eastLimit": 180,
+                    "westLimit": -180
+                },
+                "compositionChanges": {
+                    "addProducts": [
+                        "101GB007645JTHG83"
+                    ],
+                    "removeProducts": []
+                }
+            }
+        ]
+    }
+}
