@@ -11,6 +11,14 @@ module "app_insights" {
   location            = azurerm_resource_group.rg.location
   tags                = local.tags
 }
+
+module "addsapp_insights" {
+  source              = "./Modules/AppInsights"
+  name                = "${local.service_name}-${local.env_name}-sapmockinsights"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+  tags                = local.tags
+}
   
 module "eventhub" {
   source              = "./Modules/EventHub"
@@ -52,7 +60,8 @@ module "webapp_service" {
   addsmock_app_settings = {   
     "ASPNETCORE_ENVIRONMENT"                                   = local.env_name
     "WEBSITE_RUN_FROM_PACKAGE"                                 = "1"
-    "WEBSITE_ENABLE_SYNC_UPDATE_SITE"                          = "true"    
+    "WEBSITE_ENABLE_SYNC_UPDATE_SITE"                          = "true"
+    "APPINSIGHTS_INSTRUMENTATIONKEY"                           = module.addMock_app_insights.instrumentation_key
   }
   tags                                                         = local.tags
 }
