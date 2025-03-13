@@ -62,7 +62,7 @@ module "webapp_service" {
     "ASPNETCORE_ENVIRONMENT"                                   = local.env_name
     "WEBSITE_RUN_FROM_PACKAGE"                                 = "1"
     "WEBSITE_ENABLE_SYNC_UPDATE_SITE"                          = "true"
-    "APPINSIGHTS_INSTRUMENTATIONKEY"                           = module.addMock_app_insights.instrumentation_key
+    "APPINSIGHTS_INSTRUMENTATIONKEY"                           = module.addsMock_app_insights.instrumentation_key
   }
   tags                                                         = local.tags
 }
