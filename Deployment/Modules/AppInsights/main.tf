@@ -16,7 +16,7 @@ resource "azurerm_application_insights" "app_insights" {
   tags                = var.tags
 }
 
-resource "azurerm_application_insights" "addMock_app_insights" { 
+resource "azurerm_application_insights" "addsMock_app_insights" { 
   name                = var.name
   location            = var.location
   resource_group_name = var.resource_group_name
