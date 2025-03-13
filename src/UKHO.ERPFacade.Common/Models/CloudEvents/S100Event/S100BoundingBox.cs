@@ -9,9 +9,9 @@ namespace UKHO.ERPFacade.Common.Models.CloudEvents.S100Event
         [JsonProperty("northLimit")]
         public double NorthLimit { get; set; }
         [JsonProperty("southLimit")]
-        public int SouthLimit { get; set; }
+        public double SouthLimit { get; set; }
         [JsonProperty("eastLimit")]
-        public int EastLimit { get; set; }
+        public double EastLimit { get; set; }
         [JsonProperty("westLimit")]
         public double WestLimit { get; set; }
     }
