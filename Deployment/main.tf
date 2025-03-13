@@ -10,6 +10,7 @@ module "app_insights" {
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   tags                = local.tags
+  env_name                  = local.env_name
 }
 
 module "addsMock_app_insights" {  
@@ -18,6 +19,7 @@ module "addsMock_app_insights" {
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   tags                = local.tags
+  env_name            = local.env_name
 }
   
 module "eventhub" {
@@ -61,7 +63,7 @@ module "webapp_service" {
     "ASPNETCORE_ENVIRONMENT"                                   = local.env_name
     "WEBSITE_RUN_FROM_PACKAGE"                                 = "1"
     "WEBSITE_ENABLE_SYNC_UPDATE_SITE"                          = "true"
-    "APPINSIGHTS_INSTRUMENTATIONKEY"                           = module.addsMock_app_insights.instrumentation_key
+    "APPINSIGHTS_INSTRUMENTATIONKEY"                           =  local.env_name == "iat" ? module.addsMock_app_insights.instrumentation_key : ""
   }
   tags                                                         = local.tags
 }

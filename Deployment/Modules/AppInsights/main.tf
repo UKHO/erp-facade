@@ -17,6 +17,7 @@ resource "azurerm_application_insights" "app_insights" {
 }
 
 resource "azurerm_application_insights" "addsMock_app_insights" { 
+  count              = var.env_name == "iat" ? 1 : 0
   name                = var.name
   location            = var.location
   resource_group_name = var.resource_group_name
