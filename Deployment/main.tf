@@ -12,8 +12,7 @@ module "app_insights" {
   tags                = local.tags
 }
 
-module "addsMock_app_insights" {
-  count               = local.env_name == "iat" ? 1 : 0
+module "addsMock_app_insights" {  
   source              = "./Modules/AppInsights"
   name                = "${local.service_name}-${local.env_name}-sapmockinsights"
   resource_group_name = azurerm_resource_group.rg.name
