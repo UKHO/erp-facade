@@ -695,6 +695,8 @@ stages:
         value: '/home/site/wwwroot/service-configuration/demo/files'
       - name: "OverrideConfigurationPath"
         value: '/home/site/wwwroot/override-configuration/demo/files'
+      - name: "Port"
+        value: '5678'
    
     jobs:
       - deployment: IATDeployTerraform
