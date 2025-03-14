@@ -120,7 +120,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         }
 
         
-        [TestCase("simpleUpdateNoXmlGeneration.JSON", TestName = "WhenICallTheWebhookWithSimpleUpdateScenario_ThenWebhookReturns200ResponseAndXmlIsNotGenerated")]
+        [TestCase("SimpleUpdateNoXmlGeneration.JSON", TestName = "WhenICallTheWebhookWithSimpleUpdateScenario_ThenWebhookReturns200ResponseAndXmlIsNotGenerated")]
         [TestCase("SuspendNoXmlGeneration.JSON", TestName = "WhenICallTheWebhookWithSuspendScenario_ThenWebhookReturns200ResponseAndXmlIsNotGenerated")]
         [TestCase("NewEditionNoXmlGeneration.JSON", TestName = "WhenICallTheWebhookWithNewEditionScenario_ThenWebhookReturns200ResponseAndXmlIsNotGenerated")]
         [TestCase("ReissueNoXmlGeneration.JSON", TestName = "WhenICallTheWebhookWithReissueScenario_ThenWebhookReturns200ResponseAndXmlIsNotGenerated")]
