@@ -74,7 +74,7 @@ locals {
   }
   
   kv_read_access_list_with_mock = merge(local.kv_read_access_list, {
-    "mock_service" = local.env_name == "dev" || local.env_name == "iat" ? module.webapp_service.mock_web_app_object_id : ""
+    "mock_service" = local.env_name == "dev"? module.webapp_service.mock_web_app_object_id : ""
     })    
 }
   
