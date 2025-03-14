@@ -4,9 +4,9 @@
     <Z_SHOP_MAT_INFO xmlns="urn:sap-com:document:sap:rfc:functions">
       <IM_MATINFO xmlns="">
         <CORRID>165ce4a4-1d62-4f56-b359-59e178d77105</CORRID>
-        <NOOFACTIONS>5</NOOFACTIONS>
-        <RECDATE>20250228</RECDATE>
-        <RECTIME>094546</RECTIME>
+        <NOOFACTIONS>4</NOOFACTIONS>
+        <RECDATE>20250314</RECDATE>
+        <RECTIME>082242</RECTIME>
         <ORG>UKHO</ORG>
         <ACTIONITEMS>
           <item>
@@ -59,19 +59,6 @@
             <AGENCY></AGENCY>
             <PROVIDER></PROVIDER>
             <ENCSIZE></ENCSIZE>
-            <TITLE></TITLE>
-          </item>
-          <item>
-            <ACTIONNUMBER>5</ACTIONNUMBER>
-            <ACTION>CHANGE UNIT OF SALE</ACTION>
-            <PRODUCT>SHOP UNIT</PRODUCT>
-            <PRODTYPE>s101</PRODTYPE>
-            <CHILDCELL></CHILDCELL>
-            <PRODUCTNAME>s100WorldFolio</PRODUCTNAME>
-            <REPLACEDBY></REPLACEDBY>
-            <AGENCY>UKHO</AGENCY>
-            <PROVIDER>0</PROVIDER>
-            <ENCSIZE>large</ENCSIZE>
             <TITLE></TITLE>
           </item>
         </ACTIONITEMS>

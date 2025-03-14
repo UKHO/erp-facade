@@ -41,5 +41,12 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Operations
             Pageable<EventEntity> existingEntity = tableClient.Query<EventEntity>(filter: TableClient.CreateQueryFilter($"RowKey eq {correlationId}"));
             return existingEntity != null ? existingEntity.FirstOrDefault()?.Status : string.Empty;
         }
+
+        public Pageable<EventEntity> GetTableEntity(string correlationId)
+        {
+            TableClient tableClient = GetTableClient(AzureStorage.EventTableName);
+            var existingEntity = tableClient.Query<EventEntity>(filter: TableClient.CreateQueryFilter($"RowKey eq {correlationId}"));
+            return existingEntity;
+        }
     }
 }
