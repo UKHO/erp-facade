@@ -662,7 +662,7 @@ stages:
                     AzureSubscription: "ERP-Facade-vNext-E2E-A.011.08"            
 
   - stage: IATDeploy
-    dependsOn: DevDeploy   
+    # dependsOn: DevDeploy   
     displayName: "IATdeploy (inc terraform, webapp deploy)"  
     # condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/'))) 
     variables:
