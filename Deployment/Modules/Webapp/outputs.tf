@@ -31,9 +31,9 @@ output "slot_name" {
 }
 
 output "mock_web_app_object_id" {
-  value = var.env_name == "dev" || var.env_name == "iat" ? azurerm_windows_web_app.mock_webapp_service.0.identity.0.principal_id : null
+  value = var.env_name == "dev" ? azurerm_windows_web_app.mock_webapp_service.0.identity.0.principal_id : null
 }
 
 output "default_site_hostname_mock" {
-  value = var.env_name == "dev" || var.env_name == "iat"  ? azurerm_windows_web_app.mock_webapp_service[0].default_hostname : null
+  value = var.env_name == "dev" ? azurerm_windows_web_app.mock_webapp_service[0].default_hostname : null
 }
