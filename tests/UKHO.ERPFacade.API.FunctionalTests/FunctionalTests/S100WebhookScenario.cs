@@ -17,7 +17,6 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         private AzureBlobReaderWriter _azureBlobReaderWriter;
         private AzureTableReaderWriter _azureTableReaderWriter;
         private S100JsonValidator _s100JsonValidator;
-
         private readonly string _projectDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory));
 
         [SetUp]
@@ -33,7 +32,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         [Test]
         [TestCase("NewCell.JSON", TestName = "WhenICallTheWebhookWithNewCellScenario_ThenWebhookReturns200Response")]
         [TestCase("CancellationAndReplacement.JSON", TestName = "WhenICallTheWebhookWithCancellationAndReplacementScenario_ThenWebhookReturns200Response")]
-        [TestCase("NewCellAndEdition.JSON", TestName = "WhenICallTheWebhookWithNewCellAndEditionScenario_ThenWebhookReturns200Response")]
+        [TestCase("NewCellAndEdition.JSON", TestName = "WhenICallTheWebhookWithNewCellAndEditionScenario_ThenChangeProductAndChangeUnitOfSaleActionsAreNotGenerated")]
         [TestCase("SimpleUpdate.JSON", TestName = "WhenICallTheWebhookWithSimpleUpdateScenario_ThenWebhookReturns200Response")]
         [TestCase("SupplierChange.JSON", TestName = "WhenICallTheWebhookWithSupplierChangeScenario_ThenWebhookReturns200Response")]
         [TestCase("SupplierDefinedReleasability.JSON", TestName = "WhenICallTheWebhookWithSupplierDefinedReleasabilityScenario_ThenWebhookReturns200Response")]
@@ -82,7 +81,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 
             //Delay is added to ensure SAP callback is completed from wiremock.
-            await Task.Delay(30000); 
+            await Task.Delay(30000);
 
             //Download the S100UnitOfSaleUpdatedEvent JSON file from the blob container.
             expectedFilePath = _azureBlobReaderWriter.DownloadContainerFile(expectedFilePath, correlationId, ".json", EventPayloadFiles.S100UnitOfSaleUpdatedEventFileName);
@@ -108,7 +107,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
         public async Task Verify400BadRequestReceivedForInvalidS100DataContentPublishedEvent()
         {
             var jsonPayloadFilePath = Path.Combine(_projectDir, EventPayloadFiles.PayloadFolder, EventPayloadFiles.S100PayloadFolder, "NewCellV1.JSON");
-            
+
             var requestBody = await File.ReadAllTextAsync(jsonPayloadFilePath);
             requestBody = JsonModifier.UpdateTime(requestBody);
             (requestBody, _) = JsonModifier.UpdateCorrelationId(requestBody);
@@ -120,5 +119,34 @@ namespace UKHO.ERPFacade.API.FunctionalTests.FunctionalTests
             Assert.That(response.Content!.Contains("Unknown event type received in payload."));
         }
 
+        
+        [TestCase("SimpleUpdateNoXmlGeneration.JSON", TestName = "WhenICallTheWebhookWithSimpleUpdateScenario_ThenWebhookReturns200ResponseAndXmlIsNotGenerated")]
+        [TestCase("SuspendNoXmlGeneration.JSON", TestName = "WhenICallTheWebhookWithSuspendScenario_ThenWebhookReturns200ResponseAndXmlIsNotGenerated")]
+        [TestCase("NewEditionNoXmlGeneration.JSON", TestName = "WhenICallTheWebhookWithNewEditionScenario_ThenWebhookReturns200ResponseAndXmlIsNotGenerated")]
+        [TestCase("ReissueNoXmlGeneration.JSON", TestName = "WhenICallTheWebhookWithReissueScenario_ThenWebhookReturns200ResponseAndXmlIsNotGenerated")]
+        public async Task WhenValidS100DataContentPublishedEventReceivedWithValidToken_ThenWebhookReturns200OkResponseAndXmlIsNotGenerated(string jsonPayloadFileName)
+        {
+            var jsonPayloadFilePath = Path.Combine(_projectDir, EventPayloadFiles.PayloadFolder, EventPayloadFiles.S100PayloadFolder, jsonPayloadFileName);
+            var expectedFilePath = Path.Combine(_projectDir, EventPayloadFiles.GeneratedJsonFolder);
+
+            var requestBody = await File.ReadAllTextAsync(jsonPayloadFilePath);
+            requestBody = JsonModifier.UpdateTime(requestBody);
+            (requestBody, var correlationId) = JsonModifier.UpdateCorrelationId(requestBody);
+
+            Console.WriteLine("Scenario: " + jsonPayloadFileName + "\n" + "CorrelationId: " + correlationId + "\n");
+
+            var response = await _webhookEndpoint.PostWebhookResponseAsync(requestBody, await _authTokenProvider.GetAzureADTokenAsync(false));
+
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+
+            Assert.That(_azureTableReaderWriter.GetStatus(correlationId), Is.EqualTo("Complete"), $"SAP status is Incomplete for {correlationId}");
+
+            var responseDateTime =  _azureTableReaderWriter.GetTableEntity(correlationId);
+            responseDateTime.FirstOrDefault()!.ResponseDateTime.Should().BeNull();
+
+            var generatedXmlFilePath = _azureBlobReaderWriter.DownloadContainerFile(Path.Combine(_projectDir, EventPayloadFiles.GeneratedXmlFolder), correlationId, ".xml");
+
+            generatedXmlFilePath.Should().BeNullOrEmpty();
+        }
     }
 }

@@ -3,10 +3,10 @@
   <soap:Body>
     <Z_SHOP_MAT_INFO xmlns="urn:sap-com:document:sap:rfc:functions">
       <IM_MATINFO xmlns="">
-        <CORRID>165ce4a4-1d62-4f56-b359-59e178d77106</CORRID>
-        <NOOFACTIONS>5</NOOFACTIONS>
-        <RECDATE>20250228</RECDATE>
-        <RECTIME>110158</RECTIME>
+        <CORRID>1650ce4a4-1d62-4f56-b359-59e178d77106</CORRID>
+        <NOOFACTIONS>4</NOOFACTIONS>
+        <RECDATE>20250313</RECDATE>
+        <RECTIME>115426</RECTIME>
         <ORG>UKHO</ORG>
         <ACTIONITEMS>
           <item>
@@ -50,28 +50,15 @@
           </item>
           <item>
             <ACTIONNUMBER>4</ACTIONNUMBER>
-            <ACTION>CHANGE PRODUCT</ACTION>
-            <PRODUCT>SHOP CELL</PRODUCT>
-            <PRODTYPE>s101</PRODTYPE>
-            <CHILDCELL>101CA7777777</CHILDCELL>
-            <PRODUCTNAME>101CA7777777</PRODUCTNAME>
-            <REPLACEDBY></REPLACEDBY>
-            <AGENCY>CA</AGENCY>
-            <PROVIDER>1</PROVIDER>
-            <ENCSIZE>medium</ENCSIZE>
-            <TITLE></TITLE>
-          </item>
-          <item>
-            <ACTIONNUMBER>5</ACTIONNUMBER>
-            <ACTION>CHANGE UNIT OF SALE</ACTION>
+            <ACTION>ASSIGN PRODUCT TO UNIT OF SALE</ACTION>
             <PRODUCT>SHOP UNIT</PRODUCT>
             <PRODTYPE>s101</PRODTYPE>
-            <CHILDCELL></CHILDCELL>
+            <CHILDCELL>101GB008888888</CHILDCELL>
             <PRODUCTNAME>101CA7777777</PRODUCTNAME>
             <REPLACEDBY></REPLACEDBY>
-            <AGENCY>GB00</AGENCY>
-            <PROVIDER>1</PROVIDER>
-            <ENCSIZE>small</ENCSIZE>
+            <AGENCY></AGENCY>
+            <PROVIDER></PROVIDER>
+            <ENCSIZE></ENCSIZE>
             <TITLE></TITLE>
           </item>
         </ACTIONITEMS>

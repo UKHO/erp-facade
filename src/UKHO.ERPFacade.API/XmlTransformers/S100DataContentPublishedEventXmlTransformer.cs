@@ -77,11 +77,6 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                                     BuildAndAppendActionNode(soapXml, product, null, action, actionItemNode, product.ProductName, replacedProduct);
                                 }
                             break;
-
-                        case 6://CHANGE PRODUCT
-                            if (product.InUnitsOfSale.Any())
-                                BuildAndAppendActionNode(soapXml, product, null, action, actionItemNode, product.ProductName);
-                            break;
                     }
                 }
             }
@@ -99,7 +94,6 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                     switch (action.ActionNumber)
                     {
                         case 2://CREATE UNIT OF SALE
-                        case 7://CHANGE UNIT OF SALE
                         case 11://CANCEL UNIT OF SALE
                             BuildAndAppendActionNode(soapXml, null, unitOfSale, action, actionItemNode);
                             break;

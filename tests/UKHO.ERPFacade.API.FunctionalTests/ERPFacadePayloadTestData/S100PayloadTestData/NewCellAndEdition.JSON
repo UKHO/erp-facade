@@ -10,7 +10,6 @@
         "correlationId": "165ce4a4-1d62-4f56-b359-59e178d77106",
         "products": [
             {
-                "productType": "s100",
                 "productIdentifier": "s101",
                 "productName": "101CA7777777",
                 "editionNumber": 3,
@@ -29,30 +28,29 @@
                 "dataReplacement": [],
                 "boundingBox": {
                     "northLimit": 63,
-                    "southLimit": 63,
+                    "southLimit": 63.25,
                     "eastLimit": 8,
-                    "westLimit": 7
+                    "westLimit": 7.75
                 },
                 "fileSize": 3456,
                 "inUnitsOfSale": [
-                    "101CA7777777"
+                    "101CA7777777",
+                    "s100WorldFolio"
                 ],
                 "producerUnitName": "101CA7777777"
             },
             {
-                "productType": "s100",
                 "productIdentifier": "s101",
                 "productName": "101CA8888888",
                 "editionNumber": 1,
                 "updateNumber": 0,
                 "mayAffectHoldings": true,
-                "contentChange": true,
                 "providerCode": "1",
                 "providerName": "ICE",
                 "size": "medium",
                 "producingAgency": "CA",
                 "status": {
-                    "statusName": "newEditon",
+                    "statusName": "newDataset",
                     "statusDate": "2024-07-16T19:20:30.45+01:00",
                     "isNewCell": true
                 },
@@ -66,7 +64,8 @@
                 },
                 "fileSize": 3456,
                 "inUnitsOfSale": [
-                    "101CA8888888"
+                    "101CA8888888",
+                    "s100WorldFolio"
                 ],
                 "producerUnitName": "101CA8888888"
             }
@@ -84,10 +83,10 @@
                 "status": "ForSale",
                 "isNewUnitOfSale": true,
                 "boundingBox": {
-                    "northLimit": 63,
+                    "northLimit": 63.35,
                     "southLimit": 63,
                     "eastLimit": 8,
-                    "westLimit": 7
+                    "westLimit": 7.75
                 },
                 "compositionChanges": {
                     "addProducts": [
@@ -108,13 +107,15 @@
                 "status": "ForSale",
                 "isNewUnitOfSale": false,
                 "boundingBox": {
-                    "northLimit": 63,
+                    "northLimit": 63.25,
                     "southLimit": 63,
                     "eastLimit": 8,
-                    "westLimit": 7
+                    "westLimit": 7.75
                 },
                 "compositionChanges": {
-                    "addProducts": [],
+                    "addProducts": [
+                        "101GB008888888"
+                    ],
                     "removeProducts": []
                 }
             }

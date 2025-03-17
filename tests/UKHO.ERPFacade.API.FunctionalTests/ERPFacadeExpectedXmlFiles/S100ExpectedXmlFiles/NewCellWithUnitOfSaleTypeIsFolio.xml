@@ -1,68 +1,55 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-	<soap:Body>
-		<Z_SHOP_MAT_INFO xmlns="urn:sap-com:document:sap:rfc:functions">
-			<IM_MATINFO xmlns="">
-				<CORRID>165cea4-1d6-4f6-b35-59e178d7108</CORRID>
-				<NOOFACTIONS>4</NOOFACTIONS>
-				<RECDATE>20250312</RECDATE>
-				<RECTIME>100824</RECTIME>
-				<ORG>UKHO</ORG>
-				<ACTIONITEMS>
-					<item>
-						<ACTIONNUMBER>1</ACTIONNUMBER>
-						<ACTION>CREATE PRODUCT</ACTION>
-						<PRODUCT>SHOP CELL</PRODUCT>
-						<PRODTYPE>s101</PRODTYPE>
-						<CHILDCELL>101GB7645JTHG83</CHILDCELL>
-						<PRODUCTNAME>101GB7645JTHG83</PRODUCTNAME>
-						<REPLACEDBY></REPLACEDBY>
-						<AGENCY>GB</AGENCY>
-						<PROVIDER>1</PROVIDER>
-						<ENCSIZE>medium</ENCSIZE>
-						<TITLE>101GB7645JTHG83</TITLE>
-					</item>
-					<item>
-						<ACTIONNUMBER>2</ACTIONNUMBER>
-						<ACTION>ASSIGN PRODUCT TO UNIT OF SALE</ACTION>
-						<PRODUCT>SHOP UNIT</PRODUCT>
-						<PRODTYPE>s101</PRODTYPE>
-						<CHILDCELL>101GB7645JTHG83</CHILDCELL>
-						<PRODUCTNAME>101GB7645JTHG83</PRODUCTNAME>
-						<REPLACEDBY></REPLACEDBY>
-						<AGENCY></AGENCY>
-						<PROVIDER></PROVIDER>
-						<ENCSIZE></ENCSIZE>
-						<TITLE></TITLE>
-					</item>
-					<item>
-						<ACTIONNUMBER>3</ACTIONNUMBER>
-						<ACTION>ASSIGN PRODUCT TO UNIT OF SALE</ACTION>
-						<PRODUCT>SHOP UNIT</PRODUCT>
-						<PRODTYPE>s101</PRODTYPE>
-						<CHILDCELL>101GB007645JTHG83</CHILDCELL>
-						<PRODUCTNAME>s100WorldFolio</PRODUCTNAME>
-						<REPLACEDBY></REPLACEDBY>
-						<AGENCY></AGENCY>
-						<PROVIDER></PROVIDER>
-						<ENCSIZE></ENCSIZE>
-						<TITLE></TITLE>
-					</item>
-					<item>
-						<ACTIONNUMBER>4</ACTIONNUMBER>
-						<ACTION>CHANGE UNIT OF SALE</ACTION>
-						<PRODUCT>SHOP UNIT</PRODUCT>
-						<PRODTYPE>s101</PRODTYPE>
-						<CHILDCELL></CHILDCELL>
-						<PRODUCTNAME>s100WorldFolio</PRODUCTNAME>
-						<REPLACEDBY></REPLACEDBY>
-						<AGENCY>UKHO</AGENCY>
-						<PROVIDER>0</PROVIDER>
-						<ENCSIZE>large</ENCSIZE>
-						<TITLE></TITLE>
-					</item>
-				</ACTIONITEMS>
-			</IM_MATINFO>
-		</Z_SHOP_MAT_INFO>
-	</soap:Body>
+  <soap:Body>
+    <Z_SHOP_MAT_INFO xmlns="urn:sap-com:document:sap:rfc:functions">
+      <IM_MATINFO xmlns="">
+        <CORRID>165cea4-1d6-4f6-b35-59e178d7108</CORRID>
+        <NOOFACTIONS>3</NOOFACTIONS>
+        <RECDATE>20250314</RECDATE>
+        <RECTIME>085053</RECTIME>
+        <ORG>UKHO</ORG>
+        <ACTIONITEMS>
+          <item>
+            <ACTIONNUMBER>1</ACTIONNUMBER>
+            <ACTION>CREATE PRODUCT</ACTION>
+            <PRODUCT>SHOP CELL</PRODUCT>
+            <PRODTYPE>s101</PRODTYPE>
+            <CHILDCELL>101GB7645JTHG83</CHILDCELL>
+            <PRODUCTNAME>101GB7645JTHG83</PRODUCTNAME>
+            <REPLACEDBY></REPLACEDBY>
+            <AGENCY>GB</AGENCY>
+            <PROVIDER>1</PROVIDER>
+            <ENCSIZE>medium</ENCSIZE>
+            <TITLE>101GB7645JTHG83</TITLE>
+          </item>
+          <item>
+            <ACTIONNUMBER>2</ACTIONNUMBER>
+            <ACTION>ASSIGN PRODUCT TO UNIT OF SALE</ACTION>
+            <PRODUCT>SHOP UNIT</PRODUCT>
+            <PRODTYPE>s101</PRODTYPE>
+            <CHILDCELL>101GB7645JTHG83</CHILDCELL>
+            <PRODUCTNAME>101GB7645JTHG83</PRODUCTNAME>
+            <REPLACEDBY></REPLACEDBY>
+            <AGENCY></AGENCY>
+            <PROVIDER></PROVIDER>
+            <ENCSIZE></ENCSIZE>
+            <TITLE></TITLE>
+          </item>
+          <item>
+            <ACTIONNUMBER>3</ACTIONNUMBER>
+            <ACTION>ASSIGN PRODUCT TO UNIT OF SALE</ACTION>
+            <PRODUCT>SHOP UNIT</PRODUCT>
+            <PRODTYPE>s101</PRODTYPE>
+            <CHILDCELL>101GB007645JTHG83</CHILDCELL>
+            <PRODUCTNAME>s100WorldFolio</PRODUCTNAME>
+            <REPLACEDBY></REPLACEDBY>
+            <AGENCY></AGENCY>
+            <PROVIDER></PROVIDER>
+            <ENCSIZE></ENCSIZE>
+            <TITLE></TITLE>
+          </item>
+        </ACTIONITEMS>
+      </IM_MATINFO>
+    </Z_SHOP_MAT_INFO>
+  </soap:Body>
 </soap:Envelope>
