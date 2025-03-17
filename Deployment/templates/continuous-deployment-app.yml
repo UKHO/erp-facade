@@ -56,14 +56,14 @@ steps:
         xmlTransformationRules: ''
         jsonTargetFiles: '**/mock-configuration.json'
 
-  # - task: AzureWebApp@1
-  #   displayName: "Azure App Deploy: ERPFacade-ADDS-MockService"
-  #   condition: and(succeeded(), eq(variables['Environment.Name'], 'ERP-IAT'))
-  #   inputs:
-  #     azureSubscription: "${{ parameters.AzureSubscription }}"
-  #     appType: webApp
-  #     appName: "$(MOCK_WEB_APP_NAME)"
-  #     package: "$(Pipeline.Workspace)/ADDSMock/ADDSMock.zip"
+  - task: AzureWebApp@1
+    displayName: "Azure App Deploy: ERPFacade-ADDS-MockService"
+    condition: and(succeeded(), eq(variables['Environment.Name'], 'ERP-IAT'))
+    inputs:
+      azureSubscription: "${{ parameters.AzureSubscription }}"
+      appType: webApp
+      appName: "$(MOCK_WEB_APP_NAME)"
+      package: "$(Pipeline.Workspace)/ADDSMock/ADDSMock.zip"
 
   
   
