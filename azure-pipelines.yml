@@ -401,14 +401,14 @@ stages:
           - task: CopyFiles@2
             displayName: "Copy additional configuration directories"
             inputs:
-              SourceFolder: '$(Build.SourcesDirectory)\mock\repo\src\override-configuration'
+              SourceFolder: '$(Build.SourcesDirectory)\mock\repo\override-configuration'
               Contents: '**'
               TargetFolder: '$(Build.ArtifactStagingDirectory)\UKHO.ADDS.MockService\override-configuration'
 
           - task: CopyFiles@2
             displayName: "Copy additional configuration directories"
             inputs:
-              SourceFolder: '$(Build.SourcesDirectory)\mock\repo\src\service-configuration'
+              SourceFolder: '$(Build.SourcesDirectory)\mock\repo\service-configuration'
               Contents: '**'
               TargetFolder: '$(Build.ArtifactStagingDirectory)\UKHO.ADDS.MockService\service-configuration'
 
