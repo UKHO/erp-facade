@@ -366,6 +366,9 @@ stages:
             submodules: true
 
           - powershell: |
+              # Navigate to the submodule directory
+              cd $(Build.SourcesDirectory)\mock\repo
+
               # Fetch all branches
               git fetch
       
