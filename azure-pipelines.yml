@@ -429,8 +429,8 @@ stages:
               publishWebProjects: false
               projects: '**/*ADDSMock.csproj'
               arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\ADDSMock'
-              zipAfterPublish: true
-              modifyOutputPath: true
+              zipAfterPublish: false
+              modifyOutputPath: false
 
           - task: CopyFiles@2
             displayName: "Copy additional configuration directories"
@@ -446,17 +446,19 @@ stages:
               SourceFolder: '$(Build.SourcesDirectory)\mock\repo\service-configuration'
               Contents: '**'
               TargetFolder: '$(Build.ArtifactStagingDirectory)\ADDSMock\service-configuration'
-          
-          - task: PublishBuildArtifacts@1
-            displayName: "copy service-configuration"
+          - task: ArchiveFiles@2
+            displayName: "Zip ADDS Mock Service"
             inputs:
-              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-              ArtifactName: service-configuration
-
+              rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/ADDSMock/'
+              includeRootFolder: false
+              archiveType: "zip"
+              archiveFile: '$(Build.ArtifactStagingDirectory)/ADDSMock/UKHOADDSMockService.zip'
+              replaceExistingArchive: true
+           
           - task: PublishBuildArtifacts@1
-            displayName: "Publish Web Artifact"
+            displayName: "Publish ADDS Mock Service Artifact"
             inputs:
-              PathtoPublish: '$(Build.ArtifactStagingDirectory)\ADDSMock'
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)\ADDSMock/UKHOADDSMockService.zip'
               ArtifactName: ADDSMock
  
   - stage: Devdeploy
