@@ -426,13 +426,13 @@ stages:
               Contents: '**'
               TargetFolder: '$(Build.ArtifactStagingDirectory)\ADDSMock\override-configuration'
 
-
           - task: CopyFiles@2
             displayName: 'Copy files to: $(Build.SourcesDirectory)\mock\repo\service-configuration'
             inputs:
               SourceFolder: '$(Build.SourcesDirectory)\mock\repo\service-configuration'
               Contents: '**'
               TargetFolder: '$(Build.ArtifactStagingDirectory)\ADDSMock\service-configuration'
+
           - task: ArchiveFiles@2
             displayName: "Zip ADDS Mock Service"
             inputs:
@@ -716,11 +716,11 @@ stages:
       - name : MOCK_WEB_APP_NAME
         value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.mockWebApp'] ]
       - name: "ConfigurationPath"
-        value: '/home/site/wwwroot/service-configuration/demo/files'
+        value: '/home/site/wwwroot/service-configuration'
       - name: "OverrideConfigurationPath"
-        value: '/home/site/wwwroot/override-configuration/demo/files'
+        value: '/home/site/wwwroot/override-configuration'
       - name: "Port"
-        value: '5678'
+        value: '8080'
    
     jobs:
       - deployment: IATDeployTerraform

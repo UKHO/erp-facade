@@ -63,7 +63,7 @@ module "webapp_service" {
     "WEBSITE_RUN_FROM_PACKAGE"                                 = "1"
     "WEBSITE_ENABLE_SYNC_UPDATE_SITE"                          = "true"
     "APPINSIGHTS_INSTRUMENTATIONKEY"                           = local.env_name == "iat" ? module.addsMock_app_insights.instrumentation_key : ""
-    "WEBSITES_PORT"                                            = "5678"
+    "WEBSITES_PORT"                                            = "8080"
   }
   tags                                                         = local.tags
 }
