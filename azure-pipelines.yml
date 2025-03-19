@@ -365,20 +365,7 @@ stages:
           - checkout: self
             submodules: true
 
-          - powershell: |
-              # Navigate to the submodule directory
-              cd $(Build.SourcesDirectory)\mock\repo
-
-              # Fetch all branches
-              git fetch
-      
-              # Checkout the specific branch
-              git checkout MockDeploymentTestBranch
-      
-              # Optionally, pull the latest changes
-              git pull origin MockDeploymentTestBranch
-            displayName: 'Checkout specific branch in submodule'
-            workingDirectory: '$(Build.SourcesDirectory)'
+          - script: git submodule update --init --force --remote
 
           - task: UseDotNet@2
             displayName: Use .NET SDK $(DotNetSdkVersion)
