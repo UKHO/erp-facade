@@ -131,16 +131,10 @@
     <None Update="ERPFacadeExpectedXmlFiles\S100ExpectedXmlFiles\SupplierChange.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPFacadeExpectedXmlFiles\S100ExpectedXmlFiles\SimpleUpdate.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="ERPFacadeExpectedXmlFiles\S100ExpectedXmlFiles\NewCell.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPFacadeExpectedXmlFiles\S100ExpectedXmlFiles\SupplierDefinedUnitChangeV2.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ERPFacadeExpectedXmlFiles\S100ExpectedXmlFiles\Suspend.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPFacadeExpectedXmlFiles\S100ExpectedXmlFiles\Withdrawn.xml">
@@ -341,7 +335,7 @@
     <None Update="ERPFacadePayloadTestData\S100PayloadTestData\SupplierChange.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPFacadePayloadTestData\S100PayloadTestData\SimpleUpdate.JSON">
+    <None Update="ERPFacadePayloadTestData\S57PayloadTestData\SapMockApiConfigure.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPFacadePayloadTestData\S100PayloadTestData\NewCellAndEdition.JSON">
@@ -353,7 +347,7 @@
     <None Update="ERPFacadePayloadTestData\S100PayloadTestData\SupplierDefinedUnitChangeV2.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPFacadePayloadTestData\S100PayloadTestData\Suspend.JSON">
+    <None Update="ERPFacadePayloadTestData\S57PayloadTestData\UoSMetadataChange.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPFacadePayloadTestData\S100PayloadTestData\Withdrawn.JSON">
@@ -399,8 +393,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
-	<ItemGroup>
+  <ItemGroup>
 		<Content Include="ERPFacadeGeneratedXmlFiles\**">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
