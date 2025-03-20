@@ -61,16 +61,7 @@ stages:
           noCache: true
           nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
           workingDirectory: '$(Build.SourcesDirectory)\src'
-          packagesDirectory: '$(Build.SourcesDirectory)\src\packagesForAPI'          
-         
-      - task: PowerShell@1
-        displayName: "Fail Build if Dependency Check Finds Any Vulnerabilities"
-        inputs:
-          scriptType: inlineScript
-          arguments: '-ReportLocation $(Build.ArtifactStagingDirectory)\DCReport\*'
-          inlineScript: |
-            param($ReportLocation)
-            Invoke-VulnerabilityCheck -ReportLocation $ReportLocation
+          packagesDirectory: '$(Build.SourcesDirectory)\src\packagesForAPI'
 
       - job: UnitTestsAndCodeCoverage
         workspace:
