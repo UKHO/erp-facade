@@ -73,20 +73,8 @@ stages:
               noCache: true
               nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
               workingDirectory: '$(Build.SourcesDirectory)\src'
-              packagesDirectory: '$(Build.SourcesDirectory)\src\packagesForAPI'
-
-          - task: CmdLine@1
-            displayName: "Run OWASP Dependency Checker"
-            inputs:
-              filename: 'dependency-check.bat'
-              arguments: '--project "erp-facade - $(Build.SourceBranchName)" --scan "$(Build.SourcesDirectory)\src" --out "$(Build.ArtifactStagingDirectory)\DCReport" --suppression $(Build.SourcesDirectory)\NVDSuppressions.xml --noupdate'
-
-          - task: PublishBuildArtifacts@1
-            displayName: "Publish Artifact: OWASP Dependency Checker Report"
-            inputs:
-              PathtoPublish: '$(Build.ArtifactStagingDirectory)\DCReport'
-              ArtifactName: "OWASP Dependency Checker Report"
-
+              packagesDirectory: '$(Build.SourcesDirectory)\src\packagesForAPI'          
+         
           - task: PowerShell@1
             displayName: "Fail Build if Dependency Check Finds Any Vulnerabilities"
             inputs:
