@@ -7,19 +7,18 @@
     "subject": "101GB7645JTHG83",
     "datacontenttype": "application/json",
     "data": {
-      "correlationId": "lt-20250312-m85n51eg-mm7jgcc8-j6re0a",
+      "correlationId": "pt5ce4a4-1d62-4f56-b359-59e178d77105",
       "products": [
         {
-          "productType": "S100",
           "productIdentifier": "s101",
           "productName": "101GB7645JTHG83",
           "editionNumber": 1,
           "updateNumber": 0,
           "mayAffectHoldings": true,
-          "providerCode": "1",
+          "providerCode": "1B",
           "providerName": "ICE",
           "size": "medium",
-          "producingAgency": "GB",
+          "producingAgency": "GB03",
           "status": {
             "statusName": "newDataset",
             "statusDate": "2024-07-16T19:20:30.45+01:00",
@@ -29,8 +28,8 @@
           "dataReplacement": [],
           "boundingBox": {
                 "northLimit": 63.25,
-                "southLimit": 63,
-                "eastLimit": 8,
+                "southLimit": 63.9898,
+                "eastLimit": 8.00,
                 "westLimit": 7.75
               },
           "fileSize": 3456,
@@ -49,8 +48,8 @@
           "isNewUnitOfSale": true,
           "boundingBox": {
             "northLimit": 63.25,
-            "southLimit": 63,
-            "eastLimit": 8,
+            "southLimit": 63.9898,
+            "eastLimit": 8.00,
             "westLimit": 7.75
           },
           "compositionChanges": {
@@ -61,7 +60,7 @@
           },
           "productIdentifier": "s101",
           "unitOfSaleType": "unit",
-          "providerCode": "1",
+          "providerCode": "1B",
           "providerName": "ICE",
           "producingAgency": "GB"
         }

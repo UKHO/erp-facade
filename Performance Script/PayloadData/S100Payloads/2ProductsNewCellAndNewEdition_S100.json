@@ -10,16 +10,15 @@
       "correlationId": "lt-20250312-m85sjz0l-4mu1ezhj-rnwg8e",
       "products": [
         {
-          "productType": "S100",
           "productIdentifier": "s101",
           "productName": "101CA7777777",
           "editionNumber": 3,
           "updateNumber": 0,
           "mayAffectHoldings": true,
-          "providerCode": "1",
+          "providerCode": "1B",
           "providerName": "ICE",
           "size": "medium",
-          "producingAgency": "CA",
+          "producingAgency": "CA03",
           "status": {
             "statusName": "newEditon",
             "statusDate": "2024-07-16T19:20:30.45+01:00",
@@ -29,8 +28,8 @@
           "dataReplacement": [],
           "boundingBox": {
                 "northLimit": 63.25,
-                "southLimit": 63,
-                "eastLimit": 8,
+                "southLimit": 63.00,
+                "eastLimit": 8.00,
                 "westLimit": 7.75
               },
           "fileSize": 3456,
@@ -40,16 +39,15 @@
           "producerUnitName": "101CA7777777"
         },
         {
-          "productType": "S100",
           "productIdentifier": "s101",
           "productName": "101CA8888888",
           "editionNumber": 1,
           "updateNumber": 0,
           "mayAffectHoldings": true,
-          "providerCode": "1",
+          "providerCode": "1B",
           "providerName": "ICE",
           "size": "medium",
-          "producingAgency": "CA",
+          "producingAgency": "CA03",
           "status": {
             "statusName": "newEditon",
             "statusDate": "2024-07-16T19:20:30.45+01:00",
@@ -59,8 +57,8 @@
           "dataReplacement": [],
           "boundingBox": {
                 "northLimit": 63.25,
-                "southLimit": 63,
-                "eastLimit": 8,
+                "southLimit": 63.00,
+                "eastLimit": 8.00,
                 "westLimit": 7.75
               },
           "fileSize": 3456,
@@ -79,8 +77,8 @@
           "isNewUnitOfSale": true,
           "boundingBox": {
             "northLimit": 63.25,
-            "southLimit": 63,
-            "eastLimit": 8,
+            "southLimit": 63.00,
+            "eastLimit": 8.00,
             "westLimit": 7.75
           },
           "compositionChanges": {
@@ -91,7 +89,7 @@
           },
           "productIdentifier": "s101",
           "unitOfSaleType": "unit",
-          "providerCode": "1",
+          "providerCode": "1B",
           "providerName": "ICE",
           "producingAgency": "CA"
         },
@@ -103,8 +101,8 @@
           "isNewUnitOfSale": false,
           "boundingBox": {
             "northLimit": 63.25,
-            "southLimit": 63,
-            "eastLimit": 8,
+            "southLimit": 63.00,
+            "eastLimit": 8.00,
             "westLimit": 7.75
           },
           "compositionChanges": {
@@ -113,7 +111,7 @@
           },
           "productIdentifier": "s101",
           "unitOfSaleType": "unit",
-          "providerCode": "1",
+          "providerCode": "1B",
           "providerName": "ICE",
           "producingAgency": "CA"
         }
