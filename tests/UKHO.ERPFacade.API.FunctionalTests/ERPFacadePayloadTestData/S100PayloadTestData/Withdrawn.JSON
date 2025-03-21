@@ -1,13 +1,13 @@
 {
     "specversion": "1.0",
-    "type": "uk.gov.ukho.encpublishing.s100datacontentpublished.v1",
+    "type": "uk.gov.ukho.encpublishing.s100datacontentpublished.v1.1",
     "source": "https://encpublishing.ukho.gov.uk",
     "id": "5f03a25f-28b3-46ea-b009-5943250a9a42",
     "time": "2024-08-13T12:08:03.4880776Z",
     "subject": "104CA123456UNIB",
     "datacontenttype": "application/json",
     "data": {
-        "correlationId": "ft-e4c9d333-b133-4133-a0aa-08dccb35b407",
+        "correlationId": "ft-e4333-b3-433-aa-08d5b407",
         "products": [
             {
                 "productType": "s100",

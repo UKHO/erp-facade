@@ -1,28 +1,27 @@
-{
+﻿{
     "specversion": "1.0",
     "type": "uk.gov.ukho.encpublishing.s100datacontentpublished.v1.1",
     "source": "https://encpublishing.ukho.gov.uk",
-    "id": "5f03a25f-28b3-46ea-b009-5943250a9a42",
+    "id": "5ff-23-ea-b009-59041",
     "time": "2024-08-13T12:08:03.4880776Z",
-    "subject": "104CA123456UNIA",
+    "subject": "101GB007777777",
     "datacontenttype": "application/json",
     "data": {
-        "correlationId": "ft-e4c9d333-b133-4133-a0aa-08dccb35b407",
+        "correlationId": "165ce4a-1d6-4f5-b65-53e178d7911",
         "products": [
             {
-                "productType": "s100",
                 "productIdentifier": "s101",
-                "productName": "104CA123456UNIA",
-                "editionNumber": 1,
+                "productName": "101GB007777777",
+                "editionNumber": 3,
                 "updateNumber": 0,
-                "mayAffectHoldings": false,
-                "providerCode": 1,
+                "mayAffectHoldings": true,
+                "providerCode": "1Q",
                 "providerName": "ICE",
-                "producingAgency": "AU",
                 "size": "medium",
+                "producingAgency": "GB03",
                 "status": {
-                    "statusName": "Suspended",
-                    "statusDate": "2024-07-16T19:20:30",
+                    "statusName": "newEdition",
+                    "statusDate": "2024-07-16T19:20:30.45+01:00",
                     "isNewCell": false
                 },
                 "replaces": [],
@@ -33,33 +32,31 @@
                     "eastLimit": 8,
                     "westLimit": 7.75
                 },
-                "filesize": 3456,
+                "fileSize": 3456,
                 "inUnitsOfSale": [
-                    "104CA123456UNIA"
+                    "101GB007777777",
+                    "s100WorldFolio"
                 ],
-                "producerUnitName": "104CA123456UNIA"
+                "producerUnitName": "101GB007777777"
             }
         ],
         "unitsOfSale": [
             {
-                "unitName": "104CA123456UNIA",
+                "unitName": "101GB007777777",
                 "productIdentifier": "s101",
                 "title": "A test S-101 cell from GB authority in its own unit of sale",
                 "unitOfSaleType": "unit",
                 "providerCode": "1",
                 "providerName": "ICE",
                 "producingAgency": "GB00",
-                "unitType": "C15",
                 "unitSize": "large",
                 "status": "ForSale",
                 "isNewUnitOfSale": false,
-                "providerCode": 1,
-                "producingAgency": "AU",
                 "boundingBox": {
-                    "northLimit": 63,
+                    "northLimit": 63.25,
                     "southLimit": 63,
                     "eastLimit": 8,
-                    "westLimit": 7
+                    "westLimit": 7.75
                 },
                 "compositionChanges": {
                     "addProducts": [],
@@ -84,9 +81,7 @@
                     "westLimit": -180
                 },
                 "compositionChanges": {
-                    "addProducts": [
-                        "101GB007645JTHG83"
-                    ],
+                    "addProducts": [],
                     "removeProducts": []
                 }
             }

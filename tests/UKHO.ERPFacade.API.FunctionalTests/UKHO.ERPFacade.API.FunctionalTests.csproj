@@ -50,6 +50,9 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ERPFacadeExpectedXmlFiles\S100ExpectedXmlFiles\NewCellWithUnitOfSaleTypeIsFolio.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ERPFacadeExpectedXmlFiles\S57ExpectedXmlFiles\2NewCells.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -162,6 +165,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPFacadeExpectedXmlFiles\S57ExpectedXmlFiles\WithdrawCell.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\S100PayloadTestData\NewCellWithUnitOfSaleTypeIsFolio.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\S100PayloadTestData\NewCellV1.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPFacadePayloadTestData\S100PayloadTestData\SAP500InternalServerError.JSON">
@@ -350,6 +359,18 @@
     <None Update="ERPFacadePayloadTestData\S100PayloadTestData\Withdrawn.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ERPFacadePayloadTestData\S100PayloadTestData\SimpleUpdateNoXmlGeneration.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\S100PayloadTestData\SuspendNoXmlGeneration.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\S100PayloadTestData\NewEditionNoXmlGeneration.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPFacadePayloadTestData\S100PayloadTestData\ReissueNoXmlGeneration.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ERPFacadePayloadTestData\S57PayloadTestData\SapMockApiConfigure.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -376,7 +397,7 @@
     </None>
     <None Update="ERPFacadePayloadTestData\S57PayloadTestData\WithdrawCell.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>    
+    </None>
   </ItemGroup>
 
 	<ItemGroup>

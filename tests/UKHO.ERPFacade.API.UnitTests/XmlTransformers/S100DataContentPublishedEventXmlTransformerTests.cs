@@ -121,6 +121,49 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
         }
 
         [Test]
+        public void WhenBuildXmlPayloadIsCalledForNewProductWithUnitOfSaleTypeAsFolio_ThenReturnXMLDocumentWithoutFolio()
+        {
+            var newProductEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\S100TestData\\NewProductWithUnitOfSaleTypeAsFolio.JSON");
+            var baseCloudEvent = JsonConvert.DeserializeObject<BaseCloudEvent>(newProductEventPayloadJson);
+            var s100EventData = JsonConvert.DeserializeObject<S100EventData>(baseCloudEvent.Data.ToString()!);
+
+            XmlDocument soapXml = new();
+            soapXml.LoadXml(_sapXmlTemplate);
+            A.CallTo(() => _fakeXmlOperations.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
+            var result = _fakeS100DataContentPublishedEventXmlTransformer.BuildXmlPayload(s100EventData, _sapXmlTemplate);
+
+            result.Should().BeOfType<XmlDocument>();
+
+            XElement xElement = XElement.Parse(result.OuterXml);
+            var itemList = xElement.Descendants("item").ToList();
+            var s100WorldFolio = itemList.FirstOrDefault(item => item.Descendants("PRODUCTNAME").FirstOrDefault()?.Value == "s100WorldFolio");
+            Assert.That(itemList.Count, Is.EqualTo(3));
+            Assert.That(s100WorldFolio == null, Is.True);
+
+            A.CallTo(() => _fakeXmlOperations.AppendChildNode(A<XmlElement>.Ignored, A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened(9, Times.Exactly);
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+                                                && call.GetArgument<LogLevel>(0) == LogLevel.Information
+                                                && call.GetArgument<EventId>(1) == EventIds.S100EventSapXmlPayloadGenerationStarted.ToEventId()
+                                                && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Generation of SAP xml payload for S-100 data content published event started.").MustHaveHappenedOnceExactly();
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+                                                && call.GetArgument<LogLevel>(0) == LogLevel.Information
+                                                && call.GetArgument<EventId>(1) == EventIds.S100SapActionGenerationStarted.ToEventId()
+                                                && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Generation of {ActionName} action started.").MustHaveHappened(3, Times.Exactly);
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+                                                && call.GetArgument<LogLevel>(0) == LogLevel.Information
+                                                && call.GetArgument<EventId>(1) == EventIds.S100SapActionGenerationCompleted.ToEventId()
+                                                && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Generation of {ActionName} action completed.").MustHaveHappened(3, Times.Exactly);
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+                                                && call.GetArgument<LogLevel>(0) == LogLevel.Information
+                                                && call.GetArgument<EventId>(1) == EventIds.S100EventSapXmlPayloadGenerationCompleted.ToEventId()
+                                                && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Generation of SAP xml payload for S-100 data content published event completed.").MustHaveHappenedOnceExactly();
+        }
+
+        [Test]
         public void WhenBuildXmlPayloadIfRequiredAttributesNotProvided_ThenThrowERPFacadeException()
         {
             var newProductEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\S100TestData\\NewProductWithoutProducingAgencyAttributes.JSON");
@@ -134,42 +177,6 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
 
             Assert.Throws<ERPFacadeException>(() => _fakeS100DataContentPublishedEventXmlTransformer.BuildXmlPayload(s100EventData, _sapXmlTemplate))
                 .Message.Should().Be("Error while generating SAP action information. | Action : CREATE PRODUCT | XML Attribute : AGENCY | ErrorMessage : Object reference not set to an instance of an object.");
-        }
-
-        [Test]
-        public void WhenBuildXmlPayloadIsCalledForChangeProductScenario_ThenReturnXMLDocument()
-        {
-            var newProductEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\S100TestData\\ChangeProduct.JSON");
-            var baseCloudEvent = JsonConvert.DeserializeObject<BaseCloudEvent>(newProductEventPayloadJson);
-            S100EventData s100EventData = JsonConvert.DeserializeObject<S100EventData>(baseCloudEvent.Data.ToString()!);
-
-            XmlDocument soapXml = new();
-            soapXml.LoadXml(_sapXmlTemplate);
-
-            A.CallTo(() => _fakeXmlOperations.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
-            var result = _fakeS100DataContentPublishedEventXmlTransformer.BuildXmlPayload(s100EventData, _sapXmlTemplate);
-
-            result.Should().BeOfType<XmlDocument>();
-
-            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-                                                && call.GetArgument<LogLevel>(0) == LogLevel.Information
-                                                && call.GetArgument<EventId>(1) == EventIds.S100EventSapXmlPayloadGenerationStarted.ToEventId()
-                                                && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Generation of SAP xml payload for S-100 data content published event started.").MustHaveHappenedOnceExactly();
-
-            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-                                                && call.GetArgument<LogLevel>(0) == LogLevel.Information
-                                                && call.GetArgument<EventId>(1) == EventIds.S100SapActionGenerationStarted.ToEventId()
-                                                && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Generation of {ActionName} action started.").MustHaveHappened(2, Times.Exactly);
-
-            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-                                                && call.GetArgument<LogLevel>(0) == LogLevel.Information
-                                                && call.GetArgument<EventId>(1) == EventIds.S100SapActionGenerationCompleted.ToEventId()
-                                                && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Generation of {ActionName} action completed.").MustHaveHappened(2, Times.Exactly);
-
-            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
-                                                && call.GetArgument<LogLevel>(0) == LogLevel.Information
-                                                && call.GetArgument<EventId>(1) == EventIds.S100EventSapXmlPayloadGenerationCompleted.ToEventId()
-                                                && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "Generation of SAP xml payload for S-100 data content published event completed.").MustHaveHappenedOnceExactly();
         }
 
         [Test]

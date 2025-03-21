@@ -3,10 +3,10 @@
   <soap:Body>
     <Z_SHOP_MAT_INFO xmlns="urn:sap-com:document:sap:rfc:functions">
       <IM_MATINFO xmlns="">
-        <CORRID>165ce4a4-1d62-4f56-b359-59e178d77105</CORRID>
-        <NOOFACTIONS>4</NOOFACTIONS>
+        <CORRID>165cea4-1d6-4f6-b35-59e178d7108</CORRID>
+        <NOOFACTIONS>3</NOOFACTIONS>
         <RECDATE>20250314</RECDATE>
-        <RECTIME>082242</RECTIME>
+        <RECTIME>085053</RECTIME>
         <ORG>UKHO</ORG>
         <ACTIONITEMS>
           <item>
@@ -24,19 +24,6 @@
           </item>
           <item>
             <ACTIONNUMBER>2</ACTIONNUMBER>
-            <ACTION>CREATE UNIT OF SALE</ACTION>
-            <PRODUCT>SHOP UNIT</PRODUCT>
-            <PRODTYPE>s101</PRODTYPE>
-            <CHILDCELL></CHILDCELL>
-            <PRODUCTNAME>101GB7645JTHG83</PRODUCTNAME>
-            <REPLACEDBY></REPLACEDBY>
-            <AGENCY>GB00</AGENCY>
-            <PROVIDER>1</PROVIDER>
-            <ENCSIZE>large</ENCSIZE>
-            <TITLE>A test S-101 cell from GB authority in its own unit of sale</TITLE>
-          </item>
-          <item>
-            <ACTIONNUMBER>3</ACTIONNUMBER>
             <ACTION>ASSIGN PRODUCT TO UNIT OF SALE</ACTION>
             <PRODUCT>SHOP UNIT</PRODUCT>
             <PRODTYPE>s101</PRODTYPE>
@@ -49,7 +36,7 @@
             <TITLE></TITLE>
           </item>
           <item>
-            <ACTIONNUMBER>4</ACTIONNUMBER>
+            <ACTIONNUMBER>3</ACTIONNUMBER>
             <ACTION>ASSIGN PRODUCT TO UNIT OF SALE</ACTION>
             <PRODUCT>SHOP UNIT</PRODUCT>
             <PRODTYPE>s101</PRODTYPE>

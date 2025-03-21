@@ -4,9 +4,9 @@
     <Z_SHOP_MAT_INFO xmlns="urn:sap-com:document:sap:rfc:functions">
       <IM_MATINFO xmlns="">
         <CORRID>165ce4a4-1d62-4f56-b359-59e178d77110</CORRID>
-        <NOOFACTIONS>7</NOOFACTIONS>
-        <RECDATE>20250228</RECDATE>
-        <RECTIME>122502</RECTIME>
+        <NOOFACTIONS>4</NOOFACTIONS>
+        <RECDATE>20250314</RECDATE>
+        <RECTIME>083721</RECTIME>
         <ORG>UKHO</ORG>
         <ACTIONITEMS>
           <item>
@@ -37,45 +37,6 @@
           </item>
           <item>
             <ACTIONNUMBER>3</ACTIONNUMBER>
-            <ACTION>CHANGE PRODUCT</ACTION>
-            <PRODUCT>SHOP CELL</PRODUCT>
-            <PRODTYPE>s104</PRODTYPE>
-            <CHILDCELL>104CA5555555</CHILDCELL>
-            <PRODUCTNAME>104CA5555555</PRODUCTNAME>
-            <REPLACEDBY></REPLACEDBY>
-            <AGENCY>CA</AGENCY>
-            <PROVIDER>1</PROVIDER>
-            <ENCSIZE>medium</ENCSIZE>
-            <TITLE></TITLE>
-          </item>
-          <item>
-            <ACTIONNUMBER>4</ACTIONNUMBER>
-            <ACTION>CHANGE UNIT OF SALE</ACTION>
-            <PRODUCT>SHOP UNIT</PRODUCT>
-            <PRODTYPE>s104</PRODTYPE>
-            <CHILDCELL></CHILDCELL>
-            <PRODUCTNAME>104CA6666666UNIT</PRODUCTNAME>
-            <REPLACEDBY></REPLACEDBY>
-            <AGENCY>GB00</AGENCY>
-            <PROVIDER>1</PROVIDER>
-            <ENCSIZE>large</ENCSIZE>
-            <TITLE></TITLE>
-          </item>
-          <item>
-            <ACTIONNUMBER>5</ACTIONNUMBER>
-            <ACTION>CHANGE UNIT OF SALE</ACTION>
-            <PRODUCT>SHOP UNIT</PRODUCT>
-            <PRODTYPE>s101</PRODTYPE>
-            <CHILDCELL></CHILDCELL>
-            <PRODUCTNAME>s100WorldFolio</PRODUCTNAME>
-            <REPLACEDBY></REPLACEDBY>
-            <AGENCY>UKHO</AGENCY>
-            <PROVIDER>0</PROVIDER>
-            <ENCSIZE>large</ENCSIZE>
-            <TITLE></TITLE>
-          </item>
-          <item>
-            <ACTIONNUMBER>6</ACTIONNUMBER>
             <ACTION>REMOVE PRODUCT FROM UNIT OF SALE</ACTION>
             <PRODUCT>SHOP UNIT</PRODUCT>
             <PRODTYPE>s104</PRODTYPE>
@@ -88,7 +49,7 @@
             <TITLE></TITLE>
           </item>
           <item>
-            <ACTIONNUMBER>7</ACTIONNUMBER>
+            <ACTIONNUMBER>4</ACTIONNUMBER>
             <ACTION>CANCEL UNIT OF SALE</ACTION>
             <PRODUCT>SHOP UNIT</PRODUCT>
             <PRODTYPE>s104</PRODTYPE>

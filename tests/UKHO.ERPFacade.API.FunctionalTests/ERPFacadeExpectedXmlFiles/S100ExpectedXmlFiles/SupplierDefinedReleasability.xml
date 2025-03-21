@@ -4,9 +4,9 @@
     <Z_SHOP_MAT_INFO xmlns="urn:sap-com:document:sap:rfc:functions">
       <IM_MATINFO xmlns="">
         <CORRID>165ce4a4-1d62-4f56-b359-59e178d77109</CORRID>
-        <NOOFACTIONS>6</NOOFACTIONS>
-        <RECDATE>20250228</RECDATE>
-        <RECTIME>120133</RECTIME>
+        <NOOFACTIONS>1</NOOFACTIONS>
+        <RECDATE>20250314</RECDATE>
+        <RECTIME>083049</RECTIME>
         <ORG>UKHO</ORG>
         <ACTIONITEMS>
           <item>
@@ -20,71 +20,6 @@
             <AGENCY></AGENCY>
             <PROVIDER></PROVIDER>
             <ENCSIZE></ENCSIZE>
-            <TITLE></TITLE>
-          </item>
-          <item>
-            <ACTIONNUMBER>2</ACTIONNUMBER>
-            <ACTION>CHANGE PRODUCT</ACTION>
-            <PRODUCT>SHOP CELL</PRODUCT>
-            <PRODTYPE>s101</PRODTYPE>
-            <CHILDCELL>101CA44444444</CHILDCELL>
-            <PRODUCTNAME>101CA44444444</PRODUCTNAME>
-            <REPLACEDBY></REPLACEDBY>
-            <AGENCY>CA</AGENCY>
-            <PROVIDER>1</PROVIDER>
-            <ENCSIZE>medium</ENCSIZE>
-            <TITLE></TITLE>
-          </item>
-          <item>
-            <ACTIONNUMBER>3</ACTIONNUMBER>
-            <ACTION>CHANGE PRODUCT</ACTION>
-            <PRODUCT>SHOP CELL</PRODUCT>
-            <PRODTYPE>s101</PRODTYPE>
-            <CHILDCELL>101CA5555555</CHILDCELL>
-            <PRODUCTNAME>101CA5555555</PRODUCTNAME>
-            <REPLACEDBY></REPLACEDBY>
-            <AGENCY>CA</AGENCY>
-            <PROVIDER>1</PROVIDER>
-            <ENCSIZE>medium</ENCSIZE>
-            <TITLE></TITLE>
-          </item>
-          <item>
-            <ACTIONNUMBER>4</ACTIONNUMBER>
-            <ACTION>CHANGE UNIT OF SALE</ACTION>
-            <PRODUCT>SHOP UNIT</PRODUCT>
-            <PRODTYPE>s101</PRODTYPE>
-            <CHILDCELL></CHILDCELL>
-            <PRODUCTNAME>101CA5555555</PRODUCTNAME>
-            <REPLACEDBY></REPLACEDBY>
-            <AGENCY>GB00</AGENCY>
-            <PROVIDER>1</PROVIDER>
-            <ENCSIZE>large</ENCSIZE>
-            <TITLE></TITLE>
-          </item>
-          <item>
-            <ACTIONNUMBER>5</ACTIONNUMBER>
-            <ACTION>CHANGE UNIT OF SALE</ACTION>
-            <PRODUCT>SHOP UNIT</PRODUCT>
-            <PRODTYPE>s101</PRODTYPE>
-            <CHILDCELL></CHILDCELL>
-            <PRODUCTNAME>101CA44444444</PRODUCTNAME>
-            <REPLACEDBY></REPLACEDBY>
-            <AGENCY>GB00</AGENCY>
-            <PROVIDER>1</PROVIDER>
-            <ENCSIZE>large</ENCSIZE>
-            <TITLE></TITLE>
-          </item>
-          <item>
-            <ACTIONNUMBER>6</ACTIONNUMBER>
-            <ACTION>CHANGE UNIT OF SALE</ACTION>
-            <PRODUCT>SHOP UNIT</PRODUCT>
-            <PRODTYPE>s101</PRODTYPE>
-            <CHILDCELL></CHILDCELL>
-            <PRODUCTNAME>s100WorldFolio</PRODUCTNAME>
-            <REPLACEDBY></REPLACEDBY>
-            <AGENCY>UKHO</AGENCY>
-            <PROVIDER>0</PROVIDER>
-            <ENCSIZE>large</ENCSIZE>
             <TITLE></TITLE>
           </item>
         </ACTIONITEMS>
