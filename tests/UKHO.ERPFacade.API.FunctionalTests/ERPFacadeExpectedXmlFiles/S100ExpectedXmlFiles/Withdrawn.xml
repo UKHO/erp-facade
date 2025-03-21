@@ -3,27 +3,14 @@
   <soap:Body>
     <Z_SHOP_MAT_INFO xmlns="urn:sap-com:document:sap:rfc:functions">
       <IM_MATINFO xmlns="">
-        <CORRID>ft-e4333-b3-433-aa-08d5b407</CORRID>
-        <NOOFACTIONS>3</NOOFACTIONS>
-        <RECDATE>20250314</RECDATE>
-        <RECTIME>084153</RECTIME>
+        <CORRID>ft-ec333-b13-4a3-aa-08dcc7</CORRID>
+        <NOOFACTIONS>2</NOOFACTIONS>
+        <RECDATE>20250319</RECDATE>
+        <RECTIME>081627</RECTIME>
         <ORG>UKHO</ORG>
         <ACTIONITEMS>
           <item>
             <ACTIONNUMBER>1</ACTIONNUMBER>
-            <ACTION>ASSIGN PRODUCT TO UNIT OF SALE</ACTION>
-            <PRODUCT>SHOP UNIT</PRODUCT>
-            <PRODTYPE>s101</PRODTYPE>
-            <CHILDCELL>101GB007645JTHG83</CHILDCELL>
-            <PRODUCTNAME>s100WorldFolio</PRODUCTNAME>
-            <REPLACEDBY></REPLACEDBY>
-            <AGENCY></AGENCY>
-            <PROVIDER></PROVIDER>
-            <ENCSIZE></ENCSIZE>
-            <TITLE></TITLE>
-          </item>
-          <item>
-            <ACTIONNUMBER>2</ACTIONNUMBER>
             <ACTION>REMOVE PRODUCT FROM UNIT OF SALE</ACTION>
             <PRODUCT>SHOP UNIT</PRODUCT>
             <PRODTYPE>s101</PRODTYPE>
@@ -36,7 +23,7 @@
             <TITLE></TITLE>
           </item>
           <item>
-            <ACTIONNUMBER>3</ACTIONNUMBER>
+            <ACTIONNUMBER>2</ACTIONNUMBER>
             <ACTION>CANCEL UNIT OF SALE</ACTION>
             <PRODUCT>SHOP UNIT</PRODUCT>
             <PRODTYPE>s101</PRODTYPE>
