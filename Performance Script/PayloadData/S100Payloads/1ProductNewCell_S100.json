@@ -1,65 +1,69 @@
 {
-  "specversion": "1.0",
-  "type": "uk.gov.ukho.encpublishing.s100datacontentpublished.v1",
-  "source": "https://encpublishing.ukho.gov.uk",
-  "id": "5f03a25f-28b3-46ea-b009-5943250a9a41",
-  "time": "2024-08-13T12:08:03.4880776Z",
-  "subject": "101GB7645JTHG83",
-  "datacontenttype": "application/json",
-  "data": {
-      "correlationId": "165ce4a4-1d62-4f56-b359-59e178d77105",
+    "specversion": "1.0",
+    "type": "uk.gov.ukho.encpublishing.s100datacontentpublished.v1.1",
+    "source": "https://encpublishing.ukho.gov.uk",
+    "id": "5f03a25f-28b3-46ea-b009-5943250a9a41",
+    "time": "2024-08-13T12:08:03.4880776Z",
+    "subject": "101GB7645JTHG83",
+    "datacontenttype": "application/json",
+    "data": {
+      "correlationId": "pt5ce4a4-1d62-4f56-b359-59e178d77105",
       "products": [
-          {
-              "productType": "S100",
-              "productIdentifier": "S-101",
-              "productName": "101GB7645JTHG83",
-              "editionNumber": 1,
-              "updateNumber": 0,
-              "mayAffectHoldings": true,
-              "contentChange": true,
-              "providerCode": "1",
-              "providerName": "ICE",
-              "size": "medium",
-              "producingAgency": "GB",
-              "status": {
-                  "statusName": "newDataset",
-                  "statusDate": "2024-07-16T19:20:30.45+01:00",
-                  "isNewCell": true
+        {
+          "productIdentifier": "s101",
+          "productName": "101GB7645JTHG83",
+          "editionNumber": 1,
+          "updateNumber": 0,
+          "mayAffectHoldings": true,
+          "providerCode": "1B",
+          "providerName": "ICE",
+          "size": "medium",
+          "producingAgency": "GB03",
+          "status": {
+            "statusName": "newDataset",
+            "statusDate": "2024-07-16T19:20:30.45+01:00",
+            "isNewCell": true
+          },
+          "replaces": [],
+          "dataReplacement": [],
+          "boundingBox": {
+                "northLimit": 63.25,
+                "southLimit": 63.9898,
+                "eastLimit": 8.00,
+                "westLimit": 7.75
               },
-              "replaces": [],
-              "dataReplacement": [],
-              "boundingBox": {
-                  "northLimit": 63.25,
-                  "southLimit": 63,
-                  "eastLimit": 8,
-                  "westLimit": 7.75
-              },
-              "fileSize": 3456,
-              "inUnitsOfSale": [
-                  "101GB7645JTHG83"
-              ]
-          }
+          "fileSize": 3456,
+          "inUnitsOfSale": [
+                "101GB7645JTHG83"
+              ],
+          "producerUnitName": "101GB7645JTHG83"
+        }
       ],
       "unitsOfSale": [
-          {
-              "unitName": "101GB7645JTHG83",
-              "title": "A test S-101 cell from GB authority in its own unit of sale",
-              "unitSize": "large",
-              "status": "ForSale",
-              "isNewUnitOfSale": true,
-              "boundingBox": {
-                  "northLimit": 63.25,
-                  "southLimit": 63,
-                  "eastLimit": 8,
-                  "westLimit": 7.75
-              },
-              "compositionChanges": {
-                  "addProducts": [
-                      "101GB7645JTHG83"
-                  ],
-                  "removeProducts": []
-              }
-          }
+        {
+          "unitName": "101GB7645JTHG83",
+          "title": "A test S-101 cell from GB authority in its own unit of sale",
+          "unitSize": "large",
+          "status": "ForSale",
+          "isNewUnitOfSale": true,
+          "boundingBox": {
+            "northLimit": 63.25,
+            "southLimit": 63.9898,
+            "eastLimit": 8.00,
+            "westLimit": 7.75
+          },
+          "compositionChanges": {
+            "addProducts": [
+              "101GB7645JTHG83"
+            ],
+            "removeProducts": []
+          },
+          "productIdentifier": "s101",
+          "unitOfSaleType": "unit",
+          "providerCode": "1B",
+          "providerName": "ICE",
+          "producingAgency": "GB"
+        }
       ]
-  }
-}
+    }
+  } 
