@@ -4,141 +4,109 @@
     "source": "https://encpublishing.ukho.gov.uk",
     "id": "5f03a25f-28b3-46ea-b009-5943250a9a41",
     "time": "2024-08-13T12:08:03.4880776Z",
-    "subject": "101CA123456UNIA",
+    "subject": "101GB00123456UNIA,101GB00123456UNIB,101GB00123456UNIC",
     "datacontenttype": "application/json",
     "data": {
-        "correlationId": "165ce4a4-162-f56-39-59e17877104",
+        "correlationId": "165a4-162-f56-359-59-77104",
         "products": [
             {
-                "productType": "s100",
                 "productIdentifier": "s101",
-                "productName": "101CA123456UNIA",
+                "productName": "101GB00123456UNIA",
                 "editionNumber": 1,
-                "updateNumber": 0,
+                "updateNumber": 2,
                 "mayAffectHoldings": true,
-                "providerCode": "1",
+                "providerCode": "1A",
                 "providerName": "ICE",
-                "size": "medium",
-                "producingAgency": "GB",
-                "status": {
-                    "statusName": "CancellAtion",
-                    "statusDate": "2024-07-16T19:20:30.45+01:00",
-                    "isNewCell": false
-                },
-                "replaces": [],
-                "dataReplacement": [
-                    "101CA123456UNIB",
-                    "101CA123456UNIC"
-                ],
-                "boundingBox": {
-                    "northLimit": 63,
-                    "southLimit": 63,
-                    "eastLimit": 8,
-                    "westLimit": 7
-                },
-                "fileSize": 3456,
-                "inUnitsOfSale": [],
-                "producerUnitName": "101CA123456UNIA"
-            },
-            {
-                "productType": "s100",
-                "productIdentifier": "s101",
-                "productName": "101CA123456UNIB",
-                "editionNumber": 1,
-                "updateNumber": 0,
-                "mayAffectHoldings": true,
-                "contentChange": true,
-                "providerCode": "1",
-                "providerName": "ICE",
-                "size": "medium",
-                "producingAgency": "GB",
-                "status": {
-                    "statusName": "New Edition",
-                    "statusDate": "2024-07-16T19:20:30.45+01:00",
-                    "isNewCell": true
-                },
-                "replaces": [
-                    "101CA123456UNIA"
-                ],
-                "dataReplacement": [],
-                "boundingBox": {
-                    "northLimit": 63,
-                    "southLimit": 63,
-                    "eastLimit": 8,
-                    "westLimit": 7
-                },
-                "fileSize": 3456,
-                "inUnitsOfSale": [
-                    "101CA123456UNIB"
-                ],
-                "producerUnitName": "101CA123456UNIB"
-            },
-            {
-                "productType": "s100",
-                "productIdentifier": "s101",
-                "productName": "101CA123456UNIC",
-                "editionNumber": 1,
-                "updateNumber": 0,
-                "mayAffectHoldings": true,
-                "contentChange": true,
-                "providerCode": "1",
-                "providerName": "ICE",
-                "size": "medium",
-                "producingAgency": "GB",
-                "status": {
-                    "statusName": "New Edition",
-                    "statusDate": "2024-07-16T19:20:30.45+01:00",
-                    "isNewCell": true
-                },
-                "replaces": [
-                    "101CA123456UNIA"
-                ],
-                "dataReplacement": [],
-                "boundingBox": {
-                    "northLimit": 63,
-                    "southLimit": 63,
-                    "eastLimit": 8,
-                    "westLimit": 7
-                },
-                "fileSize": 3456,
-                "inUnitsOfSale": [
-                    "101CA123456UNIC"
-                ],
-                "producerUnitName": "101CA123456UNIC"
-            },
-            {
-                "productType": "s100",
-                "productIdentifier": "s101",
-                "productName": "101CA123456UNID",
-                "editionNumber": 1,
-                "updateNumber": 0,
-                "mayAffectHoldings": true,
-                "contentChange": true,
-                "providerCode": "1",
-                "providerName": "ICE",
-                "size": "medium",
-                "producingAgency": "GB",
+                "size": "small",
+                "producingAgency": "GB01",
                 "status": {
                     "statusName": "Cancellation",
                     "statusDate": "2024-07-16T19:20:30.45+01:00",
                     "isNewCell": false
                 },
                 "replaces": [],
-                "dataReplacement": [],
+                "dataReplacement": [
+                    "101GB00123456UNIB",
+                    "101GB00123456UNIC"
+                ],
                 "boundingBox": {
-                    "northLimit": 63,
+                    "northLimit": 63.25,
                     "southLimit": 63,
                     "eastLimit": 8,
-                    "westLimit": 7
+                    "westLimit": 7.75
                 },
                 "fileSize": 3456,
                 "inUnitsOfSale": [],
-                "producerUnitName": "101CA123456UNID"
+                "producerUnitName": "101GB00123456UNIA"
+            },
+            {
+                "productIdentifier": "s101",
+                "productName": "101GB00123456UNIB",
+                "editionNumber": 1,
+                "updateNumber": 0,
+                "mayAffectHoldings": true,
+                "providerCode": "1",
+                "providerName": "ICE",
+                "size": "medium",
+                "producingAgency": "GB00",
+                "status": {
+                    "statusName": "NewDataset",
+                    "statusDate": "2024-07-16T19:20:30.45+01:00",
+                    "isNewCell": true
+                },
+                "replaces": [
+                    "101GB00123456UNIA"
+                ],
+                "dataReplacement": [],
+                "boundingBox": {
+                    "northLimit": 63.25,
+                    "southLimit": 63,
+                    "eastLimit": 8,
+                    "westLimit": 7.75
+                },
+                "fileSize": 3456,
+                "inUnitsOfSale": [
+                    "101GB00123456UNIB",
+                    "s100WorldFolio"
+                ],
+                "producerUnitName": "101GB00123456UNIB"
+            },
+            {
+                "productIdentifier": "s101",
+                "productName": "101GB00123456UNIC",
+                "editionNumber": 1,
+                "updateNumber": 0,
+                "mayAffectHoldings": true,
+                "providerCode": "1B",
+                "providerName": "ICE",
+                "size": "medium",
+                "producingAgency": "GB01",
+                "status": {
+                    "statusName": "NewDataset",
+                    "statusDate": "2024-07-16T19:20:30.45+01:00",
+                    "isNewCell": true
+                },
+                "replaces": [
+                    "101GB00123456UNIA"
+                ],
+                "dataReplacement": [],
+                "boundingBox": {
+                    "northLimit": 63.25,
+                    "southLimit": 63,
+                    "eastLimit": 8,
+                    "westLimit": 7.75
+                },
+                "fileSize": 3456,
+                "inUnitsOfSale": [
+                    "101GB00123456UNIC",
+                    "s100WorldFolio"
+                ],
+                "producerUnitName": "101GB00123456UNIC"
             }
         ],
         "unitsOfSale": [
             {
-                "unitName": "101CA123456UNIA",
+                "unitName": "101GB00123456UNIA",
                 "productIdentifier": "s101",
                 "title": "A test S-101 cell from GB authority in its own unit of sale",
                 "unitOfSaleType": "unit",
@@ -149,20 +117,18 @@
                 "status": "NotForSale",
                 "isNewUnitOfSale": false,
                 "boundingBox": {
-                    "northLimit": 63,
+                    "northLimit": 63.25,
                     "southLimit": 63,
                     "eastLimit": 8,
-                    "westLimit": 7
+                    "westLimit": 7.75
                 },
                 "compositionChanges": {
                     "addProducts": [],
-                    "removeProducts": [
-                        "101CA123456UNIA"
-                    ]
+                    "removeProducts": [ "101GB00123456UNIA" ]
                 }
             },
             {
-                "unitName": "101CA123456UNIB",
+                "unitName": "101GB00123456UNIB",
                 "productIdentifier": "s101",
                 "title": "A test S-101 cell from GB authority in its own unit of sale",
                 "unitOfSaleType": "unit",
@@ -173,20 +139,20 @@
                 "status": "ForSale",
                 "isNewUnitOfSale": true,
                 "boundingBox": {
-                    "northLimit": 63,
+                    "northLimit": 63.25,
                     "southLimit": 63,
                     "eastLimit": 8,
-                    "westLimit": 7
+                    "westLimit": 7.75
                 },
                 "compositionChanges": {
                     "addProducts": [
-                        "101CA123456UNIB"
+                        "101GB00123456UNIB"
                     ],
                     "removeProducts": []
                 }
             },
             {
-                "unitName": "101CA123456UNIC",
+                "unitName": "101GB00123456UNIC",
                 "productIdentifier": "s101",
                 "title": "A test S-101 cell from GB authority in its own unit of sale",
                 "unitOfSaleType": "unit",
@@ -197,40 +163,16 @@
                 "status": "ForSale",
                 "isNewUnitOfSale": true,
                 "boundingBox": {
-                    "northLimit": 63,
+                    "northLimit": 63.25,
                     "southLimit": 63,
                     "eastLimit": 8,
-                    "westLimit": 7
+                    "westLimit": 7.75
                 },
                 "compositionChanges": {
                     "addProducts": [
-                        "101CA123456UNIC"
+                        "101GB00123456UNIC"
                     ],
                     "removeProducts": []
-                }
-            },
-            {
-                "unitName": "101CA123456UNID",
-                "productIdentifier": "s101",
-                "title": "A test S-101 cell from GB authority in its own unit of sale",
-                "unitOfSaleType": "unit",
-                "providerCode": "1",
-                "providerName": "ICE",
-                "producingAgency": "GB00",
-                "unitSize": "large",
-                "status": "NotForSale",
-                "isNewUnitOfSale": false,
-                "boundingBox": {
-                    "northLimit": 63,
-                    "southLimit": 63,
-                    "eastLimit": 8,
-                    "westLimit": 7
-                },
-                "compositionChanges": {
-                    "addProducts": [],
-                    "removeProducts": [
-                        "101CA123456UNID"
-                    ]
                 }
             },
             {

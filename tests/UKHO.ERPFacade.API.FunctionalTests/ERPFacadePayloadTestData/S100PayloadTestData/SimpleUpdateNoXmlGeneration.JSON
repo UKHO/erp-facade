@@ -2,24 +2,22 @@
     "specversion": "1.0",
     "type": "uk.gov.ukho.encpublishing.s100datacontentpublished.v1.1",
     "source": "https://encpublishing.ukho.gov.uk",
-    "id": "5fa25f-283-6ea-b009-59450a9a41",
+    "id": "5ff-23-6a-09-5a9a41",
     "time": "2024-08-13T12:08:03.4880776Z",
-    "subject": "101GBUPDATE123",
     "datacontenttype": "application/json",
     "data": {
-        "correlationId": "1651ce4a4-1d62-4f56-b359-59e178d771090",
+        "correlationId": "1m-f5-59-577107",
         "products": [
             {
-                "productType": "s100",
                 "productIdentifier": "s101",
-                "productName": "101GBUPDATE123",
+                "productName": "101GB00UPDATE123",
                 "editionNumber": 4,
                 "updateNumber": 3,
                 "mayAffectHoldings": false,
-                "providerCode": "1",
+                "providerCode": "1S",
                 "providerName": "ICE",
                 "size": "medium",
-                "producingAgency": "GB",
+                "producingAgency": "GB06",
                 "status": {
                     "statusName": "update",
                     "statusDate": "2024-07-16T19:20:30.45+01:00",
@@ -28,35 +26,36 @@
                 "replaces": [],
                 "dataReplacement": [],
                 "boundingBox": {
-                    "northLimit": 63,
+                    "northLimit": 63.25,
                     "southLimit": 63,
                     "eastLimit": 8,
-                    "westLimit": 7
+                    "westLimit": 7.75
                 },
                 "fileSize": 3456,
                 "inUnitsOfSale": [
-                    "101GB123UNIT"
+                    "101GB00123UNIT",
+                    "s100WorldFolio"
                 ],
-                "producerUnitName": "101GBUPDATE123"
+                "producerUnitName": "101GB00123UNIT"
             }
         ],
         "unitsOfSale": [
             {
-                "unitName": "101GB123UNIT",
+                "unitName": "101GB00123UNIT",
                 "productIdentifier": "s101",
                 "title": "A test S-101 cell from GB authority in its own unit of sale",
                 "unitOfSaleType": "unit",
-                "providerCode": "1U",
+                "providerCode": "1",
                 "providerName": "ICE",
-                "producingAgency": "GB08",
-                "unitSize": "medium",
+                "producingAgency": "GB00",
+                "unitSize": "large",
                 "status": "ForSale",
                 "isNewUnitOfSale": false,
                 "boundingBox": {
-                    "northLimit": 63,
+                    "northLimit": 63.25,
                     "southLimit": 63,
                     "eastLimit": 8,
-                    "westLimit": 7
+                    "westLimit": 7.75
                 },
                 "compositionChanges": {
                     "addProducts": [],

@@ -10,16 +10,15 @@
         "correlationId": "165ce4a4-1d62-4f56-b359-59e178d77105",
         "products": [
             {
-                "productType": "s100",
                 "productIdentifier": "s101",
-                "productName": "101GB7645JTHG83",
+                "productName": "101GB007645JTHG83",
                 "editionNumber": 1,
                 "updateNumber": 0,
                 "mayAffectHoldings": true,
-                "providerCode": "1",
+                "providerCode": "1B",
                 "providerName": "ICE",
-                "size": "medium",
-                "producingAgency": "GB",
+                "size": "small",
+                "producingAgency": "GB03",
                 "status": {
                     "statusName": "newDataset",
                     "statusDate": "2024-07-16T19:20:30.45+01:00",
@@ -28,21 +27,22 @@
                 "replaces": [],
                 "dataReplacement": [],
                 "boundingBox": {
-                    "northLimit": 63,
-                    "southLimit": 63,
-                    "eastLimit": 8,
-                    "westLimit": 7
+                    "northLimit": 63.25,
+                    "southLimit": 63.9898,
+                    "eastLimit": 8.00005,
+                    "westLimit": 7.7556
                 },
                 "fileSize": 3456,
                 "inUnitsOfSale": [
-                    "101GB7645JTHG83"
+                    "101GB007645JTHG83",
+                    "s100WorldFolio"
                 ],
-                "producerUnitName": "101GB7645JTHG83"
+                "producerUnitName": "101GB007645JTHG83"
             }
         ],
         "unitsOfSale": [
             {
-                "unitName": "101GB7645JTHG83",
+                "unitName": "101GB007645JTHG83",
                 "productIdentifier": "s101",
                 "title": "A test S-101 cell from GB authority in its own unit of sale",
                 "unitOfSaleType": "unit",
@@ -53,14 +53,14 @@
                 "status": "ForSale",
                 "isNewUnitOfSale": true,
                 "boundingBox": {
-                    "northLimit": 63,
-                    "southLimit": 63,
-                    "eastLimit": 8,
-                    "westLimit": 7
+                    "northLimit": 63.25,
+                    "southLimit": 63.99,
+                    "eastLimit": 8.90,
+                    "westLimit": 7.75
                 },
                 "compositionChanges": {
                     "addProducts": [
-                        "101GB7645JTHG83"
+                        "101GB007645JTHG83"
                     ],
                     "removeProducts": []
                 }
@@ -77,10 +77,10 @@
                 "status": "ForSale",
                 "isNewUnitOfSale": false,
                 "boundingBox": {
-                    "northLimit": 90,
-                    "southLimit": -90,
-                    "eastLimit": 180,
-                    "westLimit": -180
+                    "northLimit": 90.00,
+                    "southLimit": -90.00,
+                    "eastLimit": 180.00,
+                    "westLimit": -180.00
                 },
                 "compositionChanges": {
                     "addProducts": [

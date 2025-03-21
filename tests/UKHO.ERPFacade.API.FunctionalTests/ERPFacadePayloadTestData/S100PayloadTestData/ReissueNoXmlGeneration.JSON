@@ -10,7 +10,7 @@
         "correlationId": "abc345-1a6-52adv11",
         "products": [
             {
-                "productIdentifier": "S-101",
+                "productIdentifier": "s101",
                 "productName": "104CA123456UNIA",
                 "editionNumber": 7,
                 "updateNumber": 0,
