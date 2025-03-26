@@ -699,6 +699,14 @@ stages:
         value: $(AzureADConfigurationClientId)
       - name: "PermitConfiguration.PermitDecryptionHardwareId"
         value: $(PermitDecryptionHardwareId)
+      - name: "AzureADConfiguration.AutoTestClientId"
+        value: $(AzureADConfigurationAutoTestClientId)
+      - name: "AzureADConfiguration.ClientSecret"
+        value: $(AzureADConfigurationClientSecret)
+      - name: "AzureADConfiguration.AutoTestClientIdNoRole"
+        value: $(AzureADConfigurationAutoTestClientIdNoRole)
+      - name: "AzureADConfiguration.ClientSecretNoRole"
+        value: $(AzureADConfigurationClientSecretNoRole)
       - name: mockWebAppName
         value: $[ stageDependencies.DevDeploy.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup
