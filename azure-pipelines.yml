@@ -768,8 +768,32 @@ stages:
               steps:
                 - template: Deployment/templates/continuous-deployment-app.yml
                   parameters:
-                    AzureSubscription: "ERP-Facade-IAT-A.011.08"                    
-  
+                    AzureSubscription: "ERP-Facade-IAT-A.011.08"   
+
+      - job: FunctionalTests
+        dependsOn:
+        - IATDeployTerraform
+        - IATDeployApp
+        pool: $(DeploymentPoolPE)
+        variables:
+          - name : ErpFacadeConfiguration.BaseUrl
+            value : $[ dependencies.DevDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
+          - name : SapMockConfiguration.BaseUrl
+            value : $[ dependencies.DevDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.mockwebappurl'] ]
+          - name : AzureStorageConfiguration.ConnectionString
+            value : $[ dependencies.DevDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
+          - name : mockWebAppName
+            value : $[ dependencies.DevDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.mockWebApp'] ]
+          - name : mockWebAppResourceGroup
+            value : $[ dependencies.DevDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName'] ]
+        displayName: "Dev Functional Automated Tests"
+        workspace:
+         clean: all
+        steps:
+          - template: Deployment/templates/continuous-testing.yml
+            parameters:
+              AzureSubscription: "ERP-Facade-IAT-A.011.05.12"              
+ 
   - stage: PreProdDeploy
     dependsOn: IATDeploy   
     displayName: "PreProddeploy (inc terraform, webapp deploy)"  
