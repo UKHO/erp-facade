@@ -385,21 +385,7 @@ stages:
               workingDirectory: '$(Build.SourcesDirectory)\mock\repo\src'
               packagesDirectory: '$(Build.SourcesDirectory)\mock\repo\src\packages'
           
-          - task: CopyFiles@2
-            displayName: "Copy additional configuration directories"
-            inputs:
-              SourceFolder: '$(Build.SourcesDirectory)\mock\repo\override-configuration'
-              Contents: '**'
-              TargetFolder: '$(Build.ArtifactStagingDirectory)\UKHO.ADDS.MockService\override-configuration'
-
-          - task: CopyFiles@2
-            displayName: "Copy additional configuration directories"
-            inputs:
-              SourceFolder: '$(Build.SourcesDirectory)\mock\repo\service-configuration'
-              Contents: '**'
-              TargetFolder: '$(Build.ArtifactStagingDirectory)\UKHO.ADDS.MockService\service-configuration'
-
-          
+         
           - task: DotNetCoreCLI@2
             displayName: "dotnet build task"
             inputs:
@@ -417,21 +403,7 @@ stages:
               projects: '**/*ADDSMock.csproj'
               arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\ADDSMock'
               zipAfterPublish: false
-              modifyOutputPath: false
-
-          - task: CopyFiles@2
-            displayName: "Copy additional configuration directories"
-            inputs:
-              SourceFolder: '$(Build.SourcesDirectory)\mock\repo\override-configuration'
-              Contents: '**'
-              TargetFolder: '$(Build.ArtifactStagingDirectory)\ADDSMock\override-configuration'
-
-          - task: CopyFiles@2
-            displayName: 'Copy files to: $(Build.SourcesDirectory)\mock\repo\service-configuration'
-            inputs:
-              SourceFolder: '$(Build.SourcesDirectory)\mock\repo\service-configuration'
-              Contents: '**'
-              TargetFolder: '$(Build.ArtifactStagingDirectory)\ADDSMock\service-configuration'
+              modifyOutputPath: false        
 
           - task: ArchiveFiles@2
             displayName: "Zip ADDS Mock Service"
