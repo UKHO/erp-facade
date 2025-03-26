@@ -777,15 +777,15 @@ stages:
         pool: $(DeploymentPoolPE)
         variables:
           - name : ErpFacadeConfiguration.BaseUrl
-            value : $[ dependencies.DevDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
+            value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
           - name : SapMockConfiguration.BaseUrl
-            value : $[ dependencies.DevDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.mockwebappurl'] ]
+            value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.mockwebappurl'] ]
           - name : AzureStorageConfiguration.ConnectionString
-            value : $[ dependencies.DevDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
+            value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
           - name : mockWebAppName
-            value : $[ dependencies.DevDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.mockWebApp'] ]
+            value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.mockWebApp'] ]
           - name : mockWebAppResourceGroup
-            value : $[ dependencies.DevDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName'] ]
+            value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName'] ]
         displayName: "Dev Functional Automated Tests"
         workspace:
          clean: all
