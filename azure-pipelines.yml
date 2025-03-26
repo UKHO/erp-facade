@@ -737,10 +737,6 @@ stages:
         value: $(AzureADConfigurationClientId)
       - name: "PermitConfiguration.PermitDecryptionHardwareId"
         value: $(PermitDecryptionHardwareId)
-      - name: "EnterpriseEventServiceConfiguration.ClientId"
-        value: $(EnterpriseEventServiceConfigurationClientId)
-      - name: "SharedApiKeyConfiguration.SharedApiKey"
-        value: $(SharedApiKeyConfigurationSharedApiKey)
       - name: mockWebAppName
         value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
       - name: mockWebAppResourceGroup
