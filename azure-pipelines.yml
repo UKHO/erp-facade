@@ -679,28 +679,18 @@ stages:
         value: $(AzureADConfigurationAutoTestClientIdNoRole)
       - name: "AzureADConfiguration.ClientSecretNoRole"
         value: $(AzureADConfigurationClientSecretNoRole)
-      - name: mockWebAppName
-        value: $[ stageDependencies.DevDeploy.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.mockWebApp']  ]
-      - name: mockWebAppResourceGroup
-        value: $[ stageDependencies.DevDeploy.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
-      - name: "SapMockConfiguration.BaseUrl"
-        value: $[ stageDependencies.DevDeploy.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.mockwebappurl']  ]
-      - name: addsmockWebApp
-        value: $[ stageDependencies.DevDeploy.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.addsmock_webapp_name']  ]
-      - name: addsmockWebAppResourceGroup
-        value: $[ stageDependencies.DevDeploy.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.addsmockWebAppResourceGroupName']  ]
-      - name: "addsSapMockConfiguration.BaseUrl"
-        value: $[ stageDependencies.DevDeploy.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.addsmockwebappurl']  ]
-      - name : ADDSMOCK_WEB_APP_NAME
-        value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.addsmock_webapp_name'] ]
-      - name : MOCK_WEB_APP_NAME
-        value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.mockWebApp'] ]
-      - name: "ConfigurationPath"
-        value: '/home/site/wwwroot/service-configuration'
-      - name: "OverrideConfigurationPath"
-        value: '/home/site/wwwroot/override-configuration'
-      - name: "Port"
-        value: '8080'
+      - name: "PermitWithSameKey.Permit"
+        value: $(PermitWithSameKeyPermit)
+      - name: "PermitWithSameKey.ActiveKey"
+        value: $(PermitWithSameKeyACTIVEKEY)
+      - name: "PermitWithSameKey.NextKey"
+        value: $(PermitWithSameKeyNEXTKEY)
+      - name: "PermitWithDifferentKey.Permit"
+        value: $(PermitWithDifferentKeyPermit)
+      - name: "PermitWithDifferentKey.ActiveKey"
+        value: $(PermitWithDifferentKeyACTIVEKEY)
+      - name: "PermitWithDifferentKey.NextKey"
+        value: $(PermitWithDifferentKeyNEXTKEY) 
    
     jobs:
       - deployment: IATDeployTerraform
@@ -725,6 +715,23 @@ stages:
         environment: "ERP-IAT"
         pool: $(DeploymentPoolPE)
         variables:
+          - name: mockWebAppName
+            value: $[ stageDependencies.DevDeploy.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.mockWebApp']  ]
+          - name: mockWebAppResourceGroup
+            value: $[ stageDependencies.DevDeploy.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
+          - name: "SapMockConfiguration.BaseUrl"
+            value: $[ stageDependencies.DevDeploy.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.mockwebappurl']  ]
+          - name: addsmockWebApp
+            value: $[ stageDependencies.DevDeploy.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.addsmock_webapp_name']  ]
+          - name: addsmockWebAppResourceGroup
+            value: $[ stageDependencies.DevDeploy.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.addsmockWebAppResourceGroupName']  ]
+          - name: "addsSapMockConfiguration.BaseUrl"
+            value: $[ stageDependencies.DevDeploy.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.addsmockwebappurl']  ]
+          - name : ADDSMOCK_WEB_APP_NAME
+            value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.addsmock_webapp_name'] ]
+          - name : MOCK_WEB_APP_NAME
+            value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.mockWebApp'] ]
+        
           - name : WEB_APP_NAME
             value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.WEB_APP'] ]
           - name : "KeyVaultSettings.ServiceUri"
