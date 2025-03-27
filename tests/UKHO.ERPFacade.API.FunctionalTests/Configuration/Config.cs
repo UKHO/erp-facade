@@ -11,7 +11,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Configuration
             IConfiguration configurationRoot = new ConfigurationBuilder()
                                .AddJsonFile("appsettings.json", false)
 #if DEBUG
-                //Add development overrides configuration
+                //Add development overrides configurationsdfsdfsdf
                 .AddJsonFile("appsettings.local.overrides.json", true, true)
 #endif
                                .AddEnvironmentVariables()
