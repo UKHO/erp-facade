@@ -48,6 +48,16 @@ steps:
       deployToSlotOrASE: true
       slotName: $(WEB_APP_SLOT_NAME) 
   
+  - task: AzureAppServiceManage@0
+    displayName: Swap with production slot
+    inputs:
+      azureSubscription: ${{ parameters.AzureSubscription }}
+      resourceGroupName: $(ResourceGroup)
+      webAppName: "$(WEB_APP_NAME)"
+      action: "Swap Slots"
+      swapWithProduction: true
+      sourceSlot: $(WEB_APP_SLOT_NAME) 
+    
   - task: FileTransform@2
     displayName: "File Transform: ADDS Mock Service Application Settings"
     condition: and(succeeded(), eq(variables['Environment.Name'], 'ERP-IAT'))
