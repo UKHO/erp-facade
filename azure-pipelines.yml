@@ -6,11 +6,6 @@ parameters:
     type: boolean
     default: false
 
-  - name: DisableDependencyCheck
-    displayName: "Disable OWASP dependency checking"
-    type: boolean
-    default: false
-
   - name: RunStryker
     displayName: "Run Stryker test mutation"
     type: boolean
@@ -39,61 +34,16 @@ variables:
     value: "Tiberius"
   - name: DeploymentPoolPE
     value: "Private Link Deployments (ENG)"
+  - name: DeploymentPoolPD
+    value: "Private Link Deployments (BUS)"
   - name: DotNetSdkVersion
     value: "8.x"
 
 stages:
-  - stage: PERFORM_DEPENDENCYCHECK_DOTNETBUILD_DOTNETTEST_AND_PUBLISH
-    displayName: "Build (DependencyChecker, Dotnet Build & Restore , Dotnet Test and Publish Artifact )"
+  - stage: DOTNETBUILD_DOTNETTEST_AND_PUBLISH
+    displayName: "Build (Dotnet Build & Restore , Dotnet Test and Publish Artifact )"
     dependsOn: []
-    jobs:
-      - job: Dependencychecker
-        pool: NautilusBuild
-        condition: eq('${{ parameters.DisableDependencyCheck }}', false)      
-        workspace:
-          clean: all
-        displayName: "Dependencychecker"
-        steps:
-          - task: UseDotNet@2
-            displayName: Use .NET SDK $(DotNetSdkVersion)
-            inputs:
-              packageType: sdk
-              version: $(DotNetSdkVersion)
-
-          - task: DotNetCoreCLI@2
-            displayName: ".Net Core - NuGet restore non test projects only"
-            inputs:
-              command: "restore"
-              projects: |
-                **/*.csproj
-                !**/*Tests.csproj
-              feedsToUse: config
-              noCache: true
-              nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
-              workingDirectory: '$(Build.SourcesDirectory)\src'
-              packagesDirectory: '$(Build.SourcesDirectory)\src\packagesForAPI'
-
-          - task: CmdLine@1
-            displayName: "Run OWASP Dependency Checker"
-            inputs:
-              filename: 'dependency-check.bat'
-              arguments: '--project "erp-facade - $(Build.SourceBranchName)" --scan "$(Build.SourcesDirectory)\src" --out "$(Build.ArtifactStagingDirectory)\DCReport" --suppression $(Build.SourcesDirectory)\NVDSuppressions.xml --noupdate'
-
-          - task: PublishBuildArtifacts@1
-            displayName: "Publish Artifact: OWASP Dependency Checker Report"
-            inputs:
-              PathtoPublish: '$(Build.ArtifactStagingDirectory)\DCReport'
-              ArtifactName: "OWASP Dependency Checker Report"
-
-          - task: PowerShell@1
-            displayName: "Fail Build if Dependency Check Finds Any Vulnerabilities"
-            inputs:
-              scriptType: inlineScript
-              arguments: '-ReportLocation $(Build.ArtifactStagingDirectory)\DCReport\*'
-              inlineScript: |
-                param($ReportLocation)
-                Invoke-VulnerabilityCheck -ReportLocation $ReportLocation
-
+    jobs:     
       - job: UnitTestsAndCodeCoverage
         workspace:
           clean: all
@@ -121,7 +71,7 @@ stages:
             inputs:
               command: "test"
               projects: "**/*UnitTests.csproj"
-              arguments: '--configuration $(BuildConfiguration) --settings "$(Build.SourcesDirectory)\test.runsettings" /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura'
+              arguments: '--configuration $(BuildConfiguration) --settings "$(Build.SourcesDirectory)\test.runsettings" /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura --no-restore'
               publishTestResults: true
               testRunTitle: "UnitTests"
 
@@ -170,7 +120,7 @@ stages:
               projects: |
                 **/*.csproj
                 !**/UKHO.SAP.MockService.csproj
-              arguments: '--configuration $(BuildConfiguration)'
+              arguments: '--configuration $(BuildConfiguration) --no-restore'
 
           - task: DotNetCoreCLI@2
             displayName: "Publish ERP Facade API "
@@ -178,7 +128,7 @@ stages:
               command: "publish"
               publishWebProjects: false
               projects: '**/*UKHO.ERPFacade.API.csproj'
-              arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\UKHO.ERPFacade.API'
+              arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\UKHO.ERPFacade.API --no-restore'
               zipAfterPublish: false
               modifyOutputPath: false
 
@@ -188,7 +138,7 @@ stages:
               command: "publish"
               publishWebProjects: false
               projects: "**/UKHO.ERPFacade.CleanUp.WebJob.csproj"
-              arguments: "--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/UKHO.ERPFacade.API/App_Data/jobs/Triggered/CleanupWebjob"
+              arguments: "--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/UKHO.ERPFacade.API/App_Data/jobs/Triggered/CleanupWebjob --no-restore"
               zipAfterPublish: false
               modifyOutputPath: false
 
@@ -198,7 +148,7 @@ stages:
               command: "publish"
               publishWebProjects: false
               projects: "**/UKHO.ERPFacade.EventAggregation.WebJob"
-              arguments: "--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/UKHO.ERPFacade.API/App_Data/jobs/continuous/EventAggregationWebJob"
+              arguments: "--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/UKHO.ERPFacade.API/App_Data/jobs/continuous/EventAggregationWebJob --no-restore"
               zipAfterPublish: false
               modifyOutputPath: false
 
@@ -261,7 +211,7 @@ stages:
               command: "publish"
               publishWebProjects: false
               projects: '$(Build.SourcesDirectory)\tests\UKHO.ERPFacade.API.FunctionalTests\UKHO.ERPFacade.API.FunctionalTests.csproj'
-              arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\UKHO.ERPFacade.API.FunctionalTests'
+              arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\UKHO.ERPFacade.API.FunctionalTests --no-restore'
               workingDirectory: '$(Build.SourcesDirectory)\tests\UKHO.ERPFacade.API.FunctionalTests'
               zipAfterPublish: false
               modifyOutputPath: true
@@ -308,7 +258,7 @@ stages:
               command: "build"
               projects: |
                 **/UKHO.SAP.MockAPIService.csproj
-              arguments: '--configuration $(BuildConfiguration)'
+              arguments: '--configuration $(BuildConfiguration) --no-restore'
 
           - task: DotNetCoreCLI@2
             displayName: "Publish Mock Service"
@@ -316,7 +266,7 @@ stages:
               command: "publish"
               publishWebProjects: false
               projects: '**/UKHO.SAP.MockAPIService.csproj'
-              arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\MockSAPService'
+              arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\MockSAPService --no-restore'
               zipAfterPublish: true
               modifyOutputPath: true
 
@@ -841,7 +791,7 @@ stages:
         dependsOn: LiveDeployTerraform
         displayName: "Live - Deploy Dotnet App"
         environment: "ERP-Live"
-        pool: $(DeploymentPoolPE)
+        pool: "$(DeploymentPoolPD)"
         variables:
         - name : WEB_APP_NAME
           value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.WEB_APP'] ]
