@@ -665,20 +665,10 @@ stages:
         environment: "ERP-IAT"
         pool: $(DeploymentPoolPE)
         variables:
-          # - name: mockWebAppName
-          #   value: $[ stageDependencies.DevDeploy.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.mockWebApp']  ]
-          # - name: mockWebAppResourceGroup
-          #   value: $[ stageDependencies.DevDeploy.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
-          # - name: "SapMockConfiguration.BaseUrl"
-          #   value: $[ stageDependencies.DevDeploy.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.mockwebappurl']  ]
-          # - name: addsmockWebApp
-          #   value: $[ stageDependencies.DevDeploy.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.addsmock_webapp_name']  ]
           - name: addsmockWebAppResourceGroup
             value: $[ stageDependencies.DevDeploy.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.addsmockWebAppResourceGroupName']  ]
           - name: "addsSapMockConfiguration.BaseUrl"
             value: $[ stageDependencies.DevDeploy.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.addsmockwebappurl']  ]
-          # - name : ADDSMOCK_WEB_APP_NAME
-          #   value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.addsmock_webapp_name'] ]
           - name : MOCK_WEB_APP_NAME
             value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.mockWebApp'] ]
         
@@ -694,9 +684,7 @@ stages:
             value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME'] ]
           - name : WEB_APP_SLOT_HOST_NAME
             value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME'] ]
-          # - name : ADDSMOCK_WEB_APP_NAME
-          #   value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.addsmock_webapp_name'] ]  
-     
+        
         workspace:
           clean: all
         strategy:

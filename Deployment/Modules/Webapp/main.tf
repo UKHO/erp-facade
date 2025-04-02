@@ -85,14 +85,13 @@ resource "azurerm_windows_web_app" "mock_webapp_service" {
     ftps_state = "Disabled"
   }
      
-  app_settings = var.env_name == "dev" ? var.mock_app_settings : var.addsmock_app_settings
-  https_only = false
+  app_settings = var.env_name == "dev" ? var.mock_app_settings : var.addsmock_app_settings 
 
   identity {
     type = "SystemAssigned"
   }
 
-  # https_only = true
+  https_only = true
 }
 
 resource "azurerm_app_service_virtual_network_swift_connection" "webapp_vnet_integration" {

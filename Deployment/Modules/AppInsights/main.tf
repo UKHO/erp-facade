@@ -15,13 +15,3 @@ resource "azurerm_application_insights" "app_insights" {
   workspace_id        = azurerm_log_analytics_workspace.logs_analytics_workspace.id
   tags                = var.tags
 }
-
-resource "azurerm_application_insights" "addsMock_app_insights" { 
-  count              = var.env_name == "iat" ? 1 : 0
-  name                = var.name
-  location            = var.location
-  resource_group_name = var.resource_group_name
-  application_type    = "web"
-  workspace_id        = azurerm_log_analytics_workspace.logs_analytics_workspace.id
-  tags                = var.tags
-}
