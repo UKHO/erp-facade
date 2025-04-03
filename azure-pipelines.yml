@@ -55,13 +55,13 @@ stages:
           displayName: 'Use .NET SDK'
           inputs:
             packageType: sdk
-            version: $(SdkVersion)
+            version: $(DotNetSdkVersion)
 
         - task: UseDotNet@2
           displayName: 'Use .NET SDK for Stryker'
           inputs:
             packageType: sdk
-            version: $(SdkVersion)
+            version: $(DotNetSdkVersion)
 
         - task: DotNetCoreCLI@2
           displayName: "Install Stryker"
