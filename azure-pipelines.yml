@@ -341,7 +341,7 @@ stages:
             inputs:
               command: "build"
               projects: |
-                **/*.csproj
+                **/*ADDSMock.csproj
               
               arguments: '--configuration $(BuildConfiguration)\mock\repo'
 
