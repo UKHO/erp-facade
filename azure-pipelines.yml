@@ -74,7 +74,7 @@ stages:
         - task: Powershell@2
           displayName: "Run Stryker"
           inputs:
-            workingDirectory: '$(Build.SourcesDirectory)\'
+            workingDirectory: '$(Build.SourcesDirectory)\src'
             targetType: 'inline'
             pwsh: true
             script: $(Agent.BuildDirectory)/tools/dotnet-stryker
