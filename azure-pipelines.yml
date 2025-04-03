@@ -6,8 +6,8 @@ parameters:
     type: boolean
     default: false
 
-  - name: RunStryker
-    displayName: "Run Stryker test mutation"
+  - name: disableStryker
+    displayName: "Disable Stryker test mutation"
     type: boolean
     default: false
     
@@ -40,6 +40,50 @@ variables:
     value: "8.x"
 
 stages:
+  - stage: Stryker_Mutator
+    displayName: "Stryker Mutator"
+    condition: ${{ eq(parameters.disableStryker, false) }}
+    dependsOn: []
+    jobs:
+    - job: Stryker
+      workspace:
+        clean: all
+      steps:
+        - checkout: self
+          submodules: true          
+        - task: UseDotNet@2
+          displayName: 'Use .NET SDK'
+          inputs:
+            packageType: sdk
+            version: $(SdkVersion)
+
+        - task: UseDotNet@2
+          displayName: 'Use .NET SDK for Stryker'
+          inputs:
+            packageType: sdk
+            version: $(SdkVersion)
+
+        - task: DotNetCoreCLI@2
+          displayName: "Install Stryker"
+          inputs:
+            command: custom
+            custom: tool
+            workingDirectory: $(Agent.TempDirectory)
+            arguments: install dotnet-stryker --tool-path $(Agent.BuildDirectory)/tools
+
+        - task: Powershell@2
+          displayName: "Run Stryker"
+          inputs:
+            workingDirectory: '$(Build.SourcesDirectory)\'
+            targetType: 'inline'
+            pwsh: true
+            script: $(Agent.BuildDirectory)/tools/dotnet-stryker
+
+        - task: PublishMutationReport@1
+          displayName: 'Publish Stryker Mutator Report'
+          inputs:
+            reportPattern: '**/mutation-report.html'
+
   - stage: DOTNETBUILD_DOTNETTEST_AND_PUBLISH
     displayName: "Build (Dotnet Build & Restore , Dotnet Test and Publish Artifact )"
     dependsOn: []
@@ -276,36 +320,36 @@ stages:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)\MockSAPService'
               ArtifactName: UKHOMockSAPService
           
-      - job: Stryker
-        condition: eq('${{ parameters.RunStryker }}', true)      
-        workspace:
-          clean: all
-        dependsOn: BuildAndPublishMockService
-        steps:
-          - checkout: self
-            submodules: true
-          - task: UseDotNet@2
-            displayName: Use .NET SDK $(DotNetSdkVersion)
-            inputs:
-              packageType: sdk
-              version: $(DotNetSdkVersion)
-          - task: DotNetCoreCLI@2
-            displayName: "Install Stryker"
-            inputs:
-              command: custom
-              custom: tool
-              arguments: install dotnet-stryker --tool-path $(Agent.BuildDirectory)/tools
-          - task: Powershell@2
-            displayName: "Run Stryker"
-            inputs:
-              workingDirectory: '$(Build.SourcesDirectory)'
-              targetType: 'inline'
-              pwsh: true
-              script: $(Agent.BuildDirectory)/tools/dotnet-stryker
-          - task: PublishMutationReport@0
-            displayName: 'Publish Strkyer Mutator Report'
-            inputs:
-              reportPattern: '**/mutation-report.html'
+      # - job: Stryker
+      #   condition: eq('${{ parameters.RunStryker }}', true)      
+      #   workspace:
+      #     clean: all
+      #   dependsOn: BuildAndPublishMockService
+      #   steps:
+      #     - checkout: self
+      #       submodules: true
+      #     - task: UseDotNet@2
+      #       displayName: Use .NET SDK $(DotNetSdkVersion)
+      #       inputs:
+      #         packageType: sdk
+      #         version: $(DotNetSdkVersion)
+      #     - task: DotNetCoreCLI@2
+      #       displayName: "Install Stryker"
+      #       inputs:
+      #         command: custom
+      #         custom: tool
+      #         arguments: install dotnet-stryker --tool-path $(Agent.BuildDirectory)/tools
+      #     - task: Powershell@2
+      #       displayName: "Run Stryker"
+      #       inputs:
+      #         workingDirectory: '$(Build.SourcesDirectory)'
+      #         targetType: 'inline'
+      #         pwsh: true
+      #         script: $(Agent.BuildDirectory)/tools/dotnet-stryker
+      #     - task: PublishMutationReport@0
+      #       displayName: 'Publish Strkyer Mutator Report'
+      #       inputs:
+      #         reportPattern: '**/mutation-report.html'
       
       - job: BuildAndPublishADDSMockService
         workspace:
