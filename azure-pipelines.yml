@@ -71,7 +71,7 @@ stages:
             inputs:
               command: "test"
               projects: "**/*UnitTests.csproj"
-              arguments: '--configuration $(BuildConfiguration) --settings "$(Build.SourcesDirectory)\test.runsettings" /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura --no-restore'
+              arguments: '--configuration $(BuildConfiguration) --settings "$(Build.SourcesDirectory)\test.runsettings" /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura'
               publishTestResults: true
               testRunTitle: "UnitTests"
 
@@ -120,7 +120,7 @@ stages:
               projects: |
                 **/*.csproj
                 !**/UKHO.SAP.MockService.csproj
-              arguments: '--configuration $(BuildConfiguration) --no-restore'
+              arguments: '--configuration $(BuildConfiguration)'
 
           - task: DotNetCoreCLI@2
             displayName: "Publish ERP Facade API "
@@ -128,7 +128,7 @@ stages:
               command: "publish"
               publishWebProjects: false
               projects: '**/*UKHO.ERPFacade.API.csproj'
-              arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\UKHO.ERPFacade.API --no-restore'
+              arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\UKHO.ERPFacade.API'
               zipAfterPublish: false
               modifyOutputPath: false
 
@@ -138,7 +138,7 @@ stages:
               command: "publish"
               publishWebProjects: false
               projects: "**/UKHO.ERPFacade.CleanUp.WebJob.csproj"
-              arguments: "--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/UKHO.ERPFacade.API/App_Data/jobs/Triggered/CleanupWebjob --no-restore"
+              arguments: "--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/UKHO.ERPFacade.API/App_Data/jobs/Triggered/CleanupWebjob"
               zipAfterPublish: false
               modifyOutputPath: false
 
@@ -148,7 +148,7 @@ stages:
               command: "publish"
               publishWebProjects: false
               projects: "**/UKHO.ERPFacade.EventAggregation.WebJob"
-              arguments: "--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/UKHO.ERPFacade.API/App_Data/jobs/continuous/EventAggregationWebJob --no-restore"
+              arguments: "--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/UKHO.ERPFacade.API/App_Data/jobs/continuous/EventAggregationWebJob"
               zipAfterPublish: false
               modifyOutputPath: false
 
@@ -211,7 +211,7 @@ stages:
               command: "publish"
               publishWebProjects: false
               projects: '$(Build.SourcesDirectory)\tests\UKHO.ERPFacade.API.FunctionalTests\UKHO.ERPFacade.API.FunctionalTests.csproj'
-              arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\UKHO.ERPFacade.API.FunctionalTests --no-restore'
+              arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\UKHO.ERPFacade.API.FunctionalTests'
               workingDirectory: '$(Build.SourcesDirectory)\tests\UKHO.ERPFacade.API.FunctionalTests'
               zipAfterPublish: false
               modifyOutputPath: true
@@ -258,7 +258,7 @@ stages:
               command: "build"
               projects: |
                 **/UKHO.SAP.MockAPIService.csproj
-              arguments: '--configuration $(BuildConfiguration) --no-restore'
+              arguments: '--configuration $(BuildConfiguration)'
 
           - task: DotNetCoreCLI@2
             displayName: "Publish Mock Service"
@@ -266,7 +266,7 @@ stages:
               command: "publish"
               publishWebProjects: false
               projects: '**/UKHO.SAP.MockAPIService.csproj'
-              arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\MockSAPService --no-restore'
+              arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\MockSAPService'
               zipAfterPublish: true
               modifyOutputPath: true
 
