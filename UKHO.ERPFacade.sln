@@ -9,10 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UKHO.ERPFacade.API.UnitTest
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E2E557E3-1BF9-47BD-9B86-949B7F1CE3FA}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{50E64422-A1CF-4B77-9652-B141C13C6086}
-ProjectSection(SolutionItems) = preProject
-		src\UKHO.ERPFacade.Monitoring.WebJob\UKHO.ERPFacade.Monitoring.WebJob.v3.ncrunchproject = src\UKHO.ERPFacade.Monitoring.WebJob\UKHO.ERPFacade.Monitoring.WebJob.v3.ncrunchproject
-	EndProjectSection"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{50E64422-A1CF-4B77-9652-B141C13C6086}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UKHO.ERPFacade.Common", "src\UKHO.ERPFacade.Common\UKHO.ERPFacade.Common.csproj", "{37689E17-E7FD-48D0-A361-B869B9B837BB}"
 EndProject
