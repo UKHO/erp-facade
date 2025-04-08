@@ -70,7 +70,7 @@ stages:
               noCache: true
               nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
               workingDirectory: '$(Build.SourcesDirectory)'
-              packagesDirectory: '$(Build.SourcesDirectory)\packages'
+              # packagesDirectory: '$(Build.SourcesDirectory)\packages'
 
           - task: Powershell@2
             displayName: "Run Stryker"
