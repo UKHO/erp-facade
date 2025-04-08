@@ -47,8 +47,7 @@ stages:
       - job: Stryker
         condition: eq('${{ parameters.RunStryker }}', true)      
         workspace:
-          clean: all
-        dependsOn: BuildAndPublishMockService
+          clean: all        
         steps:
           - task: UseDotNet@2
             displayName: Use .NET SDK $(DotNetSdkVersion)
