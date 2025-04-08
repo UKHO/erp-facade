@@ -39,7 +39,52 @@ variables:
   - name: DotNetSdkVersion
     value: "8.x"
 
+
 stages:
+  - stage: RUNSTRKER
+    displayName: "run stryker"
+    jobs:
+      - job: Stryker
+        condition: eq('${{ parameters.RunStryker }}', true)      
+        workspace:
+          clean: all
+        dependsOn: BuildAndPublishMockService
+        steps:
+          - task: UseDotNet@2
+            displayName: Use .NET SDK $(DotNetSdkVersion)
+            inputs:
+              packageType: sdk
+              version: $(DotNetSdkVersion)
+          - task: DotNetCoreCLI@2
+            displayName: "Install Stryker"
+            inputs:
+              command: custom
+              custom: tool
+              arguments: install dotnet-stryker --tool-path $(Agent.BuildDirectory)/tools
+          - task: DotNetCoreCLI@2
+            displayName: ".Net Core - NuGet restore for non test projects only"
+            inputs:
+              command: "restore"
+              projects: |
+                **/*.csproj              
+              feedsToUse: config
+              noCache: true
+              nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
+              workingDirectory: '$(Build.SourcesDirectory)'
+              packagesDirectory: '$(Build.SourcesDirectory)\packages'
+
+          - task: Powershell@2
+            displayName: "Run Stryker"
+            inputs:
+              workingDirectory: '$(Build.SourcesDirectory)'
+              targetType: 'inline'
+              pwsh: true
+              script: $(Agent.BuildDirectory)/tools/dotnet-stryker
+          - task: PublishMutationReport@0
+            displayName: 'Publish Strkyer Mutator Report'
+            inputs:
+              reportPattern: '**/mutation-report.html'          
+  
   - stage: DOTNETBUILD_DOTNETTEST_AND_PUBLISH
     displayName: "Build (Dotnet Build & Restore , Dotnet Test and Publish Artifact )"
     dependsOn: []
@@ -275,48 +320,7 @@ stages:
             inputs:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)\MockSAPService'
               ArtifactName: UKHOMockSAPService
-              
-      - job: Stryker
-        condition: eq('${{ parameters.RunStryker }}', true)      
-        workspace:
-          clean: all
-        dependsOn: BuildAndPublishMockService
-        steps:
-          - task: UseDotNet@2
-            displayName: Use .NET SDK $(DotNetSdkVersion)
-            inputs:
-              packageType: sdk
-              version: $(DotNetSdkVersion)
-          - task: DotNetCoreCLI@2
-            displayName: "Install Stryker"
-            inputs:
-              command: custom
-              custom: tool
-              arguments: install dotnet-stryker --tool-path $(Agent.BuildDirectory)/tools
-          - task: DotNetCoreCLI@2
-            displayName: ".Net Core - NuGet restore for non test projects only"
-            inputs:
-              command: "restore"
-              projects: |
-                **/*.csproj              
-              feedsToUse: config
-              noCache: true
-              nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
-              workingDirectory: '$(Build.SourcesDirectory)'
-              packagesDirectory: '$(Build.SourcesDirectory)\packages'
-
-          - task: Powershell@2
-            displayName: "Run Stryker"
-            inputs:
-              workingDirectory: '$(Build.SourcesDirectory)'
-              targetType: 'inline'
-              pwsh: true
-              script: $(Agent.BuildDirectory)/tools/dotnet-stryker
-          - task: PublishMutationReport@0
-            displayName: 'Publish Strkyer Mutator Report'
-            inputs:
-              reportPattern: '**/mutation-report.html'
-
+    
   - stage: Devdeploy
     displayName: "Devdeploy (inc terraform, webapp deploy)"
     variables:
