@@ -34,7 +34,7 @@
     <PackageReference Include="System.IO.Abstractions" Version="21.3.1" />
     <PackageReference Include="System.Runtime.Caching" Version="8.0.1" />
     <PackageReference Include="UKHO.Logging.EventHubLogProvider" Version="1.24163.8" />
-    <PackageReference Include="UKHO.WeekNumberUtils" Version="1.5.22270.11" />
+    <PackageReference Include="UKHO.WeekNumberUtils" Version="1.5.24187.1" />
   </ItemGroup>
 
 </Project>

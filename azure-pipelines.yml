@@ -293,6 +293,18 @@ stages:
               command: custom
               custom: tool
               arguments: install dotnet-stryker --tool-path $(Agent.BuildDirectory)/tools
+          - task: DotNetCoreCLI@2
+            displayName: ".Net Core - NuGet restore for non test projects only"
+            inputs:
+              command: "restore"
+              projects: |
+                **/*.csproj              
+              feedsToUse: config
+              noCache: true
+              nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
+              workingDirectory: '$(Build.SourcesDirectory)'
+              packagesDirectory: '$(Build.SourcesDirectory)\packages'
+
           - task: Powershell@2
             displayName: "Run Stryker"
             inputs:
