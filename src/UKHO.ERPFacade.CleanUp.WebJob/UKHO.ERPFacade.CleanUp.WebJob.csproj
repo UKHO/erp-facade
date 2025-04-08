@@ -36,7 +36,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.3" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.3" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.3" />
-    <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="8.0.14" />
+    <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="9.0.3" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.3" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.1" />
     <PackageReference Include="Serilog.Extensions.Logging.File" Version="3.0.0" />
