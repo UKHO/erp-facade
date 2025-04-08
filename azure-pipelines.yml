@@ -9,7 +9,7 @@ parameters:
   - name: RunStryker
     displayName: "Run Stryker test mutation"
     type: boolean
-    default: false
+    default: true
     
 trigger:
   - main
