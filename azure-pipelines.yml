@@ -47,8 +47,10 @@ stages:
       - job: Stryker
         condition: eq('${{ parameters.RunStryker }}', true)      
         workspace:
-          clean: all        
+          clean: all       
         steps:
+          - checkout: self
+            submodules: true
           - task: UseDotNet@2
             displayName: Use .NET SDK $(DotNetSdkVersion)
             inputs:
@@ -316,8 +318,69 @@ stages:
             displayName: "Publish Mock Service Artifact"
             inputs:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)\MockSAPService'
-              ArtifactName: UKHOMockSAPService
-    
+              ArtifactName: UKHOMockSAPService          
+
+      - job: BuildAndPublishADDSMockService
+        workspace:
+          clean: all
+        displayName: "Dotnet Build publish ADDS Mock Service"        
+        steps:
+          - checkout: self
+            submodules: true
+
+          - script: git submodule update --init --force --remote
+
+          - task: UseDotNet@2
+            displayName: Use .NET SDK $(DotNetSdkVersion)
+            inputs:
+              packageType: sdk
+              version: $(DotNetSdkVersion)
+              
+          - task: DotNetCoreCLI@2
+            displayName: ".Net Core - NuGet restore for non test projects only"
+            inputs:
+              command: "restore"
+              projects: |
+                **/*.csproj              
+              feedsToUse: config
+              noCache: true
+              nugetConfigPath: '$(Build.SourcesDirectory)\mock\repo\BuildNuget.config'
+              workingDirectory: '$(Build.SourcesDirectory)\mock\repo\src'
+              packagesDirectory: '$(Build.SourcesDirectory)\mock\repo\src\packages'          
+         
+          - task: DotNetCoreCLI@2
+            displayName: "dotnet build task"
+            inputs:
+              command: "build"
+              projects: |
+                **/*ADDSMock.csproj              
+              arguments: '--configuration $(BuildConfiguration) --no-restore'
+
+          - task: DotNetCoreCLI@2
+            displayName: "Publish ADDS Mock Service "
+            inputs:
+              command: "publish"
+              publishWebProjects: false
+              projects: '**/*ADDSMock.csproj'
+              arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\ADDSMock --no-restore'
+              zipAfterPublish: false
+              modifyOutputPath: false        
+
+          - task: ArchiveFiles@2
+            displayName: "Zip ADDS Mock Service"
+            inputs:
+              rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/ADDSMock/'
+              includeRootFolder: false
+              archiveType: "zip"
+              archiveFile: '$(Build.ArtifactStagingDirectory)/ADDSMock/UKHOADDSMockService.zip'
+              replaceExistingArchive: true
+           
+          - task: PublishBuildArtifacts@1
+            displayName: "Publish ADDS Mock Service Artifact"
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)\ADDSMock/UKHOADDSMockService.zip'
+              ArtifactName: ADDSMock
+ 
   - stage: Devdeploy
     displayName: "Devdeploy (inc terraform, webapp deploy)"
     variables:
@@ -389,7 +452,7 @@ stages:
           - name : WEB_APP_SLOT_NAME
             value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME'] ]
           - name : WEB_APP_SLOT_HOST_NAME
-            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME'] ]
+            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME'] ]        
         workspace:
           clean: all
         strategy:
@@ -569,12 +632,26 @@ stages:
         value: $(AzureADConfigurationClientId)
       - name: "PermitConfiguration.PermitDecryptionHardwareId"
         value: $(PermitDecryptionHardwareId)
-      - name: mockWebAppName
-        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
-      - name: mockWebAppResourceGroup
-        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
-      - name: "SapMockConfiguration.BaseUrl"
-        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
+      - name: "AzureADConfiguration.AutoTestClientId"
+        value: $(AzureADConfigurationAutoTestClientId)
+      - name: "AzureADConfiguration.ClientSecret"
+        value: $(AzureADConfigurationClientSecret)
+      - name: "AzureADConfiguration.AutoTestClientIdNoRole"
+        value: $(AzureADConfigurationAutoTestClientIdNoRole)
+      - name: "AzureADConfiguration.ClientSecretNoRole"
+        value: $(AzureADConfigurationClientSecretNoRole)
+      - name: "PermitWithSameKey.Permit"
+        value: $(PermitWithSameKeyPermit)
+      - name: "PermitWithSameKey.ActiveKey"
+        value: $(PermitWithSameKeyACTIVEKEY)
+      - name: "PermitWithSameKey.NextKey"
+        value: $(PermitWithSameKeyNEXTKEY)
+      - name: "PermitWithDifferentKey.Permit"
+        value: $(PermitWithDifferentKeyPermit)
+      - name: "PermitWithDifferentKey.ActiveKey"
+        value: $(PermitWithDifferentKeyACTIVEKEY)
+      - name: "PermitWithDifferentKey.NextKey"
+        value: $(PermitWithDifferentKeyNEXTKEY) 
    
     jobs:
       - deployment: IATDeployTerraform
@@ -599,6 +676,13 @@ stages:
         environment: "ERP-IAT"
         pool: $(DeploymentPoolPE)
         variables:
+          - name: addsmockWebAppResourceGroup
+            value: $[ stageDependencies.DevDeploy.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.addsmockWebAppResourceGroupName']  ]
+          - name: "addsSapMockConfiguration.BaseUrl"
+            value: $[ stageDependencies.DevDeploy.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.addsmockwebappurl']  ]
+          - name : MOCK_WEB_APP_NAME
+            value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.mockWebApp'] ]
+        
           - name : WEB_APP_NAME
             value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.WEB_APP'] ]
           - name : "KeyVaultSettings.ServiceUri"
@@ -611,6 +695,7 @@ stages:
             value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME'] ]
           - name : WEB_APP_SLOT_HOST_NAME
             value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME'] ]
+        
         workspace:
           clean: all
         strategy:
@@ -619,8 +704,32 @@ stages:
               steps:
                 - template: Deployment/templates/continuous-deployment-app.yml
                   parameters:
-                    AzureSubscription: "ERP-Facade-IAT-A.011.08"
-  
+                    AzureSubscription: "ERP-Facade-IAT-A.011.08"   
+
+      - job: FunctionalTests
+        dependsOn:
+        - IATDeployTerraform
+        - IATDeployApp
+        pool: $(DeploymentPoolPE)
+        variables:
+          - name : ErpFacadeConfiguration.BaseUrl
+            value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
+          - name : SapMockConfiguration.BaseUrl
+            value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.mockwebappurl'] ]
+          - name : AzureStorageConfiguration.ConnectionString
+            value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
+          - name : mockWebAppName
+            value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.mockWebApp'] ]
+          - name : mockWebAppResourceGroup
+            value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName'] ]
+        displayName: "Dev Functional Automated Tests"
+        workspace:
+         clean: all
+        steps:
+          - template: Deployment/templates/continuous-testing.yml
+            parameters:
+              AzureSubscription: "ERP-Facade-IAT-A.011.05.12"              
+ 
   - stage: PreProdDeploy
     dependsOn: IATDeploy   
     displayName: "PreProddeploy (inc terraform, webapp deploy)"  
