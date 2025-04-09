@@ -6,8 +6,8 @@ parameters:
     type: boolean
     default: false
 
-  - name: disableStryker
-    displayName: "Disable Stryker test mutation"
+  - name: RunStryker
+    displayName: "Run Stryker test mutation"
     type: boolean
     default: true
     
@@ -316,39 +316,8 @@ stages:
             displayName: "Publish Mock Service Artifact"
             inputs:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)\MockSAPService'
-              ArtifactName: UKHOMockSAPService
-          
-      # - job: Stryker
-      #   condition: eq('${{ parameters.RunStryker }}', true)      
-      #   workspace:
-      #     clean: all
-      #   dependsOn: BuildAndPublishMockService
-      #   steps:
-      #     - checkout: self
-      #       submodules: true
-      #     - task: UseDotNet@2
-      #       displayName: Use .NET SDK $(DotNetSdkVersion)
-      #       inputs:
-      #         packageType: sdk
-      #         version: $(DotNetSdkVersion)
-      #     - task: DotNetCoreCLI@2
-      #       displayName: "Install Stryker"
-      #       inputs:
-      #         command: custom
-      #         custom: tool
-      #         arguments: install dotnet-stryker --tool-path $(Agent.BuildDirectory)/tools
-      #     - task: Powershell@2
-      #       displayName: "Run Stryker"
-      #       inputs:
-      #         workingDirectory: '$(Build.SourcesDirectory)'
-      #         targetType: 'inline'
-      #         pwsh: true
-      #         script: $(Agent.BuildDirectory)/tools/dotnet-stryker
-      #     - task: PublishMutationReport@0
-      #       displayName: 'Publish Strkyer Mutator Report'
-      #       inputs:
-      #         reportPattern: '**/mutation-report.html'
-      
+              ArtifactName: UKHOMockSAPService          
+
       - job: BuildAndPublishADDSMockService
         workspace:
           clean: all
@@ -652,7 +621,7 @@ stages:
   - stage: IATDeploy
     dependsOn: DevDeploy   
     displayName: "IATdeploy (inc terraform, webapp deploy)"  
-    # condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/'))) 
+    #condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/'))) 
     variables:
       - group: "ERP-Facade-IAT"
       - group: "Erp-IAT"
