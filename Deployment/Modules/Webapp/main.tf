@@ -110,5 +110,3 @@ resource "azurerm_app_service_slot_virtual_network_swift_connection" "slot_vnet_
   subnet_id      = var.subnet_id
   slot_name      = azurerm_windows_web_app_slot.staging.name
 }
-
-
