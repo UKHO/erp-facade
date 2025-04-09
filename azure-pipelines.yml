@@ -354,7 +354,7 @@ stages:
               command: "build"
               projects: |
                 **/*ADDSMock.csproj              
-              arguments: '--configuration $(BuildConfiguration)\mock\repo --no-restore'
+              arguments: '--configuration $(BuildConfiguration) --no-restore'
 
           - task: DotNetCoreCLI@2
             displayName: "Publish ADDS Mock Service "
