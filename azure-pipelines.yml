@@ -47,8 +47,10 @@ stages:
       - job: Stryker
         condition: eq('${{ parameters.RunStryker }}', true)      
         workspace:
-          clean: all        
+          clean: all       
         steps:
+          - checkout: self
+            submodules: true
           - task: UseDotNet@2
             displayName: Use .NET SDK $(DotNetSdkVersion)
             inputs:
