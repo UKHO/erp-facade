@@ -517,7 +517,7 @@ stages:
     dependsOn: vNextIATDeploy
     displayName: "E2Edeploy (inc terraform, webapp deploy)"
     variables:
-    - template: Deployment/templates/var/e2e-deploy.yml  
+    - template: Deployment/templates/var/vnexte2e-deploy.yml 
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/develop'), startsWith(variables['Build.SourceBranch'], 'refs/heads/dev/')))
 
     jobs:
