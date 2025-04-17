@@ -384,7 +384,7 @@ stages:
   - stage: Devdeploy
     displayName: "Devdeploy (inc terraform, webapp deploy)"
     variables:
-    - template: var/dev-deploy.yml
+    - template: Deployment/templates/var/dev-deploy.yml
     # variables:
     #   - group: "ERP-Facade-Dev"
     #   - group: "Erp-Dev"
@@ -494,7 +494,7 @@ stages:
     displayName: "VNext IATdeploy (inc terraform, webapp deploy)"
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/develop'), startsWith(variables['Build.SourceBranch'], 'refs/heads/dev/')))
     variables:
-    - template: var/vnext-deploy.yml
+    - template: Deployment/templates/var/vnext-deploy.yml
     # variables:
     #   - group: "ERP-Facade-vNextIAT"
     #   - group: "Erp-vNextIAT"
@@ -560,7 +560,7 @@ stages:
     dependsOn: vNextIATDeploy
     displayName: "E2Edeploy (inc terraform, webapp deploy)"
     variables:
-    - template: var/e2e-deploy.yml  
+    - template: Deployment/templates/var/e2e-deploy.yml  
     # variables:
     #   - group: "ERP-Facade-E2E"
     #   - group: "Erp-E2E"
@@ -629,7 +629,7 @@ stages:
     displayName: "IATdeploy (inc terraform, webapp deploy)"  
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
     variables:
-    - template: var/iat-deploy.yml
+    - template: Deployment/templates/var/iat-deploy.yml
     # variables:
     #   - group: "ERP-Facade-IAT"
     #   - group: "Erp-IAT"
@@ -742,7 +742,7 @@ stages:
     displayName: "PreProddeploy (inc terraform, webapp deploy)"  
     condition: succeeded()
     variables:
-    - template: var/prp-deploy.yml
+    - template: Deployment/templates/var/prp-deploy.yml
     # variables:
     #   - group: "ERP-Facade-PreProd"
     #   - group: "Erp-PreProd"
@@ -809,7 +809,7 @@ stages:
     dependsOn: DevDeploy
     displayName: "QAdeploy (inc terraform, webapp deploy)"
     variables:
-    - template: var/qa-deploy.yml
+    - template: Deployment/templates/var/qa-deploy.yml
     # variables:
     #   - group: "ERP-Facade-QA"
     #   - group: "Erp-QA"
@@ -877,7 +877,7 @@ stages:
     dependsOn: PreProdDeploy 
     displayName: "Livedeploy (inc terraform, webapp deploy)"
     variables:
-    - template: var/live-deploy.yml
+    - template: Deployment/templates/var/live-deploy.yml
     # variables:
     #   - group: "ERP-Facade-Live"
     #   - group: "Erp-Live"
