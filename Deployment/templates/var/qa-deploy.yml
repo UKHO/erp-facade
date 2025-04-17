@@ -1,0 +1,5 @@
+variables:
+  - group: "ERP-Facade-QA"
+  - group: "Erp-QA"
+  - group: "ERP-FACADE-QA-KV"
+  - template: var/variables.yml
