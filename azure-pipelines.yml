@@ -384,36 +384,7 @@ stages:
   - stage: Devdeploy
     displayName: "Devdeploy (inc terraform, webapp deploy)"
     variables:
-      - group: "ERP-Facade-Dev"
-      - group: "Erp-Dev"
-      - group: "ERP-FACADE-DEV-KV"
-      - name: "AzureADConfiguration.TenantId"
-        value: $(AzureADConfigurationTenantId)
-      - name: "AzureADConfiguration.ClientId"
-        value: $(AzureADConfigurationClientId)
-      - name: "AzureADConfiguration.AutoTestClientId"
-        value: $(AzureADConfigurationAutoTestClientId)
-      - name: "AzureADConfiguration.ClientSecret"
-        value: $(AzureADConfigurationClientSecret)
-      - name: "AzureADConfiguration.AutoTestClientIdNoRole"
-        value: $(AzureADConfigurationAutoTestClientIdNoRole)
-      - name: "AzureADConfiguration.ClientSecretNoRole"
-        value: $(AzureADConfigurationClientSecretNoRole)
-      - name: "PermitConfiguration.PermitDecryptionHardwareId"
-        value: $(PermitDecryptionHardwareId)
-      - name: "PermitWithSameKey.Permit"
-        value: $(PermitWithSameKeyPermit)
-      - name: "PermitWithSameKey.ActiveKey"
-        value: $(PermitWithSameKeyACTIVEKEY)
-      - name: "PermitWithSameKey.NextKey"
-        value: $(PermitWithSameKeyNEXTKEY)
-      - name: "PermitWithDifferentKey.Permit"
-        value: $(PermitWithDifferentKeyPermit)
-      - name: "PermitWithDifferentKey.ActiveKey"
-        value: $(PermitWithDifferentKeyACTIVEKEY)
-      - name: "PermitWithDifferentKey.NextKey"
-        value: $(PermitWithDifferentKeyNEXTKEY)
-
+    - template: Deployment/templates/var/dev-deploy.yml
     jobs:
       - deployment: DevDeployTerraform
         displayName: "Dev - Deploy Terraform"
@@ -492,21 +463,7 @@ stages:
     displayName: "VNext IATdeploy (inc terraform, webapp deploy)"
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/develop'), startsWith(variables['Build.SourceBranch'], 'refs/heads/dev/')))
     variables:
-      - group: "ERP-Facade-vNextIAT"
-      - group: "Erp-vNextIAT"
-      - group: "ERP-FACADE-vNextIAT-KV"
-      - name: "AzureADConfiguration.TenantId"
-        value: $(AzureADConfigurationTenantId)
-      - name: "AzureADConfiguration.ClientId"
-        value: $(AzureADConfigurationClientId)
-      - name: "PermitConfiguration.PermitDecryptionHardwareId"
-        value: $(PermitDecryptionHardwareId)
-      - name: mockWebAppName
-        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
-      - name: mockWebAppResourceGroup
-        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
-      - name: "SapMockConfiguration.BaseUrl"
-        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
+    - template: Deployment/templates/var/vnextiat-deploy.yml
     jobs:
       - deployment: vNextIATDeployTerraform
         displayName: "vNextIAT - Deploy Terraform"
@@ -530,6 +487,10 @@ stages:
         environment: "ERP-vNextIAT"
         pool: $(DeploymentPoolPE)
         variables:
+          - name: mockWebAppResourceGroup
+            value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
+          - name: "SapMockConfiguration.BaseUrl"
+            value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
           - name : WEB_APP_NAME
             value : $[ dependencies.vNextIATDeployTerraform.outputs['vNextIATDeployTerraform.TerraformDeploy.WEB_APP'] ]
           - name : "KeyVaultSettings.ServiceUri"
@@ -554,23 +515,9 @@ stages:
    
   - stage: E2EDeploy
     dependsOn: vNextIATDeploy
-    displayName: "E2Edeploy (inc terraform, webapp deploy)"       
+    displayName: "E2Edeploy (inc terraform, webapp deploy)"
     variables:
-      - group: "ERP-Facade-E2E"
-      - group: "Erp-E2E"
-      - group: "ERP-FACADE-E2E-KV"
-      - name: "AzureADConfiguration.TenantId"
-        value: $(AzureADConfigurationTenantId)
-      - name: "AzureADConfiguration.ClientId"
-        value: $(AzureADConfigurationClientId)
-      - name: "PermitConfiguration.PermitDecryptionHardwareId"
-        value: $(PermitDecryptionHardwareId)
-      - name: mockWebAppName
-        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
-      - name: mockWebAppResourceGroup
-        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
-      - name: "SapMockConfiguration.BaseUrl"
-        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
+    - template: Deployment/templates/var/vnexte2e-deploy.yml 
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/develop'), startsWith(variables['Build.SourceBranch'], 'refs/heads/dev/')))
 
     jobs:
@@ -596,6 +543,10 @@ stages:
         environment: "ERP-E2E"
         pool: $(DeploymentPoolPE)
         variables:
+          - name: mockWebAppResourceGroup
+            value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
+          - name: "SapMockConfiguration.BaseUrl"
+            value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
           - name : WEB_APP_NAME
             value : $[ dependencies.E2EDeployTerraform.outputs['E2EDeployTerraform.TerraformDeploy.WEB_APP'] ]
           - name : "KeyVaultSettings.ServiceUri"
@@ -621,37 +572,9 @@ stages:
   - stage: IATDeploy
     dependsOn: DevDeploy   
     displayName: "IATdeploy (inc terraform, webapp deploy)"  
-    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/'))) 
+    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))    
     variables:
-      - group: "ERP-Facade-IAT"
-      - group: "Erp-IAT"
-      - group: "ERP-FACADE-IAT-KV"
-      - name: "AzureADConfiguration.TenantId"
-        value: $(AzureADConfigurationTenantId)
-      - name: "AzureADConfiguration.ClientId"
-        value: $(AzureADConfigurationClientId)
-      - name: "PermitConfiguration.PermitDecryptionHardwareId"
-        value: $(PermitDecryptionHardwareId)
-      - name: "AzureADConfiguration.AutoTestClientId"
-        value: $(AzureADConfigurationAutoTestClientId)
-      - name: "AzureADConfiguration.ClientSecret"
-        value: $(AzureADConfigurationClientSecret)
-      - name: "AzureADConfiguration.AutoTestClientIdNoRole"
-        value: $(AzureADConfigurationAutoTestClientIdNoRole)
-      - name: "AzureADConfiguration.ClientSecretNoRole"
-        value: $(AzureADConfigurationClientSecretNoRole)
-      - name: "PermitWithSameKey.Permit"
-        value: $(PermitWithSameKeyPermit)
-      - name: "PermitWithSameKey.ActiveKey"
-        value: $(PermitWithSameKeyACTIVEKEY)
-      - name: "PermitWithSameKey.NextKey"
-        value: $(PermitWithSameKeyNEXTKEY)
-      - name: "PermitWithDifferentKey.Permit"
-        value: $(PermitWithDifferentKeyPermit)
-      - name: "PermitWithDifferentKey.ActiveKey"
-        value: $(PermitWithDifferentKeyACTIVEKEY)
-      - name: "PermitWithDifferentKey.NextKey"
-        value: $(PermitWithDifferentKeyNEXTKEY) 
+    - template: Deployment/templates/var/iat-deploy.yml
    
     jobs:
       - deployment: IATDeployTerraform
@@ -681,8 +604,7 @@ stages:
           - name: "addsSapMockConfiguration.BaseUrl"
             value: $[ stageDependencies.DevDeploy.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.addsmockwebappurl']  ]
           - name : MOCK_WEB_APP_NAME
-            value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.mockWebApp'] ]
-        
+            value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.mockWebApp'] ]        
           - name : WEB_APP_NAME
             value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.WEB_APP'] ]
           - name : "KeyVaultSettings.ServiceUri"
@@ -733,24 +655,9 @@ stages:
   - stage: PreProdDeploy
     dependsOn: IATDeploy   
     displayName: "PreProddeploy (inc terraform, webapp deploy)"  
-    condition: succeeded() 
+    condition: succeeded()
     variables:
-      - group: "ERP-Facade-PreProd"
-      - group: "Erp-PreProd"
-      - group: "ERP-FACADE-PREPROD-KV"
-      - name: "AzureADConfiguration.TenantId"
-        value: $(AzureADConfigurationTenantId)
-      - name: "AzureADConfiguration.ClientId"
-        value: $(AzureADConfigurationClientId)
-      - name: "PermitConfiguration.PermitDecryptionHardwareId"
-        value: $(PermitDecryptionHardwareId)
-      - name: mockWebAppName
-        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
-      - name: mockWebAppResourceGroup
-        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
-      - name: "SapMockConfiguration.BaseUrl"
-        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
-   
+    - template: Deployment/templates/var/prp-deploy.yml
     jobs:
       - deployment: PreProdDeployTerraform
         displayName: "PreProd - Deploy Terraform"
@@ -774,6 +681,10 @@ stages:
         environment: "ERP-preprod"
         pool: $(DeploymentPoolPE)
         variables:
+          - name: mockWebAppResourceGroup
+            value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
+          - name: "SapMockConfiguration.BaseUrl"
+            value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
           - name : WEB_APP_NAME
             value : $[ dependencies.PreProdDeployTerraform.outputs['PreProdDeployTerraform.TerraformDeploy.WEB_APP'] ]
           - name : "KeyVaultSettings.ServiceUri"
@@ -800,21 +711,7 @@ stages:
     dependsOn: DevDeploy
     displayName: "QAdeploy (inc terraform, webapp deploy)"
     variables:
-      - group: "ERP-Facade-QA"
-      - group: "Erp-QA"
-      - group: "ERP-FACADE-QA-KV"
-      - name: "AzureADConfiguration.TenantId"
-        value: $(AzureADConfigurationTenantId)
-      - name: "AzureADConfiguration.ClientId"
-        value: $(AzureADConfigurationClientId)
-      - name: "PermitConfiguration.PermitDecryptionHardwareId"
-        value: $(PermitDecryptionHardwareId)
-      - name: mockWebAppName
-        value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
-      - name: mockWebAppResourceGroup
-        value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
-      - name: "SapMockConfiguration.BaseUrl"
-        value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
+    - template: Deployment/templates/var/qa-deploy.yml
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
 
     jobs:
@@ -833,13 +730,16 @@ stages:
                   parameters:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
                     AzureSubscription: "ERP-Facade-QA-A.011.05.12"
-
       - deployment: QADeployApp
         dependsOn: QADeployTerraform
         displayName: "Qa - Deploy Dotnet App"
         environment: "ERP-QA"
         pool: $(DeploymentPoolPE)
         variables:
+          - name: mockWebAppResourceGroup
+            value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
+          - name: "SapMockConfiguration.BaseUrl"
+            value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
           - name : WEB_APP_NAME
             value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.WEB_APP'] ]
           - name : "KeyVaultSettings.ServiceUri"
@@ -866,15 +766,7 @@ stages:
     dependsOn: PreProdDeploy 
     displayName: "Livedeploy (inc terraform, webapp deploy)"
     variables:
-      - group: "ERP-Facade-Live"
-      - group: "Erp-Live"
-      - group: "ERP-FACADE-LIVE-KV"
-      - name: "AzureADConfiguration.TenantId"
-        value: $(AzureADConfigurationTenantId)
-      - name: "AzureADConfiguration.ClientId"
-        value: $(AzureADConfigurationClientId)
-      - name: "PermitConfiguration.PermitDecryptionHardwareId"
-        value: $(PermitDecryptionHardwareId)
+    - template: Deployment/templates/var/live-deploy.yml
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
     jobs:
       - deployment: LiveDeployTerraform
