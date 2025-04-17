@@ -505,12 +505,6 @@ stages:
     #     value: $(AzureADConfigurationClientId)
     #   - name: "PermitConfiguration.PermitDecryptionHardwareId"
     #     value: $(PermitDecryptionHardwareId)
-    - name: mockWebAppName #not sure we need this
-      value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
-    - name: mockWebAppResourceGroup
-      value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
-    - name: "SapMockConfiguration.BaseUrl"
-      value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
     jobs:
       - deployment: vNextIATDeployTerraform
         displayName: "vNextIAT - Deploy Terraform"
@@ -534,6 +528,10 @@ stages:
         environment: "ERP-vNextIAT"
         pool: $(DeploymentPoolPE)
         variables:
+          - name: mockWebAppResourceGroup
+            value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
+          - name: "SapMockConfiguration.BaseUrl"
+            value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
           - name : WEB_APP_NAME
             value : $[ dependencies.vNextIATDeployTerraform.outputs['vNextIATDeployTerraform.TerraformDeploy.WEB_APP'] ]
           - name : "KeyVaultSettings.ServiceUri"
@@ -571,12 +569,6 @@ stages:
     #     value: $(AzureADConfigurationClientId)
     #   - name: "PermitConfiguration.PermitDecryptionHardwareId"
     #     value: $(PermitDecryptionHardwareId)
-    - name: mockWebAppName
-      value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
-    - name: mockWebAppResourceGroup
-      value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
-    - name: "SapMockConfiguration.BaseUrl"
-      value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/develop'), startsWith(variables['Build.SourceBranch'], 'refs/heads/dev/')))
 
     jobs:
@@ -602,6 +594,10 @@ stages:
         environment: "ERP-E2E"
         pool: $(DeploymentPoolPE)
         variables:
+          - name: mockWebAppResourceGroup
+            value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
+          - name: "SapMockConfiguration.BaseUrl"
+            value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
           - name : WEB_APP_NAME
             value : $[ dependencies.E2EDeployTerraform.outputs['E2EDeployTerraform.TerraformDeploy.WEB_APP'] ]
           - name : "KeyVaultSettings.ServiceUri"
@@ -627,7 +623,8 @@ stages:
   - stage: IATDeploy
     dependsOn: DevDeploy   
     displayName: "IATdeploy (inc terraform, webapp deploy)"  
-    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
+   # condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
+    condition: and(succeeded())   
     variables:
     - template: Deployment/templates/var/iat-deploy.yml
     # variables:
@@ -753,12 +750,6 @@ stages:
     #     value: $(AzureADConfigurationClientId)
     #   - name: "PermitConfiguration.PermitDecryptionHardwareId"
     #     value: $(PermitDecryptionHardwareId)
-    - name: mockWebAppName # not sure we need this
-      value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
-    - name: mockWebAppResourceGroup
-      value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
-    - name: "SapMockConfiguration.BaseUrl"
-      value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
    
     jobs:
       - deployment: PreProdDeployTerraform
@@ -783,6 +774,10 @@ stages:
         environment: "ERP-preprod"
         pool: $(DeploymentPoolPE)
         variables:
+          - name: mockWebAppResourceGroup
+            value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
+          - name: "SapMockConfiguration.BaseUrl"
+            value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
           - name : WEB_APP_NAME
             value : $[ dependencies.PreProdDeployTerraform.outputs['PreProdDeployTerraform.TerraformDeploy.WEB_APP'] ]
           - name : "KeyVaultSettings.ServiceUri"
@@ -820,13 +815,8 @@ stages:
     #     value: $(AzureADConfigurationClientId)
     #   - name: "PermitConfiguration.PermitDecryptionHardwareId"
     #     value: $(PermitDecryptionHardwareId)
-    - name: mockWebAppName #not sure we need this
-      value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
-    - name: mockWebAppResourceGroup
-      value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
-    - name: "SapMockConfiguration.BaseUrl"
-      value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
-    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
+    condition: and(succeeded()) 
+    # condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
 
     jobs:
       - deployment: QADeployTerraform
@@ -844,13 +834,16 @@ stages:
                   parameters:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
                     AzureSubscription: "ERP-Facade-QA-A.011.05.12"
-
       - deployment: QADeployApp
         dependsOn: QADeployTerraform
         displayName: "Qa - Deploy Dotnet App"
         environment: "ERP-QA"
         pool: $(DeploymentPoolPE)
         variables:
+          - name: mockWebAppResourceGroup
+            value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
+          - name: "SapMockConfiguration.BaseUrl"
+            value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
           - name : WEB_APP_NAME
             value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.WEB_APP'] ]
           - name : "KeyVaultSettings.ServiceUri"
