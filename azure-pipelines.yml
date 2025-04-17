@@ -494,7 +494,7 @@ stages:
     displayName: "VNext IATdeploy (inc terraform, webapp deploy)"
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/develop'), startsWith(variables['Build.SourceBranch'], 'refs/heads/dev/')))
     variables:
-    - template: Deployment/templates/var/vnext-deploy.yml
+    - template: Deployment/templates/var/vnextiat-deploy.yml
     # variables:
     #   - group: "ERP-Facade-vNextIAT"
     #   - group: "Erp-vNextIAT"
