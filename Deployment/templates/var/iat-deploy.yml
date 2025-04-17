@@ -1,5 +1,5 @@
 variables:
-  - group: "ERP-Facade-vNextIAT"
-  - group: "Erp-vNextIAT"
-  - group: "ERP-FACADE-vNextIAT-KV"
+  - group: "ERP-Facade-IAT"
+  - group: "Erp-IAT"
+  - group: "ERP-FACADE-IAT-KV"
   - template: variables.yml
