@@ -623,8 +623,7 @@ stages:
   - stage: IATDeploy
     dependsOn: DevDeploy   
     displayName: "IATdeploy (inc terraform, webapp deploy)"  
-   # condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
-    condition: and(succeeded())   
+   # condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))    
     variables:
     - template: Deployment/templates/var/iat-deploy.yml
     # variables:
@@ -815,7 +814,7 @@ stages:
     #     value: $(AzureADConfigurationClientId)
     #   - name: "PermitConfiguration.PermitDecryptionHardwareId"
     #     value: $(PermitDecryptionHardwareId)
-    condition: and(succeeded()) 
+    
     # condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
 
     jobs:
