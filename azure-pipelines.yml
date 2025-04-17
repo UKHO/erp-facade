@@ -385,37 +385,6 @@ stages:
     displayName: "Devdeploy (inc terraform, webapp deploy)"
     variables:
     - template: Deployment/templates/var/dev-deploy.yml
-    # variables:
-    #   - group: "ERP-Facade-Dev"
-    #   - group: "Erp-Dev"
-    #   - group: "ERP-FACADE-DEV-KV"
-    #   - name: "AzureADConfiguration.TenantId"
-    #     value: $(AzureADConfigurationTenantId)
-    #   - name: "AzureADConfiguration.ClientId"
-    #     value: $(AzureADConfigurationClientId)
-    #   - name: "AzureADConfiguration.AutoTestClientId"
-    #     value: $(AzureADConfigurationAutoTestClientId)
-    #   - name: "AzureADConfiguration.ClientSecret"
-    #     value: $(AzureADConfigurationClientSecret)
-    #   - name: "AzureADConfiguration.AutoTestClientIdNoRole"
-    #     value: $(AzureADConfigurationAutoTestClientIdNoRole)
-    #   - name: "AzureADConfiguration.ClientSecretNoRole"
-    #     value: $(AzureADConfigurationClientSecretNoRole)
-    #   - name: "PermitConfiguration.PermitDecryptionHardwareId"
-    #     value: $(PermitDecryptionHardwareId)
-    #   - name: "PermitWithSameKey.Permit"
-    #     value: $(PermitWithSameKeyPermit)
-    #   - name: "PermitWithSameKey.ActiveKey"
-    #     value: $(PermitWithSameKeyACTIVEKEY)
-    #   - name: "PermitWithSameKey.NextKey"
-    #     value: $(PermitWithSameKeyNEXTKEY)
-    #   - name: "PermitWithDifferentKey.Permit"
-    #     value: $(PermitWithDifferentKeyPermit)
-    #   - name: "PermitWithDifferentKey.ActiveKey"
-    #     value: $(PermitWithDifferentKeyACTIVEKEY)
-    #   - name: "PermitWithDifferentKey.NextKey"
-    #     value: $(PermitWithDifferentKeyNEXTKEY)
-
     jobs:
       - deployment: DevDeployTerraform
         displayName: "Dev - Deploy Terraform"
@@ -495,16 +464,6 @@ stages:
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/develop'), startsWith(variables['Build.SourceBranch'], 'refs/heads/dev/')))
     variables:
     - template: Deployment/templates/var/vnextiat-deploy.yml
-    # variables:
-    #   - group: "ERP-Facade-vNextIAT"
-    #   - group: "Erp-vNextIAT"
-    #   - group: "ERP-FACADE-vNextIAT-KV"
-    #   - name: "AzureADConfiguration.TenantId"
-    #     value: $(AzureADConfigurationTenantId)
-    #   - name: "AzureADConfiguration.ClientId"
-    #     value: $(AzureADConfigurationClientId)
-    #   - name: "PermitConfiguration.PermitDecryptionHardwareId"
-    #     value: $(PermitDecryptionHardwareId)
     jobs:
       - deployment: vNextIATDeployTerraform
         displayName: "vNextIAT - Deploy Terraform"
@@ -559,16 +518,6 @@ stages:
     displayName: "E2Edeploy (inc terraform, webapp deploy)"
     variables:
     - template: Deployment/templates/var/e2e-deploy.yml  
-    # variables:
-    #   - group: "ERP-Facade-E2E"
-    #   - group: "Erp-E2E"
-    #   - group: "ERP-FACADE-E2E-KV"
-    #   - name: "AzureADConfiguration.TenantId"
-    #     value: $(AzureADConfigurationTenantId)
-    #   - name: "AzureADConfiguration.ClientId"
-    #     value: $(AzureADConfigurationClientId)
-    #   - name: "PermitConfiguration.PermitDecryptionHardwareId"
-    #     value: $(PermitDecryptionHardwareId)
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/develop'), startsWith(variables['Build.SourceBranch'], 'refs/heads/dev/')))
 
     jobs:
@@ -623,39 +572,9 @@ stages:
   - stage: IATDeploy
     dependsOn: DevDeploy   
     displayName: "IATdeploy (inc terraform, webapp deploy)"  
-   # condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))    
+    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))    
     variables:
     - template: Deployment/templates/var/iat-deploy.yml
-    # variables:
-    #   - group: "ERP-Facade-IAT"
-    #   - group: "Erp-IAT"
-    #   - group: "ERP-FACADE-IAT-KV"
-    #   - name: "AzureADConfiguration.TenantId"
-    #     value: $(AzureADConfigurationTenantId)
-    #   - name: "AzureADConfiguration.ClientId"
-    #     value: $(AzureADConfigurationClientId)
-    #   - name: "PermitConfiguration.PermitDecryptionHardwareId"
-    #     value: $(PermitDecryptionHardwareId)
-    #   - name: "AzureADConfiguration.AutoTestClientId"
-    #     value: $(AzureADConfigurationAutoTestClientId)
-    #   - name: "AzureADConfiguration.ClientSecret"
-    #     value: $(AzureADConfigurationClientSecret)
-    #   - name: "AzureADConfiguration.AutoTestClientIdNoRole"
-    #     value: $(AzureADConfigurationAutoTestClientIdNoRole)
-    #   - name: "AzureADConfiguration.ClientSecretNoRole"
-    #     value: $(AzureADConfigurationClientSecretNoRole)
-    #   - name: "PermitWithSameKey.Permit"
-    #     value: $(PermitWithSameKeyPermit)
-    #   - name: "PermitWithSameKey.ActiveKey"
-    #     value: $(PermitWithSameKeyACTIVEKEY)
-    #   - name: "PermitWithSameKey.NextKey"
-    #     value: $(PermitWithSameKeyNEXTKEY)
-    #   - name: "PermitWithDifferentKey.Permit"
-    #     value: $(PermitWithDifferentKeyPermit)
-    #   - name: "PermitWithDifferentKey.ActiveKey"
-    #     value: $(PermitWithDifferentKeyACTIVEKEY)
-    #   - name: "PermitWithDifferentKey.NextKey"
-    #     value: $(PermitWithDifferentKeyNEXTKEY) 
    
     jobs:
       - deployment: IATDeployTerraform
@@ -739,17 +658,6 @@ stages:
     condition: succeeded()
     variables:
     - template: Deployment/templates/var/prp-deploy.yml
-    # variables:
-    #   - group: "ERP-Facade-PreProd"
-    #   - group: "Erp-PreProd"
-    #   - group: "ERP-FACADE-PREPROD-KV"
-    #   - name: "AzureADConfiguration.TenantId"
-    #     value: $(AzureADConfigurationTenantId)
-    #   - name: "AzureADConfiguration.ClientId"
-    #     value: $(AzureADConfigurationClientId)
-    #   - name: "PermitConfiguration.PermitDecryptionHardwareId"
-    #     value: $(PermitDecryptionHardwareId)
-   
     jobs:
       - deployment: PreProdDeployTerraform
         displayName: "PreProd - Deploy Terraform"
@@ -804,18 +712,7 @@ stages:
     displayName: "QAdeploy (inc terraform, webapp deploy)"
     variables:
     - template: Deployment/templates/var/qa-deploy.yml
-    # variables:
-    #   - group: "ERP-Facade-QA"
-    #   - group: "Erp-QA"
-    #   - group: "ERP-FACADE-QA-KV"
-    #   - name: "AzureADConfiguration.TenantId"
-    #     value: $(AzureADConfigurationTenantId)
-    #   - name: "AzureADConfiguration.ClientId"
-    #     value: $(AzureADConfigurationClientId)
-    #   - name: "PermitConfiguration.PermitDecryptionHardwareId"
-    #     value: $(PermitDecryptionHardwareId)
-    
-    # condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
+    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
 
     jobs:
       - deployment: QADeployTerraform
@@ -870,16 +767,6 @@ stages:
     displayName: "Livedeploy (inc terraform, webapp deploy)"
     variables:
     - template: Deployment/templates/var/live-deploy.yml
-    # variables:
-    #   - group: "ERP-Facade-Live"
-    #   - group: "Erp-Live"
-    #   - group: "ERP-FACADE-LIVE-KV"
-    #   - name: "AzureADConfiguration.TenantId"
-    #     value: $(AzureADConfigurationTenantId)
-    #   - name: "AzureADConfiguration.ClientId"
-    #     value: $(AzureADConfigurationClientId)
-    #   - name: "PermitConfiguration.PermitDecryptionHardwareId"
-    #     value: $(PermitDecryptionHardwareId)
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
     jobs:
       - deployment: LiveDeployTerraform
