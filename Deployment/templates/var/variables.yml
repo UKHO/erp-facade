@@ -1,3 +1,4 @@
+variables:
   - name: "AzureADConfiguration.TenantId"
     value: $(AzureADConfigurationTenantId)
   - name: "AzureADConfiguration.ClientId"
