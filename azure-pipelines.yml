@@ -686,7 +686,7 @@ stages:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
                     AzureSubscription: "ERP-Facade-PRE-A.011.08"
 
-  - stage: PreProdDeploy 
+  - stage: PreProdAppDeploy 
     # deployment: PreProdDeploy
     dependsOn: PreProdDeployTerraform
     displayName: "PRP - Deploy Dotnet App"
