@@ -461,8 +461,8 @@ stages:
             parameters:
               AzureSubscription: "ERP-Facade-Dev-A.011.05.12"              
 
-  - stage: vNextIATDeploy
-    dependsOn:  Devdeploy
+  - stage: vNextIATDeployTerraform
+    dependsOn:  DevAppsdeploy
     displayName: "VNext IATdeploy (inc terraform, webapp deploy)"
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/develop'), startsWith(variables['Build.SourceBranch'], 'refs/heads/dev/')))
     variables:
@@ -486,7 +486,7 @@ stages:
 
   - stage: vNextIATAppDeploy
     # deployment: vNextIATDeployApp
-    dependsOn: vNextIATDeployApp
+    dependsOn: vNextIATDeployTerraform
     displayName: "vNextIAT - Deploy Dotnet App"
         # environment: "ERP-vNextIAT"
         # pool: $(DeploymentPoolPE)
@@ -519,8 +519,8 @@ stages:
           ShortName: "vNextIAT"
           AppPool: $(DeploymentPoolPE)
    
-  - stage: E2EDeploy
-    dependsOn: vNextIATDeploy
+  - stage: E2EDeployTerraform
+    dependsOn: vNextIATAppDeploy
     displayName: "E2Edeploy (inc terraform, webapp deploy)"
     variables:
     - template: Deployment/templates/var/vnexte2e-deploy.yml 
@@ -545,7 +545,7 @@ stages:
 
   - stage: E2EDeployApp
     # deployment: E2EDeployApp
-    dependsOn: E2EDeploy
+    dependsOn: E2EDeployTerraform
     displayName: "E2e - Deploy Dotnet App"
         # environment: "ERP-E2E"
         # pool: $(DeploymentPoolPE)
@@ -579,7 +579,7 @@ stages:
           AppPool: $(DeploymentPoolPE)            
 
   - stage: IATDeployTerraform
-    dependsOn: DevDeploy   
+    dependsOn: DevDeployApp   
     displayName: "IATdeploy (inc terraform, webapp deploy)"  
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))    
     variables:
@@ -642,7 +642,7 @@ stages:
 
       - job: FunctionalTests
         dependsOn:
-        - IATDeployTerraform       
+        - IATDeployApp       
         pool: $(DeploymentPoolPE)
         variables:
           - name : ErpFacadeConfiguration.BaseUrl
@@ -663,8 +663,8 @@ stages:
             parameters:
               AzureSubscription: "ERP-Facade-IAT-A.011.05.12"              
  
-  - stage: PreProdDeploy
-    dependsOn: IATDeploy   
+  - stage: PreProdDeployTerraform
+    dependsOn: DevDeployApp   
     displayName: "PreProddeploy (inc terraform, webapp deploy)"  
     condition: succeeded()
     variables:
@@ -721,8 +721,8 @@ stages:
           ShortName: "PreProd"
           AppPool: $(DeploymentPoolPE)
  
-  - stage: QAdeploy
-    dependsOn: DevDeploy
+  - stage: QADeployTerraform
+    dependsOn: DevDeployApp
     displayName: "QAdeploy (inc terraform, webapp deploy)"
     variables:
     - template: Deployment/templates/var/qa-deploy.yml
@@ -746,7 +746,7 @@ stages:
                     AzureSubscription: "ERP-Facade-QA-A.011.05.12"
   - stage: QADeployApp    
     # deployment: QADeployApp
-    dependsOn: QAdeploy
+    dependsOn: QADeployTerraform
     displayName: "Qa - Deploy Dotnet App"
         # environment: "ERP-QA"
         # pool: $(DeploymentPoolPE)
