@@ -404,9 +404,9 @@ stages:
 
       - deployment: DevDeployApp
         dependsOn: DevDeployTerraform
-        displayName: "Dev - Deploy Dotnet App"
-        environment: "ERP-Dev"
-        pool: $(DeploymentPoolPE)
+        # displayName: "Dev - Deploy Dotnet App"
+        # environment: "ERP-Dev"
+        # pool: $(DeploymentPoolPE)
         # variables:
         #   - name : WEB_APP_NAME
         #     value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_APP'] ]
@@ -424,16 +424,17 @@ stages:
         #     value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME'] ]
         #   - name : WEB_APP_SLOT_HOST_NAME
         #     value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME'] ]        
-        workspace:
-          clean: all
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - template: Deployment/templates/continuous-deployment-app.yml
-                  parameters:
-                    AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
-                    ShortName: "Dev"
+        # workspace:
+        #   clean: all
+        # strategy:
+        #   runOnce:
+        #     deploy:
+        steps:
+          - template: Deployment/templates/continuous-deployment-app.yml
+            parameters:
+              AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
+              ShortName: "Dev"
+              AppPool: $(DeploymentPoolPE)
 
       - job: FunctionalTests
         dependsOn:
@@ -484,9 +485,9 @@ stages:
 
       - deployment: vNextIATDeployApp
         dependsOn: vNextIATDeployTerraform
-        displayName: "vNextIAT - Deploy Dotnet App"
-        environment: "ERP-vNextIAT"
-        pool: $(DeploymentPoolPE)
+        # displayName: "vNextIAT - Deploy Dotnet App"
+        # environment: "ERP-vNextIAT"
+        # pool: $(DeploymentPoolPE)
         # variables:
         #   - name: mockWebAppResourceGroup
         #     value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
@@ -504,16 +505,17 @@ stages:
         #     value : $[ dependencies.vNextIATDeployTerraform.outputs['vNextIATDeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME'] ]
         #   - name : WEB_APP_SLOT_HOST_NAME
         #     value : $[ dependencies.vNextIATDeployTerraform.outputs['vNextIATDeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME'] ]
-        workspace:
-          clean: all
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - template: Deployment/templates/continuous-deployment-app.yml
-                  parameters:
-                    AzureSubscription: "ERP-Facade-vNext-IAT-A.011.08"
-                    ShortName: "vNextIAT"
+        # workspace:
+        #   clean: all
+        # strategy:
+        #   runOnce:
+        #     deploy:
+        steps:
+          - template: Deployment/templates/continuous-deployment-app.yml
+            parameters:
+              AzureSubscription: "ERP-Facade-vNext-IAT-A.011.08"
+              ShortName: "vNextIAT"
+              AppPool: $(DeploymentPoolPE)
    
   - stage: E2EDeploy
     dependsOn: vNextIATDeploy
@@ -541,9 +543,9 @@ stages:
 
       - deployment: E2EDeployApp
         dependsOn: E2EDeployTerraform
-        displayName: "E2e - Deploy Dotnet App"
-        environment: "ERP-E2E"
-        pool: $(DeploymentPoolPE)
+        # displayName: "E2e - Deploy Dotnet App"
+        # environment: "ERP-E2E"
+        # pool: $(DeploymentPoolPE)
         # variables:
         #   - name: mockWebAppResourceGroup
         #     value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
@@ -561,16 +563,17 @@ stages:
         #     value : $[ dependencies.E2EDeployTerraform.outputs['E2EDeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME'] ]
         #   - name : WEB_APP_SLOT_HOST_NAME
         #     value : $[ dependencies.E2EDeployTerraform.outputs['E2EDeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME'] ]
-        workspace:
-          clean: all
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - template: Deployment/templates/continuous-deployment-app.yml
-                  parameters:
-                    AzureSubscription: "ERP-Facade-vNext-E2E-A.011.08"
-                    ShortName: "E2E"            
+        # workspace:
+        #   clean: all
+        # strategy:
+        #   runOnce:
+        #     deploy:
+        steps:
+          - template: Deployment/templates/continuous-deployment-app.yml
+            parameters:
+              AzureSubscription: "ERP-Facade-vNext-E2E-A.011.08"
+              ShortName: "E2E"
+              AppPool: $(DeploymentPoolPE)            
 
   - stage: IATDeploy
     dependsOn: DevDeploy   
@@ -598,9 +601,9 @@ stages:
 
       - deployment: IATDeployApp
         dependsOn: IATDeployTerraform
-        displayName: "IAT - Deploy Dotnet App"
-        environment: "ERP-IAT"
-        pool: $(DeploymentPoolPE)
+        # displayName: "IAT - Deploy Dotnet App"
+        # environment: "ERP-IAT"
+        # pool: $(DeploymentPoolPE)
         # variables:
         #   - name: addsmockWebAppResourceGroup
         #     value: $[ stageDependencies.DevDeploy.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.addsmockWebAppResourceGroupName']  ]
@@ -621,16 +624,17 @@ stages:
         #   - name : WEB_APP_SLOT_HOST_NAME
         #     value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME'] ]
         
-        workspace:
-          clean: all
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - template: Deployment/templates/continuous-deployment-app.yml
-                  parameters:
-                    AzureSubscription: "ERP-Facade-IAT-A.011.08"
-                    ShortName: "IAT" 
+        # workspace:
+        #   clean: all
+        # strategy:
+        #   runOnce:
+        #     deploy:
+        steps:
+          - template: Deployment/templates/continuous-deployment-app.yml
+            parameters:
+              AzureSubscription: "ERP-Facade-IAT-A.011.08"
+              ShortName: "IAT"
+              AppPool: $(DeploymentPoolPE)
 
       - job: FunctionalTests
         dependsOn:
@@ -681,9 +685,9 @@ stages:
 
       - deployment: PreProdDeploy
         dependsOn: PreProdDeployTerraform
-        displayName: "PRP - Deploy Dotnet App"
-        environment: "ERP-preprod"
-        pool: $(DeploymentPoolPE)
+        # displayName: "PRP - Deploy Dotnet App"
+        # environment: "ERP-preprod"
+        # pool: $(DeploymentPoolPE)
         # variables:
         #   - name: mockWebAppResourceGroup
         #     value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
@@ -701,16 +705,17 @@ stages:
         #     value : $[ dependencies.PreProdDeployTerraform.outputs['PreProdDeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME'] ]
         #   - name : WEB_APP_SLOT_HOST_NAME
         #     value : $[ dependencies.PreProdDeployTerraform.outputs['PreProdDeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME'] ]
-        workspace:
-          clean: all
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - template: Deployment/templates/continuous-deployment-app.yml
-                  parameters:
-                    AzureSubscription: "ERP-Facade-PRE-A.011.08"
-                    ShortName: "PreProd"
+        # workspace:
+        #   clean: all
+        # strategy:
+        #   runOnce:
+        #     deploy:
+        steps:
+          - template: Deployment/templates/continuous-deployment-app.yml
+            parameters:
+              AzureSubscription: "ERP-Facade-PRE-A.011.08"
+              ShortName: "PreProd"
+              AppPool: $(DeploymentPoolPE)
  
   - stage: QAdeploy
     dependsOn: DevDeploy
@@ -737,9 +742,9 @@ stages:
                     AzureSubscription: "ERP-Facade-QA-A.011.05.12"
       - deployment: QADeployApp
         dependsOn: QADeployTerraform
-        displayName: "Qa - Deploy Dotnet App"
-        environment: "ERP-QA"
-        pool: $(DeploymentPoolPE)
+        # displayName: "Qa - Deploy Dotnet App"
+        # environment: "ERP-QA"
+        # pool: $(DeploymentPoolPE)
         # variables:
         #   - name: mockWebAppResourceGroup
         #     value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
@@ -757,16 +762,17 @@ stages:
         #     value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME'] ]
         #   - name : WEB_APP_SLOT_HOST_NAME
         #     value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME'] ]
-        workspace:
-          clean: all
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - template: Deployment/templates/continuous-deployment-app.yml
-                  parameters:
-                    AzureSubscription: "ERP-Facade-QA-A.011.05.12"
-                    ShortName: "QA"
+        # workspace:
+        #   clean: all
+        # strategy:
+        #   runOnce:
+        #     deploy:
+        steps:
+          - template: Deployment/templates/continuous-deployment-app.yml
+            parameters:
+              AzureSubscription: "ERP-Facade-QA-A.011.05.12"
+              ShortName: "QA"
+              AppPool: $(DeploymentPoolPE)
      
   - stage: Livedeploy
     dependsOn: PreProdDeploy 
@@ -793,32 +799,33 @@ stages:
 
       - deployment: LiveDeployApp
         dependsOn: LiveDeployTerraform
-        displayName: "Live - Deploy Dotnet App"
-        environment: "ERP-Live"
-        pool: "$(DeploymentPoolPD)"
-        # variables:
-        # - name : WEB_APP_NAME
-        #   value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.WEB_APP'] ]
-        # - name : "KeyVaultSettings.ServiceUri"
-        #   value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.keyvaulturi'] ]
-        # - name : "AzureWebJobsStorage.ConnectionString"
-        #   value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
-        # - name : ResourceGroup
-        #   value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.ResourceGroup'] ]
-        # - name : WEB_APP_SLOT_NAME
-        #   value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME'] ]
-        # - name : WEB_APP_SLOT_HOST_NAME
-        #   value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME'] ] 
-        workspace:
-          clean: all
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - template: Deployment/templates/continuous-deployment-app.yml
-                  parameters:
-                    AzureSubscription: "ERP-Facade-Live-A.011.05.12"
-                    ShortName: "Live"
+        # displayName: "Live - Deploy Dotnet App"
+        # environment: "ERP-Live"
+        # pool: "$(DeploymentPoolPD)"
+        # # variables:
+        # # - name : WEB_APP_NAME
+        # #   value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.WEB_APP'] ]
+        # # - name : "KeyVaultSettings.ServiceUri"
+        # #   value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.keyvaulturi'] ]
+        # # - name : "AzureWebJobsStorage.ConnectionString"
+        # #   value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
+        # # - name : ResourceGroup
+        # #   value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.ResourceGroup'] ]
+        # # - name : WEB_APP_SLOT_NAME
+        # #   value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME'] ]
+        # # - name : WEB_APP_SLOT_HOST_NAME
+        # #   value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME'] ] 
+        # workspace:
+        #   clean: all
+        # strategy:
+        #   runOnce:
+        #     deploy:
+        steps:
+          - template: Deployment/templates/continuous-deployment-app.yml
+            parameters:
+              AzureSubscription: "ERP-Facade-Live-A.011.05.12"
+              ShortName: "Live"
+              AppPool: $(DeploymentPoolPD)
 
       - job: PostDeploymentActions
         dependsOn:
