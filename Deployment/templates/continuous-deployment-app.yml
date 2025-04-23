@@ -9,7 +9,7 @@ parameters:
 
 jobs:
 - deployment: ${{ parameters.ShortName }}DeployApp
-  dependsOn: ${{ parameters.ShortName }}DeployTerraform
+  # dependsOn: ${{ parameters.ShortName }}DeployTerraform
   displayName: "${{ parameters.ShortName }} - Deploy Dotnet App"
   environment: "ERP-${{ parameters.ShortName }}"
   pool: "${{ parameters.AppPool }}"    
