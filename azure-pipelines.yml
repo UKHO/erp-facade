@@ -87,299 +87,301 @@ stages:
   - stage: DOTNETBUILD_DOTNETTEST_AND_PUBLISH
     displayName: "Build (Dotnet Build & Restore , Dotnet Test and Publish Artifact )"
     dependsOn: []
-    jobs:     
-      - job: UnitTestsAndCodeCoverage
-        workspace:
-          clean: all
-        displayName: "Dotnet Test and Publish Code Coverage"
-        steps:
-          - task: UseDotNet@2
-            displayName: Use .NET SDK $(DotNetSdkVersion)
-            inputs:
-              packageType: sdk
-              version: $(DotNetSdkVersion)
+    jobs:
+      - template: Deployment/Template/build-test-publish.yml
+  #   jobs:     
+  #     - job: UnitTestsAndCodeCoverage
+  #       workspace:
+  #         clean: all
+  #       displayName: "Dotnet Test and Publish Code Coverage"
+  #       steps:
+  #         - task: UseDotNet@2
+  #           displayName: Use .NET SDK $(DotNetSdkVersion)
+  #           inputs:
+  #             packageType: sdk
+  #             version: $(DotNetSdkVersion)
 
-          - task: DotNetCoreCLI@2
-            displayName: ".Net Core - NuGet restore test projects only"
-            inputs:
-              command: "restore"
-              projects: "**/*Tests.csproj"
-              feedsToUse: config
-              noCache: true
-              nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
-              workingDirectory: '$(Build.SourcesDirectory)'
-              packagesDirectory: '$(Build.SourcesDirectory)\packagesForTests'
+  #         - task: DotNetCoreCLI@2
+  #           displayName: ".Net Core - NuGet restore test projects only"
+  #           inputs:
+  #             command: "restore"
+  #             projects: "**/*Tests.csproj"
+  #             feedsToUse: config
+  #             noCache: true
+  #             nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
+  #             workingDirectory: '$(Build.SourcesDirectory)'
+  #             packagesDirectory: '$(Build.SourcesDirectory)\packagesForTests'
 
-          - task: DotNetCoreCLI@2
-            displayName: "dotnet test - Perform Unit Tests"
-            inputs:
-              command: "test"
-              projects: "**/*UnitTests.csproj"
-              arguments: '--configuration $(BuildConfiguration) --settings "$(Build.SourcesDirectory)\test.runsettings" /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura --no-restore'
-              publishTestResults: true
-              testRunTitle: "UnitTests"
+  #         - task: DotNetCoreCLI@2
+  #           displayName: "dotnet test - Perform Unit Tests"
+  #           inputs:
+  #             command: "test"
+  #             projects: "**/*UnitTests.csproj"
+  #             arguments: '--configuration $(BuildConfiguration) --settings "$(Build.SourcesDirectory)\test.runsettings" /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura --no-restore'
+  #             publishTestResults: true
+  #             testRunTitle: "UnitTests"
 
-          - task: PowerShell@2
-            displayName: "Generate code coverage report"
-            inputs:
-              targetType: filePath
-              filePath: '$(Build.SourcesDirectory)\CodeCoverageReport.ps1'
-              arguments: '-source "$(Build.SourcesDirectory)" -reportFolder "$(Build.ArtifactStagingDirectory)"'
+  #         - task: PowerShell@2
+  #           displayName: "Generate code coverage report"
+  #           inputs:
+  #             targetType: filePath
+  #             filePath: '$(Build.SourcesDirectory)\CodeCoverageReport.ps1'
+  #             arguments: '-source "$(Build.SourcesDirectory)" -reportFolder "$(Build.ArtifactStagingDirectory)"'
 
-          - task: PublishBuildArtifacts@1
-            displayName: "Publish Code coverage"
-            inputs:
-              PathtoPublish: "$(Build.ArtifactStagingDirectory)/codecoveragereport"
-              ArtifactName: codecoveragereport
+  #         - task: PublishBuildArtifacts@1
+  #           displayName: "Publish Code coverage"
+  #           inputs:
+  #             PathtoPublish: "$(Build.ArtifactStagingDirectory)/codecoveragereport"
+  #             ArtifactName: codecoveragereport
 
-      - job: BuildAndPublishAPI
-        workspace:
-          clean: all
-        displayName: "Dotnet Build publish ERP Facade API"
-        steps:
+  #     - job: BuildAndPublishAPI
+  #       workspace:
+  #         clean: all
+  #       displayName: "Dotnet Build publish ERP Facade API"
+  #       steps:
 
-          - task: UseDotNet@2
-            displayName: Use .NET SDK $(DotNetSdkVersion)
-            inputs:
-              packageType: sdk
-              version: $(DotNetSdkVersion)
+  #         - task: UseDotNet@2
+  #           displayName: Use .NET SDK $(DotNetSdkVersion)
+  #           inputs:
+  #             packageType: sdk
+  #             version: $(DotNetSdkVersion)
               
-          - task: DotNetCoreCLI@2
-            displayName: ".Net Core - NuGet restore for non test projects only"
-            inputs:
-              command: "restore"
-              projects: |
-                **/*.csproj
-                !**/UKHO.SAP.MockService.csproj
-              feedsToUse: config
-              noCache: true
-              nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
-              workingDirectory: '$(Build.SourcesDirectory)\src'
-              packagesDirectory: '$(Build.SourcesDirectory)\src\packages'
+  #         - task: DotNetCoreCLI@2
+  #           displayName: ".Net Core - NuGet restore for non test projects only"
+  #           inputs:
+  #             command: "restore"
+  #             projects: |
+  #               **/*.csproj
+  #               !**/UKHO.SAP.MockService.csproj
+  #             feedsToUse: config
+  #             noCache: true
+  #             nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
+  #             workingDirectory: '$(Build.SourcesDirectory)\src'
+  #             packagesDirectory: '$(Build.SourcesDirectory)\src\packages'
 
-          - task: DotNetCoreCLI@2
-            displayName: "dotnet build task"
-            inputs:
-              command: "build"
-              projects: |
-                **/*.csproj
-                !**/UKHO.SAP.MockService.csproj
-              arguments: '--configuration $(BuildConfiguration) --no-restore'
+  #         - task: DotNetCoreCLI@2
+  #           displayName: "dotnet build task"
+  #           inputs:
+  #             command: "build"
+  #             projects: |
+  #               **/*.csproj
+  #               !**/UKHO.SAP.MockService.csproj
+  #             arguments: '--configuration $(BuildConfiguration) --no-restore'
 
-          - task: DotNetCoreCLI@2
-            displayName: "Publish ERP Facade API "
-            inputs:
-              command: "publish"
-              publishWebProjects: false
-              projects: '**/*UKHO.ERPFacade.API.csproj'
-              arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\UKHO.ERPFacade.API --no-restore'
-              zipAfterPublish: false
-              modifyOutputPath: false
+  #         - task: DotNetCoreCLI@2
+  #           displayName: "Publish ERP Facade API "
+  #           inputs:
+  #             command: "publish"
+  #             publishWebProjects: false
+  #             projects: '**/*UKHO.ERPFacade.API.csproj'
+  #             arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\UKHO.ERPFacade.API --no-restore'
+  #             zipAfterPublish: false
+  #             modifyOutputPath: false
 
-          - task: DotNetCoreCLI@2
-            displayName: "Publish Cleanup Webjob"
-            inputs:
-              command: "publish"
-              publishWebProjects: false
-              projects: "**/UKHO.ERPFacade.CleanUp.WebJob.csproj"
-              arguments: "--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/UKHO.ERPFacade.API/App_Data/jobs/Triggered/CleanupWebjob --no-restore"
-              zipAfterPublish: false
-              modifyOutputPath: false
+  #         - task: DotNetCoreCLI@2
+  #           displayName: "Publish Cleanup Webjob"
+  #           inputs:
+  #             command: "publish"
+  #             publishWebProjects: false
+  #             projects: "**/UKHO.ERPFacade.CleanUp.WebJob.csproj"
+  #             arguments: "--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/UKHO.ERPFacade.API/App_Data/jobs/Triggered/CleanupWebjob --no-restore"
+  #             zipAfterPublish: false
+  #             modifyOutputPath: false
 
-          - task: DotNetCoreCLI@2
-            displayName: "Publish Event Aggregation Webjob"
-            inputs:
-              command: "publish"
-              publishWebProjects: false
-              projects: "**/UKHO.ERPFacade.EventAggregation.WebJob"
-              arguments: "--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/UKHO.ERPFacade.API/App_Data/jobs/continuous/EventAggregationWebJob --no-restore"
-              zipAfterPublish: false
-              modifyOutputPath: false
+  #         - task: DotNetCoreCLI@2
+  #           displayName: "Publish Event Aggregation Webjob"
+  #           inputs:
+  #             command: "publish"
+  #             publishWebProjects: false
+  #             projects: "**/UKHO.ERPFacade.EventAggregation.WebJob"
+  #             arguments: "--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/UKHO.ERPFacade.API/App_Data/jobs/continuous/EventAggregationWebJob --no-restore"
+  #             zipAfterPublish: false
+  #             modifyOutputPath: false
 
-          - task: ArchiveFiles@2
-            displayName: "Zip ERP Service binaries for Webjob"
-            inputs:
-              rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/UKHO.ERPFacade.API/'
-              includeRootFolder: false
-              archiveType: "zip"
-              archiveFile: '$(Build.ArtifactStagingDirectory)/UKHO.ERPFacade.API/UKHOERPFacadeAPI.zip'
-              replaceExistingArchive: true
+  #         - task: ArchiveFiles@2
+  #           displayName: "Zip ERP Service binaries for Webjob"
+  #           inputs:
+  #             rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/UKHO.ERPFacade.API/'
+  #             includeRootFolder: false
+  #             archiveType: "zip"
+  #             archiveFile: '$(Build.ArtifactStagingDirectory)/UKHO.ERPFacade.API/UKHOERPFacadeAPI.zip'
+  #             replaceExistingArchive: true
 
-          - task: PublishBuildArtifacts@1
-            displayName: "Publish Web Artifact"
-            inputs:
-              PathtoPublish: '$(Build.ArtifactStagingDirectory)\UKHO.ERPFacade.API\UKHOERPFacadeAPI.zip'
-              ArtifactName: UKHOERPFacadeAPI
+  #         - task: PublishBuildArtifacts@1
+  #           displayName: "Publish Web Artifact"
+  #           inputs:
+  #             PathtoPublish: '$(Build.ArtifactStagingDirectory)\UKHO.ERPFacade.API\UKHOERPFacadeAPI.zip'
+  #             ArtifactName: UKHOERPFacadeAPI
 
-          - task: PowerShell@2
-            displayName: "Generate event id runbook"
-            inputs:
-              targetType: filePath
-              filePath: '$(Build.SourcesDirectory)\Utility\XmlToRtfTransformation.ps1'
-              arguments: '-xmlFilePath $(Build.ArtifactStagingDirectory)\UKHO.ERPFacade.API\UKHO.ERPFacade.Common.xml -xsltFilePath $(Build.SourcesDirectory)\Utility\EventIdXmlTransformation.xslt -outputFileName Runbook-EventId'
+  #         - task: PowerShell@2
+  #           displayName: "Generate event id runbook"
+  #           inputs:
+  #             targetType: filePath
+  #             filePath: '$(Build.SourcesDirectory)\Utility\XmlToRtfTransformation.ps1'
+  #             arguments: '-xmlFilePath $(Build.ArtifactStagingDirectory)\UKHO.ERPFacade.API\UKHO.ERPFacade.Common.xml -xsltFilePath $(Build.SourcesDirectory)\Utility\EventIdXmlTransformation.xslt -outputFileName Runbook-EventId'
           
-          - task: PublishBuildArtifacts@1
-            displayName: "Publish event id runbook"
-            inputs:
-              PathtoPublish: '$(Build.SourcesDirectory)\Utility\Runbook-EventId.rtf'
-              ArtifactName: Runbook
+  #         - task: PublishBuildArtifacts@1
+  #           displayName: "Publish event id runbook"
+  #           inputs:
+  #             PathtoPublish: '$(Build.SourcesDirectory)\Utility\Runbook-EventId.rtf'
+  #             ArtifactName: Runbook
 
-      - job: PublishFunctionalTestsAndTerraform
-        workspace:
-          clean: all
-        displayName: "Publish FunctionalTests and Terraform Artifact"
-        steps:
+  #     - job: PublishFunctionalTestsAndTerraform
+  #       workspace:
+  #         clean: all
+  #       displayName: "Publish FunctionalTests and Terraform Artifact"
+  #       steps:
 
-          - task: UseDotNet@2
-            displayName: Use .NET SDK $(DotNetSdkVersion)
-            inputs:
-              packageType: sdk
-              version: $(DotNetSdkVersion)
+  #         - task: UseDotNet@2
+  #           displayName: Use .NET SDK $(DotNetSdkVersion)
+  #           inputs:
+  #             packageType: sdk
+  #             version: $(DotNetSdkVersion)
               
-          - task: DotNetCoreCLI@2
-            displayName: ".Net Core - NuGet restore for non test projects only"
-            inputs:
-              command: "restore"
-              projects: |
-                **/*.csproj
-                !**/UKHO.SAP.MockService.csproj
-              feedsToUse: config
-              noCache: true
-              nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
-              workingDirectory: '$(Build.SourcesDirectory)\src'
-              packagesDirectory: '$(Build.SourcesDirectory)\src\packages'
+  #         - task: DotNetCoreCLI@2
+  #           displayName: ".Net Core - NuGet restore for non test projects only"
+  #           inputs:
+  #             command: "restore"
+  #             projects: |
+  #               **/*.csproj
+  #               !**/UKHO.SAP.MockService.csproj
+  #             feedsToUse: config
+  #             noCache: true
+  #             nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
+  #             workingDirectory: '$(Build.SourcesDirectory)\src'
+  #             packagesDirectory: '$(Build.SourcesDirectory)\src\packages'
 
-          - task: DotNetCoreCLI@2
-            displayName: "Publish Functional Test Code "
-            inputs:
-              command: "publish"
-              publishWebProjects: false
-              projects: '$(Build.SourcesDirectory)\tests\UKHO.ERPFacade.API.FunctionalTests\UKHO.ERPFacade.API.FunctionalTests.csproj'
-              arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\UKHO.ERPFacade.API.FunctionalTests --no-restore'
-              workingDirectory: '$(Build.SourcesDirectory)\tests\UKHO.ERPFacade.API.FunctionalTests'
-              zipAfterPublish: false
-              modifyOutputPath: true
+  #         - task: DotNetCoreCLI@2
+  #           displayName: "Publish Functional Test Code "
+  #           inputs:
+  #             command: "publish"
+  #             publishWebProjects: false
+  #             projects: '$(Build.SourcesDirectory)\tests\UKHO.ERPFacade.API.FunctionalTests\UKHO.ERPFacade.API.FunctionalTests.csproj'
+  #             arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\UKHO.ERPFacade.API.FunctionalTests --no-restore'
+  #             workingDirectory: '$(Build.SourcesDirectory)\tests\UKHO.ERPFacade.API.FunctionalTests'
+  #             zipAfterPublish: false
+  #             modifyOutputPath: true
 
-          - task: PublishBuildArtifacts@1
-            displayName: "Publish Functional test Artifact"
-            inputs:
-              PathtoPublish: '$(Build.ArtifactStagingDirectory)\UKHO.ERPFacade.API.FunctionalTests'
-              ArtifactName: functionaltests
+  #         - task: PublishBuildArtifacts@1
+  #           displayName: "Publish Functional test Artifact"
+  #           inputs:
+  #             PathtoPublish: '$(Build.ArtifactStagingDirectory)\UKHO.ERPFacade.API.FunctionalTests'
+  #             ArtifactName: functionaltests
 
-          - task: PublishBuildArtifacts@1
-            displayName: "Publish terraform Artifacts"
-            inputs:
-              PathtoPublish: '$(Build.SourcesDirectory)\Deployment'
-              ArtifactName: terraformartifact
+  #         - task: PublishBuildArtifacts@1
+  #           displayName: "Publish terraform Artifacts"
+  #           inputs:
+  #             PathtoPublish: '$(Build.SourcesDirectory)\Deployment'
+  #             ArtifactName: terraformartifact
 
-      - job: BuildAndPublishMockService
-        workspace:
-          clean: all
-        displayName: "Dotnet Build And Publish Mock Service"
-        steps:
+  #     - job: BuildAndPublishMockService
+  #       workspace:
+  #         clean: all
+  #       displayName: "Dotnet Build And Publish Mock Service"
+  #       steps:
 
-          - task: UseDotNet@2
-            displayName: Use .NET SDK $(DotNetSdkVersion)
-            inputs:
-              packageType: sdk
-              version: $(DotNetSdkVersion)
+  #         - task: UseDotNet@2
+  #           displayName: Use .NET SDK $(DotNetSdkVersion)
+  #           inputs:
+  #             packageType: sdk
+  #             version: $(DotNetSdkVersion)
               
-          - task: DotNetCoreCLI@2
-            displayName: ".Net Core - NuGet restore for mock project"
-            inputs:
-              command: "restore"
-              projects: |
-                **/UKHO.SAP.MockAPIService.csproj
-              feedsToUse: config
-              noCache: true
-              nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
-              workingDirectory: '$(Build.SourcesDirectory)\UKHO.SAP.MockSAPService'
-              packagesDirectory: '$(Build.SourcesDirectory)\UKHO.SAP.MockSAPService\packages'
+  #         - task: DotNetCoreCLI@2
+  #           displayName: ".Net Core - NuGet restore for mock project"
+  #           inputs:
+  #             command: "restore"
+  #             projects: |
+  #               **/UKHO.SAP.MockAPIService.csproj
+  #             feedsToUse: config
+  #             noCache: true
+  #             nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
+  #             workingDirectory: '$(Build.SourcesDirectory)\UKHO.SAP.MockSAPService'
+  #             packagesDirectory: '$(Build.SourcesDirectory)\UKHO.SAP.MockSAPService\packages'
 
-          - task: DotNetCoreCLI@2
-            displayName: "Build Mock Service Project"
-            inputs:
-              command: "build"
-              projects: |
-                **/UKHO.SAP.MockAPIService.csproj
-              arguments: '--configuration $(BuildConfiguration) --no-restore'
+  #         - task: DotNetCoreCLI@2
+  #           displayName: "Build Mock Service Project"
+  #           inputs:
+  #             command: "build"
+  #             projects: |
+  #               **/UKHO.SAP.MockAPIService.csproj
+  #             arguments: '--configuration $(BuildConfiguration) --no-restore'
 
-          - task: DotNetCoreCLI@2
-            displayName: "Publish Mock Service"
-            inputs:
-              command: "publish"
-              publishWebProjects: false
-              projects: '**/UKHO.SAP.MockAPIService.csproj'
-              arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\MockSAPService --no-restore'
-              zipAfterPublish: true
-              modifyOutputPath: true
+  #         - task: DotNetCoreCLI@2
+  #           displayName: "Publish Mock Service"
+  #           inputs:
+  #             command: "publish"
+  #             publishWebProjects: false
+  #             projects: '**/UKHO.SAP.MockAPIService.csproj'
+  #             arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\MockSAPService --no-restore'
+  #             zipAfterPublish: true
+  #             modifyOutputPath: true
 
-          - task: PublishBuildArtifacts@1
-            displayName: "Publish Mock Service Artifact"
-            inputs:
-              PathtoPublish: '$(Build.ArtifactStagingDirectory)\MockSAPService'
-              ArtifactName: UKHOMockSAPService          
+  #         - task: PublishBuildArtifacts@1
+  #           displayName: "Publish Mock Service Artifact"
+  #           inputs:
+  #             PathtoPublish: '$(Build.ArtifactStagingDirectory)\MockSAPService'
+  #             ArtifactName: UKHOMockSAPService          
 
-      - job: BuildAndPublishADDSMockService
-        workspace:
-          clean: all
-        displayName: "Dotnet Build publish ADDS Mock Service"        
-        steps:
-          - checkout: self
-            submodules: true
+  #     - job: BuildAndPublishADDSMockService
+  #       workspace:
+  #         clean: all
+  #       displayName: "Dotnet Build publish ADDS Mock Service"        
+  #       steps:
+  #         - checkout: self
+  #           submodules: true
 
-          - script: git submodule update --init --force --remote
+  #         - script: git submodule update --init --force --remote
 
-          - task: UseDotNet@2
-            displayName: Use .NET SDK $(DotNetSdkVersion)
-            inputs:
-              packageType: sdk
-              version: $(DotNetSdkVersion)
+  #         - task: UseDotNet@2
+  #           displayName: Use .NET SDK $(DotNetSdkVersion)
+  #           inputs:
+  #             packageType: sdk
+  #             version: $(DotNetSdkVersion)
               
-          - task: DotNetCoreCLI@2
-            displayName: ".Net Core - NuGet restore for non test projects only"
-            inputs:
-              command: "restore"
-              projects: |
-                **/*.csproj              
-              feedsToUse: config
-              noCache: true
-              nugetConfigPath: '$(Build.SourcesDirectory)\mock\repo\BuildNuget.config'
-              workingDirectory: '$(Build.SourcesDirectory)\mock\repo\src'
-              packagesDirectory: '$(Build.SourcesDirectory)\mock\repo\src\packages'          
+  #         - task: DotNetCoreCLI@2
+  #           displayName: ".Net Core - NuGet restore for non test projects only"
+  #           inputs:
+  #             command: "restore"
+  #             projects: |
+  #               **/*.csproj              
+  #             feedsToUse: config
+  #             noCache: true
+  #             nugetConfigPath: '$(Build.SourcesDirectory)\mock\repo\BuildNuget.config'
+  #             workingDirectory: '$(Build.SourcesDirectory)\mock\repo\src'
+  #             packagesDirectory: '$(Build.SourcesDirectory)\mock\repo\src\packages'          
          
-          - task: DotNetCoreCLI@2
-            displayName: "dotnet build task"
-            inputs:
-              command: "build"
-              projects: |
-                **/*ADDSMock.csproj              
-              arguments: '--configuration $(BuildConfiguration) --no-restore'
+  #         - task: DotNetCoreCLI@2
+  #           displayName: "dotnet build task"
+  #           inputs:
+  #             command: "build"
+  #             projects: |
+  #               **/*ADDSMock.csproj              
+  #             arguments: '--configuration $(BuildConfiguration) --no-restore'
 
-          - task: DotNetCoreCLI@2
-            displayName: "Publish ADDS Mock Service "
-            inputs:
-              command: "publish"
-              publishWebProjects: false
-              projects: '**/*ADDSMock.csproj'
-              arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\ADDSMock --no-restore'
-              zipAfterPublish: false
-              modifyOutputPath: false        
+  #         - task: DotNetCoreCLI@2
+  #           displayName: "Publish ADDS Mock Service "
+  #           inputs:
+  #             command: "publish"
+  #             publishWebProjects: false
+  #             projects: '**/*ADDSMock.csproj'
+  #             arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\ADDSMock --no-restore'
+  #             zipAfterPublish: false
+  #             modifyOutputPath: false        
 
-          - task: ArchiveFiles@2
-            displayName: "Zip ADDS Mock Service"
-            inputs:
-              rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/ADDSMock/'
-              includeRootFolder: false
-              archiveType: "zip"
-              archiveFile: '$(Build.ArtifactStagingDirectory)/ADDSMock/UKHOADDSMockService.zip'
-              replaceExistingArchive: true
+  #         - task: ArchiveFiles@2
+  #           displayName: "Zip ADDS Mock Service"
+  #           inputs:
+  #             rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/ADDSMock/'
+  #             includeRootFolder: false
+  #             archiveType: "zip"
+  #             archiveFile: '$(Build.ArtifactStagingDirectory)/ADDSMock/UKHOADDSMockService.zip'
+  #             replaceExistingArchive: true
            
-          - task: PublishBuildArtifacts@1
-            displayName: "Publish ADDS Mock Service Artifact"
-            inputs:
-              PathtoPublish: '$(Build.ArtifactStagingDirectory)\ADDSMock/UKHOADDSMockService.zip'
-              ArtifactName: ADDSMock
+  #         - task: PublishBuildArtifacts@1
+  #           displayName: "Publish ADDS Mock Service Artifact"
+  #           inputs:
+  #             PathtoPublish: '$(Build.ArtifactStagingDirectory)\ADDSMock/UKHOADDSMockService.zip'
+  #             ArtifactName: ADDSMock
  
   - stage: Devdeploy
     displayName: "Devdeploy (inc terraform, webapp deploy)"
@@ -439,7 +441,7 @@ stages:
       - job: FunctionalTests
         dependsOn:
         - Devdeploy
-        - DevAppsdeploy
+        - DevDeployApp
         pool: $(DeploymentPoolPE)
         variables:
           - name : ErpFacadeConfiguration.BaseUrl
@@ -483,9 +485,9 @@ stages:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
                     AzureSubscription: "ERP-Facade-vNext-IAT-A.011.08"
 
-  - stage: vNextIATDeployApp
+  - stage: vNextIAT-DeployApp
     # deployment: vNextIATDeployApp
-    dependsOn: vNextIATDeploy
+    dependsOn: vNextIATDeployApp
     displayName: "vNextIAT - Deploy Dotnet App"
         # environment: "ERP-vNextIAT"
         # pool: $(DeploymentPoolPE)
@@ -641,7 +643,7 @@ stages:
 
       - job: FunctionalTests
         dependsOn:
-        - IATDeployTerraform
+        - IATDeploy
         - IATDeployApp
         pool: $(DeploymentPoolPE)
         variables:
@@ -746,7 +748,7 @@ stages:
                     AzureSubscription: "ERP-Facade-QA-A.011.05.12"
   - stage: QADeployApp    
     # deployment: QADeployApp
-    dependsOn: QADeployTerraform
+    dependsOn: QAdeploy
     displayName: "Qa - Deploy Dotnet App"
         # environment: "ERP-QA"
         # pool: $(DeploymentPoolPE)
@@ -780,7 +782,7 @@ stages:
           AppPool: $(DeploymentPoolPE)
   
   - stage: Livedeploy
-    dependsOn: PreProdDeploy 
+    dependsOn: PreProdAppDeploy 
     displayName: "Livedeploy (inc terraform, webapp deploy)"
     variables:
     - template: Deployment/templates/var/live-deploy.yml
