@@ -438,8 +438,8 @@ stages:
 
       - job: FunctionalTests
         dependsOn:
-        - DevDeployTerraform
-        - DevDeployApp
+        - Devdeploy
+        - DevAppsdeploy
         pool: $(DeploymentPoolPE)
         variables:
           - name : ErpFacadeConfiguration.BaseUrl
@@ -485,7 +485,7 @@ stages:
 
   - stage: vNextIATDeployApp
     # deployment: vNextIATDeployApp
-    dependsOn: vNextIATDeployTerraform
+    dependsOn: vNextIATDeploy
     displayName: "vNextIAT - Deploy Dotnet App"
         # environment: "ERP-vNextIAT"
         # pool: $(DeploymentPoolPE)
@@ -544,7 +544,7 @@ stages:
 
   - stage: E2EDeployApp
     # deployment: E2EDeployApp
-    dependsOn: E2EDeployTerraform
+    dependsOn: E2EDeploy
     displayName: "E2e - Deploy Dotnet App"
         # environment: "ERP-E2E"
         # pool: $(DeploymentPoolPE)
@@ -603,7 +603,7 @@ stages:
 
   - stage: IATDeployApp
     # deployment: IATDeployApp
-    dependsOn: IATDeployTerraform
+    dependsOn: IATDeploy
     displayName: "IAT - Deploy Dotnet App"
         # environment: "ERP-IAT"
         # pool: $(DeploymentPoolPE)
