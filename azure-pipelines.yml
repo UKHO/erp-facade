@@ -402,9 +402,9 @@ stages:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
                     AzureSubscription: "ERP-Facade-Dev-A.011.05.12"                    
   - stage: DevAppsdeploy
-    deployment: DevDeployApp
+    # deployment: DevDeployApp
     dependsOn: DevDeployTerraform
-        # displayName: "Dev - Deploy Dotnet App"
+    displayName: "Dev - Deploy Dotnet App"
         # environment: "ERP-Dev"
         # pool: $(DeploymentPoolPE)
         # variables:
@@ -484,9 +484,9 @@ stages:
                     AzureSubscription: "ERP-Facade-vNext-IAT-A.011.08"
 
   - stage: vNextIATDeployApp
-    deployment: vNextIATDeployApp
+    # deployment: vNextIATDeployApp
     dependsOn: vNextIATDeployTerraform
-        # displayName: "vNextIAT - Deploy Dotnet App"
+    displayName: "vNextIAT - Deploy Dotnet App"
         # environment: "ERP-vNextIAT"
         # pool: $(DeploymentPoolPE)
         # variables:
@@ -543,9 +543,9 @@ stages:
                     AzureSubscription: "ERP-Facade-E2E-A.011.08"
 
   - stage: E2EDeployApp
-    deployment: E2EDeployApp
+    # deployment: E2EDeployApp
     dependsOn: E2EDeployTerraform
-        # displayName: "E2e - Deploy Dotnet App"
+    displayName: "E2e - Deploy Dotnet App"
         # environment: "ERP-E2E"
         # pool: $(DeploymentPoolPE)
         # variables:
@@ -602,9 +602,9 @@ stages:
                     AzureSubscription: "ERP-Facade-IAT-A.011.08"
 
   - stage: IATDeployApp
-    deployment: IATDeployApp
+    # deployment: IATDeployApp
     dependsOn: IATDeployTerraform
-        # displayName: "IAT - Deploy Dotnet App"
+    displayName: "IAT - Deploy Dotnet App"
         # environment: "ERP-IAT"
         # pool: $(DeploymentPoolPE)
         # variables:
@@ -687,9 +687,9 @@ stages:
                     AzureSubscription: "ERP-Facade-PRE-A.011.08"
 
   - stage: PreProdDeploy 
-    deployment: PreProdDeploy
+    # deployment: PreProdDeploy
     dependsOn: PreProdDeployTerraform
-        # displayName: "PRP - Deploy Dotnet App"
+    displayName: "PRP - Deploy Dotnet App"
         # environment: "ERP-preprod"
         # pool: $(DeploymentPoolPE)
         # variables:
@@ -745,9 +745,9 @@ stages:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
                     AzureSubscription: "ERP-Facade-QA-A.011.05.12"
   - stage: QADeployApp    
-    deployment: QADeployApp
+    # deployment: QADeployApp
     dependsOn: QADeployTerraform
-        # displayName: "Qa - Deploy Dotnet App"
+    displayName: "Qa - Deploy Dotnet App"
         # environment: "ERP-QA"
         # pool: $(DeploymentPoolPE)
         # variables:
@@ -802,9 +802,9 @@ stages:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
                     AzureSubscription: "ERP-Facade-Live-A.011.05.12"
   - stage: LiveDeployApp
-    deployment: LiveDeployApp
+    # deployment: LiveDeployApp
     dependsOn: LiveDeployTerraform
-        # displayName: "Live - Deploy Dotnet App"
+    displayName: "Live - Deploy Dotnet App"
         # environment: "ERP-Live"
         # pool: "$(DeploymentPoolPD)"
         # # variables:
