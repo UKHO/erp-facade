@@ -485,7 +485,7 @@ stages:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
                     AzureSubscription: "ERP-Facade-vNext-IAT-A.011.08"
 
-  - stage: vNextIAT-DeployApp
+  - stage: vNextIATAppDeploy
     # deployment: vNextIATDeployApp
     dependsOn: vNextIATDeployApp
     displayName: "vNextIAT - Deploy Dotnet App"
@@ -643,7 +643,7 @@ stages:
 
       - job: FunctionalTests
         dependsOn:
-        - IATDeploy
+        - IATDeployTerraform
         - IATDeployApp
         pool: $(DeploymentPoolPE)
         variables:
