@@ -440,8 +440,7 @@ stages:
 
       - job: FunctionalTests
         dependsOn:
-        - Devdeploy
-        - DevDeployApp
+        - DevDeployApp        
         pool: $(DeploymentPoolPE)
         variables:
           - name : ErpFacadeConfiguration.BaseUrl
