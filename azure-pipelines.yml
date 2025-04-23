@@ -383,7 +383,7 @@ stages:
   #             PathtoPublish: '$(Build.ArtifactStagingDirectory)\ADDSMock/UKHOADDSMockService.zip'
   #             ArtifactName: ADDSMock
  
-  - stage: Devdeploy
+  - stage: DevDeployTerraform
     displayName: "Devdeploy (inc terraform, webapp deploy)"
     variables:
     - template: Deployment/templates/var/dev-deploy.yml
