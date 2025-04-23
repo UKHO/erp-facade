@@ -401,9 +401,9 @@ stages:
                   parameters:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
                     AzureSubscription: "ERP-Facade-Dev-A.011.05.12"                    
-
-      - deployment: DevDeployApp
-        dependsOn: DevDeployTerraform
+  - stage: DevAppsdeploy
+    deployment: DevDeployApp
+    dependsOn: DevDeployTerraform
         # displayName: "Dev - Deploy Dotnet App"
         # environment: "ERP-Dev"
         # pool: $(DeploymentPoolPE)
@@ -429,12 +429,12 @@ stages:
         # strategy:
         #   runOnce:
         #     deploy:
-        jobs:
-          - template: Deployment/templates/continuous-deployment-app.yml
-            parameters:
-              AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
-              ShortName: "Dev"
-              AppPool: $(DeploymentPoolPE)
+    jobs:
+      - template: Deployment/templates/continuous-deployment-app.yml
+        parameters:
+          AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
+          ShortName: "Dev"
+          AppPool: $(DeploymentPoolPE)
 
       - job: FunctionalTests
         dependsOn:
@@ -483,8 +483,9 @@ stages:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
                     AzureSubscription: "ERP-Facade-vNext-IAT-A.011.08"
 
-      - deployment: vNextIATDeployApp
-        dependsOn: vNextIATDeployTerraform
+  - stage: vNextIATDeployApp
+    deployment: vNextIATDeployApp
+    dependsOn: vNextIATDeployTerraform
         # displayName: "vNextIAT - Deploy Dotnet App"
         # environment: "ERP-vNextIAT"
         # pool: $(DeploymentPoolPE)
@@ -510,12 +511,12 @@ stages:
         # strategy:
         #   runOnce:
         #     deploy:
-        jobs:
-          - template: Deployment/templates/continuous-deployment-app.yml
-            parameters:
-              AzureSubscription: "ERP-Facade-vNext-IAT-A.011.08"
-              ShortName: "vNextIAT"
-              AppPool: $(DeploymentPoolPE)
+    jobs:
+      - template: Deployment/templates/continuous-deployment-app.yml
+        parameters:
+          AzureSubscription: "ERP-Facade-vNext-IAT-A.011.08"
+          ShortName: "vNextIAT"
+          AppPool: $(DeploymentPoolPE)
    
   - stage: E2EDeploy
     dependsOn: vNextIATDeploy
@@ -541,8 +542,9 @@ stages:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
                     AzureSubscription: "ERP-Facade-E2E-A.011.08"
 
-      - deployment: E2EDeployApp
-        dependsOn: E2EDeployTerraform
+  - stage: E2EDeployApp
+    deployment: E2EDeployApp
+    dependsOn: E2EDeployTerraform
         # displayName: "E2e - Deploy Dotnet App"
         # environment: "ERP-E2E"
         # pool: $(DeploymentPoolPE)
@@ -568,12 +570,12 @@ stages:
         # strategy:
         #   runOnce:
         #     deploy:
-        jobs:
-          - template: Deployment/templates/continuous-deployment-app.yml
-            parameters:
-              AzureSubscription: "ERP-Facade-vNext-E2E-A.011.08"
-              ShortName: "E2E"
-              AppPool: $(DeploymentPoolPE)            
+    jobs:
+      - template: Deployment/templates/continuous-deployment-app.yml
+        parameters:
+          AzureSubscription: "ERP-Facade-vNext-E2E-A.011.08"
+          ShortName: "E2E"
+          AppPool: $(DeploymentPoolPE)            
 
   - stage: IATDeploy
     dependsOn: DevDeploy   
@@ -599,8 +601,9 @@ stages:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
                     AzureSubscription: "ERP-Facade-IAT-A.011.08"
 
-      - deployment: IATDeployApp
-        dependsOn: IATDeployTerraform
+  - stage: IATDeployApp
+    deployment: IATDeployApp
+    dependsOn: IATDeployTerraform
         # displayName: "IAT - Deploy Dotnet App"
         # environment: "ERP-IAT"
         # pool: $(DeploymentPoolPE)
@@ -629,12 +632,12 @@ stages:
         # strategy:
         #   runOnce:
         #     deploy:
-        jobs:
-          - template: Deployment/templates/continuous-deployment-app.yml
-            parameters:
-              AzureSubscription: "ERP-Facade-IAT-A.011.08"
-              ShortName: "IAT"
-              AppPool: $(DeploymentPoolPE)
+    jobs:
+      - template: Deployment/templates/continuous-deployment-app.yml
+        parameters:
+          AzureSubscription: "ERP-Facade-IAT-A.011.08"
+          ShortName: "IAT"
+          AppPool: $(DeploymentPoolPE)
 
       - job: FunctionalTests
         dependsOn:
@@ -683,8 +686,9 @@ stages:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
                     AzureSubscription: "ERP-Facade-PRE-A.011.08"
 
-      - deployment: PreProdDeploy
-        dependsOn: PreProdDeployTerraform
+  - stage: PreProdDeploy 
+    deployment: PreProdDeploy
+    dependsOn: PreProdDeployTerraform
         # displayName: "PRP - Deploy Dotnet App"
         # environment: "ERP-preprod"
         # pool: $(DeploymentPoolPE)
@@ -710,12 +714,12 @@ stages:
         # strategy:
         #   runOnce:
         #     deploy:
-        jobs:
-          - template: Deployment/templates/continuous-deployment-app.yml
-            parameters:
-              AzureSubscription: "ERP-Facade-PRE-A.011.08"
-              ShortName: "PreProd"
-              AppPool: $(DeploymentPoolPE)
+    jobs:
+      - template: Deployment/templates/continuous-deployment-app.yml
+        parameters:
+          AzureSubscription: "ERP-Facade-PRE-A.011.08"
+          ShortName: "PreProd"
+          AppPool: $(DeploymentPoolPE)
  
   - stage: QAdeploy
     dependsOn: DevDeploy
@@ -740,8 +744,9 @@ stages:
                   parameters:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
                     AzureSubscription: "ERP-Facade-QA-A.011.05.12"
-      - deployment: QADeployApp
-        dependsOn: QADeployTerraform
+  - stage: QADeployApp    
+    deployment: QADeployApp
+    dependsOn: QADeployTerraform
         # displayName: "Qa - Deploy Dotnet App"
         # environment: "ERP-QA"
         # pool: $(DeploymentPoolPE)
@@ -767,13 +772,13 @@ stages:
         # strategy:
         #   runOnce:
         #     deploy:
-        jobs:
-          - template: Deployment/templates/continuous-deployment-app.yml
-            parameters:
-              AzureSubscription: "ERP-Facade-QA-A.011.05.12"
-              ShortName: "QA"
-              AppPool: $(DeploymentPoolPE)
-     
+    jobs:
+      - template: Deployment/templates/continuous-deployment-app.yml
+        parameters:
+          AzureSubscription: "ERP-Facade-QA-A.011.05.12"
+          ShortName: "QA"
+          AppPool: $(DeploymentPoolPE)
+  
   - stage: Livedeploy
     dependsOn: PreProdDeploy 
     displayName: "Livedeploy (inc terraform, webapp deploy)"
@@ -796,9 +801,9 @@ stages:
                   parameters:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
                     AzureSubscription: "ERP-Facade-Live-A.011.05.12"
-
-      - deployment: LiveDeployApp
-        dependsOn: LiveDeployTerraform
+  - stage: LiveDeployApp
+    deployment: LiveDeployApp
+    dependsOn: LiveDeployTerraform
         # displayName: "Live - Deploy Dotnet App"
         # environment: "ERP-Live"
         # pool: "$(DeploymentPoolPD)"
@@ -820,12 +825,12 @@ stages:
         # strategy:
         #   runOnce:
         #     deploy:
-        jobs:
-          - template: Deployment/templates/continuous-deployment-app.yml
-            parameters:
-              AzureSubscription: "ERP-Facade-Live-A.011.05.12"
-              ShortName: "Live"
-              AppPool: $(DeploymentPoolPD)
+    jobs:
+      - template: Deployment/templates/continuous-deployment-app.yml
+        parameters:
+          AzureSubscription: "ERP-Facade-Live-A.011.05.12"
+          ShortName: "Live"
+          AppPool: $(DeploymentPoolPD)
 
       - job: PostDeploymentActions
         dependsOn:
