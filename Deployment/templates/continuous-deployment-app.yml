@@ -8,7 +8,7 @@ parameters:
     type: string
 
 jobs:
-- deployment: ${{ parameters.ShortName }}-DeployApp
+- deployment: ${{ parameters.ShortName }}DeployApp
   dependsOn: ${{ parameters.ShortName }}DeployTerraform
   displayName: "${{ parameters.ShortName }} - Deploy Dotnet App"
   environment: "ERP-${{ parameters.ShortName }}"
@@ -43,8 +43,10 @@ jobs:
     value: $[ stageDependencies.${{ parameters.ShortName }}Deploy.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.addsmockwebappurl']  ]
   strategy:
     runOnce:
-      deploy:             
-      steps:
+      deploy:
+        steps:
+        - checkout: self
+          clean: true
         - task: PowerShell@2
           displayName: "Setting KeyVault Secrets as Pipeline Variables "
           inputs:
