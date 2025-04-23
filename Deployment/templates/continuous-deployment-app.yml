@@ -1,7 +1,41 @@
 parameters:
   - name: AzureSubscription
     type: string
+  # The name of the Terraform workspace to use. Will also be used to generate job names and, in lower case, used to select the correct var/x-deploy.yml variable file.
+  - name: ShortName
+    type: string
+
+variables:
+  - name : WEB_APP_NAME
+    value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.WEB_APP'] ]
+  - name : "ErpFacadeConfiguration.BaseUrl"
+    value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
+  - name : MOCK_WEB_APP_NAME
+    value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.mockWebApp'] ]
+  - name : "KeyVaultSettings.ServiceUri"
+    value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.keyvaulturi'] ]
+  - name :  "AzureWebJobsStorage.ConnectionString"
+    value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
+  - name : ResourceGroup
+    value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.ResourceGroup'] ]
+  - name : WEB_APP_SLOT_NAME
+    value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME'] ]
+  - name : WEB_APP_SLOT_HOST_NAME
+    value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME'] ]
   
+  - name: mockWebAppResourceGroup
+    value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
+  - name: "SapMockConfiguration.BaseUrl"
+    value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
+  - name: addsmockWebAppResourceGroup
+    value: $[ stageDependencies.${{ parameters.ShortName }}Deploy.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.addsmockWebAppResourceGroupName']  ]
+  - name: "addsSapMockConfiguration.BaseUrl"
+    value: $[ stageDependencies.${{ parameters.ShortName }}Deploy.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.addsmockwebappurl']  ]
+  
+ 
+         
+         
+          
 
 steps:
   - task: PowerShell@2
