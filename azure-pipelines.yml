@@ -578,7 +578,7 @@ stages:
           ShortName: "E2E"
           AppPool: $(DeploymentPoolPE)            
 
-  - stage: IATDeploy
+  - stage: IATDeployTerraform
     dependsOn: DevDeploy   
     displayName: "IATdeploy (inc terraform, webapp deploy)"  
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))    
@@ -604,7 +604,7 @@ stages:
 
   - stage: IATDeployApp
     # deployment: IATDeployApp
-    dependsOn: IATDeploy
+    dependsOn: IATDeployTerraform
     displayName: "IAT - Deploy Dotnet App"
         # environment: "ERP-IAT"
         # pool: $(DeploymentPoolPE)
@@ -642,8 +642,7 @@ stages:
 
       - job: FunctionalTests
         dependsOn:
-        - IATDeployTerraform
-        - IATDeployApp
+        - IATDeployTerraform       
         pool: $(DeploymentPoolPE)
         variables:
           - name : ErpFacadeConfiguration.BaseUrl
