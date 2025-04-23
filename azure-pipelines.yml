@@ -88,7 +88,7 @@ stages:
     displayName: "Build (Dotnet Build & Restore , Dotnet Test and Publish Artifact )"
     dependsOn: []
     jobs:
-      - template: Deployment/Template/build-test-publish.yml
+      - template: Deployment/templates//build-test-publish.yml
   #   jobs:     
   #     - job: UnitTestsAndCodeCoverage
   #       workspace:
