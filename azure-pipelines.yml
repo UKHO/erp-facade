@@ -429,7 +429,7 @@ stages:
         # strategy:
         #   runOnce:
         #     deploy:
-        steps:
+        jobs:
           - template: Deployment/templates/continuous-deployment-app.yml
             parameters:
               AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
@@ -510,7 +510,7 @@ stages:
         # strategy:
         #   runOnce:
         #     deploy:
-        steps:
+        jobs:
           - template: Deployment/templates/continuous-deployment-app.yml
             parameters:
               AzureSubscription: "ERP-Facade-vNext-IAT-A.011.08"
@@ -568,7 +568,7 @@ stages:
         # strategy:
         #   runOnce:
         #     deploy:
-        steps:
+        jobs:
           - template: Deployment/templates/continuous-deployment-app.yml
             parameters:
               AzureSubscription: "ERP-Facade-vNext-E2E-A.011.08"
@@ -629,7 +629,7 @@ stages:
         # strategy:
         #   runOnce:
         #     deploy:
-        steps:
+        jobs:
           - template: Deployment/templates/continuous-deployment-app.yml
             parameters:
               AzureSubscription: "ERP-Facade-IAT-A.011.08"
@@ -710,7 +710,7 @@ stages:
         # strategy:
         #   runOnce:
         #     deploy:
-        steps:
+        jobs:
           - template: Deployment/templates/continuous-deployment-app.yml
             parameters:
               AzureSubscription: "ERP-Facade-PRE-A.011.08"
@@ -767,7 +767,7 @@ stages:
         # strategy:
         #   runOnce:
         #     deploy:
-        steps:
+        jobs:
           - template: Deployment/templates/continuous-deployment-app.yml
             parameters:
               AzureSubscription: "ERP-Facade-QA-A.011.05.12"
@@ -820,7 +820,7 @@ stages:
         # strategy:
         #   runOnce:
         #     deploy:
-        steps:
+        jobs:
           - template: Deployment/templates/continuous-deployment-app.yml
             parameters:
               AzureSubscription: "ERP-Facade-Live-A.011.05.12"
