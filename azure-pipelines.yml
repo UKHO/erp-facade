@@ -94,6 +94,9 @@ stages:
     displayName: "Devdeploy (inc terraform, webapp deploy)"
     variables:
     - template: Deployment/templates/var/dev-deploy.yml
+    - template: Deployment/templates/var/vnextiat-deploy.yml
+      parameters:
+          ShortName: "Dev"      
     jobs:
       - deployment: DevDeployTerraform
         displayName: "Dev - Deploy Terraform"
@@ -153,6 +156,9 @@ stages:
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/develop'), startsWith(variables['Build.SourceBranch'], 'refs/heads/dev/')))
     variables:
     - template: Deployment/templates/var/vnextiat-deploy.yml
+    - template: Deployment/templates/var/vnextiat-deploy.yml
+      parameters:
+          ShortName: "vNextIAT"
     jobs:
       - deployment: vNextIATDeployTerraform
         displayName: "vNextIAT - Deploy Terraform"
@@ -187,7 +193,10 @@ stages:
     dependsOn: vNextIATContinuousDeploy
     displayName: "E2Edeploy (inc terraform, webapp deploy)"
     variables:
-    - template: Deployment/templates/var/vnexte2e-deploy.yml 
+    - template: Deployment/templates/var/vnexte2e-deploy.yml
+    - template: Deployment/templates/var/vnextiat-deploy.yml
+      parameters:
+          ShortName: "E2E"
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/develop'), startsWith(variables['Build.SourceBranch'], 'refs/heads/dev/')))
 
     jobs:
@@ -287,6 +296,9 @@ stages:
     condition: succeeded()
     variables:
     - template: Deployment/templates/var/prp-deploy.yml
+    - template: Deployment/templates/var/vnextiat-deploy.yml
+      parameters:
+          ShortName: "PreProd"
     jobs:
       - deployment: PreProdDeployTerraform
         displayName: "PreProd - Deploy Terraform"
@@ -322,6 +334,9 @@ stages:
     displayName: "QAdeploy (inc terraform, webapp deploy)"
     variables:
     - template: Deployment/templates/var/qa-deploy.yml
+    - template: Deployment/templates/var/vnextiat-deploy.yml
+      parameters:
+          ShortName: "QA"
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
 
     jobs:
@@ -358,6 +373,9 @@ stages:
     displayName: "Livedeploy (inc terraform, webapp deploy)"
     variables:
     - template: Deployment/templates/var/live-deploy.yml
+    - template: Deployment/templates/var/vnextiat-deploy.yml
+      parameters:
+          ShortName: "Live"
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
     jobs:
       - deployment: LiveDeployTerraform
