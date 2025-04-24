@@ -157,7 +157,7 @@ jobs:
     dependsOn:
     - ${{ parameters.ShortName }}DeployApp
     steps:
-      - template: Deployment/templates/continuous-testing.yml
+      - template: continuous-testing.yml
         parameters:
           AzureSubscription: "${{ parameters.AzureSubscription }}"
 
@@ -167,4 +167,4 @@ jobs:
     dependsOn:
     - ${{ parameters.ShortName }}DeployApp
     steps:
-      - template: Deployment/templates/retain-pipeline.yml
+      - template: retain-pipeline.yml
