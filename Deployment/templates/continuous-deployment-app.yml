@@ -8,7 +8,7 @@ parameters:
     type: string
 
 steps:
-- deployment: ${{ parameters.ShortName }}DeployApp
+# - deployment: ${{ parameters.ShortName }}DeployApp
   # dependsOn: ${{ parameters.ShortName }}DeployTerraform
   displayName: "${{ parameters.ShortName }} - Deploy Dotnet App"
   environment: "ERP-${{ parameters.ShortName }}"
