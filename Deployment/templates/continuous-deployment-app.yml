@@ -11,14 +11,20 @@ parameters:
   - name: ContinueEvenIfResourcesAreGettingDestroyed
     type: boolean
     default: false
+  - name: AppPool
+    type: string
+  - name: Container
+    type: string
+  - name: RetainPipeline
+    type: boolean
+    default: false
+    
 
 jobs:
 - deployment: ${{ parameters.ShortName }}DeployTerraform
   displayName: "${{ upper(parameters.ShortName) }} - deploy terraform"
   environment: ${{ parameters.AzureDevOpsEnvironment }}
-  pool: 
-    name: $(DeploymentPool)
-    demands: FM-Perms
+  pool:  ${{ parameters.AppPool }}
   container: ${{ parameters.Container }}
   workspace:
     clean: all

@@ -102,10 +102,13 @@ stages:
     jobs:
     - template: Deployment/templates/continuous-deployment-app.yml
       parameters:
+        AzureDevOpsEnvironment: "ERP-Dev"
         ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
         AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
         ShortName: "Dev"
-        RunFunctionalTests: true
+        AppPool: $(DeploymentPoolPE)
+        Container: ${{variables.Container}}
+        RunFunctionalTests: true       
        
       
       # - job: DevContinuousDeploy            
