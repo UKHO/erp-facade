@@ -7,7 +7,7 @@ parameters:
   - name: AppPool
     type: string
 
-jobs:
+steps:
 - deployment: ${{ parameters.ShortName }}DeployApp
   # dependsOn: ${{ parameters.ShortName }}DeployTerraform
   displayName: "${{ parameters.ShortName }} - Deploy Dotnet App"
