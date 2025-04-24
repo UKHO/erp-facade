@@ -316,7 +316,7 @@ stages:
                     AzureSubscription: "ERP-Facade-PRE-A.011.08"
 
       - job: PreProdContinuousDeploy    
-        dependsOn: PreProdDeploy
+        dependsOn: PreProdDeployTerraform
         displayName: "PRP - Deploy Dotnet App"
         pool: $(DeploymentPoolPE)   
         workspace:
@@ -368,7 +368,7 @@ stages:
               AppPool: $(DeploymentPoolPE)
       
   - stage: LiveDeploy
-    dependsOn: PreProdDeployTerraform
+    dependsOn: PreProdDeploy
     displayName: "Livedeploy (inc terraform, webapp deploy)"
     variables:
     - template: Deployment/templates/var/live-deploy.yml
