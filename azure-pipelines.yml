@@ -117,9 +117,9 @@ stages:
         displayName: "Dev - Deploy Dotnet App"
         pool: $(DeploymentPoolPE)   
         workspace:
-            clean: all
-            steps:
-            - template: Deployment/templates/continuous-deployment-app.yml
+          clean: all
+        steps:
+          - template: Deployment/templates/continuous-deployment-app.yml
             parameters:
               AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
               ShortName: "Dev"
