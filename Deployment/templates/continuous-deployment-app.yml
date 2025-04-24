@@ -27,12 +27,15 @@ jobs:
 - deployment: ${{ parameters.ShortName }}DeployTerraform
   displayName: "${{ upper(parameters.ShortName) }} - deploy terraform"
   environment: ${{ parameters.AzureDevOpsEnvironment }}
-  pool:  "Mare Nectaris"
+  pool: $(DeploymentPool)
   container: ${{ parameters.Container }}
   workspace:
     clean: all
   variables:
   - template: var/${{ lower(parameters.ShortName) }}-deploy.yml
+  - template: var/terraform-output-variables.yml
+    parameters:
+      ShortName: "${{ parameters.ShortName }}" 
   strategy:
     runOnce:
       deploy:
