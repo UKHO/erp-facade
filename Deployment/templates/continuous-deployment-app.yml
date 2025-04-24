@@ -74,9 +74,9 @@ jobs:
     clean: all
   variables:
   - template: var/${{ lower(parameters.ShortName) }}-deploy.yml
-  - template: var/terraform-output-variables.yml
-    parameters:
-      ShortName: "${{ parameters.ShortName }}" 
+  # - template: var/terraform-output-variables.yml
+  #   parameters:
+  #     ShortName: "${{ parameters.ShortName }}" 
   strategy:
     runOnce:
       deploy:
