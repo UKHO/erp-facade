@@ -90,7 +90,7 @@ stages:
     jobs:
       - template: Deployment/templates/build-test-publish.yml
 
-  - stage: DevDeployTerraform
+  - stage: DevDeploy
     displayName: "Devdeploy (inc terraform, webapp deploy)"
     variables:
     - template: Deployment/templates/var/dev-deploy.yml
@@ -114,8 +114,9 @@ stages:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
                     AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
       
-      - job: DevContinuousDeploy     
-        # dependsOn: DevDeployApp
+      - job: DevContinuousDeploy
+        deployment: DevContinuousDeploy    
+        dependsOn: DevDeployTerraform
         displayName: "Dev - Deploy Dotnet App"
         pool: $(DeploymentPoolPE)   
         workspace:
@@ -128,8 +129,8 @@ stages:
               AppPool: $(DeploymentPoolPE)
 
       - job: FunctionalTests
-        # dependsOn:
-        # - DevContinuousDeploy        
+        dependsOn:
+        - DevContinuousDeploy        
         pool: $(DeploymentPoolPE)
         variables:
           - name : ErpFacadeConfiguration.BaseUrl
@@ -150,8 +151,8 @@ stages:
             parameters:
               AzureSubscription: "ERP-Facade-Dev-A.011.05.12"              
 
-  - stage: vNextIATDeployTerraform
-    dependsOn:  DevDeployTerraform
+  - stage: vNextIATDeploy
+    dependsOn:  DevDeploy
     displayName: "VNext IATdeploy (inc terraform, webapp deploy)"
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/develop'), startsWith(variables['Build.SourceBranch'], 'refs/heads/dev/')))
     variables:
@@ -177,7 +178,7 @@ stages:
                     AzureSubscription: "ERP-Facade-vNext-IAT-A.011.08"
 
       - job: vNextIATContinuousDeploy    
-        # dependsOn: vNextIATDeployApp
+        dependsOn: vNextIATDeployTerraform
         displayName: "vNextIAT - Deploy Dotnet App"           
         pool: $(DeploymentPoolPE)   
         workspace:
@@ -189,7 +190,7 @@ stages:
               ShortName: "vNextIAT"
               AppPool: $(DeploymentPoolPE)
    
-  - stage: E2EDeployTerraform
+  - stage: E2EDeploy
     dependsOn: vNextIATDeployTerraform
     displayName: "E2Edeploy (inc terraform, webapp deploy)"
     variables:
@@ -217,7 +218,7 @@ stages:
                     AzureSubscription: "ERP-Facade-E2E-A.011.08"
 
       - job: E2EContinuousDeploy       
-        # dependsOn: E2EDeployApp
+        dependsOn: E2EDeployTerraform
         displayName: "E2e - Deploy Dotnet App"             
         pool: $(DeploymentPoolPE)   
         workspace:
@@ -229,8 +230,8 @@ stages:
               ShortName: "E2E"
               AppPool: $(DeploymentPoolPE)            
 
-  - stage: IATDeployTerraform
-    dependsOn: DevDeployTerraform   
+  - stage: IATDeploy
+    dependsOn: DevDeploy   
     displayName: "IATdeploy (inc terraform, webapp deploy)"  
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))    
     variables:
@@ -253,7 +254,8 @@ stages:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
                     AzureSubscription: "ERP-Facade-IAT-A.011.08"
 
-      - job: IATContinuousDeploy        
+      - job: IATContinuousDeploy
+        deployment: IATContinuousDeploy        
         dependsOn: IATDeployTerraform
         displayName: "IAT - Deploy Dotnet App"
         pool: $(DeploymentPoolPE)   
@@ -267,8 +269,8 @@ stages:
               AppPool: $(DeploymentPoolPE)
 
       - job: FunctionalTests
-        # dependsOn:
-        # - IATDeployApp            
+        dependsOn:
+        - IATContinuousDeploy            
         pool: $(DeploymentPoolPE)
         variables:
           - name : ErpFacadeConfiguration.BaseUrl
@@ -289,8 +291,8 @@ stages:
             parameters:
               AzureSubscription: "ERP-Facade-IAT-A.011.05.12"              
  
-  - stage: PreProdDeployTerraform
-    dependsOn: DevDeployTerraform  
+  - stage: PreProdDeploy
+    dependsOn: DevDeploy  
     displayName: "PreProddeploy (inc terraform, webapp deploy)"  
     condition: succeeded()
     variables:
@@ -316,7 +318,7 @@ stages:
                     AzureSubscription: "ERP-Facade-PRE-A.011.08"
 
       - job: PreProdContinuousDeploy    
-        # dependsOn: PreProdDeployApp
+        dependsOn: PreProdDeployTerraform
         displayName: "PRP - Deploy Dotnet App"
         pool: $(DeploymentPoolPE)   
         workspace:
@@ -328,8 +330,8 @@ stages:
               ShortName: "PreProd"
               AppPool: $(DeploymentPoolPE)
  
-  - stage: QADeployTerraform
-    dependsOn: DevDeployTerraform
+  - stage: QADeploy
+    dependsOn: DevDeploy
     displayName: "QAdeploy (inc terraform, webapp deploy)"
     variables:
     - template: Deployment/templates/var/qa-deploy.yml
@@ -355,7 +357,7 @@ stages:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
                     AzureSubscription: "ERP-Facade-QA-A.011.05.12"
       - job: QAContinuousDeploy 
-        # dependsOn: QADeployApp
+        dependsOn: QADeployTerraform
         displayName: "Qa - Deploy Dotnet App"
         pool: $(DeploymentPoolPE)   
         workspace:
@@ -367,7 +369,7 @@ stages:
               ShortName: "QA"
               AppPool: $(DeploymentPoolPE)
       
-  - stage: LiveTerraformDeploy
+  - stage: LiveDeploy
     dependsOn: PreProdDeployTerraform
     displayName: "Livedeploy (inc terraform, webapp deploy)"
     variables:
@@ -392,8 +394,9 @@ stages:
                   parameters:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
                     AzureSubscription: "ERP-Facade-Live-A.011.05.12"
-      - job: LiveContinuousDeploy        
-        # dependsOn: LiveDeployApp
+      - job: LiveContinuousDeploy
+      - deployment: LiveDeploy       
+        dependsOn: LiveDeployTerraform
         displayName: "Live - Deploy Dotnet App"
         pool: $(DeploymentPoolPE)   
         workspace:
@@ -406,8 +409,8 @@ stages:
               AppPool: $(DeploymentPoolPD)
 
       - job: PostDeploymentActions
-        # dependsOn:
-        # - LiveDeployApp                 
+        dependsOn:
+        - LiveDeploy                 
         pool: $(WindowsPool)        
         displayName: Post Deployment Actions
         steps:
