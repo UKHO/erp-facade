@@ -190,7 +190,7 @@ stages:
               AppPool: $(DeploymentPoolPE)
    
   - stage: E2EDeploy
-    dependsOn: vNextIATDeployTerraform
+    dependsOn: vNextIATDeploy
     displayName: "E2Edeploy (inc terraform, webapp deploy)"
     variables:
     - template: Deployment/templates/var/vnexte2e-deploy.yml
@@ -316,7 +316,7 @@ stages:
                     AzureSubscription: "ERP-Facade-PRE-A.011.08"
 
       - job: PreProdContinuousDeploy    
-        dependsOn: PreProdDeployTerraform
+        dependsOn: PreProdDeploy
         displayName: "PRP - Deploy Dotnet App"
         pool: $(DeploymentPoolPE)   
         workspace:
