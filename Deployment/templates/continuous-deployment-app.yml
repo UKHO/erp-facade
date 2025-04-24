@@ -1,4 +1,7 @@
 parameters:
+  # The name of the environment to be used in Azure DevOps.
+  - name: AzureDevOpsEnvironment
+    type: string
   - name: AzureSubscription
     type: string
   # The name of the Terraform workspace to use. Will also be used to generate job names and, in lower case, used to select the correct var/x-deploy.yml variable file.
