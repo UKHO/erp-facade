@@ -114,8 +114,7 @@ stages:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
                     AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
       
-      - job: DevContinuousDeploy
-        deployment: DevContinuousDeploy    
+      - job: DevContinuousDeploy            
         dependsOn: DevDeployTerraform
         displayName: "Dev - Deploy Dotnet App"
         pool: $(DeploymentPoolPE)   
@@ -254,8 +253,7 @@ stages:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
                     AzureSubscription: "ERP-Facade-IAT-A.011.08"
 
-      - job: IATContinuousDeploy
-        deployment: IATContinuousDeploy        
+      - job: IATContinuousDeploy                
         dependsOn: IATDeployTerraform
         displayName: "IAT - Deploy Dotnet App"
         pool: $(DeploymentPoolPE)   
@@ -394,8 +392,7 @@ stages:
                   parameters:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
                     AzureSubscription: "ERP-Facade-Live-A.011.05.12"
-      - job: LiveContinuousDeploy
-      - deployment: LiveDeploy       
+      - job: LiveContinuousDeploy             
         dependsOn: LiveDeployTerraform
         displayName: "Live - Deploy Dotnet App"
         pool: $(DeploymentPoolPE)   
@@ -410,7 +407,7 @@ stages:
 
       - job: PostDeploymentActions
         dependsOn:
-        - LiveDeploy                 
+        - LiveContinuousDeploy                 
         pool: $(WindowsPool)        
         displayName: Post Deployment Actions
         steps:
