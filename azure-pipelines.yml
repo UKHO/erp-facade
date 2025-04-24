@@ -151,7 +151,7 @@ stages:
               AzureSubscription: "ERP-Facade-Dev-A.011.05.12"              
 
   - stage: vNextIATDeployTerraform
-    dependsOn:  Devcontinuousdeploy
+    dependsOn:  DevDeployTerraform
     displayName: "VNext IATdeploy (inc terraform, webapp deploy)"
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/develop'), startsWith(variables['Build.SourceBranch'], 'refs/heads/dev/')))
     variables:
@@ -190,7 +190,7 @@ stages:
               AppPool: $(DeploymentPoolPE)
    
   - stage: E2EDeployTerraform
-    dependsOn: vNextIATContinuousDeploy
+    dependsOn: vNextIATDeployTerraform
     displayName: "E2Edeploy (inc terraform, webapp deploy)"
     variables:
     - template: Deployment/templates/var/vnexte2e-deploy.yml
@@ -230,7 +230,7 @@ stages:
               AppPool: $(DeploymentPoolPE)            
 
   - stage: IATDeployTerraform
-    dependsOn: DevContinuousDeploy   
+    dependsOn: DevDeployTerraform   
     displayName: "IATdeploy (inc terraform, webapp deploy)"  
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))    
     variables:
@@ -290,7 +290,7 @@ stages:
               AzureSubscription: "ERP-Facade-IAT-A.011.05.12"              
  
   - stage: PreProdDeployTerraform
-    dependsOn: DevContinuousDeploy  
+    dependsOn: DevDeployTerraform  
     displayName: "PreProddeploy (inc terraform, webapp deploy)"  
     condition: succeeded()
     variables:
@@ -329,7 +329,7 @@ stages:
               AppPool: $(DeploymentPoolPE)
  
   - stage: QADeployTerraform
-    dependsOn: DevContinuousDeploy
+    dependsOn: DevDeployTerraform
     displayName: "QAdeploy (inc terraform, webapp deploy)"
     variables:
     - template: Deployment/templates/var/qa-deploy.yml
@@ -368,7 +368,7 @@ stages:
               AppPool: $(DeploymentPoolPE)
       
   - stage: LiveTerraformDeploy
-    dependsOn: PreProdContinuousDeploy
+    dependsOn: PreProdDeployTerraform
     displayName: "Livedeploy (inc terraform, webapp deploy)"
     variables:
     - template: Deployment/templates/var/live-deploy.yml
