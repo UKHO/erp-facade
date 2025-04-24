@@ -120,12 +120,15 @@ stages:
         pool: $(DeploymentPoolPE)   
         workspace:
           clean: all
-        steps:
-          - template: Deployment/templates/continuous-deployment-app.yml
-            parameters:
-              AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
-              ShortName: "Dev"
-              AppPool: $(DeploymentPoolPE)
+        strategy:
+          runOnce:
+            deploy:          
+              steps:
+              - template: Deployment/templates/continuous-deployment-app.yml
+                parameters:
+                  AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
+                  ShortName: "Dev"
+                  AppPool: $(DeploymentPoolPE)
 
       - job: FunctionalTests
         dependsOn:
@@ -182,6 +185,9 @@ stages:
         pool: $(DeploymentPoolPE)   
         workspace:
           clean: all
+        strategy:
+          runOnce:
+            deploy:
         steps:
           - template: Deployment/templates/continuous-deployment-app.yml
             parameters:
@@ -222,6 +228,9 @@ stages:
         pool: $(DeploymentPoolPE)   
         workspace:
           clean: all
+        strategy:
+          runOnce:
+            deploy:
         steps:
           - template: Deployment/templates/continuous-deployment-app.yml
             parameters:
@@ -259,6 +268,9 @@ stages:
         pool: $(DeploymentPoolPE)   
         workspace:
           clean: all
+        strategy:
+          runOnce:
+            deploy:
         steps:
           - template: Deployment/templates/continuous-deployment-app.yml
             parameters:
@@ -321,6 +333,9 @@ stages:
         pool: $(DeploymentPoolPE)   
         workspace:
           clean: all
+        strategy:
+          runOnce:
+            deploy:
         steps:
           - template: Deployment/templates/continuous-deployment-app.yml
             parameters:
@@ -360,6 +375,9 @@ stages:
         pool: $(DeploymentPoolPE)   
         workspace:
           clean: all
+        strategy:
+          runOnce:
+            deploy:
         steps:
           - template: Deployment/templates/continuous-deployment-app.yml
             parameters:
@@ -398,6 +416,9 @@ stages:
         pool: $(DeploymentPoolPE)   
         workspace:
           clean: all
+        strategy:
+          runOnce:
+            deploy:
         steps:
           - template: Deployment/templates/continuous-deployment-app.yml
             parameters:
