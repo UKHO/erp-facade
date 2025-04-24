@@ -115,7 +115,7 @@ stages:
                     AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
       
       - job: DevContinuousDeploy     
-        dependsOn: DevDeployApp
+        # dependsOn: DevDeployApp
         displayName: "Dev - Deploy Dotnet App"
         pool: $(DeploymentPoolPE)   
         workspace:
@@ -128,8 +128,8 @@ stages:
               AppPool: $(DeploymentPoolPE)
 
       - job: FunctionalTests
-        dependsOn:
-        - DevContinuousDeploy        
+        # dependsOn:
+        # - DevContinuousDeploy        
         pool: $(DeploymentPoolPE)
         variables:
           - name : ErpFacadeConfiguration.BaseUrl
@@ -177,7 +177,7 @@ stages:
                     AzureSubscription: "ERP-Facade-vNext-IAT-A.011.08"
 
       - job: vNextIATContinuousDeploy    
-        dependsOn: vNextIATDeployApp
+        # dependsOn: vNextIATDeployApp
         displayName: "vNextIAT - Deploy Dotnet App"           
         pool: $(DeploymentPoolPE)   
         workspace:
@@ -216,9 +216,8 @@ stages:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
                     AzureSubscription: "ERP-Facade-E2E-A.011.08"
 
-      - job: E2EContinuousDeploy
-        # deployment: E2EDeployApp
-        dependsOn: E2EDeployApp
+      - job: E2EContinuousDeploy       
+        # dependsOn: E2EDeployApp
         displayName: "E2e - Deploy Dotnet App"             
         pool: $(DeploymentPoolPE)   
         workspace:
@@ -268,8 +267,8 @@ stages:
               AppPool: $(DeploymentPoolPE)
 
       - job: FunctionalTests
-        dependsOn:
-        - IATDeployApp            
+        # dependsOn:
+        # - IATDeployApp            
         pool: $(DeploymentPoolPE)
         variables:
           - name : ErpFacadeConfiguration.BaseUrl
@@ -317,7 +316,7 @@ stages:
                     AzureSubscription: "ERP-Facade-PRE-A.011.08"
 
       - job: PreProdContinuousDeploy    
-        dependsOn: PreProdDeployApp
+        # dependsOn: PreProdDeployApp
         displayName: "PRP - Deploy Dotnet App"
         pool: $(DeploymentPoolPE)   
         workspace:
@@ -356,7 +355,7 @@ stages:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
                     AzureSubscription: "ERP-Facade-QA-A.011.05.12"
       - job: QAContinuousDeploy 
-        dependsOn: QADeployApp
+        # dependsOn: QADeployApp
         displayName: "Qa - Deploy Dotnet App"
         pool: $(DeploymentPoolPE)   
         workspace:
@@ -394,7 +393,7 @@ stages:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
                     AzureSubscription: "ERP-Facade-Live-A.011.05.12"
       - job: LiveContinuousDeploy        
-        dependsOn: LiveDeployApp
+        # dependsOn: LiveDeployApp
         displayName: "Live - Deploy Dotnet App"
         pool: $(DeploymentPoolPE)   
         workspace:
@@ -407,8 +406,8 @@ stages:
               AppPool: $(DeploymentPoolPD)
 
       - job: PostDeploymentActions
-        dependsOn:
-        - LiveDeployApp                 
+        # dependsOn:
+        # - LiveDeployApp                 
         pool: $(WindowsPool)        
         displayName: Post Deployment Actions
         steps:
