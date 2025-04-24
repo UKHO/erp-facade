@@ -84,352 +84,346 @@ stages:
             inputs:
               reportPattern: '**/mutation-report.html'          
   
-  - stage: DOTNETBUILD_DOTNETTEST_AND_PUBLISH
+  - stage: BuildTestPublish
     displayName: "Build (Dotnet Build & Restore , Dotnet Test and Publish Artifact )"
     dependsOn: []
     jobs:
       - template: Deployment/templates/build-test-publish.yml
 
   - stage: DevDeploy
-    displayName: "Devdeploy (inc terraform, webapp deploy)"
-    variables:
-    - template: Deployment/templates/var/dev-deploy.yml
-    - template: Deployment/templates/var/vnextiat-deploy.yml
-      parameters:
-          ShortName: "Dev"      
+    dependsOn:
+    - BuildTestPublish
+    displayName: "Dev deploy"
+    # variables:
+    # - template: Deployment/templates/var/dev-deploy.yml
+      # - template: Deployment/templates/var/vnextiat-deploy.yml
+      # parameters:
+      #     ShortName: "Dev"      
     jobs:
-      - deployment: DevDeployTerraform
-        displayName: "Dev - Deploy Terraform"
-        environment: "ERP-Dev"
-        pool: $(DeploymentPool)
-        container: ${{variables.Container}}
-        workspace:
-          clean: all
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - template: Deployment/templates/continuous-deployment.yml
-                  parameters:
-                    ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
-                    AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
+    - template: Deployment/templates/continuous-deployment-app.yml
+      parameters:
+        ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
+        AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
+        ShortName: "Dev"
+        RunFunctionalTests: true
+       
       
-      - job: DevContinuousDeploy            
-        dependsOn: DevDeployTerraform
-        displayName: "Dev - Deploy Dotnet App"
-        pool: $(DeploymentPoolPE)   
-        workspace:
-          clean: all
-        strategy:
-          runOnce:
-            deploy:          
-              steps:
-              - template: Deployment/templates/continuous-deployment-app.yml
-                parameters:
-                  AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
-                  ShortName: "Dev"
-                  AppPool: $(DeploymentPoolPE)
+      # - job: DevContinuousDeploy            
+      #   dependsOn: DevDeployTerraform
+      #   displayName: "Dev - Deploy Dotnet App"
+      #   pool: $(DeploymentPoolPE)   
+      #   workspace:
+      #     clean: all
+      #   strategy:
+      #     runOnce:
+      #       deploy:          
+      #         steps:
+      #         - template: Deployment/templates/continuous-deployment-app.yml
+      #           parameters:
+      #             AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
+      #             ShortName: "Dev"
+      #             AppPool: $(DeploymentPoolPE)
 
-      - job: FunctionalTests
-        dependsOn:
-        - DevContinuousDeploy        
-        pool: $(DeploymentPoolPE)
-        variables:
-          - name : ErpFacadeConfiguration.BaseUrl
-            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
-          - name : SapMockConfiguration.BaseUrl
-            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl'] ]
-          - name : AzureStorageConfiguration.ConnectionString
-            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
-          - name : mockWebAppName
-            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp'] ]
-          - name : mockWebAppResourceGroup
-            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName'] ]
-        displayName: "Dev Functional Automated Tests"
-        workspace:
-         clean: all
-        steps:
-          - template: Deployment/templates/continuous-testing.yml
-            parameters:
-              AzureSubscription: "ERP-Facade-Dev-A.011.05.12"              
+      # - job: FunctionalTests
+      #   dependsOn:
+      #   - DevContinuousDeploy        
+      #   pool: $(DeploymentPoolPE)
+      #   variables:
+      #     - name : ErpFacadeConfiguration.BaseUrl
+      #       value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
+      #     - name : SapMockConfiguration.BaseUrl
+      #       value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl'] ]
+      #     - name : AzureStorageConfiguration.ConnectionString
+      #       value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
+      #     - name : mockWebAppName
+      #       value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp'] ]
+      #     - name : mockWebAppResourceGroup
+      #       value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName'] ]
+      #   displayName: "Dev Functional Automated Tests"
+      #   workspace:
+      #    clean: all
+      #   steps:
+      #     - template: Deployment/templates/continuous-testing.yml
+      #       parameters:
+      #         AzureSubscription: "ERP-Facade-Dev-A.011.05.12"              
 
-  - stage: vNextIATDeploy
-    dependsOn:  DevDeploy
-    displayName: "VNext IATdeploy (inc terraform, webapp deploy)"
-    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/develop'), startsWith(variables['Build.SourceBranch'], 'refs/heads/dev/')))
-    variables:
-    - template: Deployment/templates/var/vnextiat-deploy.yml
-    - template: Deployment/templates/var/vnextiat-deploy.yml
-      parameters:
-          ShortName: "vNextIAT"
-    jobs:
-      - deployment: vNextIATDeployTerraform
-        displayName: "vNextIAT - Deploy Terraform"
-        environment: "ERP-vNextIAT"
-        pool: $(DeploymentPool)
-        container: ${{variables.Container}}
-        workspace:
-          clean: all
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - template: Deployment/templates/continuous-deployment.yml
-                  parameters:
-                    ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
-                    AzureSubscription: "ERP-Facade-vNext-IAT-A.011.08"
+  # - stage: vNextIATDeploy
+  #   dependsOn:  DevDeploy
+  #   displayName: "VNext IATdeploy (inc terraform, webapp deploy)"
+  #   condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/develop'), startsWith(variables['Build.SourceBranch'], 'refs/heads/dev/')))
+  #   variables:
+  #   - template: Deployment/templates/var/vnextiat-deploy.yml
+  #   - template: Deployment/templates/var/vnextiat-deploy.yml
+  #     parameters:
+  #         ShortName: "vNextIAT"
+  #   jobs:
+  #     - deployment: vNextIATDeployTerraform
+  #       displayName: "vNextIAT - Deploy Terraform"
+  #       environment: "ERP-vNextIAT"
+  #       pool: $(DeploymentPool)
+  #       container: ${{variables.Container}}
+  #       workspace:
+  #         clean: all
+  #       strategy:
+  #         runOnce:
+  #           deploy:
+  #             steps:
+  #               - template: Deployment/templates/continuous-deployment.yml
+  #                 parameters:
+  #                   ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
+  #                   AzureSubscription: "ERP-Facade-vNext-IAT-A.011.08"
 
-      - job: vNextIATContinuousDeploy    
-        dependsOn: vNextIATDeployTerraform
-        displayName: "vNextIAT - Deploy Dotnet App"           
-        pool: $(DeploymentPoolPE)   
-        workspace:
-          clean: all
-        strategy:
-          runOnce:
-            deploy:
-        steps:
-          - template: Deployment/templates/continuous-deployment-app.yml
-            parameters:
-              AzureSubscription: "ERP-Facade-vNext-IAT-A.011.08"
-              ShortName: "vNextIAT"
-              AppPool: $(DeploymentPoolPE)
+  #     - job: vNextIATContinuousDeploy    
+  #       dependsOn: vNextIATDeployTerraform
+  #       displayName: "vNextIAT - Deploy Dotnet App"           
+  #       pool: $(DeploymentPoolPE)   
+  #       workspace:
+  #         clean: all
+  #       strategy:
+  #         runOnce:
+  #           deploy:
+  #       steps:
+  #         - template: Deployment/templates/continuous-deployment-app.yml
+  #           parameters:
+  #             AzureSubscription: "ERP-Facade-vNext-IAT-A.011.08"
+  #             ShortName: "vNextIAT"
+  #             AppPool: $(DeploymentPoolPE)
    
-  - stage: E2EDeploy
-    dependsOn: vNextIATDeploy
-    displayName: "E2Edeploy (inc terraform, webapp deploy)"
-    variables:
-    - template: Deployment/templates/var/vnexte2e-deploy.yml
-    - template: Deployment/templates/var/vnextiat-deploy.yml
-      parameters:
-          ShortName: "E2E"
-    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/develop'), startsWith(variables['Build.SourceBranch'], 'refs/heads/dev/')))
+  # - stage: E2EDeploy
+  #   dependsOn: vNextIATDeploy
+  #   displayName: "E2Edeploy (inc terraform, webapp deploy)"
+  #   variables:
+  #   - template: Deployment/templates/var/vnexte2e-deploy.yml
+  #   - template: Deployment/templates/var/vnextiat-deploy.yml
+  #     parameters:
+  #         ShortName: "E2E"
+  #   condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/develop'), startsWith(variables['Build.SourceBranch'], 'refs/heads/dev/')))
 
-    jobs:
-      - deployment: E2EDeployTerraform
-        displayName: "E2e - Deploy Terraform"
-        environment: "ERP-E2E"
-        pool: $(DeploymentPool)
-        container: ${{variables.Container}}
-        workspace:
-          clean: all
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - template: Deployment/templates/continuous-deployment.yml
-                  parameters:
-                    ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
-                    AzureSubscription: "ERP-Facade-E2E-A.011.08"
+  #   jobs:
+  #     - deployment: E2EDeployTerraform
+  #       displayName: "E2e - Deploy Terraform"
+  #       environment: "ERP-E2E"
+  #       pool: $(DeploymentPool)
+  #       container: ${{variables.Container}}
+  #       workspace:
+  #         clean: all
+  #       strategy:
+  #         runOnce:
+  #           deploy:
+  #             steps:
+  #               - template: Deployment/templates/continuous-deployment.yml
+  #                 parameters:
+  #                   ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
+  #                   AzureSubscription: "ERP-Facade-E2E-A.011.08"
 
-      - job: E2EContinuousDeploy       
-        dependsOn: E2EDeployTerraform
-        displayName: "E2e - Deploy Dotnet App"             
-        pool: $(DeploymentPoolPE)   
-        workspace:
-          clean: all
-        strategy:
-          runOnce:
-            deploy:
-        steps:
-          - template: Deployment/templates/continuous-deployment-app.yml
-            parameters:
-              AzureSubscription: "ERP-Facade-vNext-E2E-A.011.08"
-              ShortName: "E2E"
-              AppPool: $(DeploymentPoolPE)            
+  #     - job: E2EContinuousDeploy       
+  #       dependsOn: E2EDeployTerraform
+  #       displayName: "E2e - Deploy Dotnet App"             
+  #       pool: $(DeploymentPoolPE)   
+  #       workspace:
+  #         clean: all
+  #       strategy:
+  #         runOnce:
+  #           deploy:
+  #       steps:
+  #         - template: Deployment/templates/continuous-deployment-app.yml
+  #           parameters:
+  #             AzureSubscription: "ERP-Facade-vNext-E2E-A.011.08"
+  #             ShortName: "E2E"
+  #             AppPool: $(DeploymentPoolPE)            
 
-  - stage: IATDeploy
-    dependsOn: DevDeploy   
-    displayName: "IATdeploy (inc terraform, webapp deploy)"  
-    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))    
-    variables:
-    - template: Deployment/templates/var/iat-deploy.yml
+  # - stage: IATDeploy
+  #   dependsOn: DevDeploy   
+  #   displayName: "IATdeploy (inc terraform, webapp deploy)"  
+  #   condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))    
+  #   variables:
+  #   - template: Deployment/templates/var/iat-deploy.yml
    
-    jobs:
-      - deployment: IATDeployTerraform
-        displayName: "IAT - Deploy Terraform"
-        environment: "ERP-IAT"
-        pool: $(DeploymentPool)
-        container: ${{variables.Container}}
-        workspace:
-          clean: all
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - template: Deployment/templates/continuous-deployment.yml
-                  parameters:
-                    ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
-                    AzureSubscription: "ERP-Facade-IAT-A.011.08"
+  #   jobs:
+  #     - deployment: IATDeployTerraform
+  #       displayName: "IAT - Deploy Terraform"
+  #       environment: "ERP-IAT"
+  #       pool: $(DeploymentPool)
+  #       container: ${{variables.Container}}
+  #       workspace:
+  #         clean: all
+  #       strategy:
+  #         runOnce:
+  #           deploy:
+  #             steps:
+  #               - template: Deployment/templates/continuous-deployment.yml
+  #                 parameters:
+  #                   ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
+  #                   AzureSubscription: "ERP-Facade-IAT-A.011.08"
 
-      - job: IATContinuousDeploy                
-        dependsOn: IATDeployTerraform
-        displayName: "IAT - Deploy Dotnet App"
-        pool: $(DeploymentPoolPE)   
-        workspace:
-          clean: all
-        strategy:
-          runOnce:
-            deploy:
-        steps:
-          - template: Deployment/templates/continuous-deployment-app.yml
-            parameters:
-              AzureSubscription: "ERP-Facade-IAT-A.011.08"
-              ShortName: "IAT"
-              AppPool: $(DeploymentPoolPE)
+  #     - job: IATContinuousDeploy                
+  #       dependsOn: IATDeployTerraform
+  #       displayName: "IAT - Deploy Dotnet App"
+  #       pool: $(DeploymentPoolPE)   
+  #       workspace:
+  #         clean: all
+  #       strategy:
+  #         runOnce:
+  #           deploy:
+  #       steps:
+  #         - template: Deployment/templates/continuous-deployment-app.yml
+  #           parameters:
+  #             AzureSubscription: "ERP-Facade-IAT-A.011.08"
+  #             ShortName: "IAT"
+  #             AppPool: $(DeploymentPoolPE)
 
-      - job: FunctionalTests
-        dependsOn:
-        - IATContinuousDeploy            
-        pool: $(DeploymentPoolPE)
-        variables:
-          - name : ErpFacadeConfiguration.BaseUrl
-            value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
-          - name : SapMockConfiguration.BaseUrl
-            value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.mockwebappurl'] ]
-          - name : AzureStorageConfiguration.ConnectionString
-            value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
-          - name : mockWebAppName
-            value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.mockWebApp'] ]
-          - name : mockWebAppResourceGroup
-            value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName'] ]
-        displayName: "Dev Functional Automated Tests"
-        workspace:
-         clean: all
-        steps:
-          - template: Deployment/templates/continuous-testing.yml
-            parameters:
-              AzureSubscription: "ERP-Facade-IAT-A.011.05.12"              
+  #     - job: FunctionalTests
+  #       dependsOn:
+  #       - IATContinuousDeploy            
+  #       pool: $(DeploymentPoolPE)
+  #       variables:
+  #         - name : ErpFacadeConfiguration.BaseUrl
+  #           value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
+  #         - name : SapMockConfiguration.BaseUrl
+  #           value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.mockwebappurl'] ]
+  #         - name : AzureStorageConfiguration.ConnectionString
+  #           value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
+  #         - name : mockWebAppName
+  #           value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.mockWebApp'] ]
+  #         - name : mockWebAppResourceGroup
+  #           value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName'] ]
+  #       displayName: "Dev Functional Automated Tests"
+  #       workspace:
+  #        clean: all
+  #       steps:
+  #         - template: Deployment/templates/continuous-testing.yml
+  #           parameters:
+  #             AzureSubscription: "ERP-Facade-IAT-A.011.05.12"              
  
-  - stage: PreProdDeploy
-    dependsOn: DevDeploy  
-    displayName: "PreProddeploy (inc terraform, webapp deploy)"  
-    condition: succeeded()
-    variables:
-    - template: Deployment/templates/var/prp-deploy.yml
-    - template: Deployment/templates/var/vnextiat-deploy.yml
-      parameters:
-          ShortName: "PreProd"
-    jobs:
-      - deployment: PreProdDeployTerraform
-        displayName: "PreProd - Deploy Terraform"
-        environment: "ERP-preprod"
-        pool: $(DeploymentPool)
-        container: ${{variables.Container}}
-        workspace:
-          clean: all
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - template: Deployment/templates/continuous-deployment.yml
-                  parameters:
-                    ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
-                    AzureSubscription: "ERP-Facade-PRE-A.011.08"
+  # - stage: PreProdDeploy
+  #   dependsOn: DevDeploy  
+  #   displayName: "PreProddeploy (inc terraform, webapp deploy)"  
+  #   condition: succeeded()
+  #   variables:
+  #   - template: Deployment/templates/var/prp-deploy.yml
+  #   - template: Deployment/templates/var/vnextiat-deploy.yml
+  #     parameters:
+  #         ShortName: "PreProd"
+  #   jobs:
+  #     - deployment: PreProdDeployTerraform
+  #       displayName: "PreProd - Deploy Terraform"
+  #       environment: "ERP-preprod"
+  #       pool: $(DeploymentPool)
+  #       container: ${{variables.Container}}
+  #       workspace:
+  #         clean: all
+  #       strategy:
+  #         runOnce:
+  #           deploy:
+  #             steps:
+  #               - template: Deployment/templates/continuous-deployment.yml
+  #                 parameters:
+  #                   ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
+  #                   AzureSubscription: "ERP-Facade-PRE-A.011.08"
 
-      - job: PreProdContinuousDeploy    
-        dependsOn: PreProdDeployTerraform
-        displayName: "PRP - Deploy Dotnet App"
-        pool: $(DeploymentPoolPE)   
-        workspace:
-          clean: all
-        strategy:
-          runOnce:
-            deploy:
-        steps:
-          - template: Deployment/templates/continuous-deployment-app.yml
-            parameters:
-              AzureSubscription: "ERP-Facade-PRE-A.011.08"
-              ShortName: "PreProd"
-              AppPool: $(DeploymentPoolPE)
+  #     - job: PreProdContinuousDeploy    
+  #       dependsOn: PreProdDeployTerraform
+  #       displayName: "PRP - Deploy Dotnet App"
+  #       pool: $(DeploymentPoolPE)   
+  #       workspace:
+  #         clean: all
+  #       strategy:
+  #         runOnce:
+  #           deploy:
+  #       steps:
+  #         - template: Deployment/templates/continuous-deployment-app.yml
+  #           parameters:
+  #             AzureSubscription: "ERP-Facade-PRE-A.011.08"
+  #             ShortName: "PreProd"
+  #             AppPool: $(DeploymentPoolPE)
  
-  - stage: QADeploy
-    dependsOn: DevDeploy
-    displayName: "QAdeploy (inc terraform, webapp deploy)"
-    variables:
-    - template: Deployment/templates/var/qa-deploy.yml
-    - template: Deployment/templates/var/vnextiat-deploy.yml
-      parameters:
-          ShortName: "QA"
-    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
+  # - stage: QADeploy
+  #   dependsOn: DevDeploy
+  #   displayName: "QAdeploy (inc terraform, webapp deploy)"
+  #   variables:
+  #   - template: Deployment/templates/var/qa-deploy.yml
+  #   - template: Deployment/templates/var/vnextiat-deploy.yml
+  #     parameters:
+  #         ShortName: "QA"
+  #   condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
 
-    jobs:
-      - deployment: QADeployTerraform
-        displayName: "Qa - Deploy Terraform"
-        environment: "ERP-QA"
-        pool: $(DeploymentPool)
-        container: ${{variables.Container}}
-        workspace:
-          clean: all
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - template: Deployment/templates/continuous-deployment.yml
-                  parameters:
-                    ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
-                    AzureSubscription: "ERP-Facade-QA-A.011.05.12"
-      - job: QAContinuousDeploy 
-        dependsOn: QADeployTerraform
-        displayName: "Qa - Deploy Dotnet App"
-        pool: $(DeploymentPoolPE)   
-        workspace:
-          clean: all
-        strategy:
-          runOnce:
-            deploy:
-        steps:
-          - template: Deployment/templates/continuous-deployment-app.yml
-            parameters:
-              AzureSubscription: "ERP-Facade-QA-A.011.05.12"
-              ShortName: "QA"
-              AppPool: $(DeploymentPoolPE)
+  #   jobs:
+  #     - deployment: QADeployTerraform
+  #       displayName: "Qa - Deploy Terraform"
+  #       environment: "ERP-QA"
+  #       pool: $(DeploymentPool)
+  #       container: ${{variables.Container}}
+  #       workspace:
+  #         clean: all
+  #       strategy:
+  #         runOnce:
+  #           deploy:
+  #             steps:
+  #               - template: Deployment/templates/continuous-deployment.yml
+  #                 parameters:
+  #                   ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
+  #                   AzureSubscription: "ERP-Facade-QA-A.011.05.12"
+  #     - job: QAContinuousDeploy 
+  #       dependsOn: QADeployTerraform
+  #       displayName: "Qa - Deploy Dotnet App"
+  #       pool: $(DeploymentPoolPE)   
+  #       workspace:
+  #         clean: all
+  #       strategy:
+  #         runOnce:
+  #           deploy:
+  #       steps:
+  #         - template: Deployment/templates/continuous-deployment-app.yml
+  #           parameters:
+  #             AzureSubscription: "ERP-Facade-QA-A.011.05.12"
+  #             ShortName: "QA"
+  #             AppPool: $(DeploymentPoolPE)
       
-  - stage: LiveDeploy
-    dependsOn: PreProdDeploy
-    displayName: "Livedeploy (inc terraform, webapp deploy)"
-    variables:
-    - template: Deployment/templates/var/live-deploy.yml
-    - template: Deployment/templates/var/vnextiat-deploy.yml
-      parameters:
-          ShortName: "Live"
-    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
-    jobs:
-      - deployment: LiveDeployTerraform
-        displayName: "Live - Deploy Terraform"
-        environment: "ERP-Live"
-        pool: $(DeploymentPool)
-        container: ${{variables.Container}}
-        workspace:
-          clean: all
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - template: Deployment/templates/continuous-deployment.yml
-                  parameters:
-                    ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
-                    AzureSubscription: "ERP-Facade-Live-A.011.05.12"
-      - job: LiveContinuousDeploy             
-        dependsOn: LiveDeployTerraform
-        displayName: "Live - Deploy Dotnet App"
-        pool: $(DeploymentPoolPE)   
-        workspace:
-          clean: all
-        strategy:
-          runOnce:
-            deploy:
-        steps:
-          - template: Deployment/templates/continuous-deployment-app.yml
-            parameters:
-              AzureSubscription: "ERP-Facade-Live-A.011.05.12"
-              ShortName: "Live"
-              AppPool: $(DeploymentPoolPD)
+  # - stage: LiveDeploy
+  #   dependsOn: PreProdDeploy
+  #   displayName: "Livedeploy (inc terraform, webapp deploy)"
+  #   variables:
+  #   - template: Deployment/templates/var/live-deploy.yml
+  #   - template: Deployment/templates/var/vnextiat-deploy.yml
+  #     parameters:
+  #         ShortName: "Live"
+  #   condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
+  #   jobs:
+  #     - deployment: LiveDeployTerraform
+  #       displayName: "Live - Deploy Terraform"
+  #       environment: "ERP-Live"
+  #       pool: $(DeploymentPool)
+  #       container: ${{variables.Container}}
+  #       workspace:
+  #         clean: all
+  #       strategy:
+  #         runOnce:
+  #           deploy:
+  #             steps:
+  #               - template: Deployment/templates/continuous-deployment.yml
+  #                 parameters:
+  #                   ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
+  #                   AzureSubscription: "ERP-Facade-Live-A.011.05.12"
+  #     - job: LiveContinuousDeploy             
+  #       dependsOn: LiveDeployTerraform
+  #       displayName: "Live - Deploy Dotnet App"
+  #       pool: $(DeploymentPoolPE)   
+  #       workspace:
+  #         clean: all
+  #       strategy:
+  #         runOnce:
+  #           deploy:
+  #       steps:
+  #         - template: Deployment/templates/continuous-deployment-app.yml
+  #           parameters:
+  #             AzureSubscription: "ERP-Facade-Live-A.011.05.12"
+  #             ShortName: "Live"
+  #             AppPool: $(DeploymentPoolPD)
 
-      - job: PostDeploymentActions
-        dependsOn:
-        - LiveContinuousDeploy                 
-        pool: $(WindowsPool)        
-        displayName: Post Deployment Actions
-        steps:
-          - template: Deployment/templates/retain-pipeline.yml
+  #     - job: PostDeploymentActions
+  #       dependsOn:
+  #       - LiveContinuousDeploy                 
+  #       pool: $(WindowsPool)        
+  #       displayName: Post Deployment Actions
+  #       steps:
+  #         - template: Deployment/templates/retain-pipeline.yml
