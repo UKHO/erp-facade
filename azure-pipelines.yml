@@ -88,7 +88,7 @@ stages:
     displayName: "Build (Dotnet Build & Restore , Dotnet Test and Publish Artifact )"
     dependsOn: []
     jobs:
-      - template: Deployment/templates//build-test-publish.yml
+      - template: Deployment/templates/build-test-publish.yml
   #   jobs:     
   #     - job: UnitTestsAndCodeCoverage
   #       workspace:
@@ -402,43 +402,21 @@ stages:
                 - template: Deployment/templates/continuous-deployment.yml
                   parameters:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
-                    AzureSubscription: "ERP-Facade-Dev-A.011.05.12"                    
-  - stage: DevContinuousDeploy
+                    AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
+      
+      - job: DevContinuousDeploy 
     # deployment: DevDeployApp
-    dependsOn: DevDeployTerraform
-    displayName: "Dev - Deploy Dotnet App"
-    variables:
-    - template: Deployment/templates/var/dev-deploy.yml
-        # environment: "ERP-Dev"
-        # pool: $(DeploymentPoolPE)
-        # variables:
-        #   - name : WEB_APP_NAME
-        #     value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_APP'] ]
-        #   - name : "ErpFacadeConfiguration.BaseUrl"
-        #     value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
-        #   - name : MOCK_WEB_APP_NAME
-        #     value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp'] ]
-        #   - name : "KeyVaultSettings.ServiceUri"
-        #     value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.keyvaulturi'] ]
-        #   - name :  "AzureWebJobsStorage.ConnectionString"
-        #     value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
-        #   - name : ResourceGroup
-        #     value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.ResourceGroup'] ]
-        #   - name : WEB_APP_SLOT_NAME
-        #     value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME'] ]
-        #   - name : WEB_APP_SLOT_HOST_NAME
-        #     value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME'] ]        
-        # workspace:
-        #   clean: all
-        # strategy:
-        #   runOnce:
-        #     deploy:
-    jobs:
-      - template: Deployment/templates/continuous-deployment-app.yml
-        parameters:
-          AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
-          ShortName: "Dev"
-          AppPool: $(DeploymentPoolPE)
+        dependsOn: DevDeployApp
+        displayName: "Dev - Deploy Dotnet App"
+        pool: $(DeploymentPoolPE)   
+        workspace:
+            clean: all
+            steps:
+            - template: Deployment/templates/continuous-deployment-app.yml
+            parameters:
+              AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
+              ShortName: "Dev"
+              AppPool: $(DeploymentPoolPE)
 
       - job: FunctionalTests
         dependsOn:
