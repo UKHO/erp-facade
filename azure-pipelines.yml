@@ -219,7 +219,7 @@ stages:
             parameters:
               AzureSubscription: "ERP-Facade-vNext-E2E-A.011.08"
               ShortName: "E2E"
-            AppPool: $(DeploymentPoolPE)            
+              AppPool: $(DeploymentPoolPE)            
 
   - stage: IATDeployTerraform
     dependsOn: DevContinuousDeploy   
@@ -388,10 +388,10 @@ stages:
               ShortName: "Live"
               AppPool: $(DeploymentPoolPD)
 
-          - job: PostDeploymentActions
-            dependsOn:
-            - LiveDeployApp                 
-            pool: $(WindowsPool)        
-            displayName: Post Deployment Actions
-            steps:
-              - template: Deployment/templates/retain-pipeline.yml
+      - job: PostDeploymentActions
+        dependsOn:
+        - LiveDeployApp                 
+        pool: $(WindowsPool)        
+        displayName: Post Deployment Actions
+        steps:
+          - template: Deployment/templates/retain-pipeline.yml
