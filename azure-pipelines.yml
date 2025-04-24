@@ -407,6 +407,8 @@ stages:
     # deployment: DevDeployApp
     dependsOn: DevDeployTerraform
     displayName: "Dev - Deploy Dotnet App"
+    variables:
+    - template: Deployment/templates/var/dev-deploy.yml
         # environment: "ERP-Dev"
         # pool: $(DeploymentPoolPE)
         # variables:
@@ -488,6 +490,8 @@ stages:
     # deployment: vNextIATDeployApp
     dependsOn: vNextIATDeployTerraform
     displayName: "vNextIAT - Deploy Dotnet App"
+    variables:
+    - template: Deployment/templates/var/vnextiat-deploy.yml
         # environment: "ERP-vNextIAT"
         # pool: $(DeploymentPoolPE)
         # variables:
@@ -547,6 +551,8 @@ stages:
     # deployment: E2EDeployApp
     dependsOn: E2EDeployTerraform
     displayName: "E2e - Deploy Dotnet App"
+    variables:
+    - template: Deployment/templates/var/vnexte2e-deploy.yml 
         # environment: "ERP-E2E"
         # pool: $(DeploymentPoolPE)
         # variables:
@@ -606,6 +612,8 @@ stages:
     # deployment: IATDeployApp
     dependsOn: IATDeployTerraform
     displayName: "IAT - Deploy Dotnet App"
+    variables:
+    - template: Deployment/templates/var/iat-deploy.yml
         # environment: "ERP-IAT"
         # pool: $(DeploymentPoolPE)
         # variables:
@@ -690,6 +698,8 @@ stages:
     # deployment: PreProdDeploy
     dependsOn: PreProdDeployTerraform
     displayName: "PRP - Deploy Dotnet App"
+    variables:
+    - template: Deployment/templates/var/prp-deploy.yml
         # environment: "ERP-preprod"
         # pool: $(DeploymentPoolPE)
         # variables:
@@ -748,6 +758,8 @@ stages:
     # deployment: QADeployApp
     dependsOn: QADeployTerraform
     displayName: "Qa - Deploy Dotnet App"
+    variables:
+    - template: Deployment/templates/var/qa-deploy.yml
         # environment: "ERP-QA"
         # pool: $(DeploymentPoolPE)
         # variables:
@@ -805,6 +817,8 @@ stages:
     # deployment: LiveDeployApp
     dependsOn: LiveTerraformDeploy
     displayName: "Live - Deploy Dotnet App"
+    variables:
+    - template: Deployment/templates/var/live-deploy.yml
         # environment: "ERP-Live"
         # pool: "$(DeploymentPoolPD)"
         # # variables:
