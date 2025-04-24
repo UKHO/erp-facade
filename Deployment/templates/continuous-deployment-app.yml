@@ -27,7 +27,7 @@ jobs:
 - deployment: ${{ parameters.ShortName }}DeployTerraform
   displayName: "${{ upper(parameters.ShortName) }} - deploy terraform"
   environment: ${{ parameters.AzureDevOpsEnvironment }}
-  pool:  ${{ parameters.AppPool }}
+  pool:  "Mare Nectaris"
   container: ${{ parameters.Container }}
   workspace:
     clean: all
