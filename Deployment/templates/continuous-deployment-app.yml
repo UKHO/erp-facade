@@ -21,6 +21,12 @@ parameters:
   - name: RetainPipeline
     type: boolean
     default: false
+  - name: DeploySAPMocks
+    type: boolean
+    default: false
+  - name: DeployADDSMocks
+    type: boolean
+    default: false
     
 
 jobs:
@@ -40,7 +46,7 @@ jobs:
         - checkout: self
           clean: true
         - task: PowerShell@2
-          displayName: "terraform $(Environment)deploy"
+          displayName: "terraform ${{ parameters.AzureDevOpsEnvironment }}-deploy"
           name: TerraformDeploy
           inputs:
             targetType: filePath
@@ -66,17 +72,15 @@ jobs:
   - ${{ parameters.ShortName }}DeployTerraform  
   displayName: "${{ upper(parameters.ShortName) }} - Deploy App"
   environment: ${{ parameters.AzureDevOpsEnvironment }}
-  pool: 
-    name: $(DeploymentPool)
-    demands: FM-Perms
+  pool: ${{ parameters.AppPool }}  
   container: ${{ parameters.Container }}
   workspace:
     clean: all
   variables:
   - template: var/${{ lower(parameters.ShortName) }}-deploy.yml
-  # - template: var/terraform-output-variables.yml
-  #   parameters:
-  #     ShortName: "${{ parameters.ShortName }}" 
+  - template: var/terraform-output-variables.yml
+    parameters:
+      ShortName: "${{ parameters.ShortName }}" 
   strategy:
     runOnce:
       deploy:
@@ -92,18 +96,16 @@ jobs:
                 echo "##vso[task.setvariable variable=SapConfiguration.SapUsernameForEncEvent]$(SapUsernameForEncEvent)"
                 echo "##vso[task.setvariable variable=SapConfiguration.SapUsernameForRecordOfSale]$(SapUsernameForRecordOfSale)"
                 echo "##vso[task.setvariable variable=SapConfiguration.SapPasswordForRecordOfSale]$(SapPasswordForRecordOfSale)"
+        - ${{ if ne(parameters.DeploySAPMocks, true) }}:
+          - task: FileTransform@1
+            displayName: "File Transform: Mock Service Application Settings"            
+            inputs:
+              folderPath: '$(Pipeline.Workspace)/UKHOMockSAPService/*.zip'
+              fileType: 'json'
+              targetFiles: '**/appsettings.json'
 
-        - task: FileTransform@1
-          displayName: "File Transform: Mock Service Application Settings"
-          condition: and(succeeded(), eq(variables['Environment.Name'], 'ERP-Dev'))
-          inputs:
-            folderPath: '$(Pipeline.Workspace)/UKHOMockSAPService/*.zip'
-            fileType: 'json'
-            targetFiles: '**/appsettings.json'
-
-        - task: AzureWebApp@1  
-          displayName: "Azure App Deploy: ERPFacade-SAP-MockService"
-          condition: and(succeeded(), eq(variables['Environment.Name'], 'ERP-Dev'))
+          - task: AzureWebApp@1  
+          displayName: "Azure App Deploy: ERPFacade-SAP-MockService"          
           inputs:
             azureSubscription: "${{ parameters.AzureSubscription }}"
             appType: webApp
@@ -136,23 +138,22 @@ jobs:
             action: "Swap Slots"
             swapWithProduction: true
             sourceSlot: $(WEB_APP_SLOT_NAME) 
-          
-        - task: FileTransform@2
-          displayName: "File Transform: ADDS Mock Service Application Settings"
-          condition: and(succeeded(), eq(variables['Environment.Name'], 'ERP-IAT'))
-          inputs:
-              folderPath: '$(Pipeline.Workspace)/ADDSMock/*.zip'
-              xmlTransformationRules: ''
-              jsonTargetFiles: '**/mock-configuration.json'
 
-        - task: AzureWebApp@1
-          displayName: "Azure App Deploy: ERPFacade-ADDS-MockService"
-          condition: and(succeeded(), eq(variables['Environment.Name'], 'ERP-IAT'))
-          inputs:
-            azureSubscription: "${{ parameters.AzureSubscription }}"
-            appType: webApp
-            appName: "$(MOCK_WEB_APP_NAME)"
-            package: "$(Pipeline.Workspace)/ADDSMock/UKHOADDSMockService.zip"
+        - ${{ if ne(parameters.DeployADDSMocks, true) }}:  
+          - task: FileTransform@2
+            displayName: "File Transform: ADDS Mock Service Application Settings"           
+            inputs:
+                folderPath: '$(Pipeline.Workspace)/ADDSMock/*.zip'
+                xmlTransformationRules: ''
+                jsonTargetFiles: '**/mock-configuration.json'
+
+          - task: AzureWebApp@1
+            displayName: "Azure App Deploy: ERPFacade-ADDS-MockService"            
+            inputs:
+              azureSubscription: "${{ parameters.AzureSubscription }}"
+              appType: webApp
+              appName: "$(MOCK_WEB_APP_NAME)"
+              package: "$(Pipeline.Workspace)/ADDSMock/UKHOADDSMockService.zip"
 
 - ${{ if eq(parameters.RunFunctionalTests, true) }}:
   - job: ${{ parameters.ShortName }}RetainPipeline

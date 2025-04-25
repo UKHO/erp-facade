@@ -108,7 +108,8 @@ stages:
         ShortName: "Dev"
         AppPool: $(DeploymentPoolPE)
         Container: ${{variables.Container}}
-        RunFunctionalTests: true       
+        DeploySAPMocks: true
+        RunFunctionalTests: true      
        
       
       # - job: DevContinuousDeploy            
