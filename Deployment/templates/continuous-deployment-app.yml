@@ -176,10 +176,14 @@ jobs:
             sourceSlot: $(WEB_APP_SLOT_NAME)        
 
 - ${{ if eq(parameters.RunFunctionalTests, true) }}:
-  - job: ${{ parameters.ShortName }}RetainPipeline
-    displayName: ${{ upper(parameters.ShortName) }} - retain pipeline
+  - job: ${{ parameters.ShortName }}FunctionalTest
+    displayName: ${{ upper(parameters.ShortName) }} - Functional Test
     dependsOn:
     - ${{ parameters.ShortName }}DeployApp
+    variables:
+      - template: var/terraform-output-variables.yml
+        parameters:
+          ShortName: "${{ parameters.ShortName }}"
     steps:
       - template: continuous-testing.yml
         parameters:
@@ -191,4 +195,7 @@ jobs:
     dependsOn:
     - ${{ parameters.ShortName }}DeployApp
     steps:
-      - template: retain-pipeline.yml
+    - checkout: UKHOTemplates
+    - template: retain-pipelinerun/retain-pipelinerun.yml@UKHOTemplates
+      parameters:
+        DaysValid: 365

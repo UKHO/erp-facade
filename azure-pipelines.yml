@@ -39,6 +39,14 @@ variables:
   - name: DotNetSdkVersion
     value: "8.x"
 
+resources:
+  repositories:
+  - repository: UKHOTemplates
+    type: github
+    name: UKHO/devops-pipelinetemplates
+    endpoint: UKHO
+    ref: refs/heads/main
+
 
 stages:
   - stage: RUNSTRKER
