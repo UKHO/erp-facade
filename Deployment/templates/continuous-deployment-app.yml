@@ -72,13 +72,12 @@ jobs:
             TF_VAR_pe_rg: $(peRG)
             TF_VAR_dns_zone_rg: $(dnsZoneRG)
 
-- deployment: ${{ parameters.ShortName }}DeployApp
+- deployment: ${{ parameters.ShortName }}DeployAppye
   dependsOn:
   - ${{ parameters.ShortName }}DeployTerraform  
   displayName: "${{ upper(parameters.ShortName) }} - Deploy App"
   environment: ${{ parameters.AzureDevOpsEnvironment }}
-  pool: ${{ parameters.AppPool }}  
-  container: ${{ parameters.Container }}
+  pool: ${{ parameters.AppPool }}
   workspace:
     clean: all
   variables:
