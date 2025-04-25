@@ -181,9 +181,10 @@ jobs:
     dependsOn:
     - ${{ parameters.ShortName }}DeployApp
     variables:
-      - template: var/terraform-output-variables.yml
-        parameters:
-          ShortName: "${{ parameters.ShortName }}"
+    - template: var/${{ lower(parameters.ShortName) }}-deploy.yml
+    - template: var/terraform-output-variables.yml
+      parameters:
+        ShortName: "${{ parameters.ShortName }}" 
     steps:
       - template: continuous-testing.yml
         parameters:
