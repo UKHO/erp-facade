@@ -72,7 +72,7 @@ jobs:
             TF_VAR_pe_rg: $(peRG)
             TF_VAR_dns_zone_rg: $(dnsZoneRG)
 
-- deployment: ${{ parameters.ShortName }}DeployAppye
+- deployment: ${{ parameters.ShortName }}DeployApp
   dependsOn:
   - ${{ parameters.ShortName }}DeployTerraform  
   displayName: "${{ upper(parameters.ShortName) }} - Deploy App"
