@@ -158,7 +158,7 @@ jobs:
         - task: AzureWebApp@1
           displayName: "Azure App Deploy: Staging slot"
           inputs:
-            azureSubscription: "${{ parameters.AzureSubscription }}"
+            azureSubscription: $(AzureSubscription)
             appType: webApp
             appName: "$(WEB_APP_NAME)"
             package: "$(Pipeline.Workspace)/UKHOERPFacadeAPI/UKHOERPFacadeAPI.zip"
@@ -168,7 +168,7 @@ jobs:
         - task: AzureAppServiceManage@0
           displayName: Swap with production slot
           inputs:
-            azureSubscription: ${{ parameters.AzureSubscription }}
+            azureSubscription: $(AzureSubscription)
             resourceGroupName: $(ResourceGroup)
             webAppName: "$(WEB_APP_NAME)"
             action: "Swap Slots"
@@ -183,12 +183,12 @@ jobs:
     variables:
     - template: var/${{ lower(parameters.ShortName) }}-deploy.yml
     - name : "ErpFacadeConfiguration.BaseUrl"
-    value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
+      value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
  
     steps:
       - template: continuous-testing.yml
         parameters:
-          AzureSubscription: "${{ parameters.AzureSubscription }}"
+          AzureSubscription: $(AzureSubscription)
 
 - ${{ if eq(parameters.RetainPipeline, true) }}:
   - job: ${{ parameters.ShortName }}RetainPipeline
