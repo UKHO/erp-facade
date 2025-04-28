@@ -101,7 +101,9 @@ stages:
   - stage: DevDeploy
     dependsOn:
     - BuildTestPublish
-    displayName: "Dev deploy"    
+    displayName: "Dev deploy" 
+    variables:
+    - template: var/dev-deploy.yml   
     jobs:
     - template: Deployment/templates/continuous-deployment-app.yml
       parameters:
