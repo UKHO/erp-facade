@@ -103,7 +103,7 @@ stages:
     - BuildTestPublish
     displayName: "Dev deploy" 
     variables:
-    - template: var/dev-deploy.yml   
+    - template: Deployment/templates/var/dev-deploy.yml   
     jobs:
     - template: Deployment/templates/continuous-deployment-app.yml
       parameters:
