@@ -182,18 +182,18 @@ jobs:
     dependsOn:
     - ${{ parameters.ShortName }}DeployApp            
     variables:
-    - template: var/${{ lower(parameters.ShortName) }}-deploy.yml
+    - template: var/${{ lower(parameters.ShortName) }}-deploy.yml    
+    
     - name : ErpFacadeConfiguration.BaseUrl
-      value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.tfoutput.ErpFacadeBaseUrl'] ]
+      value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
     - name : SapMockConfiguration.BaseUrl
-      value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.tfoutput.mockwebappurl'] ]
+      value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl'] ]
     - name : AzureStorageConfiguration.ConnectionString
-      value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.tfoutput.AzureStorageConnectionString'] ]
+      value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
     - name : mockWebAppName
-      value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.tfoutput.mockWebApp'] ]
+      value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp'] ]
     - name : mockWebAppResourceGroup
-      value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.tfoutput.mockWebAppResourceGroupName'] ]
- 
+      value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName'] ]
     workspace:
       clean: all
     steps:
