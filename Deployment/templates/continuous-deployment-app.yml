@@ -181,17 +181,18 @@ jobs:
     dependsOn:
     - ${{ parameters.ShortName }}DeployApp            
     variables:
-      - name : ErpFacadeConfiguration.BaseUrl
-        value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
-      - name : SapMockConfiguration.BaseUrl
-        value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.mockwebappurl'] ]
-      - name : AzureStorageConfiguration.ConnectionString
-        value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
-      - name : mockWebAppName
-        value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.mockWebApp'] ]
-      - name : mockWebAppResourceGroup
-        value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.mockWebAppResourceGroupName'] ]
-    
+    - template: var/${{ lower(parameters.ShortName) }}-deploy.yml
+    - name : ErpFacadeConfiguration.BaseUrl
+      value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
+    - name : SapMockConfiguration.BaseUrl
+      value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.mockwebappurl'] ]
+    - name : AzureStorageConfiguration.ConnectionString
+      value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
+    - name : mockWebAppName
+      value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.mockWebApp'] ]
+    - name : mockWebAppResourceGroup
+      value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.mockWebAppResourceGroupName'] ]
+  
     workspace:
       clean: all
     steps:
