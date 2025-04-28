@@ -130,9 +130,7 @@ jobs:
               azureSubscription: "${{ parameters.AzureSubscription }}"
               appType: webApp
               appName: "$(MOCK_WEB_APP_NAME)"
-              package: "$(Pipeline.Workspace)/UKHOMockSAPService/UKHO.SAP.MockAPIService.zip"
-          
-          - powershell: Write-Host "$(myStageAVar)"
+              package: "$(Pipeline.Workspace)/UKHOMockSAPService/UKHO.SAP.MockAPIService.zip"  
 
         - ${{ if eq(parameters.DeployADDSMocks, true) }}:  
           - task: FileTransform@2
@@ -181,21 +179,34 @@ jobs:
   - job: ${{ parameters.ShortName }}FunctionalTest
     displayName: ${{ upper(parameters.ShortName) }} - Functional Test
     dependsOn:
-    - ${{ parameters.ShortName }}DeployApp
+    - ${{ parameters.ShortName }}DeployApp            
     variables:
-    - template: var/${{ lower(parameters.ShortName) }}-deploy.yml            
+      - name : ErpFacadeConfiguration.BaseUrl
+        value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
+      - name : SapMockConfiguration.BaseUrl
+        value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.mockwebappurl'] ]
+      - name : AzureStorageConfiguration.ConnectionString
+        value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
+      - name : mockWebAppName
+        value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.mockWebApp'] ]
+      - name : mockWebAppResourceGroup
+        value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.mockWebAppResourceGroupName'] ]
+      
+    displayName: "Dev Functional Automated Tests"
+    workspace:
+    clean: all
     steps:
-      - template: continuous-testing.yml
-        parameters:
-          AzureSubscription: "${{ parameters.AzureSubscription }}"
+      - template: Deployment/templates/continuous-testing.yml
+    parameters:              
+        AzureSubscription: "${{ parameters.AzureSubscription }}"
 
 - ${{ if eq(parameters.RetainPipeline, true) }}:
-  - job: ${{ parameters.ShortName }}RetainPipeline
-    displayName: ${{ upper(parameters.ShortName) }} - retain pipeline
-    dependsOn:
-    - ${{ parameters.ShortName }}DeployApp
-    steps:
-    - checkout: UKHOTemplates
-    - template: retain-pipelinerun/retain-pipelinerun.yml@UKHOTemplates
-      parameters:
-        DaysValid: 365
+          - job: ${{ parameters.ShortName }}RetainPipeline
+            displayName: ${{ upper(parameters.ShortName) }} - retain pipeline
+            dependsOn:
+            - ${{ parameters.ShortName }}DeployApp
+            steps:
+            - checkout: UKHOTemplates
+            - template: retain-pipelinerun/retain-pipelinerun.yml@UKHOTemplates
+              parameters:
+                DaysValid: 365
