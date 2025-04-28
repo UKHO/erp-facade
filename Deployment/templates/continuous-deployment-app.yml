@@ -90,8 +90,8 @@ jobs:
       deploy:
         steps:
         - checkout: self
-          clean: true
-
+          clean: true  
+          
         - download: current
           displayName: Download UKHOERPFacadeAPI
           artifact: UKHOERPFacadeAPI
@@ -183,7 +183,7 @@ jobs:
     variables:
     - template: var/${{ lower(parameters.ShortName) }}-deploy.yml
     - name : "ErpFacadeConfiguration.BaseUrl"
-      value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
+      value : $[ dependencies.${{ parameters.ShortName }}DeployApp.output["ErpFacadeConfiguration.BaseUrl"]    
  
     steps:
       - template: continuous-testing.yml
