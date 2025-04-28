@@ -114,7 +114,8 @@ jobs:
                 echo "##vso[task.setvariable variable=SapConfiguration.SapPasswordForEncEvent]$(SapPasswordForEncEvent)"
                 echo "##vso[task.setvariable variable=SapConfiguration.SapUsernameForEncEvent]$(SapUsernameForEncEvent)"
                 echo "##vso[task.setvariable variable=SapConfiguration.SapUsernameForRecordOfSale]$(SapUsernameForRecordOfSale)"
-                echo "##vso[task.setvariable variable=SapConfiguration.SapPasswordForRecordOfSale]$(SapPasswordForRecordOfSale)"       
+                echo "##vso[task.setvariable variable=SapConfiguration.SapPasswordForRecordOfSale]$(SapPasswordForRecordOfSale)"
+                echo "##vso[task.setvariable variable=ErpFacadeConfiguration.BaseUrl;isOutput=true]$(ErpFacadeConfiguration.BaseUrl)"   
         
         - ${{ if eq(parameters.DeploySAPMocks, true) }}:
           - task: FileTransform@1
@@ -183,16 +184,16 @@ jobs:
     variables:
     - template: var/${{ lower(parameters.ShortName) }}-deploy.yml
     - name : ErpFacadeConfiguration.BaseUrl
-      value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
+      value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.tfoutput.ErpFacadeBaseUrl'] ]
     - name : SapMockConfiguration.BaseUrl
-      value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.mockwebappurl'] ]
+      value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.tfoutput.mockwebappurl'] ]
     - name : AzureStorageConfiguration.ConnectionString
-      value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
+      value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.tfoutput.AzureStorageConnectionString'] ]
     - name : mockWebAppName
-      value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.mockWebApp'] ]
+      value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.tfoutput.mockWebApp'] ]
     - name : mockWebAppResourceGroup
-      value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.mockWebAppResourceGroupName'] ]
-  
+      value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.tfoutput.mockWebAppResourceGroupName'] ]
+ 
     workspace:
       clean: all
     steps:
