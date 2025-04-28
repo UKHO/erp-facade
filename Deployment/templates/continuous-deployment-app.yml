@@ -26,173 +26,172 @@ parameters:
     default: false
   - name: DeployADDSMocks
     type: boolean
-    default: false
-    
+    default: false    
 
-    jobs:
-      - deployment: DevDeployTerraform
-        displayName: "Dev - Deploy Terraform"
-        environment: "ERP-Dev"
-        pool: $(DeploymentPool)
-        container: ${{variables.Container}}
-        workspace:
-          clean: all
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - template: Deployment/templates/continuous-deployment.yml
-                  parameters:
-                    ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
-                    AzureSubscription: ${{parameters.AzureSubscription}} 
+jobs:
+  - deployment: DevDeployTerraform
+    displayName: "Dev - Deploy Terraform"
+    environment: "ERP-Dev"
+    pool: $(DeploymentPool)
+    container: ${{variables.Container}}
+    workspace:
+      clean: all
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - template: Deployment/templates/continuous-deployment.yml
+              parameters:
+                ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
+                AzureSubscription: ${{parameters.AzureSubscription}} 
 
-      - deployment: DevDeployApp
-        dependsOn: DevDeployTerraform
-        displayName: "Dev - Deploy Dotnet App"
-        environment: "ERP-Dev"
-        pool: ${{ parameters.AppPool }}
-        variables:
-          - name : WEB_APP_NAME
-            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_APP'] ]
-          - name : "ErpFacadeConfiguration.BaseUrl"
-            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
-          - name : MOCK_WEB_APP_NAME
-            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp'] ]
-          - name : "KeyVaultSettings.ServiceUri"
-            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.keyvaulturi'] ]
-          - name :  "AzureWebJobsStorage.ConnectionString"
-            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
-          - name : ResourceGroup
-            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.ResourceGroup'] ]
-          - name : WEB_APP_SLOT_NAME
-            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME'] ]
-          - name : WEB_APP_SLOT_HOST_NAME
-            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME'] ]        
-        workspace:
-          clean: all
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - checkout: self
-                  clean: true  
+  - deployment: DevDeployApp
+    dependsOn: DevDeployTerraform
+    displayName: "Dev - Deploy Dotnet App"
+    environment: "ERP-Dev"
+    pool: ${{ parameters.AppPool }}
+    variables:
+      - name : WEB_APP_NAME
+        value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_APP'] ]
+      - name : "ErpFacadeConfiguration.BaseUrl"
+        value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
+      - name : MOCK_WEB_APP_NAME
+        value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp'] ]
+      - name : "KeyVaultSettings.ServiceUri"
+        value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.keyvaulturi'] ]
+      - name :  "AzureWebJobsStorage.ConnectionString"
+        value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
+      - name : ResourceGroup
+        value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.ResourceGroup'] ]
+      - name : WEB_APP_SLOT_NAME
+        value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME'] ]
+      - name : WEB_APP_SLOT_HOST_NAME
+        value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME'] ]        
+    workspace:
+      clean: all
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - checkout: self
+              clean: true  
 
-                - download: current
-                  displayName: Download UKHOERPFacadeAPI
-                  artifact: UKHOERPFacadeAPI
+            - download: current
+              displayName: Download UKHOERPFacadeAPI
+              artifact: UKHOERPFacadeAPI
 
-                - ${{ if eq(parameters.DeploySAPMocks, true) }}:
-                  - download: current
-                    displayName: Download UKHOMockSAPService
-                    artifact: UKHOMockSAPService
+            - ${{ if eq(parameters.DeploySAPMocks, true) }}:
+              - download: current
+                displayName: Download UKHOMockSAPService
+                artifact: UKHOMockSAPService
 
-                - ${{ if eq(parameters.DeployADDSMocks, true) }}:
-                  - download: current
-                    displayName: Download ADDSMock
-                    artifact: ADDSMock
+            - ${{ if eq(parameters.DeployADDSMocks, true) }}:
+              - download: current
+                displayName: Download ADDSMock
+                artifact: ADDSMock
 
-                - task: PowerShell@2
-                  displayName: "Setting KeyVault Secrets as Pipeline Variables "
-                  inputs:
-                    targetType: 'inline'
-                    script: |
-                        echo "##vso[task.setvariable variable=SapConfiguration.SapPasswordForEncEvent]$(SapPasswordForEncEvent)"
-                        echo "##vso[task.setvariable variable=SapConfiguration.SapUsernameForEncEvent]$(SapUsernameForEncEvent)"
-                        echo "##vso[task.setvariable variable=SapConfiguration.SapUsernameForRecordOfSale]$(SapUsernameForRecordOfSale)"
-                        echo "##vso[task.setvariable variable=SapConfiguration.SapPasswordForRecordOfSale]$(SapPasswordForRecordOfSale)"
-                        echo "##vso[task.setvariable variable=ErpFacadeConfiguration.BaseUrl;isOutput=true]$(ErpFacadeConfiguration.BaseUrl)"   
-                
-                - ${{ if eq(parameters.DeploySAPMocks, true) }}:
-                  - task: FileTransform@1
-                    displayName: "File Transform: Mock Service Application Settings"            
-                    inputs:
-                      folderPath: '$(Pipeline.Workspace)/UKHOMockSAPService/*.zip'
-                      fileType: 'json'
-                      targetFiles: '**/appsettings.json'
+            - task: PowerShell@2
+              displayName: "Setting KeyVault Secrets as Pipeline Variables "
+              inputs:
+                targetType: 'inline'
+                script: |
+                    echo "##vso[task.setvariable variable=SapConfiguration.SapPasswordForEncEvent]$(SapPasswordForEncEvent)"
+                    echo "##vso[task.setvariable variable=SapConfiguration.SapUsernameForEncEvent]$(SapUsernameForEncEvent)"
+                    echo "##vso[task.setvariable variable=SapConfiguration.SapUsernameForRecordOfSale]$(SapUsernameForRecordOfSale)"
+                    echo "##vso[task.setvariable variable=SapConfiguration.SapPasswordForRecordOfSale]$(SapPasswordForRecordOfSale)"
+                    echo "##vso[task.setvariable variable=ErpFacadeConfiguration.BaseUrl;isOutput=true]$(ErpFacadeConfiguration.BaseUrl)"   
+            
+            - ${{ if eq(parameters.DeploySAPMocks, true) }}:
+              - task: FileTransform@1
+                displayName: "File Transform: Mock Service Application Settings"            
+                inputs:
+                  folderPath: '$(Pipeline.Workspace)/UKHOMockSAPService/*.zip'
+                  fileType: 'json'
+                  targetFiles: '**/appsettings.json'
 
-                  - task: AzureWebApp@1  
-                    displayName: "Azure App Deploy: ERPFacade-SAP-MockService"          
-                    inputs:
-                      azureSubscription: "${{ parameters.AzureSubscription }}"
-                      appType: webApp
-                      appName: "$(MOCK_WEB_APP_NAME)"
-                      package: "$(Pipeline.Workspace)/UKHOMockSAPService/UKHO.SAP.MockAPIService.zip"  
+              - task: AzureWebApp@1  
+                displayName: "Azure App Deploy: ERPFacade-SAP-MockService"          
+                inputs:
+                  azureSubscription: "${{ parameters.AzureSubscription }}"
+                  appType: webApp
+                  appName: "$(MOCK_WEB_APP_NAME)"
+                  package: "$(Pipeline.Workspace)/UKHOMockSAPService/UKHO.SAP.MockAPIService.zip"  
 
-                - ${{ if eq(parameters.DeployADDSMocks, true) }}:  
-                  - task: FileTransform@2
-                    displayName: "File Transform: ADDS Mock Service Application Settings"           
-                    inputs:
-                        folderPath: '$(Pipeline.Workspace)/ADDSMock/*.zip'
-                        xmlTransformationRules: ''
-                        jsonTargetFiles: '**/mock-configuration.json'
+            - ${{ if eq(parameters.DeployADDSMocks, true) }}:  
+              - task: FileTransform@2
+                displayName: "File Transform: ADDS Mock Service Application Settings"           
+                inputs:
+                    folderPath: '$(Pipeline.Workspace)/ADDSMock/*.zip'
+                    xmlTransformationRules: ''
+                    jsonTargetFiles: '**/mock-configuration.json'
 
-                  - task: AzureWebApp@1
-                    displayName: "Azure App Deploy: ERPFacade-ADDS-MockService"            
-                    inputs:
-                      azureSubscription: "${{ parameters.AzureSubscription }}"
-                      appType: webApp
-                      appName: "$(MOCK_WEB_APP_NAME)"
-                      package: "$(Pipeline.Workspace)/ADDSMock/UKHOADDSMockService.zip"
+              - task: AzureWebApp@1
+                displayName: "Azure App Deploy: ERPFacade-ADDS-MockService"            
+                inputs:
+                  azureSubscription: "${{ parameters.AzureSubscription }}"
+                  appType: webApp
+                  appName: "$(MOCK_WEB_APP_NAME)"
+                  package: "$(Pipeline.Workspace)/ADDSMock/UKHOADDSMockService.zip"
 
-                - task: FileTransform@1
-                  displayName: "File Transform: WebAppSettings"
-                  inputs:
-                    folderPath: '$(Pipeline.Workspace)/UKHOERPFacadeAPI/*.zip'
-                    fileType: 'json'
-                    targetFiles: '**/appsettings.json'
-                        
-                - task: AzureWebApp@1
-                  displayName: "Azure App Deploy: Staging slot"
-                  inputs:
-                    azureSubscription: "${{ parameters.AzureSubscription }}"
-                    appType: webApp
-                    appName: "$(WEB_APP_NAME)"
-                    package: "$(Pipeline.Workspace)/UKHOERPFacadeAPI/UKHOERPFacadeAPI.zip"
-                    deployToSlotOrASE: true
-                    slotName: $(WEB_APP_SLOT_NAME) 
-                
-                - task: AzureAppServiceManage@0
-                  displayName: Swap with production slot
-                  inputs:
-                    azureSubscription: "${{ parameters.AzureSubscription }}"
-                    resourceGroupName: $(ResourceGroup)
-                    webAppName: "$(WEB_APP_NAME)"
-                    action: "Swap Slots"
-                    swapWithProduction: true
-                    sourceSlot: $(WEB_APP_SLOT_NAME)        
+            - task: FileTransform@1
+              displayName: "File Transform: WebAppSettings"
+              inputs:
+                folderPath: '$(Pipeline.Workspace)/UKHOERPFacadeAPI/*.zip'
+                fileType: 'json'
+                targetFiles: '**/appsettings.json'
+                    
+            - task: AzureWebApp@1
+              displayName: "Azure App Deploy: Staging slot"
+              inputs:
+                azureSubscription: "${{ parameters.AzureSubscription }}"
+                appType: webApp
+                appName: "$(WEB_APP_NAME)"
+                package: "$(Pipeline.Workspace)/UKHOERPFacadeAPI/UKHOERPFacadeAPI.zip"
+                deployToSlotOrASE: true
+                slotName: $(WEB_APP_SLOT_NAME) 
+            
+            - task: AzureAppServiceManage@0
+              displayName: Swap with production slot
+              inputs:
+                azureSubscription: "${{ parameters.AzureSubscription }}"
+                resourceGroupName: $(ResourceGroup)
+                webAppName: "$(WEB_APP_NAME)"
+                action: "Swap Slots"
+                swapWithProduction: true
+                sourceSlot: $(WEB_APP_SLOT_NAME)        
 
-                - ${{ if eq(parameters.RunFunctionalTests, true) }}:  
-                    - job: FunctionalTests
-                      dependsOn:
-                      - DevDeployTerraform
-                      - DevDeployApp
-                      pool: $(DeploymentPoolPE)
-                      variables:
-                        - name : ErpFacadeConfiguration.BaseUrl
-                          value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
-                        - name : SapMockConfiguration.BaseUrl
-                          value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl'] ]
-                        - name : AzureStorageConfiguration.ConnectionString
-                          value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
-                        - name : mockWebAppName
-                          value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp'] ]
-                        - name : mockWebAppResourceGroup
-                          value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName'] ]
-                      displayName: "Dev Functional Automated Tests"
-                      workspace:
-                      clean: all
-                      steps:
-                        - template: Deployment/templates/continuous-testing.yml
+            - ${{ if eq(parameters.RunFunctionalTests, true) }}:  
+                - job: FunctionalTests
+                  dependsOn:
+                  - DevDeployTerraform
+                  - DevDeployApp
+                  pool: $(DeploymentPoolPE)
+                  variables:
+                    - name : ErpFacadeConfiguration.BaseUrl
+                      value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
+                    - name : SapMockConfiguration.BaseUrl
+                      value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl'] ]
+                    - name : AzureStorageConfiguration.ConnectionString
+                      value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
+                    - name : mockWebAppName
+                      value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp'] ]
+                    - name : mockWebAppResourceGroup
+                      value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName'] ]
+                  displayName: "Dev Functional Automated Tests"
+                  workspace:
+                  clean: all
+                  steps:
+                    - template: Deployment/templates/continuous-testing.yml
+                      parameters:
+                        AzureSubscription: ${{parameters.AzureSubscription}} 
+
+            - ${{ if eq(parameters.RetainPipeline, true) }}:
+                      - job: ${{ parameters.ShortName }}RetainPipeline
+                        displayName: ${{ upper(parameters.ShortName) }} - retain pipeline
+                        dependsOn:
+                        - ${{ parameters.ShortName }}DeployApp
+                        steps:
+                        - checkout: UKHOTemplates
+                        - template: retain-pipelinerun/retain-pipelinerun.yml@UKHOTemplates
                           parameters:
-                            AzureSubscription: ${{parameters.AzureSubscription}} 
-
-                - ${{ if eq(parameters.RetainPipeline, true) }}:
-                          - job: ${{ parameters.ShortName }}RetainPipeline
-                            displayName: ${{ upper(parameters.ShortName) }} - retain pipeline
-                            dependsOn:
-                            - ${{ parameters.ShortName }}DeployApp
-                            steps:
-                            - checkout: UKHOTemplates
-                            - template: retain-pipelinerun/retain-pipelinerun.yml@UKHOTemplates
-                              parameters:
-                                DaysValid: 365
+                            DaysValid: 365
