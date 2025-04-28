@@ -64,6 +64,7 @@ jobs:
   workspace:
     clean: all
   variables:
+  - template: var/${{ lower(parameters.ShortName) }}-deploy.yml  
   - name : WEB_APP_NAME
     value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.WEB_APP'] ]
   - name : "ErpFacadeConfiguration.BaseUrl"
