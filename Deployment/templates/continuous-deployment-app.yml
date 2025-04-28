@@ -179,7 +179,7 @@ jobs:
                     value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName'] ]
                 displayName: "Dev Functional Automated Tests"
                 workspace:
-                clean: all
+                  clean: all
                 steps:
                   - template: Deployment/templates/continuous-testing.yml
                     parameters:
