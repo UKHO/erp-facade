@@ -193,11 +193,11 @@ jobs:
         value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.mockWebAppResourceGroupName'] ]
     
     workspace:
-    clean: all
+      clean: all
     steps:
       - template: Deployment/templates/continuous-testing.yml
-    parameters:              
-        AzureSubscription: "${{ parameters.AzureSubscription }}"
+        parameters:              
+          AzureSubscription: "${{ parameters.AzureSubscription }}"
 
 - ${{ if eq(parameters.RetainPipeline, true) }}:
           - job: ${{ parameters.ShortName }}RetainPipeline
