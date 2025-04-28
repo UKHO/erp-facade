@@ -50,27 +50,10 @@ jobs:
           displayName: Download terraformartifact
           artifact: terraformartifact
 
-        - task: PowerShell@2
-          displayName: "terraform ${{ parameters.AzureDevOpsEnvironment }}-deploy"
-          name: TerraformDeploy
-          inputs:
-            targetType: filePath
-            filePath: '$(Pipeline.Workspace)/terraformartifact/terraform_conditional_run.ps1'
-            arguments: '-deploymentResourceGroupName $(DeploymentResourceGroupName) -deploymentStorageAccountName $(DeploymentStorageAccountName) -workSpace $(Environment) -continueEvenIfResourcesAreGettingDestroyed $${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }} -terraformJsonOutputFile $(Pipeline.Workspace)/terraformartifact/terraform_output.json'
-          env:
-            ARM_CLIENT_ID: $(TERRAFORM-CLIENT-ID)
-            ARM_CLIENT_SECRET: $(TERRAFORM-CLIENT-SECRET)
-            ARM_TENANT_ID: $(TERRAFORM-TENANT-ID)
-            ARM_SUBSCRIPTION_ID: $(TERRAFORM-SUBSCRIPTION-ID)
-            TF_VAR_spoke_rg: $(spokeRG)
-            TF_VAR_spoke_vnet_name: $(spokeVnetName)
-            TF_VAR_spoke_subnet_name: $(spokeSubnetName)
-            TF_VAR_subscription_id: $(subscriptionId)
-            TF_VAR_hub_subscription_id: $(hubSubscriptionId)
-            TF_VAR_pe_vnet_name: $(peVnetName)
-            TF_VAR_pe_subnet_name: $(peSubnetName)
-            TF_VAR_pe_rg: $(peRG)
-            TF_VAR_dns_zone_rg: $(dnsZoneRG)
+        - template: continuous-deployment.yml
+          parameters:
+            ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
+            AzureSubscription: ${{parameters.AzureSubscription}}       
 
 - deployment: ${{ parameters.ShortName }}DeployApp
   dependsOn:
@@ -82,9 +65,16 @@ jobs:
     clean: all
   variables:
   - template: var/${{ lower(parameters.ShortName) }}-deploy.yml
-  - template: var/terraform-output-variables.yml
-    parameters:
-      ShortName: "${{ parameters.ShortName }}" 
+  - name : ErpFacadeConfiguration.BaseUrl
+    value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
+  - name : SapMockConfiguration.BaseUrl
+    value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.mockwebappurl'] ]
+  - name : AzureStorageConfiguration.ConnectionString
+    value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
+  - name : mockWebAppName
+    value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.mockWebApp'] ]
+  - name : mockWebAppResourceGroup
+    value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.mockWebAppResourceGroupName'] ] 
   strategy:
     runOnce:
       deploy:
@@ -185,15 +175,16 @@ jobs:
     - template: var/${{ lower(parameters.ShortName) }}-deploy.yml    
     
     - name : ErpFacadeConfiguration.BaseUrl
-      value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
+      value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.tfoutput.ErpFacadeBaseUrl'] ]
     - name : SapMockConfiguration.BaseUrl
-      value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl'] ]
+      value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.tfoutput.mockwebappurl'] ]
     - name : AzureStorageConfiguration.ConnectionString
-      value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
+      value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.tfoutput.AzureStorageConnectionString'] ]
     - name : mockWebAppName
-      value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp'] ]
+      value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.tfoutput.mockWebApp'] ]
     - name : mockWebAppResourceGroup
-      value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName'] ]
+      value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.tfoutput.mockWebAppResourceGroupName'] ]
+ 
     workspace:
       clean: all
     steps:
