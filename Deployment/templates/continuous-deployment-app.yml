@@ -158,7 +158,7 @@ jobs:
         - task: AzureWebApp@1
           displayName: "Azure App Deploy: Staging slot"
           inputs:
-            azureSubscription: $(AzureSubscription)
+            azureSubscription: "${{ parameters.AzureSubscription }}"
             appType: webApp
             appName: "$(WEB_APP_NAME)"
             package: "$(Pipeline.Workspace)/UKHOERPFacadeAPI/UKHOERPFacadeAPI.zip"
@@ -168,7 +168,7 @@ jobs:
         - task: AzureAppServiceManage@0
           displayName: Swap with production slot
           inputs:
-            azureSubscription: $(AzureSubscription)
+            azureSubscription: "${{ parameters.AzureSubscription }}"
             resourceGroupName: $(ResourceGroup)
             webAppName: "$(WEB_APP_NAME)"
             action: "Swap Slots"
@@ -188,7 +188,7 @@ jobs:
     steps:
       - template: continuous-testing.yml
         parameters:
-          AzureSubscription: $(AzureSubscription)
+          AzureSubscription: "${{ parameters.AzureSubscription }}"
 
 - ${{ if eq(parameters.RetainPipeline, true) }}:
   - job: ${{ parameters.ShortName }}RetainPipeline
