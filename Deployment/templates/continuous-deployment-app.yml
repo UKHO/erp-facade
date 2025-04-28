@@ -33,7 +33,7 @@ jobs:
     displayName: "Dev - Deploy Terraform"
     environment: "ERP-Dev"
     pool: $(DeploymentPool)
-    container: ${{variables.Container}}
+    container: ${{parameters.Container}}
     workspace:
       clean: all
     strategy:
@@ -161,37 +161,37 @@ jobs:
                 sourceSlot: $(WEB_APP_SLOT_NAME)        
 
             - ${{ if eq(parameters.RunFunctionalTests, true) }}:  
-                - job: FunctionalTests
-                  dependsOn:
-                  - DevDeployTerraform
-                  - DevDeployApp
-                  pool: $(DeploymentPoolPE)
-                  variables:
-                    - name : ErpFacadeConfiguration.BaseUrl
-                      value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
-                    - name : SapMockConfiguration.BaseUrl
-                      value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl'] ]
-                    - name : AzureStorageConfiguration.ConnectionString
-                      value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
-                    - name : mockWebAppName
-                      value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp'] ]
-                    - name : mockWebAppResourceGroup
-                      value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName'] ]
-                  displayName: "Dev Functional Automated Tests"
-                  workspace:
-                  clean: all
-                  steps:
-                    - template: Deployment/templates/continuous-testing.yml
-                      parameters:
-                        AzureSubscription: ${{parameters.AzureSubscription}} 
+              - job: FunctionalTests
+                dependsOn:
+                - DevDeployTerraform
+                - DevDeployApp
+                pool: $(DeploymentPoolPE)
+                variables:
+                  - name : ErpFacadeConfiguration.BaseUrl
+                    value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
+                  - name : SapMockConfiguration.BaseUrl
+                    value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl'] ]
+                  - name : AzureStorageConfiguration.ConnectionString
+                    value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
+                  - name : mockWebAppName
+                    value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp'] ]
+                  - name : mockWebAppResourceGroup
+                    value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName'] ]
+                displayName: "Dev Functional Automated Tests"
+                workspace:
+                clean: all
+                steps:
+                  - template: Deployment/templates/continuous-testing.yml
+                    parameters:
+                      AzureSubscription: ${{parameters.AzureSubscription}} 
 
             - ${{ if eq(parameters.RetainPipeline, true) }}:
-                      - job: ${{ parameters.ShortName }}RetainPipeline
-                        displayName: ${{ upper(parameters.ShortName) }} - retain pipeline
-                        dependsOn:
-                        - ${{ parameters.ShortName }}DeployApp
-                        steps:
-                        - checkout: UKHOTemplates
-                        - template: retain-pipelinerun/retain-pipelinerun.yml@UKHOTemplates
-                          parameters:
-                            DaysValid: 365
+              - job: ${{ parameters.ShortName }}RetainPipeline
+                displayName: ${{ upper(parameters.ShortName) }} - retain pipeline
+                dependsOn:
+                - ${{ parameters.ShortName }}DeployApp
+                steps:
+                - checkout: UKHOTemplates
+                - template: retain-pipelinerun/retain-pipelinerun.yml@UKHOTemplates
+                  parameters:
+                    DaysValid: 365
