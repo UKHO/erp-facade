@@ -25,3 +25,5 @@ variables:
     value: $(PermitWithDifferentKeyACTIVEKEY)
   - name: "PermitWithDifferentKey.NextKey"
     value: $(PermitWithDifferentKeyNEXTKEY)
+  - name: "ErpFacadeConfiguration.ApiBaseUrl"
+    value: $(ErpFacadeConfiguration.ApiBaseUrl)

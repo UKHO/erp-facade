@@ -177,28 +177,25 @@ jobs:
             swapWithProduction: true
             sourceSlot: $(WEB_APP_SLOT_NAME)        
 
-        - ${{ if eq(parameters.RunFunctionalTests, true) }}:
-          - job: ${{ parameters.ShortName }}FunctionalTest
-            displayName: ${{ upper(parameters.ShortName) }} - Functional Test
-            dependsOn:
-            - ${{ parameters.ShortName }}DeployApp
-            variables:
-            - template: var/${{ lower(parameters.ShortName) }}-deploy.yml
-            - template: var/terraform-output-variables.yml
-              parameters:
-                ShortName: "${{ parameters.ShortName }}" 
-            steps:
-              - template: continuous-testing.yml
-                parameters:
-                  AzureSubscription: "${{ parameters.AzureSubscription }}"
+- ${{ if eq(parameters.RunFunctionalTests, true) }}:
+  - job: ${{ parameters.ShortName }}FunctionalTest
+    displayName: ${{ upper(parameters.ShortName) }} - Functional Test
+    dependsOn:
+    - ${{ parameters.ShortName }}DeployApp
+    variables:
+    - template: var/${{ lower(parameters.ShortName) }}-deploy.yml            
+    steps:
+      - template: continuous-testing.yml
+        parameters:
+          AzureSubscription: "${{ parameters.AzureSubscription }}"
 
-        - ${{ if eq(parameters.RetainPipeline, true) }}:
-          - job: ${{ parameters.ShortName }}RetainPipeline
-            displayName: ${{ upper(parameters.ShortName) }} - retain pipeline
-            dependsOn:
-            - ${{ parameters.ShortName }}DeployApp
-            steps:
-            - checkout: UKHOTemplates
-            - template: retain-pipelinerun/retain-pipelinerun.yml@UKHOTemplates
-              parameters:
-                DaysValid: 365
+- ${{ if eq(parameters.RetainPipeline, true) }}:
+  - job: ${{ parameters.ShortName }}RetainPipeline
+    displayName: ${{ upper(parameters.ShortName) }} - retain pipeline
+    dependsOn:
+    - ${{ parameters.ShortName }}DeployApp
+    steps:
+    - checkout: UKHOTemplates
+    - template: retain-pipelinerun/retain-pipelinerun.yml@UKHOTemplates
+      parameters:
+        DaysValid: 365
