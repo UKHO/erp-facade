@@ -184,9 +184,7 @@ jobs:
             - ${{ parameters.ShortName }}DeployApp
             variables:
             - template: var/${{ lower(parameters.ShortName) }}-deploy.yml
-            - name : "ErpFacadeConfiguration.BaseUrl"
-              value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
-        
+            - template: var/terraform-output-variables.yml
             steps:
               - template: continuous-testing.yml
                 parameters:
