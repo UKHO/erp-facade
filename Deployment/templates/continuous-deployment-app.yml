@@ -191,8 +191,7 @@ jobs:
         value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.mockWebApp'] ]
       - name : mockWebAppResourceGroup
         value : $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.mockWebAppResourceGroupName'] ]
-      
-    displayName: "Dev Functional Automated Tests"
+    
     workspace:
     clean: all
     steps:
