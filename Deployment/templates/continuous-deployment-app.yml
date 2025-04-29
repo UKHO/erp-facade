@@ -29,8 +29,8 @@ parameters:
     default: false    
 
 jobs:
-  - deployment: DevDeployTerraform
-    displayName: "Dev - Deploy Terraform"
+  - deployment: ${{parameters.ShortName}}DeployTerraform
+    displayName: "${{parameters.ShortName}} - Deploy Terraform"
     environment: "ERP-Dev"
     pool: $(DeploymentPool)
     container: ${{parameters.Container}}
@@ -45,28 +45,28 @@ jobs:
                 ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
                 AzureSubscription: ${{parameters.AzureSubscription}} 
 
-  - deployment: DevDeployApp
-    dependsOn: DevDeployTerraform
-    displayName: "Dev - Deploy Dotnet App"
+  - deployment: ${{parameters.ShortName}}DeployApp
+    dependsOn: ${{parameters.ShortName}}DeployTerraform
+    displayName: "${{parameters.ShortName}} - Deploy Dotnet App"
     environment: "ERP-Dev"
     pool: ${{ parameters.AppPool }}
     variables:
       - name : WEB_APP_NAME
-        value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_APP'] ]
+        value : $[ dependencies.${{parameters.ShortName}}DeployTerraform.outputs['${{parameters.ShortName}}DeployTerraform.TerraformDeploy.WEB_APP'] ]
       - name : "ErpFacadeConfiguration.BaseUrl"
-        value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
+        value : $[ dependencies.${{parameters.ShortName}}DeployTerraform.outputs['${{parameters.ShortName}}DeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
       - name : MOCK_WEB_APP_NAME
-        value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp'] ]
+        value : $[ dependencies.${{parameters.ShortName}}DeployTerraform.outputs['${{parameters.ShortName}}DeployTerraform.TerraformDeploy.mockWebApp'] ]
       - name : "KeyVaultSettings.ServiceUri"
-        value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.keyvaulturi'] ]
+        value : $[ dependencies.${{parameters.ShortName}}DeployTerraform.outputs['${{parameters.ShortName}}DeployTerraform.TerraformDeploy.keyvaulturi'] ]
       - name :  "AzureWebJobsStorage.ConnectionString"
-        value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
+        value : $[ dependencies.${{parameters.ShortName}}DeployTerraform.outputs['${{parameters.ShortName}}DeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
       - name : ResourceGroup
-        value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.ResourceGroup'] ]
+        value : $[ dependencies.${{parameters.ShortName}}DeployTerraform.outputs['${{parameters.ShortName}}DeployTerraform.TerraformDeploy.ResourceGroup'] ]
       - name : WEB_APP_SLOT_NAME
-        value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME'] ]
+        value : $[ dependencies.${{parameters.ShortName}}DeployTerraform.outputs['${{parameters.ShortName}}DeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME'] ]
       - name : WEB_APP_SLOT_HOST_NAME
-        value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME'] ]        
+        value : $[ dependencies.${{parameters.ShortName}}DeployTerraform.outputs['${{parameters.ShortName}}DeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME'] ]        
     workspace:
       clean: all
     strategy:
@@ -163,20 +163,20 @@ jobs:
   - ${{ if eq(parameters.RunFunctionalTests, true) }}:  
     - job: FunctionalTests
       dependsOn:
-      - DevDeployTerraform
-      - DevDeployApp
+      - ${{parameters.ShortName}}DeployTerraform
+      - ${{parameters.ShortName}}DeployApp
       pool: ${{ parameters.AppPool }}
       variables:
         - name : ErpFacadeConfiguration.BaseUrl
-          value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
+          value : $[ dependencies.${{parameters.ShortName}}DeployTerraform.outputs['${{parameters.ShortName}}DeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
         - name : SapMockConfiguration.BaseUrl
-          value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl'] ]
+          value : $[ dependencies.${{parameters.ShortName}}DeployTerraform.outputs['${{parameters.ShortName}}DeployTerraform.TerraformDeploy.mockwebappurl'] ]
         - name : AzureStorageConfiguration.ConnectionString
-          value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
+          value : $[ dependencies.${{parameters.ShortName}}DeployTerraform.outputs['${{parameters.ShortName}}DeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
         - name : mockWebAppName
-          value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp'] ]
+          value : $[ dependencies.${{parameters.ShortName}}DeployTerraform.outputs['${{parameters.ShortName}}DeployTerraform.TerraformDeploy.mockWebApp'] ]
         - name : mockWebAppResourceGroup
-          value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName'] ]
+          value : $[ dependencies.${{parameters.ShortName}}DeployTerraform.outputs['${{parameters.ShortName}}DeployTerraform.TerraformDeploy.mockWebAppResourceGroupName'] ]
       displayName: "Dev Functional Automated Tests"
       workspace:
         clean: all
