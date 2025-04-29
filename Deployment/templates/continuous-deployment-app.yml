@@ -31,7 +31,7 @@ parameters:
 jobs:
   - deployment: ${{parameters.ShortName}}DeployTerraform
     displayName: "${{parameters.ShortName}} - Deploy Terraform"
-    environment: "ERP-Dev"
+    environment: ${{parameters.AzureDevOpsEnvironment}}
     pool: $(DeploymentPool)
     container: ${{parameters.Container}}
     workspace:
@@ -48,7 +48,7 @@ jobs:
   - deployment: ${{parameters.ShortName}}DeployApp
     dependsOn: ${{parameters.ShortName}}DeployTerraform
     displayName: "${{parameters.ShortName}} - Deploy Dotnet App"
-    environment: "ERP-Dev"
+    environment: ${{parameters.AzureDevOpsEnvironment}}
     pool: ${{ parameters.AppPool }}
     variables:
       - name : WEB_APP_NAME
