@@ -40,6 +40,13 @@ jobs:
       runOnce:
         deploy:
           steps:
+            - checkout: self
+              clean: true
+
+            - download: current
+              displayName: Download terraformartifact
+              artifact: terraformartifact
+              
             - template: continuous-deployment.yml
               parameters:
                 ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
