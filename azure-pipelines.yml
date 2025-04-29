@@ -132,21 +132,21 @@ stages:
         AppPool: $(DeploymentPoolPE)
         Container: ${{variables.Container}}
 
-  - stage: E2EDeploy
-    dependsOn:
-    - vNextIATDeploy
-    displayName: "E2e - Deploy Terraform" 
-    variables:
-    - template: Deployment/templates/var/vnexte2e-deploy.yml   
-    jobs:
-    - template: Deployment/templates/continuous-deployment-app.yml
-      parameters:
-        AzureDevOpsEnvironment: "ERP-E2E"
-        ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
-        AzureSubscription: "ERP-Facade-E2E-A.011.08"
-        ShortName: "E2E"
-        AppPool: $(DeploymentPoolPE)
-        Container: ${{variables.Container}}          
+  # - stage: E2EDeploy
+  #   dependsOn:
+  #   - vNextIATDeploy
+  #   displayName: "E2e - Deploy Terraform" 
+  #   variables:
+  #   - template: Deployment/templates/var/vnexte2e-deploy.yml   
+  #   jobs:
+  #   - template: Deployment/templates/continuous-deployment-app.yml
+  #     parameters:
+  #       AzureDevOpsEnvironment: "ERP-E2E"
+  #       ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
+  #       AzureSubscription: "ERP-Facade-E2E-A.011.08"
+  #       ShortName: "E2E"
+  #       AppPool: $(DeploymentPoolPE)
+  #       Container: ${{variables.Container}}          
        
 
   - stage: IATDeploy
