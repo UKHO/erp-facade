@@ -121,7 +121,7 @@ stages:
     - DevDeploy
     displayName: "vNextIAT deploy" 
     variables:
-    - template: Deployment/templates/var/vnextIAT-deploy.yml   
+    - template: Deployment/templates/var/vnextiat-deploy.yml   
     jobs:
     - template: Deployment/templates/continuous-deployment-app.yml
       parameters:
