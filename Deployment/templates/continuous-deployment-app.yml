@@ -46,7 +46,7 @@ jobs:
             - download: current
               displayName: Download terraformartifact
               artifact: terraformartifact
-              
+
             - template: continuous-deployment.yml
               parameters:
                 ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
@@ -105,12 +105,11 @@ jobs:
                     echo "##vso[task.setvariable variable=SapConfiguration.SapPasswordForEncEvent]$(SapPasswordForEncEvent)"
                     echo "##vso[task.setvariable variable=SapConfiguration.SapUsernameForEncEvent]$(SapUsernameForEncEvent)"
                     echo "##vso[task.setvariable variable=SapConfiguration.SapUsernameForRecordOfSale]$(SapUsernameForRecordOfSale)"
-                    echo "##vso[task.setvariable variable=SapConfiguration.SapPasswordForRecordOfSale]$(SapPasswordForRecordOfSale)"
-                    echo "##vso[task.setvariable variable=ErpFacadeConfiguration.BaseUrl;isOutput=true]$(ErpFacadeConfiguration.BaseUrl)"   
+                    echo "##vso[task.setvariable variable=SapConfiguration.SapPasswordForRecordOfSale]$(SapPasswordForRecordOfSale)"                      
             
             - ${{ if eq(parameters.DeploySAPMocks, true) }}:
               - task: FileTransform@1
-                displayName: "File Transform: Mock Service Application Settings"            
+                displayName: "File Transform: SAP Mocks Service Application Settings"            
                 inputs:
                   folderPath: '$(Pipeline.Workspace)/UKHOMockSAPService/*.zip'
                   fileType: 'json'
@@ -126,7 +125,7 @@ jobs:
 
             - ${{ if eq(parameters.DeployADDSMocks, true) }}:  
               - task: FileTransform@2
-                displayName: "File Transform: ADDS Mock Service Application Settings"           
+                displayName: "File Transform: ADDS Mocks Service Application Settings"           
                 inputs:
                     folderPath: '$(Pipeline.Workspace)/ADDSMock/*.zip'
                     xmlTransformationRules: ''

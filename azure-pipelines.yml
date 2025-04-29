@@ -135,7 +135,7 @@ stages:
   - stage: E2EDeploy
     dependsOn:
     - vNextIATDeploy
-    displayName: "E2e - Deploy Terraform" 
+    displayName: "E2e Deploy" 
     variables:
     - template: Deployment/templates/var/vnexte2e-deploy.yml   
     jobs:

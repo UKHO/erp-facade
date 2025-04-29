@@ -2,8 +2,5 @@ variables:
   - group: "ERP-Facade-vNextIAT"
   - group: "Erp-vNextIAT"
   - group: "ERP-FACADE-vNextIAT-KV"
-
-  - name: "AzureSubscription"
-    value: "ERP-Facade-vNext-IAT-A.011.08"
   
   - template: variables.yml

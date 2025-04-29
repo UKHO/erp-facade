@@ -2,8 +2,5 @@ variables:
   - group: "ERP-Facade-E2E"
   - group: "Erp-E2E"
   - group: "ERP-FACADE-E2E-KV"
-
-  - name: "AzureSubscription"
-    value: "ERP-Facade-E2E-A.011.08"
   
   - template: variables.yml

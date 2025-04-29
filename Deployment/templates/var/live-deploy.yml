@@ -3,7 +3,5 @@ variables:
   - group: "Erp-Live"
   - group: "ERP-FACADE-Live-KV"
 
-  - name: "AzureSubscription"
-    value: "ERP-Facade-Live-A.011.05.12"
     
   - template: variables.yml

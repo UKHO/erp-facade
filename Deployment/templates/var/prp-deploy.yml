@@ -2,7 +2,5 @@ variables:
   - group: "ERP-Facade-PreProd"
   - group: "Erp-PreProd"
   - group: "ERP-FACADE-PreProd-KV"
-  - name: "AzureSubscription"
-    value: "ERP-Facade-PRE-A.011.08"
     
   - template: variables.yml
