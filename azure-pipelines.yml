@@ -162,9 +162,7 @@ stages:
   - stage: PreProdDeploy
     dependsOn:
     - IATDeploy
-    displayName: "PreProd Deploy" 
-    # variables:
-    # - template: Deployment/templates/var/prp-deploy.yml   
+    displayName: "PreProd Deploy"   
     jobs:
     - template: Deployment/templates/continuous-deployment.yml
       parameters:
@@ -178,9 +176,7 @@ stages:
   - stage: QADeploy
     dependsOn:
     - DevDeploy
-    displayName: "QA Deploy" 
-    # variables:
-    # - template: Deployment/templates/var/qa-deploy.yml   
+    displayName: "QA Deploy"  
     jobs:
     - template: Deployment/templates/continuous-deployment.yml
       parameters:
