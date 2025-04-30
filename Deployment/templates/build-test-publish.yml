@@ -44,10 +44,10 @@ jobs:
           ArtifactName: codecoveragereport
 
   - job: BuildAndPublishAPI
-  workspace:
-    clean: all
-  displayName: "Dotnet Build publish ERP Facade API"
-  steps:
+    workspace:
+      clean: all
+    displayName: "Dotnet Build publish ERP Facade API"
+    steps:
 
     - task: UseDotNet@2
       displayName: Use .NET SDK $(DotNetSdkVersion)
@@ -136,10 +136,10 @@ jobs:
         ArtifactName: Runbook
 
   - job: PublishFunctionalTestsAndTerraform
-  workspace:
-    clean: all
-  displayName: "Publish FunctionalTests and Terraform Artifact"
-  steps:
+    workspace:
+      clean: all
+    displayName: "Publish FunctionalTests and Terraform Artifact"
+    steps:
 
     - task: UseDotNet@2
       displayName: Use .NET SDK $(DotNetSdkVersion)
@@ -184,10 +184,10 @@ jobs:
         ArtifactName: terraformartifact
 
   - job: BuildAndPublishMockService
-  workspace:
-    clean: all
-  displayName: "Dotnet Build And Publish Mock Service"
-  steps:
+    workspace:
+      clean: all
+    displayName: "Dotnet Build And Publish Mock Service"
+    steps:
 
     - task: UseDotNet@2
       displayName: Use .NET SDK $(DotNetSdkVersion)
@@ -232,10 +232,10 @@ jobs:
         ArtifactName: UKHOMockSAPService          
 
   - job: BuildAndPublishADDSMockService
-  workspace:
-    clean: all
-  displayName: "Dotnet Build publish ADDS Mock Service"        
-  steps:
+    workspace:
+      clean: all
+    displayName: "Dotnet Build publish ADDS Mock Service"        
+    steps:
     - checkout: self
       submodules: true
 
