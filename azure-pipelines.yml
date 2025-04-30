@@ -132,19 +132,20 @@ stages:
         AppPool: $(DeploymentPoolPE)
         Container: ${{variables.Container}}
 
-  - stage: E2EDeploy
+  - stage: vNextE2EDeploy
     dependsOn:
-    - vNextIATDeploy
-    displayName: "E2e Deploy" 
+    - DevDeploy
+    # - vNextIATDeploy
+    displayName: "vNextE2E Deploy" 
     # variables:
     # - template: Deployment/templates/var/vnexte2e-deploy.yml   
     jobs:
     - template: Deployment/templates/continuous-deployment.yml
       parameters:
-        AzureDevOpsEnvironment: "ERP-E2E"
+        AzureDevOpsEnvironment: "ERP-vnextE2E"
         ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
         AzureSubscription: "ERP-Facade-vNext-E2E-A.011.08"
-        ShortName: "E2E"
+        ShortName: "vnexte2e"
         AppPool: $(DeploymentPoolPE)
         Container: ${{variables.Container}}          
  

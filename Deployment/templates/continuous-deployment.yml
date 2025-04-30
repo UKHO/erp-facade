@@ -50,7 +50,7 @@ jobs:
               artifact: terraformartifact
 
             - task: PowerShell@2
-              displayName: "terraform $(Environment)deploy"
+              displayName: "terraform ${{parameters.ShortName}} deploy"
               name: TerraformDeploy
               inputs:
                 targetType: filePath
