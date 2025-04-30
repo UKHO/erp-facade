@@ -42,15 +42,32 @@ jobs:
           steps:
             - checkout: self
               clean: true
-
+              
             - download: current
               displayName: Download terraformartifact
               artifact: terraformartifact
 
-            - template: continuous-deployment.yml
-              parameters:
-                ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
-                AzureSubscription: ${{parameters.AzureSubscription}} 
+            - task: PowerShell@2
+              displayName: "terraform $(Environment)deploy"
+              name: TerraformDeploy
+              inputs:
+                targetType: filePath
+                filePath: '$(Pipeline.Workspace)/terraformartifact/terraform_conditional_run.ps1'
+                arguments: '-deploymentResourceGroupName $(DeploymentResourceGroupName) -deploymentStorageAccountName $(DeploymentStorageAccountName) -workSpace $(Environment) -continueEvenIfResourcesAreGettingDestroyed $${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }} -terraformJsonOutputFile $(Pipeline.Workspace)/terraformartifact/terraform_output.json'
+              env:
+                ARM_CLIENT_ID: $(TERRAFORM-CLIENT-ID)
+                ARM_CLIENT_SECRET: $(TERRAFORM-CLIENT-SECRET)
+                ARM_TENANT_ID: $(TERRAFORM-TENANT-ID)
+                ARM_SUBSCRIPTION_ID: $(TERRAFORM-SUBSCRIPTION-ID)
+                TF_VAR_spoke_rg: $(spokeRG)
+                TF_VAR_spoke_vnet_name: $(spokeVnetName)
+                TF_VAR_spoke_subnet_name: $(spokeSubnetName)
+                TF_VAR_subscription_id: $(subscriptionId)
+                TF_VAR_hub_subscription_id: $(hubSubscriptionId)
+                TF_VAR_pe_vnet_name: $(peVnetName)
+                TF_VAR_pe_subnet_name: $(peSubnetName)
+                TF_VAR_pe_rg: $(peRG)
+                TF_VAR_dns_zone_rg: $(dnsZoneRG) 
 
   - deployment: ${{parameters.ShortName}}DeployApp
     dependsOn: ${{parameters.ShortName}}DeployTerraform
