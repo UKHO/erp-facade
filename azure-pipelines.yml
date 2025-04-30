@@ -142,7 +142,7 @@ stages:
     jobs:
     - template: Deployment/templates/continuous-deployment.yml
       parameters:
-        AzureDevOpsEnvironment: "ERP-vnextE2E"
+        AzureDevOpsEnvironment: "ERP-E2E"
         ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
         AzureSubscription: "ERP-Facade-vNext-E2E-A.011.08"
         ShortName: "vnexte2e"
