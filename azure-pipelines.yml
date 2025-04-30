@@ -101,9 +101,7 @@ stages:
   - stage: DevDeploy
     dependsOn:
     - BuildTestPublish
-    displayName: "Dev deploy" 
-    # variables:
-    # - template: Deployment/templates/var/dev-deploy.yml   
+    displayName: "Dev deploy"  
     jobs:
     - template: Deployment/templates/continuous-deployment.yml
       parameters:
@@ -134,11 +132,8 @@ stages:
 
   - stage: vNextE2EDeploy
     dependsOn:
-    - DevDeploy
-    # - vNextIATDeploy
+      - vNextIATDeploy
     displayName: "vNextE2E Deploy" 
-    # variables:
-    # - template: Deployment/templates/var/vnexte2e-deploy.yml   
     jobs:
     - template: Deployment/templates/continuous-deployment.yml
       parameters:
@@ -152,9 +147,7 @@ stages:
   - stage: IATDeploy
     dependsOn:
     - DevDeploy
-    displayName: "IAT deploy" 
-    # variables:
-    # - template: Deployment/templates/var/iat-deploy.yml   
+    displayName: "IAT deploy"  
     jobs:
     - template: Deployment/templates/continuous-deployment.yml
       parameters:
@@ -202,9 +195,7 @@ stages:
   - stage: LiveDeploy
     dependsOn:
     - PreProdDeploy
-    displayName: "Live Deploy" 
-    # variables:
-    # - template: Deployment/templates/var/live-deploy.yml   
+    displayName: "Live Deploy"   
     jobs:
     - template: Deployment/templates/continuous-deployment.yml
       parameters:
