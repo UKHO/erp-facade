@@ -117,9 +117,7 @@ stages:
   - stage: vNextIATDeploy
     dependsOn:
     - DevDeploy
-    displayName: "vNextIAT deploy" 
-    # variables:
-    # - template: Deployment/templates/var/vnextiat-deploy.yml   
+    displayName: "vNextIAT deploy"   
     jobs:
     - template: Deployment/templates/continuous-deployment.yml
       parameters:
@@ -132,7 +130,8 @@ stages:
 
   - stage: vNextE2EDeploy
     dependsOn:
-      - vNextIATDeploy
+      # - vNextIATDeploy
+    - DevDeploy
     displayName: "vNextE2E Deploy" 
     jobs:
     - template: Deployment/templates/continuous-deployment.yml
