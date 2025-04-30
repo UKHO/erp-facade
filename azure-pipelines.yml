@@ -105,7 +105,7 @@ stages:
     # variables:
     # - template: Deployment/templates/var/dev-deploy.yml   
     jobs:
-    - template: Deployment/templates/continuous-deployment-app.yml
+    - template: Deployment/templates/continuous-deployment.yml
       parameters:
         AzureDevOpsEnvironment: "ERP-Dev"
         ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
@@ -123,7 +123,7 @@ stages:
     # variables:
     # - template: Deployment/templates/var/vnextiat-deploy.yml   
     jobs:
-    - template: Deployment/templates/continuous-deployment-app.yml
+    - template: Deployment/templates/continuous-deployment.yml
       parameters:
         AzureDevOpsEnvironment: "ERP-vNextIAT"
         ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
@@ -139,7 +139,7 @@ stages:
     # variables:
     # - template: Deployment/templates/var/vnexte2e-deploy.yml   
     jobs:
-    - template: Deployment/templates/continuous-deployment-app.yml
+    - template: Deployment/templates/continuous-deployment.yml
       parameters:
         AzureDevOpsEnvironment: "ERP-E2E"
         ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
@@ -147,8 +147,7 @@ stages:
         ShortName: "E2E"
         AppPool: $(DeploymentPoolPE)
         Container: ${{variables.Container}}          
-       
-
+ 
   - stage: IATDeploy
     dependsOn:
     - DevDeploy
@@ -156,7 +155,7 @@ stages:
     # variables:
     # - template: Deployment/templates/var/iat-deploy.yml   
     jobs:
-    - template: Deployment/templates/continuous-deployment-app.yml
+    - template: Deployment/templates/continuous-deployment.yml
       parameters:
         AzureDevOpsEnvironment: "ERP-IAT"
         ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
@@ -174,7 +173,7 @@ stages:
     # variables:
     # - template: Deployment/templates/var/prp-deploy.yml   
     jobs:
-    - template: Deployment/templates/continuous-deployment-app.yml
+    - template: Deployment/templates/continuous-deployment.yml
       parameters:
         AzureDevOpsEnvironment: "ERP-preprod"
         ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
@@ -190,7 +189,7 @@ stages:
     # variables:
     # - template: Deployment/templates/var/qa-deploy.yml   
     jobs:
-    - template: Deployment/templates/continuous-deployment-app.yml
+    - template: Deployment/templates/continuous-deployment.yml
       parameters:
         AzureDevOpsEnvironment: "ERP-QA"
         ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
@@ -206,7 +205,7 @@ stages:
     # variables:
     # - template: Deployment/templates/var/live-deploy.yml   
     jobs:
-    - template: Deployment/templates/continuous-deployment-app.yml
+    - template: Deployment/templates/continuous-deployment.yml
       parameters:
         AzureDevOpsEnvironment: "ERP-Live"
         ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
