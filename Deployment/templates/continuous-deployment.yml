@@ -44,7 +44,7 @@ jobs:
           steps:
             - checkout: self
               clean: true
-              
+                          
             - download: current
               displayName: Download terraformartifact
               artifact: terraformartifact
