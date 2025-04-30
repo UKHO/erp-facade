@@ -87,7 +87,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Webapp", "Webapp", "{61B1FA
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{3AFB80F8-56A2-4883-9695-902DA25A5569}"
 	ProjectSection(SolutionItems) = preProject
-		Deployment\templates\continuous-deployment-app.yml = Deployment\templates\continuous-deployment-app.yml
+		Deployment\templates\build-test-publish.yml = Deployment\templates\build-test-publish.yml
 		Deployment\templates\continuous-deployment.yml = Deployment\templates\continuous-deployment.yml
 		Deployment\templates\continuous-testing.yml = Deployment\templates\continuous-testing.yml
 		Deployment\templates\retain-pipeline.yml = Deployment\templates\retain-pipeline.yml

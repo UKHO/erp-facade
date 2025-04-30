@@ -102,8 +102,8 @@ stages:
     dependsOn:
     - BuildTestPublish
     displayName: "Dev deploy" 
-    variables:
-    - template: Deployment/templates/var/dev-deploy.yml   
+    # variables:
+    # - template: Deployment/templates/var/dev-deploy.yml   
     jobs:
     - template: Deployment/templates/continuous-deployment-app.yml
       parameters:
@@ -120,8 +120,8 @@ stages:
     dependsOn:
     - DevDeploy
     displayName: "vNextIAT deploy" 
-    variables:
-    - template: Deployment/templates/var/vnextiat-deploy.yml   
+    # variables:
+    # - template: Deployment/templates/var/vnextiat-deploy.yml   
     jobs:
     - template: Deployment/templates/continuous-deployment-app.yml
       parameters:
@@ -136,8 +136,8 @@ stages:
     dependsOn:
     - vNextIATDeploy
     displayName: "E2e Deploy" 
-    variables:
-    - template: Deployment/templates/var/vnexte2e-deploy.yml   
+    # variables:
+    # - template: Deployment/templates/var/vnexte2e-deploy.yml   
     jobs:
     - template: Deployment/templates/continuous-deployment-app.yml
       parameters:
@@ -153,8 +153,8 @@ stages:
     dependsOn:
     - DevDeploy
     displayName: "IAT deploy" 
-    variables:
-    - template: Deployment/templates/var/iat-deploy.yml   
+    # variables:
+    # - template: Deployment/templates/var/iat-deploy.yml   
     jobs:
     - template: Deployment/templates/continuous-deployment-app.yml
       parameters:
@@ -171,8 +171,8 @@ stages:
     dependsOn:
     - IATDeploy
     displayName: "PreProd Deploy" 
-    variables:
-    - template: Deployment/templates/var/prp-deploy.yml   
+    # variables:
+    # - template: Deployment/templates/var/prp-deploy.yml   
     jobs:
     - template: Deployment/templates/continuous-deployment-app.yml
       parameters:
@@ -187,8 +187,8 @@ stages:
     dependsOn:
     - DevDeploy
     displayName: "QA Deploy" 
-    variables:
-    - template: Deployment/templates/var/qa-deploy.yml   
+    # variables:
+    # - template: Deployment/templates/var/qa-deploy.yml   
     jobs:
     - template: Deployment/templates/continuous-deployment-app.yml
       parameters:
@@ -203,8 +203,8 @@ stages:
     dependsOn:
     - PreProdDeploy
     displayName: "Live Deploy" 
-    variables:
-    - template: Deployment/templates/var/live-deploy.yml   
+    # variables:
+    # - template: Deployment/templates/var/live-deploy.yml   
     jobs:
     - template: Deployment/templates/continuous-deployment-app.yml
       parameters:

@@ -36,6 +36,8 @@ jobs:
     container: ${{parameters.Container}}
     workspace:
       clean: all
+    variables:
+    - template: var/${{ lower(parameters.ShortName) }}-deploy.yml
     strategy:
       runOnce:
         deploy:
@@ -73,8 +75,9 @@ jobs:
     dependsOn: ${{parameters.ShortName}}DeployTerraform
     displayName: "${{parameters.ShortName}} - Deploy Dotnet App"
     environment: ${{parameters.AzureDevOpsEnvironment}}
-    pool: ${{ parameters.AppPool }}
+    pool: ${{ parameters.AppPool }}    
     variables:
+      - template: var/${{ lower(parameters.ShortName) }}-deploy.yml
       - name : WEB_APP_NAME
         value : $[ dependencies.${{parameters.ShortName}}DeployTerraform.outputs['${{parameters.ShortName}}DeployTerraform.TerraformDeploy.WEB_APP'] ]
       - name : "ErpFacadeConfiguration.BaseUrl"
@@ -190,6 +193,7 @@ jobs:
       - ${{parameters.ShortName}}DeployApp
       pool: ${{ parameters.AppPool }}
       variables:
+        - template: var/${{ lower(parameters.ShortName) }}-deploy.yml
         - name : ErpFacadeConfiguration.BaseUrl
           value : $[ dependencies.${{parameters.ShortName}}DeployTerraform.outputs['${{parameters.ShortName}}DeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
         - name : SapMockConfiguration.BaseUrl
