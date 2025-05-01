@@ -117,7 +117,8 @@ stages:
   - stage: vNextIATDeploy
     dependsOn:
     - DevDeploy
-    displayName: "vNextIAT deploy"   
+    displayName: "vNextIAT deploy"
+    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/develop'), startsWith(variables['Build.SourceBranch'], 'refs/heads/dev/')))     
     jobs:
     - template: Deployment/templates/continuous-deployment.yml
       parameters:
@@ -131,6 +132,7 @@ stages:
   - stage: vNextE2EDeploy
     dependsOn:
     - vNextIATDeploy
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
     displayName: "vNextE2E Deploy" 
     jobs:
     - template: Deployment/templates/continuous-deployment.yml
@@ -145,7 +147,8 @@ stages:
   - stage: IATDeploy
     dependsOn:
     - DevDeploy
-    displayName: "IAT deploy"  
+    displayName: "IAT deploy"
+    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))   
     jobs:
     - template: Deployment/templates/continuous-deployment.yml
       parameters:
@@ -161,6 +164,7 @@ stages:
   - stage: PreProdDeploy
     dependsOn:
     - IATDeploy
+    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
     displayName: "PreProd Deploy"   
     jobs:
     - template: Deployment/templates/continuous-deployment.yml
@@ -175,6 +179,7 @@ stages:
   - stage: QADeploy
     dependsOn:
     - DevDeploy
+    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
     displayName: "QA Deploy"  
     jobs:
     - template: Deployment/templates/continuous-deployment.yml
@@ -189,6 +194,7 @@ stages:
   - stage: LiveDeploy
     dependsOn:
     - PreProdDeploy
+    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
     displayName: "Live Deploy"   
     jobs:
     - template: Deployment/templates/continuous-deployment.yml
