@@ -146,7 +146,8 @@ stages:
  
   - stage: IATDeploy
     dependsOn:
-    - DevDeploy
+    # - DevDeploy
+    - BuildTestPublish
     displayName: "IAT deploy"
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))   
     jobs:
