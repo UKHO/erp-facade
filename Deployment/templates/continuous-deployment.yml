@@ -78,14 +78,14 @@ jobs:
                 TF_VAR_pe_subnet_name: $(peSubnetName)
                 TF_VAR_pe_rg: $(peRG)
                 TF_VAR_dns_zone_rg: $(dnsZoneRG) 
-                
-            - ${{ if ne(parameters.RunAddsTests, 'skip') }}:
-              - template:  template.yml@TriggerAddsAutoTestsPipeline
-                parameters:
-                  serviceConnection: 'addse2eauto Test - A.011.13'
-                  environment: ${{ parameters.RunAddsTests }}
-                  dependsOn:
-                  - ${{ parameters.ShortName }}DeployApp
+
+  - ${{ if ne(parameters.RunAddsTests, 'skip') }}:
+    - template:  template.yml@TriggerAddsAutoTestsPipeline
+      parameters:
+        serviceConnection: 'addse2eauto Test - A.011.13'
+        environment: ${{ parameters.RunAddsTests }}
+        dependsOn:
+        - ${{ parameters.ShortName }}DeployApp
 
 
   - deployment: ${{parameters.ShortName}}DeployApp
