@@ -26,7 +26,15 @@ parameters:
     default: false
   - name: DeployADDSMocks
     type: boolean
-    default: false    
+    default: false
+# Run ADDS tests by specifying the environment to run the tests in. Leave as the default value if you don't want to run them.
+  - name: RunAddsTests
+    type: string
+    default: 'skip'
+    values:
+    - 'skip'
+    - 'vNextIAT'
+    - 'IAT'  
 
 jobs:
   - deployment: ${{parameters.ShortName}}DeployTerraform
@@ -70,6 +78,15 @@ jobs:
                 TF_VAR_pe_subnet_name: $(peSubnetName)
                 TF_VAR_pe_rg: $(peRG)
                 TF_VAR_dns_zone_rg: $(dnsZoneRG) 
+                
+            - ${{ if ne(parameters.RunAddsTests, 'skip') }}:
+              - template:  template.yml@TriggerAddsAutoTestsPipeline
+                parameters:
+                  serviceConnection: 'addse2eauto Test - A.011.13'
+                  environment: ${{ parameters.RunAddsTests }}
+                  dependsOn:
+                  - ${{ parameters.ShortName }}DeployApp
+
 
   - deployment: ${{parameters.ShortName}}DeployApp
     dependsOn: ${{parameters.ShortName}}DeployTerraform
