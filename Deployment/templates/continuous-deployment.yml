@@ -79,14 +79,6 @@ jobs:
                 TF_VAR_pe_rg: $(peRG)
                 TF_VAR_dns_zone_rg: $(dnsZoneRG) 
 
-  - ${{ if ne(parameters.RunAddsTests, 'skip') }}:
-    - template:  template.yml@TriggerAddsAutoTestsPipeline
-      parameters:
-        serviceConnection: 'addse2eauto Test - A.011.13'
-        environment: ${{ parameters.RunAddsTests }}
-        dependsOn:
-        - ${{ parameters.ShortName }}DeployApp
-
 
   - deployment: ${{parameters.ShortName}}DeployApp
     dependsOn: ${{parameters.ShortName}}DeployTerraform
@@ -203,6 +195,14 @@ jobs:
                 swapWithProduction: true
                 sourceSlot: $(WEB_APP_SLOT_NAME)        
 
+  - ${{ if ne(parameters.RunAddsTests, 'skip') }}:
+    - template:  template.yml@TriggerAddsAutoTestsPipeline
+      parameters:
+        serviceConnection: 'addse2eauto Test - A.011.13'
+        environment: ${{ parameters.RunAddsTests }}
+        dependsOn:
+        - ${{ parameters.ShortName }}DeployApp
+        
   - ${{ if eq(parameters.RunFunctionalTests, true) }}:  
     - job: FunctionalTests
       dependsOn:
