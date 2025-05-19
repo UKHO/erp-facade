@@ -47,6 +47,12 @@ resources:
     endpoint: UKHO
     ref: refs/heads/main
 
+  - repository: TriggerAddsAutoTestsPipeline
+    type: github
+    endpoint: ukho
+    name: ukho/devops-trigger-adds-autotest-pipeline
+    ref: refs/heads/main 
+
 
 stages:
   - stage: RUNSTRKER
@@ -128,6 +134,7 @@ stages:
         ShortName: "vNextIAT"
         AppPool: $(DeploymentPoolPE)
         Container: ${{variables.Container}}
+        RunAddsTests: vNextIAT
 
   - stage: vNextE2EDeploy
     dependsOn:
@@ -160,6 +167,7 @@ stages:
         Container: ${{variables.Container}}
         DeployADDSMocks: true
         RunFunctionalTests: true
+        RunAddsTests: IAT
   
   - stage: PreProdDeploy
     dependsOn:
