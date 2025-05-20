@@ -62,6 +62,7 @@ jobs:
         projects: |
           **/*.csproj
           !**/UKHO.SAP.MockService.csproj
+          !**/mock/*.csproj          
         feedsToUse: config
         noCache: true
         nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
@@ -75,7 +76,7 @@ jobs:
         projects: |
           **/*.csproj
           !**/UKHO.SAP.MockService.csproj
-          !**/UKHO.ADDS.Mocks.ERP.csproj
+          !**/mock/*.csproj
         arguments: '--configuration $(BuildConfiguration) --no-restore'
 
     - task: DotNetCoreCLI@2
@@ -155,6 +156,7 @@ jobs:
         projects: |
           **/*.csproj
           !**/UKHO.SAP.MockService.csproj
+          !**/UKHO.ADDS.Mocks.ERP.csproj
         feedsToUse: config
         noCache: true
         nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
@@ -249,15 +251,15 @@ jobs:
         version: $(DotNetSdkVersionAddsMock)
         
     - task: DotNetCoreCLI@2
-      displayName: ".Net Core - NuGet restore for non test projects only"
+      displayName: ".Net Core - NuGet restore for Adds Mock"
       inputs:
         command: "restore"
-        projects: |
-          **/*.csproj              
+        projects: |          
+          **/UKHO.ADDS.Mocks.ERP.csproj          
         feedsToUse: config
         noCache: true
         nugetConfigPath: '$(Build.SourcesDirectory)\mock\repo\BuildNuget.config'
-        workingDirectory: '$(Build.SourcesDirectory)\mock\repo\src'
+        workingDirectory: '$(Build.SourcesDirectory)\mock\repo\'
         packagesDirectory: '$(Build.SourcesDirectory)\mock\repo\src\packages'          
     
     - task: DotNetCoreCLI@2
