@@ -256,8 +256,8 @@ jobs:
         feedsToUse: config
         noCache: true
         nugetConfigPath: '$(Build.SourcesDirectory)\mock\repo\BuildNuget.config'
-        workingDirectory: '$(Build.SourcesDirectory)\mock\repo'
-        packagesDirectory: '$(Build.SourcesDirectory)\mock\repo\packages'          
+        workingDirectory: '$(Build.SourcesDirectory)\mock\repo\src'
+        packagesDirectory: '$(Build.SourcesDirectory)\mock\repo\src\packages'          
     
     - task: DotNetCoreCLI@2
       displayName: "dotnet build task"
