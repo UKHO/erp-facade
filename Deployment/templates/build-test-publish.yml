@@ -61,9 +61,8 @@ jobs:
         command: "restore"
         projects: |
           **/*.csproj
-          !**/UKHO.SAP.MockService.csproj
-          !**/mock/UKHO.ADDS.Mocks.ERP.csproj
-          !**/mock/repo/*.csproj          
+          !**/UKHO.SAP.MockService.csproj      
+                   
         feedsToUse: config
         noCache: true
         nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
@@ -76,8 +75,7 @@ jobs:
         command: "build"
         projects: |
           **/*.csproj
-          !**/UKHO.SAP.MockService.csproj
-          !**/mock/*.csproj
+          !**/UKHO.SAP.MockService.csproj          
         arguments: '--configuration $(BuildConfiguration) --no-restore'
 
     - task: DotNetCoreCLI@2
