@@ -242,10 +242,10 @@ jobs:
     - script: git submodule update --init --force --remote
 
     - task: UseDotNet@2
-      displayName: Use .NET SDK $(DotNetSdkVersionAddsMock)
+      displayName: Use .NET SDK $(DotNetSdkVersion)
       inputs:
         packageType: sdk
-        version: $(DotNetSdkVersionAddsMock)
+        version: $(DotNetSdkVersion)
         
     - task: DotNetCoreCLI@2
       displayName: ".Net Core - NuGet restore for non test projects only"
@@ -264,7 +264,7 @@ jobs:
       inputs:
         command: "build"
         projects: |
-          **/*UKHO.ADDS.Mocks.csproj              
+          **/*UKHO.ADDS.Mocks.ERP.csproj              
         arguments: '--configuration $(BuildConfiguration) --no-restore'
 
     - task: DotNetCoreCLI@2
@@ -272,7 +272,7 @@ jobs:
       inputs:
         command: "publish"
         publishWebProjects: false
-        projects: '**/*UKHO.ADDS.Mocks.csproj'
+        projects: '**/*UKHO.ADDS.Mocks.ERP.csproj'
         arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\ADDSMock --no-restore'
         zipAfterPublish: false
         modifyOutputPath: false        

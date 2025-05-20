@@ -38,8 +38,6 @@ variables:
     value: "Private Link Deployments (BUS)"
   - name: DotNetSdkVersion
     value: "8.x"
-  - name: DotNetSdkVersionAddsMock
-    value: "9.x"
 
 resources:
   repositories:
