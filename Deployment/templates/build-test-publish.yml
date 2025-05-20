@@ -75,6 +75,7 @@ jobs:
         projects: |
           **/*.csproj
           !**/UKHO.SAP.MockService.csproj
+          !**/UKHO.ADDS.Mocks.ERP.csproj
         arguments: '--configuration $(BuildConfiguration) --no-restore'
 
     - task: DotNetCoreCLI@2
