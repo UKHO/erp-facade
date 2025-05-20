@@ -62,7 +62,8 @@ jobs:
         projects: |
           **/*.csproj
           !**/UKHO.SAP.MockService.csproj
-          !**/mock/*.csproj          
+          !**/mock/UKHO.ADDS.Mocks.ERP.csproj
+          !**/mock/repo/*.csproj          
         feedsToUse: config
         noCache: true
         nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
@@ -156,7 +157,7 @@ jobs:
         projects: |
           **/*.csproj
           !**/UKHO.SAP.MockService.csproj
-          !**/UKHO.ADDS.Mocks.ERP.csproj
+          !**/mock/*.csproj
         feedsToUse: config
         noCache: true
         nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
