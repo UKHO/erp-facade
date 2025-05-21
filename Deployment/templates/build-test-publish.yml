@@ -61,7 +61,8 @@ jobs:
         command: "restore"
         projects: |
           **/*.csproj
-          !**/UKHO.SAP.MockService.csproj      
+          !**/UKHO.SAP.MockService.csproj
+          !**/mock/UKHO.ADDS.Mocks.ERP/UKHO.ADDS.Mocks.ERP.csproj      
                    
         feedsToUse: config
         noCache: true
