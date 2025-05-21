@@ -75,7 +75,8 @@ jobs:
         command: "build"
         projects: |
           **/*.csproj
-          !**/UKHO.SAP.MockService.csproj          
+          !**/UKHO.SAP.MockService.csproj
+          !**/mock/UKHO.ADDS.Mocks.ERP/UKHO.ADDS.Mocks.ERP.csproj         
         arguments: '--configuration $(BuildConfiguration) --no-restore'
 
     - task: DotNetCoreCLI@2
