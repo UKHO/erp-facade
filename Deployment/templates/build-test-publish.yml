@@ -145,10 +145,10 @@ jobs:
     steps:
 
     - task: UseDotNet@2
-      displayName: Use .NET SDK $(DotNetSdkVersionAddsMock)
+      displayName: Use .NET SDK $(DotNetSdkVersion)
       inputs:
         packageType: sdk
-        version: $(DotNetSdkVersionAddsMock)
+        version: $(DotNetSdkVersion)
         
     - task: DotNetCoreCLI@2
       displayName: ".Net Core - NuGet restore for non test projects only"
