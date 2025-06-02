@@ -157,7 +157,7 @@ jobs:
         projects: |
           **/*.csproj
           !**/UKHO.SAP.MockService.csproj
-          !**/mock/*.csproj
+          !**/mock/UKHO.ADDS.Mocks.ERP/UKHO.ADDS.Mocks.ERP.csproj 
         feedsToUse: config
         noCache: true
         nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
