@@ -1,9 +1,9 @@
 ﻿using UKHO.ADDS.Mocks.Markdown;
 using UKHO.ADDS.Mocks.States;
 
-namespace UKHO.ADDS.Mocks.ERP.Override.Mocks.sap    
+namespace UKHO.ADDS.Mocks.ERP.Override.Mocks.sap
 {
-    public class GetZAddsMatInfo : ServiceEndpointMock
+    public class PostZAddsMatInfoEndpoint : ServiceEndpointMock
     {
         public override void RegisterSingleEndpoint(IEndpointMock endpoint) =>
             endpoint.MapPost("/z_adds_mat_info.asmx", (HttpRequest request) =>
