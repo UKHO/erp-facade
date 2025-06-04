@@ -38,6 +38,8 @@ variables:
     value: "Private Link Deployments (BUS)"
   - name: DotNetSdkVersion
     value: "8.x"
+  - name: DotNetSdkVersionAddsMock
+    value: "9.x"
 
 resources:
   repositories:
@@ -60,10 +62,10 @@ stages:
           - checkout: self
             submodules: true
           - task: UseDotNet@2
-            displayName: Use .NET SDK $(DotNetSdkVersion)
+            displayName: Use .NET SDK $(DotNetSdkVersionAddsMock)
             inputs:
               packageType: sdk
-              version: $(DotNetSdkVersion)
+              version: $(DotNetSdkVersionAddsMock)
           - task: DotNetCoreCLI@2
             displayName: "Install Stryker"
             inputs:
@@ -146,7 +148,7 @@ stages:
  
   - stage: IATDeploy
     dependsOn:
-    - DevDeploy
+    - DevDeploy   
     displayName: "IAT deploy"
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))   
     jobs:

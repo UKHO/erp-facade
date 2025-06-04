@@ -62,6 +62,8 @@ jobs:
         projects: |
           **/*.csproj
           !**/UKHO.SAP.MockService.csproj
+          !**/mock/UKHO.ADDS.Mocks.ERP/UKHO.ADDS.Mocks.ERP.csproj      
+                   
         feedsToUse: config
         noCache: true
         nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
@@ -75,6 +77,7 @@ jobs:
         projects: |
           **/*.csproj
           !**/UKHO.SAP.MockService.csproj
+          !**/mock/UKHO.ADDS.Mocks.ERP/UKHO.ADDS.Mocks.ERP.csproj         
         arguments: '--configuration $(BuildConfiguration) --no-restore'
 
     - task: DotNetCoreCLI@2
@@ -154,6 +157,7 @@ jobs:
         projects: |
           **/*.csproj
           !**/UKHO.SAP.MockService.csproj
+          !**/mock/UKHO.ADDS.Mocks.ERP/UKHO.ADDS.Mocks.ERP.csproj 
         feedsToUse: config
         noCache: true
         nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
@@ -242,21 +246,21 @@ jobs:
     - script: git submodule update --init --force --remote
 
     - task: UseDotNet@2
-      displayName: Use .NET SDK $(DotNetSdkVersion)
+      displayName: Use .NET SDK $(DotNetSdkVersionAddsMock)
       inputs:
         packageType: sdk
-        version: $(DotNetSdkVersion)
+        version: $(DotNetSdkVersionAddsMock)
         
     - task: DotNetCoreCLI@2
-      displayName: ".Net Core - NuGet restore for non test projects only"
+      displayName: ".Net Core - NuGet restore for Adds Mock"
       inputs:
         command: "restore"
-        projects: |
-          **/*.csproj              
+        projects: |          
+          **/UKHO.ADDS.Mocks.ERP.csproj          
         feedsToUse: config
         noCache: true
         nugetConfigPath: '$(Build.SourcesDirectory)\mock\repo\BuildNuget.config'
-        workingDirectory: '$(Build.SourcesDirectory)\mock\repo\src'
+        workingDirectory: '$(Build.SourcesDirectory)\mock\repo\'
         packagesDirectory: '$(Build.SourcesDirectory)\mock\repo\src\packages'          
     
     - task: DotNetCoreCLI@2
@@ -264,7 +268,7 @@ jobs:
       inputs:
         command: "build"
         projects: |
-          **/*ADDSMock.csproj              
+          **/*UKHO.ADDS.Mocks.ERP.csproj              
         arguments: '--configuration $(BuildConfiguration) --no-restore'
 
     - task: DotNetCoreCLI@2
@@ -272,7 +276,7 @@ jobs:
       inputs:
         command: "publish"
         publishWebProjects: false
-        projects: '**/*ADDSMock.csproj'
+        projects: '**/*UKHO.ADDS.Mocks.ERP.csproj'
         arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\ADDSMock --no-restore'
         zipAfterPublish: false
         modifyOutputPath: false        
