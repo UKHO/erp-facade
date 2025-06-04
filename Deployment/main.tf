@@ -32,7 +32,7 @@ module "webapp_service" {
   location                  = azurerm_resource_group.rg.location
   sku_name                  = var.sku_name[local.env_name]
   subnet_id                 = data.azurerm_subnet.main_subnet.id
-  deploy_adds_mocks         = var.deploy_adds_mocks = "true" ? true: false
+  deploy_adds_mocks         = var.deploy_adds_mocks
 
   app_settings = {
     "KeyVaultSettings:ServiceUri"                              = "https://${local.key_vault_name}.vault.azure.net/"
