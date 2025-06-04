@@ -70,7 +70,7 @@ jobs:
                 TF_VAR_pe_subnet_name: $(peSubnetName)
                 TF_VAR_pe_rg: $(peRG)
                 TF_VAR_dns_zone_rg: $(dnsZoneRG)
-                TF_VAR_deploy_adds_mocks: ${{parameters.DeployADDSMocks}}
+                TF_VAR_deploy_adds_mocks: ${{lower(parameters.DeployADDSMocks)}}
 
   - deployment: ${{parameters.ShortName}}DeployApp
     dependsOn: ${{parameters.ShortName}}DeployTerraform
