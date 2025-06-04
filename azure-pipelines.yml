@@ -113,14 +113,14 @@ stages:
         ShortName: "Dev"
         AppPool: $(DeploymentPoolPE)
         Container: ${{variables.Container}}
-        DeploySAPMocks: true
+        DeployADDSMocks: true
         RunFunctionalTests: true 
 
   - stage: vNextIATDeploy
     dependsOn:
     - DevDeploy
     displayName: "vNextIAT deploy"
-    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/develop'), startsWith(variables['Build.SourceBranch'], 'refs/heads/dev/')))     
+    # condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/develop'), startsWith(variables['Build.SourceBranch'], 'refs/heads/dev/')))     
     jobs:
     - template: Deployment/templates/continuous-deployment.yml
       parameters:
@@ -129,7 +129,8 @@ stages:
         AzureSubscription: "ERP-Facade-vNext-IAT-A.011.08"
         ShortName: "vNextIAT"
         AppPool: $(DeploymentPoolPE)
-        Container: ${{variables.Container}}
+        Container: ${{variables.Container}},
+        DeployADDSMocks: true
 
   - stage: vNextE2EDeploy
     dependsOn:
@@ -150,7 +151,7 @@ stages:
     dependsOn:
     - DevDeploy   
     displayName: "IAT deploy"
-    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))   
+   # condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))   
     jobs:
     - template: Deployment/templates/continuous-deployment.yml
       parameters:

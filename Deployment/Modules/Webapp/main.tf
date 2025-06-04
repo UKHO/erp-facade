@@ -68,7 +68,7 @@ resource "azurerm_windows_web_app_slot" "staging" {
 }
 
 resource "azurerm_windows_web_app" "mock_webapp_service" {
-  count               = var.env_name == "dev" || var.env_name == "iat" ? 1 : 0
+  count               = var.deploy_adds_mocks ?  ? 1 : 0
   name                = var.mock_webapp_name
   location            = var.location
   resource_group_name = var.resource_group_name
@@ -85,7 +85,7 @@ resource "azurerm_windows_web_app" "mock_webapp_service" {
     ftps_state = "Disabled"
   }
      
-  app_settings = var.env_name == "dev" ? var.mock_app_settings : var.addsmock_app_settings 
+  app_settings = var.env_name ==  var.addsmock_app_settings 
 
   identity {
     type = "SystemAssigned"
@@ -100,7 +100,7 @@ resource "azurerm_app_service_virtual_network_swift_connection" "webapp_vnet_int
 }
 
 resource "azurerm_app_service_virtual_network_swift_connection" "mock_webapp_vnet_integration" {
-  count               = var.env_name == "dev" || var.env_name == "iat" ? 1 : 0
+  count               = var.deploy_adds_mocks ? 1 : 0
   app_service_id = azurerm_windows_web_app.mock_webapp_service[0].id
   subnet_id      = var.subnet_id
 }
