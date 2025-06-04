@@ -59,4 +59,5 @@ variable "pe_subnet_name" {
 
 variable "deploy_adds_mocks" {
   type = bool
+  defaul = false
 }
