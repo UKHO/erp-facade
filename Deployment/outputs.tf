@@ -3,11 +3,11 @@ output "webapp_name" {
 }
 
 output "mock_webapp_name" {
-  value = var.deploy_adds_mocks ? local.mock_web_app_name : ""
+  value = var.deploy_adds_mocks ? local.mock_web_app_name : null
 }
 
 output "addsmock_webapp_name" {
-  value = var.deploy_adds_mocks ? local.addsmock_webapp_name : ""
+  value = var.deploy_adds_mocks ? local.addsmock_webapp_name : null
 }
 
 output "storage_connection_string" {
@@ -28,7 +28,7 @@ output "erp_facade_web_app_public_url" {
 }
 
 output "erp_facade_mock_service_url" {
-  value = var.deploy_adds_mocks ? "https://${module.webapp_service.default_site_hostname_mock}" : ""
+  value = local.env_name == "dev" ? "https://${module.webapp_service.default_site_hostname_mock}" : null
 }
 
 output keyvault_uri {
