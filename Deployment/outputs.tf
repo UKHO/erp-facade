@@ -28,7 +28,7 @@ output "erp_facade_web_app_public_url" {
 }
 
 output "erp_facade_mock_service_url" {
-  value = local.env_name == "dev" ? "https://${module.webapp_service.default_site_hostname_mock}" : null
+  value = var.deploy_adds_mocks ? "https://${module.webapp_service.default_site_hostname_mock}" : null
 }
 
 output keyvault_uri {
