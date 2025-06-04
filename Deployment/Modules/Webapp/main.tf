@@ -74,7 +74,7 @@ resource "azurerm_windows_web_app" "mock_webapp_service" {
   resource_group_name = var.resource_group_name
   service_plan_id     = azurerm_service_plan.app_service_plan.id
   tags                = var.tags
-  public_network_access_enabled      = false
+  public_network_access_enabled      = false 
 
   site_config {
     application_stack {    
@@ -85,7 +85,7 @@ resource "azurerm_windows_web_app" "mock_webapp_service" {
     ftps_state = "Disabled"
   }
      
-  app_settings = var.env_name ==  var.addsmock_app_settings 
+  app_settings = var.addsmock_app_settings 
 
   identity {
     type = "SystemAssigned"
