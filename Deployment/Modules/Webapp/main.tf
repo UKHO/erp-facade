@@ -68,7 +68,7 @@ resource "azurerm_windows_web_app_slot" "staging" {
 }
 
 resource "azurerm_windows_web_app" "mock_webapp_service" {
-  count               = var.deploy_adds_mocks ?  ? 1 : 0
+  count               = var.deploy_adds_mocks == true  ?  ? 1 : 0
   name                = var.mock_webapp_name
   location            = var.location
   resource_group_name = var.resource_group_name
