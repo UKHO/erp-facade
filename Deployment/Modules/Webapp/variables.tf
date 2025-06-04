@@ -35,7 +35,15 @@ variable "mock_webapp_name" {
   type = string
 }
 
+variable "addsmock_webapp_name" {
+  type = string
+}
+
 variable "mock_app_settings" {
+  type = map(string)
+}
+
+variable "addsmock_app_settings" {
   type = map(string)
 }
 
