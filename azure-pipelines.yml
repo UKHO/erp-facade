@@ -113,7 +113,7 @@ stages:
         ShortName: "Dev"
         AppPool: $(DeploymentPoolPE)
         Container: ${{variables.Container}}
-        DeploySAPMocks: true
+        DeployADDSMocks: true
         RunFunctionalTests: true 
 
   - stage: vNextIATDeploy
@@ -129,7 +129,8 @@ stages:
         AzureSubscription: "ERP-Facade-vNext-IAT-A.011.08"
         ShortName: "vNextIAT"
         AppPool: $(DeploymentPoolPE)
-        Container: ${{variables.Container}}
+        Container: ${{variables.Container}},
+        DeployADDSMocks: true
 
   - stage: vNextE2EDeploy
     dependsOn:
