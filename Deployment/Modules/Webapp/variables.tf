@@ -50,3 +50,7 @@ variable "addsmock_app_settings" {
 variable "subnet_id" {
   type = string  
 }
+
+variable "deploy_adds_mocks" {
+  type = bool  
+}

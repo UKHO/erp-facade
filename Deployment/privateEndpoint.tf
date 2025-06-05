@@ -24,9 +24,9 @@ module "private_endpoint_link" {
     azurerm.spoke   = azurerm.erp
   }
   vnet_link           = local.vnet_link
-  private_connection  = local.env_name == "dev" ||local.env_name == "iat"  ? [local.private_connection, local.mock_private_connection] : [local.private_connection]
+  private_connection  = var.deploy_adds_mocks ? [local.private_connection, local.mock_private_connection] : [local.private_connection]
   zone_group          = local.zone_group 
-  pe_identity         = local.env_name == "dev" ||local.env_name == "iat" ? [local.pe_identity, local.mock_pe_identity] : [local.pe_identity]
+  pe_identity         = var.deploy_adds_mocks ? [local.pe_identity, local.mock_pe_identity] : [local.pe_identity]
   pe_environment      = local.env_name 
   pe_vnet_rg          = var.spoke_rg 
   pe_vnet_name        = var.pe_vnet_name
