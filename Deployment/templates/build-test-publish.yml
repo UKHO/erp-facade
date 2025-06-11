@@ -243,13 +243,7 @@ jobs:
     - checkout: self
       submodules: true
 
-    # - script: git submodule update --init --force --remote
-    - script: | 
-        git submodule update --init --force --remote      
-        git fetch origin SAPEndPointUpdate
-        git checkout SAPEndPointUpdate
-        git pull origin SAPEndPointUpdate   
-        
+    - script: git submodule update --init --force --remote  
 
     - task: UseDotNet@2
       displayName: Use .NET SDK $(DotNetSdkVersionAddsMock)
