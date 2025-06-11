@@ -244,7 +244,7 @@ jobs:
       submodules: true
 
     # - script: git submodule update --init --force --remote
-    - run: |
+    - script: |
         git submodule update --init --recursive
         git fetch origin SAPEndPointUpdate
         git checkout SAPEndPointUpdate
