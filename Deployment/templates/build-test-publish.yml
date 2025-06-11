@@ -243,7 +243,9 @@ jobs:
     - checkout: self
       submodules: true
 
-    - script: git submodule update --init --force --remote
+    # - script: git submodule update --init --force --remote
+    - script: git submodule update --init --remote --force --branch SAPEndPointUpdate
+       
 
     - task: UseDotNet@2
       displayName: Use .NET SDK $(DotNetSdkVersionAddsMock)
