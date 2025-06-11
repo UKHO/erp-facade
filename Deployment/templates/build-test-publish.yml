@@ -245,10 +245,13 @@ jobs:
 
     # - script: git submodule update --init --force --remote
     - script: |
-        git submodule update --init --recursive
+        cd path/to/submodule
         git fetch origin SAPEndPointUpdate
         git checkout SAPEndPointUpdate
-       
+        git pull origin SAPEndPointUpdate
+        cd ../..
+        git add path/to/submodule
+        git commit -m "Update submodule to SAPEndPointUpdate"    
 
     - task: UseDotNet@2
       displayName: Use .NET SDK $(DotNetSdkVersionAddsMock)
