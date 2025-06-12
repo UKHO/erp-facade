@@ -9,7 +9,7 @@ parameters:
   - name: RunStryker
     displayName: "Run Stryker test mutation"
     type: boolean
-    default: false
+    default: true
     
 trigger:
   - main
@@ -38,261 +38,50 @@ variables:
     value: "Private Link Deployments (BUS)"
   - name: DotNetSdkVersion
     value: "8.x"
+  - name: DotNetSdkVersionAddsMock
+    value: "9.x"
+
+resources:
+  repositories:
+  - repository: UKHOTemplates
+    type: github
+    name: UKHO/devops-pipelinetemplates
+    endpoint: UKHO
+    ref: refs/heads/main
+
 
 stages:
-  - stage: DOTNETBUILD_DOTNETTEST_AND_PUBLISH
-    displayName: "Build (Dotnet Build & Restore , Dotnet Test and Publish Artifact )"
-    dependsOn: []
-    jobs:     
-      - job: UnitTestsAndCodeCoverage
-        workspace:
-          clean: all
-        displayName: "Dotnet Test and Publish Code Coverage"
-        steps:
-          - task: UseDotNet@2
-            displayName: Use .NET SDK $(DotNetSdkVersion)
-            inputs:
-              packageType: sdk
-              version: $(DotNetSdkVersion)
-
-          - task: DotNetCoreCLI@2
-            displayName: ".Net Core - NuGet restore test projects only"
-            inputs:
-              command: "restore"
-              projects: "**/*Tests.csproj"
-              feedsToUse: config
-              noCache: true
-              nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
-              workingDirectory: '$(Build.SourcesDirectory)'
-              packagesDirectory: '$(Build.SourcesDirectory)\packagesForTests'
-
-          - task: DotNetCoreCLI@2
-            displayName: "dotnet test - Perform Unit Tests"
-            inputs:
-              command: "test"
-              projects: "**/*UnitTests.csproj"
-              arguments: '--configuration $(BuildConfiguration) --settings "$(Build.SourcesDirectory)\test.runsettings" /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura --no-restore'
-              publishTestResults: true
-              testRunTitle: "UnitTests"
-
-          - task: PowerShell@2
-            displayName: "Generate code coverage report"
-            inputs:
-              targetType: filePath
-              filePath: '$(Build.SourcesDirectory)\CodeCoverageReport.ps1'
-              arguments: '-source "$(Build.SourcesDirectory)" -reportFolder "$(Build.ArtifactStagingDirectory)"'
-
-          - task: PublishBuildArtifacts@1
-            displayName: "Publish Code coverage"
-            inputs:
-              PathtoPublish: "$(Build.ArtifactStagingDirectory)/codecoveragereport"
-              ArtifactName: codecoveragereport
-
-      - job: BuildAndPublishAPI
-        workspace:
-          clean: all
-        displayName: "Dotnet Build publish ERP Facade API"
-        steps:
-
-          - task: UseDotNet@2
-            displayName: Use .NET SDK $(DotNetSdkVersion)
-            inputs:
-              packageType: sdk
-              version: $(DotNetSdkVersion)
-              
-          - task: DotNetCoreCLI@2
-            displayName: ".Net Core - NuGet restore for non test projects only"
-            inputs:
-              command: "restore"
-              projects: |
-                **/*.csproj
-                !**/UKHO.SAP.MockService.csproj
-              feedsToUse: config
-              noCache: true
-              nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
-              workingDirectory: '$(Build.SourcesDirectory)\src'
-              packagesDirectory: '$(Build.SourcesDirectory)\src\packages'
-
-          - task: DotNetCoreCLI@2
-            displayName: "dotnet build task"
-            inputs:
-              command: "build"
-              projects: |
-                **/*.csproj
-                !**/UKHO.SAP.MockService.csproj
-              arguments: '--configuration $(BuildConfiguration) --no-restore'
-
-          - task: DotNetCoreCLI@2
-            displayName: "Publish ERP Facade API "
-            inputs:
-              command: "publish"
-              publishWebProjects: false
-              projects: '**/*UKHO.ERPFacade.API.csproj'
-              arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\UKHO.ERPFacade.API --no-restore'
-              zipAfterPublish: false
-              modifyOutputPath: false
-
-          - task: DotNetCoreCLI@2
-            displayName: "Publish Cleanup Webjob"
-            inputs:
-              command: "publish"
-              publishWebProjects: false
-              projects: "**/UKHO.ERPFacade.CleanUp.WebJob.csproj"
-              arguments: "--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/UKHO.ERPFacade.API/App_Data/jobs/Triggered/CleanupWebjob --no-restore"
-              zipAfterPublish: false
-              modifyOutputPath: false
-
-          - task: DotNetCoreCLI@2
-            displayName: "Publish Event Aggregation Webjob"
-            inputs:
-              command: "publish"
-              publishWebProjects: false
-              projects: "**/UKHO.ERPFacade.EventAggregation.WebJob"
-              arguments: "--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/UKHO.ERPFacade.API/App_Data/jobs/continuous/EventAggregationWebJob --no-restore"
-              zipAfterPublish: false
-              modifyOutputPath: false
-
-          - task: ArchiveFiles@2
-            displayName: "Zip ERP Service binaries for Webjob"
-            inputs:
-              rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/UKHO.ERPFacade.API/'
-              includeRootFolder: false
-              archiveType: "zip"
-              archiveFile: '$(Build.ArtifactStagingDirectory)/UKHO.ERPFacade.API/UKHOERPFacadeAPI.zip'
-              replaceExistingArchive: true
-
-          - task: PublishBuildArtifacts@1
-            displayName: "Publish Web Artifact"
-            inputs:
-              PathtoPublish: '$(Build.ArtifactStagingDirectory)\UKHO.ERPFacade.API\UKHOERPFacadeAPI.zip'
-              ArtifactName: UKHOERPFacadeAPI
-
-          - task: PowerShell@2
-            displayName: "Generate event id runbook"
-            inputs:
-              targetType: filePath
-              filePath: '$(Build.SourcesDirectory)\Utility\XmlToRtfTransformation.ps1'
-              arguments: '-xmlFilePath $(Build.ArtifactStagingDirectory)\UKHO.ERPFacade.API\UKHO.ERPFacade.Common.xml -xsltFilePath $(Build.SourcesDirectory)\Utility\EventIdXmlTransformation.xslt -outputFileName Runbook-EventId'
-          
-          - task: PublishBuildArtifacts@1
-            displayName: "Publish event id runbook"
-            inputs:
-              PathtoPublish: '$(Build.SourcesDirectory)\Utility\Runbook-EventId.rtf'
-              ArtifactName: Runbook
-
-      - job: PublishFunctionalTestsAndTerraform
-        workspace:
-          clean: all
-        displayName: "Publish FunctionalTests and Terraform Artifact"
-        steps:
-
-          - task: UseDotNet@2
-            displayName: Use .NET SDK $(DotNetSdkVersion)
-            inputs:
-              packageType: sdk
-              version: $(DotNetSdkVersion)
-              
-          - task: DotNetCoreCLI@2
-            displayName: ".Net Core - NuGet restore for non test projects only"
-            inputs:
-              command: "restore"
-              projects: |
-                **/*.csproj
-                !**/UKHO.SAP.MockService.csproj
-              feedsToUse: config
-              noCache: true
-              nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
-              workingDirectory: '$(Build.SourcesDirectory)\src'
-              packagesDirectory: '$(Build.SourcesDirectory)\src\packages'
-
-          - task: DotNetCoreCLI@2
-            displayName: "Publish Functional Test Code "
-            inputs:
-              command: "publish"
-              publishWebProjects: false
-              projects: '$(Build.SourcesDirectory)\tests\UKHO.ERPFacade.API.FunctionalTests\UKHO.ERPFacade.API.FunctionalTests.csproj'
-              arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\UKHO.ERPFacade.API.FunctionalTests --no-restore'
-              workingDirectory: '$(Build.SourcesDirectory)\tests\UKHO.ERPFacade.API.FunctionalTests'
-              zipAfterPublish: false
-              modifyOutputPath: true
-
-          - task: PublishBuildArtifacts@1
-            displayName: "Publish Functional test Artifact"
-            inputs:
-              PathtoPublish: '$(Build.ArtifactStagingDirectory)\UKHO.ERPFacade.API.FunctionalTests'
-              ArtifactName: functionaltests
-
-          - task: PublishBuildArtifacts@1
-            displayName: "Publish terraform Artifacts"
-            inputs:
-              PathtoPublish: '$(Build.SourcesDirectory)\Deployment'
-              ArtifactName: terraformartifact
-
-      - job: BuildAndPublishMockService
-        workspace:
-          clean: all
-        displayName: "Dotnet Build And Publish Mock Service"
-        steps:
-
-          - task: UseDotNet@2
-            displayName: Use .NET SDK $(DotNetSdkVersion)
-            inputs:
-              packageType: sdk
-              version: $(DotNetSdkVersion)
-              
-          - task: DotNetCoreCLI@2
-            displayName: ".Net Core - NuGet restore for mock project"
-            inputs:
-              command: "restore"
-              projects: |
-                **/UKHO.SAP.MockAPIService.csproj
-              feedsToUse: config
-              noCache: true
-              nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
-              workingDirectory: '$(Build.SourcesDirectory)\UKHO.SAP.MockSAPService'
-              packagesDirectory: '$(Build.SourcesDirectory)\UKHO.SAP.MockSAPService\packages'
-
-          - task: DotNetCoreCLI@2
-            displayName: "Build Mock Service Project"
-            inputs:
-              command: "build"
-              projects: |
-                **/UKHO.SAP.MockAPIService.csproj
-              arguments: '--configuration $(BuildConfiguration) --no-restore'
-
-          - task: DotNetCoreCLI@2
-            displayName: "Publish Mock Service"
-            inputs:
-              command: "publish"
-              publishWebProjects: false
-              projects: '**/UKHO.SAP.MockAPIService.csproj'
-              arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\MockSAPService --no-restore'
-              zipAfterPublish: true
-              modifyOutputPath: true
-
-          - task: PublishBuildArtifacts@1
-            displayName: "Publish Mock Service Artifact"
-            inputs:
-              PathtoPublish: '$(Build.ArtifactStagingDirectory)\MockSAPService'
-              ArtifactName: UKHOMockSAPService
-              
+  - stage: RUNSTRKER
+    displayName: "run stryker"
+    jobs:
       - job: Stryker
         condition: eq('${{ parameters.RunStryker }}', true)      
         workspace:
-          clean: all
-        dependsOn: BuildAndPublishMockService
+          clean: all       
         steps:
+          - checkout: self
+            submodules: true
           - task: UseDotNet@2
-            displayName: Use .NET SDK $(DotNetSdkVersion)
+            displayName: Use .NET SDK $(DotNetSdkVersionAddsMock)
             inputs:
               packageType: sdk
-              version: $(DotNetSdkVersion)
+              version: $(DotNetSdkVersionAddsMock)
           - task: DotNetCoreCLI@2
             displayName: "Install Stryker"
             inputs:
               command: custom
               custom: tool
               arguments: install dotnet-stryker --tool-path $(Agent.BuildDirectory)/tools
+          - task: DotNetCoreCLI@2
+            displayName: ".Net Core - NuGet restore for non test projects only"
+            inputs:
+              command: "restore"
+              projects: |
+                **/*.csproj              
+              feedsToUse: config
+              noCache: true
+              nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
+              workingDirectory: '$(Build.SourcesDirectory)'             
           - task: Powershell@2
             displayName: "Run Stryker"
             inputs:
@@ -303,506 +92,120 @@ stages:
           - task: PublishMutationReport@0
             displayName: 'Publish Strkyer Mutator Report'
             inputs:
-              reportPattern: '**/mutation-report.html'
-
-  - stage: Devdeploy
-    displayName: "Devdeploy (inc terraform, webapp deploy)"
-    variables:
-      - group: "ERP-Facade-Dev"
-      - group: "Erp-Dev"
-      - group: "ERP-FACADE-DEV-KV"
-      - name: "AzureADConfiguration.TenantId"
-        value: $(AzureADConfigurationTenantId)
-      - name: "AzureADConfiguration.ClientId"
-        value: $(AzureADConfigurationClientId)
-      - name: "AzureADConfiguration.AutoTestClientId"
-        value: $(AzureADConfigurationAutoTestClientId)
-      - name: "AzureADConfiguration.ClientSecret"
-        value: $(AzureADConfigurationClientSecret)
-      - name: "AzureADConfiguration.AutoTestClientIdNoRole"
-        value: $(AzureADConfigurationAutoTestClientIdNoRole)
-      - name: "AzureADConfiguration.ClientSecretNoRole"
-        value: $(AzureADConfigurationClientSecretNoRole)
-      - name: "PermitConfiguration.PermitDecryptionHardwareId"
-        value: $(PermitDecryptionHardwareId)
-      - name: "PermitWithSameKey.Permit"
-        value: $(PermitWithSameKeyPermit)
-      - name: "PermitWithSameKey.ActiveKey"
-        value: $(PermitWithSameKeyACTIVEKEY)
-      - name: "PermitWithSameKey.NextKey"
-        value: $(PermitWithSameKeyNEXTKEY)
-      - name: "PermitWithDifferentKey.Permit"
-        value: $(PermitWithDifferentKeyPermit)
-      - name: "PermitWithDifferentKey.ActiveKey"
-        value: $(PermitWithDifferentKeyACTIVEKEY)
-      - name: "PermitWithDifferentKey.NextKey"
-        value: $(PermitWithDifferentKeyNEXTKEY)
-
+              reportPattern: '**/mutation-report.html'          
+  
+  - stage: BuildTestPublish
+    displayName: "Build (Dotnet Build & Restore , Dotnet Test and Publish Artifact )"
+    dependsOn: []
     jobs:
-      - deployment: DevDeployTerraform
-        displayName: "Dev - Deploy Terraform"
-        environment: "ERP-Dev"
-        pool: $(DeploymentPool)
-        container: ${{variables.Container}}
-        workspace:
-          clean: all
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - template: Deployment/templates/continuous-deployment.yml
-                  parameters:
-                    ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
-                    AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
+      - template: Deployment/templates/build-test-publish.yml
 
-      - deployment: DevDeployApp
-        dependsOn: DevDeployTerraform
-        displayName: "Dev - Deploy Dotnet App"
-        environment: "ERP-Dev"
-        pool: $(DeploymentPoolPE)
-        variables:
-          - name : WEB_APP_NAME
-            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_APP'] ]
-          - name : "ErpFacadeConfiguration.BaseUrl"
-            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
-          - name : MOCK_WEB_APP_NAME
-            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp'] ]
-          - name : "KeyVaultSettings.ServiceUri"
-            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.keyvaulturi'] ]
-          - name :  "AzureWebJobsStorage.ConnectionString"
-            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
-          - name : ResourceGroup
-            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.ResourceGroup'] ]
-          - name : WEB_APP_SLOT_NAME
-            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME'] ]
-          - name : WEB_APP_SLOT_HOST_NAME
-            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME'] ]
-        workspace:
-          clean: all
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - template: Deployment/templates/continuous-deployment-app.yml
-                  parameters:
-                    AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
-
-      - job: FunctionalTests
-        dependsOn:
-        - DevDeployTerraform
-        - DevDeployApp
-        pool: $(DeploymentPoolPE)
-        variables:
-          - name : ErpFacadeConfiguration.BaseUrl
-            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.ErpFacadeBaseUrl'] ]
-          - name : SapMockConfiguration.BaseUrl
-            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl'] ]
-          - name : AzureStorageConfiguration.ConnectionString
-            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
-          - name : mockWebAppName
-            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp'] ]
-          - name : mockWebAppResourceGroup
-            value : $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName'] ]
-        displayName: "Dev Functional Automated Tests"
-        workspace:
-         clean: all
-        steps:
-          - template: Deployment/templates/continuous-testing.yml
-            parameters:
-              AzureSubscription: "ERP-Facade-Dev-A.011.05.12"              
+  - stage: DevDeploy
+    dependsOn:
+    - BuildTestPublish
+    displayName: "Dev deploy"  
+    jobs:
+    - template: Deployment/templates/continuous-deployment.yml
+      parameters:
+        AzureDevOpsEnvironment: "ERP-Dev"
+        ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
+        AzureSubscription: "ERP-Facade-Dev-A.011.05.12"
+        ShortName: "Dev"
+        AppPool: $(DeploymentPoolPE)
+        Container: ${{variables.Container}}
+        DeployADDSMocks: true
+        RunFunctionalTests: true 
 
   - stage: vNextIATDeploy
-    dependsOn:  Devdeploy
-    displayName: "VNext IATdeploy (inc terraform, webapp deploy)"
-    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/develop'), startsWith(variables['Build.SourceBranch'], 'refs/heads/dev/')))
-    variables:
-      - group: "ERP-Facade-vNextIAT"
-      - group: "Erp-vNextIAT"
-      - group: "ERP-FACADE-vNextIAT-KV"
-      - name: "AzureADConfiguration.TenantId"
-        value: $(AzureADConfigurationTenantId)
-      - name: "AzureADConfiguration.ClientId"
-        value: $(AzureADConfigurationClientId)
-      - name: "PermitConfiguration.PermitDecryptionHardwareId"
-        value: $(PermitDecryptionHardwareId)
-      - name: mockWebAppName
-        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
-      - name: mockWebAppResourceGroup
-        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
-      - name: "SapMockConfiguration.BaseUrl"
-        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
+    dependsOn:
+    - DevDeploy
+    displayName: "vNextIAT deploy"
+    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/develop'), startsWith(variables['Build.SourceBranch'], 'refs/heads/dev/')))     
     jobs:
-      - deployment: vNextIATDeployTerraform
-        displayName: "vNextIAT - Deploy Terraform"
-        environment: "ERP-vNextIAT"
-        pool: $(DeploymentPool)
-        container: ${{variables.Container}}
-        workspace:
-          clean: all
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - template: Deployment/templates/continuous-deployment.yml
-                  parameters:
-                    ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
-                    AzureSubscription: "ERP-Facade-vNext-IAT-A.011.08"
+    - template: Deployment/templates/continuous-deployment.yml
+      parameters:
+        AzureDevOpsEnvironment: "ERP-vNextIAT"
+        ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
+        AzureSubscription: "ERP-Facade-vNext-IAT-A.011.08"
+        ShortName: "vNextIAT"
+        AppPool: $(DeploymentPoolPE)
+        Container: ${{variables.Container}}
+        DeployADDSMocks: true
 
-      - deployment: vNextIATDeployApp
-        dependsOn: vNextIATDeployTerraform
-        displayName: "vNextIAT - Deploy Dotnet App"
-        environment: "ERP-vNextIAT"
-        pool: $(DeploymentPoolPE)
-        variables:
-          - name : WEB_APP_NAME
-            value : $[ dependencies.vNextIATDeployTerraform.outputs['vNextIATDeployTerraform.TerraformDeploy.WEB_APP'] ]
-          - name : "KeyVaultSettings.ServiceUri"
-            value : $[ dependencies.vNextIATDeployTerraform.outputs['vNextIATDeployTerraform.TerraformDeploy.keyvaulturi'] ]
-          - name : "AzureWebJobsStorage.ConnectionString"
-            value : $[ dependencies.vNextIATDeployTerraform.outputs['vNextIATDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
-          - name : ResourceGroup
-            value : $[ dependencies.vNextIATDeployTerraform.outputs['vNextIATDeployTerraform.TerraformDeploy.ResourceGroup'] ]
-          - name : WEB_APP_SLOT_NAME
-            value : $[ dependencies.vNextIATDeployTerraform.outputs['vNextIATDeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME'] ]
-          - name : WEB_APP_SLOT_HOST_NAME
-            value : $[ dependencies.vNextIATDeployTerraform.outputs['vNextIATDeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME'] ]
-        workspace:
-          clean: all
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - template: Deployment/templates/continuous-deployment-app.yml
-                  parameters:
-                    AzureSubscription: "ERP-Facade-vNext-IAT-A.011.08"
-   
-  - stage: E2EDeploy
-    dependsOn: vNextIATDeploy
-    displayName: "E2Edeploy (inc terraform, webapp deploy)"       
-    variables:
-      - group: "ERP-Facade-E2E"
-      - group: "Erp-E2E"
-      - group: "ERP-FACADE-E2E-KV"
-      - name: "AzureADConfiguration.TenantId"
-        value: $(AzureADConfigurationTenantId)
-      - name: "AzureADConfiguration.ClientId"
-        value: $(AzureADConfigurationClientId)
-      - name: "PermitConfiguration.PermitDecryptionHardwareId"
-        value: $(PermitDecryptionHardwareId)
-      - name: mockWebAppName
-        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
-      - name: mockWebAppResourceGroup
-        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
-      - name: "SapMockConfiguration.BaseUrl"
-        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
-    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/develop'), startsWith(variables['Build.SourceBranch'], 'refs/heads/dev/')))
-
+  - stage: vNextE2EDeploy
+    dependsOn:
+    - vNextIATDeploy
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
+    displayName: "vNextE2E Deploy" 
     jobs:
-      - deployment: E2EDeployTerraform
-        displayName: "E2e - Deploy Terraform"
-        environment: "ERP-E2E"
-        pool: $(DeploymentPool)
-        container: ${{variables.Container}}
-        workspace:
-          clean: all
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - template: Deployment/templates/continuous-deployment.yml
-                  parameters:
-                    ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
-                    AzureSubscription: "ERP-Facade-E2E-A.011.08"
-
-      - deployment: E2EDeployApp
-        dependsOn: E2EDeployTerraform
-        displayName: "E2e - Deploy Dotnet App"
-        environment: "ERP-E2E"
-        pool: $(DeploymentPoolPE)
-        variables:
-          - name : WEB_APP_NAME
-            value : $[ dependencies.E2EDeployTerraform.outputs['E2EDeployTerraform.TerraformDeploy.WEB_APP'] ]
-          - name : "KeyVaultSettings.ServiceUri"
-            value : $[ dependencies.E2EDeployTerraform.outputs['E2EDeployTerraform.TerraformDeploy.keyvaulturi'] ]
-          - name : "AzureWebJobsStorage.ConnectionString"
-            value : $[ dependencies.E2EDeployTerraform.outputs['E2EDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
-          - name : ResourceGroup
-            value : $[ dependencies.E2EDeployTerraform.outputs['E2EDeployTerraform.TerraformDeploy.ResourceGroup'] ]
-          - name : WEB_APP_SLOT_NAME
-            value : $[ dependencies.E2EDeployTerraform.outputs['E2EDeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME'] ]
-          - name : WEB_APP_SLOT_HOST_NAME
-            value : $[ dependencies.E2EDeployTerraform.outputs['E2EDeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME'] ]
-        workspace:
-          clean: all
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - template: Deployment/templates/continuous-deployment-app.yml
-                  parameters:
-                    AzureSubscription: "ERP-Facade-vNext-E2E-A.011.08"            
-
+    - template: Deployment/templates/continuous-deployment.yml
+      parameters:
+        AzureDevOpsEnvironment: "ERP-E2E"
+        ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
+        AzureSubscription: "ERP-Facade-vNext-E2E-A.011.08"
+        ShortName: "vnexte2e"
+        AppPool: $(DeploymentPoolPE)
+        Container: ${{variables.Container}}          
+ 
   - stage: IATDeploy
-    dependsOn: DevDeploy   
-    displayName: "IATdeploy (inc terraform, webapp deploy)"  
-    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/'))) 
-    variables:
-      - group: "ERP-Facade-IAT"
-      - group: "Erp-IAT"
-      - group: "ERP-FACADE-IAT-KV"
-      - name: "AzureADConfiguration.TenantId"
-        value: $(AzureADConfigurationTenantId)
-      - name: "AzureADConfiguration.ClientId"
-        value: $(AzureADConfigurationClientId)
-      - name: "PermitConfiguration.PermitDecryptionHardwareId"
-        value: $(PermitDecryptionHardwareId)
-      - name: mockWebAppName
-        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
-      - name: mockWebAppResourceGroup
-        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
-      - name: "SapMockConfiguration.BaseUrl"
-        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
-   
+    dependsOn:
+    - DevDeploy   
+    displayName: "IAT deploy"
+    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))   
     jobs:
-      - deployment: IATDeployTerraform
-        displayName: "IAT - Deploy Terraform"
-        environment: "ERP-IAT"
-        pool: $(DeploymentPool)
-        container: ${{variables.Container}}
-        workspace:
-          clean: all
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - template: Deployment/templates/continuous-deployment.yml
-                  parameters:
-                    ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
-                    AzureSubscription: "ERP-Facade-IAT-A.011.08"
-
-      - deployment: IATDeployApp
-        dependsOn: IATDeployTerraform
-        displayName: "IAT - Deploy Dotnet App"
-        environment: "ERP-IAT"
-        pool: $(DeploymentPoolPE)
-        variables:
-          - name : WEB_APP_NAME
-            value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.WEB_APP'] ]
-          - name : "KeyVaultSettings.ServiceUri"
-            value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.keyvaulturi'] ]
-          - name : "AzureWebJobsStorage.ConnectionString"
-            value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
-          - name : ResourceGroup
-            value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.ResourceGroup'] ]
-          - name : WEB_APP_SLOT_NAME
-            value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME'] ]
-          - name : WEB_APP_SLOT_HOST_NAME
-            value : $[ dependencies.IATDeployTerraform.outputs['IATDeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME'] ]
-        workspace:
-          clean: all
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - template: Deployment/templates/continuous-deployment-app.yml
-                  parameters:
-                    AzureSubscription: "ERP-Facade-IAT-A.011.08"
+    - template: Deployment/templates/continuous-deployment.yml
+      parameters:
+        AzureDevOpsEnvironment: "ERP-IAT"
+        ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
+        AzureSubscription: "ERP-Facade-IAT-A.011.08"
+        ShortName: "IAT"
+        AppPool: $(DeploymentPoolPE)
+        Container: ${{variables.Container}}
+        DeployADDSMocks: true
+        RunFunctionalTests: true
   
   - stage: PreProdDeploy
-    dependsOn: IATDeploy   
-    displayName: "PreProddeploy (inc terraform, webapp deploy)"  
-    condition: succeeded() 
-    variables:
-      - group: "ERP-Facade-PreProd"
-      - group: "Erp-PreProd"
-      - group: "ERP-FACADE-PREPROD-KV"
-      - name: "AzureADConfiguration.TenantId"
-        value: $(AzureADConfigurationTenantId)
-      - name: "AzureADConfiguration.ClientId"
-        value: $(AzureADConfigurationClientId)
-      - name: "PermitConfiguration.PermitDecryptionHardwareId"
-        value: $(PermitDecryptionHardwareId)
-      - name: mockWebAppName
-        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
-      - name: mockWebAppResourceGroup
-        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
-      - name: "SapMockConfiguration.BaseUrl"
-        value: $[ stageDependencies.DevDeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
-   
+    dependsOn:
+    - IATDeploy
+    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
+    displayName: "PreProd Deploy"   
     jobs:
-      - deployment: PreProdDeployTerraform
-        displayName: "PreProd - Deploy Terraform"
-        environment: "ERP-preprod"
-        pool: $(DeploymentPool)
-        container: ${{variables.Container}}
-        workspace:
-          clean: all
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - template: Deployment/templates/continuous-deployment.yml
-                  parameters:
-                    ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
-                    AzureSubscription: "ERP-Facade-PRE-A.011.08"
-
-      - deployment: PreProdDeploy
-        dependsOn: PreProdDeployTerraform
-        displayName: "PRP - Deploy Dotnet App"
-        environment: "ERP-preprod"
-        pool: $(DeploymentPoolPE)
-        variables:
-          - name : WEB_APP_NAME
-            value : $[ dependencies.PreProdDeployTerraform.outputs['PreProdDeployTerraform.TerraformDeploy.WEB_APP'] ]
-          - name : "KeyVaultSettings.ServiceUri"
-            value : $[ dependencies.PreProdDeployTerraform.outputs['PreProdDeployTerraform.TerraformDeploy.keyvaulturi'] ]
-          - name : "AzureWebJobsStorage.ConnectionString"
-            value : $[ dependencies.PreProdDeployTerraform.outputs['PreProdDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
-          - name : ResourceGroup
-            value : $[ dependencies.PreProdDeployTerraform.outputs['PreProdDeployTerraform.TerraformDeploy.ResourceGroup'] ]
-          - name : WEB_APP_SLOT_NAME
-            value : $[ dependencies.PreProdDeployTerraform.outputs['PreProdDeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME'] ]
-          - name : WEB_APP_SLOT_HOST_NAME
-            value : $[ dependencies.PreProdDeployTerraform.outputs['PreProdDeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME'] ]
-        workspace:
-          clean: all
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - template: Deployment/templates/continuous-deployment-app.yml
-                  parameters:
-                    AzureSubscription: "ERP-Facade-PRE-A.011.08"
- 
-  - stage: QAdeploy
-    dependsOn: DevDeploy
-    displayName: "QAdeploy (inc terraform, webapp deploy)"
-    variables:
-      - group: "ERP-Facade-QA"
-      - group: "Erp-QA"
-      - group: "ERP-FACADE-QA-KV"
-      - name: "AzureADConfiguration.TenantId"
-        value: $(AzureADConfigurationTenantId)
-      - name: "AzureADConfiguration.ClientId"
-        value: $(AzureADConfigurationClientId)
-      - name: "PermitConfiguration.PermitDecryptionHardwareId"
-        value: $(PermitDecryptionHardwareId)
-      - name: mockWebAppName
-        value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebApp']  ]
-      - name: mockWebAppResourceGroup
-        value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockWebAppResourceGroupName']  ]
-      - name: "SapMockConfiguration.BaseUrl"
-        value: $[ stageDependencies.Devdeploy.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.mockwebappurl']  ]
-    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
-
+    - template: Deployment/templates/continuous-deployment.yml
+      parameters:
+        AzureDevOpsEnvironment: "ERP-preprod"
+        ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
+        AzureSubscription: "ERP-Facade-PRE-A.011.08"
+        ShortName: "prp"
+        AppPool: $(DeploymentPoolPE)
+        Container: ${{variables.Container}}
+  
+  - stage: QADeploy
+    dependsOn:
+    - DevDeploy
+    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
+    displayName: "QA Deploy"  
     jobs:
-      - deployment: QADeployTerraform
-        displayName: "Qa - Deploy Terraform"
-        environment: "ERP-QA"
-        pool: $(DeploymentPool)
-        container: ${{variables.Container}}
-        workspace:
-          clean: all
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - template: Deployment/templates/continuous-deployment.yml
-                  parameters:
-                    ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
-                    AzureSubscription: "ERP-Facade-QA-A.011.05.12"
-
-      - deployment: QADeployApp
-        dependsOn: QADeployTerraform
-        displayName: "Qa - Deploy Dotnet App"
-        environment: "ERP-QA"
-        pool: $(DeploymentPoolPE)
-        variables:
-          - name : WEB_APP_NAME
-            value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.WEB_APP'] ]
-          - name : "KeyVaultSettings.ServiceUri"
-            value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.keyvaulturi'] ]
-          - name : "AzureWebJobsStorage.ConnectionString"
-            value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
-          - name : ResourceGroup
-            value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.ResourceGroup'] ]
-          - name : WEB_APP_SLOT_NAME
-            value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME'] ]
-          - name : WEB_APP_SLOT_HOST_NAME
-            value : $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME'] ]
-        workspace:
-          clean: all
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - template: Deployment/templates/continuous-deployment-app.yml
-                  parameters:
-                    AzureSubscription: "ERP-Facade-QA-A.011.05.12"
-     
-  - stage: Livedeploy
-    dependsOn: PreProdDeploy 
-    displayName: "Livedeploy (inc terraform, webapp deploy)"
-    variables:
-      - group: "ERP-Facade-Live"
-      - group: "Erp-Live"
-      - group: "ERP-FACADE-LIVE-KV"
-      - name: "AzureADConfiguration.TenantId"
-        value: $(AzureADConfigurationTenantId)
-      - name: "AzureADConfiguration.ClientId"
-        value: $(AzureADConfigurationClientId)
-      - name: "PermitConfiguration.PermitDecryptionHardwareId"
-        value: $(PermitDecryptionHardwareId)
-    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
+    - template: Deployment/templates/continuous-deployment.yml
+      parameters:
+        AzureDevOpsEnvironment: "ERP-QA"
+        ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
+        AzureSubscription: "ERP-Facade-QA-A.011.05.12"
+        ShortName: "qa"
+        AppPool: $(DeploymentPoolPE)
+        Container: ${{variables.Container}} 
+  
+  - stage: LiveDeploy
+    dependsOn:
+    - PreProdDeploy
+    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
+    displayName: "Live Deploy"   
     jobs:
-      - deployment: LiveDeployTerraform
-        displayName: "Live - Deploy Terraform"
-        environment: "ERP-Live"
-        pool: $(DeploymentPool)
-        container: ${{variables.Container}}
-        workspace:
-          clean: all
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - template: Deployment/templates/continuous-deployment.yml
-                  parameters:
-                    ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
-                    AzureSubscription: "ERP-Facade-Live-A.011.05.12"
-
-      - deployment: LiveDeployApp
-        dependsOn: LiveDeployTerraform
-        displayName: "Live - Deploy Dotnet App"
-        environment: "ERP-Live"
-        pool: "$(DeploymentPoolPD)"
-        variables:
-        - name : WEB_APP_NAME
-          value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.WEB_APP'] ]
-        - name : "KeyVaultSettings.ServiceUri"
-          value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.keyvaulturi'] ]
-        - name : "AzureWebJobsStorage.ConnectionString"
-          value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.AzureStorageConnectionString'] ]
-        - name : ResourceGroup
-          value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.ResourceGroup'] ]
-        - name : WEB_APP_SLOT_NAME
-          value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME'] ]
-        - name : WEB_APP_SLOT_HOST_NAME
-          value : $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME'] ] 
-        workspace:
-          clean: all
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - template: Deployment/templates/continuous-deployment-app.yml
-                  parameters:
-                    AzureSubscription: "ERP-Facade-Live-A.011.05.12"
-
-      - job: PostDeploymentActions
-        dependsOn:
-        - LiveDeployApp                 
-        pool: $(WindowsPool)        
-        displayName: Post Deployment Actions
-        steps:
-          - template: Deployment/templates/retain-pipeline.yml
+    - template: Deployment/templates/continuous-deployment.yml
+      parameters:
+        AzureDevOpsEnvironment: "ERP-Live"
+        ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
+        AzureSubscription: "ERP-Facade-Live-A.011.05.12"
+        ShortName: "Live"
+        AppPool: $(DeploymentPoolPD)
+        Container: ${{variables.Container}} 
+        RetainPipeline: true 

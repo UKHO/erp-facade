@@ -1,0 +1,6 @@
+variables:
+  - group: "ERP-Facade-PreProd"
+  - group: "Erp-PreProd"
+  - group: "ERP-FACADE-PreProd-KV"
+    
+  - template: variables.yml
