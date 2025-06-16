@@ -26,7 +26,16 @@ parameters:
     default: false
   - name: DeployADDSMocks
     type: boolean
-    default: false    
+    default: false
+
+# Run ADDS tests by specifying the environment to run the tests in. Leave as the default value if you don't want to run them.
+  - name: RunAddsTests
+    type: string
+    default: 'skip'
+    values:
+    - 'skip'
+    - 'vNextIAT'
+    - 'IAT'   
 
 jobs:
   - deployment: ${{parameters.ShortName}}DeployTerraform
@@ -178,7 +187,15 @@ jobs:
                 webAppName: "$(WEB_APP_NAME)"
                 action: "Swap Slots"
                 swapWithProduction: true
-                sourceSlot: $(WEB_APP_SLOT_NAME)        
+                sourceSlot: $(WEB_APP_SLOT_NAME) 
+      
+  - ${{ if ne(parameters.RunAddsTests, 'skip') }}:
+    - template:  template.yml@TriggerAddsAutoTestsPipeline
+      parameters:
+        serviceConnection: 'addse2eauto Test - A.011.13'
+        environment: ${{ parameters.RunAddsTests }}
+        dependsOn:
+        - ${{ parameters.ShortName }}DeployApp
 
   - ${{ if eq(parameters.RunFunctionalTests, true) }}:  
     - job: FunctionalTests
