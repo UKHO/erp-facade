@@ -23,7 +23,7 @@ trigger:
   - main
   - release/*
 
-pool: $(WindowsPool) 
+pool: $(WindowsPool1) 
 
 variables:
   - name: BuildConfiguration
@@ -32,7 +32,7 @@ variables:
     value: "any cpu"
   - name: BuildCounter
     value: $[counter(format('{0:yyyyMMdd}', pipeline.startTime), 1)]
-  - name: WindowsPool
+  - name: WindowsPool1
     value: "Mare Nubium"
   - name: Container
     value: "ukhydrographicoffice/terraform-azure-powershell-unzip:1.7.2"
