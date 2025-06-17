@@ -67,15 +67,15 @@ resources:
 
 
 stages:
-- stage: VulnerabilityChecks
-  displayName: Snyk checks
-  dependsOn: []
-  jobs:
-  - template: Deployment/Template/vulnerability-checks.yml
-    parameters:
-      SnykOnlyFailIfFixable: ${{ parameters.SnykOnlyFailIfFixable }}
-      SnykPassOnIssues: ${{ parameters.SnykPassOnIssues }}
-      
+  - stage: VulnerabilityChecks
+    displayName: Snyk checks
+    dependsOn: []
+    jobs:
+    - template: Deployment/Template/vulnerability-checks.yml
+      parameters:
+        SnykOnlyFailIfFixable: ${{ parameters.SnykOnlyFailIfFixable }}
+        SnykPassOnIssues: ${{ parameters.SnykPassOnIssues }}
+
   - stage: RUNSTRKER
     displayName: "run stryker"
     jobs:
