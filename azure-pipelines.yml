@@ -71,7 +71,7 @@ stages:
     displayName: Snyk checks
     dependsOn: []
     jobs:
-    - template: Deployment/Template/vulnerability-checks.yml
+    - template: Deployment/templates/vulnerability-checks.yml    
       parameters:
         SnykOnlyFailIfFixable: ${{ parameters.SnykOnlyFailIfFixable }}
         SnykPassOnIssues: ${{ parameters.SnykPassOnIssues }}
