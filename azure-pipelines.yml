@@ -155,7 +155,7 @@ stages:
         AzureSubscription: "ERP-Facade-vNext-IAT-A.011.08"
         ShortName: "vNextIAT"
         AppPool: $(DeploymentPoolPE)
-        Container: ${{variables.Container}},
+        Container: ${{variables.Container}}
         DeployADDSMocks: true
         RunAddsTests: vNextIAT
 
