@@ -1,0 +1,6 @@
+variables:
+  - group: "ERP-Facade-IAT"
+  - group: "Erp-IAT"
+  - group: "ERP-FACADE-IAT-KV"
+  
+  - template: variables.yml
