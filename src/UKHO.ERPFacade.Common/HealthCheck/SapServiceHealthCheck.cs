@@ -39,23 +39,23 @@ namespace UKHO.ERPFacade.Common.HealthCheck
 
             try
             {
-                string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, SapHealthCheckXmlPath);
+                string sapXmlTemplatePath = Path.Combine(Environment.CurrentDirectory, XmlTemplateInfo.SapHealthCheckXmlPath);
 
                 healthCheckData.Add("SAP Template Path", sapXmlTemplatePath);
 
                 //Check whether template file exists or not
-                if (!_fileSystemHelper.IsFileExists(sapXmlTemplatePath))
+                if (!_fileOperations.IsFileExists(sapXmlTemplatePath))
                 {
                     _logger.LogWarning(EventIds.SapHealthCheckXmlTemplateNotFound.ToEventId(), "The SAP Health Check xml template does not exist.");
                     return HealthCheckResult.Unhealthy(data: healthCheckData, description: description);
                 }
 
-                XmlDocument sapPayload = _xmlHelper.CreateXmlDocument(sapXmlTemplatePath);
+                XmlDocument sapPayload = _xmlOperations.CreateXmlDocument(sapXmlTemplatePath);
 
                 healthCheckData.Add("SAP SOAP endpoint", new Uri(_sapClient.Uri, _sapConfig.Value.SapEndpointForEncEvent));
                 healthCheckData.Add("SAP SOAP operation(ENC)", _sapConfig.Value.SapServiceOperationForEncEvent);
 
-                HttpResponseMessage response = await _sapClient.PostEventData(sapPayload, _sapConfig.Value.SapEndpointForEncEvent, _sapConfig.Value.SapServiceOperationForEncEvent, _sapConfig.Value.SapUsernameForEncEvent, _sapConfig.Value.SapPasswordForEncEvent);
+                HttpResponseMessage response = await _sapClient.SendUpdateAsync(sapPayload, _sapConfig.Value.SapEndpointForEncEvent, _sapConfig.Value.SapServiceOperationForEncEvent, _sapConfig.Value.SapUsernameForEncEvent, _sapConfig.Value.SapPasswordForEncEvent);
 
                 _logger.LogInformation(EventIds.SapHealthCheckRequestSentToSap.ToEventId(), "SAP Health Check request has been sent to SAP successfully. | {StatusCode}", response.StatusCode);
 
@@ -74,9 +74,9 @@ namespace UKHO.ERPFacade.Common.HealthCheck
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.RequestToSapFailed.ToEventId(), "An error occurred while processing your request in SAP. | {Message}", ex.Message);
+                _logger.LogError(EventIds.S57RequestToSapFailedException.ToEventId(), "An error occurred while processing your request in SAP. | {Message}", ex.Message);
                 return HealthCheckResult.Unhealthy(exception: ex, data: healthCheckData, description: description);
-            }           
+            }            
         }
     }
 }
