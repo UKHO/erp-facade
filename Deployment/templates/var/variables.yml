@@ -27,3 +27,9 @@ variables:
     value: $(PermitWithDifferentKeyNEXTKEY)
   - name: "ErpFacadeConfiguration.ApiBaseUrl"
     value: $(ErpFacadeConfiguration.ApiBaseUrl)
+  - name: "SapCallbackConfiguration.SharedApiKey"
+    value: $(SharedApiKeyConfigurationSharedApiKey)
+  - name: "SharedApiKeyConfiguration.SharedApiKey"
+    value: $(SharedApiKeyConfigurationSharedApiKey)
+  - name: "EnterpriseEventServiceConfiguration.ClientId"
+    value: $(EnterpriseEventServiceConfigurationClientId)
