@@ -33,3 +33,15 @@ variables:
     value: $(SharedApiKeyConfigurationSharedApiKey)
   - name: "EnterpriseEventServiceConfiguration.ClientId"
     value: $(EnterpriseEventServiceConfigurationClientId)
+  - name: "ErpFacadeConfiguration.PermitWithSameKey.Permit"
+    value: $(PermitWithSameKeyPermit)
+  - name: "ErpFacadeConfiguration.PermitWithSameKey.ActiveKey"
+    value: $(PermitWithSameKeyACTIVEKEY)
+  - name: "ErpFacadeConfiguration.PermitWithSameKey.NextKey"
+    value: $(PermitWithSameKeyNEXTKEY)
+  - name: "ErpFacadeConfiguration.PermitWithDifferentKey.Permit"
+    value: $(PermitWithDifferentKeyPermit)
+  - name: "ErpFacadeConfiguration.PermitWithDifferentKey.ActiveKey"
+    value: $(PermitWithDifferentKeyACTIVEKEY)
+  - name: "ErpFacadeConfiguration.PermitWithDifferentKey.NextKey"
+    value: $(PermitWithDifferentKeyNEXTKEY)
