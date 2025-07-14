@@ -64,11 +64,3 @@ variable "deploy_adds_mocks" {
 variable "PermitDecryptionHardwareId" {
   type = string
 }
-
-variable "erpFacadeURL" {
-  type = string
-}
-
-variable "sharedApiKey" {
-  type = string
-}
