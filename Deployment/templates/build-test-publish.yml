@@ -268,11 +268,11 @@ jobs:
       inputs:
         targetType: "inline"
         script: |
-          $jsonPath = '$(Build.SourcesDirectory)\mock\UKHO.ADDS.Mocks.ERP\Override\Files\sap\config.json'
-          $json = Get-Content $jsonPath  | ConvertFrom-json
-          $json.erpFacadeURL = "http:test.com"
-          $json.sharedApiKey = "1234"
-          $json | ConvertFrom-json | Set-Content $jsonPath         
+          $configPath = 'mock/UKHO.ADDS.Mocks.ERP/Override/Files/sap/config.json'
+          $json = Get-Content $configPath | ConvertFrom-Json
+          $json.erpFacadeURL = 'https://your-erp-facade-url'
+          $json.sharedApiKey = 'your-api-key'
+          $json | ConvertTo-Json -Depth 10 | Set-Content $configPath      
     
     - task: DotNetCoreCLI@2
       displayName: "dotnet build task"
