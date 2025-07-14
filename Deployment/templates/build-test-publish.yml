@@ -290,7 +290,7 @@ jobs:
           $json = Get-Content $jsonePath  | ConvertFrom-json
           $json.erpFacadeURL = "http:test.com"
           $json.sharedApiKey = "1234"
-          $json | ConvertFrom-json -Depth 10 | Set-Content $jsonPath
+          $json | ConvertFrom-json | Set-Content $jsonPath
 
     - task: ArchiveFiles@2
       displayName: "Zip ADDS Mock Service"
