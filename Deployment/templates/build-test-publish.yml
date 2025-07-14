@@ -3,8 +3,8 @@ jobs:
     workspace:
       clean: all
     displayName: "Dotnet Test and Publish Code Coverage"
-    variables:
-    - template: var/${{ lower(parameters.ShortName) }}-deploy.yml
+    # variables:
+    # - template: var/${{ lower(parameters.ShortName) }}-deploy.yml
     steps:
       - task: UseDotNet@2
         displayName: Use .NET SDK $(DotNetSdkVersion)
@@ -265,16 +265,16 @@ jobs:
         workingDirectory: '$(Build.SourcesDirectory)\mock\repo\'
         packagesDirectory: '$(Build.SourcesDirectory)\mock\repo\src\packages'
 
-    - task: PowerShell@2
-      displayName: "update ADDSMock Sap config file" 
-      inputs:
-        targetType: "inline"
-        script: |
-          $configPath = '$(Build.SourcesDirectory)/mock/UKHO.ADDS.Mocks.ERP/Override/Files/sap/config.json'
-          $json = Get-Content $configPath | ConvertFrom-Json
-          $json.erpFacadeApiBaseUrl = '$(ErpFacadeConfiguration.ApiBaseUrl)'
-          $json.sharedApiKey = '$(SharedApiKeyConfigurationSharedApiKey)'
-          $json | ConvertTo-Json -Depth 10 | Set-Content $configPath      
+    # - task: PowerShell@2
+    #   displayName: "update ADDSMock Sap config file" 
+    #   inputs:
+    #     targetType: "inline"
+    #     script: |
+    #       $configPath = '$(Build.SourcesDirectory)/mock/UKHO.ADDS.Mocks.ERP/Override/Files/sap/config.json'
+    #       $json = Get-Content $configPath | ConvertFrom-Json
+    #       $json.erpFacadeApiBaseUrl = '$(ErpFacadeConfiguration.ApiBaseUrl)'
+    #       $json.sharedApiKey = '$(SharedApiKeyConfigurationSharedApiKey)'
+    #       $json | ConvertTo-Json -Depth 10 | Set-Content $configPath      
     
     - task: DotNetCoreCLI@2
       displayName: "dotnet build task"
