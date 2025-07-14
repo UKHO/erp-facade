@@ -155,16 +155,16 @@ jobs:
                   package: "$(Pipeline.Workspace)/UKHOMockSAPService/UKHO.SAP.MockAPIService.zip"  
 
             - ${{ if eq(parameters.DeployADDSMocks, true) }}:
-              - task: PowerShell@2
-                displayName: "update ADDSMock Sap config file" 
-                inputs:
-                  targetType: "inline"
-                  script: |
-                    $configPath = '$(Pipeline.Workspace)/ADDSMock/UKHOERPFacadeAPI/Override/Files/sap/config.json'
-                    $json = Get-Content $configPath | ConvertFrom-Json
-                    $json.ErpFacadeConfiguration.ApiBaseUrl = '$(ErpFacadeConfiguration.ApiBaseUrl)'
-                    $json.SapCallbackConfiguration.SharedApiKey = '$(SharedApiKeyConfigurationSharedApiKey)'
-                    $json | ConvertTo-Json -Depth 10 | Set-Content $configPath
+              # - task: PowerShell@2
+              #   displayName: "update ADDSMock Sap config file" 
+              #   inputs:
+              #     targetType: "inline"
+              #     script: |
+              #       $configPath = '$(Pipeline.Workspace)/ADDSMock/UKHOERPFacadeAPI/Override/Files/sap/config.json'
+              #       $json = Get-Content $configPath | ConvertFrom-Json
+              #       $json.ErpFacadeConfiguration.ApiBaseUrl = '$(ErpFacadeConfiguration.ApiBaseUrl)'
+              #       $json.SapCallbackConfiguration.SharedApiKey = '$(SharedApiKeyConfigurationSharedApiKey)'
+              #       $json | ConvertTo-Json -Depth 10 | Set-Content $configPath
 
               - task: AzureWebApp@1
                 displayName: "Azure App Deploy: ERPFacade-ADDS-MockService"            
@@ -181,12 +181,12 @@ jobs:
                 fileType: 'json'
                 targetFiles: '**/appsettings.json'
 
-            # - task: FileTransform@1
-            #   displayName: "File Transform: Adds Mock config json"
-            #   inputs:
-            #     folderPath: '$(System.DefaultWorkingDirectory)/'
-            #     fileType: 'json'
-            #     targetFiles: '**/config.json'
+            - task: FileTransform@1
+              displayName: "File Transform: Adds Mock config json"
+              inputs:
+                folderPath: '$(Pipeline.Workspace)/UKHOERPFacadeAPI/*.zip'
+                fileType: 'json'
+                targetFiles: '/Override/Files/sap/config.json'
 
 
 
