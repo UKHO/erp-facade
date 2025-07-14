@@ -281,16 +281,16 @@ jobs:
         zipAfterPublish: false
         modifyOutputPath: false
 
-    - task: PowerShell@2
-      displayName: "update ADDSMock Sap config file" 
-      inputs:
-        targetType: "inline"
-        script: |
-          $jsonePath = '$(Build.SourcesDirectory)\mock\UKHO.ADDS.Mocks.ERP\Override\Files\sap\config.json'
-          $json = Get-Content $jsonePath  | ConvertFrom-json
-          $json.erpFacadeURL = "http:test.com"
-          $json.sharedApiKey = "1234"
-          $json | ConvertFrom-json | Set-Content $jsonPath
+    # - task: PowerShell@2
+    #   displayName: "update ADDSMock Sap config file" 
+    #   inputs:
+    #     targetType: "inline"
+    #     script: |
+    #       $jsonePath = '$(Build.SourcesDirectory)\mock\UKHO.ADDS.Mocks.ERP\Override\Files\sap\config.json'
+    #       $json = Get-Content $jsonePath  | ConvertFrom-json
+    #       $json.erpFacadeURL = "http:test.com"
+    #       $json.sharedApiKey = "1234"
+    #       $json | ConvertFrom-json | Set-Content $jsonPath
 
     - task: ArchiveFiles@2
       displayName: "Zip ADDS Mock Service"
