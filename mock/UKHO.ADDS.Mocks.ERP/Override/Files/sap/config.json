@@ -3,10 +3,14 @@
   //"sharedApiKey": "1233",
   //"sapCallbackConfiguration": "/api/v2/callback/sap/s100actions/processed"
   "SapCallbackConfiguration": {
-    "Url": "/api/v2/callback/sap/s100actions/processed",
+    "Url": "/api/v2/callback/sap/s100actions/processed"    
+  },
+  "SharedApiKeyConfiguration": {
     "SharedApiKey": ""
   },
+  "SharedApiKeyConfigurationSharedApiKey": "",
   "ErpFacadeConfiguration": {
     "ApiBaseUrl": ""
-  }
+  },
+  "ErpFacadeConfiguration.ApiBaseUrl": ""
 }
