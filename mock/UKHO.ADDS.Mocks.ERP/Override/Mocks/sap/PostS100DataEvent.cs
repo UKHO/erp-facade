@@ -51,7 +51,7 @@ namespace UKHO.ADDS.Mocks.ERP.Override.Mocks.sap
         {
             var jsonString = File.ReadAllText("./Override/Files/sap/config.json");
             using var doc = JsonDocument.Parse(jsonString);
-            var erpFacadeUrl = doc.RootElement.GetProperty("erpFacadeURL").GetString();
+            var erpFacadeApiBaseUrl = doc.RootElement.GetProperty("erpFacadeApiBaseUrl").GetString();
             var sharedApiKey = doc.RootElement.GetProperty("sharedApiKey").GetString();
             var sapCallbackConfiguration = doc.RootElement.GetProperty("sapCallbackConfiguration").GetString();
 
@@ -78,7 +78,7 @@ namespace UKHO.ADDS.Mocks.ERP.Override.Mocks.sap
 
                 using var httpClient = new HttpClient()
                 {
-                    BaseAddress = new Uri(erpFacadeUrl)
+                    BaseAddress = new Uri(erpFacadeApiBaseUrl)
                 };
                 var callbackRequest = new HttpRequestMessage(HttpMethod.Post, sapCallbackConfiguration)
                 {
