@@ -124,8 +124,8 @@ stages:
     dependsOn: []
     jobs:
       - template: Deployment/templates/build-test-publish.yml
-        parameters:        
-          ShortName: "Dev"        
+        # parameters:        
+        #   ShortName: "Dev"        
 
   - stage: DevDeploy
     dependsOn:
