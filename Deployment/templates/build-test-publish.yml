@@ -263,7 +263,7 @@ jobs:
         noCache: true
         nugetConfigPath: '$(Build.SourcesDirectory)\mock\repo\BuildNuget.config'
         workingDirectory: '$(Build.SourcesDirectory)\mock\repo\'
-        packagesDirectory: '$(Build.SourcesDirectory)\mock\repo\src\packages'
+        packagesDirectory: '$(Build.SourcesDirectory)\mock\repo\src\packages'   
 
     # - task: PowerShell@2
     #   displayName: "update ADDSMock Sap config file" 
