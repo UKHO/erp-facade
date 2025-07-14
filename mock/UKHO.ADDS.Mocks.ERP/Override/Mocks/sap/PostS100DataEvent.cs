@@ -49,14 +49,14 @@ namespace UKHO.ADDS.Mocks.ERP.Override.Mocks.sap
 
         private void callBackErpFacade(HttpRequest request)
         {
-            var jsonString = File.ReadAllText("file/config.json");
+            var jsonString = File.ReadAllText("./Override/Files/sap/config.json");
             using var doc = JsonDocument.Parse(jsonString);
             var erpFacadeUrl = doc.RootElement.GetProperty("erpFacadeURL").GetString();
             var sharedApiKey = doc.RootElement.GetProperty("sharedApiKey").GetString();
             var sapCallbackConfiguration = doc.RootElement.GetProperty("sapCallbackConfiguration").GetString();
 
             var requestBody = request.Body.ToString();
-            var xmlDocument = XDocument.Parse(requestBody); 
+            var xmlDocument = XDocument.Parse(requestBody);           
             XNamespace soapNs = "http://schemas.xmlsoap.org/soap/envelope/";
             XNamespace rfcNs = "urn:sap-com:document:sap:rfc:functions";
 

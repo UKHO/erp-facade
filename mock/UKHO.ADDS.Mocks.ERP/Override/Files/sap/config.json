@@ -1,4 +1,5 @@
 {
-  "erpFacadeURL": "",
-  "sharedApiKey": ""
+  "erpFacadeURL": "https://mock-erp.example.com",
+  "sharedApiKey": "1233",
+  "sapCallbackConfiguration": "/api/v2/callback/sap/s100actions/processed"
 }
