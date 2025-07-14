@@ -3,6 +3,8 @@ jobs:
     workspace:
       clean: all
     displayName: "Dotnet Test and Publish Code Coverage"
+    variables:
+    - template: var/${{ lower(parameters.ShortName) }}-deploy.yml
     steps:
       - task: UseDotNet@2
         displayName: Use .NET SDK $(DotNetSdkVersion)
