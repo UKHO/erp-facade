@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.IO.Abstractions;
+using System.Text;
 using System.Text.Json;
 using System.Xml.Linq;
 using Microsoft.AspNetCore.Http.Extensions;
@@ -10,11 +11,11 @@ namespace UKHO.ADDS.Mocks.ERP.Override.Mocks.sap
     public class PostS100DataEvent : ServiceEndpointMock
     {
         public override void RegisterSingleEndpoint(IEndpointMock endpoint) => endpoint.MapPost("/z_shop_mat_info.asmx", (HttpRequest request) =>
-        {
-            
+        {            
             var rawRequestBody = new StreamReader(request.Body).ReadToEnd();
             var body = JsonDocument.Parse(rawRequestBody).RootElement;
             var correlationId = string.Empty;
+
 
             if (body.TryGetProperty("data", out JsonElement data) && data.TryGetProperty("correlationId", out JsonElement correlationIdElement))
             {
@@ -48,16 +49,18 @@ namespace UKHO.ADDS.Mocks.ERP.Override.Mocks.sap
 
         private void callBackErpFacade(HttpRequest request)
         {
+            var jsonString = File.ReadAllText("file/config.json");
+            using var doc = JsonDocument.Parse(jsonString);
+            var erpFacadeUrl = doc.RootElement.GetProperty("erpFacadeURL").GetString();
+            var sharedApiKey = doc.RootElement.GetProperty("sharedApiKey").GetString();
+            var sapCallbackConfiguration = doc.RootElement.GetProperty("sapCallbackConfiguration").GetString();
+
             var requestBody = request.Body.ToString();
-            //  var xmlDocument = XDocument.Parse(requestBody);
-            var xmlDocument = new XDocument();
-          //  var url = GetConfiguration["SapCallbackConfiguration:Url"];
-           // var test = GetConfiguration["Logging:LogLevel:Default"];
-
-
+            var xmlDocument = XDocument.Parse(requestBody); 
             XNamespace soapNs = "http://schemas.xmlsoap.org/soap/envelope/";
             XNamespace rfcNs = "urn:sap-com:document:sap:rfc:functions";
 
+            
             var correlationIdElement = xmlDocument
                 .Element(soapNs + "Envelope")?
                 .Element(soapNs + "Body")?
@@ -69,21 +72,21 @@ namespace UKHO.ADDS.Mocks.ERP.Override.Mocks.sap
 
             var payload = string.Format("{{\"correlationId\":\"{0}\"}}", correlationId);
 
-            //Task.Run(async () =>
-            //{
-            //    await Task.Delay(1000);
+            Task.Run(async () =>
+            {
+                await Task.Delay(1000);
 
-            //    using var httpClient = new HttpClient()
-            //    {
-            //        BaseAddress = new Uri(GetConfiguration["ErpFacadeConfiguration:ApiBaseUrl"])
-            //    };
-            //    var callbackRequest = new HttpRequestMessage(HttpMethod.Post, GetConfiguration["SapCallbackConfiguration:Url"])
-            //    {
-            //        Content = new StringContent(payload, Encoding.UTF8, "application/json"),
-            //    };
-            //    callbackRequest.Headers.Add("X-API-Key", GetConfiguration["SapCallbackConfiguration:SharedApiKey"]);
-            //    var callbackResponse = await httpClient.SendAsync(callbackRequest);
-            //});
+                using var httpClient = new HttpClient()
+                {
+                    BaseAddress = new Uri(erpFacadeUrl)
+                };
+                var callbackRequest = new HttpRequestMessage(HttpMethod.Post, sapCallbackConfiguration)
+                {
+                    Content = new StringContent(payload, Encoding.UTF8, "application/json"),
+                };
+                callbackRequest.Headers.Add("X-API-Key", sharedApiKey);
+                var callbackResponse = await httpClient.SendAsync(callbackRequest);
+            });
         }
     }
 }
