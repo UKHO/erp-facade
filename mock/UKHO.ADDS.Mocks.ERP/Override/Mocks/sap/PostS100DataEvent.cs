@@ -1,4 +1,5 @@
-﻿using System.IO.Abstractions;
+﻿using System;
+using System.IO.Abstractions;
 using System.Text;
 using System.Text.Json;
 using System.Xml.Linq;
@@ -10,12 +11,15 @@ namespace UKHO.ADDS.Mocks.ERP.Override.Mocks.sap
 {
     public class PostS100DataEvent : ServiceEndpointMock
     {
-        public override void RegisterSingleEndpoint(IEndpointMock endpoint) => endpoint.MapPost("/z_shop_mat_info.asmx", (HttpRequest request) =>
+        public override void RegisterSingleEndpoint(IEndpointMock endpoint) => endpoint.MapPost("/z_shop_mat_info.asmx", async (HttpRequest request) =>
         {
-            var requestBody = request.Body.ToString();
-            var xmlDocument = XDocument.Parse(requestBody);
-            var correlationId = xmlDocument.Descendants("correlationId").FirstOrDefault()?.Value ?? string.Empty;
+            request.EnableBuffering();
+            using var reader = new StreamReader(request.Body, leaveOpen: true);
+            string body = await reader.ReadToEndAsync();
+            request.Body.Position = 0;
 
+            var xmlDocument = XDocument.Parse(body);
+            var correlationId = xmlDocument.Descendants("CORRID").FirstOrDefault()?.Value ?? string.Empty;
 
             if (correlationId.Contains("SAP401Unauthorized", StringComparison.OrdinalIgnoreCase))
             {
@@ -32,7 +36,7 @@ namespace UKHO.ADDS.Mocks.ERP.Override.Mocks.sap
                 return Results.InternalServerError("Internal Server Error");
             }
 
-            callBackErpFacade(request);
+            callBackErpFacade(request, xmlDocument);
 
             return Results.Ok("S100 record received successfully");
         })
@@ -42,19 +46,22 @@ namespace UKHO.ADDS.Mocks.ERP.Override.Mocks.sap
             d.Append(new MarkdownHeader("SAP Post /z_shop_mat_info.asmx  ", 3));
         });
 
-        private void callBackErpFacade(HttpRequest request)
+        private void callBackErpFacade(HttpRequest request, XDocument xmlDocument)
         {
             var jsonString = File.ReadAllText("./Override/Files/sap/config.json");
             using var doc = JsonDocument.Parse(jsonString);
-            var erpFacadeApiBaseUrl = doc.RootElement.GetProperty("ErpFacadeConfiguration.ApiBaseUrl").GetString();
-            var sharedApiKey = doc.RootElement.GetProperty("SharedApiKeyConfiguration.SharedApiKey").GetString();
-            var sapCallbackConfigurationUrl = doc.RootElement.GetProperty("SapCallbackConfiguration.Url").GetString();
 
-            var requestBody = request.Body.ToString();
-            var xmlDocument = XDocument.Parse(requestBody);           
+            doc.RootElement.TryGetProperty("ErpFacadeConfiguration", out JsonElement erpFacadeApiBase);
+            var erpFacadeApiBaseUrl = erpFacadeApiBase.GetProperty("ApiBaseUrl").GetString() ?? string.Empty;
+
+            doc.RootElement.TryGetProperty("SharedApiKeyConfiguration", out JsonElement sharedApiKeyConfiguration);
+            var sharedApiKey = sharedApiKeyConfiguration.GetProperty("SharedApiKey").GetString() ?? string.Empty;
+
+            doc.RootElement.TryGetProperty("SapCallbackConfiguration", out JsonElement SapCallbackConfiguration);
+            var sapCallbackConfigurationUrl = SapCallbackConfiguration.GetProperty("Url").GetString() ?? string.Empty;
+                               
             XNamespace soapNs = "http://schemas.xmlsoap.org/soap/envelope/";
             XNamespace rfcNs = "urn:sap-com:document:sap:rfc:functions";
-
             
             var correlationIdElement = xmlDocument
                 .Element(soapNs + "Envelope")?
