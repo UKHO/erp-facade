@@ -6,7 +6,7 @@ namespace UKHO.ADDS.Mocks.ERP.Override.Mocks.sap
 {
     public class PostEesEvent : ServiceEndpointMock
     {
-        public override void RegisterSingleEndpoint(IEndpointMock endpoint) => endpoint.MapPost("/Ese", (HttpRequest request) =>
+        public override void RegisterSingleEndpoint(IEndpointMock endpoint) => endpoint.MapPost("/api/events", (HttpRequest request) =>
         {
             var rawRequestBody = new StreamReader(request.Body).ReadToEnd();
             var body = JsonDocument.Parse(rawRequestBody).RootElement;
