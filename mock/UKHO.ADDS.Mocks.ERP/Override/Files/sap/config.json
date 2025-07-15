@@ -7,10 +7,8 @@
   },
   "SharedApiKeyConfiguration": {
     "SharedApiKey": ""
-  },
-  "SharedApiKeyConfigurationSharedApiKey": "",
+  },  
   "ErpFacadeConfiguration": {
     "ApiBaseUrl": ""
-  },
-  "ErpFacadeConfiguration.ApiBaseUrl": ""
+  }  
 }
