@@ -186,7 +186,7 @@ jobs:
               inputs:
                 folderPath: '$(Pipeline.Workspace)/UKHOERPFacadeAPI/*.zip'
                 fileType: 'json'
-                targetFiles: '/Override/Files/sap/config.json'
+                targetFiles: '**/config.json'
 
 
 
