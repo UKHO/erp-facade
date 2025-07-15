@@ -11,16 +11,11 @@ namespace UKHO.ADDS.Mocks.ERP.Override.Mocks.sap
     public class PostS100DataEvent : ServiceEndpointMock
     {
         public override void RegisterSingleEndpoint(IEndpointMock endpoint) => endpoint.MapPost("/z_shop_mat_info.asmx", (HttpRequest request) =>
-        {            
-            var rawRequestBody = new StreamReader(request.Body).ReadToEnd();
-            var body = JsonDocument.Parse(rawRequestBody).RootElement;
-            var correlationId = string.Empty;
+        {
+            var requestBody = request.Body.ToString();
+            var xmlDocument = XDocument.Parse(requestBody);
+            var correlationId = xmlDocument.Descendants("correlationId").FirstOrDefault()?.Value ?? string.Empty;
 
-
-            if (body.TryGetProperty("data", out JsonElement data) && data.TryGetProperty("correlationId", out JsonElement correlationIdElement))
-            {
-                correlationId = correlationIdElement.GetString() ?? string.Empty;
-            }
 
             if (correlationId.Contains("SAP401Unauthorized", StringComparison.OrdinalIgnoreCase))
             {
@@ -51,9 +46,9 @@ namespace UKHO.ADDS.Mocks.ERP.Override.Mocks.sap
         {
             var jsonString = File.ReadAllText("./Override/Files/sap/config.json");
             using var doc = JsonDocument.Parse(jsonString);
-            var erpFacadeApiBaseUrl = doc.RootElement.GetProperty("erpFacadeApiBaseUrl").GetString();
-            var sharedApiKey = doc.RootElement.GetProperty("sharedApiKey").GetString();
-            var sapCallbackConfiguration = doc.RootElement.GetProperty("sapCallbackConfiguration").GetString();
+            var erpFacadeApiBaseUrl = doc.RootElement.GetProperty("ErpFacadeConfiguration.ApiBaseUrl").GetString();
+            var sharedApiKey = doc.RootElement.GetProperty("SharedApiKeyConfiguration.SharedApiKey").GetString();
+            var sapCallbackConfigurationUrl = doc.RootElement.GetProperty("SapCallbackConfiguration.Url").GetString();
 
             var requestBody = request.Body.ToString();
             var xmlDocument = XDocument.Parse(requestBody);           
@@ -80,7 +75,7 @@ namespace UKHO.ADDS.Mocks.ERP.Override.Mocks.sap
                 {
                     BaseAddress = new Uri(erpFacadeApiBaseUrl)
                 };
-                var callbackRequest = new HttpRequestMessage(HttpMethod.Post, sapCallbackConfiguration)
+                var callbackRequest = new HttpRequestMessage(HttpMethod.Post, sapCallbackConfigurationUrl)
                 {
                     Content = new StringContent(payload, Encoding.UTF8, "application/json"),
                 };

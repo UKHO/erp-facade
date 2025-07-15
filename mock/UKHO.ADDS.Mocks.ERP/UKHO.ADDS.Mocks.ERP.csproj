@@ -11,19 +11,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="override\files\sap\config.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.6" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\repo\src\UKHO.ADDS.Mocks\UKHO.ADDS.Mocks.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Override\Files\sap\" />
   </ItemGroup>
 
 </Project>
