@@ -1,0 +1,11 @@
+{
+  "SapCallbackConfiguration": {
+    "Url": "/api/v2/callback/sap/s100actions/processed"    
+  },
+  "SharedApiKeyConfiguration": {
+    "SharedApiKey": ""
+  },  
+  "ErpFacadeConfiguration": {
+    "ApiBaseUrl": ""
+  }  
+}
