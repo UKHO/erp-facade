@@ -1,0 +1,6 @@
+variables:
+  - group: "ERP-Facade-Dev"
+  - group: "Erp-Dev"
+  - group: "ERP-FACADE-DEV-KV"
+  
+  - template: variables.yml
