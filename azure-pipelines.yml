@@ -10,12 +10,20 @@ parameters:
     displayName: "Run Stryker test mutation"
     type: boolean
     default: true
+  - name: SnykOnlyFailIfFixable
+    displayName: "Snyk - fail only if an issue has an available fix"
+    type: boolean
+    default: false
+  - name: SnykPassOnIssues
+    displayName: "Snyk - don't fail if issues found"
+    type: boolean
+    default: false
     
 trigger:
   - main
   - release/*
 
-pool: $(WindowsPool) 
+pool: $(WindowsPool1) 
 
 variables:
   - name: BuildConfiguration
@@ -24,7 +32,7 @@ variables:
     value: "any cpu"
   - name: BuildCounter
     value: $[counter(format('{0:yyyyMMdd}', pipeline.startTime), 1)]
-  - name: WindowsPool
+  - name: WindowsPool1
     value: "Mare Nubium"
   - name: Container
     value: "ukhydrographicoffice/terraform-azure-powershell-unzip:1.7.2"
@@ -40,6 +48,8 @@ variables:
     value: "8.x"
   - name: DotNetSdkVersionAddsMock
     value: "9.x"
+  - name: snykAbzuOrganizationId
+    value: aeb7543b-8394-457c-8334-a31493d8910d
 
 resources:
   repositories:
@@ -48,9 +58,24 @@ resources:
     name: UKHO/devops-pipelinetemplates
     endpoint: UKHO
     ref: refs/heads/main
+  
+  - repository: TriggerAddsAutoTestsPipeline
+    type: github
+    endpoint: ukho
+    name: ukho/devops-trigger-adds-autotest-pipeline
+    ref: refs/heads/main 
 
 
 stages:
+  - stage: VulnerabilityChecks
+    displayName: Snyk checks
+    dependsOn: []
+    jobs:
+    - template: Deployment/templates/vulnerability-checks.yml    
+      parameters:
+        SnykOnlyFailIfFixable: ${{ parameters.SnykOnlyFailIfFixable }}
+        SnykPassOnIssues: ${{ parameters.SnykPassOnIssues }}
+
   - stage: RUNSTRKER
     displayName: "run stryker"
     jobs:
@@ -102,6 +127,7 @@ stages:
 
   - stage: DevDeploy
     dependsOn:
+    - VulnerabilityChecks
     - BuildTestPublish
     displayName: "Dev deploy"  
     jobs:
@@ -131,6 +157,7 @@ stages:
         AppPool: $(DeploymentPoolPE)
         Container: ${{variables.Container}}
         DeployADDSMocks: true
+        RunAddsTests: vNextIAT
 
   - stage: vNextE2EDeploy
     dependsOn:
@@ -163,6 +190,7 @@ stages:
         Container: ${{variables.Container}}
         DeployADDSMocks: true
         RunFunctionalTests: true
+        RunAddsTests: IAT
   
   - stage: PreProdDeploy
     dependsOn:
