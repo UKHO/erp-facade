@@ -80,7 +80,7 @@ jobs:
                 TF_VAR_pe_rg: $(peRG)
                 TF_VAR_dns_zone_rg: $(dnsZoneRG)
                 TF_VAR_deploy_adds_mocks: ${{lower(parameters.DeployADDSMocks)}}
-                 TF_VAR_PermitDecryptionHardwareId: $(PermitDecryptionHardwareId)
+                TF_VAR_PermitDecryptionHardwareId: $(PermitDecryptionHardwareId)
 
   - deployment: ${{parameters.ShortName}}DeployApp
     dependsOn: ${{parameters.ShortName}}DeployTerraform
