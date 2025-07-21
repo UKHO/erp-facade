@@ -1,0 +1,6 @@
+variables:
+  - group: "ERP-Facade-vNextIAT"
+  - group: "Erp-vNextIAT"
+  - group: "ERP-FACADE-vNextIAT-KV"
+  
+  - template: variables.yml

@@ -1,0 +1,45 @@
+variables:
+  - name: "AzureADConfiguration.TenantId"
+    value: $(AzureADConfigurationTenantId)
+  - name: "AzureADConfiguration.ClientId"
+    value: $(AzureADConfigurationClientId)
+  - name: "AzureADConfiguration.AutoTestClientId"
+    value: $(AzureADConfigurationAutoTestClientId)
+  - name: "AzureADConfiguration.ClientSecret"
+    value: $(AzureADConfigurationClientSecret)
+  - name: "AzureADConfiguration.AutoTestClientIdNoRole"
+    value: $(AzureADConfigurationAutoTestClientIdNoRole)
+  - name: "AzureADConfiguration.ClientSecretNoRole"
+    value: $(AzureADConfigurationClientSecretNoRole)
+  - name: "PermitConfiguration.PermitDecryptionHardwareId"
+    value: $(PermitDecryptionHardwareId)
+  - name: "PermitWithSameKey.Permit"
+    value: $(PermitWithSameKeyPermit)
+  - name: "PermitWithSameKey.ActiveKey"
+    value: $(PermitWithSameKeyACTIVEKEY)
+  - name: "PermitWithSameKey.NextKey"
+    value: $(PermitWithSameKeyNEXTKEY)
+  - name: "PermitWithDifferentKey.Permit"
+    value: $(PermitWithDifferentKeyPermit)
+  - name: "PermitWithDifferentKey.ActiveKey"
+    value: $(PermitWithDifferentKeyACTIVEKEY)
+  - name: "PermitWithDifferentKey.NextKey"
+    value: $(PermitWithDifferentKeyNEXTKEY)
+  - name: "SapCallbackConfiguration.SharedApiKey"
+    value: $(SharedApiKeyConfigurationSharedApiKey)
+  - name: "SharedApiKeyConfiguration.SharedApiKey"
+    value: $(SharedApiKeyConfigurationSharedApiKey)
+  - name: "EnterpriseEventServiceConfiguration.ClientId"
+    value: $(EnterpriseEventServiceConfigurationClientId)
+  - name: "ErpFacadeConfiguration.PermitWithSameKey.Permit"
+    value: $(PermitWithSameKeyPermit)
+  - name: "ErpFacadeConfiguration.PermitWithSameKey.ActiveKey"
+    value: $(PermitWithSameKeyACTIVEKEY)
+  - name: "ErpFacadeConfiguration.PermitWithSameKey.NextKey"
+    value: $(PermitWithSameKeyNEXTKEY)
+  - name: "ErpFacadeConfiguration.PermitWithDifferentKey.Permit"
+    value: $(PermitWithDifferentKeyPermit)
+  - name: "ErpFacadeConfiguration.PermitWithDifferentKey.ActiveKey"
+    value: $(PermitWithDifferentKeyACTIVEKEY)
+  - name: "ErpFacadeConfiguration.PermitWithDifferentKey.NextKey"
+    value: $(PermitWithDifferentKeyNEXTKEY)
