@@ -154,7 +154,14 @@ jobs:
                   appName: "$(MOCK_WEB_APP_NAME)"
                   package: "$(Pipeline.Workspace)/UKHOMockSAPService/UKHO.SAP.MockAPIService.zip"  
 
-            - ${{ if eq(parameters.DeployADDSMocks, true) }}: 
+            - ${{ if eq(parameters.DeployADDSMocks, true) }}:
+              - task: FileTransform@1
+                displayName: "File Transform: Adds Mock config json"
+                inputs:
+                  folderPath: '$(Pipeline.Workspace)/ADDSMock/UKHOADDSMockService.zip'
+                  fileType: 'json'
+                  targetFiles: '**/config.json'
+
               - task: AzureWebApp@1
                 displayName: "Azure App Deploy: ERPFacade-ADDS-MockService"            
                 inputs:
