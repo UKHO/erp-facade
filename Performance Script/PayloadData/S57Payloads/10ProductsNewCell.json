@@ -1,0 +1,1217 @@
+{
+    "specversion": "1.0",
+    "type": "uk.gov.ukho.encpublishing.enccontentpublished.v2.2",
+    "source": "https://encpublishing.ukho.gov.uk",
+    "id": "2f03a25f-28b3-46ea-b009-5943250a9a41",
+    "time": "2020-10-13T12:08:03.4880776Z",
+    "subject": "FR679000",
+    "datacontenttype": "application/json",
+    "data": {
+      "correlationId": "cdsa-v03-newcell-3021",
+      "ukhoWeekNumber": {
+        "year": 2024,
+        "week": 3,
+        "currentWeekAlphaCorrection": false
+      },
+      "products": [
+        {
+          "dataSetName": "MX545010.001",
+          "productName": "MX545010",
+          "title": "Isla Clarion",
+          "scale": 90000,
+          "usageBand": 5,
+          "editionNumber": 1,
+          "updateNumber": 0,
+          "mayAffectHoldings": true,
+          "contentChange": true,
+          "permit": "permitString",
+          "providerCode": 1,
+          "providerName": "ICE",
+          "_ENUM": [
+            "large",
+            "medium",
+            "small"
+          ],
+          "size": "medium",
+          "bundle": [
+            {
+              "bundleType": "DVD",
+              "_ENUM": [
+                "DVD"
+              ],
+              "location": "M1;B1"
+            }
+          ],
+          "status": {
+            "statusName": "New Edition",
+            "_ENUM": [
+              "New Edition",
+              "Re-issue",
+              "Update",
+              "Cancellation Update",
+              "Withdrawn",
+              "Suspended"
+            ],
+            "statusDate": "2023-03-03T00:00:00.00+01:00",
+            "isNewCell": true
+          },
+          "replaces": [],
+          "replacedBy": [],
+          "additionalCoverage": [],
+          "geographicLimit": {
+            "boundingBox": {
+              "northLimit": 24,
+              "southLimit": 22,
+              "eastLimit": 120,
+              "westLimit": 119
+            }
+          },
+          "inUnitsOfSale": [
+            "MX545010",
+            "AVCSO",
+            "PAYSF"
+          ],
+          "s63": {
+            "name": "XXXXXXXX.001",
+            "hash": "5160204288db0a543850da177ec637b71ed55946e7f3843e6180b1906ee4f4ea",
+            "fileSize": "4500",
+            "compression": true,
+            "s57Crc": "5C06E104"
+          },
+          "signature": {
+            "name": "XXXXXXXX.001",
+            "hash": "fd0c9e5f95c0b664a1a27c2ff98812c648ebd113b117f5639f74536c397fbac9",
+            "fileSize": "2500"
+          },
+          "ancillaryFiles": [
+            {
+              "name": "GBXXXXXXXX_04.TXT",
+              "hash": "d030b93ad8a0801e6955e4f52599f6200d01310155882a1b80eec78c9b93662b",
+              "fileSize": "1240"
+            },
+            {
+              "name": "GBXXXXXXXX_01.TXT",
+              "hash": "bb8042082bd1d37236801837585fa0df5e96097fb8d2281b41888af2b23ceb0b",
+              "fileSize": "1360"
+            },
+            {
+              "name": "GBXXXXXXXX_01.TXT",
+              "hash": "81470666f387a9035f6b33f59fb9bbf0872e9c296fecee58c4e919d6a1d87ab6",
+              "fileSize": "1360"
+            }
+          ]
+        },
+        {
+          "dataSetName": "MX545011.001",
+          "productName": "MX545011",
+          "title": "Isla Clarion - 11",
+          "scale": 90000,
+          "usageBand": 5,
+          "editionNumber": 1,
+          "updateNumber": 0,
+          "mayAffectHoldings": true,
+          "contentChange": true,
+          "permit": "permitString",
+          "providerCode": 1,
+          "providerName": "ICE",
+          "_ENUM": [
+            "large",
+            "medium",
+            "small"
+          ],
+          "size": "medium",
+          "bundle": [
+            {
+              "bundleType": "DVD",
+              "_ENUM": [
+                "DVD"
+              ],
+              "location": "M1;B1"
+            }
+          ],
+          "status": {
+            "statusName": "New Edition",
+            "_ENUM": [
+              "New Edition",
+              "Re-issue",
+              "Update",
+              "Cancellation Update",
+              "Withdrawn",
+              "Suspended"
+            ],
+            "statusDate": "2023-03-03T00:00:00.00+01:00",
+            "isNewCell": true
+          },
+          "replaces": [],
+          "replacedBy": [],
+          "additionalCoverage": [],
+          "geographicLimit": {
+            "boundingBox": {
+              "northLimit": 24,
+              "southLimit": 22,
+              "eastLimit": 120,
+              "westLimit": 119
+            }
+          },
+          "inUnitsOfSale": [
+            "MX545011",
+            "AVCSO",
+            "PAYSF"
+          ],
+          "s63": {
+            "name": "XXXXXXXX.001",
+            "hash": "5160204288db0a543850da177ec637b71ed55946e7f3843e6180b1906ee4f4ea",
+            "fileSize": "4500",
+            "compression": true,
+            "s57Crc": "5C06E104"
+          },
+          "signature": {
+            "name": "XXXXXXXX.001",
+            "hash": "fd0c9e5f95c0b664a1a27c2ff98812c648ebd113b117f5639f74536c397fbac9",
+            "fileSize": "2500"
+          },
+          "ancillaryFiles": [
+            {
+              "name": "GBXXXXXXXX_04.TXT",
+              "hash": "d030b93ad8a0801e6955e4f52599f6200d01310155882a1b80eec78c9b93662b",
+              "fileSize": "1240"
+            },
+            {
+              "name": "GBXXXXXXXX_01.TXT",
+              "hash": "bb8042082bd1d37236801837585fa0df5e96097fb8d2281b41888af2b23ceb0b",
+              "fileSize": "1360"
+            },
+            {
+              "name": "GBXXXXXXXX_01.TXT",
+              "hash": "81470666f387a9035f6b33f59fb9bbf0872e9c296fecee58c4e919d6a1d87ab6",
+              "fileSize": "1360"
+            }
+          ]
+        },
+        {
+          "dataSetName": "MX545012.001",
+          "productName": "MX545012",
+          "title": "Isla Clarion - 12",
+          "scale": 90000,
+          "usageBand": 5,
+          "editionNumber": 1,
+          "updateNumber": 0,
+          "mayAffectHoldings": true,
+          "contentChange": true,
+          "permit": "permitString",
+          "providerCode": 1,
+          "providerName": "ICE",
+          "_ENUM": [
+            "large",
+            "medium",
+            "small"
+          ],
+          "size": "medium",
+          "bundle": [
+            {
+              "bundleType": "DVD",
+              "_ENUM": [
+                "DVD"
+              ],
+              "location": "M1;B1"
+            }
+          ],
+          "status": {
+            "statusName": "New Edition",
+            "_ENUM": [
+              "New Edition",
+              "Re-issue",
+              "Update",
+              "Cancellation Update",
+              "Withdrawn",
+              "Suspended"
+            ],
+            "statusDate": "2023-03-03T00:00:00.00+01:00",
+            "isNewCell": true
+          },
+          "replaces": [],
+          "replacedBy": [],
+          "additionalCoverage": [],
+          "geographicLimit": {
+            "boundingBox": {
+              "northLimit": 24,
+              "southLimit": 22,
+              "eastLimit": 120,
+              "westLimit": 119
+            }
+          },
+          "inUnitsOfSale": [
+            "MX545012",
+            "AVCSO",
+            "PAYSF"
+          ],
+          "s63": {
+            "name": "XXXXXXXX.001",
+            "hash": "5160204288db0a543850da177ec637b71ed55946e7f3843e6180b1906ee4f4ea",
+            "fileSize": "4500",
+            "compression": true,
+            "s57Crc": "5C06E104"
+          },
+          "signature": {
+            "name": "XXXXXXXX.001",
+            "hash": "fd0c9e5f95c0b664a1a27c2ff98812c648ebd113b117f5639f74536c397fbac9",
+            "fileSize": "2500"
+          },
+          "ancillaryFiles": [
+            {
+              "name": "GBXXXXXXXX_04.TXT",
+              "hash": "d030b93ad8a0801e6955e4f52599f6200d01310155882a1b80eec78c9b93662b",
+              "fileSize": "1240"
+            },
+            {
+              "name": "GBXXXXXXXX_01.TXT",
+              "hash": "bb8042082bd1d37236801837585fa0df5e96097fb8d2281b41888af2b23ceb0b",
+              "fileSize": "1360"
+            },
+            {
+              "name": "GBXXXXXXXX_01.TXT",
+              "hash": "81470666f387a9035f6b33f59fb9bbf0872e9c296fecee58c4e919d6a1d87ab6",
+              "fileSize": "1360"
+            }
+          ]
+        },
+        {
+          "dataSetName": "MX545013.001",
+          "productName": "MX545013",
+          "title": "Isla Clarion - 13",
+          "scale": 90000,
+          "usageBand": 5,
+          "editionNumber": 1,
+          "updateNumber": 0,
+          "mayAffectHoldings": true,
+          "contentChange": true,
+          "permit": "permitString",
+          "providerCode": 1,
+          "providerName": "ICE",
+          "_ENUM": [
+            "large",
+            "medium",
+            "small"
+          ],
+          "size": "medium",
+          "bundle": [
+            {
+              "bundleType": "DVD",
+              "_ENUM": [
+                "DVD"
+              ],
+              "location": "M1;B1"
+            }
+          ],
+          "status": {
+            "statusName": "New Edition",
+            "_ENUM": [
+              "New Edition",
+              "Re-issue",
+              "Update",
+              "Cancellation Update",
+              "Withdrawn",
+              "Suspended"
+            ],
+            "statusDate": "2023-03-03T00:00:00.00+01:00",
+            "isNewCell": true
+          },
+          "replaces": [],
+          "replacedBy": [],
+          "additionalCoverage": [],
+          "geographicLimit": {
+            "boundingBox": {
+              "northLimit": 24,
+              "southLimit": 22,
+              "eastLimit": 120,
+              "westLimit": 119
+            }
+          },
+          "inUnitsOfSale": [
+            "MX545013",
+            "AVCSO",
+            "PAYSF"
+          ],
+          "s63": {
+            "name": "XXXXXXXX.001",
+            "hash": "5160204288db0a543850da177ec637b71ed55946e7f3843e6180b1906ee4f4ea",
+            "fileSize": "4500",
+            "compression": true,
+            "s57Crc": "5C06E104"
+          },
+          "signature": {
+            "name": "XXXXXXXX.001",
+            "hash": "fd0c9e5f95c0b664a1a27c2ff98812c648ebd113b117f5639f74536c397fbac9",
+            "fileSize": "2500"
+          },
+          "ancillaryFiles": [
+            {
+              "name": "GBXXXXXXXX_04.TXT",
+              "hash": "d030b93ad8a0801e6955e4f52599f6200d01310155882a1b80eec78c9b93662b",
+              "fileSize": "1240"
+            },
+            {
+              "name": "GBXXXXXXXX_01.TXT",
+              "hash": "bb8042082bd1d37236801837585fa0df5e96097fb8d2281b41888af2b23ceb0b",
+              "fileSize": "1360"
+            },
+            {
+              "name": "GBXXXXXXXX_01.TXT",
+              "hash": "81470666f387a9035f6b33f59fb9bbf0872e9c296fecee58c4e919d6a1d87ab6",
+              "fileSize": "1360"
+            }
+          ]
+        },
+        {
+          "dataSetName": "MX545014.001",
+          "productName": "MX545014",
+          "title": "Isla Clarion - 14",
+          "scale": 90000,
+          "usageBand": 5,
+          "editionNumber": 1,
+          "updateNumber": 0,
+          "mayAffectHoldings": true,
+          "contentChange": true,
+          "permit": "permitString",
+          "providerCode": 1,
+          "providerName": "ICE",
+          "_ENUM": [
+            "large",
+            "medium",
+            "small"
+          ],
+          "size": "medium",
+          "bundle": [
+            {
+              "bundleType": "DVD",
+              "_ENUM": [
+                "DVD"
+              ],
+              "location": "M1;B1"
+            }
+          ],
+          "status": {
+            "statusName": "New Edition",
+            "_ENUM": [
+              "New Edition",
+              "Re-issue",
+              "Update",
+              "Cancellation Update",
+              "Withdrawn",
+              "Suspended"
+            ],
+            "statusDate": "2023-03-03T00:00:00.00+01:00",
+            "isNewCell": true
+          },
+          "replaces": [],
+          "replacedBy": [],
+          "additionalCoverage": [],
+          "geographicLimit": {
+            "boundingBox": {
+              "northLimit": 24,
+              "southLimit": 22,
+              "eastLimit": 120,
+              "westLimit": 119
+            }
+          },
+          "inUnitsOfSale": [
+            "MX545014",
+            "AVCSO",
+            "PAYSF"
+          ],
+          "s63": {
+            "name": "XXXXXXXX.001",
+            "hash": "5160204288db0a543850da177ec637b71ed55946e7f3843e6180b1906ee4f4ea",
+            "fileSize": "4500",
+            "compression": true,
+            "s57Crc": "5C06E104"
+          },
+          "signature": {
+            "name": "XXXXXXXX.001",
+            "hash": "fd0c9e5f95c0b664a1a27c2ff98812c648ebd113b117f5639f74536c397fbac9",
+            "fileSize": "2500"
+          },
+          "ancillaryFiles": [
+            {
+              "name": "GBXXXXXXXX_04.TXT",
+              "hash": "d030b93ad8a0801e6955e4f52599f6200d01310155882a1b80eec78c9b93662b",
+              "fileSize": "1240"
+            },
+            {
+              "name": "GBXXXXXXXX_01.TXT",
+              "hash": "bb8042082bd1d37236801837585fa0df5e96097fb8d2281b41888af2b23ceb0b",
+              "fileSize": "1360"
+            },
+            {
+              "name": "GBXXXXXXXX_01.TXT",
+              "hash": "81470666f387a9035f6b33f59fb9bbf0872e9c296fecee58c4e919d6a1d87ab6",
+              "fileSize": "1360"
+            }
+          ]
+        },
+        {
+          "dataSetName": "MX545015.001",
+          "productName": "MX545015",
+          "title": "Isla Clarion - 15",
+          "scale": 90000,
+          "usageBand": 5,
+          "editionNumber": 1,
+          "updateNumber": 0,
+          "mayAffectHoldings": true,
+          "contentChange": true,
+          "permit": "permitString",
+          "providerCode": 1,
+          "providerName": "ICE",
+          "_ENUM": [
+            "large",
+            "medium",
+            "small"
+          ],
+          "size": "medium",
+          "bundle": [
+            {
+              "bundleType": "DVD",
+              "_ENUM": [
+                "DVD"
+              ],
+              "location": "M1;B1"
+            }
+          ],
+          "status": {
+            "statusName": "New Edition",
+            "_ENUM": [
+              "New Edition",
+              "Re-issue",
+              "Update",
+              "Cancellation Update",
+              "Withdrawn",
+              "Suspended"
+            ],
+            "statusDate": "2023-03-03T00:00:00.00+01:00",
+            "isNewCell": true
+          },
+          "replaces": [],
+          "replacedBy": [],
+          "additionalCoverage": [],
+          "geographicLimit": {
+            "boundingBox": {
+              "northLimit": 24,
+              "southLimit": 22,
+              "eastLimit": 120,
+              "westLimit": 119
+            }
+          },
+          "inUnitsOfSale": [
+            "MX545015",
+            "AVCSO",
+            "PAYSF"
+          ],
+          "s63": {
+            "name": "XXXXXXXX.001",
+            "hash": "5160204288db0a543850da177ec637b71ed55946e7f3843e6180b1906ee4f4ea",
+            "fileSize": "4500",
+            "compression": true,
+            "s57Crc": "5C06E104"
+          },
+          "signature": {
+            "name": "XXXXXXXX.001",
+            "hash": "fd0c9e5f95c0b664a1a27c2ff98812c648ebd113b117f5639f74536c397fbac9",
+            "fileSize": "2500"
+          },
+          "ancillaryFiles": [
+            {
+              "name": "GBXXXXXXXX_04.TXT",
+              "hash": "d030b93ad8a0801e6955e4f52599f6200d01310155882a1b80eec78c9b93662b",
+              "fileSize": "1240"
+            },
+            {
+              "name": "GBXXXXXXXX_01.TXT",
+              "hash": "bb8042082bd1d37236801837585fa0df5e96097fb8d2281b41888af2b23ceb0b",
+              "fileSize": "1360"
+            },
+            {
+              "name": "GBXXXXXXXX_01.TXT",
+              "hash": "81470666f387a9035f6b33f59fb9bbf0872e9c296fecee58c4e919d6a1d87ab6",
+              "fileSize": "1360"
+            }
+          ]
+        },
+        {
+          "dataSetName": "MX545016.001",
+          "productName": "MX545016",
+          "title": "Isla Clarion - 16",
+          "scale": 90000,
+          "usageBand": 5,
+          "editionNumber": 1,
+          "updateNumber": 0,
+          "mayAffectHoldings": true,
+          "contentChange": true,
+          "permit": "permitString",
+          "providerCode": 1,
+          "providerName": "ICE",
+          "_ENUM": [
+            "large",
+            "medium",
+            "small"
+          ],
+          "size": "medium",
+          "bundle": [
+            {
+              "bundleType": "DVD",
+              "_ENUM": [
+                "DVD"
+              ],
+              "location": "M1;B1"
+            }
+          ],
+          "status": {
+            "statusName": "New Edition",
+            "_ENUM": [
+              "New Edition",
+              "Re-issue",
+              "Update",
+              "Cancellation Update",
+              "Withdrawn",
+              "Suspended"
+            ],
+            "statusDate": "2023-03-03T00:00:00.00+01:00",
+            "isNewCell": true
+          },
+          "replaces": [],
+          "replacedBy": [],
+          "additionalCoverage": [],
+          "geographicLimit": {
+            "boundingBox": {
+              "northLimit": 24,
+              "southLimit": 22,
+              "eastLimit": 120,
+              "westLimit": 119
+            }
+          },
+          "inUnitsOfSale": [
+            "MX545016",
+            "AVCSO",
+            "PAYSF"
+          ],
+          "s63": {
+            "name": "XXXXXXXX.001",
+            "hash": "5160204288db0a543850da177ec637b71ed55946e7f3843e6180b1906ee4f4ea",
+            "fileSize": "4500",
+            "compression": true,
+            "s57Crc": "5C06E104"
+          },
+          "signature": {
+            "name": "XXXXXXXX.001",
+            "hash": "fd0c9e5f95c0b664a1a27c2ff98812c648ebd113b117f5639f74536c397fbac9",
+            "fileSize": "2500"
+          },
+          "ancillaryFiles": [
+            {
+              "name": "GBXXXXXXXX_04.TXT",
+              "hash": "d030b93ad8a0801e6955e4f52599f6200d01310155882a1b80eec78c9b93662b",
+              "fileSize": "1240"
+            },
+            {
+              "name": "GBXXXXXXXX_01.TXT",
+              "hash": "bb8042082bd1d37236801837585fa0df5e96097fb8d2281b41888af2b23ceb0b",
+              "fileSize": "1360"
+            },
+            {
+              "name": "GBXXXXXXXX_01.TXT",
+              "hash": "81470666f387a9035f6b33f59fb9bbf0872e9c296fecee58c4e919d6a1d87ab6",
+              "fileSize": "1360"
+            }
+          ]
+        },
+        {
+          "dataSetName": "MX545017.001",
+          "productName": "MX545017",
+          "title": "Isla Clarion - 17",
+          "scale": 90000,
+          "usageBand": 5,
+          "editionNumber": 1,
+          "updateNumber": 0,
+          "mayAffectHoldings": true,
+          "contentChange": true,
+          "permit": "permitString",
+          "providerCode": 1,
+          "providerName": "ICE",
+          "_ENUM": [
+            "large",
+            "medium",
+            "small"
+          ],
+          "size": "medium",
+          "bundle": [
+            {
+              "bundleType": "DVD",
+              "_ENUM": [
+                "DVD"
+              ],
+              "location": "M1;B1"
+            }
+          ],
+          "status": {
+            "statusName": "New Edition",
+            "_ENUM": [
+              "New Edition",
+              "Re-issue",
+              "Update",
+              "Cancellation Update",
+              "Withdrawn",
+              "Suspended"
+            ],
+            "statusDate": "2023-03-03T00:00:00.00+01:00",
+            "isNewCell": true
+          },
+          "replaces": [],
+          "replacedBy": [],
+          "additionalCoverage": [],
+          "geographicLimit": {
+            "boundingBox": {
+              "northLimit": 24,
+              "southLimit": 22,
+              "eastLimit": 120,
+              "westLimit": 119
+            }
+          },
+          "inUnitsOfSale": [
+            "MX545017",
+            "AVCSO",
+            "PAYSF"
+          ],
+          "s63": {
+            "name": "XXXXXXXX.001",
+            "hash": "5160204288db0a543850da177ec637b71ed55946e7f3843e6180b1906ee4f4ea",
+            "fileSize": "4500",
+            "compression": true,
+            "s57Crc": "5C06E104"
+          },
+          "signature": {
+            "name": "XXXXXXXX.001",
+            "hash": "fd0c9e5f95c0b664a1a27c2ff98812c648ebd113b117f5639f74536c397fbac9",
+            "fileSize": "2500"
+          },
+          "ancillaryFiles": [
+            {
+              "name": "GBXXXXXXXX_04.TXT",
+              "hash": "d030b93ad8a0801e6955e4f52599f6200d01310155882a1b80eec78c9b93662b",
+              "fileSize": "1240"
+            },
+            {
+              "name": "GBXXXXXXXX_01.TXT",
+              "hash": "bb8042082bd1d37236801837585fa0df5e96097fb8d2281b41888af2b23ceb0b",
+              "fileSize": "1360"
+            },
+            {
+              "name": "GBXXXXXXXX_01.TXT",
+              "hash": "81470666f387a9035f6b33f59fb9bbf0872e9c296fecee58c4e919d6a1d87ab6",
+              "fileSize": "1360"
+            }
+          ]
+        },
+        {
+          "dataSetName": "MX545018.001",
+          "productName": "MX545018",
+          "title": "Isla Clarion - 18",
+          "scale": 90000,
+          "usageBand": 5,
+          "editionNumber": 1,
+          "updateNumber": 0,
+          "mayAffectHoldings": true,
+          "contentChange": true,
+          "permit": "permitString",
+          "providerCode": 1,
+          "providerName": "ICE",
+          "_ENUM": [
+            "large",
+            "medium",
+            "small"
+          ],
+          "size": "medium",
+          "bundle": [
+            {
+              "bundleType": "DVD",
+              "_ENUM": [
+                "DVD"
+              ],
+              "location": "M1;B1"
+            }
+          ],
+          "status": {
+            "statusName": "New Edition",
+            "_ENUM": [
+              "New Edition",
+              "Re-issue",
+              "Update",
+              "Cancellation Update",
+              "Withdrawn",
+              "Suspended"
+            ],
+            "statusDate": "2023-03-03T00:00:00.00+01:00",
+            "isNewCell": true
+          },
+          "replaces": [],
+          "replacedBy": [],
+          "additionalCoverage": [],
+          "geographicLimit": {
+            "boundingBox": {
+              "northLimit": 24,
+              "southLimit": 22,
+              "eastLimit": 120,
+              "westLimit": 119
+            }
+          },
+          "inUnitsOfSale": [
+            "MX545018",
+            "AVCSO",
+            "PAYSF"
+          ],
+          "s63": {
+            "name": "XXXXXXXX.001",
+            "hash": "5160204288db0a543850da177ec637b71ed55946e7f3843e6180b1906ee4f4ea",
+            "fileSize": "4500",
+            "compression": true,
+            "s57Crc": "5C06E104"
+          },
+          "signature": {
+            "name": "XXXXXXXX.001",
+            "hash": "fd0c9e5f95c0b664a1a27c2ff98812c648ebd113b117f5639f74536c397fbac9",
+            "fileSize": "2500"
+          },
+          "ancillaryFiles": [
+            {
+              "name": "GBXXXXXXXX_04.TXT",
+              "hash": "d030b93ad8a0801e6955e4f52599f6200d01310155882a1b80eec78c9b93662b",
+              "fileSize": "1240"
+            },
+            {
+              "name": "GBXXXXXXXX_01.TXT",
+              "hash": "bb8042082bd1d37236801837585fa0df5e96097fb8d2281b41888af2b23ceb0b",
+              "fileSize": "1360"
+            },
+            {
+              "name": "GBXXXXXXXX_01.TXT",
+              "hash": "81470666f387a9035f6b33f59fb9bbf0872e9c296fecee58c4e919d6a1d87ab6",
+              "fileSize": "1360"
+            }
+          ]
+        },
+        {
+          "dataSetName": "MX545019.001",
+          "productName": "MX545019",
+          "title": "Isla Clarion - 19",
+          "scale": 90000,
+          "usageBand": 5,
+          "editionNumber": 1,
+          "updateNumber": 0,
+          "mayAffectHoldings": true,
+          "contentChange": true,
+          "permit": "permitString",
+          "providerCode": 1,
+          "providerName": "ICE",
+          "_ENUM": [
+            "large",
+            "medium",
+            "small"
+          ],
+          "size": "medium",
+          "bundle": [
+            {
+              "bundleType": "DVD",
+              "_ENUM": [
+                "DVD"
+              ],
+              "location": "M1;B1"
+            }
+          ],
+          "status": {
+            "statusName": "New Edition",
+            "_ENUM": [
+              "New Edition",
+              "Re-issue",
+              "Update",
+              "Cancellation Update",
+              "Withdrawn",
+              "Suspended"
+            ],
+            "statusDate": "2023-03-03T00:00:00.00+01:00",
+            "isNewCell": true
+          },
+          "replaces": [],
+          "replacedBy": [],
+          "additionalCoverage": [],
+          "geographicLimit": {
+            "boundingBox": {
+              "northLimit": 24,
+              "southLimit": 22,
+              "eastLimit": 120,
+              "westLimit": 119
+            }
+          },
+          "inUnitsOfSale": [
+            "MX545019",
+            "AVCSO",
+            "PAYSF"
+          ],
+          "s63": {
+            "name": "XXXXXXXX.001",
+            "hash": "5160204288db0a543850da177ec637b71ed55946e7f3843e6180b1906ee4f4ea",
+            "fileSize": "4500",
+            "compression": true,
+            "s57Crc": "5C06E104"
+          },
+          "signature": {
+            "name": "XXXXXXXX.001",
+            "hash": "fd0c9e5f95c0b664a1a27c2ff98812c648ebd113b117f5639f74536c397fbac9",
+            "fileSize": "2500"
+          },
+          "ancillaryFiles": [
+            {
+              "name": "GBXXXXXXXX_04.TXT",
+              "hash": "d030b93ad8a0801e6955e4f52599f6200d01310155882a1b80eec78c9b93662b",
+              "fileSize": "1240"
+            },
+            {
+              "name": "GBXXXXXXXX_01.TXT",
+              "hash": "bb8042082bd1d37236801837585fa0df5e96097fb8d2281b41888af2b23ceb0b",
+              "fileSize": "1360"
+            },
+            {
+              "name": "GBXXXXXXXX_01.TXT",
+              "hash": "81470666f387a9035f6b33f59fb9bbf0872e9c296fecee58c4e919d6a1d87ab6",
+              "fileSize": "1360"
+            }
+          ]
+        }
+      ],
+      "unitsOfSale": [
+        {
+          "unitName": "MX545010",
+          "title": "Isla MX545010",
+          "unitType": "AVCS Units Coastal",
+          "unitSize": "large",
+          "providerCode": "1",
+          "providerName": "ICE",
+          "status": "ForSale",
+          "_ENUM": [
+            "ForSale",
+            "NotForSale"
+          ],
+          "isNewUnitOfSale": true,
+          "unitOfSaleType": "unit",
+          "geographicLimit": {
+            "boundingBox": {
+              "northLimit": 24.146815,
+              "southLimit": 22.581615,
+              "eastLimit": 120.349635,
+              "westLimit": 119.39142
+            }
+          },
+          "compositionChanges": {
+            "addProducts": [
+              "MX545010"
+            ],
+            "removeProducts": []
+          }
+        },
+        {
+          "unitName": "MX545011",
+          "title": "Isla MX545011",
+          "unitType": "AVCS Units Coastal",
+          "unitSize": "large",
+          "providerCode": "1",
+          "providerName": "ICE",
+          "status": "ForSale",
+          "_ENUM": [
+            "ForSale",
+            "NotForSale"
+          ],
+          "isNewUnitOfSale": true,
+          "unitOfSaleType": "unit",
+          "geographicLimit": {
+            "boundingBox": {
+              "northLimit": 24.146815,
+              "southLimit": 22.581615,
+              "eastLimit": 120.349635,
+              "westLimit": 119.39142
+            }
+          },
+          "compositionChanges": {
+            "addProducts": [
+              "MX545011"
+            ],
+            "removeProducts": []
+          }
+        },
+        {
+          "unitName": "MX545012",
+          "title": "Isla MX545012",
+          "unitType": "AVCS Units Coastal",
+          "unitSize": "large",
+          "providerCode": "1",
+          "providerName": "ICE",
+          "status": "ForSale",
+          "_ENUM": [
+            "ForSale",
+            "NotForSale"
+          ],
+          "isNewUnitOfSale": true,
+          "unitOfSaleType": "unit",
+          "geographicLimit": {
+            "boundingBox": {
+              "northLimit": 24.146815,
+              "southLimit": 22.581615,
+              "eastLimit": 120.349635,
+              "westLimit": 119.39142
+            }
+          },
+          "compositionChanges": {
+            "addProducts": [
+              "MX545012"
+            ],
+            "removeProducts": []
+          }
+        },
+        {
+          "unitName": "MX545013",
+          "title": "Isla MX545013",
+          "unitType": "AVCS Units Coastal",
+          "unitSize": "large",
+          "providerCode": "1",
+          "providerName": "ICE",
+          "status": "ForSale",
+          "_ENUM": [
+            "ForSale",
+            "NotForSale"
+          ],
+          "isNewUnitOfSale": true,
+          "unitOfSaleType": "unit",
+          "geographicLimit": {
+            "boundingBox": {
+              "northLimit": 24.146815,
+              "southLimit": 22.581615,
+              "eastLimit": 120.349635,
+              "westLimit": 119.39142
+            }
+          },
+          "compositionChanges": {
+            "addProducts": [
+              "MX545013"
+            ],
+            "removeProducts": []
+          }
+        },
+        {
+          "unitName": "MX545014",
+          "title": "Isla MX545014",
+          "unitType": "AVCS Units Coastal",
+          "unitSize": "large",
+          "providerCode": "1",
+          "providerName": "ICE",
+          "status": "ForSale",
+          "_ENUM": [
+            "ForSale",
+            "NotForSale"
+          ],
+          "isNewUnitOfSale": true,
+          "unitOfSaleType": "unit",
+          "geographicLimit": {
+            "boundingBox": {
+              "northLimit": 24.146815,
+              "southLimit": 22.581615,
+              "eastLimit": 120.349635,
+              "westLimit": 119.39142
+            }
+          },
+          "compositionChanges": {
+            "addProducts": [
+              "MX545014"
+            ],
+            "removeProducts": []
+          }
+        },
+        {
+          "unitName": "MX545015",
+          "title": "Isla MX545015",
+          "unitType": "AVCS Units Coastal",
+          "unitSize": "large",
+          "providerCode": "1",
+          "providerName": "ICE",
+          "status": "ForSale",
+          "_ENUM": [
+            "ForSale",
+            "NotForSale"
+          ],
+          "isNewUnitOfSale": true,
+          "unitOfSaleType": "unit",
+          "geographicLimit": {
+            "boundingBox": {
+              "northLimit": 24.146815,
+              "southLimit": 22.581615,
+              "eastLimit": 120.349635,
+              "westLimit": 119.39142
+            }
+          },
+          "compositionChanges": {
+            "addProducts": [
+              "MX545015"
+            ],
+            "removeProducts": []
+          }
+        },
+        {
+          "unitName": "MX545016",
+          "title": "Isla MX545016",
+          "unitType": "AVCS Units Coastal",
+          "unitSize": "large",
+          "providerCode": "1",
+          "providerName": "ICE",
+          "status": "ForSale",
+          "_ENUM": [
+            "ForSale",
+            "NotForSale"
+          ],
+          "isNewUnitOfSale": true,
+          "unitOfSaleType": "unit",
+          "geographicLimit": {
+            "boundingBox": {
+              "northLimit": 24.146815,
+              "southLimit": 22.581615,
+              "eastLimit": 120.349635,
+              "westLimit": 119.39142
+            }
+          },
+          "compositionChanges": {
+            "addProducts": [
+              "MX545016"
+            ],
+            "removeProducts": []
+          }
+        },
+        {
+          "unitName": "MX545017",
+          "title": "Isla MX545017",
+          "unitType": "AVCS Units Coastal",
+          "unitSize": "large",
+          "providerCode": "1",
+          "providerName": "ICE",
+          "status": "ForSale",
+          "_ENUM": [
+            "ForSale",
+            "NotForSale"
+          ],
+          "isNewUnitOfSale": true,
+          "unitOfSaleType": "unit",
+          "geographicLimit": {
+            "boundingBox": {
+              "northLimit": 24.146815,
+              "southLimit": 22.581615,
+              "eastLimit": 120.349635,
+              "westLimit": 119.39142
+            }
+          },
+          "compositionChanges": {
+            "addProducts": [
+              "MX545017"
+            ],
+            "removeProducts": []
+          }
+        },
+        {
+          "unitName": "MX545018",
+          "title": "Isla MX545018",
+          "unitType": "AVCS Units Coastal",
+          "unitSize": "large",
+          "providerCode": "1",
+          "providerName": "ICE",
+          "status": "ForSale",
+          "_ENUM": [
+            "ForSale",
+            "NotForSale"
+          ],
+          "isNewUnitOfSale": true,
+          "unitOfSaleType": "unit",
+          "geographicLimit": {
+            "boundingBox": {
+              "northLimit": 24.146815,
+              "southLimit": 22.581615,
+              "eastLimit": 120.349635,
+              "westLimit": 119.39142
+            }
+          },
+          "compositionChanges": {
+            "addProducts": [
+              "MX545018"
+            ],
+            "removeProducts": []
+          }
+        },
+        {
+          "unitName": "MX545019",
+          "title": "Isla MX545019",
+          "unitType": "AVCS Units Coastal",
+          "unitSize": "large",
+          "providerCode": "1",
+          "providerName": "ICE",
+          "status": "ForSale",
+          "_ENUM": [
+            "ForSale",
+            "NotForSale"
+          ],
+          "isNewUnitOfSale": true,
+          "unitOfSaleType": "unit",
+          "geographicLimit": {
+            "boundingBox": {
+              "northLimit": 24.146815,
+              "southLimit": 22.581615,
+              "eastLimit": 120.349635,
+              "westLimit": 119.39142
+            }
+          },
+          "compositionChanges": {
+            "addProducts": [
+              "MX545019"
+            ],
+            "removeProducts": []
+          }
+        },
+        {
+          "unitName": "AVCSO",
+          "title": "AVCS Online Folio Some Title",
+          "unitSize": "large",
+          "unitType": "AVCS Online Folio",
+          "providerCode": "1",
+          "providerName": "ICE",
+          "status": "ForSale",
+          "isNewUnitOfSale": false,
+          "unitOfSaleType": "folio",
+          "geographicLimit": {
+            "boundingBox": {}
+          },
+          "compositionChanges": {
+            "addProducts": [],
+            "removeProducts": []
+          }
+        },
+        {
+          "unitName": "PAYSF",
+          "title": "World Folio",
+          "unitType": "AVCS Folio Transit",
+          "unitSize": "large",
+          "providerCode": "1",
+          "providerName": "ICE",
+          "status": "ForSale",
+          "unitOfSaleType": "folio",
+          "isNewUnitOfSale": false,
+          "geographicLimit": {
+            "boundingBox": {}
+          },
+          "compositionChanges": {
+            "addProducts": [],
+            "removeProducts": []
+          }
+        }
+      ]
+    }
+  }

@@ -17,7 +17,7 @@ namespace UKHO.ERPFacade.API.Health
         {
             if (report != null)
             {
-                httpContext.Response.ContentType = Constants.DefaultContentType;
+                httpContext.Response.ContentType = "application/json";
 
                 ErpHealthReport uiReport = ErpHealthReport.CreateFrom(report);
 

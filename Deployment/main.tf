@@ -83,6 +83,7 @@ module "key_vault" {
     "EventHubLoggingConfiguration--EntityPath"                  = module.eventhub.entity_path
     "ApplicationInsights--ConnectionString"                     = module.app_insights.connection_string
     "AzureStorageConfiguration--ConnectionString"               = module.storage.storage_connection_string
+    "PermitConfiguration--PermitDecryptionHardwareId"           = var.PermitDecryptionHardwareId
   }
   tags                                                          = local.tags
 }

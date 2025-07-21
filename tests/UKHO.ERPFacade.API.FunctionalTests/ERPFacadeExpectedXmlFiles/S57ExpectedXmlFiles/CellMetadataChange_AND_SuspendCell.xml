@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <Z_ADDS_MAT_INFO xmlns="urn:sap-com:document:sap:rfc:functions">
+      <IM_MATINFO xmlns="">
+        <CORRID>81998956-d6ae-4ac5-d369-08dcd31236c8</CORRID>
+        <NOOFACTIONS>5</NOOFACTIONS>
+        <RECDATE>20240920</RECDATE>
+        <RECTIME>014929</RECTIME>
+        <ORG>UKHO</ORG>
+        <ACTIONITEMS>
+          <item>
+            <ACTIONNUMBER>1</ACTIONNUMBER>
+            <ACTION>CHANGE ENC CELL</ACTION>
+            <PRODUCT>ENC CELL</PRODUCT>
+            <PRODTYPE>S57</PRODTYPE>
+            <CHILDCELL>1U322260</CHILDCELL>
+            <PRODUCTNAME>1U322260</PRODUCTNAME>
+            <CANCELLED />
+            <REPLACEDBY />
+            <AGENCY>1U</AGENCY>
+            <PROVIDER>2</PROVIDER>
+            <ENCSIZE>large</ENCSIZE>
+            <TITLE />
+            <EDITIONNO />
+            <UPDATENO />
+            <UNITTYPE />
+            <WEEKNO>202431</WEEKNO>
+            <VALIDFROM>20240801</VALIDFROM>
+            <CORRECTION>N</CORRECTION>
+            <ACTIVEKEY />
+            <NEXTKEY />
+          </item>
+          <item>
+            <ACTIONNUMBER>2</ACTIONNUMBER>
+            <ACTION>CHANGE ENC CELL</ACTION>
+            <PRODUCT>ENC CELL</PRODUCT>
+            <PRODTYPE>S57</PRODTYPE>
+            <CHILDCELL>1U422220</CHILDCELL>
+            <PRODUCTNAME>1U422220</PRODUCTNAME>
+            <CANCELLED />
+            <REPLACEDBY />
+            <AGENCY>1U</AGENCY>
+            <PROVIDER>2</PROVIDER>
+            <ENCSIZE>large</ENCSIZE>
+            <TITLE />
+            <EDITIONNO />
+            <UPDATENO />
+            <UNITTYPE />
+            <WEEKNO>202431</WEEKNO>
+            <VALIDFROM>20240801</VALIDFROM>
+            <CORRECTION>N</CORRECTION>
+            <ACTIVEKEY />
+            <NEXTKEY />
+          </item>
+          <item>
+            <ACTIONNUMBER>3</ACTIONNUMBER>
+            <ACTION>CHANGE ENC CELL</ACTION>
+            <PRODUCT>ENC CELL</PRODUCT>
+            <PRODTYPE>S57</PRODTYPE>
+            <CHILDCELL>1U422220</CHILDCELL>
+            <PRODUCTNAME>1U422220</PRODUCTNAME>
+            <CANCELLED />
+            <REPLACEDBY />
+            <AGENCY>1U</AGENCY>
+            <PROVIDER>2</PROVIDER>
+            <ENCSIZE>large</ENCSIZE>
+            <TITLE />
+            <EDITIONNO />
+            <UPDATENO />
+            <UNITTYPE />
+            <WEEKNO>202431</WEEKNO>
+            <VALIDFROM>20240801</VALIDFROM>
+            <CORRECTION>N</CORRECTION>
+            <ACTIVEKEY />
+            <NEXTKEY />
+          </item>
+          <item>
+            <ACTIONNUMBER>4</ACTIONNUMBER>
+            <ACTION>CHANGE AVCS UNIT OF SALE</ACTION>
+            <PRODUCT>AVCS UNIT</PRODUCT>
+            <PRODTYPE>S57</PRODTYPE>
+            <CHILDCELL></CHILDCELL>
+            <PRODUCTNAME>1U322260</PRODUCTNAME>
+            <CANCELLED />
+            <REPLACEDBY />
+            <AGENCY>1U</AGENCY>
+            <PROVIDER>2</PROVIDER>
+            <ENCSIZE>large</ENCSIZE>
+            <TITLE />
+            <EDITIONNO />
+            <UPDATENO />
+            <UNITTYPE />
+            <WEEKNO>202431</WEEKNO>
+            <VALIDFROM>20240801</VALIDFROM>
+            <CORRECTION>N</CORRECTION>
+            <ACTIVEKEY />
+            <NEXTKEY />
+          </item>
+          <item>
+            <ACTIONNUMBER>5</ACTIONNUMBER>
+            <ACTION>CHANGE AVCS UNIT OF SALE</ACTION>
+            <PRODUCT>AVCS UNIT</PRODUCT>
+            <PRODTYPE>S57</PRODTYPE>
+            <CHILDCELL></CHILDCELL>
+            <PRODUCTNAME>1U422220</PRODUCTNAME>
+            <CANCELLED />
+            <REPLACEDBY />
+            <AGENCY>1U</AGENCY>
+            <PROVIDER>2</PROVIDER>
+            <ENCSIZE>large</ENCSIZE>
+            <TITLE />
+            <EDITIONNO />
+            <UPDATENO />
+            <UNITTYPE />
+            <WEEKNO>202431</WEEKNO>
+            <VALIDFROM>20240801</VALIDFROM>
+            <CORRECTION>N</CORRECTION>
+            <ACTIVEKEY />
+            <NEXTKEY />
+          </item>
+        </ACTIONITEMS>
+      </IM_MATINFO>
+    </Z_ADDS_MAT_INFO>
+  </soap:Body>
+</soap:Envelope>

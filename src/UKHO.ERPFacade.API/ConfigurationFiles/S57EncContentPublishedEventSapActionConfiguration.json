@@ -1,0 +1,1400 @@
+/*
+JSON configuration file that defines a set of SAP actions sent to SAP when ERP Facade recieve S57 ENC update from Penrose as part of "uk.gov.ukho.encpublishing.enccontentpublished.v2.2" event.
+It allows for easy customization and configuration of the system's behavior based on the defined actions and their associated rules and attributes.
+
+Each action has the following properties:
+
+•	"ActionNumber": An representing the sequence number of the action.
+•	"ActionName": Action Name.
+•	"Product": A string specifying the product associated with the action.
+•	"Rules": An array of objects representing the conditions that must be met for a rule to satisfied to create a SAP action. Mininum one rule needs to be satisfied to generate a SAP action. These rules are applied against event data received from Penrose. Each rule object has following properties
+      * "Conditions": An array of objects representing the conditions that must be met for the rule to be satisfied. Each condition object has following properties.
+            * "AttributeDataType" (a string specifying the data type of the attribute),
+            * "AttributeName" (a string specifying the name of the attribute in received event JSON),
+            * "AttributeValue" (a string specifying the value of the attribute).
+•	"Attributes": An array of objects representing the attributes associated with the action. Each attribute object has following properties
+      * "IsRequired" (a boolean indicating whether the attribute is required),
+      * "Section" (the section to which the attribute belongs),
+      * "JsonPropertyName" (the name of the attribute in event JSON payload),
+      * "XmlNodeName" (the name of the attribute in SAP XML payload),
+      * "SortingOrder" (an integer specifying the sorting order of the attribute).
+*/
+
+{
+    "S57EncContentPublishedEventSapActionConfiguration": {
+        "Actions": [
+            {
+                "ActionNumber": 1,
+                "ActionName": "CREATE ENC CELL",
+                "Product": "ENC CELL",
+                "Rules": [
+                    {
+                        "Conditions": [
+                            {
+                                "AttributeDataType": "bool",
+                                "AttributeName": "Status.IsNewCell",
+                                "AttributeValue": "True"
+                            },
+                            {
+                                "AttributeDataType": "bool",
+                                "AttributeName": "ContentChange",
+                                "AttributeValue": "True"
+                            }
+                        ]
+                    }
+                ],
+                "Attributes": [
+                    {
+                        "IsRequired": true,
+                        "Section": "UnitOfSale",
+                        "JsonPropertyName": "UnitName",
+                        "XmlNodeName": "PRODUCTNAME",
+                        "SortingOrder": 1
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "CANCELLED",
+                        "SortingOrder": 2
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "REPLACEDBY",
+                        "SortingOrder": 3
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "Product",
+                        "JsonPropertyName": "ProductName",
+                        "XmlNodeName": "AGENCY",
+                        "SortingOrder": 4
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "Product",
+                        "JsonPropertyName": "ProviderCode",
+                        "XmlNodeName": "PROVIDER",
+                        "SortingOrder": 5
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "Product",
+                        "JsonPropertyName": "Size",
+                        "XmlNodeName": "ENCSIZE",
+                        "SortingOrder": 6
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "Product",
+                        "JsonPropertyName": "Title",
+                        "XmlNodeName": "TITLE",
+                        "SortingOrder": 7
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "Product",
+                        "JsonPropertyName": "EditionNumber",
+                        "XmlNodeName": "EDITIONNO",
+                        "SortingOrder": 8
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "Product",
+                        "JsonPropertyName": "UpdateNumber",
+                        "XmlNodeName": "UPDATENO",
+                        "SortingOrder": 9
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "UnitOfSale",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "UNITTYPE",
+                        "SortingOrder": 10
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "WEEKNO",
+                        "SortingOrder": 11
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "VALIDFROM",
+                        "SortingOrder": 12
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "CurrentWeekAlphaCorrection",
+                        "XmlNodeName": "CORRECTION",
+                        "SortingOrder": 13
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "ACTIVEKEY",
+                        "SortingOrder": 14
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "NEXTKEY",
+                        "SortingOrder": 15
+                    }
+                ]
+            },
+            {
+                "ActionNumber": 2,
+                "ActionName": "CREATE AVCS UNIT OF SALE",
+                "Product": "AVCS UNIT",
+                "Rules": [
+                    {
+                        "Conditions": [
+                            {
+                                "AttributeDataType": "bool",
+                                "AttributeName": "IsNewUnitOfSale",
+                                "AttributeValue": "True"
+                            },
+                            {
+                                "AttributeDataType": "string",
+                                "AttributeName": "UnitOfSaleType",
+                                "AttributeValue": "unit"
+                            }
+                        ]
+                    }
+                ],
+                "Attributes": [
+                    {
+                        "IsRequired": true,
+                        "Section": "UnitOfSale",
+                        "JsonPropertyName": "UnitName",
+                        "XmlNodeName": "PRODUCTNAME",
+                        "SortingOrder": 1
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "CANCELLED",
+                        "SortingOrder": 2
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "REPLACEDBY",
+                        "SortingOrder": 3
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UnitOfSale",
+                        "JsonPropertyName": "UnitName",
+                        "XmlNodeName": "AGENCY",
+                        "SortingOrder": 4
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UnitOfSale",
+                        "JsonPropertyName": "ProviderCode",
+                        "XmlNodeName": "PROVIDER",
+                        "SortingOrder": 5
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UnitOfSale",
+                        "JsonPropertyName": "UnitSize",
+                        "XmlNodeName": "ENCSIZE",
+                        "SortingOrder": 6
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UnitOfSale",
+                        "JsonPropertyName": "Title",
+                        "XmlNodeName": "TITLE",
+                        "SortingOrder": 7
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "EDITIONNO",
+                        "SortingOrder": 8
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "UPDATENO",
+                        "SortingOrder": 9
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UnitOfSale",
+                        "JsonPropertyName": "UnitType",
+                        "XmlNodeName": "UNITTYPE",
+                        "SortingOrder": 10
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "WEEKNO",
+                        "SortingOrder": 11
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "VALIDFROM",
+                        "SortingOrder": 12
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "CurrentWeekAlphaCorrection",
+                        "XmlNodeName": "CORRECTION",
+                        "SortingOrder": 13
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "ACTIVEKEY",
+                        "SortingOrder": 14
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "NEXTKEY",
+                        "SortingOrder": 15
+                    }
+                ]
+            },
+            {
+                "ActionNumber": 3,
+                "ActionName": "ASSIGN CELL TO AVCS UNIT OF SALE",
+                "Product": "AVCS UNIT",
+                "Rules": [],
+                "Attributes": [
+                    {
+                        "IsRequired": true,
+                        "Section": "UnitOfSale",
+                        "JsonPropertyName": "UnitName",
+                        "XmlNodeName": "PRODUCTNAME",
+                        "SortingOrder": 1
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "CANCELLED",
+                        "SortingOrder": 2
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "REPLACEDBY",
+                        "SortingOrder": 3
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "UnitOfSale",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "AGENCY",
+                        "SortingOrder": 4
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "UnitOfSale",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "PROVIDER",
+                        "SortingOrder": 5
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "UnitOfSale",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "ENCSIZE",
+                        "SortingOrder": 6
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "UnitOfSale",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "TITLE",
+                        "SortingOrder": 7
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "EDITIONNO",
+                        "SortingOrder": 8
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "UPDATENO",
+                        "SortingOrder": 9
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "UnitOfSale",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "UNITTYPE",
+                        "SortingOrder": 10
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "WEEKNO",
+                        "SortingOrder": 11
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "VALIDFROM",
+                        "SortingOrder": 12
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "CurrentWeekAlphaCorrection",
+                        "XmlNodeName": "CORRECTION",
+                        "SortingOrder": 13
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "ACTIVEKEY",
+                        "SortingOrder": 14
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "NEXTKEY",
+                        "SortingOrder": 15
+                    }
+                ]
+            },
+            {
+                "ActionNumber": 4,
+                "ActionName": "REPLACED WITH ENC CELL",
+                "Product": "ENC CELL",
+                "Rules": [
+                    {
+                        "Conditions": [
+                            {
+                                "AttributeDataType": "bool",
+                                "AttributeName": "ContentChange",
+                                "AttributeValue": "True"
+                            }
+                        ]
+                    }
+                ],
+                "Attributes": [
+                    {
+                        "IsRequired": true,
+                        "Section": "UnitOfSale",
+                        "JsonPropertyName": "UnitName",
+                        "XmlNodeName": "PRODUCTNAME",
+                        "SortingOrder": 1
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "CANCELLED",
+                        "SortingOrder": 2
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "REPLACEDBY",
+                        "SortingOrder": 3
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "AGENCY",
+                        "SortingOrder": 4
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "PROVIDER",
+                        "SortingOrder": 5
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "ENCSIZE",
+                        "SortingOrder": 6
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "TITLE",
+                        "SortingOrder": 7
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "EDITIONNO",
+                        "SortingOrder": 8
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "UPDATENO",
+                        "SortingOrder": 9
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "UnitOfSale",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "UNITTYPE",
+                        "SortingOrder": 10
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "WEEKNO",
+                        "SortingOrder": 11
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "VALIDFROM",
+                        "SortingOrder": 12
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "CurrentWeekAlphaCorrection",
+                        "XmlNodeName": "CORRECTION",
+                        "SortingOrder": 13
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "ACTIVEKEY",
+                        "SortingOrder": 14
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "NEXTKEY",
+                        "SortingOrder": 15
+                    }
+                ]
+            },
+            {
+                "ActionNumber": 5,
+                "ActionName": "ADDITIONAL COVERAGE ENC CELL",
+                "Product": "ENC CELL",
+                "Rules": [
+                    {
+                        "Conditions": [
+                            {
+                                "AttributeDataType": "bool",
+                                "AttributeName": "ContentChange",
+                                "AttributeValue": "True"
+                            }
+                        ]
+                    }
+                ],
+                "Attributes": [
+                    {
+                        "IsRequired": false,
+                        "Section": "UnitOfSale",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "PRODUCTNAME",
+                        "SortingOrder": 1
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "CANCELLED",
+                        "SortingOrder": 2
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "REPLACEDBY",
+                        "SortingOrder": 3
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "AGENCY",
+                        "SortingOrder": 4
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "PROVIDER",
+                        "SortingOrder": 5
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "ENCSIZE",
+                        "SortingOrder": 6
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "TITLE",
+                        "SortingOrder": 7
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "EDITIONNO",
+                        "SortingOrder": 8
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "UPDATENO",
+                        "SortingOrder": 9
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "UnitOfSale",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "UNITTYPE",
+                        "SortingOrder": 10
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "WEEKNO",
+                        "SortingOrder": 11
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "VALIDFROM",
+                        "SortingOrder": 12
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "CurrentWeekAlphaCorrection",
+                        "XmlNodeName": "CORRECTION",
+                        "SortingOrder": 13
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "ACTIVEKEY",
+                        "SortingOrder": 14
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "NEXTKEY",
+                        "SortingOrder": 15
+                    }
+                ]
+            },
+            {
+                "ActionNumber": 6,
+                "ActionName": "CHANGE ENC CELL",
+                "Product": "ENC CELL",
+                "Rules": [
+                    {
+                        "Conditions": [
+                            {
+                                "AttributeDataType": "bool",
+                                "AttributeName": "ContentChange",
+                                "AttributeValue": "False"
+                            }
+                        ]
+                    },
+                    {
+                        "Conditions": [
+                            {
+                                "AttributeDataType": "bool",
+                                "AttributeName": "Status.IsNewCell",
+                                "AttributeValue": "False"
+                            }
+                        ]
+                    }
+                ],
+                "Attributes": [
+                    {
+                        "IsRequired": true,
+                        "Section": "UnitOfSale",
+                        "JsonPropertyName": "UnitName",
+                        "XmlNodeName": "PRODUCTNAME",
+                        "SortingOrder": 1
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "CANCELLED",
+                        "SortingOrder": 2
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "REPLACEDBY",
+                        "SortingOrder": 3
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "Product",
+                        "JsonPropertyName": "ProductName",
+                        "XmlNodeName": "AGENCY",
+                        "SortingOrder": 4
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "Product",
+                        "JsonPropertyName": "ProviderCode",
+                        "XmlNodeName": "PROVIDER",
+                        "SortingOrder": 5
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "Product",
+                        "JsonPropertyName": "Size",
+                        "XmlNodeName": "ENCSIZE",
+                        "SortingOrder": 6
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "TITLE",
+                        "SortingOrder": 7
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "EDITIONNO",
+                        "SortingOrder": 8
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "UPDATENO",
+                        "SortingOrder": 9
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "UnitOfSale",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "UNITTYPE",
+                        "SortingOrder": 10
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "WEEKNO",
+                        "SortingOrder": 11
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "VALIDFROM",
+                        "SortingOrder": 12
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "CurrentWeekAlphaCorrection",
+                        "XmlNodeName": "CORRECTION",
+                        "SortingOrder": 13
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "ACTIVEKEY",
+                        "SortingOrder": 14
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "NEXTKEY",
+                        "SortingOrder": 15
+                    }
+                ]
+            },
+            {
+                "ActionNumber": 7,
+                "ActionName": "CHANGE AVCS UNIT OF SALE",
+                "Product": "AVCS UNIT",
+                "Rules": [
+                    {
+                        "Conditions": [
+                            {
+                                "AttributeDataType": "bool",
+                                "AttributeName": "IsNewUnitOfSale",
+                                "AttributeValue": "False"
+                            },
+                            {
+                                "AttributeDataType": "bool",
+                                "AttributeName": "Status",
+                                "AttributeValue": "ForSale"
+                            },
+                            {
+                                "AttributeDataType": "string",
+                                "AttributeName": "UnitOfSaleType",
+                                "AttributeValue": "unit"
+                            }
+                        ]
+                    }
+                ],
+                "Attributes": [
+                    {
+                        "IsRequired": true,
+                        "Section": "UnitOfSale",
+                        "JsonPropertyName": "UnitName",
+                        "XmlNodeName": "PRODUCTNAME",
+                        "SortingOrder": 1
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "CANCELLED",
+                        "SortingOrder": 2
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "REPLACEDBY",
+                        "SortingOrder": 3
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UnitOfSale",
+                        "JsonPropertyName": "UnitName",
+                        "XmlNodeName": "AGENCY",
+                        "SortingOrder": 4
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UnitOfSale",
+                        "JsonPropertyName": "ProviderCode",
+                        "XmlNodeName": "PROVIDER",
+                        "SortingOrder": 5
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UnitOfSale",
+                        "JsonPropertyName": "UnitSize",
+                        "XmlNodeName": "ENCSIZE",
+                        "SortingOrder": 6
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "UnitOfSale",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "TITLE",
+                        "SortingOrder": 7
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "EDITIONNO",
+                        "SortingOrder": 8
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "UPDATENO",
+                        "SortingOrder": 9
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "UnitOfSale",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "UNITTYPE",
+                        "SortingOrder": 10
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "WEEKNO",
+                        "SortingOrder": 11
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "VALIDFROM",
+                        "SortingOrder": 12
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "CurrentWeekAlphaCorrection",
+                        "XmlNodeName": "CORRECTION",
+                        "SortingOrder": 13
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "ACTIVEKEY",
+                        "SortingOrder": 14
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "NEXTKEY",
+                        "SortingOrder": 15
+                    }
+                ]
+            },
+            {
+                "ActionNumber": 8,
+                "ActionName": "UPDATE ENC CELL EDITION UPDATE NUMBER",
+                "Product": "ENC CELL",
+                "Rules": [
+                    {
+                        "Conditions": [
+                            {
+                                "AttributeDataType": "bool",
+                                "AttributeName": "Status.IsNewCell",
+                                "AttributeValue": "False"
+                            },
+                            {
+                                "AttributeDataType": "bool",
+                                "AttributeName": "ContentChange",
+                                "AttributeValue": "True"
+                            }
+                        ]
+                    }
+                ],
+                "Attributes": [
+                    {
+                        "IsRequired": true,
+                        "Section": "UnitOfSale",
+                        "JsonPropertyName": "UnitName",
+                        "XmlNodeName": "PRODUCTNAME",
+                        "SortingOrder": 1
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "CANCELLED",
+                        "SortingOrder": 2
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "REPLACEDBY",
+                        "SortingOrder": 3
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "AGENCY",
+                        "SortingOrder": 4
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "PROVIDER",
+                        "SortingOrder": 5
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "ENCSIZE",
+                        "SortingOrder": 6
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "TITLE",
+                        "SortingOrder": 7
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "Product",
+                        "JsonPropertyName": "EditionNumber",
+                        "XmlNodeName": "EDITIONNO",
+                        "SortingOrder": 8
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "Product",
+                        "JsonPropertyName": "UpdateNumber",
+                        "XmlNodeName": "UPDATENO",
+                        "SortingOrder": 9
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "UnitOfSale",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "UNITTYPE",
+                        "SortingOrder": 10
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "WEEKNO",
+                        "SortingOrder": 11
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "VALIDFROM",
+                        "SortingOrder": 12
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "CurrentWeekAlphaCorrection",
+                        "XmlNodeName": "CORRECTION",
+                        "SortingOrder": 13
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "ACTIVEKEY",
+                        "SortingOrder": 14
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "NEXTKEY",
+                        "SortingOrder": 15
+                    }
+                ]
+            },
+            {
+                "ActionNumber": 9,
+                "ActionName": "REMOVE ENC CELL FROM AVCS UNIT OF SALE",
+                "Product": "AVCS UNIT",
+                "Rules": [],
+                "Attributes": [
+                    {
+                        "IsRequired": true,
+                        "Section": "UnitOfSale",
+                        "JsonPropertyName": "UnitName",
+                        "XmlNodeName": "PRODUCTNAME",
+                        "SortingOrder": 1
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "CANCELLED",
+                        "SortingOrder": 2
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "REPLACEDBY",
+                        "SortingOrder": 3
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "AGENCY",
+                        "SortingOrder": 4
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "PROVIDER",
+                        "SortingOrder": 5
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "ENCSIZE",
+                        "SortingOrder": 6
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "UnitOfSale",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "TITLE",
+                        "SortingOrder": 7
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "EDITIONNO",
+                        "SortingOrder": 8
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "UPDATENO",
+                        "SortingOrder": 9
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "UnitOfSale",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "UNITTYPE",
+                        "SortingOrder": 10
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "WEEKNO",
+                        "SortingOrder": 11
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "VALIDFROM",
+                        "SortingOrder": 12
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "CurrentWeekAlphaCorrection",
+                        "XmlNodeName": "CORRECTION",
+                        "SortingOrder": 13
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "ACTIVEKEY",
+                        "SortingOrder": 14
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "NEXTKEY",
+                        "SortingOrder": 15
+                    }
+                ]
+            },
+            {
+                "ActionNumber": 10,
+                "ActionName": "CANCEL ENC CELL",
+                "Product": "ENC CELL",
+                "Rules": [
+                    {
+                        "Conditions": [
+                            {
+                                "AttributeDataType": "string",
+                                "AttributeName": "Status.StatusName",
+                                "AttributeValue": "Cancellation Update"
+                            },
+                            {
+                                "AttributeDataType": "bool",
+                                "AttributeName": "ContentChange",
+                                "AttributeValue": "True"
+                            }
+                        ]
+                    }
+                ],
+                "Attributes": [
+                    {
+                        "IsRequired": true,
+                        "Section": "UnitOfSale",
+                        "JsonPropertyName": "UnitName",
+                        "XmlNodeName": "PRODUCTNAME",
+                        "SortingOrder": 1
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "CANCELLED",
+                        "SortingOrder": 2
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "REPLACEDBY",
+                        "SortingOrder": 3
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "AGENCY",
+                        "SortingOrder": 4
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "PROVIDER",
+                        "SortingOrder": 5
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "ENCSIZE",
+                        "SortingOrder": 6
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "TITLE",
+                        "SortingOrder": 7
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "EDITIONNO",
+                        "SortingOrder": 8
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "UPDATENO",
+                        "SortingOrder": 9
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "UnitOfSale",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "UNITTYPE",
+                        "SortingOrder": 10
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "WEEKNO",
+                        "SortingOrder": 11
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "VALIDFROM",
+                        "SortingOrder": 12
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "CurrentWeekAlphaCorrection",
+                        "XmlNodeName": "CORRECTION",
+                        "SortingOrder": 13
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "ACTIVEKEY",
+                        "SortingOrder": 14
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "NEXTKEY",
+                        "SortingOrder": 15
+                    }
+                ]
+            },
+            {
+                "ActionNumber": 11,
+                "ActionName": "CANCEL AVCS UNIT OF SALE",
+                "Product": "AVCS UNIT",
+                "Rules": [
+                    {
+                        "Conditions": [
+                            {
+                                "AttributeDataType": "string",
+                                "AttributeName": "Status",
+                                "AttributeValue": "NotForSale"
+                            }
+                        ]
+                    }
+                ],
+                "Attributes": [
+                    {
+                        "IsRequired": true,
+                        "Section": "UnitOfSale",
+                        "JsonPropertyName": "UnitName",
+                        "XmlNodeName": "PRODUCTNAME",
+                        "SortingOrder": 1
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "CANCELLED",
+                        "SortingOrder": 2
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "REPLACEDBY",
+                        "SortingOrder": 3
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "AGENCY",
+                        "SortingOrder": 4
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "PROVIDER",
+                        "SortingOrder": 5
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "ENCSIZE",
+                        "SortingOrder": 6
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "UnitOfSale",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "TITLE",
+                        "SortingOrder": 7
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "EDITIONNO",
+                        "SortingOrder": 8
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "UPDATENO",
+                        "SortingOrder": 9
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "UnitOfSale",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "UNITTYPE",
+                        "SortingOrder": 10
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "WEEKNO",
+                        "SortingOrder": 11
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "VALIDFROM",
+                        "SortingOrder": 12
+                    },
+                    {
+                        "IsRequired": true,
+                        "Section": "UkhoWeekNumber",
+                        "JsonPropertyName": "CurrentWeekAlphaCorrection",
+                        "XmlNodeName": "CORRECTION",
+                        "SortingOrder": 13
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "ACTIVEKEY",
+                        "SortingOrder": 14
+                    },
+                    {
+                        "IsRequired": false,
+                        "Section": "Product",
+                        "JsonPropertyName": "",
+                        "XmlNodeName": "NEXTKEY",
+                        "SortingOrder": 15
+                    }
+                ]
+            }
+        ]
+    }
+}

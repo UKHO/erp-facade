@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <Z_SHOP_MAT_INFO xmlns="urn:sap-com:document:sap:rfc:functions">
+      <IM_MATINFO xmlns="">
+        <CORRID>165ce4a4-1d62-4f56-b359-59e178d77110</CORRID>
+        <NOOFACTIONS>3</NOOFACTIONS>
+        <RECDATE>20250314</RECDATE>
+        <RECTIME>083437</RECTIME>
+        <ORG>UKHO</ORG>
+        <ACTIONITEMS>
+          <item>
+            <ACTIONNUMBER>1</ACTIONNUMBER>
+            <ACTION>ASSIGN PRODUCT TO UNIT OF SALE</ACTION>
+            <PRODUCT>SHOP UNIT</PRODUCT>
+            <PRODTYPE>s101</PRODTYPE>
+            <CHILDCELL>104CA5555555</CHILDCELL>
+            <PRODUCTNAME>104CA6666666UNIT</PRODUCTNAME>
+            <REPLACEDBY></REPLACEDBY>
+            <AGENCY></AGENCY>
+            <PROVIDER></PROVIDER>
+            <ENCSIZE></ENCSIZE>
+            <TITLE></TITLE>
+          </item>
+          <item>
+            <ACTIONNUMBER>2</ACTIONNUMBER>
+            <ACTION>ASSIGN PRODUCT TO UNIT OF SALE</ACTION>
+            <PRODUCT>SHOP UNIT</PRODUCT>
+            <PRODTYPE>s101</PRODTYPE>
+            <CHILDCELL>101GB007645JTHG83</CHILDCELL>
+            <PRODUCTNAME>s100WorldFolio</PRODUCTNAME>
+            <REPLACEDBY></REPLACEDBY>
+            <AGENCY></AGENCY>
+            <PROVIDER></PROVIDER>
+            <ENCSIZE></ENCSIZE>
+            <TITLE></TITLE>
+          </item>
+          <item>
+            <ACTIONNUMBER>3</ACTIONNUMBER>
+            <ACTION>REMOVE PRODUCT FROM UNIT OF SALE</ACTION>
+            <PRODUCT>SHOP UNIT</PRODUCT>
+            <PRODTYPE>s101</PRODTYPE>
+            <CHILDCELL>104CA5555555</CHILDCELL>
+            <PRODUCTNAME>104CA123456UNIT</PRODUCTNAME>
+            <REPLACEDBY></REPLACEDBY>
+            <AGENCY></AGENCY>
+            <PROVIDER></PROVIDER>
+            <ENCSIZE></ENCSIZE>
+            <TITLE></TITLE>
+          </item>
+        </ACTIONITEMS>
+      </IM_MATINFO>
+    </Z_SHOP_MAT_INFO>
+  </soap:Body>
+</soap:Envelope>

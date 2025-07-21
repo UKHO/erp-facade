@@ -1,0 +1,65 @@
+﻿{
+    "specversion": "1.0",
+    "type": "uk.gov.ukho.encpublishing.s100datacontentpublished.v1.1",
+    "source": "https://encpublishing.ukho.gov.uk",
+    "id": "5f5f-283-4a-b9-590a9a42",
+    "time": "2024-08-13T12:08:03.4880776Z",
+    "subject": "104CA123456UNIA",
+    "datacontenttype": "application/json",
+    "data": {
+        "correlationId": "abc345-1a6-52adv11",
+        "products": [
+            {
+                "productIdentifier": "s101",
+                "productName": "104CA123456UNIA",
+                "editionNumber": 7,
+                "updateNumber": 0,
+                "mayAffectHoldings": false,
+                "providerCode": 1,
+                "providerName": "ICE",
+                "producingAgency": "AU",
+                "size": "medium",
+                "status": {
+                    "statusName": "Reissue",
+                    "statusDate": "2024-07-16T19:20:30",
+                    "isNewCell": false
+                },
+                "replaces": [],
+                "dataReplacement": [],
+                "boundingBox": {
+                    "northLimit": 63.25,
+                    "southLimit": 63,
+                    "eastLimit": 8,
+                    "westLimit": 7.75
+                },
+                "filesize": 3456,
+                "inUnitsOfSale": [ "104CA123456UNIA" ],
+                "producerUnitName": "101GB00123456UNIA"
+            }
+        ],
+        "unitsOfSale": [
+            {
+                "unitName": "104CA123456UNIA",
+                "productIdentifier": "s101",
+                "title": "A test S-101 cell from GB authority in its own unit of sale",
+                "unitOfSaleType": "unit",
+                "unitSize": "large",
+                "status": "ForSale",
+                "isNewUnitOfSale": false,
+                "providerCode": "1",
+                "providerName": "ICE",
+                "producingAgency": "AU",
+                "boundingBox": {
+                    "northLimit": 90,
+                    "southLimit": -90,
+                    "eastLimit": 180,
+                    "westLimit": -180
+                },
+                "compositionChanges": {
+                    "addProducts": [],
+                    "removeProducts": []
+                }
+            }
+        ]
+    }
+}

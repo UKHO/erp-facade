@@ -1,0 +1,221 @@
+openapi: 3.0.1
+info:
+  title: UKHO ERP Facade Service API
+  description: |
+     UKHO ERP Facade Service shall process S57 and S100 Content publish event received from Enterprise Event Service.
+  contact:
+    name: UKHO
+    email: contact@ukho.co.uk
+  version: 0.0.1
+servers:
+  - url: https://erpfacade-dev-api.azurewebsites.net
+    description: Dev URL
+paths:
+  /api/v2/webhook:
+    options:
+      summary: "Handle CloudEvent webhook validation"
+      tags:
+        - "ERP Facade"
+      description: "Handles CloudEvent webhook validation request."
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorised - either you have not provided valid token, or your token is not recognised.
+        "403":
+          description: Forbidden - you have no permission to use this API  
+        "500":
+          description: Internal Server Error.
+    post:
+      summary: "Webhook to receive events from Enterprise Event Service."
+      security:
+        - jwtBearerAuth: []
+      tags:
+        - "ERP Facade"
+      operationId: "eesWebhook"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/eventSchema'
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request - The request is incomplete or fails validation. E.g. <br /> - Unknown event type received in payload.
+          headers:
+            X-Correlation-ID:
+              description: GUID for the request for logging/tracing
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorDescription'
+              example:
+                correlationId: 6c254109-8a0f-4446-8649-721775ba9de2
+                errors:
+                  - source: erpfacade
+                    description: Unknown event type received in payload.
+        "401":
+          description: Unauthorised - either you have not provided valid token, or your token is not recognised.
+        "403":
+          description: Forbidden - you have no permission to use this API
+        "500":
+          description: Internal Server Error.
+  /api/v2/callback/sap/s100actions/processed:
+    post:
+      tags:
+        - "ERP Facade"
+      summary: Callback endpoint for SAP to report completion of processing.
+      security:
+        - ApiKeyAuth: []
+      operationId: sapCallback
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/correlationIdRequest'
+      responses:
+        "200":
+          description: OK 
+          headers:
+            X-Correlation-ID:
+              description: GUID for the request for logging/tracing
+              schema:
+                type: string
+        "401":
+          description: Unauthorised - your key is not recognised.
+          headers:
+            X-Correlation-ID:
+              description: GUID for the request for logging/tracing
+              schema:
+                type: string
+          content: {}
+        "404":
+          description: Correlation ID not found.
+          headers:
+            X-Correlation-ID:
+              description: GUID for the request for logging/tracing
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorDescription'
+              example:
+                correlationId: 6c254109-8a0f-4446-8649-721775ba9de2
+                errors:
+                - source: erpfacade
+                  description: Correlation ID Not Found.
+        "500":
+          description: Internal Server Error.
+          headers:
+            X-Correlation-ID:
+              description: GUID for the request for logging/tracing
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/exceptionDescription'
+components:
+  schemas:
+    correlationIdRequest:
+      type: object
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Id must be a string.
+    exceptionDescription:
+      type: object
+      properties:
+        correlationId:
+          type: string
+    errorDescription:
+      type: object
+      properties:
+        correlationId:
+          type: string
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/fieldError'
+    fieldError:
+      type: object
+      properties:
+        source:
+          type: string
+        description:
+          type: string
+    eventSchema:
+      type: object
+      properties:
+        specversion:
+          type: string
+        type:
+          type: string
+        source:
+          type: string
+        id:
+          type: string
+        time:
+          type: string
+        subject:
+          type: string
+        datacontenttype:
+          type: string
+        data:
+          type: object
+          description: The event payload. This specification does not place any restriction on the type of this information.
+  responses:
+    TokenAuthenticationFailed:
+      description: Token Authentication Failed
+      headers:
+        X-Correlation-ID:
+          description: GUID for the request for logging/tracing
+          schema:
+            type: string
+      content: {}
+    NotAcceptable:
+      description: The content type requested in the Accept header can not be provided.
+      headers:
+        X-Correlation-ID:
+          description: GUID for the request for logging/tracing
+          schema:
+            type: string
+      content: {}
+    InternalServerError:
+      description: Internal Server Error.
+      headers:
+        X-Correlation-ID:
+          description: GUID for the request for logging/tracing
+          schema:
+            type: string
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/exceptionDescription'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/exceptionDescription'
+        application/zip:
+          schema:
+            $ref: '#/components/schemas/exceptionDescription'
+        application/enp:
+          schema:
+            $ref: '#/components/schemas/exceptionDescription'
+        application/pdf:
+          schema:
+            $ref: '#/components/schemas/exceptionDescription'
+  securitySchemes:
+    jwtBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

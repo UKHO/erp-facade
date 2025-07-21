@@ -1,4 +1,6 @@
-﻿using Azure.Extensions.AspNetCore.Configuration.Secrets;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
+using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using Microsoft.ApplicationInsights.Channel;
@@ -7,12 +9,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
-using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
 using UKHO.ERPFacade.CleanUp.WebJob;
 using UKHO.ERPFacade.CleanUp.WebJob.Services;
 using UKHO.ERPFacade.Common.Configuration;
-using UKHO.ERPFacade.Common.IO.Azure;
+using UKHO.ERPFacade.Common.Operations.IO.Azure;
 using UKHO.Logging.EventHubLogProvider;
 
 namespace UKHO.ERPFacade.Monitoring.WebJob
@@ -23,7 +23,7 @@ namespace UKHO.ERPFacade.Monitoring.WebJob
         private static readonly InMemoryChannel TelemetryChannel = new();
         private static readonly string WebJobAssemblyVersion = Assembly.GetExecutingAssembly().GetCustomAttributes<AssemblyFileVersionAttribute>().Single().Version;
 
-        public static void Main()
+        public static async Task Main()
         {
             try
             {
@@ -42,13 +42,13 @@ namespace UKHO.ERPFacade.Monitoring.WebJob
 
                 try
                 {
-                    serviceProvider.GetService<CleanUpWebjob>().Start();
+                   await serviceProvider.GetService<CleanUpWebjob>().Start();
                 }
                 finally
                 {
                     //Ensure all buffered app insights logs are flushed into Azure
                     TelemetryChannel.Flush();
-                    Task.Delay(delayTime);
+                    await Task.Delay(delayTime);
                 }
             }
             catch (Exception ex)
@@ -142,14 +142,14 @@ namespace UKHO.ERPFacade.Monitoring.WebJob
 
             if (configuration != null)
             {
-                serviceCollection.Configure<ErpFacadeWebJobConfiguration>(configuration.GetSection("ErpFacadeWebJobConfiguration"));
+                serviceCollection.Configure<CleanupWebJobConfiguration>(configuration.GetSection("CleanupWebJobConfiguration"));
                 serviceCollection.Configure<AzureStorageConfiguration>(configuration.GetSection("AzureStorageConfiguration"));
                 serviceCollection.AddSingleton(configuration);
             }
 
             serviceCollection.AddSingleton<CleanUpWebjob>();
             serviceCollection.AddSingleton<IAzureTableReaderWriter, AzureTableReaderWriter>();
-            serviceCollection.AddSingleton<IAzureBlobEventWriter, AzureBlobEventWriter>();
+            serviceCollection.AddSingleton<IAzureBlobReaderWriter, AzureBlobReaderWriter>();
             serviceCollection.AddSingleton<ICleanUpService, CleanUpService>();
         }
     }

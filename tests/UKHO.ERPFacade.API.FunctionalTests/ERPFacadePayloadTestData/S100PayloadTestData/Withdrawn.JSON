@@ -1,0 +1,65 @@
+{
+    "specversion": "1.0",
+    "type": "uk.gov.ukho.encpublishing.s100datacontentpublished.v1.1",
+    "source": "https://encpublishing.ukho.gov.uk",
+    "id": "5f03a25f-28b3-46ea-b009-5943250a9a42",
+    "time": "2024-08-13T12:08:03.4880776Z",
+    "subject": "104CA123456UNIA",
+    "datacontenttype": "application/json",
+    "data": {
+        "correlationId": "ft-ec333-b13-4a3-aa-08dcc7",
+        "products": [
+            {
+                "productIdentifier": "S101",
+                "productName": "104CA123456UNIB",
+                "editionNumber": 1,
+                "updateNumber": 0,
+                "mayAffectHoldings": true,
+                "providerCode": "1",
+                "providerName": "ICE",
+                "size": "medium",
+                "producingAgency": "CA12",
+                "status": {
+                    "statusName": "withdrawn",
+                    "statusDate": "2024-07-16T19:20:30",
+                    "isNewCell": false
+                },
+                "replaces": [],
+                "dataReplacement": [],
+                "boundingBox": {
+                    "northLimit": 63.25,
+                    "southLimit": 63,
+                    "eastLimit": 8,
+                    "westLimit": 7.75
+                },
+                "fileSize": 3456,
+                "inUnitsOfSale": [],
+                "producerUnitName": "104CA123456UNIB"
+            }
+        ],
+        "unitsOfSale": [
+            {
+                "unitName": "104CA123456UNIB",
+                "productIdentifier": "s101",
+                "title": "Withdraw S-101 cell from CA authority from its own unit of sale",
+                "unitOfSaleType": "unit",
+                "unitSize": "LARGE",
+                "status": "NotForSale",
+                "isNewUnitOfSale": false,
+                "providerCode": 1,
+                "providerName": "ICE",
+                "producingAgency": "CA12",
+                "boundingBox": {
+                    "northLimit": 63.25,
+                    "southLimit": 63,
+                    "eastLimit": 8,
+                    "westLimit": 7.75
+                },
+                "compositionChanges": {
+                    "addProducts": [],
+                    "removeProducts": [ "104CA123456UNIB" ]
+                }
+            }
+        ]
+    }
+}

@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <Z_SHOP_MAT_INFO xmlns="urn:sap-com:document:sap:rfc:functions">
+      <IM_MATINFO xmlns="">
+        <CORRID>5f03a25f-28b3-46ea-b009-5943250a9a89</CORRID>
+        <NOOFACTIONS>0</NOOFACTIONS>
+        <RECDATE>20241125</RECDATE>
+        <RECTIME>093722</RECTIME>
+        <ORG>UKHO</ORG>
+        <ACTIONITEMS></ACTIONITEMS>
+      </IM_MATINFO>
+    </Z_SHOP_MAT_INFO>
+  </soap:Body>
+</soap:Envelope>

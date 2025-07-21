@@ -12,17 +12,17 @@ namespace UKHO.ERPFacade.CleanUp.WebJob
         private readonly ICleanUpService _cleanUpService;
 
         public CleanUpWebjob(ILogger<CleanUpWebjob> logger,
-                               ICleanUpService cleanUpService)
+                             ICleanUpService cleanUpService)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _cleanUpService = cleanUpService ?? throw new ArgumentNullException(nameof(cleanUpService));
         }
 
-        public void Start()
+        public async Task Start()
         {
-            _logger.LogInformation(EventIds.WebjobCleanUpEventStarted.ToEventId(), "Webjob started for clean up");
-            _cleanUpService.CleanUpAzureTableAndBlobs();
-            _logger.LogInformation(EventIds.WebjobCleanUpEventCompleted.ToEventId(), "Webjob completed clean up");
+            _logger.LogInformation(EventIds.CleanupWebjobStarted.ToEventId(), "Clean up webjob started.");
+             await _cleanUpService.CleanAsync();
+            _logger.LogInformation(EventIds.CleanupWebjobCompleted.ToEventId(), "Clean up webjob completed.");
         }
     }
 }
