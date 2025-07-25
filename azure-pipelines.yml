@@ -161,7 +161,8 @@ stages:
 
   - stage: vNextE2EDeploy
     dependsOn:
-    - vNextIATDeploy
+    - DevDeploy 
+    # - vNextIATDeploy
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
     displayName: "vNextE2E Deploy" 
     jobs:
