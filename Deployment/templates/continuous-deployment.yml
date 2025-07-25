@@ -199,8 +199,16 @@ jobs:
                 swapWithProduction: true
                 sourceSlot: $(WEB_APP_SLOT_NAME) 
       
-  - ${{ if ne(parameters.RunAddsTests, 'skip') }}:
+  - ${{ if eq(parameters.RunAddsTests, 'IAT') }}:
     - template:  template.yml@TriggerAddsAutoTestsPipeline
+      parameters:
+        serviceConnection: 'Addse2eauto Test - A.011.13'
+        environment: ${{ parameters.RunAddsTests }}
+        dependsOn:
+        - ${{ parameters.ShortName }}DeployApp
+  
+    - ${{ if eq(parameters.RunAddsTests, 'vNextIAT') }}:
+    - template:  template.yml@TriggerAddsAutoTestsPipeline_vnextIAT
       parameters:
         serviceConnection: 'Addse2eauto Test - A.011.13'
         environment: ${{ parameters.RunAddsTests }}
