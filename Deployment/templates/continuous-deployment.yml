@@ -208,12 +208,12 @@ jobs:
         - ${{ parameters.ShortName }}DeployApp
   
     - ${{ if eq(parameters.RunAddsTests, 'vNextIAT') }}:
-    - template:  template.yml@TriggerAddsAutoTestsPipeline_vnextIAT
-      parameters:
-        serviceConnection: 'Addse2eauto Test - A.011.13'
-        environment: ${{ parameters.RunAddsTests }}
-        dependsOn:
-        - ${{ parameters.ShortName }}DeployApp
+      - template:  template.yml@TriggerAddsAutoTestsPipeline_vnextIAT
+        parameters:
+          serviceConnection: 'Addse2eauto Test - A.011.13'
+          environment: ${{ parameters.RunAddsTests }}
+          dependsOn:
+          - ${{ parameters.ShortName }}DeployApp
 
   - ${{ if eq(parameters.RunFunctionalTests, true) }}:  
     - job: FunctionalTests
