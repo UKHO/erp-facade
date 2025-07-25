@@ -65,11 +65,11 @@ resources:
     name: ukho/devops-trigger-adds-autotest-pipeline
     ref: refs/heads/main
 
-  - repository: TriggerAddsAutoTestsPipeline_vnextIAT
-    type: github
-    endpoint: ukho
-    name: ukho/devops-trigger-adds-autotest-pipeline
-    ref: refs/heads/main-vnextiat
+  # - repository: TriggerAddsAutoTestsPipeline_vnextIAT
+  #   type: github
+  #   endpoint: ukho
+  #   name: ukho/devops-trigger-adds-autotest-pipeline
+  #   ref: refs/heads/main-vnextiat
 
 
 stages:
@@ -163,7 +163,7 @@ stages:
         AppPool: $(DeploymentPoolPE)
         Container: ${{variables.Container}}
         DeployADDSMocks: true
-        RunAddsTests: vNextIAT
+        # RunAddsTests: vNextIAT
 
   - stage: vNextE2EDeploy
     dependsOn:
