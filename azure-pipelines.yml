@@ -63,7 +63,13 @@ resources:
     type: github
     endpoint: ukho
     name: ukho/devops-trigger-adds-autotest-pipeline
-    ref: refs/heads/main 
+    ref: refs/heads/main
+
+  - repository: TriggerAddsAutoTestsPipeline_vnextIAT
+  type: github
+  endpoint: ukho
+  name: ukho/devops-trigger-adds-autotest-pipeline
+  ref: refs/heads/main-vnextiat
 
 
 stages:
