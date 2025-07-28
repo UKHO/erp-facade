@@ -65,13 +65,6 @@ resources:
     name: ukho/devops-trigger-adds-autotest-pipeline
     ref: refs/heads/main
 
-  # - repository: TriggerAddsAutoTestsPipeline_vnextIAT
-  #   type: github
-  #   endpoint: ukho
-  #   name: ukho/devops-trigger-adds-autotest-pipeline
-  #   ref: refs/heads/main-vnextiat
-
-
 stages:
   - stage: VulnerabilityChecks
     displayName: Snyk checks
@@ -163,12 +156,12 @@ stages:
         AppPool: $(DeploymentPoolPE)
         Container: ${{variables.Container}}
         DeployADDSMocks: true
-        # RunAddsTests: vNextIAT
+        RunAddsTests: vNextIAT
 
   - stage: vNextE2EDeploy
     dependsOn:
     - vNextIATDeploy
-    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/develop'), startsWith(variables['Build.SourceBranch'], 'refs/heads/dev/')))
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
     displayName: "vNextE2E Deploy" 
     jobs:
     - template: Deployment/templates/continuous-deployment.yml
