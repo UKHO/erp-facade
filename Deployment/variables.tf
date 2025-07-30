@@ -60,3 +60,6 @@ variable "pe_subnet_name" {
 variable "deploy_adds_mocks" {
   type = bool  
 }
+variable "PermitDecryptionHardwareId" {
+  type = string
+}

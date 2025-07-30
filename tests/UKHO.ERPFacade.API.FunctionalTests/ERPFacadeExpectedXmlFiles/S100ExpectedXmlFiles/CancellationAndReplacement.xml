@@ -1,0 +1,198 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <Z_SHOP_MAT_INFO xmlns="urn:sap-com:document:sap:rfc:functions">
+      <IM_MATINFO xmlns="">
+        <CORRID>165a4-162-f56-359-59-77104</CORRID>
+        <NOOFACTIONS>14</NOOFACTIONS>
+        <RECDATE>20250319</RECDATE>
+        <RECTIME>090657</RECTIME>
+        <ORG>UKHO</ORG>
+        <ACTIONITEMS>
+          <item>
+            <ACTIONNUMBER>1</ACTIONNUMBER>
+            <ACTION>CREATE PRODUCT</ACTION>
+            <PRODUCT>SHOP CELL</PRODUCT>
+            <PRODTYPE>s101</PRODTYPE>
+            <CHILDCELL>101GB00123456UNIB</CHILDCELL>
+            <PRODUCTNAME>101GB00123456UNIB</PRODUCTNAME>
+            <REPLACEDBY></REPLACEDBY>
+            <AGENCY>GB00</AGENCY>
+            <PROVIDER>1</PROVIDER>
+            <ENCSIZE>medium</ENCSIZE>
+            <TITLE>101GB00123456UNIB</TITLE>
+          </item>
+          <item>
+            <ACTIONNUMBER>2</ACTIONNUMBER>
+            <ACTION>CREATE PRODUCT</ACTION>
+            <PRODUCT>SHOP CELL</PRODUCT>
+            <PRODTYPE>s101</PRODTYPE>
+            <CHILDCELL>101GB00123456UNIC</CHILDCELL>
+            <PRODUCTNAME>101GB00123456UNIC</PRODUCTNAME>
+            <REPLACEDBY></REPLACEDBY>
+            <AGENCY>GB01</AGENCY>
+            <PROVIDER>1B</PROVIDER>
+            <ENCSIZE>medium</ENCSIZE>
+            <TITLE>101GB00123456UNIC</TITLE>
+          </item>
+          <item>
+            <ACTIONNUMBER>3</ACTIONNUMBER>
+            <ACTION>CREATE UNIT OF SALE</ACTION>
+            <PRODUCT>SHOP UNIT</PRODUCT>
+            <PRODTYPE>s101</PRODTYPE>
+            <CHILDCELL></CHILDCELL>
+            <PRODUCTNAME>101GB00123456UNIB</PRODUCTNAME>
+            <REPLACEDBY></REPLACEDBY>
+            <AGENCY>GB00</AGENCY>
+            <PROVIDER>1</PROVIDER>
+            <ENCSIZE>large</ENCSIZE>
+            <TITLE>A test S-101 cell from GB authority in its own unit of sale</TITLE>
+          </item>
+          <item>
+            <ACTIONNUMBER>4</ACTIONNUMBER>
+            <ACTION>CREATE UNIT OF SALE</ACTION>
+            <PRODUCT>SHOP UNIT</PRODUCT>
+            <PRODTYPE>s101</PRODTYPE>
+            <CHILDCELL></CHILDCELL>
+            <PRODUCTNAME>101GB00123456UNIC</PRODUCTNAME>
+            <REPLACEDBY></REPLACEDBY>
+            <AGENCY>GB00</AGENCY>
+            <PROVIDER>1</PROVIDER>
+            <ENCSIZE>large</ENCSIZE>
+            <TITLE>A test S-101 cell from GB authority in its own unit of sale</TITLE>
+          </item>
+          <item>
+            <ACTIONNUMBER>5</ACTIONNUMBER>
+            <ACTION>ASSIGN PRODUCT TO UNIT OF SALE</ACTION>
+            <PRODUCT>SHOP UNIT</PRODUCT>
+            <PRODTYPE>s101</PRODTYPE>
+            <CHILDCELL>101GB00123456UNIB</CHILDCELL>
+            <PRODUCTNAME>101GB00123456UNIB</PRODUCTNAME>
+            <REPLACEDBY></REPLACEDBY>
+            <AGENCY></AGENCY>
+            <PROVIDER></PROVIDER>
+            <ENCSIZE></ENCSIZE>
+            <TITLE></TITLE>
+          </item>
+          <item>
+            <ACTIONNUMBER>6</ACTIONNUMBER>
+            <ACTION>ASSIGN PRODUCT TO UNIT OF SALE</ACTION>
+            <PRODUCT>SHOP UNIT</PRODUCT>
+            <PRODTYPE>s101</PRODTYPE>
+            <CHILDCELL>101GB00123456UNIC</CHILDCELL>
+            <PRODUCTNAME>101GB00123456UNIC</PRODUCTNAME>
+            <REPLACEDBY></REPLACEDBY>
+            <AGENCY></AGENCY>
+            <PROVIDER></PROVIDER>
+            <ENCSIZE></ENCSIZE>
+            <TITLE></TITLE>
+          </item>
+          <item>
+            <ACTIONNUMBER>7</ACTIONNUMBER>
+            <ACTION>ASSIGN PRODUCT TO UNIT OF SALE</ACTION>
+            <PRODUCT>SHOP UNIT</PRODUCT>
+            <PRODTYPE>s101</PRODTYPE>
+            <CHILDCELL>101GB00123456UNIB</CHILDCELL>
+            <PRODUCTNAME>s100WorldFolio</PRODUCTNAME>
+            <REPLACEDBY></REPLACEDBY>
+            <AGENCY></AGENCY>
+            <PROVIDER></PROVIDER>
+            <ENCSIZE></ENCSIZE>
+            <TITLE></TITLE>
+          </item>
+          <item>
+            <ACTIONNUMBER>8</ACTIONNUMBER>
+            <ACTION>ASSIGN PRODUCT TO UNIT OF SALE</ACTION>
+            <PRODUCT>SHOP UNIT</PRODUCT>
+            <PRODTYPE>s101</PRODTYPE>
+            <CHILDCELL>101GB00123456UNIC</CHILDCELL>
+            <PRODUCTNAME>s100WorldFolio</PRODUCTNAME>
+            <REPLACEDBY></REPLACEDBY>
+            <AGENCY></AGENCY>
+            <PROVIDER></PROVIDER>
+            <ENCSIZE></ENCSIZE>
+            <TITLE></TITLE>
+          </item>
+          <item>
+            <ACTIONNUMBER>9</ACTIONNUMBER>
+            <ACTION>REPLACED WITH PRODUCT</ACTION>
+            <PRODUCT>SHOP CELL</PRODUCT>
+            <PRODTYPE>s101</PRODTYPE>
+            <CHILDCELL>101GB00123456UNIA</CHILDCELL>
+            <PRODUCTNAME>101GB00123456UNIA</PRODUCTNAME>
+            <REPLACEDBY>101GB00123456UNIB</REPLACEDBY>
+            <AGENCY></AGENCY>
+            <PROVIDER></PROVIDER>
+            <ENCSIZE></ENCSIZE>
+            <TITLE></TITLE>
+          </item>
+          <item>
+            <ACTIONNUMBER>10</ACTIONNUMBER>
+            <ACTION>REPLACED WITH PRODUCT</ACTION>
+            <PRODUCT>SHOP CELL</PRODUCT>
+            <PRODTYPE>s101</PRODTYPE>
+            <CHILDCELL>101GB00123456UNIA</CHILDCELL>
+            <PRODUCTNAME>101GB00123456UNIA</PRODUCTNAME>
+            <REPLACEDBY>101GB00123456UNIC</REPLACEDBY>
+            <AGENCY></AGENCY>
+            <PROVIDER></PROVIDER>
+            <ENCSIZE></ENCSIZE>
+            <TITLE></TITLE>
+          </item>
+          <item>
+            <ACTIONNUMBER>11</ACTIONNUMBER>
+            <ACTION>REMOVE PRODUCT FROM UNIT OF SALE</ACTION>
+            <PRODUCT>SHOP UNIT</PRODUCT>
+            <PRODTYPE>s101</PRODTYPE>
+            <CHILDCELL>101GB00123456UNIA</CHILDCELL>
+            <PRODUCTNAME>101GB00123456UNIA</PRODUCTNAME>
+            <REPLACEDBY></REPLACEDBY>
+            <AGENCY></AGENCY>
+            <PROVIDER></PROVIDER>
+            <ENCSIZE></ENCSIZE>
+            <TITLE></TITLE>
+          </item>
+          <item>
+            <ACTIONNUMBER>12</ACTIONNUMBER>
+            <ACTION>REMOVE PRODUCT FROM UNIT OF SALE</ACTION>
+            <PRODUCT>SHOP UNIT</PRODUCT>
+            <PRODTYPE>s101</PRODTYPE>
+            <CHILDCELL>101GB00123456UNIA</CHILDCELL>
+            <PRODUCTNAME>s100WorldFolio</PRODUCTNAME>
+            <REPLACEDBY></REPLACEDBY>
+            <AGENCY></AGENCY>
+            <PROVIDER></PROVIDER>
+            <ENCSIZE></ENCSIZE>
+            <TITLE></TITLE>
+          </item>
+          <item>
+            <ACTIONNUMBER>13</ACTIONNUMBER>
+            <ACTION>CANCEL PRODUCT</ACTION>
+            <PRODUCT>SHOP CELL</PRODUCT>
+            <PRODTYPE>s101</PRODTYPE>
+            <CHILDCELL>101GB00123456UNIA</CHILDCELL>
+            <PRODUCTNAME>101GB00123456UNIA</PRODUCTNAME>
+            <REPLACEDBY></REPLACEDBY>
+            <AGENCY></AGENCY>
+            <PROVIDER></PROVIDER>
+            <ENCSIZE></ENCSIZE>
+            <TITLE></TITLE>
+          </item>
+          <item>
+            <ACTIONNUMBER>14</ACTIONNUMBER>
+            <ACTION>CANCEL UNIT OF SALE</ACTION>
+            <PRODUCT>SHOP UNIT</PRODUCT>
+            <PRODTYPE>s101</PRODTYPE>
+            <CHILDCELL></CHILDCELL>
+            <PRODUCTNAME>101GB00123456UNIA</PRODUCTNAME>
+            <REPLACEDBY></REPLACEDBY>
+            <AGENCY></AGENCY>
+            <PROVIDER></PROVIDER>
+            <ENCSIZE></ENCSIZE>
+            <TITLE></TITLE>
+          </item>
+        </ACTIONITEMS>
+      </IM_MATINFO>
+    </Z_SHOP_MAT_INFO>
+  </soap:Body>
+</soap:Envelope>

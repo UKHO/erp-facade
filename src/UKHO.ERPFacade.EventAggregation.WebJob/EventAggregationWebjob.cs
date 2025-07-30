@@ -20,10 +20,10 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob
             _aggregationService = aggregationService ?? throw new ArgumentNullException(nameof(aggregationService));
         }
 
-        public async Task ProcessQueueMessage([QueueTrigger(Constants.RecordOfSaleQueueName)] QueueMessage message)
+        public async Task ProcessQueueMessageAsync([QueueTrigger(AzureStorage.RecordOfSaleQueueName)] QueueMessage message)
         {
             _logger.LogInformation(EventIds.WebjobForEventAggregationStarted.ToEventId(), "Webjob has started to process and merge sliced events.");
-            await _aggregationService.MergeRecordOfSaleEvents(message);
+            await _aggregationService.MergeRecordOfSaleEventsAsync(message);
             _logger.LogInformation(EventIds.WebjobForEventAggregationCompleted.ToEventId(), "Webjob is completed.");
         }
     }

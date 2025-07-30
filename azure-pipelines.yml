@@ -63,8 +63,7 @@ resources:
     type: github
     endpoint: ukho
     name: ukho/devops-trigger-adds-autotest-pipeline
-    ref: refs/heads/main 
-
+    ref: refs/heads/main
 
 stages:
   - stage: VulnerabilityChecks

@@ -42,31 +42,31 @@
     <None Update="ERPTestData\NewAIOCell.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPTestData\NewCellWithNullcurrentWeekAlphaCorrectionInUkhoWeekNumberSection.JSON">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ERPTestData\NewCellWithoutYearInUkhoWeekNumberSection.JSON">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ERPTestData\NewCellWithNullYearInUkhoWeekNumberSection.JSON">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ERPTestData\NewCellWithEmptyPermit.JSON">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="ERPTestData\NewCellWithNoUnitOfSaleHavingTypeIsUnit.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPTestData\NewCellWithoutProviderCodeAttributes.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ERPTestData\NewCellWithoutUkhoWeekNumberSection.JSON">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="ERPTestData\NewCellWithWrongUkhoWeekDetails.JSON">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPTestData\ReplaceCellWithNoUnitOfSaleHavingTypeIsUnit.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPTestData\S100TestData\SapXmlWithNoActions.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPTestData\S100TestData\NewProductWithNoUnitOfSaleStatusAndAddProducts.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPTestData\S100TestData\NewProductWithoutProducingAgencyAttributes.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPTestData\S100TestData\CancellationAndReplacement.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPTestData\S100TestData\ReplaceProductWithNoUnitOfSaleRemoveProducts.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPTestData\UnsortedActionItems.xml">
@@ -85,6 +85,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ERPTestData\UpdateCell.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPTestData\S100TestData\NewProduct.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ERPTestData\S100TestData\NewProductWithUnitOfSaleTypeAsFolio.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

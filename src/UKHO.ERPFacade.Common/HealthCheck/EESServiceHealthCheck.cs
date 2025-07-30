@@ -5,16 +5,15 @@ using UKHO.ERPFacade.Common.Configuration;
 using UKHO.ERPFacade.Common.HttpClients;
 using UKHO.ERPFacade.Common.Logging;
 
-
 namespace UKHO.ERPFacade.Common.HealthCheck
 {
     public class EESServiceHealthCheck : IHealthCheck
     {
         private readonly ILogger<EESServiceHealthCheck> _logger;
-        private readonly IEESClient _eesClient;
+        private readonly IEesClient _eesClient;
         private readonly IOptions<EESHealthCheckEnvironmentConfiguration> _eesHealthCheckEnvironmentConfiguration;
 
-        public EESServiceHealthCheck(ILogger<EESServiceHealthCheck> logger, IEESClient eesClient, IOptions<EESHealthCheckEnvironmentConfiguration> eesHealthCheckEnvironmentConfiguration)
+        public EESServiceHealthCheck(ILogger<EESServiceHealthCheck> logger, IEesClient eesClient, IOptions<EESHealthCheckEnvironmentConfiguration> eesHealthCheckEnvironmentConfiguration)
         {
             _logger = logger;
             _eesClient = eesClient;
@@ -30,7 +29,7 @@ namespace UKHO.ERPFacade.Common.HealthCheck
             {
                 healthCheckData.Add("EES health endpoint", _eesHealthCheckEnvironmentConfiguration.Value.EESHealthCheckUrl);
 
-                HttpResponseMessage response = await _eesClient.Get(_eesHealthCheckEnvironmentConfiguration.Value.EESHealthCheckUrl);
+                HttpResponseMessage response = await _eesClient.GetAsync(_eesHealthCheckEnvironmentConfiguration.Value.EESHealthCheckUrl);
 
                 _logger.LogInformation(EventIds.EESHealthCheckRequestSentToEES.ToEventId(), "EES health check request has been sent to EES successfully. | {StatusCode}", response.StatusCode);
 

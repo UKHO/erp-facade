@@ -1,0 +1,5316 @@
+{
+  "specversion": "1.0",
+  "type": "uk.gov.ukho.encpublishing.s100datacontentpublished.v1.1",
+  "source": "https://encpublishing.ukho.gov.uk",
+  "id": "5f03a25f-28b3-46ea-b009-5943250a9a41",
+  "time": "2024-08-13T12:08:03.4880776Z",
+  "subject": "LT",
+  "datacontenttype": "application/json",
+  "data": {
+    "correlationId": "lt-20250310-m83j68tm-t8imgq3l-a4ieg6",
+    "products": [
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG001",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG001"
+            ],
+        "producerUnitName": "101GB7645JTHG001"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG002",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG002"
+            ],
+        "producerUnitName": "101GB7645JTHG002"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG003",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG003"
+            ],
+        "producerUnitName": "101GB7645JTHG003"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG004",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG004"
+            ],
+        "producerUnitName": "101GB7645JTHG004"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG005",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG005"
+            ],
+        "producerUnitName": "101GB7645JTHG005"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG006",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG006"
+            ],
+        "producerUnitName": "101GB7645JTHG006"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG007",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG007"
+            ],
+        "producerUnitName": "101GB7645JTHG007"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG008",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG008"
+            ],
+        "producerUnitName": "101GB7645JTHG008"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG009",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG009"
+            ],
+        "producerUnitName": "101GB7645JTHG009"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG010",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG010"
+            ],
+        "producerUnitName": "101GB7645JTHG010"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG011",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG011"
+            ],
+        "producerUnitName": "101GB7645JTHG011"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG012",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG012"
+            ],
+        "producerUnitName": "101GB7645JTHG012"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG013",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG013"
+            ],
+        "producerUnitName": "101GB7645JTHG013"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG014",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG014"
+            ],
+        "producerUnitName": "101GB7645JTHG014"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG015",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG015"
+            ],
+        "producerUnitName": "101GB7645JTHG015"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG016",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG016"
+            ],
+        "producerUnitName": "101GB7645JTHG016"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG017",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG017"
+            ],
+        "producerUnitName": "101GB7645JTHG017"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG018",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG018"
+            ],
+        "producerUnitName": "101GB7645JTHG018"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG019",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG019"
+            ],
+        "producerUnitName": "101GB7645JTHG019"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG020",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG020"
+            ],
+        "producerUnitName": "101GB7645JTHG020"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG021",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG021"
+            ],
+        "producerUnitName": "101GB7645JTHG021"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG022",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG022"
+            ],
+        "producerUnitName": "101GB7645JTHG022"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG023",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG023"
+            ],
+        "producerUnitName": "101GB7645JTHG023"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG024",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG024"
+            ],
+        "producerUnitName": "101GB7645JTHG024"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG025",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG025"
+            ],
+        "producerUnitName": "101GB7645JTHG025"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG026",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG026"
+            ],
+        "producerUnitName": "101GB7645JTHG026"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG027",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG027"
+            ],
+        "producerUnitName": "101GB7645JTHG027"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG028",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG028"
+            ],
+        "producerUnitName": "101GB7645JTHG028"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG029",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG029"
+            ],
+        "producerUnitName": "101GB7645JTHG029"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG030",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG030"
+            ],
+        "producerUnitName": "101GB7645JTHG030"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG031",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG031"
+            ],
+        "producerUnitName": "101GB7645JTHG031"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG032",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG032"
+            ],
+        "producerUnitName": "101GB7645JTHG032"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG033",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG033"
+            ],
+        "producerUnitName": "101GB7645JTHG033"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG034",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG034"
+            ],
+        "producerUnitName": "101GB7645JTHG034"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG035",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG035"
+            ],
+        "producerUnitName": "101GB7645JTHG035"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG036",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG036"
+            ],
+        "producerUnitName": "101GB7645JTHG036"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG037",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG037"
+            ],
+        "producerUnitName": "101GB7645JTHG037"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG038",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG038"
+            ],
+        "producerUnitName": "101GB7645JTHG038"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG039",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG039"
+            ],
+        "producerUnitName": "101GB7645JTHG039"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG040",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG040"
+            ],
+        "producerUnitName": "101GB7645JTHG040"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG041",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG041"
+            ],
+        "producerUnitName": "101GB7645JTHG041"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG042",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG042"
+            ],
+        "producerUnitName": "101GB7645JTHG042"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG043",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG043"
+            ],
+        "producerUnitName": "101GB7645JTHG043"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG044",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG044"
+            ],
+        "producerUnitName": "101GB7645JTHG044"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG045",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG045"
+            ],
+        "producerUnitName": "101GB7645JTHG045"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG046",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG046"
+            ],
+        "producerUnitName": "101GB7645JTHG046"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG047",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG047"
+            ],
+        "producerUnitName": "101GB7645JTHG047"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG048",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG048"
+            ],
+        "producerUnitName": "101GB7645JTHG048"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG049",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG049"
+            ],
+        "producerUnitName": "101GB7645JTHG049"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG050",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG050"
+            ],
+        "producerUnitName": "101GB7645JTHG050"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG051",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG051"
+            ],
+        "producerUnitName": "101GB7645JTHG051"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG052",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG052"
+            ],
+        "producerUnitName": "101GB7645JTHG052"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG053",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG053"
+            ],
+        "producerUnitName": "101GB7645JTHG053"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG054",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG054"
+            ],
+        "producerUnitName": "101GB7645JTHG054"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG055",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG055"
+            ],
+        "producerUnitName": "101GB7645JTHG055"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG056",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG056"
+            ],
+        "producerUnitName": "101GB7645JTHG056"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG057",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG057"
+            ],
+        "producerUnitName": "101GB7645JTHG057"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG058",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG058"
+            ],
+        "producerUnitName": "101GB7645JTHG058"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG059",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG059"
+            ],
+        "producerUnitName": "101GB7645JTHG059"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG060",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG060"
+            ],
+        "producerUnitName": "101GB7645JTHG060"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG061",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG061"
+            ],
+        "producerUnitName": "101GB7645JTHG061"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG062",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG062"
+            ],
+        "producerUnitName": "101GB7645JTHG062"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG063",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG063"
+            ],
+        "producerUnitName": "101GB7645JTHG063"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG064",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG064"
+            ],
+        "producerUnitName": "101GB7645JTHG064"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG065",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG065"
+            ],
+        "producerUnitName": "101GB7645JTHG065"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG066",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG066"
+            ],
+        "producerUnitName": "101GB7645JTHG066"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG067",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG067"
+            ],
+        "producerUnitName": "101GB7645JTHG067"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG068",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG068"
+            ],
+        "producerUnitName": "101GB7645JTHG068"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG069",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG069"
+            ],
+        "producerUnitName": "101GB7645JTHG069"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG070",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG070"
+            ],
+        "producerUnitName": "101GB7645JTHG070"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG071",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG071"
+            ],
+        "producerUnitName": "101GB7645JTHG071"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG072",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG072"
+            ],
+        "producerUnitName": "101GB7645JTHG072"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG073",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG073"
+            ],
+        "producerUnitName": "101GB7645JTHG073"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG074",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG074"
+            ],
+        "producerUnitName": "101GB7645JTHG074"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG075",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG075"
+            ],
+        "producerUnitName": "101GB7645JTHG075"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG076",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG076"
+            ],
+        "producerUnitName": "101GB7645JTHG076"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG077",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG077"
+            ],
+        "producerUnitName": "101GB7645JTHG077"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG078",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG078"
+            ],
+        "producerUnitName": "101GB7645JTHG078"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG079",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG079"
+            ],
+        "producerUnitName": "101GB7645JTHG079"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG080",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG080"
+            ],
+        "producerUnitName": "101GB7645JTHG080"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG081",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG081"
+            ],
+        "producerUnitName": "101GB7645JTHG081"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG082",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG082"
+            ],
+        "producerUnitName": "101GB7645JTHG082"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG083",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG083"
+            ],
+        "producerUnitName": "101GB7645JTHG083"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG084",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG084"
+            ],
+        "producerUnitName": "101GB7645JTHG084"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG085",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG085"
+            ],
+        "producerUnitName": "101GB7645JTHG085"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG086",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG086"
+            ],
+        "producerUnitName": "101GB7645JTHG086"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG087",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG087"
+            ],
+        "producerUnitName": "101GB7645JTHG087"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG088",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG088"
+            ],
+        "producerUnitName": "101GB7645JTHG088"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG089",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG089"
+            ],
+        "producerUnitName": "101GB7645JTHG089"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG090",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG090"
+            ],
+        "producerUnitName": "101GB7645JTHG090"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG091",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG091"
+            ],
+        "producerUnitName": "101GB7645JTHG091"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG092",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG092"
+            ],
+        "producerUnitName": "101GB7645JTHG092"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG093",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG093"
+            ],
+        "producerUnitName": "101GB7645JTHG093"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG094",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG094"
+            ],
+        "producerUnitName": "101GB7645JTHG094"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG095",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG095"
+            ],
+        "producerUnitName": "101GB7645JTHG095"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG096",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG096"
+            ],
+        "producerUnitName": "101GB7645JTHG096"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG097",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG097"
+            ],
+        "producerUnitName": "101GB7645JTHG097"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG098",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG098"
+            ],
+        "producerUnitName": "101GB7645JTHG098"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG099",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG099"
+            ],
+        "producerUnitName": "101GB7645JTHG099"
+      },
+      {
+        "productIdentifier": "s101",
+        "productName": "101GB7645JTHG100",
+        "editionNumber": 1,
+        "updateNumber": 0,
+        "mayAffectHoldings": true,
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "size": "medium",
+        "producingAgency": "GB03",
+        "status": {
+          "statusName": "newDataset",
+          "statusDate": "2024-07-16T19:20:30.45+01:00",
+          "isNewCell": true
+        },
+        "replaces": [],
+        "dataReplacement": [],
+        "boundingBox": {
+              "northLimit": 63.25,
+              "southLimit": 63.00,
+              "eastLimit": 8.00,
+              "westLimit": 7.75
+            },
+        "fileSize": 3456,
+        "inUnitsOfSale": [
+              "101GB7645JTHG100"
+            ],
+        "producerUnitName": "101GB7645JTHG100"
+      }
+    ],
+    "unitsOfSale": [
+      {
+        "unitName": "101GB7645JTHG001",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG001"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG002",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG002"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG003",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG003"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG004",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG004"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG005",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG005"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG006",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG006"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG007",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG007"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG008",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG008"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG009",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG009"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG010",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG010"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG011",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG011"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG012",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG012"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG013",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG013"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG014",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG014"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG015",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG015"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG016",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG016"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG017",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG017"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG018",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG018"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG019",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG019"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG020",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG020"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG021",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG021"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG022",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG022"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG023",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG023"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG024",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG024"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG025",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG025"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG026",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG026"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG027",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG027"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG028",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG028"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG029",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG029"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG030",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG030"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG031",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG031"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG032",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG032"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG033",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG033"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG034",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG034"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG035",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG035"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG036",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG036"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG037",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG037"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG038",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG038"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG039",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG039"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG040",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG040"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG041",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG041"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG042",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG042"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG043",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG043"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG044",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG044"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG045",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG045"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG046",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG046"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG047",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG047"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG048",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG048"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG049",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG049"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG050",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG050"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG051",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG051"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG052",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG052"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG053",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG053"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG054",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG054"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG055",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG055"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG056",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG056"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG057",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG057"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG058",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG058"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG059",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG059"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG060",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG060"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG061",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG061"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG062",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG062"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG063",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG063"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG064",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG064"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG065",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG065"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG066",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG066"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG067",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG067"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG068",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG068"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG069",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG069"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG070",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG070"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG071",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG071"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG072",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG072"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG073",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG073"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG074",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG074"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG075",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG075"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG076",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG076"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG077",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG077"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG078",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG078"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG079",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG079"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG080",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG080"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG081",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG081"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG082",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG082"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG083",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG083"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG084",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG084"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG085",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG085"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG086",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG086"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG087",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG087"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG088",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG088"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG089",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG089"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG090",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG090"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG091",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG091"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG092",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG092"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG093",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG093"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG094",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG094"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG095",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG095"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG096",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG096"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG097",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG097"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG098",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG098"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG099",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG099"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      },
+      {
+        "unitName": "101GB7645JTHG100",
+        "title": "A test S-101 cell from GB authority in its own unit of sale",
+        "unitSize": "large",
+        "status": "ForSale",
+        "isNewUnitOfSale": true,
+        "boundingBox": {
+          "northLimit": 63.25,
+          "southLimit": 63.00,
+          "eastLimit": 8.00,
+          "westLimit": 7.75
+        },
+        "compositionChanges": {
+          "addProducts": [
+            "101GB7645JTHG100"
+          ],
+          "removeProducts": []
+        },
+        "productIdentifier": "s101",
+        "unitOfSaleType": "unit",
+        "providerCode": "1B",
+        "providerName": "ICE",
+        "producingAgency": "GB"
+      }
+    ]
+  }
+}

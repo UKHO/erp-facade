@@ -4,6 +4,6 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.Services
 {
     public interface IAggregationService
     {
-        Task MergeRecordOfSaleEvents(QueueMessage message);
+        Task MergeRecordOfSaleEventsAsync(QueueMessage message);
     }
 }

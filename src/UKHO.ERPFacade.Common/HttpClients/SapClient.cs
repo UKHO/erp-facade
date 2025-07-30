@@ -14,7 +14,7 @@ namespace UKHO.ERPFacade.Common.HttpClients
             _httpClient = httpClient;
         }
 
-        public async Task<HttpResponseMessage> PostEventData(XmlDocument sapMessageXml, string endpoint, string sapServiceOperation, string username, string password)
+        public async Task<HttpResponseMessage> SendUpdateAsync(XmlDocument sapMessageXml, string endpoint, string sapServiceOperation, string username, string password)
         {
             _httpClient.DefaultRequestHeaders.Clear();
 

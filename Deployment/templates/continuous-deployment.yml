@@ -80,6 +80,7 @@ jobs:
                 TF_VAR_pe_rg: $(peRG)
                 TF_VAR_dns_zone_rg: $(dnsZoneRG)
                 TF_VAR_deploy_adds_mocks: ${{lower(parameters.DeployADDSMocks)}}
+                TF_VAR_PermitDecryptionHardwareId: $(PermitDecryptionHardwareId)
 
   - deployment: ${{parameters.ShortName}}DeployApp
     dependsOn: ${{parameters.ShortName}}DeployTerraform
@@ -135,7 +136,9 @@ jobs:
                     echo "##vso[task.setvariable variable=SapConfiguration.SapPasswordForEncEvent]$(SapPasswordForEncEvent)"
                     echo "##vso[task.setvariable variable=SapConfiguration.SapUsernameForEncEvent]$(SapUsernameForEncEvent)"
                     echo "##vso[task.setvariable variable=SapConfiguration.SapUsernameForRecordOfSale]$(SapUsernameForRecordOfSale)"
-                    echo "##vso[task.setvariable variable=SapConfiguration.SapPasswordForRecordOfSale]$(SapPasswordForRecordOfSale)"                      
+                    echo "##vso[task.setvariable variable=SapConfiguration.SapPasswordForRecordOfSale]$(SapPasswordForRecordOfSale)"
+                    echo "##vso[task.setvariable variable=SapConfiguration.SapUsernameForS100Event]$(SapUsernameForS100Event)"
+                    echo "##vso[task.setvariable variable=SapConfiguration.SapPasswordForS100Event]$(SapPasswordForS100Event)"                     
             
             - ${{ if eq(parameters.DeploySAPMocks, true) }}:
               - task: FileTransform@1
@@ -153,7 +156,14 @@ jobs:
                   appName: "$(MOCK_WEB_APP_NAME)"
                   package: "$(Pipeline.Workspace)/UKHOMockSAPService/UKHO.SAP.MockAPIService.zip"  
 
-            - ${{ if eq(parameters.DeployADDSMocks, true) }}: 
+            - ${{ if eq(parameters.DeployADDSMocks, true) }}:
+              - task: FileTransform@1
+                displayName: "File Transform: Adds Mock config json"
+                inputs:
+                  folderPath: '$(Pipeline.Workspace)/ADDSMock/UKHOADDSMockService.zip'
+                  fileType: 'json'
+                  targetFiles: '**/config.json'
+
               - task: AzureWebApp@1
                 displayName: "Azure App Deploy: ERPFacade-ADDS-MockService"            
                 inputs:

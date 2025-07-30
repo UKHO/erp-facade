@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <Z_SHOP_MAT_INFO xmlns="urn:sap-com:document:sap:rfc:functions">
+      <IM_MATINFO xmlns="">
+        <CORRID>ft-ec333-b13-4a3-aa-08dcc7</CORRID>
+        <NOOFACTIONS>2</NOOFACTIONS>
+        <RECDATE>20250319</RECDATE>
+        <RECTIME>081627</RECTIME>
+        <ORG>UKHO</ORG>
+        <ACTIONITEMS>
+          <item>
+            <ACTIONNUMBER>1</ACTIONNUMBER>
+            <ACTION>REMOVE PRODUCT FROM UNIT OF SALE</ACTION>
+            <PRODUCT>SHOP UNIT</PRODUCT>
+            <PRODTYPE>s101</PRODTYPE>
+            <CHILDCELL>104CA123456UNIB</CHILDCELL>
+            <PRODUCTNAME>104CA123456UNIB</PRODUCTNAME>
+            <REPLACEDBY></REPLACEDBY>
+            <AGENCY></AGENCY>
+            <PROVIDER></PROVIDER>
+            <ENCSIZE></ENCSIZE>
+            <TITLE></TITLE>
+          </item>
+          <item>
+            <ACTIONNUMBER>2</ACTIONNUMBER>
+            <ACTION>CANCEL UNIT OF SALE</ACTION>
+            <PRODUCT>SHOP UNIT</PRODUCT>
+            <PRODTYPE>s101</PRODTYPE>
+            <CHILDCELL></CHILDCELL>
+            <PRODUCTNAME>104CA123456UNIB</PRODUCTNAME>
+            <REPLACEDBY></REPLACEDBY>
+            <AGENCY></AGENCY>
+            <PROVIDER></PROVIDER>
+            <ENCSIZE></ENCSIZE>
+            <TITLE></TITLE>
+          </item>
+        </ACTIONITEMS>
+      </IM_MATINFO>
+    </Z_SHOP_MAT_INFO>
+  </soap:Body>
+</soap:Envelope>

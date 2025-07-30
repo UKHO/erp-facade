@@ -14,449 +14,540 @@ namespace UKHO.ERPFacade.Common.Logging
         UnhandledException = 940001,
 
         /// <summary>
-        /// 940002 - New ENC content published event options call started.
+        /// 940002 - Sap Xml Template Not Found
         /// </summary>
-        NewEncContentPublishedEventOptionsCallStarted = 940002,
+        SapXmlTemplateNotFoundException = 940002,
 
         /// <summary>
-        /// 940003 - New ENC content published event options call completed.
+        /// 940003 - ERP facade OPTIONS endpoint requested.
         /// </summary>
-        NewEncContentPublishedEventOptionsCallCompleted = 940003,
+        ErpFacadeWebhookOptionsEndPointRequested = 940003,
 
         /// <summary>
-        /// 940004 - New ENC content published event received by ERP Facade webhook.
+        /// 940004 - New cloud event received in ERP facade.
         /// </summary>
-        NewEncContentPublishedEventReceived = 940004,
+        NewCloudEventReceived = 940004,
 
         /// <summary>
-        /// 940005 - CorrelationId is missing in ENC content published event.
+        /// 940005 - Invalid event received in ERP facade.
         /// </summary>
-        CorrelationIdMissingInEvent = 940005,
+        InvalidEventTypeReceived = 940005,
 
         /// <summary>
-        /// 940006 - Adding or Updating entry for enccontentpublished event in azure table.
+        /// 940006 - Aio cell configuration is missing.
         /// </summary>
-        AddingEntryForEncContentPublishedEventInAzureTable = 940006,
+        AioConfigurationMissingException = 940006,
 
         /// <summary>
-        /// 940007 - ENC content published event in added in azure table successfully.
+        /// 940007 - S57 event processing started.
         /// </summary>
-        AddedEntryForEncContentPublishedEventInAzureTable = 940007,
+        S57EventProcessingStarted = 940007,
 
         /// <summary>
-        /// 940008 - Duplicate ENC contect published event received.
+        /// 940008 - S57 enccontentpublished event is specific to AIO cells and, as a result, it is not processed.
         /// </summary>
-        ReceivedDuplicateEncContentPublishedEvent = 940008,
+        S57EventNotProcessedForAioCells = 940008,
 
         /// <summary>
-        /// 940009 - Existing ENC content published event updated in azure table successfully.
+        /// 940009 - Request to SAP failed.
         /// </summary>
-        UpdatedEncContentPublishedEventInAzureTable = 940009,
+        S57RequestToSapFailedException = 940009,
 
         /// <summary>
-        /// 940010 - Uploading the received ENC content published event in blob storage.
+        /// 940010 - S57 enc update sent to SAP.
         /// </summary>
-        UploadEncContentPublishedEventInAzureBlobStarted = 940010,
+        S57EventUpdateSentToSap = 940010,
 
         /// <summary>
-        /// 940011 - ENC content published event is uploaded in blob storage successfully.
+        /// 940011 - S57 event entry is added in azure table successfully.
         /// </summary>
-        UploadEncContentPublishedEventInAzureBlobCompleted = 940011,
+        S57EventEntryAddedInAzureTable = 940011,
 
         /// <summary>
-        /// 940012 - Request to SAP failed
+        /// 940012 - S57 event json payload is stored in azure blob container.
         /// </summary>
-        RequestToSapFailed = 940012,
+        S57EventJsonStoredInAzureBlobContainer = 940012,
 
         /// <summary>
-        /// 940013 - ENC Update sent to SAP
+        /// 940013 - Generation of SAP xml payload for S57 enccontentpublished event started.
         /// </summary>
-        EncUpdateSentToSap = 940013,
+        S57EventSapXmlPayloadGenerationStarted = 940013,
 
         /// <summary>
-        /// 940014 - Updated RequestTime entity successfully in Azure Table
+        /// 940014 - Generation of enc cell SAP actions for S57 enccontentpublished event started.
         /// </summary>
-        UpdateRequestTimeEntitySuccessful = 940014,
+        S57EncCellSapActionGenerationStarted = 940014,
 
         /// <summary>
-        /// 940015 - Sap Xml Template Not Found
+        /// 940015 - Generation of SAP action for S57 enccontentpublished event started .
         /// </summary>
-        SapXmlTemplateNotFound = 940015,
+        S57SapActionGenerationStarted = 940015,
 
         /// <summary>
-        /// 940016 - Generation of SAP xml payload started
+        /// 940016 - Generation of SAP action for S57 enccontentpublished event completed .
         /// </summary>
-        GenerationOfSapXmlPayloadStarted = 940016,
+        S57SapActionGenerationCompleted = 940016,
 
         /// <summary>
-        /// 940017 - Sap Action Created
+        /// 940017 - Hardware ids configuration missing.
         /// </summary>
-        SapActionCreated = 940017,
+        HardwareIdsConfigurationMissingException = 940017,
 
         /// <summary>
-        /// 940018 - Generation of SAP xml payload completed
+        /// 940018 - Permit decryption failed and could not generate ActiveKey and NextKey.
         /// </summary>
-        GenerationOfSapXmlPayloadCompleted = 940018,
+        PermitDecryptionException = 940018,
 
         /// <summary>
-        /// 940019 - Azure Table Not Found
+        /// 940019 - Error while generating SAP action information for S57 enccontentpublished event.
         /// </summary>
-        AzureTableNotFound = 940019,
+        S57SapActionInformationGenerationFailedException = 940019,
 
         /// <summary>
-        /// 940020 - Sap Health Check Xml Template Not Found
+        /// 940020 - Generation of SAP xml payloa for S57 enccontentpublished event completed.
         /// </summary>
-        SapHealthCheckXmlTemplateNotFound = 940020,
+        S57EventSapXmlPayloadGenerationCompleted = 940020,
 
         /// <summary>
-        /// 940021 - SAP Health Check Request Sent To SAP
+        /// 940021 - S57 event xml payload is stored in azure blob container.
         /// </summary>
-        SapHealthCheckRequestSentToSap = 940021,
+        S57EventXmlStoredInAzureBlobContainer = 940021,
 
         /// <summary>
-        /// 940022 - Uploading the SAP xml payload in blob storage.
+        /// 940022 - Cleanup webjob started.
         /// </summary>
-        UploadSapXmlPayloadInAzureBlobStarted = 940022,
+        CleanupWebjobStarted = 940022,
 
         /// <summary>
-        /// 940023 - SAP xml payload is uploaded in blob storage successfully.
+        /// 940023 - Cleanup webjob completed.
         /// </summary>
-        UploadSapXmlPayloadInAzureBlobCompleted = 940023,
+        CleanupWebjobCompleted = 940023,
 
         /// <summary>
-        /// 940024 - Deleted EES entity successfully from Azure Table
+        /// 940024 - Event data clean up completed successfully.
         /// </summary>
-        DeletedEESEntitySuccessful = 940024,
+        EventDataCleanupCompleted = 940024,
 
         /// <summary>
-        /// 940025 - Fetching all EES entities from Azure Table.
+        /// 940025 - EES Health Check Request Sent To EES
         /// </summary>
-        FetchEESEntities = 940025,
+        EESHealthCheckRequestSentToEES = 940025,
 
         /// <summary>
-        /// 940026 - Deleted container successfully.
+        /// 940026 - SAP Is Healthy
         /// </summary>
-        DeletedContainerSuccessful = 940026,
+        SAPIsHealthy = 940026,
 
         /// <summary>
-        /// 940027 - Webjob started cleanup process.
+        /// 940027 - SAP Is Unhealty
         /// </summary>
-        WebjobCleanUpEventStarted = 940027,
+        SAPIsUnhealthy = 940027,
 
         /// <summary>
-        /// 940028 - Webjob completed cleanup process.
+        /// 940028 - EES Is Healthy
         /// </summary>
-        WebjobCleanUpEventCompleted = 940028,
+        EESIsHealthy = 940028,
 
         /// <summary>
-        /// 940029 - Error occurred while connecting EES
+        /// 940029 - EES Is Unhealty
         /// </summary>
-        ErrorOccurredInEES = 940029,
+        EESIsUnhealthy = 940029,
 
         /// <summary>
-        /// 940030 - EES Health Check Request Sent To EES
+        /// 940030 - Sap Health Check Xml Template Not Found
         /// </summary>
-        EESHealthCheckRequestSentToEES = 940030,
+        SapHealthCheckXmlTemplateNotFound = 940030,
 
         /// <summary>
-        /// 940031 - SAP Is Healthy
+        /// 940031 - SAP Health Check Request Sent To SAP
         /// </summary>
-        SAPIsHealthy = 940031,
+        SapHealthCheckRequestSentToSap = 940031,
 
         /// <summary>
-        /// 940032 - SAP Is Unhealty
+        /// 940032 - Error occurred while connecting EES
         /// </summary>
-        SAPIsUnhealthy = 940032,
+        ErrorOccurredInEES = 940032,
 
+
+        //Below event ids are for WP - Fleet Manager Record of Sale and Licence Updated events
+
+
+        /// <summary>
+        /// 940033 - Record of Sale published event options call started.
+        /// </summary>
+        RecordOfSalePublishedEventOptionsCallStarted = 940033,
+
+        /// <summary>
+        /// 940034 - Record of Sale published event options call completed.
+        /// </summary>
+        RecordOfSalePublishedEventOptionsCallCompleted = 940034,
+
+        /// <summary>
+        /// 940035 - Record of Sale published event received by ERP Facade webhook.
+        /// </summary>
+        RecordOfSalePublishedEventReceived = 940035,
+
+        /// <summary>
+        /// 940036 - Storing the received Record of sale published event in azure table.
+        /// </summary>
+        StoreRecordOfSalePublishedEventInAzureTable = 940036,
+
+        /// <summary>
+        /// 940037 - Record of sale published event in added in azure table successfully.
+        /// </summary>
+        AddedRecordOfSalePublishedEventInAzureTable = 940037,
+
+        /// <summary>
+        /// 940038 - Duplicate Record of sale published event received.
+        /// </summary>
+        ReceivedDuplicateRecordOfSalePublishedEvent = 940038,
+
+        /// <summary>
+        /// 940039 - Existing Record of sale published event updated in azure table successfully.
+        /// </summary>
+        UpdatedRecordOfSalePublishedEventInAzureTable = 940039,
+
+        /// <summary>
+        /// 940040 - Uploading the received Record of sale published event in blob storage.
+        /// </summary>
+        UploadRecordOfSalePublishedEventInAzureBlob = 940040,
+
         /// <summary>
-        /// 940033 - EES Is Healthy
+        /// 940041 - Record of sale published event is uploaded in blob storage successfully.
         /// </summary>
-        EESIsHealthy = 940033,
+        UploadedRecordOfSalePublishedEventInAzureBlob = 940041,
 
         /// <summary>
-        /// 940034 - EES Is Unhealty
+        /// 940042 - CorrelationId is missing in Record of sale published event.
         /// </summary>
-        EESIsUnhealthy = 940034,
+        CorrelationIdMissingInRecordOfSaleEvent = 940042,
 
         /// <summary>
-        /// 940035 - Record of Sale published event options call started.
+        /// 940043 - Licence updated published event options call started.
         /// </summary>
-        RecordOfSalePublishedEventOptionsCallStarted = 940035,
+        LicenceUpdatedEventOptionsCallStarted = 940043,
 
         /// <summary>
-        /// 940036 - Record of Sale published event options call completed.
+        /// 940044 - Licence updated published event options call completed.
         /// </summary>
-        RecordOfSalePublishedEventOptionsCallCompleted = 940036,
+        LicenceUpdatedEventOptionsCallCompleted = 940044,
 
         /// <summary>
-        /// 940037 - Record of Sale published event received by ERP Facade webhook.
+        /// 940045 - Licence updated published event received by ERP Facade webhook.
         /// </summary>
-        RecordOfSalePublishedEventReceived = 940037,
+        LicenceUpdatedEventPublishedEventReceived = 940045,
 
         /// <summary>
-        /// 940038 - Storing the received Record of sale published event in azure table.
+        /// 940046 - CorrelationId is missing in Licence updated published event.
         /// </summary>
-        StoreRecordOfSalePublishedEventInAzureTable = 940038,
+        CorrelationIdMissingInLicenceUpdatedEvent = 940046,
 
         /// <summary>
-        /// 940039 - Record of sale published event in added in azure table successfully.
+        /// 940047 - Storing the received Licence updated published event in azure table.
         /// </summary>
-        AddedRecordOfSalePublishedEventInAzureTable = 940039,
+        StoreLicenceUpdatedPublishedEventInAzureTable = 940047,
 
         /// <summary>
-        /// 940040 - Duplicate Record of sale published event received.
+        /// 940048 - Uploading the received Licence updated published event in blob storage.
         /// </summary>
-        ReceivedDuplicateRecordOfSalePublishedEvent = 940040,
+        UploadLicenceUpdatedPublishedEventInAzureBlob = 940048,
 
         /// <summary>
-        /// 940041 - Existing Record of sale published event updated in azure table successfully.
+        /// 940049 - Licence updated published event is uploaded in blob storage successfully.
         /// </summary>
-        UpdatedRecordOfSalePublishedEventInAzureTable = 940041,
+        UploadedLicenceUpdatedPublishedEventInAzureBlob = 940049,
 
         /// <summary>
-        /// 940042 - Uploading the received Record of sale published event in blob storage.
+        /// 940050 - Licence updated published event in added in azure table successfully.
         /// </summary>
-        UploadRecordOfSalePublishedEventInAzureBlob = 940042,
+        AddedLicenceUpdatedPublishedEventInAzureTable = 940050,
 
         /// <summary>
-        /// 940043 - Record of sale published event is uploaded in blob storage successfully.
+        /// 940051 - Duplicate Licence updated published event received.
         /// </summary>
-        UploadedRecordOfSalePublishedEventInAzureBlob = 940043,
+        ReceivedDuplicateLicenceUpdatedPublishedEvent = 940051,
 
         /// <summary>
-        /// 940044 - CorrelationId is missing in Record of sale published event.
+        /// 940052 - Existing Licence updated published event updated in azure table successfully.
         /// </summary>
-        CorrelationIdMissingInRecordOfSaleEvent = 940044,
+        UpdatedLicenceUpdatedPublishedEventInAzureTable = 940052,
 
         /// <summary>
-        /// 940045 - Licence updated published event options call started.
+        /// 940053 - Status of existing record of sale published event updated in azure table successfully.
         /// </summary>
-        LicenceUpdatedEventOptionsCallStarted = 940045,
+        UpdatedStatusOfRecordOfSalePublishedEventInAzureTable = 940053,
 
         /// <summary>
-        /// 940046 - Licence updated published event options call completed.
+        /// 940054 - Status of existing licence updated published event updated in azure table successfully.
         /// </summary>
-        LicenceUpdatedEventOptionsCallCompleted = 940046,
+        UpdatedStatusOfLicenceUpdatedPublishedEventInAzureTable = 940054,
 
         /// <summary>
-        /// 940047 - Licence updated published event received by ERP Facade webhook.
+        /// 940055 - The record of sale event data has been sent to SAP successfully.
         /// </summary>
-        LicenceUpdatedEventPublishedEventReceived = 940047,
+        RecordOfSalePublishedEventDataPushedToSap = 940055,
 
         /// <summary>
-        /// 940048 - CorrelationId is missing in Licence updated published event.
+        /// 940056 - The licence updated event data has been sent to SAP successfully.
         /// </summary>
-        CorrelationIdMissingInLicenceUpdatedEvent = 940048,
+        LicenceUpdatedPublishedEventUpdatePushedToSap = 940056,
 
         /// <summary>
-        /// 940049 - Storing the received Licence updated published event in azure table.
+        /// 940057 - An error occurred while sending record of sale published event data to SAP.
         /// </summary>
-        StoreLicenceUpdatedPublishedEventInAzureTable = 940049,
+        RecordOfSaleRequestToSapFailedException = 940057,
 
         /// <summary>
-        /// 940050 - Uploading the received Licence updated published event in blob storage.
+        /// 940058 - An error occurred while sending licence updated event data to SAP.
         /// </summary>
-        UploadLicenceUpdatedPublishedEventInAzureBlob = 940050,
+        LicenceUpdatedRequestToSapFailedException = 940058,
 
         /// <summary>
-        /// 940051 - Licence updated published event is uploaded in blob storage successfully.
+        /// 940059 - Uploading Sap Xml payload for licence updated event in Azure blob.
         /// </summary>
-        UploadedLicenceUpdatedPublishedEventInAzureBlob = 940051,
+        UploadLicenceUpdatedSapXmlPayloadInAzureBlob = 940059,
 
         /// <summary>
-        /// 940052 - Licence updated published event in added in azure table successfully.
+        /// 940060 - SAP xml payload for licence updated event is uploaded in blob storage successfully.
         /// </summary>
-        AddedLicenceUpdatedPublishedEventInAzureTable = 940052,
+        UploadedLicenceUpdatedSapXmlPayloadInAzureBlob = 940060,
 
         /// <summary>
-        /// 940053 - Duplicate Licence updated published event received.
+        /// 940061 - Creating licence updated Sap Xml payload.
         /// </summary>
-        ReceivedDuplicateLicenceUpdatedPublishedEvent = 940053,
+        CreatingLicenceUpdatedSapPayload = 940061,
 
         /// <summary>
-        /// 940054 - Existing Licence updated published event updated in azure table successfully.
+        /// 940062 - Licence updated SAP xml payload created.
         /// </summary>
-        UpdatedLicenceUpdatedPublishedEventInAzureTable = 940054,
+        CreatedLicenceUpdatedSapPayload = 940062,
 
         /// <summary>
-        /// 940055 - Status of existing record of sale published event updated in azure table successfully.
+        /// 940063 - Licence updated SAP message xml template does not exist.
         /// </summary>
-        UpdatedStatusOfRecordOfSalePublishedEventInAzureTable = 940055,
+        LicenceUpdatedSapXmlTemplateNotFound = 940063,
 
         /// <summary>
-        /// 940056 - Status of existing licence updated published event updated in azure table successfully.
+        /// 940064 - The record of sale SAP message xml template does not exist.
         /// </summary>
-        UpdatedStatusOfLicenceUpdatedPublishedEventInAzureTable = 940056,
+        RecordOfSaleSapXmlTemplateNotFound = 940064,
 
         /// <summary>
-        /// 940057 - The record of sale event data has been sent to SAP successfully.
+        /// 940065 - Creating the record of sale SAP Payload.
         /// </summary>
-        RecordOfSalePublishedEventDataPushedToSap = 940057,
+        CreatingRecordOfSaleSapPayload = 940065,
 
         /// <summary>
-        /// 940058 - The licence updated event data has been sent to SAP successfully.
+        /// 940066 - The record of sale SAP payload created.
         /// </summary>
-        LicenceUpdatedPublishedEventUpdatePushedToSap = 940058,
+        CreatedRecordOfSaleSapPayload = 940066,
 
         /// <summary>
-        /// 940059 - An error occurred while sending record of sale published event data to SAP.
+        /// 940067 - Uploading Sap Xml payload for record of sale event in Azure blob.
         /// </summary>
-        ErrorOccurredInSapForRecordOfSalePublishedEvent = 940059,
+        UploadRecordOfSaleSapXmlPayloadInAzureBlob = 940067,
 
         /// <summary>
-        /// 940060 - An error occurred while sending licence updated event data to SAP.
+        /// 940068 - SAP xml payload for record of sale event is uploaded in blob storage successfully.
         /// </summary>
-        ErrorOccurredInSapForLicenceUpdatedPublishedEvent = 940060,
+        UploadedRecordOfSaleSapXmlPayloadInAzureBlob = 940068,
+
+        /// <summary>
+        /// 940069 - Adding record of sale event payload in Azure Queue storage.
+        /// </summary>
+        AddMessageToAzureQueue = 940069,
+
+        /// <summary>
+        /// 940070 - Record of sale event payload is added in queue storage successfully.
+        /// </summary>
+        AddedMessageToAzureQueue = 940070,
+
+        /// <summary>
+        /// 940071 - Webjob started for merging record of sale events.
+        /// </summary>
+        WebjobForEventAggregationStarted = 940071,
+
+        /// <summary>
+        /// 940072 - Webjob completed for merging record of sale events.
+        /// </summary>
+        WebjobForEventAggregationCompleted = 940072,
+
+        /// <summary>
+        /// 940073 - Webjob started downloading record of sale events from blob.
+        /// </summary>
+        DownloadRecordOfSaleEventFromAzureBlob = 940073,
+
+        /// <summary>
+        /// 940074 - All related events are not present in Azure blob.
+        /// </summary>
+        AllRelatedEventsAreNotPresentInBlob = 940074,
+
+        /// <summary>
+        /// 940075 - The record has been completed already.
+        /// </summary>
+        RequestAlreadyCompleted = 940075,
+
+        /// <summary>
+        /// 940076 - Exception occurred while processing Event aggregation WebJob.
+        /// </summary>
+        UnhandledWebJobException = 940076,
+
+        /// <summary>
+        /// 940077 - Dequeue count of message.
+        /// </summary>
+        MessageDequeueCount = 940077,
+
+        //Below event ids for - S-100
 
         /// <summary>
-        /// 940061 - Uploading Sap Xml payload for licence updated event in Azure blob.
+        /// 940078 - S-100 event processing started.
         /// </summary>
-        UploadLicenceUpdatedSapXmlPayloadInAzureBlob = 940061,
+        S100EventProcessingStarted = 940078,
 
         /// <summary>
-        /// 940062 - SAP xml payload for licence updated event is uploaded in blob storage successfully.
+        /// 940079 - S-100 event entry is added in azure table successfully.
         /// </summary>
-        UploadedLicenceUpdatedSapXmlPayloadInAzureBlob = 940062,
+        S100EventEntryAddedInAzureTable = 940079,
 
         /// <summary>
-        /// 940063 - Creating licence updated Sap Xml payload.
+        /// 940080 - S-100 event json payload is stored in azure blob container.
         /// </summary>
-        CreatingLicenceUpdatedSapPayload = 940063,
+        S100EventJsonStoredInAzureBlobContainer = 940080,
 
         /// <summary>
-        /// 940064 - Licence updated SAP xml payload created.
+        /// 940081 - Generation of SAP xml payload for S-100 data content published event started.
         /// </summary>
-        CreatedLicenceUpdatedSapPayload = 940064,
+        S100EventSapXmlPayloadGenerationStarted = 940081,
 
         /// <summary>
-        /// 940065 - Licence updated SAP message xml template does not exist.
+        /// 940082 - Generation of SAP xml payload for S-100 data content published event completed.
         /// </summary>
-        LicenceUpdatedSapXmlTemplateNotFound = 940065,
+        S100EventSapXmlPayloadGenerationCompleted = 940082,
 
         /// <summary>
-        /// 940066 - The record of sale SAP message xml template does not exist.
+        /// 940083 - Generation of SAP action for S-100 data content published event started.
         /// </summary>
-        RecordOfSaleSapXmlTemplateNotFound = 940066,
+        S100SapActionGenerationStarted = 940083,
 
         /// <summary>
-        /// 940067 - Creating the record of sale SAP Payload.
+        /// 940084 - Generation of SAP action for S-100 data content published event completed.
         /// </summary>
-        CreatingRecordOfSaleSapPayload = 940067,
+        S100SapActionGenerationCompleted = 940084,
 
         /// <summary>
-        /// 940068 - The record of sale SAP payload created.
+        /// 940085 - S-100 SAP action information generation failed.
         /// </summary>
-        CreatedRecordOfSaleSapPayload = 940068,
+        S100SapActionInformationGenerationFailedException = 940085,
 
         /// <summary>
-        /// 940069 - Uploading Sap Xml payload for record of sale event in Azure blob.
+        /// 940086 - S-100 event XML payload is stored in azure blob container.
         /// </summary>
-        UploadRecordOfSaleSapXmlPayloadInAzureBlob = 940069,
+        S100EventXMLStoredInAzureBlobContainer = 940086,
 
         /// <summary>
-        /// 940070 - SAP xml payload for record of sale event is uploaded in blob storage successfully.
+        /// 940087 - Shared key is missing in request.
         /// </summary>
-        UploadedRecordOfSaleSapXmlPayloadInAzureBlob = 940070,
+        SharedApiKeyMissingInRequest = 940087,
 
         /// <summary>
-        /// 940071 - Adding record of sale event payload in Azure Queue storage.
+        /// 940088 - Invalid shared key.
         /// </summary>
-        AddMessageToAzureQueue = 940071,
+        InvalidSharedApiKey = 940088,
 
         /// <summary>
-        /// 940072 - Record of sale event payload is added in queue storage successfully.
+        /// 940089 - Shared API Key Configuration is missing.
         /// </summary>
-        AddedMessageToAzureQueue = 940072,
+        SharedApiKeyConfigurationMissingException = 940089,
 
         /// <summary>
-        /// 940073 - Webjob started for merging record of sale events.
+        /// 940090 - S-100 Request to SAP failed.
         /// </summary>
-        WebjobForEventAggregationStarted = 940073,
+        S100RequestToSapFailedException = 940090,
 
         /// <summary>
-        /// 940074 - Webjob completed for merging record of sale events.
+        /// 940091 - S-100 data content sent to SAP.
         /// </summary>
-        WebjobForEventAggregationCompleted = 940074,
+        S100EventUpdateSentToSap = 940091,
 
         /// <summary>
-        /// 940075 - Webjob started downloading record of sale events from blob.
+        /// 940092 - Event data cleaned up for CorrelationId successfully.
         /// </summary>
-        DownloadRecordOfSaleEventFromAzureBlob = 940075,
+        EventCleanupSuccessful = 940092,
 
         /// <summary>
-        /// 940076 - All related events are not present in Azure blob.
+        /// 940093 - ErrorOccurred In CleanupWebJob.
         /// </summary>
-        AllRelatedEventsAreNotPresentInBlob = 940076,
+        ErrorOccurredInCleanupWebJob = 940093,
 
         /// <summary>
-        /// 940077 - The record has been completed already.
+        /// 940094 - Attempting to publish event to ESS.
         /// </summary>
-        RequestAlreadyCompleted = 940077,
+        StartingEnterpriseEventServiceEventPublisher = 940094,
 
         /// <summary>
-        /// 940078 - Exception occurred while processing Event aggregation WebJob.
+        /// 940095 - Retry attempt to publish EES event.
         /// </summary>
-        UnhandledWebJobException = 940078,
+        RetryAttemptForEnterpriseEventServiceEvent = 940095,
 
         /// <summary>
-        /// 940079 - Dequeue count of message.
+        /// 940096 - Exception occurred while publishing event to EES.
         /// </summary>
-        MessageDequeueCount = 940079,
+        EnterpriseEventServiceEventPublishException = 940096,
 
         /// <summary>
-        /// 940080 - Exception occurred while decrypting the permit string.
+        /// 940097 - S-100 sap callBack payload received from SAP.
         /// </summary>
-        PermitDecryptionException = 940080,
+        S100SapCallbackPayloadReceived = 940097,
 
         /// <summary>
-        /// 940081 - Unit of Sale not found.
+        /// 940098 - CorrelationId is missing in S-100 sap call back.
         /// </summary>
-        UnitOfSaleNotFoundException = 940081,
+        CorrelationIdMissingInS100SapCallBack = 940098,
 
         /// <summary>
-        /// 940082 - ENC cell SAP action generation started.
+        /// 940099 - Invalid S-100 SAP callback. Request from ERP Facade to SAP not found.
         /// </summary>
-        EncCellSapActionGenerationStarted = 940082,
+        InvalidS100SapCallback = 940099,
 
         /// <summary>
-        /// 940083 - SAP action generation started.
+        /// 940100 - Valid S-100 SAP callback.
         /// </summary>
-        BuildingSapActionStarted = 940083,
+        ValidS100SapCallback = 940100,
 
         /// <summary>
-        /// 940084 - Required SAP property value is found empty enccontentpublished event.
+        /// 940101 - Download S100 Unit Of Sale Updated Event is started.
         /// </summary>
-        EmptyEventJsonPropertyException = 940084,
+        DownloadS100UnitOfSaleUpdatedEventIsStarted = 940101,
 
         /// <summary>
-        /// 940085 - Error while generating SAP action information.
+        /// 940102 - Download S100 Unit Of Sale Updated Event is completed.
         /// </summary>
-        BuildingSapActionInformationException = 940085,
+        DownloadS100UnitOfSaleUpdatedEventIsCompleted = 940102,
 
         /// <summary>
-        /// 940086 - Required section not found in JSON payload.
+        /// 940103 - Publishing Unit Of Sale Updated Event To Ees Started.
         /// </summary>
-        RequiredSectionNotFoundException = 940086,
+        PublishingUnitOfSaleUpdatedEventToEesStarted = 940103,
 
         /// <summary>
-        /// 940087 - Hardware Id not found in configuration.
+        /// 940104 - Error occurred while publishing the publishing unit of sale updated event to EES.
         /// </summary>
-        HardwareIdNotFoundException = 940087,
+        PublishingUnitOfSaleUpdatedEventToEesFailedException = 940104,
 
         /// <summary>
-        /// 940088 - Permit string provided empty in json payload.
+        /// 940105 - The publishing unit of sale updated event successfully to EES.
         /// </summary>
-        EmptyPermitStringException = 940088,
+        UnitOfSaleUpdatedEventPublished = 940105,
 
         /// <summary>
-        /// 940087 - Aio configuration is not found.
+        /// 940106 - Updated The Enc Event StatusAnd Publish Date Time Entity in enc event table.
         /// </summary>
-        AioConfigurationNotFoundException = 940089,
+        S100DataContentPublishedEventTableEntryUpdated = 940106,
 
         /// <summary>
-        /// 940088 - The enccontentpublished event will not be processed for Aio cells.
+        /// 940107 - S-100 Unit Of Sale Updated Event Json Stored In Azure Blob Container
         /// </summary>
-        NoProcessingOfNewEncContentPublishedEventForAioCells = 940090
+        S100UnitOfSaleUpdatedEventJsonStoredInAzureBlobContainer = 940107
     }
 
     /// <summary>
