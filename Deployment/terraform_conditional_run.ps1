@@ -14,14 +14,8 @@ Write-output "Executing terraform scripts for deployment in $workSpace enviromen
 terraform init -backend-config="resource_group_name=$deploymentResourceGroupName" -backend-config="storage_account_name=$deploymentStorageAccountName" -backend-config="key=terraform.deployment.tfplan"
 if ( !$? ) { echo "Something went wrong during terraform initialization"; throw "Error" }
 
-Write-output "Selecting workspace"
+Write-output "Selecting workspace: $workSpace"
 
-# Import resource group if not already present in state
-$importCheck = terraform state list | Select-String -Pattern "azurerm_resource_group.rg"
-if (-not $importCheck) {
-    terraform import azurerm_resource_group.rg /subscriptions/01d91561-74ff-4492-b37c-1806a21423c6/resourceGroups/erpfacade-vni-rg
-    if ( !$? ) { echo "Something went wrong during terraform import"; throw "Error" }
-}
 
 $ErrorActionPreference = 'SilentlyContinue'
 terraform workspace new $WorkSpace 2>&1 > $null
