@@ -16,6 +16,15 @@ if ( !$? ) { echo "Something went wrong during terraform initialization"; throw 
 
 Write-output "Selecting workspace: $workSpace"
 
+
+
+$ErrorActionPreference = 'SilentlyContinue'
+terraform workspace new $WorkSpace 2>&1 > $null
+$ErrorActionPreference = 'Continue'
+
+terraform workspace select $workSpace
+if ( !$? ) { echo "Error while selecting workspace"; throw "Error" }
+
 # Import resource group if not already present in state
 $importCheck = terraform state list | Select-String -Pattern "azurerm_resource_group.rg"
 if (-not $importCheck) {
@@ -29,13 +38,6 @@ if (-not $dnsImportCheck) {
     terraform import module.private_endpoint_link.azurerm_private_dns_zone_virtual_network_link.main /subscriptions/282900b8-5415-4137-afcc-fd13fe9a64a7/resourceGroups/engineering-rg/providers/Microsoft.Network/privateDnsZones/privatelink.azurewebsites.net/virtualNetworkLinks/erpvni2sap
     if ( !$? ) { echo "Something went wrong during DNS zone VNet link import"; throw "Error" }
 }
-
-$ErrorActionPreference = 'SilentlyContinue'
-terraform workspace new $WorkSpace 2>&1 > $null
-$ErrorActionPreference = 'Continue'
-
-terraform workspace select $workSpace
-if ( !$? ) { echo "Error while selecting workspace"; throw "Error" }
 
 Write-output "Validating terraform"
 terraform validate
