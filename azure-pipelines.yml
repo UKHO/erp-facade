@@ -147,19 +147,6 @@ stages:
     displayName: "vNextIAT deploy"
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/develop'), startsWith(variables['Build.SourceBranch'], 'refs/heads/dev/')))     
     jobs:
-    - job: TerraformImportResourceGroup
-      displayName: 'Terraform Import Resource Group'
-      steps:
-        - checkout: self
-        - task: TerraformInstaller@1
-          displayName: 'Install Terraform'
-          inputs:
-            terraformVersion: 'latest'
-        - script: |
-            terraform state list | findstr azurerm_resource_group.rg || terraform import azurerm_resource_group.rg /subscriptions/01d91561-74ff-4492-b37c-1806a21423c6/resourceGroups/erpfacade-vni-rg
-          displayName: 'Import Resource Group if not managed'
-    # Your existing deployment job(s) go here
-
     - template: Deployment/templates/continuous-deployment.yml
       parameters:
         AzureDevOpsEnvironment: "ERP-vNextIAT"

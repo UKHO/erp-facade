@@ -16,6 +16,13 @@ if ( !$? ) { echo "Something went wrong during terraform initialization"; throw 
 
 Write-output "Selecting workspace"
 
+# Import resource group if not already present in state
+$importCheck = terraform state list | Select-String -Pattern "azurerm_resource_group.rg"
+if (-not $importCheck) {
+    terraform import azurerm_resource_group.rg /subscriptions/01d91561-74ff-4492-b37c-1806a21423c6/resourceGroups/erpfacade-vni-rg
+    if ( !$? ) { echo "Something went wrong during terraform import"; throw "Error" }
+}
+
 $ErrorActionPreference = 'SilentlyContinue'
 terraform workspace new $WorkSpace 2>&1 > $null
 $ErrorActionPreference = 'Continue'
