@@ -27,86 +27,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UKHO.ERPFacade.EventAggrega
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UKHO.ERPFacade.EventAggregation.WebJob.UnitTests", "tests\UKHO.ERPFacade.EventAggregation.WebJob.UnitTests\UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.csproj", "{860140C0-E6FA-41E6-86D3-BB49D5D25EDA}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pipeline", "Pipeline", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
-	ProjectSection(SolutionItems) = preProject
-		azure-pipelines.yml = azure-pipelines.yml
-		BuildNuget.config = BuildNuget.config
-		CodeCoverageReport.ps1 = CodeCoverageReport.ps1
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "mock", "mock", "{4F617D82-D41E-4518-9D44-20FD98EA6734}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", "{FEEF7133-18C2-46EC-B670-1E3A46D007A3}"
-	ProjectSection(SolutionItems) = preProject
-		Deployment\add-lease.ps1 = Deployment\add-lease.ps1
-		Deployment\azure.tf = Deployment\azure.tf
-		Deployment\check_service_status.ps1 = Deployment\check_service_status.ps1
-		Deployment\locals.tf = Deployment\locals.tf
-		Deployment\main.tf = Deployment\main.tf
-		Deployment\outputs.tf = Deployment\outputs.tf
-		Deployment\privateEndpoint.tf = Deployment\privateEndpoint.tf
-		Deployment\resource-group.tf = Deployment\resource-group.tf
-		Deployment\terraform_conditional_run.ps1 = Deployment\terraform_conditional_run.ps1
-		Deployment\variables.tf = Deployment\variables.tf
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{202684F3-8F86-4D74-BE7D-3DCD6D2FBE1C}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AppInsights", "AppInsights", "{28A34691-8712-4191-844F-6CC0E80F7D0B}"
-	ProjectSection(SolutionItems) = preProject
-		Deployment\Modules\AppInsights\main.tf = Deployment\Modules\AppInsights\main.tf
-		Deployment\Modules\AppInsights\outputs.tf = Deployment\Modules\AppInsights\outputs.tf
-		Deployment\Modules\AppInsights\variables.tf = Deployment\Modules\AppInsights\variables.tf
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EventHub", "EventHub", "{F32C1366-089B-470C-87DB-4A01EF2FF416}"
-	ProjectSection(SolutionItems) = preProject
-		Deployment\Modules\EventHub\main.tf = Deployment\Modules\EventHub\main.tf
-		Deployment\Modules\EventHub\outputs.tf = Deployment\Modules\EventHub\outputs.tf
-		Deployment\Modules\EventHub\variables.tf = Deployment\Modules\EventHub\variables.tf
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "KeyVault", "KeyVault", "{EAF96F0C-EC5F-414B-91A6-EFEEF0E31508}"
-	ProjectSection(SolutionItems) = preProject
-		Deployment\Modules\KeyVault\main.tf = Deployment\Modules\KeyVault\main.tf
-		Deployment\Modules\KeyVault\outputs.tf = Deployment\Modules\KeyVault\outputs.tf
-		Deployment\Modules\KeyVault\variables.tf = Deployment\Modules\KeyVault\variables.tf
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Storage", "Storage", "{05F3334C-7862-467D-8E59-7833CFEB0111}"
-	ProjectSection(SolutionItems) = preProject
-		Deployment\Modules\Storage\main.tf = Deployment\Modules\Storage\main.tf
-		Deployment\Modules\Storage\outputs.tf = Deployment\Modules\Storage\outputs.tf
-		Deployment\Modules\Storage\variables.tf = Deployment\Modules\Storage\variables.tf
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Webapp", "Webapp", "{73319756-F501-4AEA-9F37-5BCCF541A851}"
-	ProjectSection(SolutionItems) = preProject
-		Deployment\Modules\Webapp\main.tf = Deployment\Modules\Webapp\main.tf
-		Deployment\Modules\Webapp\outputs.tf = Deployment\Modules\Webapp\outputs.tf
-		Deployment\Modules\Webapp\variables.tf = Deployment\Modules\Webapp\variables.tf
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{5860EF6E-A66E-4E0F-AD45-C29F5B2C1947}"
-	ProjectSection(SolutionItems) = preProject
-		Deployment\templates\build-test-publish.yml = Deployment\templates\build-test-publish.yml
-		Deployment\templates\continuous-deployment.yml = Deployment\templates\continuous-deployment.yml
-		Deployment\templates\continuous-testing.yml = Deployment\templates\continuous-testing.yml
-		Deployment\templates\retain-pipeline.yml = Deployment\templates\retain-pipeline.yml
-		Deployment\templates\vulnerability-checks.yml = Deployment\templates\vulnerability-checks.yml
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "var", "var", "{ED2F8931-BEB4-48AA-B4E2-FE104F207E19}"
-	ProjectSection(SolutionItems) = preProject
-		Deployment\templates\var\dev-deploy.yml = Deployment\templates\var\dev-deploy.yml
-		Deployment\templates\var\iat-deploy.yml = Deployment\templates\var\iat-deploy.yml
-		Deployment\templates\var\live-deploy.yml = Deployment\templates\var\live-deploy.yml
-		Deployment\templates\var\prp-deploy.yml = Deployment\templates\var\prp-deploy.yml
-		Deployment\templates\var\qa-deploy.yml = Deployment\templates\var\qa-deploy.yml
-		Deployment\templates\var\variables.yml = Deployment\templates\var\variables.yml
-		Deployment\templates\var\vnexte2e-deploy.yml = Deployment\templates\var\vnexte2e-deploy.yml
-		Deployment\templates\var\vnextiat-deploy.yml = Deployment\templates\var\vnextiat-deploy.yml
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UKHO.ADDS.Mocks", "mock\repo\src\UKHO.ADDS.Mocks\UKHO.ADDS.Mocks.csproj", "{DF5956B7-722C-1C71-D4DA-BF57766A0220}"
 EndProject
@@ -181,15 +102,6 @@ Global
 		{E0EE87DB-1582-4DBD-8387-FAF180CBB845} = {50E64422-A1CF-4B77-9652-B141C13C6086}
 		{F82F8E74-51BA-41A9-95C1-48AE58938959} = {E2E557E3-1BF9-47BD-9B86-949B7F1CE3FA}
 		{860140C0-E6FA-41E6-86D3-BB49D5D25EDA} = {50E64422-A1CF-4B77-9652-B141C13C6086}
-		{FEEF7133-18C2-46EC-B670-1E3A46D007A3} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
-		{202684F3-8F86-4D74-BE7D-3DCD6D2FBE1C} = {FEEF7133-18C2-46EC-B670-1E3A46D007A3}
-		{28A34691-8712-4191-844F-6CC0E80F7D0B} = {202684F3-8F86-4D74-BE7D-3DCD6D2FBE1C}
-		{F32C1366-089B-470C-87DB-4A01EF2FF416} = {202684F3-8F86-4D74-BE7D-3DCD6D2FBE1C}
-		{EAF96F0C-EC5F-414B-91A6-EFEEF0E31508} = {202684F3-8F86-4D74-BE7D-3DCD6D2FBE1C}
-		{05F3334C-7862-467D-8E59-7833CFEB0111} = {202684F3-8F86-4D74-BE7D-3DCD6D2FBE1C}
-		{73319756-F501-4AEA-9F37-5BCCF541A851} = {202684F3-8F86-4D74-BE7D-3DCD6D2FBE1C}
-		{5860EF6E-A66E-4E0F-AD45-C29F5B2C1947} = {FEEF7133-18C2-46EC-B670-1E3A46D007A3}
-		{ED2F8931-BEB4-48AA-B4E2-FE104F207E19} = {5860EF6E-A66E-4E0F-AD45-C29F5B2C1947}
 		{DF5956B7-722C-1C71-D4DA-BF57766A0220} = {4F617D82-D41E-4518-9D44-20FD98EA6734}
 		{BFC9A671-3EC8-1355-FAB6-9A68915DD249} = {4F617D82-D41E-4518-9D44-20FD98EA6734}
 	EndGlobalSection

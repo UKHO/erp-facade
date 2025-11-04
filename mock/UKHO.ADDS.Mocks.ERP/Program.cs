@@ -1,4 +1,5 @@
 using UKHO.ADDS.Mocks.Configuration;
+using UKHO.ADDS.Mocks.Domain.Configuration;
 using UKHO.ADDS.Mocks.States;
 
 namespace UKHO.ADDS.Mocks.ERP
@@ -7,8 +8,8 @@ namespace UKHO.ADDS.Mocks.ERP
     {
         public static async Task Main(string[] args)
         {
-            MockServices.AddServices();
-            ServiceRegistry.AddDefinitionState("sample", new StateDefinition("get-jpeg", "Gets a JPEG file"));
+            MockServices.AddServices();            
+            ServiceRegistry.AddDefinition(new ServiceDefinition("sap", "SAP Service", []));
 
             await MockServer.RunAsync(args);
         }
