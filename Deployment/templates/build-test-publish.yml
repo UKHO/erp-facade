@@ -241,9 +241,7 @@ jobs:
     displayName: "Dotnet Build publish ADDS Mock Service"        
     steps:
     - checkout: self
-      submodules: true
-
-    - script: git submodule update --init --force --remote
+      submodules: true 
 
     - task: UseDotNet@2
       displayName: Use .NET SDK $(DotNetSdkVersionAddsMock)
