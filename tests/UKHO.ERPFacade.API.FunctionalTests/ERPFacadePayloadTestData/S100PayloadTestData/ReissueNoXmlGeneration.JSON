@@ -10,18 +10,18 @@
         "correlationId": "abc345-1a6-52adv11",
         "products": [
             {
-                "productIdentifier": "s101",
+                "productIdentifier": "s104",
                 "productName": "104CA123456UNIA",
                 "editionNumber": 7,
                 "updateNumber": 0,
                 "mayAffectHoldings": false,
-                "providerCode": 1,
+                "providerCode": "1",
                 "providerName": "ICE",
                 "producingAgency": "AU",
                 "size": "medium",
                 "status": {
                     "statusName": "Reissue",
-                    "statusDate": "2024-07-16T19:20:30",
+                    "statusDate": "2024-07-16T19:20:30.45+01:00",
                     "isNewCell": false
                 },
                 "replaces": [],
@@ -32,7 +32,7 @@
                     "eastLimit": 8,
                     "westLimit": 7.75
                 },
-                "filesize": 3456,
+                "fileSize": 3456,
                 "inUnitsOfSale": [ "104CA123456UNIA" ],
                 "producerUnitName": "101GB00123456UNIA"
             }

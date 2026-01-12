@@ -10,12 +10,12 @@
         "correlationId": "ft-e33-b3-43-a0a-0cc407",
         "products": [
             {
-                "productIdentifier": "S-101",
+                "productIdentifier": "s101",
                 "productName": "104CA123456UNIA",
                 "editionNumber": 1,
                 "updateNumber": 1,
                 "mayAffectHoldings": false,
-                "providerCode": 1,
+                "providerCode": "1",
                 "providerName": "ICE",
                 "producingAgency": "AU",
                 "size": "medium",
@@ -32,7 +32,7 @@
                     "eastLimit": 8,
                     "westLimit": 7.75
                 },
-                "filesize": 3456,
+                "fileSize": 3456,
                 "inUnitsOfSale": [ "104CA123456UNIA" ],
                 "producerUnitName": "101GB00123456UNIA"
             }
