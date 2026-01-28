@@ -28,7 +28,7 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Operations
         public List<string> GetBlobNamesInFolder(string blobContainerName, string corrId)
         {
             BlobContainerClient blobContainerClient = new(_azureStorageConfiguration.ConnectionString, blobContainerName);
-            var blobs = blobContainerClient.GetBlobs(BlobTraits.None, BlobStates.None, corrId);
+            var blobs = blobContainerClient.GetBlobs(BlobTraits.None, BlobStates.None, corrId, default);
             return (from blob in blobs select blob.Name.Split("/") into blobName select blobName[1].Split(".") into fileName select fileName[0]).ToList();
         }
 
