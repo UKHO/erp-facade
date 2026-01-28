@@ -24,7 +24,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.HealthCheck
         private ILogger<EESServiceHealthCheck> _fakeLogger;
         private IEesClient _fakeEesClient;
         private IOptions<EESHealthCheckEnvironmentConfiguration> _fakeEesConfig;
-        private EESServiceHealthCheck _fakeEESServiceHealthCheck;
+        private EESServiceHealthCheck _fakeEesServiceHealthCheck;
 
         private const string EesHealthCheckUrl = "http://fakeeeshealthcheckurl.com/health";
 
@@ -38,7 +38,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.HealthCheck
                 EESHealthCheckUrl = EesHealthCheckUrl
             });
 
-            _fakeEESServiceHealthCheck = new EESServiceHealthCheck(_fakeLogger, _fakeEesClient, _fakeEesConfig);
+            _fakeEesServiceHealthCheck = new EESServiceHealthCheck(_fakeLogger, _fakeEesClient, _fakeEesConfig);
         }
 
         [Test]
@@ -49,7 +49,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.HealthCheck
             A.CallTo(() => _fakeEesClient.GetAsync(EesHealthCheckUrl))
                 .Returns(new HttpResponseMessage { StatusCode = HttpStatusCode.OK, RequestMessage = new HttpRequestMessage { RequestUri = new Uri("http://abc.com") }, Content = new StreamContent(new MemoryStream(Encoding.UTF8.GetBytes("ServiceUnavailable"))) });
 
-            var result = await _fakeEESServiceHealthCheck.CheckHealthAsync(new HealthCheckContext(), fakeCancellationToken);
+            var result = await _fakeEesServiceHealthCheck.CheckHealthAsync(new HealthCheckContext(), fakeCancellationToken);
 
             using (Assert.EnterMultipleScope())
             {
@@ -76,7 +76,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.HealthCheck
             A.CallTo(() => _fakeEesClient.GetAsync(EesHealthCheckUrl))
                 .Returns(new HttpResponseMessage { StatusCode = HttpStatusCode.ServiceUnavailable, RequestMessage = new HttpRequestMessage { RequestUri = new Uri("http://abc.com") }, Content = new StreamContent(new MemoryStream(Encoding.UTF8.GetBytes("ServiceUnavailable"))) });
 
-            var result = await _fakeEESServiceHealthCheck.CheckHealthAsync(new HealthCheckContext(), fakeCancellationToken);
+            var result = await _fakeEesServiceHealthCheck.CheckHealthAsync(new HealthCheckContext(), fakeCancellationToken);
 
             using (Assert.EnterMultipleScope())
             {
@@ -102,7 +102,7 @@ namespace UKHO.ERPFacade.Common.UnitTests.HealthCheck
 
             A.CallTo(() => _fakeEesClient.GetAsync(EesHealthCheckUrl)).Throws<Exception>();
 
-            var result = await _fakeEESServiceHealthCheck.CheckHealthAsync(new HealthCheckContext(), fakeCancellationToken);
+            var result = await _fakeEesServiceHealthCheck.CheckHealthAsync(new HealthCheckContext(), fakeCancellationToken);
 
             using (Assert.EnterMultipleScope())
             {
