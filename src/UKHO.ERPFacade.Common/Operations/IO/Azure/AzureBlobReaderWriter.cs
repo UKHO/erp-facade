@@ -48,7 +48,7 @@ namespace UKHO.ERPFacade.Common.Operations.IO.Azure
             List<string> blobList = new List<string>();
             BlobContainerClient blobContainerClient = new BlobContainerClient(_azureStorageConfig.Value.ConnectionString, blobContainerName);
 
-            await foreach (BlobItem blob in blobContainerClient.GetBlobsAsync(prefix: corrId))
+            await foreach (var blob in blobContainerClient.GetBlobsAsync(traits: BlobTraits.None, states: BlobStates.None, prefix: corrId, cancellationToken: default))
             {
                 string fileName = Path.GetFileNameWithoutExtension(blob.Name);
                 blobList.Add(fileName);
