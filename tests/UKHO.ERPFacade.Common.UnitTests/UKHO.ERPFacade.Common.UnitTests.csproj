@@ -12,14 +12,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <NoWarn>8600;8602;8618</NoWarn>
   </PropertyGroup>
-  <ItemGroup>
-    <Compile Remove="HealthCheck\EESServiceHealthCheckTests.cs" />
-    <Compile Remove="HealthCheck\SapServiceHealthCheckTests.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="FakeItEasy" Version="8.3.0" />
-    <PackageReference Include="FluentAssertions" Version="[7.2.0]" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageReference Include="NUnit" Version="4.4.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
@@ -41,10 +36,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\UKHO.ERPFacade.Common\UKHO.ERPFacade.Common.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="HealthCheck\" />
   </ItemGroup>
 
 </Project>
