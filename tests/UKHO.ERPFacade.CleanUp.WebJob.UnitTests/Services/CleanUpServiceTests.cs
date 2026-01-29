@@ -1,6 +1,5 @@
 ﻿using Azure.Data.Tables;
 using FakeItEasy;
-using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NUnit.Framework;
@@ -39,44 +38,40 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
         [Test]
         public void WhenLoggerParameterIsNull_ThenConstructorThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(
-                    () => new CleanUpService(null, _fakeCleanupWebjobConfig, _fakeAzureTableReaderWriter, _fakeAzureBlobReaderWriter))
-                .ParamName
-                .Should().Be("logger");
+            var paramName = Assert.Throws<ArgumentNullException>(() => new CleanUpService(null, _fakeCleanupWebjobConfig, _fakeAzureTableReaderWriter, _fakeAzureBlobReaderWriter)).ParamName;
+
+            Assert.That(paramName, Is.EqualTo("logger"));
         }
 
         [Test]
         public void WhenAzureTableReaderWriterParameterIsNull_ThenConstructorThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(
-             () => new CleanUpService(_fakeLogger, _fakeCleanupWebjobConfig, null, _fakeAzureBlobReaderWriter))
-             .ParamName
-             .Should().Be("azureTableReaderWriter");
+            var paramName = Assert.Throws<ArgumentNullException>(() => new CleanUpService(_fakeLogger, _fakeCleanupWebjobConfig, null, _fakeAzureBlobReaderWriter)).ParamName;
+
+            Assert.That(paramName, Is.EqualTo("azureTableReaderWriter"));
         }
 
         [Test]
         public void WhenCleanupWebjobConfigParameterIsNull_ThenConstructorThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(
-             () => new CleanUpService(_fakeLogger, null, _fakeAzureTableReaderWriter, _fakeAzureBlobReaderWriter))
-             .ParamName
-             .Should().Be("cleanupWebjobConfig");
+            var paramName = Assert.Throws<ArgumentNullException>(() => new CleanUpService(_fakeLogger, null, _fakeAzureTableReaderWriter, _fakeAzureBlobReaderWriter)).ParamName;
+
+            Assert.That(paramName, Is.EqualTo("cleanupWebjobConfig"));
         }
 
         [Test]
         public void WhenAzureBlobReaderWriterParameterIsNull_ThenConstructorThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(
-             () => new CleanUpService(_fakeLogger, _fakeCleanupWebjobConfig, _fakeAzureTableReaderWriter, null))
-             .ParamName
-             .Should().Be("azureBlobReaderWriter");
+            var paramName = Assert.Throws<ArgumentNullException>(() => new CleanUpService(_fakeLogger, _fakeCleanupWebjobConfig, _fakeAzureTableReaderWriter, null)).ParamName;
+
+            Assert.That(paramName, Is.EqualTo("azureBlobReaderWriter"));
         }
 
         [Test]
         public void WhenEventDataIsOlderThanConfiguredDays_ThenWebjobCleanupEventData()
         {
-            List<TableEntity> eventData = new()
-            {
+            List<TableEntity> eventData =
+            [
                new TableEntity()
                {
                     { "CorrelationId", "corrid" },
@@ -87,7 +82,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
                     { "Status", Status.Complete.ToString()}
 
                }
-            };
+            ];
 
             var statusFilter = new Dictionary<string, string> { { AzureStorage.EventStatus, Status.Complete.ToString() } };
 
@@ -107,8 +102,8 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
         [Test]
         public void WhenEventDataIsNotOlderThanConfiguredDays_ThenWebjobDoesNotCleanupEventData()
         {
-            List<TableEntity> eventData = new()
-            {
+            List<TableEntity> eventData =
+            [
                new TableEntity()
                {
                     { "CorrelationId", "corrid" },
@@ -118,7 +113,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
                     { "Timestamp", DateTime.UtcNow.AddDays(-21) },
                     { "Status", Status.Complete.ToString()}
                }
-            };
+            ];
 
             A.CallTo(() => _fakeAzureTableReaderWriter.GetFilteredEntitiesAsync(A<Dictionary<string, string>>.Ignored)).Returns(eventData);
 
@@ -132,8 +127,8 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
         [Test]
         public void WhenEventDataIsExactlyConfiguredDayOlder_ThenWebjobDoesNotCleanupEventData()
         {
-            List<TableEntity> eventData = new()
-            {
+            List<TableEntity> eventData =
+            [
                new TableEntity()
                {
                     { "CorrelationId", "corrid" },
@@ -143,7 +138,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
                     { "Timestamp", DateTime.UtcNow.AddDays(-30) },
                     { "Status", Status.Complete.ToString()}
                }
-            };
+            ];
 
             A.CallTo(() => _fakeAzureTableReaderWriter.GetFilteredEntitiesAsync(A<Dictionary<string, string>>.Ignored)).Returns(eventData);
 
@@ -157,8 +152,8 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
         [Test]
         public void WhenCleanupServiceOccurAnyError_ThenLogtheException()
         {
-            List<TableEntity> eventData = new()
-            {
+            List<TableEntity> eventData =
+            [
                 new TableEntity()
                 {
                     { "CorrelationId", "corrid" },
@@ -168,7 +163,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
                     { "Timestamp", DateTime.UtcNow.AddDays(-31) },
                     { "Status", Status.Complete.ToString()}
                 }
-            };
+            ];
 
             A.CallTo(() => _fakeAzureTableReaderWriter.GetFilteredEntitiesAsync(A<Dictionary<string, string>>.Ignored)).Returns(eventData);
 

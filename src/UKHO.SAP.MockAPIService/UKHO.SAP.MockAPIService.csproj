@@ -18,7 +18,7 @@
     <None Remove="Data\**" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="WireMock.Net" Version="1.15.0" />
+    <PackageReference Include="WireMock.Net" Version="1.25.0" />
   </ItemGroup>
 
   <ItemGroup>
