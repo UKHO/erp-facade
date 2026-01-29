@@ -10,6 +10,13 @@ parameters:
     displayName: "Run Stryker test mutation"
     type: boolean
     default: true
+  - name: StrykerVersion
+    displayName: "Stryker version"
+    type: string
+    values:
+      - 'latest'
+      - '4.8.1'
+    default: 'latest'
   - name: SnykOnlyFailIfFixable
     displayName: "Snyk - fail only if an issue has an available fix"
     type: boolean
@@ -75,8 +82,10 @@ stages:
         SnykOnlyFailIfFixable: ${{ parameters.SnykOnlyFailIfFixable }}
         SnykPassOnIssues: ${{ parameters.SnykPassOnIssues }}
 
-  - stage: RUNSTRKER
-    displayName: "run stryker"
+  - stage: RunStryker
+    displayName: "Run stryker"
+    dependsOn:
+      - VulnerabilityChecks
     jobs:
       - job: Stryker
         condition: eq('${{ parameters.RunStryker }}', true)      
@@ -85,17 +94,23 @@ stages:
         steps:
           - checkout: self
             submodules: true
+
           - task: UseDotNet@2
             displayName: Use .NET SDK $(DotNetSdkVersionAddsMock)
             inputs:
               packageType: sdk
               version: $(DotNetSdkVersionAddsMock)
+
           - task: DotNetCoreCLI@2
             displayName: "Install Stryker"
             inputs:
               command: custom
               custom: tool
-              arguments: install dotnet-stryker --tool-path $(Agent.BuildDirectory)/tools
+              ${{ if eq(parameters.StrykerVersion, 'latest') }}:
+                arguments: install dotnet-stryker --tool-path $(Agent.BuildDirectory)/tools --configfile $(Build.SourcesDirectory)/BuildNuget.config
+              ${{ else }}:
+                arguments: install dotnet-stryker --tool-path $(Agent.BuildDirectory)/tools --configfile $(Build.SourcesDirectory)/BuildNuget.config --version ${{ parameters.StrykerVersion }}
+
           - task: DotNetCoreCLI@2
             displayName: ".Net Core - NuGet restore for non test projects only"
             inputs:
@@ -105,7 +120,8 @@ stages:
               feedsToUse: config
               noCache: true
               nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
-              workingDirectory: '$(Build.SourcesDirectory)'             
+              workingDirectory: '$(Build.SourcesDirectory)'
+              
           - task: Powershell@2
             displayName: "Run Stryker"
             inputs:
@@ -113,10 +129,11 @@ stages:
               targetType: 'inline'
               pwsh: true
               script: $(Agent.BuildDirectory)/tools/dotnet-stryker
+
           - task: PublishMutationReport@0
             displayName: 'Publish Strkyer Mutator Report'
             inputs:
-              reportPattern: '**/mutation-report.html'          
+              reportPattern: '**/mutation-report.html'
   
   - stage: BuildTestPublish
     displayName: "Build (Dotnet Build & Restore , Dotnet Test and Publish Artifact )"
