@@ -28,7 +28,6 @@ variable "sku_name" {
             "iat"     =  "P1v3"
             "prp"     =  "P1v3"     
             "vne"     =  "P1v3"
-            "qa"      =  "P1v3"
             live      =  "P1v3"
             }
 }
