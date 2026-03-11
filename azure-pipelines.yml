@@ -222,22 +222,7 @@ stages:
         ShortName: "prp"
         AppPool: $(DeploymentPoolPE)
         Container: ${{variables.Container}}
-  
-  - stage: QADeploy
-    dependsOn:
-    - DevDeploy
-    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
-    displayName: "QA Deploy"  
-    jobs:
-    - template: Deployment/templates/continuous-deployment.yml
-      parameters:
-        AzureDevOpsEnvironment: "ERP-QA"
-        ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
-        AzureSubscription: "ERP-Facade-QA-A.011.05.12"
-        ShortName: "qa"
-        AppPool: $(DeploymentPoolPE)
-        Container: ${{variables.Container}} 
-  
+    
   - stage: LiveDeploy
     dependsOn:
     - PreProdDeploy
