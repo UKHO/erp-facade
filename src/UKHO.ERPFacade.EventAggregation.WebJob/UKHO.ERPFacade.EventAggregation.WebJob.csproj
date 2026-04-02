@@ -30,7 +30,7 @@
     <PackageReference Include="Microsoft.Azure.WebJobs" Version="3.0.44" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Storage" Version="5.3.7" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Host.Storage" Version="5.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.12" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.5" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.12" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.12" />
     <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="8.0.23" />
