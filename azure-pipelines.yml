@@ -28,7 +28,6 @@ parameters:
     
 trigger:
   - main
-  - release/*
 
 pool: $(WindowsPool1) 
 
