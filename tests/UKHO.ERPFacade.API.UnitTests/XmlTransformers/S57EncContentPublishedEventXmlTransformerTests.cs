@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -69,7 +70,7 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
 
             A.CallTo(() => _fakeXmlOperations.CreateXmlDocument(A<string>.Ignored)).Throws(new ERPFacadeException(EventIds.SapXmlTemplateNotFoundException.ToEventId(), "The SAP XML payload template does not exist."));
 
-            Assert.Throws<ERPFacadeException>(() => _fakeS57EncContentPublishedEventXmlTransformer.BuildXmlPayload(eventData!, _sapXmlTemplate))
+            Assert.Throws<ERPFacadeException>((Action)(() => _fakeS57EncContentPublishedEventXmlTransformer.BuildXmlPayload(eventData!, _sapXmlTemplate)))
                 .Message.Should().Be("The SAP XML payload template does not exist.");
         }
 
@@ -259,7 +260,7 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
 
             A.CallTo(() => _fakeXmlOperations.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
 
-            Assert.Throws<ERPFacadeException>(() => _fakeS57EncContentPublishedEventXmlTransformer.BuildXmlPayload(s57EventData, _sapXmlTemplate))
+            Assert.Throws<ERPFacadeException>((Action)(() => _fakeS57EncContentPublishedEventXmlTransformer.BuildXmlPayload(s57EventData, _sapXmlTemplate)))
                 .Message.Should().Be("Error while generating SAP action information. | Action : CREATE ENC CELL | XML Attribute : PROVIDER | ErrorMessage : Object reference not set to an instance of an object.");
         }
 
@@ -279,7 +280,7 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
             A.CallTo(() => _fakePermitDecryption.Decrypt(A<string>.Ignored)).Returns(permitKeys);
             A.CallTo(() => _fakeWeekDetailsProvider.GetDateOfWeek(A<int>.Ignored, A<int>.Ignored, A<bool>.Ignored)).Throws<System.Exception>();
 
-            Assert.Throws<ERPFacadeException>(() => _fakeS57EncContentPublishedEventXmlTransformer.BuildXmlPayload(s57EventData, _sapXmlTemplate))
+            Assert.Throws<ERPFacadeException>((Action)(() => _fakeS57EncContentPublishedEventXmlTransformer.BuildXmlPayload(s57EventData, _sapXmlTemplate)))
                 .Message.Should().Be("Error while generating SAP action information. | Action : CREATE ENC CELL | XML Attribute : VALIDFROM | ErrorMessage : Exception of type 'System.Exception' was thrown.");
         }
 

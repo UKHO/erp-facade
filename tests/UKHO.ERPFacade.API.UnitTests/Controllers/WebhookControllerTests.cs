@@ -135,7 +135,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
         [Test]
         public void WhenParamterIsNull_ThenWebhookThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => new WebhookController(_fakeHttpContextAccessor,
+            Assert.Throws<ArgumentNullException>((Action)(() => new WebhookController(_fakeHttpContextAccessor,
                                                                              _fakeLogger,
                                                                              _fakeEventDispatcher,
                                                                              _fakeAzureTableReaderWriter,
@@ -143,7 +143,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
                                                                              _fakeAzureQueueReaderWriter,
                                                                              _fakeLicenceUpdatedSapMessageBuilder,
                                                                              _fakeSapClient,
-                                                                             null))
+                                                                             null)))
              .ParamName
              .Should().Be("sapConfig");
         }
@@ -371,7 +371,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Controllers
                     StatusCode = HttpStatusCode.Unauthorized
                 });
 
-            Assert.ThrowsAsync<ERPFacadeException>(() => _fakeWebHookController.LicenceUpdatedPublishedEventReceived(fakeLicenceUpdatedEventJson));
+            Assert.ThrowsAsync<ERPFacadeException>((Func<Task>)(async () => await _fakeWebHookController.LicenceUpdatedPublishedEventReceived(fakeLicenceUpdatedEventJson)));
 
             A.CallTo(() => _fakeAzureTableReaderWriter.UpsertEntityAsync(A<ITableEntity>.Ignored)).MustHaveHappened();
             A.CallTo(() => _fakeAzureBlobReaderWriter.UploadEventAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustHaveHappened();

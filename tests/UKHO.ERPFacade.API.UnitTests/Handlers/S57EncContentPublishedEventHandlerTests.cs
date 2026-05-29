@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Xml;
 using Azure.Data.Tables;
 using FakeItEasy;
@@ -63,7 +64,8 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
         {
             var newCellEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\NewCell.JSON");
             var eventData = JsonConvert.DeserializeObject<BaseCloudEvent>(newCellEventPayloadJson);
-            _ = _fakeS57EncContentPublishedEventHandler.ProcessEventAsync(eventData);
+            Assert.That(eventData, Is.Not.Null);
+            _ = _fakeS57EncContentPublishedEventHandler.ProcessEventAsync(eventData!);
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                               && call.GetArgument<LogLevel>(0) == LogLevel.Information
@@ -111,12 +113,13 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
             XmlDocument xmlDocument = new();
             var newCellEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\NewCell.JSON");
             var eventData = JsonConvert.DeserializeObject<BaseCloudEvent>(newCellEventPayloadJson);
+            Assert.That(eventData, Is.Not.Null);
             A.CallTo(() => _fakeXmlTransformer.BuildXmlPayload(A<BaseCloudEvent>.Ignored, XmlTemplateInfo.S57SapXmlTemplatePath)).Returns(xmlDocument);
             A.CallTo(() => _fakeSapClient.SendUpdateAsync(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(new HttpResponseMessage()
             {
                 StatusCode = HttpStatusCode.Unauthorized,
             });
-            Assert.ThrowsAsync<ERPFacadeException>(() => _fakeS57EncContentPublishedEventHandler.ProcessEventAsync(eventData))
+            Assert.ThrowsAsync<ERPFacadeException>((Func<Task>)(async () => await _fakeS57EncContentPublishedEventHandler.ProcessEventAsync(eventData!)))
                 .Message.Should().Be("An error occurred while sending S57 ENC update to SAP. | Unauthorized");
         }
 
@@ -125,8 +128,9 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
         {
             var newCellEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\NewAIOCell.JSON");
             var eventData = JsonConvert.DeserializeObject<BaseCloudEvent>(newCellEventPayloadJson);
+            Assert.That(eventData, Is.Not.Null);
 
-            _ = _fakeS57EncContentPublishedEventHandler.ProcessEventAsync(eventData);
+            _ = _fakeS57EncContentPublishedEventHandler.ProcessEventAsync(eventData!);
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Information
@@ -139,13 +143,13 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
         {
             _fakeAioConfig.Value.AioCells = string.Empty;
 
-            Assert.Throws<ERPFacadeException>(() => new S57EncContentPublishedEventHandler(_fakeXmlTransformer,
+            Assert.Throws<ERPFacadeException>((Action)(() => new S57EncContentPublishedEventHandler(_fakeXmlTransformer,
                     _fakeLogger,
                     _fakeAzureTableReaderWriter,
                     _fakeAzureBlobReaderWriter,
                     _fakeSapClient,
                     _fakeSapConfig,
-                    _fakeAioConfig))
+                    _fakeAioConfig)))
                 .Message.Should().Be("AIO cell configuration missing.");
         }
     }
