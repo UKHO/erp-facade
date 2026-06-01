@@ -137,7 +137,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.SapMessageBuilders
 
             A.CallTo(() => _fakeFileOperations.IsFileExists(A<string>.Ignored)).Returns(false);
 
-            Assert.Throws<ERPFacadeException>(() => _fakeRecordOfSaleSapMessageBuilder.BuildRecordOfSaleSapMessageXml(rosNewLicenceData, correlationId));
+            Assert.Throws<ERPFacadeException>((Action)(() => _fakeRecordOfSaleSapMessageBuilder.BuildRecordOfSaleSapMessageXml(rosNewLicenceData, correlationId)));
         }
 
         [Test]

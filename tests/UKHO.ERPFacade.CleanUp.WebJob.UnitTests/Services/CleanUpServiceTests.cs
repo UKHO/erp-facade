@@ -38,7 +38,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
         [Test]
         public void WhenLoggerParameterIsNull_ThenConstructorThrowsArgumentNullException()
         {
-            var paramName = Assert.Throws<ArgumentNullException>(() => new CleanUpService(null, _fakeCleanupWebjobConfig, _fakeAzureTableReaderWriter, _fakeAzureBlobReaderWriter)).ParamName;
+            var paramName = Assert.Throws<ArgumentNullException>((Action)(() => new CleanUpService(null, _fakeCleanupWebjobConfig, _fakeAzureTableReaderWriter, _fakeAzureBlobReaderWriter))).ParamName;
 
             Assert.That(paramName, Is.EqualTo("logger"));
         }
@@ -46,7 +46,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
         [Test]
         public void WhenAzureTableReaderWriterParameterIsNull_ThenConstructorThrowsArgumentNullException()
         {
-            var paramName = Assert.Throws<ArgumentNullException>(() => new CleanUpService(_fakeLogger, _fakeCleanupWebjobConfig, null, _fakeAzureBlobReaderWriter)).ParamName;
+            var paramName = Assert.Throws<ArgumentNullException>((Action)(() => new CleanUpService(_fakeLogger, _fakeCleanupWebjobConfig, null, _fakeAzureBlobReaderWriter))).ParamName;
 
             Assert.That(paramName, Is.EqualTo("azureTableReaderWriter"));
         }
@@ -54,7 +54,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
         [Test]
         public void WhenCleanupWebjobConfigParameterIsNull_ThenConstructorThrowsArgumentNullException()
         {
-            var paramName = Assert.Throws<ArgumentNullException>(() => new CleanUpService(_fakeLogger, null, _fakeAzureTableReaderWriter, _fakeAzureBlobReaderWriter)).ParamName;
+            var paramName = Assert.Throws<ArgumentNullException>((Action)(() => new CleanUpService(_fakeLogger, null, _fakeAzureTableReaderWriter, _fakeAzureBlobReaderWriter))).ParamName;
 
             Assert.That(paramName, Is.EqualTo("cleanupWebjobConfig"));
         }
@@ -62,7 +62,7 @@ namespace UKHO.ERPFacade.CleanUp.WebJob.UnitTests.Services
         [Test]
         public void WhenAzureBlobReaderWriterParameterIsNull_ThenConstructorThrowsArgumentNullException()
         {
-            var paramName = Assert.Throws<ArgumentNullException>(() => new CleanUpService(_fakeLogger, _fakeCleanupWebjobConfig, _fakeAzureTableReaderWriter, null)).ParamName;
+            var paramName = Assert.Throws<ArgumentNullException>((Action)(() => new CleanUpService(_fakeLogger, _fakeCleanupWebjobConfig, _fakeAzureTableReaderWriter, null))).ParamName;
 
             Assert.That(paramName, Is.EqualTo("azureBlobReaderWriter"));
         }

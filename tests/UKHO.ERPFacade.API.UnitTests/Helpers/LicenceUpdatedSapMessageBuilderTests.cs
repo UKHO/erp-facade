@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -148,7 +149,7 @@ namespace UKHO.ERPFacade.API.UnitTests.SapMessageBuilders
 
             A.CallTo(() => _fakeFileOperations.IsFileExists(A<string>.Ignored)).Returns(false);
 
-            Assert.Throws<FileNotFoundException>(() => _fakeLicenceUpdatedSapMessageBuilder.BuildLicenceUpdatedSapMessageXml(changeLicencePayloadJson!, correlationId));
+            Assert.Throws<FileNotFoundException>((Action)(() => _fakeLicenceUpdatedSapMessageBuilder.BuildLicenceUpdatedSapMessageXml(changeLicencePayloadJson!, correlationId)));
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Error
