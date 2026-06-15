@@ -10,13 +10,6 @@ parameters:
     displayName: "Run Stryker test mutation"
     type: boolean
     default: true
-  - name: StrykerVersion
-    displayName: "Stryker version"
-    type: string
-    values:
-      - 'latest'
-      - '4.8.1'
-    default: 'latest'
   - name: SnykOnlyFailIfFixable
     displayName: "Snyk - fail only if an issue has an available fix"
     type: boolean
@@ -105,10 +98,7 @@ stages:
             inputs:
               command: custom
               custom: tool
-              ${{ if eq(parameters.StrykerVersion, 'latest') }}:
-                arguments: install dotnet-stryker --tool-path $(Agent.BuildDirectory)/tools --configfile $(Build.SourcesDirectory)/BuildNuget.config
-              ${{ else }}:
-                arguments: install dotnet-stryker --tool-path $(Agent.BuildDirectory)/tools --configfile $(Build.SourcesDirectory)/BuildNuget.config --version ${{ parameters.StrykerVersion }}
+              arguments: install dotnet-stryker --tool-path $(Agent.BuildDirectory)/tools --configfile $(Build.SourcesDirectory)/BuildNuget.config
 
           - task: DotNetCoreCLI@2
             displayName: ".Net Core - NuGet restore for non test projects only"
