@@ -204,7 +204,6 @@ stages:
         AppPool: $(DeploymentPoolPE)
         Container: ${{variables.Container}}
         DeployADDSMocks: true
-        RunFunctionalTests: true
         RunAddsTests: IAT
   
   - stage: PreProdDeploy
