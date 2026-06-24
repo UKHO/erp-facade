@@ -27,7 +27,6 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob
     [ExcludeFromCodeCoverage]
     public static class Program
     {
-        private static readonly InMemoryChannel TelemetryChannel = new();
         private static IConfiguration? ConfigurationBuilder;
         private static readonly string WebJobAssemblyVersion = Assembly.GetExecutingAssembly().GetCustomAttributes<AssemblyFileVersionAttribute>().Single().Version;
 
@@ -106,13 +105,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob
              .ConfigureServices((hostContext, services) =>
              {
                  services.AddApplicationInsightsTelemetryWorkerService();
-
-                 services.Configure<TelemetryConfiguration>(
-                     (config) =>
-                     {
-                         config.TelemetryChannel = TelemetryChannel;
-                     }
-                 );
+                 // TelemetryConfiguration customization removed: telemetry channel types are provided by the Application Insights packages
 
                  var buildServiceProvider = services.BuildServiceProvider();
                  services.Configure<AzureStorageConfiguration>(ConfigurationBuilder.GetSection("AzureStorageConfiguration"));
