@@ -23,7 +23,7 @@ namespace UKHO.ERPFacade.Common.HttpClients
             _httpClient.DefaultRequestHeaders.Add("Authorization", credentials);
             _httpClient.DefaultRequestHeaders.Add("Accept", "text/xml");
 
-            return await _httpClient.PostAsync($"{endpoint}?op={sapServiceOperation}", new StringContent(sapMessageXml.InnerXml, Encoding.UTF8, "text/xml"));
+            return await _httpClient.PostAsync($"sap/{endpoint.TrimStart('/')}?op={sapServiceOperation}", new StringContent(sapMessageXml.InnerXml, Encoding.UTF8, "text/xml"));
         }
 
         public Uri? Uri => _httpClient.BaseAddress;
