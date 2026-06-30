@@ -312,5 +312,125 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
 
             result.Should().BeNull();
         }
+
+        [Test]
+        public void WhenTransformationFailsWithNullProductField_ThenLogDetailedErrorInformation()
+        {
+            var newCellEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\NewCellWithoutProviderCodeAttributes.JSON");
+            var baseCloudEvent = JsonConvert.DeserializeObject<BaseCloudEvent>(newCellEventPayloadJson);
+            S57EventData s57EventData = JsonConvert.DeserializeObject<S57EventData>(baseCloudEvent.Data.ToString()!);
+
+            XmlDocument soapXml = new();
+            soapXml.LoadXml(_sapXmlTemplate);
+
+            A.CallTo(() => _fakeXmlOperations.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
+
+            Assert.Throws<ERPFacadeException>((Action)(() => _fakeS57EncContentPublishedEventXmlTransformer.BuildXmlPayload(s57EventData, _sapXmlTemplate)))
+                .Message.Should().Be("Error while generating SAP action information. | Action : CREATE ENC CELL | XML Attribute : PROVIDER | ErrorMessage : Object reference not set to an instance of an object.");
+
+            // Verify detailed error logging was called
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+                                                && call.GetArgument<LogLevel>(0) == LogLevel.Error
+                                                && call.GetArgument<EventId>(1) == EventIds.S57XmlTransformationDetailedFailure.ToEventId()
+                                                && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString()!.StartsWith("S57 XML transformation failed.")).MustHaveHappenedOnceExactly();
+        }
+
+        [Test]
+        public void WhenTransformationFailsForUnitOfSale_ThenLogContainsUnitDetails()
+        {
+            // Arrange
+            XmlDocument soapXml = new();
+            soapXml.LoadXml(_sapXmlTemplate);
+
+            var attribute = new Attributes
+            {
+                IsRequired = true,
+                Section = ConfigFileFields.UnitOfSaleSection,
+                JsonPropertyName = "NonExistentProperty",
+                XmlNodeName = "PROVIDER",
+                SortingOrder = 1
+            };
+
+            var unit = new S57UnitOfSale
+            {
+                UnitName = "UNIT1",
+                CompositionChanges = new S57CompositionChanges
+                {
+                    AddProducts = new List<string> { "ADD1" },
+                    RemoveProducts = new List<string> { "REM1" }
+                }
+            };
+
+            var actionAttributes = new List<(int, XmlElement)>();
+
+            // Act
+            MethodInfo processAttributes = typeof(S57EncContentPublishedEventXmlTransformer).GetMethod("ProcessAttributes", BindingFlags.NonPublic | BindingFlags.Instance)!;
+
+            Assert.That((Func<object?>)(() => processAttributes.Invoke(_fakeS57EncContentPublishedEventXmlTransformer, new object[] { "ACTION", new List<Attributes> { attribute }, soapXml, unit, actionAttributes, null, null, null })), Throws.TypeOf<TargetInvocationException>().With.InnerException.TypeOf<ERPFacadeException>());
+
+            // Assert - verify detailed error log contains all expected properties
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+                && call.GetArgument<LogLevel>(0) == LogLevel.Error
+                && call.GetArgument<EventId>(1) == EventIds.S57XmlTransformationDetailedFailure.ToEventId()
+                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["Action"] ?? string.Empty).ToString() == "ACTION")
+                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["XmlAttribute"] ?? string.Empty).ToString() == "PROVIDER")
+                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["SourceIsNull"] ?? string.Empty).ToString() == "False")
+                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["SourceType"] ?? string.Empty).ToString() == "S57UnitOfSale")
+                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["jsonProperty"] ?? string.Empty).ToString() == "NonExistentProperty")
+                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["ProductName"] ?? string.Empty).ToString() == string.Empty)
+                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["DataSetName"] ?? string.Empty).ToString() == string.Empty)
+                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["UnitName"] ?? string.Empty).ToString() == "UNIT1")
+                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["InUnitsOfSale"] ?? string.Empty).ToString() == string.Empty)
+                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["CompositionAdd"] ?? string.Empty).ToString() == "ADD1")
+                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["CompositionRemove"] ?? string.Empty).ToString() == "REM1")
+                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["ChildCell"] ?? string.Empty).ToString() == "N/A")
+                && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["ReplacedBy"] == null
+                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["ErrorMessage"] ?? string.Empty).ToString().Length > 0)
+            ).MustHaveHappenedOnceExactly();
+        }
+
+        [Test]
+        public void WhenTransformationFailsWithNullSource_ThenLogContainsSourceIsNullAndSourceTypeNull()
+        {
+            // Arrange
+            XmlDocument soapXml = new();
+            soapXml.LoadXml(_sapXmlTemplate);
+
+            var attribute = new Attributes
+            {
+                IsRequired = true,
+                Section = ConfigFileFields.UnitOfSaleSection,
+                JsonPropertyName = "Any.Property",
+                XmlNodeName = "PROVIDER",
+                SortingOrder = 1
+            };
+
+            var actionAttributes = new List<(int, XmlElement)>();
+
+            // Act
+            MethodInfo processAttributes = typeof(S57EncContentPublishedEventXmlTransformer).GetMethod("ProcessAttributes", BindingFlags.NonPublic | BindingFlags.Instance)!;
+
+            Assert.That((Func<object?>)(() => processAttributes.Invoke(_fakeS57EncContentPublishedEventXmlTransformer, new object[] { "ACTION", new List<Attributes> { attribute }, soapXml, null, actionAttributes, null, null, null })), Throws.TypeOf<TargetInvocationException>().With.InnerException.TypeOf<ERPFacadeException>());
+
+            // Assert - verify detailed error log contains all expected properties for null source
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+                && call.GetArgument<LogLevel>(0) == LogLevel.Error
+                && call.GetArgument<EventId>(1) == EventIds.S57XmlTransformationDetailedFailure.ToEventId()
+                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["Action"] ?? string.Empty).ToString() == "ACTION")
+                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["XmlAttribute"] ?? string.Empty).ToString() == "PROVIDER")
+                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["SourceIsNull"] ?? string.Empty).ToString() == "True")
+                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["SourceType"] ?? string.Empty).ToString() == "null")
+                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["jsonProperty"] ?? string.Empty).ToString() == "Any.Property")
+                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["ProductName"] ?? string.Empty).ToString() == string.Empty)
+                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["DataSetName"] ?? string.Empty).ToString() == string.Empty)
+                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["UnitName"] ?? string.Empty).ToString() == string.Empty)
+                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["InUnitsOfSale"] ?? string.Empty).ToString() == string.Empty)
+                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["CompositionAdd"] ?? string.Empty).ToString() == string.Empty)
+                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["CompositionRemove"] ?? string.Empty).ToString() == string.Empty)
+                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["ChildCell"] ?? string.Empty).ToString() == "N/A")
+                && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["ReplacedBy"] == null
+                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["ErrorMessage"] ?? string.Empty).ToString().Length > 0)
+            ).MustHaveHappenedOnceExactly();
+        }
     }
 }

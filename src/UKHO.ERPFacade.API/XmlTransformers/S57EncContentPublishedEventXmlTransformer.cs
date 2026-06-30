@@ -192,10 +192,10 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             }
 
             // Process ProductSection attributes
-            ProcessAttributes(action.ActionName, action.Attributes.Where(x => x.Section == ConfigFileFields.ProductSection), soapXml, product, actionAttributes, decryptedPermit, replacedBy);
+            ProcessAttributes(action.ActionName, action.Attributes.Where(x => x.Section == ConfigFileFields.ProductSection), soapXml, product, actionAttributes, childCell, decryptedPermit, replacedBy);
 
             // Process UnitOfSaleSection attributes
-            ProcessAttributes(action.ActionName, action.Attributes.Where(x => x.Section == ConfigFileFields.UnitOfSaleSection), soapXml, unitOfSale, actionAttributes, null);
+            ProcessAttributes(action.ActionName, action.Attributes.Where(x => x.Section == ConfigFileFields.UnitOfSaleSection), soapXml, unitOfSale, actionAttributes, childCell, null);
 
             // Process UkhoWeekNumberSection attributes
             ProcessUkhoWeekNumberAttributes(action.ActionName, action.Attributes.Where(x => x.Section == ConfigFileFields.UkhoWeekNumberSection), soapXml, ukhoWeekNumber, actionAttributes);
@@ -209,7 +209,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             return itemNode;
         }
 
-        private void ProcessAttributes(string action, IEnumerable<Attributes> attributes, XmlDocument soapXml, object source, List<(int, XmlElement)> actionAttributes, DecryptedPermit decryptedPermit = null, string replacedBy = null)
+        private void ProcessAttributes(string action, IEnumerable<Attributes> attributes, XmlDocument soapXml, object source, List<(int, XmlElement)> actionAttributes, string childCell, DecryptedPermit decryptedPermit = null, string replacedBy = null)
         {
             foreach (var attribute in attributes)
             {
@@ -246,6 +246,39 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                 }
                 catch (Exception ex)
                 {
+                    // Extract detailed context for logging
+                    var sourceIsNull = source == null;
+                    var sourceType = source?.GetType().Name ?? "null";
+                    var prod = source as S57Product;
+                    var unit = source as S57UnitOfSale;
+                    var productName = prod?.ProductName ?? string.Empty;
+                    var dataSetName = prod?.DataSetName ?? string.Empty;
+                    var unitName = unit?.UnitName ?? string.Empty;
+                    var inUnitsOfSale = prod?.InUnitsOfSale != null ? string.Join(",", prod.InUnitsOfSale) : string.Empty;
+                    var compositionAdd = unit?.CompositionChanges?.AddProducts != null ? string.Join(",", unit.CompositionChanges.AddProducts) : string.Empty;
+                    var compositionRemove = unit?.CompositionChanges?.RemoveProducts != null ? string.Join(",", unit.CompositionChanges.RemoveProducts) : string.Empty;
+                    var jsonProperty = attribute?.JsonPropertyName ?? string.Empty;
+
+                    // Log detailed transformation failure information
+                    _logger.LogError(
+                        EventIds.S57XmlTransformationDetailedFailure.ToEventId(),
+                        "S57 XML transformation failed. | Action : {Action} | XML Attribute : {XmlAttribute} | SourceIsNull : {SourceIsNull} | SourceType : {SourceType} | JsonProperty : {jsonProperty} | ProductName : {ProductName} | DataSetName : {DataSetName} | UnitName : {UnitName} | InUnitsOfSale : {InUnitsOfSale} | CompositionAdd : {CompositionAdd} | CompositionRemove : {CompositionRemove} | ChildCell : {ChildCell} | ReplacedBy : {ReplacedBy} | ErrorMessage : {ErrorMessage}",
+                        action,
+                        attribute.XmlNodeName,
+                        sourceIsNull,
+                        sourceType,
+                        jsonProperty,
+                        productName,
+                        dataSetName,
+                        unitName,
+                        inUnitsOfSale,
+                        compositionAdd,
+                        compositionRemove,
+                        childCell ?? "N/A",
+                        replacedBy,
+                        ex.Message
+                    );
+
                     throw new ERPFacadeException(EventIds.S57SapActionInformationGenerationFailedException.ToEventId(), $"Error while generating SAP action information. | Action : {action} | XML Attribute : {attribute.XmlNodeName} | ErrorMessage : {ex.Message}");
                 }
             }
