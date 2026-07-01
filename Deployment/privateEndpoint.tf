@@ -23,7 +23,6 @@ module "private_endpoint_link" {
     azurerm.hub   = azurerm.hub
     azurerm.spoke   = azurerm.erp
   }
-  vnet_link           = local.vnet_link
   private_connection  = var.deploy_adds_mocks ? [local.private_connection, local.mock_private_connection] : [local.private_connection]
   zone_group          = local.zone_group 
   pe_identity         = var.deploy_adds_mocks ? [local.pe_identity, local.mock_pe_identity] : [local.pe_identity]
@@ -31,7 +30,8 @@ module "private_endpoint_link" {
   pe_vnet_rg          = var.spoke_rg 
   pe_vnet_name        = var.pe_vnet_name
   pe_subnet_name      = var.pe_subnet_name
-  pe_resource_group   = azurerm_resource_group.rg
+  pe_resource_group   = [azurerm_resource_group.rg.name]
   dns_resource_group  = local.dns_resource_group
+  pe_resource_group_locations = [azurerm_resource_group.rg.location]
 }
 
