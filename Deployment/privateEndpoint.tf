@@ -18,7 +18,7 @@ data "azurerm_subnet" "pesn" {
 }
 
 module "private_endpoint_link" {
-  source              = "github.com/UKHO/tfmodule-azure-private-endpoint-private-link?ref=0.6.0"
+  source              = "github.com/UKHO/tfmodule-azure-private-endpoint-private-link?ref=0.7.1"
   providers = {
     azurerm.hub   = azurerm.hub
     azurerm.spoke   = azurerm.erp
