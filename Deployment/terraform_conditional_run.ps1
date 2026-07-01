@@ -10,12 +10,12 @@ cd $env:AGENT_BUILDDIRECTORY/terraformartifact
 
 terraform --version
 
+Write-output "Diagnosing terraform providers for bugfixing"
+terraform providers
+
 Write-output "Executing terraform scripts for deployment in $workSpace enviroment"
 terraform init -upgrade -backend-config="resource_group_name=$deploymentResourceGroupName" -backend-config="storage_account_name=$deploymentStorageAccountName" -backend-config="key=terraform.deployment.tfplan"
 if ( !$? ) { echo "Something went wrong during terraform initialization"; throw "Error" }
-
-Write-output "Diagnosing terraform providers for bugfixing"
-terraform providers
 
 Write-output "Selecting workspace"
 
