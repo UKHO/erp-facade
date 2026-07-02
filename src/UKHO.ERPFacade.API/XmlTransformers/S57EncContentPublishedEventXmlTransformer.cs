@@ -192,10 +192,10 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             }
 
             // Process ProductSection attributes
-            ProcessAttributes(action.ActionName, action.Attributes.Where(x => x.Section == ConfigFileFields.ProductSection), soapXml, product, actionAttributes, decryptedPermit, replacedBy);
+            ProcessAttributes(action.ActionName, action.Attributes.Where(x => x.Section == ConfigFileFields.ProductSection), soapXml, product, actionAttributes, decryptedPermit, childCell, replacedBy);
 
             // Process UnitOfSaleSection attributes
-            ProcessAttributes(action.ActionName, action.Attributes.Where(x => x.Section == ConfigFileFields.UnitOfSaleSection), soapXml, unitOfSale, actionAttributes, null);
+            ProcessAttributes(action.ActionName, action.Attributes.Where(x => x.Section == ConfigFileFields.UnitOfSaleSection), soapXml, unitOfSale, actionAttributes, null, childCell);
 
             // Process UkhoWeekNumberSection attributes
             ProcessUkhoWeekNumberAttributes(action.ActionName, action.Attributes.Where(x => x.Section == ConfigFileFields.UkhoWeekNumberSection), soapXml, ukhoWeekNumber, actionAttributes);
@@ -209,7 +209,7 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             return itemNode;
         }
 
-        private void ProcessAttributes(string action, IEnumerable<Attributes> attributes, XmlDocument soapXml, object source, List<(int, XmlElement)> actionAttributes, DecryptedPermit decryptedPermit = null, string replacedBy = null)
+        private void ProcessAttributes(string action, IEnumerable<Attributes> attributes, XmlDocument soapXml, object source, List<(int, XmlElement)> actionAttributes, DecryptedPermit decryptedPermit = null, string childCell = null, string replacedBy = null)
         {
             foreach (var attribute in attributes)
             {
@@ -246,6 +246,15 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                 }
                 catch (Exception ex)
                 {
+                    _logger.LogError(
+                        EventIds.S57XmlTransformationDetailedFailure.ToEventId(),
+                        ex,
+                        "S57 XML transformation failed. | Action : {Action} | XML Attribute : {XmlAttribute} | RuleSection : {RuleSection} | SourceType : {SourceType}",
+                        action,
+                        attribute.XmlNodeName,
+                        attribute.Section,
+                        source?.GetType().Name ?? string.Empty);
+
                     throw new ERPFacadeException(EventIds.S57SapActionInformationGenerationFailedException.ToEventId(), $"Error while generating SAP action information. | Action : {action} | XML Attribute : {attribute.XmlNodeName} | ErrorMessage : {ex.Message}");
                 }
             }

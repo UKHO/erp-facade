@@ -262,6 +262,11 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
 
             Assert.Throws<ERPFacadeException>((Action)(() => _fakeS57EncContentPublishedEventXmlTransformer.BuildXmlPayload(s57EventData, _sapXmlTemplate)))
                 .Message.Should().Be("Error while generating SAP action information. | Action : CREATE ENC CELL | XML Attribute : PROVIDER | ErrorMessage : Object reference not set to an instance of an object.");
+
+            A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
+            && call.GetArgument<LogLevel>(0) == LogLevel.Error
+            && call.GetArgument<EventId>(1) == EventIds.S57XmlTransformationDetailedFailure.ToEventId()
+            && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["{OriginalFormat}"].ToString() == "S57 XML transformation failed. | Action : {Action} | XML Attribute : {XmlAttribute} | RuleSection : {RuleSection} | SourceType : {SourceType}").MustHaveHappenedOnceExactly();
         }
 
         [Test]

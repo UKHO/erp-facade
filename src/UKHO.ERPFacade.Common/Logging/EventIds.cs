@@ -547,7 +547,12 @@ namespace UKHO.ERPFacade.Common.Logging
         /// <summary>
         /// 940107 - S-100 Unit Of Sale Updated Event Json Stored In Azure Blob Container
         /// </summary>
-        S100UnitOfSaleUpdatedEventJsonStoredInAzureBlobContainer = 940107
+        S100UnitOfSaleUpdatedEventJsonStoredInAzureBlobContainer = 940107,
+
+        /// <summary>
+        /// 940108 - Detailed context for S57 XML transformation failures.
+        /// </summary>
+        S57XmlTransformationDetailedFailure = 940108
     }
 
     /// <summary>
