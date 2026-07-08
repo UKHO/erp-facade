@@ -1,4 +1,5 @@
 ﻿using System.Xml;
+using System.Linq;
 using Microsoft.Extensions.Options;
 using UKHO.ERPFacade.Common.Constants;
 using UKHO.ERPFacade.Common.Exceptions;
@@ -33,7 +34,6 @@ namespace UKHO.ERPFacade.API.XmlTransformers
             _permitDecryption = permitDecryption;
             _s57EncContentPublishedEventSapActionConfig = s57EncContentPublishedEventSapActionConfig;
         }
-
         public override XmlDocument BuildXmlPayload<T>(T eventData, string xmlTemplatePath)
         {
             _logger.LogInformation(EventIds.S57EventSapXmlPayloadGenerationStarted.ToEventId(), "Generation of SAP xml payload for S57 enccontentpublished event started.");
@@ -246,27 +246,27 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                 }
                 catch (Exception ex)
                 {
-                    // Extract detailed context for logging
+                    // Extract detailed context for logging (sanitized)
                     var sourceIsNull = source == null;
                     var sourceType = source?.GetType().Name ?? "null";
                     var prod = source as S57Product;
                     var unit = source as S57UnitOfSale;
-                    var productName = prod?.ProductName ?? string.Empty;
-                    var dataSetName = prod?.DataSetName ?? string.Empty;
-                    var unitName = unit?.UnitName ?? string.Empty;
-                    var inUnitsOfSale = prod?.InUnitsOfSale != null ? string.Join(",", prod.InUnitsOfSale) : string.Empty;
-                    var compositionAdd = unit?.CompositionChanges?.AddProducts != null ? string.Join(",", unit.CompositionChanges.AddProducts) : string.Empty;
-                    var compositionRemove = unit?.CompositionChanges?.RemoveProducts != null ? string.Join(",", unit.CompositionChanges.RemoveProducts) : string.Empty;
-                    var jsonProperty = attribute?.JsonPropertyName ?? string.Empty;
+                    var productName = SanitizeForLog(prod?.ProductName ?? string.Empty);
+                    var dataSetName = SanitizeForLog(prod?.DataSetName ?? string.Empty);
+                    var unitName = SanitizeForLog(unit?.UnitName ?? string.Empty);
+                    var inUnitsOfSale = SanitizeForLog(prod?.InUnitsOfSale != null ? string.Join(",", prod.InUnitsOfSale) : string.Empty);
+                    var compositionAdd = SanitizeForLog(unit?.CompositionChanges?.AddProducts != null ? string.Join(",", unit.CompositionChanges.AddProducts) : string.Empty);
+                    var compositionRemove = SanitizeForLog(unit?.CompositionChanges?.RemoveProducts != null ? string.Join(",", unit.CompositionChanges.RemoveProducts) : string.Empty);
+                    var jsonProperty = SanitizeForLog(attribute?.JsonPropertyName);
 
                     // Log detailed transformation failure information
                     _logger.LogError(
                         EventIds.S57XmlTransformationDetailedFailure.ToEventId(),
                         "S57 XML transformation failed. | Action : {Action} | XML Attribute : {XmlAttribute} | SourceIsNull : {SourceIsNull} | SourceType : {SourceType} | JsonProperty : {jsonProperty} | ProductName : {ProductName} | DataSetName : {DataSetName} | UnitName : {UnitName} | InUnitsOfSale : {InUnitsOfSale} | CompositionAdd : {CompositionAdd} | CompositionRemove : {CompositionRemove} | ChildCell : {ChildCell} | ReplacedBy : {ReplacedBy} | ErrorMessage : {ErrorMessage}",
-                        action,
-                        attribute.XmlNodeName,
+                        SanitizeForLog(action),
+                        SanitizeForLog(attribute.XmlNodeName),
                         sourceIsNull,
-                        sourceType,
+                        SanitizeForLog(sourceType),
                         jsonProperty,
                         productName,
                         dataSetName,
@@ -274,9 +274,9 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                         inUnitsOfSale,
                         compositionAdd,
                         compositionRemove,
-                        childCell ?? "N/A",
-                        replacedBy,
-                        ex.Message
+                        (childCell != null ? SanitizeForLog(childCell) : "N/A"),
+                        SanitizeForLog(replacedBy),
+                        SanitizeForLog(ex.Message)
                     );
 
                     throw new ERPFacadeException(EventIds.S57SapActionInformationGenerationFailedException.ToEventId(), $"Error while generating SAP action information. | Action : {action} | XML Attribute : {attribute.XmlNodeName} | ErrorMessage : {ex.Message}");
@@ -317,6 +317,12 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                     throw new ERPFacadeException(EventIds.S57SapActionInformationGenerationFailedException.ToEventId(), $"Error while generating SAP action information. | Action : {action} | XML Attribute : {attribute.XmlNodeName} | ErrorMessage : {ex.Message}");
                 }
             }
+        }
+        private string SanitizeForLog(string value)
+        {
+            return string.IsNullOrEmpty(value)
+                ? string.Empty
+                : value.Replace("\r", string.Empty).Replace("\n", string.Empty);
         }
     }
 }

@@ -372,20 +372,22 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                 && call.GetArgument<LogLevel>(0) == LogLevel.Error
                 && call.GetArgument<EventId>(1) == EventIds.S57XmlTransformationDetailedFailure.ToEventId()
-                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["Action"] ?? string.Empty).ToString() == "ACTION")
-                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["XmlAttribute"] ?? string.Empty).ToString() == "PROVIDER")
+                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["Action"] ?? string.Empty).ToString() == SanitizeForLogLocal("ACTION"))
+                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["XmlAttribute"] ?? string.Empty).ToString() == SanitizeForLogLocal("PROVIDER"))
                 && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["SourceIsNull"] ?? string.Empty).ToString() == "False")
                 && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["SourceType"] ?? string.Empty).ToString() == "S57UnitOfSale")
-                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["jsonProperty"] ?? string.Empty).ToString() == "NonExistentProperty")
                 && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["ProductName"] ?? string.Empty).ToString() == string.Empty)
                 && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["DataSetName"] ?? string.Empty).ToString() == string.Empty)
-                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["UnitName"] ?? string.Empty).ToString() == "UNIT1")
                 && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["InUnitsOfSale"] ?? string.Empty).ToString() == string.Empty)
-                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["CompositionAdd"] ?? string.Empty).ToString() == "ADD1")
-                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["CompositionRemove"] ?? string.Empty).ToString() == "REM1")
+                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["jsonProperty"] ?? string.Empty).ToString() == SanitizeForLogLocal("NonExistentProperty"))
+                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["UnitName"] ?? string.Empty).ToString() == SanitizeForLogLocal("UNIT1"))
+                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["CompositionAdd"] ?? string.Empty).ToString() == SanitizeForLogLocal(new List<string>{ "ADD1" }))
+                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["CompositionRemove"] ?? string.Empty).ToString() == SanitizeForLogLocal(new List<string>{ "REM1" }))
                 && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["ChildCell"] ?? string.Empty).ToString() == "N/A")
-                && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["ReplacedBy"] == null
-                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["ErrorMessage"] ?? string.Empty).ToString().Length > 0)
+                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["ReplacedBy"] ?? string.Empty).ToString() == string.Empty)
+                && (((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["ErrorMessage"] ?? string.Empty).ToString().Length > 0)
+                    && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["ErrorMessage"] ?? string.Empty).ToString().IndexOf('\n') == -1)
+                    && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["ErrorMessage"] ?? string.Empty).ToString().IndexOf('\r') == -1))
             ).MustHaveHappenedOnceExactly();
         }
 
@@ -416,21 +418,36 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                 && call.GetArgument<LogLevel>(0) == LogLevel.Error
                 && call.GetArgument<EventId>(1) == EventIds.S57XmlTransformationDetailedFailure.ToEventId()
-                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["Action"] ?? string.Empty).ToString() == "ACTION")
-                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["XmlAttribute"] ?? string.Empty).ToString() == "PROVIDER")
+                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["Action"] ?? string.Empty).ToString() == SanitizeForLogLocal("ACTION"))
+                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["XmlAttribute"] ?? string.Empty).ToString() == SanitizeForLogLocal("PROVIDER"))
                 && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["SourceIsNull"] ?? string.Empty).ToString() == "True")
                 && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["SourceType"] ?? string.Empty).ToString() == "null")
-                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["jsonProperty"] ?? string.Empty).ToString() == "Any.Property")
                 && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["ProductName"] ?? string.Empty).ToString() == string.Empty)
                 && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["DataSetName"] ?? string.Empty).ToString() == string.Empty)
-                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["UnitName"] ?? string.Empty).ToString() == string.Empty)
                 && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["InUnitsOfSale"] ?? string.Empty).ToString() == string.Empty)
-                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["CompositionAdd"] ?? string.Empty).ToString() == string.Empty)
-                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["CompositionRemove"] ?? string.Empty).ToString() == string.Empty)
+                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["jsonProperty"] ?? string.Empty).ToString() == SanitizeForLogLocal("Any.Property"))
+                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["UnitName"] ?? string.Empty).ToString() == SanitizeForLogLocal((string?)null))
+                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["CompositionAdd"] ?? string.Empty).ToString() == SanitizeForLogLocal((IEnumerable<string>?)null))
+                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["CompositionRemove"] ?? string.Empty).ToString() == SanitizeForLogLocal((IEnumerable<string>?)null))
                 && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["ChildCell"] ?? string.Empty).ToString() == "N/A")
-                && call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["ReplacedBy"] == null
-                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["ErrorMessage"] ?? string.Empty).ToString().Length > 0)
+                && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["ReplacedBy"] ?? string.Empty).ToString() == string.Empty)
+                && (((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["ErrorMessage"] ?? string.Empty).ToString().Length > 0)
+                    && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["ErrorMessage"] ?? string.Empty).ToString().IndexOf('\n') == -1)
+                    && ((call.GetArgument<IEnumerable<KeyValuePair<string, object>>>(2)!.ToDictionary(c => c.Key, c => c.Value)["ErrorMessage"] ?? string.Empty).ToString().IndexOf('\r') == -1))
             ).MustHaveHappenedOnceExactly();
+        }
+
+        private static string SanitizeForLogLocal(string? value)
+        {
+            return string.IsNullOrEmpty(value)
+                ? string.Empty
+                : value.Replace("\r", string.Empty).Replace("\n", string.Empty);
+        }
+
+        private static string SanitizeForLogLocal(IEnumerable<string>? values)
+        {
+            if (values == null) return string.Empty;
+            return SanitizeForLogLocal(string.Join(",", values));
         }
     }
 }
