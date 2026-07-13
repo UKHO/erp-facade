@@ -247,7 +247,6 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                 catch (Exception ex)
                 {
                     // Extract detailed context for logging (sanitized)
-                    var sourceIsNull = source == null;
                     var sourceType = source?.GetType().Name ?? "null";
                     var prod = source as S57Product;
                     var unit = source as S57UnitOfSale;
@@ -262,10 +261,9 @@ namespace UKHO.ERPFacade.API.XmlTransformers
                     // Log detailed transformation failure information
                     _logger.LogError(
                         EventIds.S57XmlTransformationDetailedFailure.ToEventId(),
-                        "S57 XML transformation failed. | Action : {Action} | XML Attribute : {XmlAttribute} | SourceIsNull : {SourceIsNull} | SourceType : {SourceType} | JsonProperty : {jsonProperty} | ProductName : {ProductName} | DataSetName : {DataSetName} | UnitName : {UnitName} | InUnitsOfSale : {InUnitsOfSale} | CompositionAdd : {CompositionAdd} | CompositionRemove : {CompositionRemove} | ChildCell : {ChildCell} | ReplacedBy : {ReplacedBy} | ErrorMessage : {ErrorMessage}",
+                        "S57 XML transformation failed. | Action : {Action} | XML Attribute : {XmlAttribute} | SourceType : {SourceType} | JsonProperty : {jsonProperty} | ProductName : {ProductName} | DataSetName : {DataSetName} | UnitName : {UnitName} | InUnitsOfSale : {InUnitsOfSale} | CompositionAdd : {CompositionAdd} | CompositionRemove : {CompositionRemove} | ChildCell : {ChildCell} | ReplacedBy : {ReplacedBy} | ErrorMessage : {ErrorMessage}",
                         SanitizeForLog(action),
                         SanitizeForLog(attribute.XmlNodeName),
-                        sourceIsNull,
                         SanitizeForLog(sourceType),
                         jsonProperty,
                         productName,
