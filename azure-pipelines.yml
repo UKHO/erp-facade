@@ -34,7 +34,7 @@ variables:
   - name: WindowsPool1
     value: "Mare Nubium"
   - name: Container
-    value: "ukhydrographicoffice/terraform-azure-powershell-unzip:1.7.2"
+    value: "ukhydrographicoffice/terraform-azure-powershell-unzip:1.15.7"
   - name: DeploymentPool
     value: "Mare Nectaris"
   - name: DeploymentPoolFT
@@ -44,9 +44,9 @@ variables:
   - name: DeploymentPoolPD
     value: "Private Link Deployments (BUS)"
   - name: DotNetSdkVersion
-    value: "8.x"
+    value: "10.x"
   - name: DotNetSdkVersionAddsMock
-    value: "9.x"
+    value: "10.x"
   - name: snykAbzuOrganizationId
     value: aeb7543b-8394-457c-8334-a31493d8910d
 
