@@ -21,6 +21,7 @@ namespace UKHO.ERPFacade.Monitoring.WebJob
     public static class Program
     {
         private static readonly string WebJobAssemblyVersion = Assembly.GetExecutingAssembly().GetCustomAttributes<AssemblyFileVersionAttribute>().Single().Version;
+        private static readonly InMemoryChannel telemetryChannel = new();
 
         public static async Task Main()
         {
@@ -41,11 +42,12 @@ namespace UKHO.ERPFacade.Monitoring.WebJob
 
                 try
                 {
-                   await serviceProvider.GetService<CleanUpWebjob>().Start();
+                    await serviceProvider.GetService<CleanUpWebjob>().Start();
                 }
                 finally
                 {
                     // Ensure any buffered app insights logs are flushed into Azure (if configured)
+                    telemetryChannel.Flush();
                     await Task.Delay(delayTime);
                 }
             }
@@ -131,7 +133,12 @@ namespace UKHO.ERPFacade.Monitoring.WebJob
                 }
             });
 
-            // TelemetryConfiguration customization removed: telemetry channel types are provided by the Application Insights packages
+            serviceCollection.Configure<TelemetryConfiguration>(
+                (config) =>
+                {
+                    config.TelemetryChannel = telemetryChannel;
+                }
+            );
 
             if (configuration != null)
             {
