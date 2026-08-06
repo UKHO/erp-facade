@@ -138,6 +138,7 @@ namespace UKHO.ERPFacade.Monitoring.WebJob
                     config.TelemetryChannel = telemetryChannel;
                 }
             );
+
             if (configuration != null)
             {
                 serviceCollection.Configure<CleanupWebJobConfiguration>(configuration.GetSection("CleanupWebJobConfiguration"));
