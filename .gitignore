@@ -346,6 +346,8 @@ crash.log
 # to change depending on the environment.
 #
 *.tfvars
+# Non-secret per-environment config (Front Door etc.) loaded by terraform_conditional_run.ps1.
+!Deployment/config/*.tfvars
 
 # Ignore override files as they are usually used to override resources locally and so
 # are not checked in
