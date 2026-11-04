@@ -18,11 +18,12 @@ data "azurerm_subnet" "pesn" {
 }
 
 module "private_endpoint_link" {
-  source              = "github.com/UKHO/tfmodule-azure-private-endpoint-private-link?ref=0.7.1"
+  source              = "github.com/UKHO/tfmodule-azure-private-endpoint-private-link?ref=0.6.2"
   providers = {
     azurerm.hub   = azurerm.hub
     azurerm.spoke   = azurerm.erp
   }
+  vnet_link           = local.vnet_link
   private_connection  = var.deploy_adds_mocks ? [local.private_connection, local.mock_private_connection] : [local.private_connection]
   zone_group          = local.zone_group 
   pe_identity         = var.deploy_adds_mocks ? [local.pe_identity, local.mock_pe_identity] : [local.pe_identity]
