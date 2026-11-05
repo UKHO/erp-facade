@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml;
@@ -55,12 +56,12 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
         [Test]
         public void WhenConstructorIsCalledWithAnyDependencyAsNull_ThenShouldThrowArgumentNullException()
         {
-            Assert.Multiple(() =>
+            using (Assert.EnterMultipleScope())
             {
-                Assert.That(() => new S100DataContentPublishedEventXmlTransformer(null, _fakeXmlOperations, _fakeSapActionConfig), Throws.ArgumentNullException.With.Message.EqualTo("Value cannot be null. (Parameter 'logger')"));
-                Assert.That(() => new S100DataContentPublishedEventXmlTransformer(_fakeLogger, null, _fakeSapActionConfig), Throws.ArgumentNullException.With.Message.EqualTo("Value cannot be null. (Parameter 'xmlOperations')"));
-                Assert.That(() => new S100DataContentPublishedEventXmlTransformer(_fakeLogger, _fakeXmlOperations, null), Throws.ArgumentNullException.With.Message.EqualTo("Value cannot be null. (Parameter 's100DataContentPublishedEventSapActionConfig')"));
-            });
+                Assert.That((Func<S100DataContentPublishedEventXmlTransformer>)(() => new S100DataContentPublishedEventXmlTransformer(null, _fakeXmlOperations, _fakeSapActionConfig)), Throws.ArgumentNullException.With.Message.EqualTo("Value cannot be null. (Parameter 'logger')"));
+                Assert.That((Func<S100DataContentPublishedEventXmlTransformer>)(() => new S100DataContentPublishedEventXmlTransformer(_fakeLogger, null, _fakeSapActionConfig)), Throws.ArgumentNullException.With.Message.EqualTo("Value cannot be null. (Parameter 'xmlOperations')"));
+                Assert.That((Func<S100DataContentPublishedEventXmlTransformer>)(() => new S100DataContentPublishedEventXmlTransformer(_fakeLogger, _fakeXmlOperations, null)), Throws.ArgumentNullException.With.Message.EqualTo("Value cannot be null. (Parameter 's100DataContentPublishedEventSapActionConfig')"));
+            }
         }
 
         [Test]
@@ -71,7 +72,7 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
 
             A.CallTo(() => _fakeXmlOperations.CreateXmlDocument(A<string>.Ignored)).Throws(new ERPFacadeException(EventIds.SapXmlTemplateNotFoundException.ToEventId(), "The SAP XML payload template does not exist."));
 
-            Assert.Throws<ERPFacadeException>(() => _fakeS100DataContentPublishedEventXmlTransformer.BuildXmlPayload(eventData!, _sapXmlTemplate))
+            Assert.Throws<ERPFacadeException>((Action)(() => _fakeS100DataContentPublishedEventXmlTransformer.BuildXmlPayload(eventData!, _sapXmlTemplate)))
                 .Message.Should().Be("The SAP XML payload template does not exist.");
         }
 
@@ -175,7 +176,7 @@ namespace UKHO.ERPFacade.API.UnitTests.XmlTransformers
 
             A.CallTo(() => _fakeXmlOperations.CreateXmlDocument(A<string>.Ignored)).Returns(soapXml);
 
-            Assert.Throws<ERPFacadeException>(() => _fakeS100DataContentPublishedEventXmlTransformer.BuildXmlPayload(s100EventData, _sapXmlTemplate))
+            Assert.Throws<ERPFacadeException>((Action)(() => _fakeS100DataContentPublishedEventXmlTransformer.BuildXmlPayload(s100EventData, _sapXmlTemplate)))
                 .Message.Should().Be("Error while generating SAP action information. | Action : CREATE PRODUCT | XML Attribute : AGENCY | ErrorMessage : Object reference not set to an instance of an object.");
         }
 

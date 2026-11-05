@@ -88,7 +88,7 @@ public class S100SapCallbackServiceTests
 
         A.CallTo(() => _fakeS100UnitOfSaleUpdatedEventPublishingService.BuildAndPublishEventAsync(A<BaseCloudEvent>.Ignored, A<string>.Ignored)).Returns(result);
 
-        Assert.ThrowsAsync<ERPFacadeException>(() => _fakeSapCallbackService.ProcessSapCallbackAsync(_fakeCorrelationId))
+        Assert.ThrowsAsync<ERPFacadeException>((Func<Task>)(async () => await _fakeSapCallbackService.ProcessSapCallbackAsync(_fakeCorrelationId)))
             .Message.Should().Be("Error occurred while publishing S-100 unit of sale updated event to EES. | Forbidden");
 
         A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"

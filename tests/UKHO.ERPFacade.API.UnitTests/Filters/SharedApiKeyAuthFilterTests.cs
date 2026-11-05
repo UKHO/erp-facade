@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using FakeItEasy;
 using FluentAssertions;
@@ -97,7 +98,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Filters
         {
             _fakeSharedApiKeyConfiguration.Value.SharedApiKey = string.Empty;
 
-            Assert.Throws<ERPFacadeException>(() => new SharedApiKeyAuthFilter(_fakeLogger, _fakeSharedApiKeyConfiguration))
+            Assert.Throws<ERPFacadeException>((Action)(() => new SharedApiKeyAuthFilter(_fakeLogger, _fakeSharedApiKeyConfiguration)))
                 .Message.Should().Be("Shared API key configuration missing.");
         }
     }

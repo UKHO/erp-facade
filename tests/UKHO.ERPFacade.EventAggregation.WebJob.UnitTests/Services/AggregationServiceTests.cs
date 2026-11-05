@@ -51,7 +51,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Services
         public void Does_Constructor_Throws_ArgumentNullException_When_Logger_Paramter_Is_Null()
         {
             Assert.Throws<ArgumentNullException>(
-                    () => new AggregationService(null!, _fakeAzureTableReaderWriter, _fakeAzureBlobReaderWriter, _fakeSapClient, _fakeSapConfig, _fakeRecordOfSaleSapMessageBuilder))
+                    (Action)(() => new AggregationService(null!, _fakeAzureTableReaderWriter, _fakeAzureBlobReaderWriter, _fakeSapClient, _fakeSapConfig, _fakeRecordOfSaleSapMessageBuilder)))
                 .ParamName
                 .Should().Be("logger");
         }
@@ -60,7 +60,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Services
         public void Does_Constructor_Throws_ArgumentNullException_When_AzureTableReaderWriter_Paramter_Is_Null()
         {
             Assert.Throws<ArgumentNullException>(
-                    () => new AggregationService(_fakeLogger, null!, _fakeAzureBlobReaderWriter, _fakeSapClient, _fakeSapConfig, _fakeRecordOfSaleSapMessageBuilder))
+                    (Action)(() => new AggregationService(_fakeLogger, null!, _fakeAzureBlobReaderWriter, _fakeSapClient, _fakeSapConfig, _fakeRecordOfSaleSapMessageBuilder)))
                 .ParamName
                 .Should().Be("azureTableReaderWriter");
         }
@@ -69,7 +69,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Services
         public void Does_Constructor_Throws_ArgumentNullException_When_AzureBlobEventWriter_Paramter_Is_Null()
         {
             Assert.Throws<ArgumentNullException>(
-                    () => new AggregationService(_fakeLogger, _fakeAzureTableReaderWriter, null!, _fakeSapClient, _fakeSapConfig, _fakeRecordOfSaleSapMessageBuilder))
+                    (Action)(() => new AggregationService(_fakeLogger, _fakeAzureTableReaderWriter, null!, _fakeSapClient, _fakeSapConfig, _fakeRecordOfSaleSapMessageBuilder)))
                 .ParamName
                 .Should().Be("azureBlobReaderWriter");
         }
@@ -78,12 +78,12 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Services
         public void Does_Constructor_Throws_ArgumentNullException_When_Paramter_Is_Null()
         {
             Assert.Throws<ArgumentNullException>(
-                    () => new AggregationService(_fakeLogger,
+                    (Action)(() => new AggregationService(_fakeLogger,
                         _fakeAzureTableReaderWriter,
                         _fakeAzureBlobReaderWriter,
                         _fakeSapClient,
                         null!,
-                        _fakeRecordOfSaleSapMessageBuilder))
+                        _fakeRecordOfSaleSapMessageBuilder)))
                 .ParamName
                 .Should().Be("sapConfig");
         }
@@ -192,7 +192,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Services
                     StatusCode = HttpStatusCode.Unauthorized
                 });
 
-            Assert.ThrowsAsync<ERPFacadeException>(() => _fakeAggregationService.MergeRecordOfSaleEventsAsync(queueMessage));
+            Assert.ThrowsAsync<ERPFacadeException>((Func<Task>)(async () => await _fakeAggregationService.MergeRecordOfSaleEventsAsync(queueMessage)));
 
             A.CallTo(() => _fakeAzureBlobReaderWriter.GetBlobNamesInFolderAsync(A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceExactly();
             A.CallTo(() => _fakeAzureBlobReaderWriter.DownloadEventAsync(A<string>.Ignored, A<string>.Ignored)).MustHaveHappenedOnceOrMore();
@@ -316,7 +316,7 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob.UnitTests.Services
                         A<string>.Ignored))
                 .Throws(new ERPFacadeException(EventIds.UnhandledWebJobException.ToEventId(), "message", []));
 
-            var ex = Assert.ThrowsAsync<ERPFacadeException>(() => _fakeAggregationService.MergeRecordOfSaleEventsAsync(queueMessage));
+            var ex = Assert.ThrowsAsync<ERPFacadeException>((Func<Task>)(async () => await _fakeAggregationService.MergeRecordOfSaleEventsAsync(queueMessage)));
 
             Assert.That(ex.EventId, Is.EqualTo(EventIds.UnhandledWebJobException.ToEventId()));
 

@@ -2,6 +2,10 @@ output "web_app_object_id" {
   value = azurerm_windows_web_app.webapp_service.identity.0.principal_id
 }
 
+output "webapp_service_id" {
+  value = azurerm_windows_web_app.webapp_service.id
+}
+
 output "web_app_tenant_id" {
   value = azurerm_windows_web_app.webapp_service.identity.0.tenant_id
 }

@@ -1,13 +1,13 @@
 ﻿using System.Text;
+using System.Xml;
+using System.Xml.Serialization;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using System.Xml.Serialization;
-using System.Xml;
-using UKHO.ERPFacade.API.FunctionalTests.Model;
 using UKHO.ERPFacade.API.FunctionalTests.Configuration;
+using UKHO.ERPFacade.API.FunctionalTests.Model;
 using UKHO.ERPFacade.Common.Constants;
-using Microsoft.Extensions.Options;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace UKHO.ERPFacade.API.FunctionalTests.Validators
 {
@@ -50,11 +50,11 @@ namespace UKHO.ERPFacade.API.FunctionalTests.Validators
 
             Z_ADDS_ROSIM_ORDER rosXmlPayload = result.IM_ORDER;
 
-            Assert.Multiple(() =>
+            using (Assert.EnterMultipleScope())
             {
                 Assert.That(jsonPayload.data.correlationId, Is.EqualTo(rosXmlPayload.GUID), "GUID in xml is same a corrid as in EES JSON");
                 Assert.That(VerifyPresenseOfMandatoryXMLAtrributes(rosXmlPayload, actionAttributesSeq, actionAttributesSeqProd).Result, Is.True);
-            });
+            }
 
             JsonInputRoSWebhookEvent.Recordsofsale roSJsonFields = jsonPayload.data.recordsOfSale;
 

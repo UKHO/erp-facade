@@ -257,9 +257,9 @@ jobs:
           **/UKHO.ADDS.Mocks.ERP.csproj          
         feedsToUse: config
         noCache: true
-        nugetConfigPath: '$(Build.SourcesDirectory)\mock\repo\BuildNuget.config'
-        workingDirectory: '$(Build.SourcesDirectory)\mock\repo\'
-        packagesDirectory: '$(Build.SourcesDirectory)\mock\repo\src\packages'          
+        nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
+        workingDirectory: '$(Build.SourcesDirectory)\mock\UKHO.ADDS.Mocks.ERP'
+        packagesDirectory: '$(Build.SourcesDirectory)\mock\UKHO.ADDS.Mocks.ERP\packages'          
     
     - task: DotNetCoreCLI@2
       displayName: "dotnet build task"

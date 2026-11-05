@@ -10,13 +10,6 @@ parameters:
     displayName: "Run Stryker test mutation"
     type: boolean
     default: true
-  - name: StrykerVersion
-    displayName: "Stryker version"
-    type: string
-    values:
-      - 'latest'
-      - '4.8.1'
-    default: 'latest'
   - name: SnykOnlyFailIfFixable
     displayName: "Snyk - fail only if an issue has an available fix"
     type: boolean
@@ -28,7 +21,6 @@ parameters:
     
 trigger:
   - main
-  - release/*
 
 pool: $(WindowsPool1) 
 
@@ -42,7 +34,7 @@ variables:
   - name: WindowsPool1
     value: "Mare Nubium"
   - name: Container
-    value: "ukhydrographicoffice/terraform-azure-powershell-unzip:1.7.2"
+    value: "ukhydrographicoffice/terraform-azure-powershell-unzip:1.15.7"
   - name: DeploymentPool
     value: "Mare Nectaris"
   - name: DeploymentPoolFT
@@ -52,9 +44,9 @@ variables:
   - name: DeploymentPoolPD
     value: "Private Link Deployments (BUS)"
   - name: DotNetSdkVersion
-    value: "8.x"
+    value: "10.x"
   - name: DotNetSdkVersionAddsMock
-    value: "9.x"
+    value: "10.x"
   - name: snykAbzuOrganizationId
     value: aeb7543b-8394-457c-8334-a31493d8910d
 
@@ -106,10 +98,7 @@ stages:
             inputs:
               command: custom
               custom: tool
-              ${{ if eq(parameters.StrykerVersion, 'latest') }}:
-                arguments: install dotnet-stryker --tool-path $(Agent.BuildDirectory)/tools --configfile $(Build.SourcesDirectory)/BuildNuget.config
-              ${{ else }}:
-                arguments: install dotnet-stryker --tool-path $(Agent.BuildDirectory)/tools --configfile $(Build.SourcesDirectory)/BuildNuget.config --version ${{ parameters.StrykerVersion }}
+              arguments: install dotnet-stryker --tool-path $(Agent.BuildDirectory)/tools --configfile $(Build.SourcesDirectory)/BuildNuget.config
 
           - task: DotNetCoreCLI@2
             displayName: ".Net Core - NuGet restore for non test projects only"
@@ -205,7 +194,6 @@ stages:
         AppPool: $(DeploymentPoolPE)
         Container: ${{variables.Container}}
         DeployADDSMocks: true
-        RunFunctionalTests: true
         RunAddsTests: IAT
   
   - stage: PreProdDeploy
@@ -222,22 +210,7 @@ stages:
         ShortName: "prp"
         AppPool: $(DeploymentPoolPE)
         Container: ${{variables.Container}}
-  
-  - stage: QADeploy
-    dependsOn:
-    - DevDeploy
-    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
-    displayName: "QA Deploy"  
-    jobs:
-    - template: Deployment/templates/continuous-deployment.yml
-      parameters:
-        AzureDevOpsEnvironment: "ERP-QA"
-        ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
-        AzureSubscription: "ERP-Facade-QA-A.011.05.12"
-        ShortName: "qa"
-        AppPool: $(DeploymentPoolPE)
-        Container: ${{variables.Container}} 
-  
+    
   - stage: LiveDeploy
     dependsOn:
     - PreProdDeploy

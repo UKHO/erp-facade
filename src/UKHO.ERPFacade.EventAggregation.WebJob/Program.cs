@@ -27,9 +27,9 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob
     [ExcludeFromCodeCoverage]
     public static class Program
     {
-        private static readonly InMemoryChannel TelemetryChannel = new();
         private static IConfiguration? ConfigurationBuilder;
         private static readonly string WebJobAssemblyVersion = Assembly.GetExecutingAssembly().GetCustomAttributes<AssemblyFileVersionAttribute>().Single().Version;
+        private static readonly InMemoryChannel telemetryChannel = new();
 
         public static void Main(string[] args)
         {
@@ -106,11 +106,10 @@ namespace UKHO.ERPFacade.EventAggregation.WebJob
              .ConfigureServices((hostContext, services) =>
              {
                  services.AddApplicationInsightsTelemetryWorkerService();
-
                  services.Configure<TelemetryConfiguration>(
                      (config) =>
                      {
-                         config.TelemetryChannel = TelemetryChannel;
+                         config.TelemetryChannel = telemetryChannel;
                      }
                  );
 

@@ -60,8 +60,9 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
         {
             var fakeS100EventDataJson = JObject.Parse(@"{""data"":{""correlationId"":""123""}}");
             var fakeS100EventData = JsonConvert.DeserializeObject<BaseCloudEvent>(fakeS100EventDataJson.ToString());
+            Assert.That(fakeS100EventData, Is.Not.Null);
 
-            await _fakes100DataContentPublishedEventHandler.ProcessEventAsync(fakeS100EventData);
+            await _fakes100DataContentPublishedEventHandler.ProcessEventAsync(fakeS100EventData!);
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Information
@@ -107,12 +108,13 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
             XmlDocument xmlDocument = new();
             var newCellEventPayloadJson = TestHelper.ReadFileData("ERPTestData\\S100TestData\\CancellationAndReplacement.JSON");
             var eventData = JsonConvert.DeserializeObject<BaseCloudEvent>(newCellEventPayloadJson);
+            Assert.That(eventData, Is.Not.Null);
             A.CallTo(() => _fakeXmlTransformer.BuildXmlPayload(A<BaseCloudEvent>.Ignored, XmlTemplateInfo.S57SapXmlTemplatePath)).Returns(xmlDocument);
             A.CallTo(() => _fakeSapClient.SendUpdateAsync(A<XmlDocument>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(new HttpResponseMessage()
             {
                 StatusCode = HttpStatusCode.Unauthorized,
             });
-            Assert.ThrowsAsync<ERPFacadeException>(() => _fakes100DataContentPublishedEventHandler.ProcessEventAsync(eventData))
+            Assert.ThrowsAsync<ERPFacadeException>((Func<Task>)(async () => await _fakes100DataContentPublishedEventHandler.ProcessEventAsync(eventData!)))
                 .Message.Should().Be("An error occurred while sending S-100 product update to SAP. | Unauthorized");
 
             A.CallTo(() => _fakeAzureTableReaderWriter.UpdateEntityAsync(A<string>.Ignored, A<string>.Ignored, A<Dictionary<string, object>>.Ignored)).MustNotHaveHappened();
@@ -123,6 +125,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
         {
             var fakeS100EventDataJson = JObject.Parse(@"{""data"":{""correlationId"":""123""}}");
             var fakeS100EventData = JsonConvert.DeserializeObject<BaseCloudEvent>(fakeS100EventDataJson.ToString());
+            Assert.That(fakeS100EventData, Is.Not.Null);
 
             var sapXml = TestHelper.ReadFileData("ERPTestData\\S100TestData\\SapXmlWithNoActions.xml");
             XmlDocument xmlDocument = new XmlDocument();
@@ -132,7 +135,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
             A.CallTo(() => _fakeS100UnitOfSaleUpdatedEventPublishingService.BuildAndPublishEventAsync(A<BaseCloudEvent>.Ignored, A<string>.Ignored)).Returns(Result.Success());
 
 
-            await _fakes100DataContentPublishedEventHandler.ProcessEventAsync(fakeS100EventData);
+            await _fakes100DataContentPublishedEventHandler.ProcessEventAsync(fakeS100EventData!);
 
             A.CallTo(_fakeLogger).Where(call => call.Method.Name == "Log"
                                                 && call.GetArgument<LogLevel>(0) == LogLevel.Information
@@ -165,6 +168,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
         {
             var fakeS100EventDataJson = JObject.Parse(@"{""data"":{""correlationId"":""123""}}");
             var fakeS100EventData = JsonConvert.DeserializeObject<BaseCloudEvent>(fakeS100EventDataJson.ToString());
+            Assert.That(fakeS100EventData, Is.Not.Null);
             var sapXml = TestHelper.ReadFileData("ERPTestData\\S100TestData\\SapXmlWithNoActions.xml");
             XmlDocument xmlDocument = new XmlDocument();
             xmlDocument.LoadXml(sapXml);
@@ -172,7 +176,7 @@ namespace UKHO.ERPFacade.API.UnitTests.Handlers
             A.CallTo(() => _fakeXmlTransformer.BuildXmlPayload(A<S100EventData>.Ignored, A<string>.Ignored)).Returns(xmlDocument);
             A.CallTo(() => _fakeS100UnitOfSaleUpdatedEventPublishingService.BuildAndPublishEventAsync(A<BaseCloudEvent>.Ignored, A<string>.Ignored)).Returns(Result.Failure("Internal Server Error"));
 
-            Assert.ThrowsAsync<ERPFacadeException>(() => _fakes100DataContentPublishedEventHandler.ProcessEventAsync(fakeS100EventData))
+            Assert.ThrowsAsync<ERPFacadeException>((Func<Task>)(async () => await _fakes100DataContentPublishedEventHandler.ProcessEventAsync(fakeS100EventData!)))
                 .Message.Should().Be("Error occurred while publishing S-100 unit of sale updated event to EES. | Internal Server Error");
         }
     }
