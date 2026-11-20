@@ -27,6 +27,7 @@
     <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.5.2" />
     <PackageReference Include="Azure.Identity" Version="1.21.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.WorkerService" Version="2.23.0" />
+    <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.3.14" />
     <PackageReference Include="Microsoft.Azure.WebJobs" Version="3.0.48" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Storage" Version="5.3.10" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Host.Storage" Version="5.0.2" />
