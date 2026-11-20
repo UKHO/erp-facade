@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -18,7 +18,7 @@
     <None Remove="Data\**" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="WireMock.Net" Version="2.11.0" />
+    <PackageReference Include="WireMock.Net" Version="2.30.0" />
   </ItemGroup>
 
   <ItemGroup>
